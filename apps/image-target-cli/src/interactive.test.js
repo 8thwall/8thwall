@@ -49,7 +49,7 @@ describe('selectPlanarGeometry', () => {
     assert.equal(crop.left, 0)
     assert.equal(crop.top, 0)
   })
-  it('portrait + manual crop computes 3:4 height', async () => {
+  it('portrait + manual computes height for 3:4 crop', async () => {
     const rl = mockRl(false, 'portrait', 10, 20, 600)
     const crop = await selectPlanarGeometry(rl, {width: 600, height: 800})
 
@@ -62,7 +62,7 @@ describe('selectPlanarGeometry', () => {
     assert.equal(crop.originalWidth, 600)
     assert.equal(crop.originalHeight, 800)
   })
-  it('landscape + manual crop computes 4:3 height', async () => {
+  it('landscape + manual computes height for 4:3 crop', async () => {
     const crop = await selectPlanarGeometry(
       mockRl(false, 'landscape', 0, 0, 400),
       {width: 600, height: 800}
