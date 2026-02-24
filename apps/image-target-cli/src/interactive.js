@@ -44,7 +44,9 @@ const selectPlanarGeometry = async (rl, imageMetadata) => {
     console.log('Computed height based on 4:3 aspect ratio:', width)
     return {
       top: visualLeft,
-      left: visualTop,
+      // NOTE(christoph): Since we're rotating the image, the origin of the crop is the bottom
+      // left of the image, so we need to adjust for that here.
+      left: imageMetadata.height - visualTop - width,
       width,
       height,
       isRotated,
