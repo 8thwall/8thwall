@@ -32,20 +32,21 @@ const selectPlanarGeometry = async (rl, imageMetadata) => {
     true
   ) === 'landscape'
 
-  // NOTE(christoph): These values are in terms of the original image as it appears on a screen,
-  // but when stored, the crop is in the coordinates of the image after it has been rotated.
   const visualTop = await rl.promptInteger('Enter the top offset of the crop')
   const visualLeft = await rl.promptInteger('Enter the left offset of the crop')
   const visualWidth = await rl.promptInteger('Enter the width of the crop')
 
   if (isRotated) {
+    // NOTE(christoph): These values are in terms of the original image as it appears on a screen,
+    // but when stored, the crop is in the coordinates of the image after it has been rotated.
+
+    // NOTE(christoph): Since we're rotating the image, the origin of the crop is the bottom
+    // left of the image, so we need to adjust for that here.
     const height = visualWidth
     const width = Math.round((height * 3) / 4)
     console.log('Computed height based on 4:3 aspect ratio:', width)
     return {
       top: visualLeft,
-      // NOTE(christoph): Since we're rotating the image, the origin of the crop is the bottom
-      // left of the image, so we need to adjust for that here.
       left: imageMetadata.height - visualTop - width,
       width,
       height,
