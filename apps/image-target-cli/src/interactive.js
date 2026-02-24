@@ -17,17 +17,20 @@ import {applyCrop} from './apply.js'
  * @returns {Promise<CropGeometry>}
  */
 const selectPlanarGeometry = async (rl, imageMetadata) => {
-  const isRotated =
-    (await rl.choose(
-      'Select the image orientation:',
-      ['landscape', 'portrait'],
-      true
-    )) === 'landscape'
-
+  const sourceIsLandscape = imageMetadata.width >= imageMetadata.height
   const useDefaultCrop = await rl.confirm('Use default crop?', true)
   if (useDefaultCrop) {
-    return getDefaultCrop(imageMetadata, isRotated)
+    return getDefaultCrop(imageMetadata, sourceIsLandscape)
   } else {
+    const orientationOptions = sourceIsLandscape
+      ? ['landscape', 'portrait']
+      : ['portrait', 'landscape']
+    const isRotated = await rl.choose(
+      'Select the image orientation of the trackable region:',
+      orientationOptions,
+      true
+    ) === 'landscape'
+
     const top = await rl.promptInteger('Enter the top offset of the crop')
     const left = await rl.promptInteger('Enter the left offset of the crop')
     const width = await rl.promptInteger('Enter the width of the crop')

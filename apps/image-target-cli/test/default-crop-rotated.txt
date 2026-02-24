@@ -1,6 +1,5 @@
-test/image.jpg
+test/tower.jpg
 flat
-landscape
 y
 tmp
 default-crop-rotated

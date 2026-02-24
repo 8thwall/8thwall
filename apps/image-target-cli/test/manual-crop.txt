@@ -1,7 +1,7 @@
 test/image.jpg
 flat
-portrait
 n
+portrait
 500
 1000
 480

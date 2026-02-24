@@ -4,42 +4,42 @@ import os from 'os'
 
 import {normalizePath, selectPlanarGeometry} from './interactive.js'
 
-const mockRl = (chooseValue, confirmValue, integers = []) => {
+const mockRl = (...values) => {
   let i = 0
+  const getNextValue = async () => {
+    if (i >= values.length) {
+      throw new Error('No more mock values available')
+    }
+    return values[i++]
+  }
   return {
-    choose: async () => chooseValue,
-    confirm: async () => confirmValue,
-    promptInteger: async () => integers[i++],
-    promptFloat: async () => {
-      throw new Error('Unexpected promptFloat call')
-    },
-    prompt: async () => '',
+    choose: getNextValue,
+    confirm: getNextValue,
+    promptInteger: getNextValue,
+    promptFloat: getNextValue,
+    prompt: getNextValue,
     close: () => {},
   }
 }
 
 describe('selectPlanarGeometry', () => {
-  const metadata = {width: 600, height: 800}
   it('landscape + default crop', async () => {
     const crop = await selectPlanarGeometry(
-      mockRl('landscape', true),
-      metadata
+      mockRl(true),
+      {width: 1200, height: 600}
     )
 
     assert.equal(crop.isRotated, true)
     // Post-rotation: 600x800 rotated -> 800x600
-    assert.equal(crop.originalWidth, 800)
-    assert.equal(crop.originalHeight, 600)
-    // Rotated effective: 800x600. 800/3=266.7 > 600/4=150 -> width cropped.
-    // croppedWidth = Math.round(600 * 3 / 4) = 450
-    // left = Math.round((800 - 450) / 2) = 175
-    assert.equal(crop.width, 450)
-    assert.equal(crop.height, 600)
-    assert.equal(crop.left, 175)
-    assert.equal(crop.top, 0)
+    assert.equal(crop.originalWidth, 600)
+    assert.equal(crop.originalHeight, 1200)
+    assert.equal(crop.width, 600)
+    assert.equal(crop.height, 800)
+    assert.equal(crop.left, 0)
+    assert.equal(crop.top, 200)
   })
   it('portrait + default crop', async () => {
-    const crop = await selectPlanarGeometry(mockRl('portrait', true), metadata)
+    const crop = await selectPlanarGeometry(mockRl(true), {width: 600, height: 800})
 
     assert.equal(crop.isRotated, false)
     // Not rotated: 600x800. 600/3=200, 800/4=200 -> equal, else branch.
@@ -50,8 +50,8 @@ describe('selectPlanarGeometry', () => {
     assert.equal(crop.top, 0)
   })
   it('portrait + manual crop computes 4:3 height', async () => {
-    const rl = mockRl('portrait', false, [10, 20, 600])
-    const crop = await selectPlanarGeometry(rl, metadata)
+    const rl = mockRl(false, 'portrait', 10, 20, 600)
+    const crop = await selectPlanarGeometry(rl, {width: 600, height: 800})
 
     assert.equal(crop.top, 10)
     assert.equal(crop.left, 20)
@@ -64,8 +64,8 @@ describe('selectPlanarGeometry', () => {
   })
   it('landscape + manual crop computes 3:4 height', async () => {
     const crop = await selectPlanarGeometry(
-      mockRl('landscape', false, [0, 0, 400]),
-      metadata
+      mockRl(false, 'landscape', 0, 0, 400),
+      {width: 600, height: 800}
     )
 
     assert.equal(crop.width, 400)
