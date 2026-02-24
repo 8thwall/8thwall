@@ -1,4 +1,4 @@
-test/image.jpg
+test/love.jpg
 flat
 y
 tmp

@@ -1,9 +1,9 @@
-test/image.jpg
+test/love.jpg
 flat
 n
 portrait
-500
-1000
+172
+150
 480
 tmp
 manual-crop
