@@ -60,6 +60,7 @@ const applyCrop = async (rawImage, crop, folder, name, overwriteFiles) => {
 
   const originalImage = rawImage
     .clone()
+    .autoOrient()
     .rotate(crop.geometry.isRotated ? 90 : 0)
   const croppedImage = originalImage.clone().extract(crop.geometry)
 

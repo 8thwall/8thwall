@@ -130,3 +130,5 @@ venv
 
 # Rust Analyzer
 rust-project.json
+
+tmp
