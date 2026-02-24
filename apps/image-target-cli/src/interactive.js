@@ -21,35 +21,47 @@ const selectPlanarGeometry = async (rl, imageMetadata) => {
   const useDefaultCrop = await rl.confirm('Use default crop?', true)
   if (useDefaultCrop) {
     return getDefaultCrop(imageMetadata, sourceIsLandscape)
-  } else {
-    const orientationOptions = sourceIsLandscape
-      ? ['landscape', 'portrait']
-      : ['portrait', 'landscape']
-    const isRotated = await rl.choose(
-      'Select the image orientation of the trackable region:',
-      orientationOptions,
-      true
-    ) === 'landscape'
+  }
 
-    const top = await rl.promptInteger('Enter the top offset of the crop')
-    const left = await rl.promptInteger('Enter the left offset of the crop')
-    const width = await rl.promptInteger('Enter the width of the crop')
-    const height = isRotated
-      ? Math.round((width * 3) / 4)
-      : Math.round((width * 4) / 3)
-    console.log('Height, determined by fixed aspect ratio:', height)
+  const orientationOptions = sourceIsLandscape
+    ? ['landscape', 'portrait']
+    : ['portrait', 'landscape']
+  const isRotated = await rl.choose(
+    'Select the image orientation of the trackable region:',
+    orientationOptions,
+    true
+  ) === 'landscape'
 
-    const [originalWidth, originalHeight] = isRotated
-      ? [imageMetadata.height, imageMetadata.width]
-      : [imageMetadata.width, imageMetadata.height]
+  // NOTE(christoph): These values are in terms of the original image as it appears on a screen,
+  // but when stored, the crop is in the coordinates of the image after it has been rotated.
+  const visualTop = await rl.promptInteger('Enter the top offset of the crop')
+  const visualLeft = await rl.promptInteger('Enter the left offset of the crop')
+  const visualWidth = await rl.promptInteger('Enter the width of the crop')
+
+  if (isRotated) {
+    const height = visualWidth
+    const width = Math.round((height * 3) / 4)
+    console.log('Computed height based on 4:3 aspect ratio:', width)
     return {
-      top,
-      left,
+      top: visualLeft,
+      left: visualTop,
       width,
       height,
       isRotated,
-      originalWidth,
-      originalHeight,
+      originalWidth: imageMetadata.height,
+      originalHeight: imageMetadata.width,
+    }
+  } else {
+    const height = Math.round((visualWidth * 4) / 3)
+    console.log('Computed height based on 3:4 aspect ratio:', height)
+    return {
+      top: visualTop,
+      left: visualLeft,
+      width: visualWidth,
+      height,
+      isRotated,
+      originalWidth: imageMetadata.width,
+      originalHeight: imageMetadata.height,
     }
   }
 }

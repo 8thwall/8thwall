@@ -1,9 +1,7 @@
 # Testing
 
-Run the following to use the interactive terminal
+These tests provide input data to the interactive terminal prompts, placing their output in the /tmp/ directory.
 
 ```
-export OVERWRITE_FILES=true && cat test/default-crop.txt | node ./src/index.js
-export OVERWRITE_FILES=true && cat test/default-crop-rotated.txt | node ./src/index.js
-export OVERWRITE_FILES=true && cat test/manual-crop.txt | node ./src/index.js
+./test/all.sh
 ```

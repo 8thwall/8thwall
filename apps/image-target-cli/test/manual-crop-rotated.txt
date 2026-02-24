@@ -1,0 +1,9 @@
+test/love.jpg
+flat
+n
+landscape
+0
+800
+640
+tmp
+manual-crop-rotated
