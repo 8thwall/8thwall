@@ -1,0 +1,20 @@
+/* eslint-disable global-require */
+module.exports = {
+  'acronym-capitalization': require('./acronym-capitalization'),
+  'implicit-any': require('./implicit-any'),
+  'commonjs': require('./commonjs'),
+  'hardcoded-copy': require('./hardcoded-copy'),
+  'i18n-nesting': require('./i18n-nesting'),
+  'inline-comment-spacing': require('./inline-comment-spacing'),
+  'prefer-await': require('./prefer-await'),
+  'zod-tuple': require('./zod-tuple'),
+  'type-only-imports': require('./type-only-imports'),
+  'typedef-separators': require('./typedef-separators'),
+  'ui-component-styling': require('./ui-component-styling'),
+  'untyped-array': require('./untyped-array'),
+  'express-deprecated-send': require('./express-deprecated-send'),
+  'export-request-handler': require('./export-request-handler'),
+  'reality-shared-imports': require('./reality-shared-imports'),
+  'underscore-argument': require('./underscore-argument'),
+  'multiline-ternary': require('./multiline-ternary'),
+}

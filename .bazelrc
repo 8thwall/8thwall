@@ -1,0 +1,124 @@
+# Bazel picks up host-OS-specific config lines from bazelrc files. For example, if the host OS is
+# Linux and you run bazel build, Bazel picks up lines starting with build:linux. Supported OS
+# identifiers are `linux`, `macos`, `windows`, `freebsd`, and `openbsd`. Enabling this flag is
+# equivalent to using `--config=linux` on Linux, `--config=windows` on Windows, etc.
+# Docs: https://bazel.build/reference/command-line-reference#flag--enable_platform_specific_config
+common --enable_platform_specific_config
+
+# Do not create a local, non-hermetic C++ toolchain, and do not auto-transition for objc_library rules.
+common --repo_env=BAZEL_DO_NOT_DETECT_CPP_TOOLCHAIN=1 --incompatible_disable_objc_library_transition
+
+# Finally...
+common --experimental_writable_outputs
+
+# Access to more information
+common --ui_actions_shown=32
+
+# Use the hermetic XCode toolchain for host and target by default.
+# Note: the crosstool_top is explicitly specified here due to a bad interaction
+# between the built-in (legacy) apple transition, the platform_mappings file,
+# and the unity target platforms, which can result in a transition to the
+# non-hermetic crosstool. This can be removed in future bazel versions that
+# support disabling the apple transition.
+build:macos --apple_platform_type=macos --crosstool_top=//bzl/crosstool:xcode-cc-toolchain
+
+# The next line is required for overcoming analysis of 'objc_*' targets on Linux [Ref: https://github.com/bazelbuild/bazel/issues/16099#issuecomment-1254180342]
+build:linux --macos_cpus=dummy
+
+# Bazel does not offer a mechanism to redistribute runtime dependencies from sys root (i.e. libstdc++)
+# This causes the linux executable might get pulled from catch without those dependencies and crashing when 
+# the host system differs our hermetic toolchain.
+# Normally this can be fixed by patching RPATH and copy library afterwards via a dedicated rule. However for protoc compiler 
+# this is not possible because the protobuf rules do not offer any setting for it in starlark.
+# Luckily we have the possibility configure it from command line pointing to protoc tool has depedencies on the hermetic libraries.
+build:linux --proto_compiler "//bzl/redist/protoc:protoc"
+
+# With Bazel 7 we cannot add dependencies on generated output directories
+# But all the Unity rules relies on that preatty heavily and Unity expect a lot of Empty directory
+# to work properly, which is not possible if you cannot pass only directory as a dependency
+# So for now allow this temporarily until we find a better solution - https://bit.ly/42IHGAh
+build --noincompatible_disallow_unsound_directory_outputs
+
+# The new skyframe dependency graph is not yet stable and can cause issues with the unity rules.
+# Specifically: it makes all the action within a rule to be executed in parallel because it does not consider 
+# the output of the action as a dependency of the next action even if an input. 
+# And Unity rules relies on that preatty heavily as well. So we have to switch it off for now.
+build --experimental_merged_skyframe_analysis_execution=false
+
+query --experimental_repo_remote_exec
+fetch --experimental_repo_remote_exec
+
+build --android_crosstool_top=//external:android/crosstool --apple_crosstool_top=//bzl/crosstool:xcode-cc-toolchain --incompatible_enable_cc_toolchain_resolution --incompatible_use_python_toolchains --experimental_repo_remote_exec --experimental_platforms_api --incompatible_strict_action_env --dynamic_mode=off
+
+# From Bazel 7, we must now set a default --android_platforms to specify the default
+# android platform to be used for android_* rules if the --platforms target is not android.
+build --android_platforms=//bzl:arm64-v8a
+
+# Currently rule_java might fail the toolchain resolution for rules that attempt to to change java flags
+# A way work around that is to specific a Java runtime version to command line:
+# See https://github.com/bazelbuild/bazel/issues/19934
+build --java_runtime_version=remotejdk_21
+
+# Local caching. incompatible_remote_results_ignore_disk makes remote_cache flags not apply to the disk_cache.
+build:linux --disk_cache=/tmp/bazel_local_cache_archive8
+build:macos --disk_cache=/tmp/bazel_local_cache_archive8
+# For windows specifically we have to use the shortest possible paths to avoid hitting the 260 character limit.
+# and we have to enable_runfiles to make sure runfiles sandboxes are created for tests.
+build:windows --disk_cache=C:\\bzlc8 --enable_runfiles
+
+build --incompatible_remote_results_ignore_disk --experimental_guard_against_concurrent_changes
+
+# NOTE(paris): Disable this in archive8 - if someone wants to re-enable support for remote caching, they can do so by uncommenting the code below. Beyond just the code, you also should:
+# - Create a bucket called bazel-remote-cache-archive8 on GCP.
+# - Create a service account which has read access to the bucket, download the key as a JSON file, and check it in as runners-bazel-cache-readers.json in the root of the repo. This will let anyone with repo access read from the remote cache.
+# - Create a service account which has read + write access to the bucket, download the key as a JSON file, get it on a trusted CI machine, and then override --google_credentials with the path to this write-access key. This will let the CI machine write to the remote cache. See ci-support/generate-ci-bazelrc.sh for how this used to be done.
+# Remote caching. Note that for CI we set `--remote_upload_local_results=true` and pass credentials with write-access so that we upload results.
+# If encountering "Could not open auth credentials file './runners-bazel-cache-readers.json'", try changing --google_credentials from relative path to absolute path
+# build --remote_cache=https://storage.googleapis.com/bazel-remote-cache-archive8 --remote_upload_local_results=false --google_credentials=./runners-bazel-cache-readers.json --remote_retries=0 --remote_timeout=20
+
+# Run dsymutil on cc_binary and cc_test outputs to generate Apple .dSYM files for debugging.
+build:dsym --aspects=//bzl/apple:dsymutil.bzl%dsymutil_aspect --output_groups=+dsym
+
+# Build in implicit WebAssembly mode, where cc_binary and cc_test outputs produce .js and .wasm files.
+build:wasm --platforms=//bzl:wasm32 --aspects=//bzl/wasm:wasm.bzl%wasm_cc_aspect --output_groups=+wasm_files  # Implicit .wasm and .js outputs.
+build:node --platforms=//bzl:wasm32 --features=nodejs --//bzl/js:target=node  # With a Node.js wrapper script.
+build:chrome --platforms=//bzl:wasm32 --features=emrun --//bzl/wasm:browser=chrome  --//bzl/js:target=web  # With a Chrome wrapper script.
+build:safari --platforms=//bzl:wasm32 --features=emrun --//bzl/wasm:browser=safari  --//bzl/js:target=web  # With a Safari wrapper script.
+
+# Build with ANGLE replacing native OpenGL headers and libraries.
+build:angle --//c8/pixels/opengl:angle
+build --flag_alias=angle=//c8/pixels/opengl:angle
+
+# Run/test with inspect or inspect-brk for node stuff
+build --flag_alias=inspect=//bzl/js:inspect
+
+# Additional specific commands for debugging with lldb on mac
+test:lldb-debug --features=oso_prefix_is_pwd -c dbg --spawn_strategy=local --test_output=streamed
+
+# ARGeo bazelrc config rules:
+# Before adding any --copt's check the toolchains as they handle adding compiler flags when -c opt / debug / fastbuild (default) are used.
+build:release -c opt --strip=never --stripopt=--strip-all
+# release_no_lto only affect mac/ios platforms
+build:release_no_lto -c opt --strip=never --stripopt=--strip-all --features=-full_lto
+build:debug -c dbg --config=dsym
+build:debug_coverage -c dbg --config=dsym --features=dbg_coverage
+build:asan -c dbg --strip=never --copt=-fsanitize=address --copt=-DADDRESS_SANITIZER --copt=-O1 --copt=-fno-omit-frame-pointer --linkopt=-fsanitize=address --config=dsym --//bzl/asan:asan
+build:ubsan -c dbg --strip=never --copt=-fsanitize=undefined --copt=-DUNDEFINED_SANITIZER --copt=-O1 --copt=-fno-omit-frame-pointer --linkopt=-fsanitize=undefined --config=dsym
+build:fastbuild -c fastbuild
+build:ext --config=release --copt=-DD2D_PROD
+build:ext_no_lto --config=release_no_lto --copt=-DD2D_PROD
+
+# Build for wasm releases
+build:versionedrelease -c opt --action_env='C8VERSION=true' --workspace_status_command='$PWD/bzl/stamp/stamp-build.sh'
+build:wasmrelease --config=versionedrelease --platforms=//bzl:wasm32 --action_env='NODE_ENV=production' --copt=-DC8_RELEASE_CONFIG_ENABLE_CONSOLE_LOGGING=true --features=nosourcemap
+build:wasmreleasesimd --config=wasmrelease --features=simd
+
+# Adding python hermetic toolchains
+build:python3_9 --extra_toolchains=//bzl/python:python3.9_toolchain
+
+####################################################################################################
+## Keep this at the bottom of .bazelrc so that it overwrites anything in this file.
+####################################################################################################
+# Generated by ci-support/generate-ci-bazelrc.sh, which is run on Jenkins CI jobs. Turns on 
+# uploading to the remote cache (also provides GCP credentials to write to it).
+try-import %workspace%/ci-support/ci.bazelrc
