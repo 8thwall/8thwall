@@ -18,7 +18,7 @@ You will be prompted to enter an image path, select crop, and choose a folder/im
 
 ![Diagram showing an original image dimension of 2000x2000, then a crop being applied by offsetting the top left corner by the top and left parameters, and reducing the width and height of the crop using width and height parameters](./docs/flat-diagram.jpg)
 
-If you choose a cylindrical geometry, you will also need the physical dimensions of the cylinder you are planning to create, according to the following diagram. The choice of units will not affect tracking behavior.
+If you choose a cylindrical geometry, you will also be prompted for the cylinder circumference and target width. See the diagram below for a visualization. The choice of units (mm vs inches) will not affect tracking behavior, so the measurements can also be scale-free.
 
 ![3D Visualization showing two views of a cylinder with a label wrapped around the side. One view shows the entire top circle of the cylinder highlighted. The other view shows the top edge of the label highlighted, which is about one third of the full circumference](./docs/cylinder-diagram.jpg) 
 
