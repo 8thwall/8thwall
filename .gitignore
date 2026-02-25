@@ -130,3 +130,6 @@ venv
 
 # Rust Analyzer
 rust-project.json
+
+# Scratch files
+tmp
