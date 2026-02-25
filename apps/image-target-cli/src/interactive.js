@@ -7,7 +7,9 @@ import {getDefaultCrop} from './crop.js'
 import {applyCrop} from './apply.js'
 
 /**
- * @import { ImageMetadata, CropResult, CropGeometry, CliInterface } from "./types"
+ * @import {
+ *   ImageMetadata, CropResult, CylinderCropGeometry, CropGeometry, CliInterface
+ *  } from "./types"
  */
 
 /**
@@ -71,11 +73,35 @@ const selectPlanarGeometry = async (rl, imageMetadata) => {
 
 /**
  * @param {CliInterface} rl
- * @returns {Promise<any>}
+ * @param {ImageMetadata} imageMetadata
+ * @returns {Promise<CylinderCropGeometry>}
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const selectCylindricalGeometry = async (rl) => {
-  throw new Error('TODO')
+const selectCylindricalGeometry = async (rl, imageMetadata) => {
+  const cylinderCircumference = await rl.promptFloat(
+    'Enter the physical circumference of the cylinder (e.g. in inches): '
+  )
+  const targetCircumference = await rl.promptFloat(
+    'Enter the physical width of the image (same units as above): '
+  )
+
+  if (targetCircumference > cylinderCircumference) {
+    throw new Error('Image width cannot be greater than cylinder circumference')
+  }
+
+  const arcAngle = (targetCircumference / cylinderCircumference) * 360
+  const cylinderSideLength = (imageMetadata.height / imageMetadata.width) * targetCircumference
+
+  const baseGeometry = await selectPlanarGeometry(rl, imageMetadata)
+
+  return {
+    ...baseGeometry,
+    targetCircumferenceTop: targetCircumference,
+    cylinderCircumferenceTop: cylinderCircumference,
+    cylinderCircumferenceBottom: cylinderCircumference,
+    cylinderSideLength,
+    arcAngle,
+    coniness: 0,
+  }
 }
 
 /**
@@ -108,7 +134,7 @@ const selectGeometry = async (rl, imageMetadata) => {
     case 'cylinder':
       return {
         type: 'CYLINDER',
-        geometry: await selectCylindricalGeometry(rl),
+        geometry: await selectCylindricalGeometry(rl, imageMetadata),
       }
     case 'cone':
       return {type: 'CONICAL', geometry: await selectConicalGeometry(rl)}

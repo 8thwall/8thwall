@@ -15,8 +15,8 @@ const CONSTANTS = require('./constants.json')
  * @param {boolean} overwriteFiles
  */
 const applyCrop = async (rawImage, crop, folder, name, overwriteFiles) => {
-  if (crop.type !== 'PLANAR') {
-    throw new Error('TODO: Add non-planar support')
+  if (crop.type === 'CONICAL') {
+    throw new Error('TODO: Add cone support')
   }
   const baseMetadata = await rawImage.metadata()
   const metadata = crop.geometry.isRotated

@@ -2,7 +2,7 @@ import {describe, it} from 'node:test'
 import assert from 'node:assert/strict'
 import os from 'os'
 
-import {normalizePath, selectPlanarGeometry} from './interactive.js'
+import {normalizePath, selectPlanarGeometry, selectCylindricalGeometry} from './interactive.js'
 
 const mockRl = (...values) => {
   let i = 0
@@ -72,6 +72,106 @@ describe('selectPlanarGeometry', () => {
     // Landscape height = Math.round(400 * 3 / 4) = 300
     assert.equal(crop.height, 400)
     assert.equal(crop.isRotated, true)
+  })
+})
+
+describe('selectCylindricalGeometry', () => {
+  it('landscape + default crop', async () => {
+    const crop = await selectCylindricalGeometry(
+      mockRl(1000, 500, true),
+      {width: 1200, height: 600}
+    )
+
+    assert.deepEqual(crop, {
+      isRotated: true,
+      originalWidth: 600,
+      originalHeight: 1200,
+      width: 600,
+      height: 800,
+      left: 0,
+      top: 200,
+      targetCircumferenceTop: 500,
+      cylinderSideLength: (600 / 1200) * 500,
+      cylinderCircumferenceTop: 1000,
+      cylinderCircumferenceBottom: 1000,
+      arcAngle: 180,
+      coniness: 0,
+    })
+  })
+
+  it('portrait + default crop', async () => {
+    const crop = await selectCylindricalGeometry(
+      mockRl(3000, 1000, true),
+      {width: 600, height: 1200}
+    )
+
+    assert.deepEqual(crop, {
+      isRotated: false,
+      originalWidth: 600,
+      originalHeight: 1200,
+      width: 600,
+      height: 800,
+      left: 0,
+      top: 200,
+      targetCircumferenceTop: 1000,
+      cylinderSideLength: (1200 / 600) * 1000,
+      cylinderCircumferenceTop: 3000,
+      cylinderCircumferenceBottom: 3000,
+      arcAngle: 120,
+      coniness: 0,
+    })
+  })
+
+  /* eslint quote-props: ["error", "as-needed"] */
+
+  it('love.jpg + default crop', async () => {
+    const crop = await selectCylindricalGeometry(
+      mockRl(30, 10, true),
+      {width: 1500, height: 1128}
+    )
+
+    // NOTE(christoph): This is comparing to the 8thwall.com behavior
+    assert.deepEqual(crop, {
+      top: 0,
+      left: 2,
+      width: 1125,
+      height: 1500,
+      isRotated: true,
+      originalWidth: 1128,
+      originalHeight: 1500,
+      cylinderCircumferenceTop: 30,
+      cylinderCircumferenceBottom: 30,
+      targetCircumferenceTop: 10,
+      cylinderSideLength: 7.52,
+      coniness: 0,
+      arcAngle: 120,
+    })
+  })
+
+  it('tower.jpg + default crop', async () => {
+    const crop = await selectCylindricalGeometry(
+      // NOTE(christoph): Specifying the exact params because it seems like the 8thwall.com client
+      // picked the initial crop according to different rounding.
+      mockRl(100, 25, false, 'portrait', 82, 0, 1000, 1333),
+      {width: 1000, height: 1500}
+    )
+
+    // NOTE(christoph): This is comparing to the 8thwall.com behavior
+    assert.deepEqual(crop, {
+      top: 82,
+      left: 0,
+      width: 1000,
+      height: 1333,
+      isRotated: false,
+      originalWidth: 1000,
+      originalHeight: 1500,
+      cylinderCircumferenceTop: 100,
+      cylinderCircumferenceBottom: 100,
+      targetCircumferenceTop: 25,
+      cylinderSideLength: 37.5,
+      coniness: 0,
+      arcAngle: 90,
+    })
   })
 })
 

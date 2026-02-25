@@ -1,0 +1,7 @@
+test/love.jpg
+cylinder
+1000
+300
+y
+tmp
+cylinder

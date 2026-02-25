@@ -15,12 +15,12 @@ interface ImageMetadata {
    // bottomRadius?: number
    // targetCircumferenceTop?: number
 
-   // cylinderSideLength?: number
-   // cylinderCircumferenceTop?: number
-   // cylinderCircumferenceBottom?: number
+   cylinderSideLength?: number
+   cylinderCircumferenceTop?: number
+   cylinderCircumferenceBottom?: number
 
-   // arcAngle?: number
-   // coniness?: number
+   arcAngle?: number
+   coniness?: number
  }
 
 type ReferencedResources = {
@@ -51,13 +51,22 @@ interface CropGeometry {
   originalHeight: number
 }
 
+type CylinderCropGeometry = CropGeometry & {
+  targetCircumferenceTop: number
+  cylinderSideLength: number
+  cylinderCircumferenceTop: number
+  cylinderCircumferenceBottom: number
+  arcAngle: number
+  coniness: number
+}
+
  type PlanarCropResult = {
    type: 'PLANAR'
    geometry: CropGeometry
  }
  type CylinderCropResult = {
    type: 'CYLINDER'
-   geometry: CropGeometry
+   geometry: CylinderCropGeometry
  }
  type ConicalCropResult = {
    type: 'CONICAL'
@@ -84,6 +93,8 @@ export type {
   CliInterface,
   CropGeometry,
   CropResult,
+  CylinderCropGeometry,
+  CylinderCropResult,
   ImageMetadata,
   ImageTargetData,
   ReferencedResources,
