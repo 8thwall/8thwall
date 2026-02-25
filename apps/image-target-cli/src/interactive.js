@@ -101,6 +101,8 @@ const selectCylindricalGeometry = async (rl, imageMetadata) => {
     cylinderSideLength,
     arcAngle,
     coniness: 0,
+    inputMode: 'ADVANCED',
+    unit: 'mm',
   }
 }
 

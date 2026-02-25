@@ -96,6 +96,8 @@ describe('selectCylindricalGeometry', () => {
       cylinderCircumferenceBottom: 1000,
       arcAngle: 180,
       coniness: 0,
+      inputMode: 'ADVANCED',
+      unit: 'mm',
     })
   })
 
@@ -119,6 +121,8 @@ describe('selectCylindricalGeometry', () => {
       cylinderCircumferenceBottom: 3000,
       arcAngle: 120,
       coniness: 0,
+      inputMode: 'ADVANCED',
+      unit: 'mm',
     })
   })
 
@@ -143,8 +147,10 @@ describe('selectCylindricalGeometry', () => {
       cylinderCircumferenceBottom: 30,
       targetCircumferenceTop: 10,
       cylinderSideLength: 7.52,
+      inputMode: 'ADVANCED',
       coniness: 0,
       arcAngle: 120,
+      unit: 'mm',
     })
   })
 
@@ -169,8 +175,10 @@ describe('selectCylindricalGeometry', () => {
       cylinderCircumferenceBottom: 100,
       targetCircumferenceTop: 25,
       cylinderSideLength: 37.5,
+      inputMode: 'ADVANCED',
       coniness: 0,
       arcAngle: 90,
+      unit: 'mm',
     })
   })
 })

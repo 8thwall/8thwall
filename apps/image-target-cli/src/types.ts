@@ -3,26 +3,6 @@ interface ImageMetadata {
   height: number
 }
 
- type TargetMetadata = {
-   left: number
-   top: number
-   width: number
-   height: number
-   isRotated?: boolean
-   originalWidth: number
-   originalHeight: number
-   // topRadius?: number
-   // bottomRadius?: number
-   // targetCircumferenceTop?: number
-
-   cylinderSideLength?: number
-   cylinderCircumferenceTop?: number
-   cylinderCircumferenceBottom?: number
-
-   arcAngle?: number
-   coniness?: number
- }
-
 type ReferencedResources = {
   originalImage: string
   croppedImage: string
@@ -36,7 +16,7 @@ type ImageTargetData = {
   metadata: null
   name: string
   type: 'PLANAR' | 'CYLINDER' | 'CONICAL'
-  properties: TargetMetadata
+  properties: CropGeometry | CylinderCropGeometry
   resources: ReferencedResources
   created: number
   updated: number
@@ -58,6 +38,8 @@ type CylinderCropGeometry = CropGeometry & {
   cylinderCircumferenceBottom: number
   arcAngle: number
   coniness: number
+  inputMode: 'ADVANCED'
+  unit: 'mm'
 }
 
  type PlanarCropResult = {
@@ -98,5 +80,4 @@ export type {
   ImageMetadata,
   ImageTargetData,
   ReferencedResources,
-  TargetMetadata,
 }
