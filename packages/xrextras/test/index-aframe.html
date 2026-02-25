@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+  <head>
+    <title>XRExtras: A-FRAME</title>
+
+    <!-- 8thWall Web - Replace the app key here with your own app key -->
+    <script async src="https://apps.8thwall.com/xrweb?appKey=XXXXXXXX"></script>
+
+    <!-- XR Extras - provides utilities like load screen, almost there, and error handling.
+         See github.com/8thwall/web/tree/master/xrextras -->
+    <script src="external/xrextras/xrextras.js"></script>
+  </head>
+
+  <body>
+    <script>
+      const xrScene = `
+<a-scene xrweb xrextras-tap-recenter xrextras-almost-there xrextras-loading xrextras-runtime-error
+    xrextras-gesture-detector throw-error>
+  <a-camera position="0 3 3"></a-camera>
+  <a-box position="0 0.5 -1" material="color: #7611B6;" shadow xrextras-one-finger-rotate></a-box>
+  <a-box scale="100 2 100" position="0 -1 0" material="shader: shadow" shadow></a-box>
+</a-scene>
+      `
+      const throwErrorComponent = {
+        init: function() {
+          // A pipeline module that throws an error after 300 frames -- illustrates the error
+          // handinling in xrweb-runtime-error.
+          const throwerrorPipelineModule = () => {
+            let frame = 0
+            return {
+              name: 'throwerror',
+              onUpdate: () => {if (++frame > 300) { throw Error('Too many frames!') }},
+            }
+          }
+          const load = () => { XR.addCameraPipelineModule(throwerrorPipelineModule()) }
+          window.XRExtras && window.XR ? load() : window.addEventListener('xrandextrasloaded', load)
+        }
+      }
+      window.XRExtras.AFrame.loadAFrameForXr({version: 'latest', components: {'throw-error': throwErrorComponent}})
+        .then(() => document.body.insertAdjacentHTML('beforeend', xrScene))
+    </script>
+  </body>
+</html>

@@ -1,0 +1,30 @@
+<div id="previewContainer">
+  <div class="top-bar">
+    <div class="preview-box">
+      <button id="closePreviewButton" class="style-reset icon-button">
+        <img src="./external/xrextras/resources/img/mediarecorder/close-v2.svg">
+      </button>
+      <img id="imagePreview">
+      <video id="videoPreview" playsinline loop></video>
+      <button id="toggleMuteButton" class="style-reset icon-button" >
+        <img id="muteButtonImg" src="./external/xrextras/resources/img/mediarecorder/sound-on-v1.svg">
+      </button>
+    </div>
+  </div>
+
+  <div class="bottom-bar">
+    <div class="finalize-container">
+      <div id="finalizeText"></div>
+      <progress id="finalizeProgressBar" value="0" max="100"></progress>
+    </div>
+    <button id="downloadButton" class="style-reset icon-button">
+      <img src="./external/xrextras/resources/img/mediarecorder/download-v1.svg">
+    </button>
+    <div id="openSafariText" class="style-reset">Downloading is only available in Safari</div>
+    <div id="tapAndHoldText" class="style-reset">Tap + Hold to Share</div>
+    <button id="actionButton" class="style-reset show-with-download-button">
+      <span id="actionButtonText"></span>
+      <img id="actionButtonImg">
+    </button>
+  </div>
+</div>
