@@ -77,11 +77,16 @@ const selectPlanarGeometry = async (rl, imageMetadata) => {
  * @returns {Promise<CylinderCropGeometry>}
  */
 const selectCylindricalGeometry = async (rl, imageMetadata) => {
+  const unit = await rl.choose(
+    'Select the unit to measure physical lengths',
+    ['mm', 'in'],
+    true
+  )
   const cylinderCircumference = await rl.promptFloat(
-    'Enter the physical circumference of the cylinder (e.g. in inches): '
+    `Enter the circumference of the cylinder in ${unit}: `
   )
   const targetCircumference = await rl.promptFloat(
-    'Enter the physical width of the image (same units as above): '
+    `Enter the width of the image in ${unit}: `
   )
 
   if (targetCircumference > cylinderCircumference) {
@@ -102,7 +107,7 @@ const selectCylindricalGeometry = async (rl, imageMetadata) => {
     arcAngle,
     coniness: 0,
     inputMode: 'ADVANCED',
-    unit: 'mm',
+    unit,
   }
 }
 

@@ -39,7 +39,7 @@ type CylinderCropGeometry = CropGeometry & {
   arcAngle: number
   coniness: number
   inputMode: 'ADVANCED'
-  unit: 'mm'
+  unit: 'mm' | 'in'
 }
 
  type PlanarCropResult = {

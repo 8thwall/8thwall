@@ -78,7 +78,7 @@ describe('selectPlanarGeometry', () => {
 describe('selectCylindricalGeometry', () => {
   it('landscape + default crop', async () => {
     const crop = await selectCylindricalGeometry(
-      mockRl(1000, 500, true),
+      mockRl('mm', 1000, 500, true),
       {width: 1200, height: 600}
     )
 
@@ -103,7 +103,7 @@ describe('selectCylindricalGeometry', () => {
 
   it('portrait + default crop', async () => {
     const crop = await selectCylindricalGeometry(
-      mockRl(3000, 1000, true),
+      mockRl('mm', 3000, 1000, true),
       {width: 600, height: 1200}
     )
 
@@ -130,7 +130,7 @@ describe('selectCylindricalGeometry', () => {
 
   it('love.jpg + default crop', async () => {
     const crop = await selectCylindricalGeometry(
-      mockRl(30, 10, true),
+      mockRl('mm', 30, 10, true),
       {width: 1500, height: 1128}
     )
 
@@ -158,7 +158,7 @@ describe('selectCylindricalGeometry', () => {
     const crop = await selectCylindricalGeometry(
       // NOTE(christoph): Specifying the exact params because it seems like the 8thwall.com client
       // picked the initial crop according to different rounding.
-      mockRl(100, 25, false, 'portrait', 82, 0, 1000, 1333),
+      mockRl('mm', 100, 25, false, 'portrait', 82, 0, 1000, 1333),
       {width: 1000, height: 1500}
     )
 

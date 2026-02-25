@@ -3,7 +3,7 @@
 This CLI tool allows the creation of image targets in the format supported by the
 [Offline Engine](https://8th.io/xrjs).
 
-Note that this is a work in progress, only flat image targets are currently supported.
+Note that this is a work in progress, only flat and cylindrical image targets are currently supported.
 
 ## Usage
 
@@ -17,6 +17,10 @@ node ./src/index.js
 You will be prompted to enter an image path, select crop, and choose a folder/image target name. You can either use a default centered crop, or choose your crop dimensions according to this diagram:
 
 ![Diagram showing an original image dimension of 2000x2000, then a crop being applied by offsetting the top left corner by the top and left parameters, and reducing the width and height of the crop using width and height parameters](./docs/flat-diagram.jpg)
+
+If you choose a cylindrical geometry, you will also need the physical dimensions of the cylinder you are planning to create, according to the following diagram. The choice of units will not affect tracking behavior.
+
+![3D Visualization showing two views of a cylinder with a label wrapped around the side. One view shows the entire top circle of the cylinder highlighted. The other view shows the top edge of the label highlighted, which is about one third of the full circumference](./docs/cylinder-diagram.jpg) 
 
 On generation, the following will be outputted:
 
