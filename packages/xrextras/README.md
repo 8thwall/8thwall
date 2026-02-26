@@ -4,9 +4,7 @@ This library provides modules that extend the
 [Camera Pipeline Module framework](https://docs.8thwall.com/web/#camerapipelinemodule) in
 [8th Wall XR](https://8thwall.com/products-web.html) to handle common application needs.
 
-The library is served at
-[//cdn.8thwall.com/web/xrextras/xrextras.js](https://cdn.8thwall.com/web/xrextras/xrextras.js), or
-can be built from this repository by running
+The library can be built by running
 
 ```bash
 $ npm install
@@ -27,13 +25,13 @@ index.html:
 
     <!-- XR Extras - provides utilities like load screen, error handling, and gesture control helpers.
          See https://github.com/8thwall/web/tree/master/xrextras/ -->
-    <script src="//cdn.8thwall.com/web/xrextras/xrextras.js"></script>
+    <script src="./external/xrextras/xrextras.js"></script>
 
     <!-- Landing Pages - see https://www.8thwall.com/docs/web/#landing-pages -->
-    <script src='//cdn.8thwall.com/web/landing-page/landing-page.js'></script>
+    <script src='./external/landing-page/landing-page.js'></script>
 
-    <!-- 8th Wall Engine - Replace the app key here with your own app key -->
-    <script async src="//apps.8thwall.com/xrweb?appKey=XXXXXXXX"></script>
+    <!-- 8th Wall Engine -->
+    <script async src="./external/xr/xr.js"></script>
 
     <script src="index.js"></script>
   </head>
@@ -72,17 +70,17 @@ index.html:
     <title>XRExtras: A-FRAME</title>
 
     <!-- We've included a slightly modified version of A-Frame, which fixes some polish concerns -->
-    <script src="//cdn.8thwall.com/web/aframe/8frame-1.3.0.min.js"></script>
+    <script src="./external/scripts/8frame-1.5.0.min.js"></script>
 
     <!-- XR Extras - provides utilities like load screen, error handling, and gesture control helpers.
          See https://github.com/8thwall/web/tree/master/xrextras/ -->
-    <script src="//cdn.8thwall.com/web/xrextras/xrextras.js"></script>
+    <script src="./external/xrextras/xrextras.js"></script>
 
     <!-- Landing Pages - see https://www.8thwall.com/docs/web/#landing-pages -->
-    <script src='//cdn.8thwall.com/web/landing-page/landing-page.js'></script>
+    <script src='./external/landing-page/landing-page.js'></script>
 
-    <!-- 8th Wall Engine - Replace the app key here with your own app key -->
-    <script async src="//apps.8thwall.com/xrweb?appKey=XXXXXXXX"></script>
+    <!-- 8th Wall Engine -->
+      <script async src="./external/xr/xr.js"></script>
   </head>
 
   <body>
@@ -199,7 +197,7 @@ applications.
 Quick Reference:
 
 ```html
-    <script src="//cdn.8thwall.com/web/xrextras/xrextras.js"></script>
+    <script src="./external/xrextras/xrextras.js"></script>
     <script>
       const screenlog = () => {
         window.XRExtras.DebugWebViews.enableLogToScreen()
