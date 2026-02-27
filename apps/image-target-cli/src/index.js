@@ -8,6 +8,7 @@ async function main() {
   try {
     await selectProcessorOptions(rl)
   } catch (err) {
+    console.log(err)
     console.error('Error:', err.message)
     process.exit(1)
   } finally {

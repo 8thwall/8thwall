@@ -5,10 +5,13 @@ import os from 'os'
 
 import {getDefaultCrop} from './crop.js'
 import {applyCrop} from './apply.js'
+import {computePixelPointsFromRadius, getUnconifiedData} from './unconify.js'
+import {getCircumferenceRatio, getConinessForRadii} from './curved-geometry.js'
 
 /**
  * @import {
- *   ImageMetadata, CropResult, CylinderCropGeometry, CropGeometry, CliInterface
+ *   ImageMetadata, CropResult, CylinderCropGeometry, CropGeometry, CliInterface,
+ *   ConicalCropResult,
  *  } from "./types"
  */
 
@@ -113,11 +116,56 @@ const selectCylindricalGeometry = async (rl, imageMetadata) => {
 
 /**
  * @param {CliInterface} rl
- * @returns {Promise<any>}
+ * @param {ImageMetadata} imageMetadata
+ * @returns {Promise<ConicalCropResult['geometry']>}
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const selectConicalGeometry = async (rl) => {
-  throw new Error('TODO')
+const selectConicalGeometry = async (rl, imageMetadata) => {
+  const widerSide = await rl.choose('Which side of the cone is wider?', ['top', 'bottom'], true)
+
+  const isFez = widerSide === 'bottom'
+
+  const outerRadius = await rl.promptFloat('Enter the outer radius of the image')
+
+  if (outerRadius <= 0) {
+    throw new Error('Outer radius must be positive')
+  }
+  const innerRadius = await rl.promptFloat('Enter the inner radius of the image')
+  if (innerRadius < 0) {
+    throw new Error('Inner radius cannot be negative')
+  }
+
+  const arcAngle = await rl.promptFloat(
+    'Enter the arc angle of the cone in degrees (e.g. 360 for a full cone)'
+  )
+  if (arcAngle <= 0 || arcAngle > 360) {
+    throw new Error('Arc angle must be between 0 and 360 degrees')
+  }
+  const topRadius = isFez ? -outerRadius : outerRadius
+  const bottomRadius = innerRadius
+
+  const points = computePixelPointsFromRadius(topRadius, bottomRadius, imageMetadata.width)
+  const {outputHeight} = getUnconifiedData(points, imageMetadata.width)
+
+  const crop = getDefaultCrop({width: imageMetadata.width, height: outputHeight}, false)
+
+  const cylinderCircumferenceTop = 100
+  const targetCircumferenceTop = (cylinderCircumferenceTop * arcAngle) / 360
+  const circumferenceRatio = getCircumferenceRatio(topRadius, bottomRadius)
+  const cylinderCircumferenceBottom = cylinderCircumferenceTop / circumferenceRatio
+  const coniness = getConinessForRadii(topRadius, bottomRadius)
+
+  return {
+    ...crop,
+    cylinderCircumferenceTop,
+    cylinderCircumferenceBottom,
+    targetCircumferenceTop,
+    coniness,
+    arcAngle,
+    inputMode: 'ADVANCED',
+    unit: 'mm',
+    topRadius,
+    bottomRadius,
+  }
 }
 
 /**
@@ -144,7 +192,7 @@ const selectGeometry = async (rl, imageMetadata) => {
         geometry: await selectCylindricalGeometry(rl, imageMetadata),
       }
     case 'cone':
-      return {type: 'CONICAL', geometry: await selectConicalGeometry(rl)}
+      return {type: 'CONICAL', geometry: await selectConicalGeometry(rl, imageMetadata)}
     default:
       throw new Error(`Unknown type: ${type}`)
   }
