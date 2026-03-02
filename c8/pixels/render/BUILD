@@ -45,51 +45,6 @@ cc_library(
 )
 # cc_end(0xa411a6f4)
 
-# file: assimp-assets-test.cc
-cc_test(
-    name = "assimp-assets-test",
-    size = "small",
-    srcs = [
-        "assimp-assets-test.cc",
-    ],
-    data = [
-        "//c8/pixels/render/testdata:doty-glb",
-    ],
-    deps = [
-        ":assimp-assets",
-        "//bzl/inliner:rules2",
-        "//c8/io:file-io",
-        "@com_google_googletest//:gtest_main",
-    ],
-)
-# cc_end(0xd98b8614)
-
-# file: assimp-assets.cc
-cc_library(
-    name = "assimp-assets",
-    srcs = [
-        "assimp-assets.cc",
-    ],
-    hdrs = [
-        "assimp-assets.h",
-    ],
-    visibility = [
-        "//visibility:public",
-    ],
-    deps = [
-        "//bzl/inliner:rules2",
-        "//c8:c8-log",
-        "//c8:string",
-        "//c8:vector",
-        "//c8/geometry:load-mesh",
-        "//c8/geometry:mesh-types",
-        "//c8/io:image-io",
-        "//c8/pixels/render:object8",
-        "//third_party/assimp",
-    ],
-)
-# cc_end(0xb7e64070)
-
 # file: cubemap-shader-test.cc
 cc_test(
     name = "cubemap-shader-test",

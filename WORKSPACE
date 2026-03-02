@@ -1758,19 +1758,6 @@ niantic_maybe(
 )
 
 niantic_maybe(
-    new_git_repository,
-    name = "assimp",
-    build_file = "//bzl/thirdpartybuild/assimp:assimp.BUILD",
-    commit = "a34688230d152345d04710e256224b71ce8ba8a1",
-    patch_args = ["-p1"],
-    patches = [
-        "//bzl/thirdpartybuild/assimp:no_double_precision.patch",
-    ],
-    remote = "https://github.com/assimp/assimp.git",
-    shallow_since = "1645384461 +0100",
-)
-
-niantic_maybe(
     http_archive,
     name = "tbb",
     patch_args = ["-p1"],
