@@ -1,0 +1,13 @@
+diff --git a/google/cloud/testing_util/BUILD b/google/cloud/testing_util/BUILD
+index 73da44d9c..f831be1ad 100644
+--- a/google/cloud/testing_util/BUILD
++++ b/google/cloud/testing_util/BUILD
+@@ -56,7 +56,7 @@ cc_library(
+             "GOOGLE_CLOUD_CPP_HAVE_RUSAGE_THREAD",
+         ],
+         (
+-            "@bazel_tools//src/conditions:darwin_x86_64",
++            # "@bazel_tools//src/conditions:darwin_x86_64",
+             "@bazel_tools//src/conditions:darwin",
+             "@bazel_tools//src/conditions:freebsd",
+             "@bazel_tools//src/conditions:openbsd",

@@ -1,0 +1,77 @@
+diff --color -ruN tensorflow/lite/delegates/coreml/builders/op_builder.h tensorflow/lite/delegates/coreml/builders/op_builder.h
+--- tensorflow/lite/delegates/coreml/builders/op_builder.h	2023-09-27 16:49:33
++++ tensorflow/lite/delegates/coreml/builders/op_builder.h	2024-05-01 17:11:57
+@@ -18,8 +18,8 @@
+ #include <functional>
+ #include <string>
+ 
+-#include "mlmodel/format/Model.pb.h"
+-#include "mlmodel/format/NeuralNetwork.pb.h"
++#include "Model.pb.h"
++#include "NeuralNetwork.pb.h"
+ #include "tensorflow/lite/c/common.h"
+ 
+ namespace tflite {
+diff --color -ruN tensorflow/lite/delegates/coreml/coreml_executor.h tensorflow/lite/delegates/coreml/coreml_executor.h
+--- tensorflow/lite/delegates/coreml/coreml_executor.h	2023-09-27 16:49:33
++++ tensorflow/lite/delegates/coreml/coreml_executor.h	2024-05-01 17:12:42
+@@ -17,7 +17,7 @@
+ #include <string>
+ #include <vector>
+ 
+-#include "mlmodel/format/Model.pb.h"
++#include "Model.pb.h"
+ 
+ // Data for input/output tensors.
+ struct TensorData {
+diff --color -ruN tensorflow/tsl/platform/default/build_config.bzl tensorflow/tsl/platform/default/build_config.bzl
+--- tensorflow/tsl/platform/default/build_config.bzl	2023-09-27 16:49:33
++++ tensorflow/tsl/platform/default/build_config.bzl	2024-05-01 17:13:52
+@@ -235,7 +235,7 @@
+         name = protolib_name + "_genproto",
+         srcs = srcs,
+         outs = outs,
+-        gen_cc = 1,
++        # gen_cc = 1,
+         includes = includes,
+         plugin = grpc_cpp_plugin,
+         plugin_language = "grpc",
+@@ -409,7 +409,7 @@
+         name = name + "_genproto",
+         srcs = srcs,
+         outs = outs,
+-        gen_py = 1,
++        # gen_py = 1,
+         includes = includes,
+         plugin = grpc_python_plugin,
+         plugin_language = "grpc",
+diff --color -ruN third_party/coremltools.BUILD third_party/coremltools.BUILD
+--- third_party/coremltools.BUILD	2023-09-27 16:49:33
++++ third_party/coremltools.BUILD	2024-05-01 17:15:50
+@@ -1,4 +1,4 @@
+-load("@com_google_protobuf//:protobuf.bzl", "cc_proto_library")
++# load("@com_google_protobuf//:protobuf.bzl", "cc_proto_library")
+ 
+ package(default_visibility = ["//visibility:public"])
+ 
+@@ -8,8 +8,17 @@
+ 
+ cc_proto_library(
+     name = "mlmodel_cc_proto",
++    # srcs = glob(["mlmodel/format/*.proto"]),
++    deps = [":mlmodel_proto"],
++    # include = "mlmodel/format",
++    # default_runtime = "@com_google_protobuf//:protobuf_lite",
++    # protoc = "@com_google_protobuf//:protoc",
++)
++
++proto_library(
++    name = "mlmodel_proto",
+     srcs = glob(["mlmodel/format/*.proto"]),
+-    include = "mlmodel/format",
+-    default_runtime = "@com_google_protobuf//:protobuf_lite",
+-    protoc = "@com_google_protobuf//:protoc",
++    strip_import_prefix = "mlmodel/format",
++    # import_prefix = "mlmodel/format",
++    visibility = ["//visibility:public"],
+ )

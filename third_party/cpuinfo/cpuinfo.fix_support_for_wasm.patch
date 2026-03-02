@@ -1,0 +1,92 @@
+diff --git a/BUILD.bazel b/BUILD.bazel
+index 90bef8d..f17514d 100644
+--- a/BUILD.bazel
++++ b/BUILD.bazel
+@@ -6,6 +6,8 @@ package(default_visibility = ["//visibility:public"])
+ 
+ licenses(["notice"])
+ 
++load("@bazel_skylib//lib:selects.bzl", "selects")
++
+ exports_files(["LICENSE"])
+ 
+ C99OPTS = [
+@@ -144,11 +146,6 @@ cc_library(
+         "include",
+         "src",
+     ],
+-    linkstatic = select({
+-        # https://github.com/bazelbuild/bazel/issues/11552
+-        ":macos_x86_64": False,
+-        "//conditions:default": True,
+-    }),
+     # Headers must be in textual_hdrs to allow us to set the standard to C99
+     textual_hdrs = [
+         "include/cpuinfo.h",
+@@ -394,20 +391,62 @@ config_setting(
+ )
+ 
+ config_setting(
+-    name = "emscripten_wasm",
++    name = "cpu_wasm",
+     values = {
+         "cpu": "wasm",
+     },
++    visibility = ["//visibility:private"],
+ )
+ 
+ config_setting(
+-    name = "emscripten_wasmsimd",
++    name = "cpu_wasm32",
+     values = {
+-        "cpu": "wasm",
+-        "features": "wasm_simd",
++        "cpu": "wasm32",
++    },
++    visibility = ["//visibility:private"],
++)
++
++config_setting(
++    name = "platforms_wasm32",
++    constraint_values = [
++        "@platforms//cpu:wasm32",
++    ],
++    visibility = ["//visibility:private"],
++)
++
++config_setting(
++    name = "platforms_wasm64",
++    constraint_values = [
++        "@platforms//cpu:wasm64",
++    ],
++    visibility = ["//visibility:private"],
++)
++
++selects.config_setting_group(
++    name = "emscripten_wasm",
++    match_any = [
++        ":cpu_wasm",
++        ":cpu_wasm32",
++        ":platforms_wasm32",
++        ":platforms_wasm64",
++    ],
++)
++
++config_setting(
++    name = "simd",
++    values = {
++        "features": "simd",
+     },
+ )
+ 
++selects.config_setting_group(
++    name = "emscripten_wasmsimd",
++    match_all = [
++        ":emscripten_wasm",
++        ":simd",
++    ],
++)
++
+ config_setting(
+     name = "emscripten_asmjs",
+     values = {

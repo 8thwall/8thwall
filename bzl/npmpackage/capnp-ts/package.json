@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "capnp-ts": "^0.7.0"
+  }
+}

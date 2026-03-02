@@ -1,0 +1,28 @@
+load("//bzl/redist:linux_binary_redist.bzl","linux_redist")
+
+package(
+    default_visibility = ["//visibility:public"],
+)
+
+linux_redist(
+    name = "protoc_linux_redist",
+    binary_executable = "@com_google_protobuf//:protoc",
+    target_compatible_with = select({
+        "//bzl/conditions:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    tags = [
+        "manual",
+    ],
+)
+
+alias(
+    name = "protoc",
+    actual = select({
+        "//bzl/conditions:linux": ":protoc_linux_redist",
+        "//conditions:default": "@com_google_protobuf//:protoc",
+    }),
+    tags = [
+        "manual",
+    ],
+)

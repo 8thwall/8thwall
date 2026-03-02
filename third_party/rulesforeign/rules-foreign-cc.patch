@@ -1,0 +1,63 @@
+diff --git a/foreign_cc/built_tools/make_build.bzl b/foreign_cc/built_tools/make_build.bzl
+index 1d0ad29..123a79b 100644
+--- a/foreign_cc/built_tools/make_build.bzl
++++ b/foreign_cc/built_tools/make_build.bzl
+@@ -1,6 +1,7 @@
+ """ Rule for building GNU Make from sources. """
+ 
+ load("@bazel_tools//tools/cpp:toolchain_utils.bzl", "find_cpp_toolchain")
++load("@rules_cc//cc:action_names.bzl", "ACTION_NAMES")
+ load(
+     "//foreign_cc/built_tools/private:built_tools_framework.bzl",
+     "FOREIGN_CC_BUILT_TOOLS_ATTRS",
+@@ -41,7 +42,6 @@ def _make_tool_impl(ctx):
+         tools_info = get_tools_info(ctx)
+ 
+         ar_path = tools_info.cxx_linker_static
+-        frozen_arflags = flags_info.cxx_linker_static
+ 
+         cc_path = tools_info.cc
+         cflags = flags_info.cc
+@@ -62,14 +62,35 @@ def _make_tool_impl(ctx):
+         if sysroot_ldflags:
+             absolute_ld += " " + _join_flags_list(ctx.workspace_name, sysroot_ldflags)
+ 
+-        # If libtool is used as AR, the output file has to be prefixed with
+-        # "-o". Since the make Makefile only uses ar-style invocations, the
+-        # output file always comes first and we can append this argument to the
+-        # flags list.
+         absolute_ar = _absolutize(ctx.workspace_name, ar_path, True)
+-        arflags = [e for e in frozen_arflags]
+-        if absolute_ar == "libtool" or absolute_ar.endswith("/libtool"):
+-            arflags.append("-o")
++
++        feature_configuration = cc_common.configure_features(
++            ctx = ctx,
++            cc_toolchain = cc_toolchain,
++            requested_features = ctx.features,
++            unsupported_features = ctx.disabled_features,
++        )
++
++        ar_vars = cc_common.create_link_variables(
++            cc_toolchain = cc_toolchain,
++            feature_configuration = feature_configuration,
++            is_using_linker = False,
++            user_link_flags = ctx.fragments.cpp.linkopts,
++            output_file = "placeholder",
++        )
++        arflags = cc_common.get_memory_inefficient_command_line(
++            feature_configuration = feature_configuration,
++            action_name = ACTION_NAMES.cpp_link_static_library,
++            variables = ar_vars,
++        )
++
++        # If libtool is used as AR, the output file has to be prefixed with
++        # "-o". Pop-off the 'placeholder' output file, keeping the flag '-o'
++        # if it was added.
++        arflags = arflags[:-1]
++
++        if os_name(ctx) == "macos":
++            non_sysroot_ldflags += ["-undefined", "error"]
+ 
+         env.update({
+             "AR": absolute_ar,

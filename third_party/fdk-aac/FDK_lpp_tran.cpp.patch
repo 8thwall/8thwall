@@ -1,0 +1,21 @@
+--- libSBRdec/src/lpp_tran.cpp
++++ libSBRdec/src/lpp_tran.cpp
+@@ -119,7 +119,17 @@ amm-info@iis.fraunhofer.de
+ */
+ 
+ #ifdef __ANDROID__
+-#include "log/log.h"
++#include <android/log.h>
++#ifndef android_errorWriteLog
++#include <cstdio>
++#define LOG_TAG "LPP_TRAN"
++#define android_errorWriteLog(tag, subTag) \
++    do { \
++        char completeTag[32]; \
++        snprintf(completeTag, sizeof(completeTag), "0x%08X:%s", tag, subTag); \
++        __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "%s", completeTag); \
++    } while (0)
++#endif
+ #endif
+ 
+ #include "lpp_tran.h"

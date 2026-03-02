@@ -1,0 +1,168 @@
+diff -ruN third_party/py/python_configure.bzl third_party/py/python_configure.bzl
+--- third_party/py/python_configure.bzl	2023-09-27 23:49:33.000000000 +0000
++++ third_party/py/python_configure.bzl	2024-10-21 17:18:46.180800484 +0000
+@@ -50,24 +50,28 @@
+ 
+ def _symlink_genrule_for_dir(
+         repository_ctx,
+-        src_dir,
++        src_dirs,
+         dest_dir,
+         genrule_name,
+         src_files = [],
+-        dest_files = []):
++        dest_files = [],
++        path_filter = None):
+     """Returns a genrule to symlink(or copy if on Windows) a set of files.
+ 
+-    If src_dir is passed, files will be read from the given directory; otherwise
++    If src_dirs is passed, files will be read from the given directory; otherwise
+     we assume files are in src_files and dest_files
+     """
+-    if src_dir != None:
+-        src_dir = _norm_path(src_dir)
+-        dest_dir = _norm_path(dest_dir)
+-        files = "\n".join(read_dir(repository_ctx, src_dir))
+-
+-        # Create a list with the src_dir stripped to use for outputs.
+-        dest_files = files.replace(src_dir, "").splitlines()
+-        src_files = files.splitlines()
++    if src_dirs != None:
++        dest_files = []
++        src_files = []
++        for src_dir in src_dirs:
++            src_dir = _norm_path(src_dir)
++            dest_dir = _norm_path(dest_dir)
++            files = "\n".join(read_dir(repository_ctx, src_dir, path_filter))
++
++            # Create a list with the src_dir stripped to use for outputs.
++            dest_files += files.replace(src_dir, "").splitlines()
++            src_files += files.splitlines()
+     command = []
+     outs = []
+     for i in range(len(dest_files)):
+@@ -78,10 +82,12 @@
+ 
+             # Copy the headers to create a sandboxable setup.
+             cmd = "cp -f"
++            cmd_mkdir = "mkdir -p"
++            command.append(cmd_mkdir + ' `dirname "%s"` ' % (dest))
+             command.append(cmd + ' "%s" "%s"' % (src_files[i], dest))
+             outs.append('        "' + dest_dir + dest_files[i] + '",')
+     genrule = _genrule(
+-        src_dir,
++        src_dirs[0],
+         genrule_name,
+         " && ".join(command),
+         "\n".join(outs),
+@@ -168,6 +174,28 @@
+     )
+     return result.stdout.splitlines()[0]
+ 
++def _get_python_include_arch(repository_ctx, python_bin):
++    """Gets the python include path."""
++    result = execute(
++        repository_ctx,
++        [
++            python_bin,
++            "-Wignore",
++            "-c",
++            "import os; " +
++            "import importlib; " +
++            "import importlib.util; " +
++            "print(os.path.join(importlib.import_module('distutils.sysconfig').get_config_var('INCLUDEDIR'), '' if importlib.import_module('distutils.sysconfig').get_config_var('MULTIARCH') is None else importlib.import_module('distutils.sysconfig').get_config_var('MULTIARCH').strip(), 'python{}'.format(importlib.import_module('distutils.sysconfig').get_python_version()))" +
++            "if importlib.util.find_spec('distutils.sysconfig') " +
++            "else importlib.import_module('sysconfig').get_path('include'))",
++        ],
++        error_msg = "Problem getting python include path.",
++        error_details = ("Is the Python binary path set up right? " +
++                         "(See ./configure or " + PYTHON_BIN_PATH + ".) " +
++                         "Is distutils installed?"),
++    )
++    return result.stdout.splitlines()[0]
++
+ def _get_python_import_lib_name(repository_ctx, python_bin):
+     """Get Python import library name (pythonXY.lib) on Windows."""
+     result = execute(
+@@ -213,12 +241,18 @@
+     python_lib = _get_python_lib(repository_ctx, python_bin)
+     _check_python_lib(repository_ctx, python_lib)
+     python_include = _get_python_include(repository_ctx, python_bin)
++    python_include_arch = _get_python_include_arch(repository_ctx, python_bin)
++    usr_include = "/usr/include"
+     numpy_include = _get_numpy_include(repository_ctx, python_bin) + "/numpy"
++    
+     python_include_rule = _symlink_genrule_for_dir(
+         repository_ctx,
+-        python_include,
++        [python_include, usr_include],
+         "python_include",
+         "python_include",
++        [],
++        [],
++        [python_include, python_include_arch],
+     )
+     python_import_lib_genrule = ""
+ 
+@@ -239,7 +273,7 @@
+         )
+     numpy_include_rule = _symlink_genrule_for_dir(
+         repository_ctx,
+-        numpy_include,
++        [numpy_include],
+         "numpy_include/numpy",
+         "numpy_include",
+     )
+diff -ruN third_party/remote_config/common.bzl third_party/remote_config/common.bzl
+--- third_party/remote_config/common.bzl	2023-09-27 23:49:33.000000000 +0000
++++ third_party/remote_config/common.bzl	2024-10-21 17:16:53.224864591 +0000
+@@ -95,7 +95,9 @@
+                          ))
+     return bash_bin_path
+ 
+-def read_dir(repository_ctx, src_dir):
++def read_dir(repository_ctx, 
++             src_dir, 
++             path_filters = []):
+     """Returns a sorted list with all files in a directory.
+ 
+     Finds all files inside a directory, traversing subfolders and following
+@@ -104,6 +106,7 @@
+     Args:
+       repository_ctx: the repository_ctx
+       src_dir: the directory to traverse
++      path_filters: a list of paths to filter the result
+ 
+     Returns:
+       A sorted list with all files in a directory.
+@@ -126,7 +129,21 @@
+             allow_failure = True,
+         )
+         result = find_result.stdout
+-    return sorted(result.splitlines())
++
++    result_list = result.splitlines()
++
++    if path_filters == None or len(path_filters) == 0:
++        return sorted(result_list)
++
++    result_list_filtered = []
++
++    for path_filter in path_filters:
++        for path in result_list:
++            if path.find(path_filter) != -1:
++                result_list_filtered.append(path)
++
++    
++    return sorted(result_list_filtered)
+ 
+ def get_environ(repository_ctx, name, default_value = None):
+     """Returns the value of an environment variable on the execution platform.
+@@ -165,6 +182,7 @@
+     Args:
+       repository_ctx: the repository_ctx
+       name: the name of environment variable
++      default_value: the value to return if not set
+ 
+     Returns:
+       The value of the environment variable 'name' on the host platform.

@@ -1,0 +1,53 @@
+diff --git a/bazel/google_cloud_cpp_deps.bzl b/bazel/google_cloud_cpp_deps.bzl
+index 1e2d851b8..c3ed8049b 100644
+--- a/bazel/google_cloud_cpp_deps.bzl
++++ b/bazel/google_cloud_cpp_deps.bzl
+@@ -117,27 +117,29 @@ def google_cloud_cpp_deps():
+     )
+ 
+     # We need libcurl for the Google Cloud Storage client.
+-    if "com_github_curl_curl" not in native.existing_rules():
+-        http_archive(
+-            name = "com_github_curl_curl",
+-            urls = [
+-                "https://curl.haxx.se/download/curl-7.69.1.tar.gz",
+-            ],
+-            strip_prefix = "curl-7.69.1",
+-            sha256 = "01ae0c123dee45b01bbaef94c0bc00ed2aec89cb2ee0fd598e0d302a6b5e0a98",
+-            build_file = "@com_github_googleapis_google_cloud_cpp//bazel:curl.BUILD",
+-        )
++    # NIANTIC: Provided by Niantic WORKSPACE under different name, ==> repo_mapping
++    # if "com_github_curl_curl" not in native.existing_rules():
++    #     http_archive(
++    #         name = "com_github_curl_curl",
++    #         urls = [
++    #             "https://curl.haxx.se/download/curl-7.69.1.tar.gz",
++    #         ],
++    #         strip_prefix = "curl-7.69.1",
++    #         sha256 = "01ae0c123dee45b01bbaef94c0bc00ed2aec89cb2ee0fd598e0d302a6b5e0a98",
++    #         build_file = "@com_github_googleapis_google_cloud_cpp//bazel:curl.BUILD",
++    #     )
+ 
+     # We need the nlohmann_json library
+-    if "com_github_nlohmann_json" not in native.existing_rules():
+-        http_archive(
+-            name = "com_github_nlohmann_json",
+-            urls = [
+-                "https://github.com/nlohmann/json/releases/download/v3.9.0/include.zip",
+-            ],
+-            sha256 = "5b9b819aed31626aefe2eace23498cafafc1691890556cd36d2a8002f6905009",
+-            build_file = "@com_github_googleapis_google_cloud_cpp//bazel:nlohmann_json.BUILD",
+-        )
++    # NIANTIC: Provided by Tensorflow, and by Niantic WORKSPACE (and also patched)
++    # if "com_github_nlohmann_json" not in native.existing_rules():
++    #     http_archive(
++    #         name = "com_github_nlohmann_json",
++    #         urls = [
++    #             "https://github.com/nlohmann/json/releases/download/v3.9.0/include.zip",
++    #         ],
++    #         sha256 = "5b9b819aed31626aefe2eace23498cafafc1691890556cd36d2a8002f6905009",
++    #         build_file = "@com_github_googleapis_google_cloud_cpp//bazel:nlohmann_json.BUILD",
++    #     )
+ 
+     # Load google/crc32c, a library to efficiently compute CRC32C checksums.
+     if "com_github_google_crc32c" not in native.existing_rules():

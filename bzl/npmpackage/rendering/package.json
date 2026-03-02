@@ -1,0 +1,40 @@
+{
+  "name": "rendering",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "postinstall": "patch-package",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "dependencies": {
+    "@babel/core": "^7.24.5",
+    "@babel/plugin-transform-modules-commonjs": "^7.24.1",
+    "@babel/plugin-transform-modules-umd": "^7.24.1",
+    "@babel/preset-env": "^7.24.5",
+    "@babel/preset-typescript": "^7.24.1",
+    "@import-maps/resolve": "^2.0.0",
+    "bit-twiddle": "^1.0.2",
+    "@webassemblyjs/wasm-parser": "^1.14.1",
+    "capnp-ts": "^0.4.0",
+    "polywasm": "^0.2.0",
+    "color-rgba": "^3.0.0",
+    "css-select": "^5.1.0",
+    "css-select-browser-adapter": "^0.1.2",
+    "glsl-tokenizer": "^2.1.5",
+    "html-element": "2.3.1",
+    "htmlparser2": "^9.1.0",
+    "image-js": "0.35.4",
+    "patch-package": "^8.0.0",
+    "three": "^0.170.0",
+    "undici": "^5.23.0",
+    "url-parse": "^1.5.10"
+  },
+  "devDependencies": {
+    "@types/color-rgba": "^2.1.3",
+    "@types/node": "^20.8.2",
+    "@types/three": "^0.157.2",
+    "@types/webxr": "^0.5.6",
+    "undici-types": "^6.19.5"
+  }
+}

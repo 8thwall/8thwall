@@ -1,0 +1,22 @@
+diff --git a/build_defs.bzl b/build_defs.bzl
+index b8217a1..3e468fe 100755
+--- a/build_defs.bzl
++++ b/build_defs.bzl
+@@ -20,7 +20,7 @@ def xnnpack_gcc_std_copts():
+ 
+ def xnnpack_msvc_std_copts():
+     """MSVC compiler flags to specify language standard for C sources."""
+-    return ["/Drestrict="]
++    return ["-Drestrict="]
+ 
+ def xnnpack_std_cxxopts():
+     """Compiler flags to specify language standard for C++ sources."""
+@@ -163,7 +163,7 @@ def xnnpack_cc_library(
+             ":windows_x86_64_clang": ["/clang:" + opt for opt in gcc_x86_copts],
+             ":windows_x86_64_mingw": mingw_copts + gcc_x86_copts,
+             ":windows_x86_64_msys": msys_copts + gcc_x86_copts,
+-            ":windows_x86_64": msvc_x86_64_copts,
++            ":windows_x86_64": msvc_x86_64_copts + gcc_x86_copts,
+             ":android_armv7": aarch32_copts,
+             ":android_arm64": aarch64_copts,
+             ":android_x86": gcc_x86_copts,

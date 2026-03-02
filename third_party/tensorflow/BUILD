@@ -1,0 +1,18 @@
+exports_files([
+    "protobuf.patch",
+    "workspace0.bzl.patch",
+    "workspace2.bzl.patch",
+    "niantic_mods.patch",
+    "abslworkspace.bzl.patch",
+    "tensorflow.bzl.patch",
+    "text2d_init_fix.patch",
+    "curl.BUILD.patch",
+    "repo.bzl.patch",
+    "boringssl.patch.patch",
+    "protobuf.patch.patch",
+    "lite-tools-versioning.BUILD.patch",
+    "xnnpack.BUILD.patch",
+    "lite-delegates-gpu-gl-kernels-registry.cc.patch",
+    "lite-delegates-gpu.BUILD.patch",
+    "grpc-upb-platform-fix-patch.patch",
+])
