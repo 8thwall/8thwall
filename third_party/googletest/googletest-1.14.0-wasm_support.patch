@@ -1,0 +1,51 @@
+diff -ruN A/BUILD.bazel B/BUILD.bazel
+--- A/BUILD.bazel	2023-08-02 16:24:53
++++ B/BUILD.bazel	2024-02-07 12:01:34
+@@ -32,11 +32,31 @@
+ 
+ package(default_visibility = ["//visibility:public"])
+ 
++load("@bazel_skylib//lib:selects.bzl", "selects")
++
+ licenses(["notice"])
+ 
+ exports_files(["LICENSE"])
+ 
+ config_setting(
++    name = "wasm32",
++    constraint_values = ["@platforms//cpu:wasm32"],
++)
++
++config_setting(
++    name = "wasm64",
++    constraint_values = ["@platforms//cpu:wasm64"],
++)
++
++selects.config_setting_group(
++    name = "wasm",
++    match_any = [
++        ":wasm32",
++        ":wasm64",
++    ],
++)
++
++config_setting(
+     name = "qnx",
+     constraint_values = ["@platforms//os:qnx"],
+ )
+@@ -101,6 +121,7 @@
+     copts = select({
+         ":qnx": [],
+         ":windows": [],
++        ":wasm": [],
+         "//conditions:default": ["-pthread"],
+     }),
+     defines = select({
+@@ -120,6 +141,7 @@
+     linkopts = select({
+         ":qnx": ["-lregex"],
+         ":windows": [],
++        ":wasm": [],
+         ":freebsd": [
+             "-lm",
+             "-pthread",

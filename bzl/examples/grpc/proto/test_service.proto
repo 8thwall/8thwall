@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+option java_package = "ex.grpc";
+
+package test_service_package;
+
+// The greeting service definition.
+service Decompositor {
+  // Decompose integer in a list of integer with sum is the request
+  rpc Decompose (IntRequest) returns (IntReply) {}
+}
+
+// The request message containing the integer
+message IntRequest {
+  int32 value = 1;
+}
+
+// The response message containing a list of values as single string
+message IntReply {
+  string message = 1;
+}

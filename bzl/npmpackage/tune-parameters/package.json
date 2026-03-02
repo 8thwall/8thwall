@@ -1,0 +1,11 @@
+{
+  "name": "tune-parameters",
+  "version": "1.0.0",
+  "description": "",
+  "author": "",
+  "dependencies": {
+    "markdown-table": "^3.0.3",
+    "progress": "^2.0.3",
+    "table": "^6.8.1"
+  }
+}

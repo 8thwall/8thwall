@@ -1,0 +1,24 @@
+include:
+  - ci-support/util.yml
+
+default:
+  before_script:
+    - !reference [.global, before_script]
+  after_script:
+    - !reference [.global, after_script]
+
+cancel-redundant-jobs:
+  stage: build
+  extends: .cancel-redundant-jobs
+
+bzl-validity-query:
+  needs: []
+  rules:
+    - if: $BZL_TRIGGER == "bzl_validity_trigger"
+  script:
+    - echo "Testing general query"
+    - bazel query ...
+    - echo "Testing bzlmod external dependency graph"
+    - bazel mod graph
+  tags:
+    - docker-executor

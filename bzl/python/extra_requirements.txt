@@ -1,0 +1,3 @@
+# Without this, we can sometimes get errors of the following form, especially in gitlab M1 runners when running tests based on innersource/whismur tools:
+# dlopen(pydantic/__init__.cpython-39-darwin.so, 0x0002): tried: 'pydantic/__init__.cpython-39-darwin.so' (mach-o file, but is an incompatible architecture (have (x86_64), need (arm64e)))
+--no-binary=pydantic,black

@@ -1,0 +1,107 @@
+--- examples/example_apple_opengl2/main.mm	2020-10-29 22:59:43.000000000 -0700
++++ examples/example_apple_opengl2/main.mm	2020-10-29 23:10:27.000000000 -0700
+@@ -1,13 +1,13 @@
+-// Dear ImGui: standalone example application for OSX + OpenGL2, using legacy fixed pipeline
++// Dear ImGui: standalone example application for OSX + OpenGL3, using legacy fixed pipeline
+ // If you are new to Dear ImGui, read documentation from the docs/ folder + read the top of imgui.cpp.
+ // Read online: https://github.com/ocornut/imgui/tree/master/docs
+ 
+ #include "imgui.h"
+-#include "../../backends/imgui_impl_osx.h"
+-#include "../../backends/imgui_impl_opengl2.h"
++#include "imgui_impl_osx.h"
++#include "imgui_impl_opengl3.h"
+ #include <stdio.h>
+ #import <Cocoa/Cocoa.h>
+-#import <OpenGL/gl.h>
++#import <OpenGL/gl3.h>
+ #import <OpenGL/glu.h>
+ 
+ //-----------------------------------------------------------------------------------
+@@ -42,7 +42,7 @@
+ -(void)updateAndDrawDemoView
+ {
+     // Start the Dear ImGui frame
+-	ImGui_ImplOpenGL2_NewFrame();
++	ImGui_ImplOpenGL3_NewFrame();
+ 	ImGui_ImplOSX_NewFrame(self);
+     ImGui::NewFrame();
+ 
+@@ -99,7 +99,7 @@
+ 
+ 	glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
+ 	glClear(GL_COLOR_BUFFER_BIT);
+-	ImGui_ImplOpenGL2_RenderDrawData(draw_data);
++	ImGui_ImplOpenGL3_RenderDrawData(draw_data);
+ 
+     // Present
+     [[self openGLContext] flushBuffer];
+@@ -183,7 +183,7 @@
+     NSRect viewRect = NSMakeRect(100.0, 100.0, 100.0 + 1280.0, 100 + 720.0);
+ 
+     _window = [[NSWindow alloc] initWithContentRect:viewRect styleMask:NSWindowStyleMaskTitled|NSWindowStyleMaskMiniaturizable|NSWindowStyleMaskResizable|NSWindowStyleMaskClosable backing:NSBackingStoreBuffered defer:YES];
+-    [_window setTitle:@"Dear ImGui OSX+OpenGL2 Example"];
++    [_window setTitle:@"Dear ImGui OSX+OpenGL3 Example"];
+     [_window setAcceptsMouseMovedEvents:YES];
+     [_window setOpaque:YES];
+     [_window makeKeyAndOrderFront:NSApp];
+@@ -197,8 +197,8 @@
+     NSMenu* appMenu;
+     NSMenuItem* menuItem;
+ 
+-    appMenu = [[NSMenu alloc] initWithTitle:@"Dear ImGui OSX+OpenGL2 Example"];
+-    menuItem = [appMenu addItemWithTitle:@"Quit Dear ImGui OSX+OpenGL2 Example" action:@selector(terminate:) keyEquivalent:@"q"];
++    appMenu = [[NSMenu alloc] initWithTitle:@"Dear ImGui OSX+OpenGL3 Example"];
++    menuItem = [appMenu addItemWithTitle:@"Quit Dear ImGui OSX+OpenGL3 Example" action:@selector(terminate:) keyEquivalent:@"q"];
+     [menuItem setKeyEquivalentModifierMask:NSEventModifierFlagCommand];
+ 
+     menuItem = [[NSMenuItem alloc] init];
+@@ -224,14 +224,24 @@
+ 	// Menu
+     [self setupMenu];
+ 
+-    NSOpenGLPixelFormatAttribute attrs[] =
+-    {
+-        NSOpenGLPFADoubleBuffer,
+-        NSOpenGLPFADepthSize, 32,
+-        0
++    const CGLPixelFormatAttribute pixelFormatAttribs[] = {
++        kCGLPFAAccelerated,
++        kCGLPFAColorSize, static_cast<CGLPixelFormatAttribute>(24),
++        kCGLPFAAlphaSize, static_cast<CGLPixelFormatAttribute>(8),
++        kCGLPFADepthSize, static_cast<CGLPixelFormatAttribute>(32),
++        kCGLPFAOpenGLProfile, static_cast<CGLPixelFormatAttribute>(kCGLOGLPVersion_3_2_Core),
++        kCGLPFADoubleBuffer,
++        static_cast<CGLPixelFormatAttribute>(0),  // Zero-terminated.
+     };
+ 
+-    NSOpenGLPixelFormat* format = [[NSOpenGLPixelFormat alloc] initWithAttributes:attrs];
++    CGLError result;
++    GLint numPixelFormats;
++    CGLPixelFormatObj pixelFormat;
++
++    result = CGLChoosePixelFormat(pixelFormatAttribs, &pixelFormat, &numPixelFormats);
++
++    NSOpenGLPixelFormat* format = [[NSOpenGLPixelFormat alloc] initWithCGLPixelFormatObj:pixelFormat];
++
+     ImGuiExampleView* view = [[ImGuiExampleView alloc] initWithFrame:self.window.frame pixelFormat:format];
+     format = nil;
+ #if MAC_OS_X_VERSION_MAX_ALLOWED >= 1070
+@@ -243,6 +253,8 @@
+     if ([view openGLContext] == nil)
+         NSLog(@"No OpenGL Context!");
+ 
++	[[view openGLContext] makeCurrentContext];
++
+     // Setup Dear ImGui context
+     // FIXME: This example doesn't have proper cleanup...
+     IMGUI_CHECKVERSION();
+@@ -257,7 +269,7 @@
+ 
+     // Setup Platform/Renderer backends
+     ImGui_ImplOSX_Init();
+-    ImGui_ImplOpenGL2_Init();
++    ImGui_ImplOpenGL3_Init();
+ 
+     // Load Fonts
+     // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.

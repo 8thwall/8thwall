@@ -1,0 +1,19 @@
+--- tensorflow/workspace0.bzl	2022-06-01 21:31:42.000000000 -0700
++++ tensorflow/workspace0.bzl	2022-07-14 10:15:33.000000000 -0700
+@@ -6,7 +6,6 @@
+ load("@build_bazel_rules_swift//swift:repositories.bzl", "swift_rules_dependencies")
+ load("@com_github_grpc_grpc//bazel:grpc_extra_deps.bzl", "grpc_extra_deps")
+ load("@local_config_android//:android.bzl", "android_workspace")
+-load("@rules_cc//cc:repositories.bzl", "rules_cc_toolchains")
+ 
+ def _tf_bind():
+     """Bind targets for some external repositories"""
+@@ -103,8 +102,6 @@
+         ],
+     )
+ 
+-    rules_cc_toolchains()
+-
+     bazel_toolchains_repositories()
+ 
+     # Use `swift_rules_dependencies` to fetch the toolchains. With the

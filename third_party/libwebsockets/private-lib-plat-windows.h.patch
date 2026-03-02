@@ -1,0 +1,13 @@
+--- lib/plat/windows/private-lib-plat-windows.h	2023-09-11 21:32:06
++++ lib/plat/windows/private-lib-plat-windows.h	2023-09-11 21:33:46
+@@ -70,6 +70,10 @@
+
+ #if defined(LWS_WITH_TLS)
+ #include <wincrypt.h>
++#undef X509_NAME
++#undef X509_CERT_PAIR
++#undef X509_EXTENSIONS
++#undef PKCS7_SIGNER_INFO
+ #endif
+
+ #if defined(LWS_HAVE_PTHREAD_H)

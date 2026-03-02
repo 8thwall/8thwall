@@ -1,0 +1,33 @@
+From b8a7a81f64478ae210ee6768fdda2dd977154c3f Mon Sep 17 00:00:00 2001
+From: Steve Vermeulen <svermeulen@nianticlabs.com>
+Date: Mon, 24 Oct 2022 00:11:38 -0700
+Subject: [PATCH] Added ability to get history of pipelines executed for a
+ given scheduled pipeline
+
+---
+ gitlab/v4/objects/pipelines.py | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/gitlab/v4/objects/pipelines.py b/gitlab/v4/objects/pipelines.py
+index eec46a1b..5cec20ea 100644
+--- a/gitlab/v4/objects/pipelines.py
++++ b/gitlab/v4/objects/pipelines.py
+@@ -183,8 +183,15 @@ class ProjectPipelineScheduleVariableManager(
+     _update_attrs = RequiredOptional(required=("key", "value"))
+ 
+ 
++class ProjectPipelineSchedulePipelinesManager(ListMixin, RESTManager):
++    _path = "/projects/{project_id}/pipeline_schedules/{pipeline_schedule_id}/pipelines"
++    _obj_cls = ProjectPipeline
++    _from_parent_attrs = {"project_id": "project_id", "pipeline_schedule_id": "encoded_id"}
++
++
+ class ProjectPipelineSchedule(SaveMixin, ObjectDeleteMixin, RESTObject):
+     variables: ProjectPipelineScheduleVariableManager
++    pipelines: ProjectPipelineSchedulePipelinesManager
+ 
+     @cli.register_custom_action("ProjectPipelineSchedule")
+     @exc.on_http_error(exc.GitlabOwnershipError)
+-- 
+2.38.1
+

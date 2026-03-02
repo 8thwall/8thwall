@@ -1,0 +1,6 @@
+#!/bin/bash
+set -ex
+cd `dirname $BASH_SOURCE`
+poetry install
+poetry export --without-hashes >requirements.txt
+cat extra_requirements.txt >>requirements.txt

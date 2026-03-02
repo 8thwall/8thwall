@@ -1,0 +1,24 @@
+diff --git a/cuda/private/repositories.bzl b/cuda/private/repositories.bzl
+index 804a69d..24a061e 100644
+--- a/cuda/private/repositories.bzl
++++ b/cuda/private/repositories.bzl
+@@ -102,7 +102,7 @@ def config_cuda_toolkit_and_nvcc(repository_ctx, cuda):
+         repository_ctx.symlink(Label("//cuda:runtime/BUILD.local_cuda"), "BUILD")
+         defs_bzl_content += defs_if_local_cuda % "if_true"
+     else:
+-        repository_ctx.file("BUILD")  # Empty file
++        repository_ctx.symlink(Label("//cuda:runtime/BUILD.dummy"), "BUILD")
+         defs_bzl_content += defs_if_local_cuda % "if_false"
+     repository_ctx.file("defs.bzl", defs_bzl_content)
+
+diff --git a/cuda/runtime/BUILD.dummy b/cuda/runtime/BUILD.dummy
+new file mode 100644
+index 0000000..94c4c85
+--- /dev/null
++++ b/cuda/runtime/BUILD.dummy
+@@ -0,0 +1,4 @@
++filegroup(
++    name = "cuda_runtime",
++    srcs = [],
++)
+

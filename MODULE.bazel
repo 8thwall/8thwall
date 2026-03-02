@@ -12,3 +12,145 @@ module(
     version = "1.0",
     compatibility_level = 1,
 )
+
+workspace_env = use_repo_rule("//bzl/crosstool:workspace-env.bzl", "workspace_env")
+
+workspace_env(
+    name = "workspace-env",
+    workspace_name = MODULE_NAME,
+)
+
+bazel_dep(name = "platforms", version = "0.0.11", repo_name = "platforms")
+single_version_override(
+    module_name = "platforms",
+    version = "0.0.11",
+)
+
+bazel_dep(name = "rules_foreign_cc", version = "0.9.0", repo_name = "rules_foreign_cc")
+single_version_override(
+    module_name = "rules_foreign_cc",
+    version = "0.9.0",
+)
+
+bazel_dep(name = "abseil-cpp", version = "20230802.0.bcr.1", repo_name = "com_google_absl")
+
+# lts 20230802.2, patch: adds MODULE.bazel file to abseil-cpp
+git_override(
+    module_name = "abseil-cpp",
+    commit = "929c17cf481222c35ff1652498994871120e832a",
+    patches = [
+        "//third_party/abseil-cpp:module_dot_bazel.patch",
+    ],
+    remote = "https://github.com/abseil/abseil-cpp.git",
+)
+
+bazel_dep(name = "rules_java", version = "7.6.1", repo_name = "rules_java")
+bazel_dep(name = "rules_apple", version = "3.1.1", repo_name = "build_bazel_rules_apple")
+bazel_dep(name = "zlib", version = "1.3", repo_name = "zlib")
+git_override(
+    module_name = "zlib",
+    commit = "04f42ceca40f73e2978b50e93806c2a18c1281fc",
+    patch_strip = 1,
+    patches = [
+        "//third_party/zlib:zlib.git_override_bzlmod.patch",
+    ],
+    remote = "https://github.com/madler/zlib.git",
+)
+
+bazel_dep(name = "protobuf", version = "25.3-nia", repo_name = "com_google_protobuf")
+archive_override(
+    module_name = "protobuf",
+    integrity = "sha256-Z0r7LQ2q8maFm0+o+fHAUdusVoAKYh37SNIwKEKWC/4=",
+    strip_prefix = "protobuf-25.3-nia-v0.3",
+    urls = ["https://huggingface.co/datasets/8thWall/bazel-dependencies/resolve/main/protobuf/protobuf-25.3-nia-v0.3.tar"],
+)
+
+bazel_dep(name = "llvm-project", version = "17.0.3")
+
+# Hedron's Compile Commands Extractor for Bazel
+# https://github.com/hedronvision/bazel-compile-commands-extractor
+# The license for this is generally permissive, but requires any publicly published changes to be pushed back to the main repo:
+# https://github.com/hedronvision/bazel-compile-commands-extractor/blob/main/LICENSE.md
+bazel_dep(name = "hedron_compile_commands", dev_dependency = True)
+git_override(
+    module_name = "hedron_compile_commands",
+    commit = "1e08f8e0507b6b6b1f4416a9a22cf5c28beaba93",
+    remote = "https://github.com/hedronvision/bazel-compile-commands-extractor.git",
+    # Replace the commit hash (above) with the latest (https://github.com/hedronvision/bazel-compile-commands-extractor/commits/main).
+)
+
+bazel_dep(name = "aspect_bazel_lib", version = "2.7.9")
+
+####################### Rules Oci (Docker image rules) #######################
+
+bazel_dep(name = "rules_oci", version = "2.0.0-beta1")
+bazel_dep(name = "container_structure_test", version = "1.19.1")
+
+oci = use_extension("@rules_oci//oci:extensions.bzl", "oci")
+oci.pull(
+    name = "distroless_base",
+    digest = "sha256:ccaef5ee2f1850270d453fdf700a5392534f8d1a8ca2acda391fbb6a06b81c86",
+    image = "gcr.io/distroless/base:nonroot",
+    platforms = [
+        "linux/amd64",
+        "linux/arm64",
+    ],
+)
+use_repo(oci, "distroless_base", "distroless_base_linux_amd64", "distroless_base_linux_arm64")
+
+bazel_dep(name = "bazel_skylib", version = "1.7.1")
+
+# Required to fix com_google_protobuf_javalite support
+bazel_dep(name = "grpc-java", version = "1.64.0")
+
+http_file = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_file")
+
+http_file(
+    name = "android-bundle-tool",
+    sha256 = "45881ead13388872d82c4255b195488b7fc33f2cac5a9a977b0afc5e92367592",
+    url = "https://github.com/google/bundletool/releases/download/1.17.1/bundletool-all-1.17.1.jar",
+)
+
+http_jar = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_jar")
+
+http_jar(
+    name = "aws-lambda-java-core",
+    sha256 = "5212360097b6f64bed1b5d7ad96a80b7d59b41c5e8d4f5f84294d07e045415d4",
+    url = "https://huggingface.co/datasets/8thWall/bazel-dependencies/resolve/main/aws-lambda/aws-lambda-java-core-1.2.3.jar",
+)
+
+http_jar(
+    name = "aws-lambda-java-events",
+    sha256 = "3c7246e51a4784bac653d917183ef224d90486ba863ca2d2f81292865c67feb7",
+    url = "https://huggingface.co/datasets/8thWall/bazel-dependencies/resolve/main/aws-lambda/aws-lambda-java-events-3.11.1.jar",
+)
+
+http_jar(
+    name = "aws-lambda-java-log4j2",
+    sha256 = "2b7c33b1a8893f96f99c903cc859fecb6d11f979d36f2f5bc92bb1dc032d27cb",
+    url = "https://huggingface.co/datasets/8thWall/bazel-dependencies/resolve/main/aws-lambda/aws-lambda-java-log4j2-1.5.1.jar",
+)
+
+http_jar(
+    name = "joda-time",
+    sha256 = "3ff52823754872b7df723920fe9c95b97feed151d4eeeedfddf56dd7694b8a3a",
+    url = "https://huggingface.co/datasets/8thWall/bazel-dependencies/resolve/main/aws-lambda/joda-time-2.10.8.jar",
+)
+
+http_jar(
+    name = "log4j-api",
+    sha256 = "e0f13acee7e257846004994340ebb621a9f9113c4c7747f5f52eb65b0ca4abef",
+    url = "https://huggingface.co/datasets/8thWall/bazel-dependencies/resolve/main/aws-lambda/log4j-api-2.17.1.jar",
+)
+
+http_jar(
+    name = "log4j-core",
+    sha256 = "192f2778925988ae8b49cfca5aad32caefc847037dde0eedd230683a0de876ff",
+    url = "https://huggingface.co/datasets/8thWall/bazel-dependencies/resolve/main/aws-lambda/log4j-core-2.17.1.jar",
+)
+
+terrain_service_support = use_repo_rule("//bzl/services:terrain-service.bzl", "terrain_service_support")
+
+terrain_service_support(
+    name = "terrain_service_support",
+)

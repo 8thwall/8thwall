@@ -1,0 +1,16 @@
+--- libFDK/include/FDK_archdef.h	2020-05-01 09:31:51.000000000 -0700
++++ libFDK/include/FDK_archdef.h	2020-05-01 09:41:31.000000000 -0700
+@@ -222,6 +222,13 @@
+ #define POW2COEFF_16BIT
+ #define LDCOEFF_16BIT
+ 
++#elif defined(__EMSCRIPTEN__)
++#define ARCH_PREFER_MULT_32x16
++#define SINETABLE_16BIT
++#define WINDOWTABLE_16BIT
++#define POW2COEFF_16BIT
++#define LDCOEFF_16BIT
++
+ #elif defined(__powerpc__)
+ #define ARCH_PREFER_MULT_32x32
+ #define ARCH_PREFER_MULT_32x16
