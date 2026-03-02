@@ -1625,15 +1625,6 @@ http_archive(
     url = "https://opensource.apple.com/tarballs/mDNSResponder/mDNSResponder-765.50.9.tar.gz",
 )
 
-# BUILD FILE NOT AVAILABLE!!!
-# new_git_repository(
-#     name = "androidcblas",
-#     build_file = "//bzl/thirdpartybuild:androidcblas.BUILD",
-#     commit = "611764050a3af0bb030ff49a5a5b15779ff254c6",
-#     remote = "https://android.googlesource.com/platform/external/cblas",
-#     shallow_since = "1458338533 -0700",
-# )
-
 new_git_repository(
     name = "opus",
     build_file = "//bzl/thirdpartybuild:opus.BUILD",

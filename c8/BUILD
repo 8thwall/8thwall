@@ -60,24 +60,6 @@ cc_library(
 )
 
 cc_library(
-    name = "cblas",
-    srcs = [],
-    hdrs = ["cblas.h"],
-    linkopts = select({
-        "@the8thwall//bzl/conditions:apple": [
-            "-framework Accelerate",
-        ],
-        "//conditions:default": [],
-    }),
-    deps = select({
-        "@the8thwall//bzl/conditions:apple": [],
-        "//conditions:default": [
-            "//third_party/clapack:cblas",
-        ],
-    }),
-)
-
-cc_library(
     name = "set",
     hdrs = ["set.h"],
 )
