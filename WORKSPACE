@@ -1949,22 +1949,6 @@ http_archive(
     url = "https://github.com/node-3d/glfw-raub/archive/refs/tags/5.1.0.zip",
 )
 
-# The patches to this repository live in a Niantic fork at
-# https://gitlab.com/<REMOVED_BEFORE_OPEN_SOURCING>/repos/legacy/niantic-ar/3rd-party/node-gles.git
-# Additional changes should be added there before updating the node-gles.patch file.
-# Requires --config=angle for ANGLE OpenGL ES 3.0 translation.
-new_git_repository(
-    name = "node-gles",
-    build_file = "//bzl/thirdpartybuild:node-gles.BUILD",
-    commit = "b4cb488f580888d13c603cba38f692441ec4fc69",
-    patch_args = ["-p1"],
-    patches = [
-        "//third_party/node-gles:node-gles.patch",
-    ],
-    remote = "https://github.com/google/node-gles.git",
-    shallow_since = "1587059214 -0700",
-)
-
 http_archive(
     name = "ring",
     build_file = "//bzl/thirdpartybuild:ring.BUILD",
