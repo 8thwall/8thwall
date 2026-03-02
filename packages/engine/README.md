@@ -21,3 +21,5 @@ Or, if building for a non-SIMD environment, run:
 bazel build --config=wasmrelease //reality/app/xr/js:xr-js
 ```
 
+## Usage
+Today, the easiest way to add the engine is to use the [Distributed Engine Binary](https://github.com/8thwall/engine), which also supports SLAM. We will also be working on official releases of the open source engine through npm.

@@ -215,9 +215,9 @@ http_toolchain(
 http_toolchain(
     name = "llvm-macosx-x86_64",
     build_file = "//third_party/llvm:llvm.BUILD",
-    sha256 = "6462c7496391b2f7af73c234f2e3746e3ba1b5c388e346e949f606e3465d4eec",
+    sha256 = "e11e55fa28810da05d43368b060dd991863e735de9198ea11de37ce9ba11c2fd",
     strip_prefix = "llvm-16.0.6-7cbf1a2-macosx-x86_64",
-    url = "https://huggingface.co/datasets/8thWall/bazel-dependencies/resolve/main/llvm/llvm-16.0.6-7cbf1a2-macosx-x86_64.tar",
+    url = "https://huggingface.co/datasets/8thWall/bazel-dependencies/resolve/main/llvm/llvm-16.0.6-7cbf1a2-macosx-x86_64.tar.gz",
 )
 
 http_toolchain(
