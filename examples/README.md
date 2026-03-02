@@ -9,7 +9,7 @@
 
 - [World Effects](https://github.com/8thwall/aframe-world-effects-example)
 
-## Additional Samples
+## Additional Examples
 
 Additional projects are available [here](https://github.com/8thwall/web/tree/master/examples). Note that they will need to be migrated to the latest project format using [this guide](https://www.8thwall.com/docs/migration/self-hosted/).
 
