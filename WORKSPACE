@@ -1718,14 +1718,6 @@ new_git_repository(
     shallow_since = "1580387311 -0500",
 )
 
-http_archive(
-    name = "dawn",
-    build_file = "//bzl/thirdpartybuild:dawn.BUILD",
-    sha256 = "c9e0b7be6674ba779f2a32582343ee5aeb44ab8035ffdaebc276c6d78d6a4d3c",
-    strip_prefix = "dawn_chromium_6875",
-    url = "https://huggingface.co/datasets/8thWall/bazel-dependencies/resolve/main/dawn/dawn_chromium_6875.zip",
-)
-
 new_git_repository(
     name = "python-gitlab",
     build_file = "//third_party/python-gitlab:python-gitlab.BUILD",
@@ -1857,14 +1849,6 @@ niantic_maybe(
     ],
 )
 
-http_archive(
-    name = "glfw",
-    build_file = "//bzl/thirdpartybuild:glfw.BUILD",
-    sha256 = "4d025083cc4a3dd1f91ab9b9ba4f5807193823e565a5bcf4be202669d9911ea6",
-    strip_prefix = "glfw-3.3.8",
-    url = "https://github.com/glfw/glfw/releases/download/3.3.8/glfw-3.3.8.zip",
-)
-
 # Downloaded from https://gitlab.com/<REMOVED_BEFORE_OPEN_SOURCING>/repos/legacy/niantic-ar/3rd-party/angle/-/tags
 http_archive(
     name = "angle",
@@ -1896,18 +1880,6 @@ http_archive(
     sha256 = "961159c82a24afc3347e2f593143394aa6d2b4be30f6f85c9bb742da03f4ce4c",
     strip_prefix = "addon-tools-raub-7.2.0",
     url = "https://github.com/node-3d/addon-tools-raub/archive/refs/tags/7.2.0.zip",
-)
-
-http_archive(
-    name = "glfw-raub",
-    build_file = "//bzl/thirdpartybuild:glfw-raub.BUILD",
-    patch_args = ["-p1"],
-    patches = [
-        "//third_party/glfw-raub:glfw-raub.patch",
-    ],
-    sha256 = "77e7bb2b72b9da2ed78552dd5eba65432b9d0abfe21799a7675d823b80653f85",
-    strip_prefix = "glfw-raub-5.1.0",
-    url = "https://github.com/node-3d/glfw-raub/archive/refs/tags/5.1.0.zip",
 )
 
 http_archive(
