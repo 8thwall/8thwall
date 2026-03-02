@@ -1,0 +1,39 @@
+diff --git a/src/iso19111/factory.cpp b/src/iso19111/factory.cpp
+index bb44c97f268..8e7838f9b7a 100644
+--- a/src/iso19111/factory.cpp
++++ b/src/iso19111/factory.cpp
+@@ -74,7 +74,7 @@
+ #include "proj_internal.h"
+ // clang-format on
+ 
+-#include <sqlite3.h>
++#include "sqlite3.h"
+ 
+ // Custom SQLite VFS as our database is not supposed to be modified in
+ // parallel. This is slightly faster
+diff --git a/src/proj_json_streaming_writer.cpp b/src/proj_json_streaming_writer.cpp
+index a60522251b1..c1717d7e957 100644
+--- a/src/proj_json_streaming_writer.cpp
++++ b/src/proj_json_streaming_writer.cpp
+@@ -35,7 +35,7 @@
+ #include "proj_json_streaming_writer.hpp"
+ 
+ #include <cmath>
+-#include <sqlite3.h>
++#include "sqlite3.h"
+ #include <stdarg.h>
+ #include <string.h>
+ #define CPLAssert(x)                                                           \
+diff --git a/src/sqlite3_utils.hpp b/src/sqlite3_utils.hpp
+index 42ec33af7b7..73e8f8ec82c 100644
+--- a/src/sqlite3_utils.hpp
++++ b/src/sqlite3_utils.hpp
+@@ -30,7 +30,7 @@
+ 
+ #include <memory>
+ 
+-#include <sqlite3.h>
++#include "sqlite3.h"
+ 
+ #include "proj.h"
+ #include "proj/util.hpp"

@@ -1,0 +1,182 @@
+diff --git a/src/cpp/bindings.cpp b/src/cpp/bindings.cpp
+index 78076f8..7d97656 100644
+--- a/src/cpp/bindings.cpp
++++ b/src/cpp/bindings.cpp
+@@ -114,9 +114,6 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports) {
+ 	JS_GLFW_SET_METHOD(platformWindow);
+ 	JS_GLFW_SET_METHOD(platformContext);
+ 	
+-	JS_GLFW_SET_METHOD(testScene);
+-	JS_GLFW_SET_METHOD(testJoystick);
+-	
+ 	JS_GLFW_SET_METHOD(getJoystickGUID);
+ 	
+ 	JS_GLFW_SET_METHOD(vulkanSupported);
+@@ -128,6 +125,10 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports) {
+ 	JS_GLFW_SET_METHOD(vulkanCreateDevice);
+ 	JS_GLFW_SET_METHOD(vulkanDestroyDevice);
+ 	JS_GLFW_SET_METHOD(vulkanDestroyInstance);
++
++        // Extra
++        JS_GLFW_SET_METHOD(getNativeWindow);
++
+ 	
+ 	// ------------ Constants ------------
+ 	
+@@ -446,7 +447,7 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports) {
+ 	
+ 	JS_GLFW_CONSTANT(DONT_CARE);
+ 	
+-	JS_GLFW_CONSTANT(NO_API);
++	//JS_GLFW_CONSTANT(NO_API);
+ 	
+ 	return exports;
+ }
+diff --git a/src/cpp/glfw-init.cpp b/src/cpp/glfw-init.cpp
+index 4a4976e..e393154 100644
+--- a/src/cpp/glfw-init.cpp
++++ b/src/cpp/glfw-init.cpp
+@@ -60,34 +60,4 @@ DBG_EXPORT JS_METHOD(terminate) { NAPI_ENV;
+ 	RET_UNDEFINED;
+ }
+ 
+-
+-DBG_EXPORT JS_METHOD(testScene) { NAPI_ENV;
+-	REQ_UINT32_ARG(0, width);
+-	REQ_UINT32_ARG(1, height);
+-	LET_FLOAT_ARG(2, z);
+-	
+-	glViewport(0, 0, width, height);
+-	glClear(GL_COLOR_BUFFER_BIT);
+-	
+-	float ratio = static_cast<float>(width) / static_cast<float>(height);
+-	glMatrixMode(GL_PROJECTION);
+-	glLoadIdentity();
+-	glOrtho(-ratio, ratio, -1.f, 1.f, 1.f, -1.f);
+-	glMatrixMode(GL_MODELVIEW);
+-	
+-	glLoadIdentity();
+-	glRotatef(static_cast<float>(glfwGetTime()) * 50.f, 0.f, 0.f, 1.f);
+-	
+-	glBegin(GL_TRIANGLES);
+-	glColor3f(1.f, 0.f, 0.f);
+-	glVertex3f(-0.6f + z, -0.4f, 0.f);
+-	glColor3f(0.f, 1.f, 0.f);
+-	glVertex3f(0.6f + z, -0.4f, 0.f);
+-	glColor3f(0.f, 0.f, 1.f);
+-	glVertex3f(0.f + z, 0.6f, 0.f);
+-	glEnd();
+-	
+-	RET_UNDEFINED;
+-}
+-
+ } // namespace glfw
+diff --git a/src/cpp/glfw-init.hpp b/src/cpp/glfw-init.hpp
+index d47f735..50f53f6 100644
+--- a/src/cpp/glfw-init.hpp
++++ b/src/cpp/glfw-init.hpp
+@@ -10,7 +10,6 @@ namespace glfw {
+ 	DBG_EXPORT JS_METHOD(init);
+ 	DBG_EXPORT JS_METHOD(initHint);
+ 	DBG_EXPORT JS_METHOD(terminate);
+-	DBG_EXPORT JS_METHOD(testScene);
+ } // namespace glfw
+ 
+ 
+diff --git a/src/cpp/glfw-joystick.cpp b/src/cpp/glfw-joystick.cpp
+index 0cd202b..139f67d 100644
+--- a/src/cpp/glfw-joystick.cpp
++++ b/src/cpp/glfw-joystick.cpp
+@@ -5,42 +5,6 @@
+ 
+ namespace glfw {
+ 
+-DBG_EXPORT JS_METHOD(testJoystick) { NAPI_ENV;
+-	REQ_UINT32_ARG(0, width);
+-	REQ_UINT32_ARG(1, height);
+-	REQ_FLOAT_ARG(2, translateX);
+-	REQ_FLOAT_ARG(3, translateY);
+-	REQ_FLOAT_ARG(4, translateZ);
+-	REQ_FLOAT_ARG(5, rotateX);
+-	REQ_FLOAT_ARG(6, rotateY);
+-	REQ_FLOAT_ARG(7, rotateZ);
+-	REQ_FLOAT_ARG(8, angle);
+-	
+-	glViewport(0, 0, width, height);
+-	glClear(GL_COLOR_BUFFER_BIT);
+-	
+-	float ratio = static_cast<float>(width) / static_cast<float>(height);
+-	glMatrixMode(GL_PROJECTION);
+-	glLoadIdentity();
+-	glOrtho(-ratio, ratio, -1.f, 1.f, 1.f, -1.f);
+-	glMatrixMode(GL_MODELVIEW);
+-	
+-	glLoadIdentity();
+-	glRotatef(angle, rotateX, rotateY, rotateZ);
+-	glTranslatef(translateX, translateY, translateZ);
+-	
+-	glBegin(GL_TRIANGLES);
+-	glColor3f(1.f, 0.f, 0.f);
+-	glVertex3f(-0.6f, -0.4f, 0.f);
+-	glColor3f(0.f, 1.f, 0.f);
+-	glVertex3f(0.6f, -0.4f, 0.f);
+-	glColor3f(0.f, 0.f, 1.f);
+-	glVertex3f(0.f, 0.6f, 0.f);
+-	glEnd();
+-	
+-	RET_UNDEFINED;
+-}
+-
+ 
+ DBG_EXPORT JS_METHOD(joystickPresent) { NAPI_ENV;
+ 	REQ_UINT32_ARG(0, joy);
+diff --git a/src/cpp/glfw-joystick.hpp b/src/cpp/glfw-joystick.hpp
+index e36654a..0a9d902 100644
+--- a/src/cpp/glfw-joystick.hpp
++++ b/src/cpp/glfw-joystick.hpp
+@@ -12,7 +12,6 @@ namespace glfw {
+ 	DBG_EXPORT JS_METHOD(getJoystickGUID);
+ 	DBG_EXPORT JS_METHOD(getJoystickHats);
+ 	DBG_EXPORT JS_METHOD(joystickIsGamepad);
+-	DBG_EXPORT JS_METHOD(testJoystick);
+ 	DBG_EXPORT JS_METHOD(updateGamepadMappings);
+ 	DBG_EXPORT JS_METHOD(getGamepadName);
+ 	DBG_EXPORT JS_METHOD(getGamepadState);
+diff --git a/src/cpp/glfw-window.cpp b/src/cpp/glfw-window.cpp
+index c7e247e..4c03b79 100644
+--- a/src/cpp/glfw-window.cpp
++++ b/src/cpp/glfw-window.cpp
+@@ -6,6 +6,8 @@
+ #include "glfw-events.hpp"
+ #include "glfw-window.hpp"
+ 
++// Extra
++#include "bzl/glfw/glfw-extra.h"
+ 
+ namespace glfw {
+ 
+@@ -181,6 +183,11 @@ DBG_EXPORT JS_METHOD(createWindow) { NAPI_ENV;
+ }
+ 
+ 
++DBG_EXPORT JS_METHOD(getNativeWindow) { NAPI_ENV; THIS_WINDOW;
++        void* nativeWindow = nc_getGlfwNativeWindow(window);
++        RET_EXT(nativeWindow);
++}
++
+ DBG_EXPORT JS_METHOD(destroyWindow) { NAPI_ENV; THIS_WINDOW; THIS_STATE;
+ 	glfwDestroyWindow(window);
+ 	if (state) {
+diff --git a/src/cpp/glfw-window.hpp b/src/cpp/glfw-window.hpp
+index b6bcb65..d86cac5 100644
+--- a/src/cpp/glfw-window.hpp
++++ b/src/cpp/glfw-window.hpp
+@@ -68,6 +68,8 @@ namespace glfw {
+ 	DBG_EXPORT JS_METHOD(setWindowShouldClose);
+ 	DBG_EXPORT JS_METHOD(getWindowAttrib);
+ 	DBG_EXPORT JS_METHOD(setWindowAttrib);
++        // Extra methods.
++	DBG_EXPORT JS_METHOD(getNativeWindow);
+ } // namespace glfw
+ 
+ 

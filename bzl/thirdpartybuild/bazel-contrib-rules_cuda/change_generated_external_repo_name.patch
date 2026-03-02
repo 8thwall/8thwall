@@ -1,0 +1,659 @@
+diff --git a/.github/release_notes.template b/.github/release_notes.template
+index 6ce2315..a66aac2 100755
+--- a/.github/release_notes.template
++++ b/.github/release_notes.template
+@@ -8,7 +8,7 @@ http_archive(
+     urls = ["https://github.com/bazel-contrib/rules_cuda/releases/download/{version}/rules_cuda-{version}.tar.gz"],
+ )
+ 
+-load("@rules_cuda//cuda:repositories.bzl", "register_detected_cuda_toolchains", "rules_cuda_dependencies")
++load("@bazel-contrib-rules_cuda//cuda:repositories.bzl", "register_detected_cuda_toolchains", "rules_cuda_dependencies")
+ rules_cuda_dependencies()
+ register_detected_cuda_toolchains()
+ ```
+\ No newline at end of file
+diff --git a/MODULE.bazel b/MODULE.bazel
+index eae6e6f..4a875de 100644
+--- a/MODULE.bazel
++++ b/MODULE.bazel
+@@ -7,11 +7,11 @@ module(
+ bazel_dep(name = "bazel_skylib", version = "1.2.1")
+ bazel_dep(name = "platforms", version = "0.0.4")
+ 
+-toolchain = use_extension("@rules_cuda//cuda:extensions.bzl", "local_toolchain")
+-use_repo(toolchain, "local_cuda")
++toolchain = use_extension("@bazel-contrib-rules_cuda//cuda:extensions.bzl", "local_toolchain")
++use_repo(toolchain, "bazel-contrib-local_cuda")
+ 
+ register_toolchains(
+-    "@local_cuda//toolchain:nvcc-local-toolchain",
+-    "@local_cuda//toolchain/clang:clang-local-toolchain",
++    "@bazel-contrib-local_cuda//toolchain:nvcc-local-toolchain",
++    "@bazel-contrib-local_cuda//toolchain/clang:clang-local-toolchain",
+ )
+ 
+diff --git a/README.md b/README.md
+index 74c389b..6003535 100644
+--- a/README.md
++++ b/README.md
+@@ -16,7 +16,7 @@ http_archive(
+     strip_prefix = "rules_cuda-{git_commit_hash}",
+     urls = ["https://github.com/bazel-contrib/rules_cuda/archive/{git_commit_hash}.tar.gz"],
+ )
+-load("@rules_cuda//cuda:repositories.bzl", "register_detected_cuda_toolchains", "rules_cuda_dependencies")
++load("@bazel-contrib-rules_cuda//cuda:repositories.bzl", "register_detected_cuda_toolchains", "rules_cuda_dependencies")
+ rules_cuda_dependencies()
+ register_detected_cuda_toolchains()
+ ```
+diff --git a/cuda/BUILD.bazel b/cuda/BUILD.bazel
+index fd89ecc..ab07f6c 100644
+--- a/cuda/BUILD.bazel
++++ b/cuda/BUILD.bazel
+@@ -80,5 +80,5 @@ string_list_flag(
+ # Example usage: --@rules_cuda//cuda:runtime=@local_cuda//:cuda_runtime_static
+ label_flag(
+     name = "runtime",
+-    build_setting_default = "@local_cuda//:cuda_runtime",
++    build_setting_default = "@bazel-contrib-local_cuda//:cuda_runtime",
+ )
+diff --git a/cuda/extensions.bzl b/cuda/extensions.bzl
+index 649662e..1d92058 100644
+--- a/cuda/extensions.bzl
++++ b/cuda/extensions.bzl
+@@ -1,8 +1,8 @@
+ """Entry point for extensions used by bzlmod."""
+ 
+-load("//cuda/private:repositories.bzl", "local_cuda")
++load("//cuda/private:repositories.bzl", "bazel-contrib-local_cuda")
+ 
+ def _init(module_ctx):
+-    local_cuda(name = "local_cuda")
++    local_cuda(name = "bazel-contrib-local_cuda")
+ 
+ local_toolchain = module_extension(implementation = _init)
+diff --git a/cuda/private/repositories.bzl b/cuda/private/repositories.bzl
+index 804a69d..10d61ce 100644
+--- a/cuda/private/repositories.bzl
++++ b/cuda/private/repositories.bzl
+@@ -52,19 +52,19 @@ def detect_cuda_toolkit(repository_ctx):
+         cuda_path = None
+ 
+     bin_ext = ".exe" if _is_windows(repository_ctx) else ""
+-    nvlink = "@rules_cuda//cuda/dummy:nvlink"
+-    link_stub = "@rules_cuda//cuda/dummy:link.stub"
+-    bin2c = "@rules_cuda//cuda/dummy:bin2c"
+-    fatbinary = "@rules_cuda//cuda/dummy:fatbinary"
++    nvlink = "@bazel-contrib-rules_cuda//cuda/dummy:nvlink"
++    link_stub = "@bazel-contrib-rules_cuda//cuda/dummy:link.stub"
++    bin2c = "@bazel-contrib-rules_cuda//cuda/dummy:bin2c"
++    fatbinary = "@bazel-contrib-rules_cuda//cuda/dummy:fatbinary"
+     if cuda_path != None:
+         if repository_ctx.path(cuda_path + "/bin/nvlink" + bin_ext).exists:
+-            nvlink = "@local_cuda//:cuda/bin/nvlink" + bin_ext
++            nvlink = "@bazel-contrib-local_cuda//:cuda/bin/nvlink" + bin_ext
+         if repository_ctx.path(cuda_path + "/bin/crt/link.stub").exists:
+-            link_stub = "@local_cuda//:cuda/bin/crt/link.stub"
++            link_stub = "@bazel-contrib-local_cuda//:cuda/bin/crt/link.stub"
+         if repository_ctx.path(cuda_path + "/bin/bin2c" + bin_ext).exists:
+-            bin2c = "@local_cuda//:cuda/bin/bin2c" + bin_ext
++            bin2c = "@bazel-contrib-local_cuda//:cuda/bin/bin2c" + bin_ext
+         if repository_ctx.path(cuda_path + "/bin/fatbinary" + bin_ext).exists:
+-            fatbinary = "@local_cuda//:cuda/bin/fatbinary" + bin_ext
++            fatbinary = "@bazel-contrib-local_cuda//:cuda/bin/fatbinary" + bin_ext
+ 
+     nvcc_version_major = -1
+     nvcc_version_minor = -1
+@@ -212,4 +212,4 @@ def rules_cuda_dependencies():
+         ],
+     )
+ 
+-    local_cuda(name = "local_cuda")
++    local_cuda(name = "bazel-contrib-local_cuda")
+diff --git a/cuda/private/toolchain.bzl b/cuda/private/toolchain.bzl
+index 132d3f2..3c48077 100644
+--- a/cuda/private/toolchain.bzl
++++ b/cuda/private/toolchain.bzl
+@@ -84,6 +84,6 @@ def register_detected_cuda_toolchains():
+ User can setup their own toolchain if needed and ignore the detected ones by not calling this macro.
+ """
+     native.register_toolchains(
+-        "@local_cuda//toolchain:nvcc-local-toolchain",
+-        "@local_cuda//toolchain/clang:clang-local-toolchain",
++        "@bazel-contrib-local_cuda//toolchain:nvcc-local-toolchain",
++        "@bazel-contrib-local_cuda//toolchain/clang:clang-local-toolchain",
+     )
+diff --git a/cuda/runtime/BUILD.local_cuda b/cuda/runtime/BUILD.local_cuda
+index 88ca2e2..375ffed 100644
+--- a/cuda/runtime/BUILD.local_cuda
++++ b/cuda/runtime/BUILD.local_cuda
+@@ -1,4 +1,4 @@
+-load("@rules_cuda//cuda:defs.bzl", "if_linux", "if_windows")
++load("@bazel-contrib-rules_cuda//cuda:defs.bzl", "if_linux", "if_windows")
+ load(":defs.bzl", "if_local_cuda")
+ 
+ package(
+@@ -86,7 +86,7 @@ cc_library(
+         ":cudart_lib",
+     ]),
+     # FIXME:
+-    # visibility = ["@rules_cuda//cuda:__pkg__"],
++    # visibility = ["@bazel-contrib-rules_cuda//cuda:__pkg__"],
+ )
+ 
+ # Note: do not use this target directly, use the configurable label_flag
+@@ -103,13 +103,13 @@ cc_library(
+     ]),
+     deps = [":cudadevrt_a"],
+     # FIXME:
+-    # visibility = ["@rules_cuda//cuda:__pkg__"],
++    # visibility = ["@bazel-contrib-rules_cuda//cuda:__pkg__"],
+ )
+ 
+ cc_library(
+     name = "no_cuda_runtime",
+     # FIXME:
+-    # visibility = ["@rules_cuda//cuda:__pkg__"],
++    # visibility = ["@bazel-contrib-rules_cuda//cuda:__pkg__"],
+ )
+ 
+ cc_import(
+diff --git a/cuda/templates/BUILD.local_toolchain_clang b/cuda/templates/BUILD.local_toolchain_clang
+index 1ef1794..5db6a49 100644
+--- a/cuda/templates/BUILD.local_toolchain_clang
++++ b/cuda/templates/BUILD.local_toolchain_clang
+@@ -1,7 +1,7 @@
+ # This becomes the BUILD file for @local_cuda//toolchain/clang if LLVM is detected
+ 
+ load(
+-    "@rules_cuda//cuda:defs.bzl",
++    "@bazel-contrib-rules_cuda//cuda:defs.bzl",
+     "cuda_toolkit",
+     "cuda_toolchain",
+     cuda_toolchain_config = "cuda_toolchain_config_clang",
+@@ -38,10 +38,10 @@ toolchain(
+         "@platforms//cpu:x86_64",
+     ],
+     target_settings = [
+-        "@rules_cuda//cuda:is_enabled",
+-        "@rules_cuda//cuda:compiler_is_clang",
++        "@bazel-contrib-rules_cuda//cuda:is_enabled",
++        "@bazel-contrib-rules_cuda//cuda:compiler_is_clang",
+     ],
+     toolchain = ":clang-local",
+-    toolchain_type = "@rules_cuda//cuda:toolchain_type",
++    toolchain_type = "@bazel-contrib-rules_cuda//cuda:toolchain_type",
+     visibility = ["//visibility:public"],
+ )
+diff --git a/cuda/templates/BUILD.local_toolchain_nvcc b/cuda/templates/BUILD.local_toolchain_nvcc
+index fde9c3b..a7f752d 100644
+--- a/cuda/templates/BUILD.local_toolchain_nvcc
++++ b/cuda/templates/BUILD.local_toolchain_nvcc
+@@ -1,7 +1,7 @@
+ # This becomes the BUILD file for @local_cuda//toolchain/ under Linux.
+ 
+ load(
+-    "@rules_cuda//cuda:defs.bzl",
++    "@bazel-contrib-rules_cuda//cuda:defs.bzl",
+     "cuda_toolchain",
+     "cuda_toolkit",
+     cuda_toolchain_config = "cuda_toolchain_config_nvcc",
+@@ -40,10 +40,10 @@ toolchain(
+         "@platforms//os:linux",
+     ],
+     target_settings = [
+-        "@rules_cuda//cuda:is_enabled",
+-        "@rules_cuda//cuda:compiler_is_nvcc",
++        "@bazel-contrib-rules_cuda//cuda:is_enabled",
++        "@bazel-contrib-rules_cuda//cuda:compiler_is_nvcc",
+     ],
+     toolchain = ":nvcc-local",
+-    toolchain_type = "@rules_cuda//cuda:toolchain_type",
++    toolchain_type = "@bazel-contrib-rules_cuda//cuda:toolchain_type",
+     visibility = ["//visibility:public"],
+ )
+diff --git a/cuda/templates/BUILD.local_toolchain_nvcc_msvc b/cuda/templates/BUILD.local_toolchain_nvcc_msvc
+index dee4ba5..e4cd17b 100644
+--- a/cuda/templates/BUILD.local_toolchain_nvcc_msvc
++++ b/cuda/templates/BUILD.local_toolchain_nvcc_msvc
+@@ -1,7 +1,7 @@
+ # This becomes the BUILD file for @local_cuda//toolchain/ under Windows.
+ 
+ load(
+-    "@rules_cuda//cuda:defs.bzl",
++    "@bazel-contrib-rules_cuda//cuda:defs.bzl",
+     "cuda_toolchain",
+     "cuda_toolkit",
+     cuda_toolchain_config = "cuda_toolchain_config_nvcc_msvc",
+@@ -43,10 +43,10 @@ toolchain(
+         "@platforms//cpu:x86_64",
+     ],
+     target_settings = [
+-        "@rules_cuda//cuda:is_enabled",
+-        "@rules_cuda//cuda:compiler_is_nvcc",
++        "@bazel-contrib-rules_cuda//cuda:is_enabled",
++        "@bazel-contrib-rules_cuda//cuda:compiler_is_nvcc",
+     ],
+     toolchain = ":nvcc-local",
+-    toolchain_type = "@rules_cuda//cuda:toolchain_type",
++    toolchain_type = "@bazel-contrib-rules_cuda//cuda:toolchain_type",
+     visibility = ["//visibility:public"],
+ )
+diff --git a/docs/BUILD.bazel b/docs/BUILD.bazel
+index ea3c8df..b8cb1e5 100644
+--- a/docs/BUILD.bazel
++++ b/docs/BUILD.bazel
+@@ -4,26 +4,26 @@ stardoc(
+     name = "user_docs",
+     out = "user_docs.md",
+     input = "user_docs.bzl",
+-    deps = ["@rules_cuda//:bzl_srcs"],
++    deps = ["@bazel-contrib-rules_cuda//:bzl_srcs"],
+ )
+ 
+ stardoc(
+     name = "toolchain_config_docs",
+     out = "toolchain_config_docs.md",
+     input = "toolchain_config_docs.bzl",
+-    deps = ["@rules_cuda//:bzl_srcs"],
++    deps = ["@bazel-contrib-rules_cuda//:bzl_srcs"],
+ )
+ 
+ stardoc(
+     name = "providers_docs",
+     out = "providers_docs.md",
+     input = "providers_docs.bzl",
+-    deps = ["@rules_cuda//:bzl_srcs"],
++    deps = ["@bazel-contrib-rules_cuda//:bzl_srcs"],
+ )
+ 
+ stardoc(
+     name = "developer_docs",
+     out = "developer_docs.md",
+     input = "developer_docs.bzl",
+-    deps = ["@rules_cuda//:bzl_srcs"],
++    deps = ["@bazel-contrib-rules_cuda//:bzl_srcs"],
+ )
+diff --git a/docs/WORKSPACE.bazel b/docs/WORKSPACE.bazel
+index 806a7b9..f945c43 100644
+--- a/docs/WORKSPACE.bazel
++++ b/docs/WORKSPACE.bazel
+@@ -5,7 +5,7 @@ local_repository(
+     path = "..",
+ )
+ 
+-load("@rules_cuda//cuda:repositories.bzl", "rules_cuda_dependencies")
++load("@bazel-contrib-rules_cuda//cuda:repositories.bzl", "rules_cuda_dependencies")
+ 
+ rules_cuda_dependencies()
+ 
+diff --git a/docs/developer_docs.bzl b/docs/developer_docs.bzl
+index 489a673..339448b 100644
+--- a/docs/developer_docs.bzl
++++ b/docs/developer_docs.bzl
+@@ -1,16 +1,16 @@
+-load("@rules_cuda//cuda/private:cuda_helper.bzl", _cuda_helper = "cuda_helper")
+-load("@rules_cuda//cuda/private:actions/compile.bzl", _compile = "compile")
+-load("@rules_cuda//cuda/private:actions/dlink.bzl", _device_link = "device_link")
++load("@bazel-contrib-rules_cuda//cuda/private:cuda_helper.bzl", _cuda_helper = "cuda_helper")
++load("@bazel-contrib-rules_cuda//cuda/private:actions/compile.bzl", _compile = "compile")
++load("@bazel-contrib-rules_cuda//cuda/private:actions/dlink.bzl", _device_link = "device_link")
+ load(
+-    "@rules_cuda//cuda/private:toolchain.bzl",
++    "@bazel-contrib-rules_cuda//cuda/private:toolchain.bzl",
+     _find_cuda_toolchain = "find_cuda_toolchain",
+     _find_cuda_toolkit = "find_cuda_toolkit",
+     _use_cpp_toolchain = "use_cpp_toolchain",
+     _use_cuda_toolchain = "use_cuda_toolchain",
+ )
+-load("@rules_cuda//cuda/private:toolchain_config_lib.bzl", _config_helper = "config_helper")
++load("@bazel-contrib-rules_cuda//cuda/private:toolchain_config_lib.bzl", _config_helper = "config_helper")
+ load(
+-    "@rules_cuda//cuda/private:repositories.bzl",
++    "@bazel-contrib-rules_cuda//cuda/private:repositories.bzl",
+     _config_clang = "config_clang",
+     _config_cuda_toolkit_and_nvcc = "config_cuda_toolkit_and_nvcc",
+     _detect_clang = "detect_clang",
+diff --git a/docs/providers_docs.bzl b/docs/providers_docs.bzl
+index 19fc34d..ef6d9fb 100644
+--- a/docs/providers_docs.bzl
++++ b/docs/providers_docs.bzl
+@@ -1,5 +1,5 @@
+ load(
+-    "@rules_cuda//cuda/private:providers.bzl",
++    "@bazel-contrib-rules_cuda//cuda/private:providers.bzl",
+     _ArchSpecInfo = "ArchSpecInfo",
+     _CudaArchsInfo = "CudaArchsInfo",
+     _CudaInfo = "CudaInfo",
+diff --git a/docs/toolchain_config_docs.bzl b/docs/toolchain_config_docs.bzl
+index e46bf3a..2039257 100644
+--- a/docs/toolchain_config_docs.bzl
++++ b/docs/toolchain_config_docs.bzl
+@@ -1,5 +1,5 @@
+ load(
+-    "@rules_cuda//cuda:defs.bzl",
++    "@bazel-contrib-rules_cuda//cuda:defs.bzl",
+     _cuda_toolchain = "cuda_toolchain",
+     _cuda_toolchain_config_clang = "cuda_toolchain_config_clang",
+     _cuda_toolchain_config_nvcc = "cuda_toolchain_config_nvcc",
+diff --git a/docs/user_docs.bzl b/docs/user_docs.bzl
+index 55ba3e2..1d99f41 100644
+--- a/docs/user_docs.bzl
++++ b/docs/user_docs.bzl
+@@ -1,6 +1,6 @@
+-load("@rules_cuda//cuda:defs.bzl", _cuda_library = "cuda_library", _cuda_objects = "cuda_objects")
+-load("@rules_cuda//cuda:repositories.bzl", _register_detected_cuda_toolchains = "register_detected_cuda_toolchains", _rules_cuda_dependencies = "rules_cuda_dependencies")
+-load("@rules_cuda//cuda/private:rules/flags.bzl", _cuda_archs_flag = "cuda_archs_flag")
++load("@bazel-contrib-rules_cuda//cuda:defs.bzl", _cuda_library = "cuda_library", _cuda_objects = "cuda_objects")
++load("@bazel-contrib-rules_cuda//cuda:repositories.bzl", _register_detected_cuda_toolchains = "register_detected_cuda_toolchains", _rules_cuda_dependencies = "rules_cuda_dependencies")
++load("@bazel-contrib-rules_cuda//cuda/private:rules/flags.bzl", _cuda_archs_flag = "cuda_archs_flag")
+ 
+ cuda_library = _cuda_library
+ cuda_objects = _cuda_objects
+diff --git a/examples/MODULE.bazel b/examples/MODULE.bazel
+index eda468f..e9dec5f 100644
+--- a/examples/MODULE.bazel
++++ b/examples/MODULE.bazel
+@@ -6,7 +6,7 @@ module(
+ 
+ bazel_dep(name = "rules_cuda", version = "0.1.1")
+ 
+-cuda_toolchain = use_extension("@rules_cuda//cuda:extensions.bzl", "local_toolchain")
+-use_repo(cuda_toolchain, "local_cuda")
++cuda_toolchain = use_extension("@bazel-contrib-rules_cuda//cuda:extensions.bzl", "local_toolchain")
++use_repo(cuda_toolchain, "bazel-contrib-local_cuda")
+ 
+ local_path_override(module_name = "rules_cuda", path = "..")
+diff --git a/examples/WORKSPACE.bazel b/examples/WORKSPACE.bazel
+index 3f9cfe2..c43a159 100644
+--- a/examples/WORKSPACE.bazel
++++ b/examples/WORKSPACE.bazel
+@@ -12,7 +12,7 @@ local_repository(
+ # If you want to have a different version of some dependency,
+ # you should fetch it *before* calling this.
+ 
+-load("@rules_cuda//cuda:repositories.bzl", "register_detected_cuda_toolchains", "rules_cuda_dependencies")
++load("@bazel-contrib-rules_cuda//cuda:repositories.bzl", "register_detected_cuda_toolchains", "rules_cuda_dependencies")
+ rules_cuda_dependencies()
+ register_detected_cuda_toolchains()
+ 
+diff --git a/examples/basic/BUILD.bazel b/examples/basic/BUILD.bazel
+index b3544f7..289437a 100644
+--- a/examples/basic/BUILD.bazel
++++ b/examples/basic/BUILD.bazel
+@@ -1,4 +1,4 @@
+-load("@rules_cuda//cuda:defs.bzl", "cuda_library")
++load("@bazel-contrib-rules_cuda//cuda:defs.bzl", "cuda_library")
+ 
+ package(default_visibility = ["//visibility:public"])
+ 
+diff --git a/examples/cublas/BUILD.bazel b/examples/cublas/BUILD.bazel
+index 88a7cf3..80acbcc 100644
+--- a/examples/cublas/BUILD.bazel
++++ b/examples/cublas/BUILD.bazel
+@@ -2,5 +2,5 @@
+ cc_binary(
+     name = "main",
+     srcs = ["cublas.cpp"],
+-    deps = ["@local_cuda//:cublas"],
++    deps = ["@bazel-contrib-local_cuda//:cublas"],
+ )
+diff --git a/examples/if_cuda/BUILD.bazel b/examples/if_cuda/BUILD.bazel
+index 9c920f5..b9ec94e 100644
+--- a/examples/if_cuda/BUILD.bazel
++++ b/examples/if_cuda/BUILD.bazel
+@@ -1,4 +1,4 @@
+-load("@rules_cuda//cuda:defs.bzl", "cuda_library")
++load("@bazel-contrib-rules_cuda//cuda:defs.bzl", "cuda_library")
+ 
+ cuda_library(
+     name = "kernel",
+@@ -10,11 +10,11 @@ cc_binary(
+     name = "main",
+     srcs = ["main.cpp"],
+     defines = [] + select({
+-        "@rules_cuda//cuda:is_enabled": ["CUDA_ENABLED"],
++        "@bazel-contrib-rules_cuda//cuda:is_enabled": ["CUDA_ENABLED"],
+         "//conditions:default": ["CUDA_DISABLED"]
+     }),
+     deps = [] + select({
+-        "@rules_cuda//cuda:is_enabled": [":kernel"],
++        "@bazel-contrib-rules_cuda//cuda:is_enabled": [":kernel"],
+         "//conditions:default": []
+     })
+ )
+diff --git a/examples/if_cuda/README.md b/examples/if_cuda/README.md
+index b3ca8e4..3a8d086 100644
+--- a/examples/if_cuda/README.md
++++ b/examples/if_cuda/README.md
+@@ -73,7 +73,7 @@ rules_cuda or not can be achieved simply by using Bazel's `select` feature:
+ 
+ ```
+ select({
+-        "@rules_cuda//cuda:is_enabled": [], # add whatever settings are required if using CUDA
++        "@bazel-contrib-rules_cuda//cuda:is_enabled": [], # add whatever settings are required if using CUDA
+         "//conditions:default": [] # add whatever settings are required if not using CUDA
+     })
+ ```
+diff --git a/examples/rdc/BUILD.bazel b/examples/rdc/BUILD.bazel
+index 2775d7f..a5b43f1 100644
+--- a/examples/rdc/BUILD.bazel
++++ b/examples/rdc/BUILD.bazel
+@@ -1,4 +1,4 @@
+-load("@rules_cuda//cuda:defs.bzl", "cuda_library", "cuda_objects")
++load("@bazel-contrib-rules_cuda//cuda:defs.bzl", "cuda_library", "cuda_objects")
+ 
+ cuda_objects(
+     name = "a",
+diff --git a/examples/thrust/BUILD.bazel b/examples/thrust/BUILD.bazel
+index bb3c7df..0b232e2 100644
+--- a/examples/thrust/BUILD.bazel
++++ b/examples/thrust/BUILD.bazel
+@@ -1,11 +1,11 @@
+-load("@rules_cuda//cuda:defs.bzl", "cuda_library")
++load("@bazel-contrib-rules_cuda//cuda:defs.bzl", "cuda_library")
+ 
+ # thrust have code marked as __global__ or __kernel__
+ # so source for thrust should be built with cuda_library first
+ cuda_library(
+     name = "thrust_cu",
+     srcs = ["thrust.cu"],
+-    deps = ["@local_cuda//:thrust"],
++    deps = ["@bazel-contrib-local_cuda//:thrust"],
+ )
+ 
+ # Run with 'bazel run //examples/thrust:main'
+diff --git a/tests/flag/BUILD.bazel b/tests/flag/BUILD.bazel
+index 1c0d9bc..bc6cefb 100644
+--- a/tests/flag/BUILD.bazel
++++ b/tests/flag/BUILD.bazel
+@@ -13,11 +13,11 @@ load(
+     "cuda_library_sm61_flag_test",
+     "num_actions_test",
+ )
+-load("@rules_cuda//cuda:defs.bzl", "cuda_library")
++load("@bazel-contrib-rules_cuda//cuda:defs.bzl", "cuda_library")
+ 
+ num_actions_test(
+     name = "cuda_library_num_actions_test",
+-    target_under_test = "@rules_cuda_examples//basic:kernel",
++    target_under_test = "@bazel-contrib-rules_cuda_examples//basic:kernel",
+     # 2 compiling, 2 lib, non-pic and pic respectively
+     # num_actions = 4,
+ )
+@@ -30,7 +30,7 @@ cuda_library_flag_test(
+         "-o",
+         "-ccbin",
+     ],
+-    target_under_test = "@rules_cuda_examples//basic:kernel",
++    target_under_test = "@bazel-contrib-rules_cuda_examples//basic:kernel",
+ )
+ 
+ # https://docs.bazel.build/versions/main/user-manual.html#flag--compilation_mode
+@@ -39,7 +39,7 @@ cuda_library_c_dbg_flag_test(
+     action_mnemonic = "CudaCompile",
+     contain_flags = ["-g"],
+     target_compatible_with = ["@platforms//os:linux"],
+-    target_under_test = "@rules_cuda_examples//basic:kernel",
++    target_under_test = "@bazel-contrib-rules_cuda_examples//basic:kernel",
+ )
+ 
+ cuda_library_c_fastbuild_flag_test(
+@@ -48,7 +48,7 @@ cuda_library_c_fastbuild_flag_test(
+     contain_flags = ["-g1"],
+     not_contain_flags = ["-DNDEBUG"],
+     target_compatible_with = ["@platforms//os:linux"],
+-    target_under_test = "@rules_cuda_examples//basic:kernel",
++    target_under_test = "@bazel-contrib-rules_cuda_examples//basic:kernel",
+ )
+ 
+ cuda_library_c_opt_flag_test(
+@@ -61,7 +61,7 @@ cuda_library_c_opt_flag_test(
+     ],
+     not_contain_flags = ["-g"],
+     target_compatible_with = ["@platforms//os:linux"],
+-    target_under_test = "@rules_cuda_examples//basic:kernel",
++    target_under_test = "@bazel-contrib-rules_cuda_examples//basic:kernel",
+ )
+ 
+ # Windows dynamic msvcrt and static msvcrt test
+@@ -80,7 +80,7 @@ cuda_library_c_dbg_flag_test(
+         "/MTd",
+     ],
+     target_compatible_with = ["@platforms//os:windows"],
+-    target_under_test = "@rules_cuda_examples//basic:kernel",
++    target_under_test = "@bazel-contrib-rules_cuda_examples//basic:kernel",
+ )
+ 
+ cuda_library_c_fastbuild_flag_test(
+@@ -98,7 +98,7 @@ cuda_library_c_fastbuild_flag_test(
+         "/MTd",
+     ],
+     target_compatible_with = ["@platforms//os:windows"],
+-    target_under_test = "@rules_cuda_examples//basic:kernel",
++    target_under_test = "@bazel-contrib-rules_cuda_examples//basic:kernel",
+ )
+ 
+ cuda_library_c_opt_flag_test(
+@@ -116,7 +116,7 @@ cuda_library_c_opt_flag_test(
+         "/MTd",
+     ],
+     target_compatible_with = ["@platforms//os:windows"],
+-    target_under_test = "@rules_cuda_examples//basic:kernel",
++    target_under_test = "@bazel-contrib-rules_cuda_examples//basic:kernel",
+ )
+ 
+ cuda_library_c_dbg_static_msvcrt_flag_test(
+@@ -134,7 +134,7 @@ cuda_library_c_dbg_static_msvcrt_flag_test(
+         "/MT",
+     ],
+     target_compatible_with = ["@platforms//os:windows"],
+-    target_under_test = "@rules_cuda_examples//basic:kernel",
++    target_under_test = "@bazel-contrib-rules_cuda_examples//basic:kernel",
+ )
+ 
+ cuda_library_c_fastbuild_static_msvcrt_flag_test(
+@@ -152,7 +152,7 @@ cuda_library_c_fastbuild_static_msvcrt_flag_test(
+         "/MTd",
+     ],
+     target_compatible_with = ["@platforms//os:windows"],
+-    target_under_test = "@rules_cuda_examples//basic:kernel",
++    target_under_test = "@bazel-contrib-rules_cuda_examples//basic:kernel",
+ )
+ 
+ cuda_library_c_opt_static_msvcrt_flag_test(
+@@ -170,7 +170,7 @@ cuda_library_c_opt_static_msvcrt_flag_test(
+         "/MTd",
+     ],
+     target_compatible_with = ["@platforms//os:windows"],
+-    target_under_test = "@rules_cuda_examples//basic:kernel",
++    target_under_test = "@bazel-contrib-rules_cuda_examples//basic:kernel",
+ )
+ 
+ ###########################################
+@@ -187,13 +187,13 @@ cuda_library_flag_test(
+     not_contain_flags = [
+         "-gencode",
+     ],
+-    target_under_test = "@rules_cuda_examples//basic:kernel",
++    target_under_test = "@bazel-contrib-rules_cuda_examples//basic:kernel",
+ )
+ 
+ cuda_library(
+     name = "examples_basic_kernel_with_flags",
+-    srcs = ["@rules_cuda_examples//basic:kernel.cu"],
+-    hdrs = ["@rules_cuda_examples//basic:kernel.h"],
++    srcs = ["@bazel-contrib-rules_cuda_examples//basic:kernel.cu"],
++    hdrs = ["@bazel-contrib-rules_cuda_examples//basic:kernel.h"],
+     copts = ["-G"],
+     host_copts = ["-O1"],
+     rdc = 1,
+@@ -234,7 +234,7 @@ cuda_library_flag_test(
+     ],
+     output_name = "kernel.o",
+     target_compatible_with = ["@platforms//os:linux"],
+-    target_under_test = "@rules_cuda_examples//basic:kernel",
++    target_under_test = "@bazel-contrib-rules_cuda_examples//basic:kernel",
+ )
+ 
+ cuda_library_flag_test(
+@@ -245,7 +245,7 @@ cuda_library_flag_test(
+     ],
+     output_name = "kernel.o",
+     target_compatible_with = ["@platforms//os:linux"],
+-    target_under_test = "@rules_cuda_examples//basic:kernel",
++    target_under_test = "@bazel-contrib-rules_cuda_examples//basic:kernel",
+ )
+ 
+ cuda_library_flag_test(
+@@ -256,7 +256,7 @@ cuda_library_flag_test(
+     ],
+     output_name = "kernel.pic.o",
+     target_compatible_with = ["@platforms//os:linux"],
+-    target_under_test = "@rules_cuda_examples//basic:kernel",
++    target_under_test = "@bazel-contrib-rules_cuda_examples//basic:kernel",
+ )
+ 
+ cuda_library_flag_test(
+@@ -267,7 +267,7 @@ cuda_library_flag_test(
+     ],
+     output_name = "kernel.pic.o",
+     target_compatible_with = ["@platforms//os:linux"],
+-    target_under_test = "@rules_cuda_examples//basic:kernel",
++    target_under_test = "@bazel-contrib-rules_cuda_examples//basic:kernel",
+ )
+ 
+ ######################
+@@ -279,7 +279,7 @@ cuda_library_sm61_flag_test(
+     contain_flags = [
+         "-gencode arch=compute_61,code=sm_61",
+     ],
+-    target_under_test = "@rules_cuda_examples//basic:kernel",
++    target_under_test = "@bazel-contrib-rules_cuda_examples//basic:kernel",
+     # target_under_test = "//cuda:archs",
+ )
+ 
+@@ -289,7 +289,7 @@ cuda_library_compute60_flag_test(
+     contain_flags = [
+         "-gencode arch=compute_60,code=compute_60",
+     ],
+-    target_under_test = "@rules_cuda_examples//basic:kernel",
++    target_under_test = "@bazel-contrib-rules_cuda_examples//basic:kernel",
+ )
+ 
+ cuda_library_compute60_sm61_flag_test(
+@@ -299,7 +299,7 @@ cuda_library_compute60_sm61_flag_test(
+         "-gencode arch=compute_60,code=compute_60",
+         "-gencode arch=compute_60,code=sm_61",
+     ],
+-    target_under_test = "@rules_cuda_examples//basic:kernel",
++    target_under_test = "@bazel-contrib-rules_cuda_examples//basic:kernel",
+ )
+ 
+ cuda_library_compute61_sm61_flag_test(
+@@ -309,5 +309,5 @@ cuda_library_compute61_sm61_flag_test(
+         "-gencode arch=compute_61,code=compute_61",
+         "-gencode arch=compute_61,code=sm_61",
+     ],
+-    target_under_test = "@rules_cuda_examples//basic:kernel",
++    target_under_test = "@bazel-contrib-rules_cuda_examples//basic:kernel",
+ )

@@ -1,0 +1,27 @@
+diff --git a/turbojpeg.c b/turbojpeg.c
+index 32394cca..641a12ba 100644
+--- a/turbojpeg.c
++++ b/turbojpeg.c
+@@ -31,10 +31,10 @@
+    libjpeg-turbo */
+ 
+ #include <ctype.h>
+-#include <jinclude.h>
++#include "jinclude.h"
+ #define JPEG_INTERNALS
+-#include <jpeglib.h>
+-#include <jerror.h>
++#include "jpeglib.h"
++#include "jerror.h"
+ #include <setjmp.h>
+ #include <errno.h>
+ #include "./turbojpeg.h"
+@@ -55,7 +55,7 @@ extern void jpeg_mem_src_tj(j_decompress_ptr, const unsigned char *,
+ 
+ /* Error handling (based on example in example.txt) */
+ 
+-static THREAD_LOCAL char errStr[JMSG_LENGTH_MAX] = "No error";
++static __thread char errStr[JMSG_LENGTH_MAX] = "No error";
+ 
+ struct my_error_mgr {
+   struct jpeg_error_mgr pub;

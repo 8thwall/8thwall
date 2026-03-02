@@ -1,0 +1,87 @@
+diff --git a/cargo/cargo_build_script_runner/bin.rs b/cargo/cargo_build_script_runner/bin.rs
+index 51a52fc26..293c9ddcd 100644
+--- a/cargo/cargo_build_script_runner/bin.rs
++++ b/cargo/cargo_build_script_runner/bin.rs
+@@ -1,3 +1,5 @@
++#![allow(unused_variables)]
++#![allow(dead_code)]
+ // Copyright 2018 The Bazel Authors. All rights reserved.
+ //
+ // Licensed under the Apache License, Version 2.0 (the "License");
+@@ -33,8 +35,12 @@ fn run_buildrs() -> Result<(), String> {
+     let exec_root = env::current_dir().expect("Failed to get current directory");
+     let manifest_dir_env = env::var("CARGO_MANIFEST_DIR").expect("CARGO_MANIFEST_DIR was not set");
+     let rustc_env = env::var("RUSTC").expect("RUSTC was not set");
+-    let manifest_dir = exec_root.join(manifest_dir_env);
+-    let rustc = exec_root.join(&rustc_env);
++    let manifest_dir = PathBuf::from(manifest_dir_env.clone());
++    let rustc = PathBuf::from(rustc_env.clone());
++
++    let workspace_env = env::var("WORKSPACE_ENV").expect("WORKSPACE_ENV was not set");
++    let workspace_env_path = PathBuf::from(workspace_env);
++
+     let Args {
+         progname,
+         crate_links,
+@@ -87,11 +93,20 @@ fn run_buildrs() -> Result<(), String> {
+     let target_env_vars =
+         get_target_env_vars(&rustc_env).expect("Error getting target env vars from rustc");
+
+-    let working_directory = resolve_rundir(&rundir, &exec_root, &manifest_dir)?;
++    // let working_directory = resolve_rundir(&rundir, &exec_root, &manifest_dir)?;
+
+-    let mut command = Command::new(exec_root.join(progname));
++    let cmd_str = format!("source {} && {}", workspace_env_path.display(), exec_root.join(&progname).display());
++    let mut command = Command::new("bash");
++    command.arg("-c").arg(cmd_str);
+     command
+-        .current_dir(&working_directory)
++        // NOTE(paris): Disable changing the working directory during Rust target builds. Instead
++        // execute from the the sandbox  root. This is important b/c many of our build tools (i.e.
++        // clang-xcwrapper.sh) expect to be run from the sandbox root. As part of this change, we
++        // had to patch some dependencies. We may need to do this as bringing in other
++        // dependencies in the future, so you can use the other changes for reference:
++        // - https://github.com/8thwall/zerocopy/pull/1
++        // - https://github.com/8thwall/tauri/pull/1
++        // .current_dir(&working_directory)
+         .envs(target_env_vars)
+         .env("OUT_DIR", &out_dir_abs)
+         .env("CARGO_MANIFEST_DIR", manifest_dir)
+diff --git a/cargo/private/cargo_build_script.bzl b/cargo/private/cargo_build_script.bzl
+index 7ede86794..da789f157 100644
+--- a/cargo/private/cargo_build_script.bzl
++++ b/cargo/private/cargo_build_script.bzl
+@@ -311,6 +311,9 @@ def _cargo_build_script_impl(ctx):
+         script_tools.append(target[DefaultInfo].files)
+         script_tools.append(target[DefaultInfo].default_runfiles.files)
+
++    script_tools.append(depset([ctx.file._workspace_env]))
++    script_tools.append(ctx.attr._workspace_env[DefaultInfo].default_runfiles.files)
++
+     workspace_name = ctx.label.workspace_name
+     if not workspace_name:
+         workspace_name = ctx.workspace_name
+@@ -369,6 +372,7 @@ def _cargo_build_script_impl(ctx):
+         "OPT_LEVEL": compilation_mode_opt_level,
+         "RUSTC": toolchain.rustc.path,
+         "TARGET": toolchain.target_flag_value,
++        "WORKSPACE_ENV": ctx.file._workspace_env.path,
+         # OUT_DIR is set by the runner itself, rather than on the action.
+     })
+
+@@ -472,6 +476,7 @@ def _cargo_build_script_impl(ctx):
+     tools = depset(
+         direct = [
+             script,
++            ctx.file._workspace_env,
+             ctx.executable._cargo_build_script_runner,
+         ] + ([toolchain.target_json] if toolchain.target_json else []),
+         transitive = script_data + script_tools + toolchain_tools,
+@@ -651,6 +656,7 @@ cargo_build_script = rule(
+             default = Label("//cargo/cargo_build_script_runner:runner"),
+             cfg = "exec",
+         ),
++        "_workspace_env": attr.label(default = "@workspace-env//:workspace-env", allow_single_file = True),
+         "_cargo_manifest_dir_filename_suffixes_to_retain": attr.label(
+             default = Label("//cargo/settings:cargo_manifest_dir_filename_suffixes_to_retain"),
+         ),

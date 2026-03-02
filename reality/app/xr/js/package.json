@@ -1,0 +1,25 @@
+{
+  "name": "jsxr",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Scott Pollack <scott@8thwall.com>",
+  "license": "Copyright (c) 2018 8th Wall, Inc.",
+  "scripts": {
+    "refresh-types": "bazel run //reality/app/xr/js/src/types:write",
+    "build-release": "bazel build --config=wasmreleasesimd //reality/app/xr/js:xr-js"
+  },
+  "devDependencies": {
+    "@types/ua-parser-js": "^0.7.36",
+    "capnp-ts": "^0.2.4",
+    "ua-parser-js": "git+https://github.com/8thwall/ua-parser-js.git#46379495762d2db94463ad0781c8a2bce5e3cef8",
+    "uuid": "^3.3.3"
+  },
+  "dependencies": {
+    "@types/webxr": "^0.5.1"
+  },
+  "yarn": {
+    "args": [
+      "--ignore-engines"
+    ]
+  }
+}

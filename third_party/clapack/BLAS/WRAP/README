@@ -1,0 +1,30 @@
+f2c'd BLAS wrapper
+
+
+The f2c translated BLAS interfaces used by CLAPACK (and other f2c'd codes)
+unfortunately often don't quite match the Fortran interfaces on various 
+platforms.  Consequently, it is difficult to use f2c'd codes with high
+performance BLAS routines, which may substantially impede the performance
+of these codes.  These simple wrappers provide a way around this difficulty
+by providing f2c style interfaces (preceded with "f2c_" to avoid name
+collisions) that call through to an underlying CBLAS or F77 BLAS. 
+
+
+f2c.h:  The f2c header file
+
+blaswrap.h:  A header file to be included in f2c codes that will use the
+   wrapper.  Just #include it at the top of an f2c generated file.
+
+cblaswr.c:  A wrapper around the CBLAS interface.  This interface is
+   provided, for instance, by ATLAS (see www.netlib.org/atlas)
+
+fblaswr.c:  A sample wrapper around a conventional Fortran BLAS interface.
+   This works on a Sun platform, but will require substantial tinkering
+   on platforms with different Fortran calling conventions.
+
+cblas.h:  A header file for the CBLAS interface.
+
+fblaswr.h:  A header file for the (Sun-style) Fortran BLAS interface
+
+[cz]rotg.c:  Complex Givens rotation routines.  For some reason, C interfaces
+   to these routines were not specified in the CBLAS interface. 

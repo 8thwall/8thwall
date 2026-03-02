@@ -1,0 +1,61 @@
+diff --git a/include/tbb/tbb_config.h b/include/tbb/tbb_config.h
+index 7a8d06a0..3b1e1b13 100644
+--- a/include/tbb/tbb_config.h
++++ b/include/tbb/tbb_config.h
+@@ -466,23 +466,8 @@ There are four cases that are supported:
+     #define TBB_USE_EXCEPTIONS 1
+ #endif
+ 
+-#ifndef TBB_IMPLEMENT_CPP0X
+-/** By default, use C++11 classes if available **/
+-    #if __clang__
+-        /* Old versions of Intel C++ Compiler do not have __has_include or cannot use it in #define */
+-        #if (__INTEL_COMPILER && (__INTEL_COMPILER < 1500 || __INTEL_COMPILER == 1500 && __INTEL_COMPILER_UPDATE <= 1))
+-            #define TBB_IMPLEMENT_CPP0X (__cplusplus < 201103L || !_LIBCPP_VERSION)
+-        #else
+-            #define TBB_IMPLEMENT_CPP0X (__cplusplus < 201103L || (!__has_include(<thread>) && !__has_include(<condition_variable>)))
+-        #endif
+-    #elif __GNUC__
+-        #define TBB_IMPLEMENT_CPP0X (__TBB_GCC_VERSION < 40400 || !__GXX_EXPERIMENTAL_CXX0X__)
+-    #elif _MSC_VER
+-        #define TBB_IMPLEMENT_CPP0X (_MSC_VER < 1700)
+-    #else
+-        // TODO: Reconsider general approach to be more reliable, e.g. (!(__cplusplus >= 201103L && __ STDC_HOSTED__))
+-        #define TBB_IMPLEMENT_CPP0X (!__STDCPP_THREADS__)
+-    #endif
++#ifdef TBB_IMPLEMENT_CPP0X
++#undef TBB_IMPLEMENT_CPP0X // Never allow reimplementation of modern C++ std library features
+ #endif /* TBB_IMPLEMENT_CPP0X */
+ 
+ /* TBB_USE_CAPTURED_EXCEPTION should be explicitly set to either 0 or 1, as it is used as C++ const */
+diff --git a/src/tbb/tbb_version.h b/src/tbb/tbb_version.h
+index 5aff3e25..2554a734 100644
+--- a/src/tbb/tbb_version.h
++++ b/src/tbb/tbb_version.h
+@@ -21,18 +21,18 @@
+ #ifndef ENDL
+ #define ENDL "\n"
+ #endif
+-#include "version_string.ver"
++#include "version_string.h"
+ 
+ #ifndef __TBB_VERSION_STRINGS
+ #pragma message("Warning: version_string.ver isn't generated properly by version_info.sh script!")
+ // here is an example of macros value:
+-#define __TBB_VERSION_STRINGS \
+-"TBB: BUILD_HOST\tUnknown\n" \
+-"TBB: BUILD_ARCH\tUnknown\n" \
+-"TBB: BUILD_OS\t\tUnknown\n" \
+-"TBB: BUILD_CL\t\tUnknown\n" \
+-"TBB: BUILD_COMPILER\tUnknown\n" \
+-"TBB: BUILD_COMMAND\tUnknown\n"
++#define __TBB_VERSION_STRINGS(N) \
++#N ": BUILD_HOST\tUnknown\n" \
++#N ": BUILD_ARCH\tUnknown\n" \
++#N ": BUILD_OS\t\tUnknown\n" \
++#N ": BUILD_CL\t\tUnknown\n" \
++#N ": BUILD_COMPILER\tUnknown\n" \
++#N ": BUILD_COMMAND\tUnknown\n"
+ #endif
+ #ifndef __TBB_DATETIME
+ #ifdef RC_INVOKED

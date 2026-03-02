@@ -1,0 +1,757 @@
+==================
+== LAPACK 3.1.1 ==
+==================
+
+Release date: 02/26/2007.
+Base on LAPACK 3.1 released on Su 11/12/2006. (see below)
+
+  * LAPACK 3.1.1: What's new
+  * Bug fix
+
+===============================
+== LAPACK 3.1.1: What's new  ==
+===============================
+
+ 1) Add blas routines so that the blas provided is complete
+Following the question from Tobias Burns on the LAPACK Mailing list and the previous discussions on providing the
+complete reference BLAS through LAPACK.
+
+The routines missing in the BLAS/SRC directory were:
+CSROT
+DROTM
+DROTMG
+DSDOT (was in LAPACK/SRC directory)
+SDSDOT
+SROTM
+SROTMG
+ZDROT    (was in LAPACK/SRC directory)
+
+new routines taken from the *** NETLIB BLAS***  website arranged with a Lapack coding style:
+- sdsdot.f
+- srotmg.F
+- srotm.f
+- drotmg.f
+- dsdot.f
+- drotm.f
+
+Move 2 routines from SRC to BLAS/SRC:
+- zdrot.f
+- csrot.f
+
+ 2) Provide 5 flavours of SECOND and DSECND
+second_EXT_ETIME.f:  SECOND  will use a call to the EXTERNAL FUNCTION ETIME [Default]
+second_EXT_ETIME_.f: SECOND will use a call to the EXTERNAL FUNCTION ETIME_[RS6K]
+second_INT_ETIME.f: SECOND  will use the INTERNAL FUNCTION ETIME [gfortran]
+second_INT_CPU_TIME.f: SECOND  will use a call to the INTERNAL FUNCTION CPU\_TIME [Nag Compiler, etc..]
+second_NONE.f: SECOND will always return 0
+
+Add the TIMER variable in the make.inc  to chose which routine to use
+ # Default : SECOND and DSECND will use a call to the EXTERNAL FUNCTION ETIME
+TIMER    = EXT_ETIME
+# For RS6K : SECOND and DSECND will use a call to the EXTERNAL FUNCTION ETIME_
+# TIMER    = EXT_ETIME_
+# For gfortran compiler: SECOND and DSECND will use a call to the INTERNAL FUNCTION ETIME
+# TIMER    = INT_ETIME
+# If your Fortran compiler does not provide etime (like Nag Fortran Compiler, etc...)
+# SECOND and DSECND will use a call to the INTERNAL FUNCTION CPU_TIME
+# TIMER    = INT_CPU_TIME
+# If neither of this works...you can use the NONE value... In that case, SECOND and DSECND will always return 0
+# TIMER     = NONE
+
+
+=============================
+==        Bug Fix         ==
+=============================
+CHANGE FROM 3.1.0 to 3.1.1
+
+------------------------------------------------------------------------
+Changed paths:
+   M /branches/june-release/lapack/SRC/ctgsen.f
+   M /branches/june-release/lapack/SRC/ctgsyl.f
+   M /branches/june-release/lapack/SRC/dtgsen.f
+   M /branches/june-release/lapack/SRC/stgsen.f
+   M /branches/june-release/lapack/SRC/ztgsen.f
+   M /branches/june-release/lapack/SRC/ztgsyl.f
+
+From Sven Hammarling, following a bug report from Michael Wimmer (see email below)
+
+I have looked at the bugs reported by Michael Wimmer and agree with what he says. I have additionally corrected comments in s/dtgsen. I attach my modified files.
+
+s/dtgsen - Removed the comment "IF IJOB = 0, WORK is not referenced."
+
+c/ztgsen - Replaced references to WORK(1) and WORK(2) by TEMP1 and TEMP2 inside the DO 60 loop, so that WORK is not referenced when IJOB = 0.
+
+c/ztgsyl - Removed the comment "IF IJOB = 0, IWORK is not referenced."
+
+Sven.
+
+Michael Wimmer wrote:
+
+    Dear LAPACK team,
+
+    I would like to report bugs in the LAPACK functions ZTGSEN and ZTGSYL.
+    Affected are the documentation of ZTGSEN and ZTGSYL and the workspace
+    query in ZTGSEN.
+
+    My observations are based on the LAPACK source as available today, 20
+    Sep 2006, on www.netlib.org:
+
+    ..........
+
+    SUBROUTINE ZTGSEN( IJOB, WANTQ, WANTZ, SELECT, N, A, LDA, B, LDB,
+    $ ALPHA, BETA, Q, LDQ, Z, LDZ, M, PL, PR, DIF,
+    $ WORK, LWORK, IWORK, LIWORK, INFO )
+    *
+    * . LAPACK routine (version 3.0) .
+    * Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,
+    * Courant Institute, Argonne National Lab, and Rice University
+    * June 30, 1999
+
+    ..........
+
+    SUBROUTINE ZTGSYL( TRANS, IJOB, M, N, A, LDA, B, LDB, C, LDC, D,
+    $ LDD, E, LDE, F, LDF, SCALE, DIF, WORK, LWORK,
+    $ IWORK, INFO )
+    *
+    * . LAPACK routine (version 3.0) .
+    * Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,
+    * Courant Institute, Argonne National Lab, and Rice University
+    * June 30, 1999
+
+    ..........
+
+    According to http://www.netlib.org/lapack/release_notes.html the two
+    affected functions have not been changed since June 30, 1999.
+
+    In the following I describe the bugs:
+
+    * ZTGSYL: (http://www.netlib.org/lapack/complex16/ztgsyl.f)
+    ....-
+
+    In the documentation to the function it says:
+
+
+            * IWORK (workspace) INTEGER array, dimension (M+N+2)
+            * If IJOB = 0, IWORK is not referenced.
+
+
+
+    however, even if IJOB = 0, ZTGSYL uses IWORK, as for example in this
+    code snippet (ll 325-342)
+
+
+            * Determine block structure of A
+            *
+            P = 0
+            I = 1
+            40 CONTINUE
+            IF( I.GT.M )
+            $ GO TO 50
+            P = P + 1
+            IWORK( P ) = I
+            I = I + MB
+            IF( I.GE.M )
+            $ GO TO 50
+            GO TO 40
+            50 CONTINUE
+            IWORK( P+1 ) = M + 1
+            IF( IWORK( P ).EQ.IWORK( P+1 ) )
+            $ P = P - 1
+            *
+
+
+
+    which is executed regardless off the value of IJOB. This means that
+    providing a too small IWORK (as, according to the documentation, it is
+    not referenced) can result in crahes due to overwritten memory.
+
+
+    * ZTGSEN: (http://www.netlib.org/lapack/complex16/ztgsen.f)
+    ....-
+
+    Here is a similar bug to the one in ZTGSYL, but here it also affects the
+    workspace query. In the documentation it says:
+
+
+            * WORK (workspace/output) COMPLEX*16 array, dimension (LWORK)
+            * IF IJOB = 0, WORK is not referenced. Otherwise,
+            * on exit, if INFO = 0, WORK(1) returns the optimal LWORK.
+
+
+
+    and
+
+
+            * IWORK (workspace/output) INTEGER, dimension (LIWORK)
+            * IF IJOB = 0, IWORK is not referenced. Otherwise,
+            * on exit, if INFO = 0, IWORK(1) returns the optimal LIWORK.
+
+
+
+    Again, even if IJOB = 0, WORK and IWORK are used within the code. For
+    IJOB = 0, a workspace query return LWORK = 1 and LIWORK = 1 as the
+    optimal workspace size (ll 395 - 404):
+
+
+            IF( IJOB.EQ.1 .OR. IJOB.EQ.2 .OR. IJOB.EQ.4 ) THEN
+            LWMIN = MAX( 1, 2*M*( N-M ) )
+            LIWMIN = MAX( 1, N+2 )
+            ELSE IF( IJOB.EQ.3 .OR. IJOB.EQ.5 ) THEN
+            LWMIN = MAX( 1, 4*M*( N-M ) )
+            LIWMIN = MAX( 1, 2*M*( N-M ), N+2 )
+            ELSE
+            LWMIN = 1 ........
+            LIWMIN = 1
+            END IF
+
+
+
+    But even for IJOB = 0, WORK(1) and WORK(2) are referenced
+    as shown in this code snippet: (ll 617 - 623)
+
+
+            DO 60 K = 1, N
+            DSCALE = ABS( B( K, K ) )
+            IF( DSCALE.GT.SAFMIN ) THEN
+            WORK( 1 ) = DCONJG( B( K, K ) / DSCALE ) .....-
+            WORK( 2 ) = B( K, K ) / DSCALE .....-
+            B( K, K ) = DSCALE
+            CALL ZSCAL( N-K, WORK( 1 ), B( K, K+1 ), LDB )
+
+
+
+    Again, providing a Workspace of size 1 only will result in overwritten
+    memory and possibly a crash.
+
+    ........................-
+
+    If you have further questions in this matter, don't hesitate to contact me.
+
+    Kind regards
+
+    Michael Wimmer 
+
+------------------------------------------------------------------------
+Changed paths:
+   M /branches/june-release/lapack/SRC/dtgsy2.f
+   M /branches/june-release/lapack/SRC/stgsy2.f
+
+Re-add the modifications submitted by Daniel Kressner on dtgsy2 and stgsy2
+See log Revision 8
+DTGSY2:
+
+line 58 (doc): STGSYL should be replaced by DTGSYL
+line 61 (doc): STGSYL should be replaced by DTGSYL
+line 146 (doc): STGSYL should be replaced by DTGSYL
+
+line 509:
+LDB should be replaced by LDE
+LDC should be replaced by LDF
+The same applies to STGSY2.
+
+These modifications had been overwritten by revision 75. 
+
+------------------------------------------------------------------------
+Changed paths:
+   M /branches/june-release/lapack/SRC/dormrz.f
+   M /branches/june-release/lapack/SRC/sormrz.f
+
+Add a missing ELSE at line 179 ( reported by Sven)
+That bug was introduced at the revision 95. 
+
+------------------------------------------------------------------------
+Changed paths:
+   M /branches/june-release/lapack/SRC/dbdsqr.f
+   M /branches/june-release/lapack/SRC/sbdsqr.f
+
+In s/dbdsqr the workspace requirement should be max(1,4*N) rather than max(1,4*N-4), because that is what is required by slasq1. (reported by Sven)
+
+------------------------------------------------------------------------
+Changed paths:
+   M /branches/june-release/lapack/TESTING/LIN/derrab.f
+   M /branches/june-release/lapack/TESTING/LIN/zerrab.f
+
+"Fix" a problem is in the testing of Julien's iterative refinement with fort77 "compiler" (pearl scrit using f2c).
+The "compiler" was complaining about the  CHARACTER(32) syntax.
+Replaced  CHARACTER(32) by CHARACTER*32.
+
+Note from Jason: The CHARACTER* syntax was declared obsolescent in Fortran 95.
+It shouldn't be used in new code. 
+
+------------------------------------------------------------------------
+Changed paths:
+   M /branches/june-release/lapack/BLAS/SRC/Makefile
+   A /branches/june-release/lapack/BLAS/SRC/csrot.f (from /branches/june-release/lapack/SRC/csrot.f:386)
+   A /branches/june-release/lapack/BLAS/SRC/drotm.f
+   A /branches/june-release/lapack/BLAS/SRC/drotmg.f
+   A /branches/june-release/lapack/BLAS/SRC/dsdot.f
+   A /branches/june-release/lapack/BLAS/SRC/sdsdot.f
+   A /branches/june-release/lapack/BLAS/SRC/srotm.f
+   A /branches/june-release/lapack/BLAS/SRC/srotmg.f
+   A /branches/june-release/lapack/BLAS/SRC/zdrot.f (from /branches/june-release/lapack/SRC/zdrot.f:386)
+   M /branches/june-release/lapack/SRC/Makefile
+   D /branches/june-release/lapack/SRC/csrot.f
+   D /branches/june-release/lapack/SRC/zdrot.f
+
+Following the question from Tobias Burns on the LAPACK Mailing list and the previous discussions on providing the
+complete reference BLAS through LAPACK.
+
+The routines missing in the BLAS/SRC directory were:
+CSROT
+DROTM
+DROTMG
+DSDOT (was in LAPACK/SRC directory)
+SDSDOT
+SROTM
+SROTMG
+ZDROT    (was in LAPACK/SRC directory)
+
+new routines taken from the *** NETLIB BLAS***  website arranged with a Lapack coding style:
+- sdsdot.f
+- srotmg.f
+- srotm.f
+- drotmg.f
+- dsdot.f
+- drotm.f
+
+Move 2 routines from SRC to BLAS/SRC:
+- zdrot.f
+- csrot.f
+
+Modification to BLAS/SRC/Makefile and SRC/Makefile 
+
+------------------------------------------------------------------------
+Changed paths:
+   M /branches/june-release/lapack/INSTALL/ilaver.f
+   M /branches/june-release/lapack/SRC/clag2z.f
+   M /branches/june-release/lapack/SRC/dlag2s.f
+   M /branches/june-release/lapack/SRC/dsgesv.f
+   M /branches/june-release/lapack/SRC/ilaenv.f
+   M /branches/june-release/lapack/SRC/ilaver.f
+   M /branches/june-release/lapack/SRC/slag2d.f
+   M /branches/june-release/lapack/SRC/zcgesv.f
+   M /branches/june-release/lapack/SRC/zlag2c.f
+
+Some format modification to follow Lapack Style Coding.
+
+------------------------------------------------------------------------
+Changed paths:
+   M /branches/june-release/lapack/SRC/cunmrz.f
+   M /branches/june-release/lapack/SRC/dormrz.f
+   M /branches/june-release/lapack/SRC/sormrz.f
+   M /branches/june-release/lapack/SRC/zunmrz.f
+
+Modification given by Sven
+--------------------------
+Here are c/zunmrz.f and a slightly modified version of s/dormrz.f, where I just moved a comment relative to the ELSE statement, so that all four routines are consistent.
+
+c/zunmrz.f needed the same change that was made to s/dormrz.f; that is, the missing ELSE statement needed to be reintroduced into the calculation of LWKOPT (line 175).
+
+------------------------------------------------------------------------
+Changed paths:
+   M /branches/june-release/lapack/TESTING/LIN/cchkge.f
+   M /branches/june-release/lapack/TESTING/LIN/dchkge.f
+   M /branches/june-release/lapack/TESTING/LIN/schkge.f
+   M /branches/june-release/lapack/TESTING/LIN/zchkge.f
+
+These problems have been found with the NAG Fortran compiler.
+with the following flag "-C -C=undefined -dcfuns -g -gline -info -nan -u"
+
+insert the line
+      CALL XLAENV( 1, 1 )
+into these routines so that IPARM(1) is initialised before it is referenced in ILAENV (the /LIN version).
+Inserted at line 163 for s/dchkge.f and 168 for c/zchkge.f.
+
+
+------------------------------------------------------------------------
+Changed paths:
+   M /branches/june-release/lapack/TESTING/LIN/cerrvx.f
+   M /branches/june-release/lapack/TESTING/LIN/derrvx.f
+   M /branches/june-release/lapack/TESTING/LIN/serrvx.f
+   M /branches/june-release/lapack/TESTING/LIN/zerrvx.f
+
+These problems have been found with the NAG Fortran compiler.
+with the following flag "-C -C=undefined -dcfuns -g -gline -info -nan -u"
+
+insert a line
+      EQ = ' '
+into these routines so that it is initialised before being referenced.
+Line 89 in s/derrvx and line 92 in c/zerrvx.
+
+------------------------------------------------------------------------
+Changed paths:
+   M /branches/june-release/lapack/TESTING/LIN/dchkq3.f
+   M /branches/june-release/lapack/TESTING/LIN/dchkqp.f
+   M /branches/june-release/lapack/TESTING/LIN/dchktz.f
+   M /branches/june-release/lapack/TESTING/LIN/dqrt12.f
+   M /branches/june-release/lapack/TESTING/LIN/schkq3.f
+   M /branches/june-release/lapack/TESTING/LIN/schkqp.f
+   M /branches/june-release/lapack/TESTING/LIN/schktz.f
+   M /branches/june-release/lapack/TESTING/LIN/sqrt12.f
+
+These problems have been found with the NAG Fortran compiler.
+with the following flag "-C -C=undefined -dcfuns -g -gline -info -nan -u"
+
+change the test in line 76 of d/sqrt12 from:
+
+      IF( LWORK.LT.M*N+4*MIN( M, N )+MAX( M, N ) ) THEN
+to
+      IF( LWORK.LT.MAX( M*N+4*MIN( M, N )+MAX( M, N ),
+     $                  M*N+2*MIN( M, N )+4*N) ) THEN
+
+because d/sbdsqr is called with the argument M*N+2*MIN( M, N )+1 and requires 4*N workspace.
+I added the same thing at line 152 of d/schkqp, line 156 of d/schkq3 and line 149 of d/schktz.
+Not having enough workspace only seemed to affect the real routines.
+
+------------------------------------------------------------------------
+Changed paths:
+   M /branches/june-release/lapack/TESTING/LIN/cdrvls.f
+   M /branches/june-release/lapack/TESTING/LIN/ddrvls.f
+   M /branches/june-release/lapack/TESTING/LIN/sdrvls.f
+   M /branches/june-release/lapack/TESTING/LIN/zdrvls.f
+
+These problems have been found with the NAG Fortran compiler.
+with the following flag "-C -C=undefined -dcfuns -g -gline -info -nan -u"
+
+These routines also needed to have elements of IPARM initialised before they were referenced.
+
+For d/sdrvls I moved the calls
+
+      CALL XLAENV( 2, 2 )
+      CALL XLAENV( 9, SMLSIZ )
+
+to be in front of the statement IF( TSTERR ) at line 183.
+
+For c/zdrvls I inserted a call
+
+      CALL XLAENV( 9, SMLSIZ )
+
+in front of the statement IF( TSTERR ) at line 188 and added the statements
+
+      INTEGER            SMLSIZ
+      PARAMETER          ( SMLSIZ = 25 )
+
+at line 122. 
+
+------------------------------------------------------------------------
+Changed paths:
+   M /branches/june-release/lapack/TESTING/LIN/cchkgt.f
+
+These problems have been found with the NAG Fortran compiler.
+with the following flag "-C -C=undefined -dcfuns -g -gline -info -nan -u"
+
+Removed the declaration of CMPLX in the INTRINSIC statement at line 113, because CMPLX is not referenced.  (So just a cosmetic change.) 
+
+------------------------------------------------------------------------
+Changed paths:
+   M /branches/june-release/lapack/TESTING/LIN/cchkaa.f
+   M /branches/june-release/lapack/TESTING/LIN/dchkaa.f
+   M /branches/june-release/lapack/TESTING/LIN/dchkab.f
+   M /branches/june-release/lapack/TESTING/LIN/schkaa.f
+   M /branches/june-release/lapack/TESTING/LIN/zchkaa.f
+   M /branches/june-release/lapack/TESTING/LIN/zchkab.f
+
+Modify the header of the output files for the LIN testing.
+Instead of writing "Lapack 3.0, released bla bla...", the tester will get the LAPACK version from a call to ilaver
+and then write "Lapack X.Y.Z" where X.Y.Z is the LAPACK version given by ilaver.
+
+
+------------------------------------------------------------------------
+Changed paths:
+   M /branches/june-release/lapack/TESTING/EIG/cchkee.f
+   M /branches/june-release/lapack/TESTING/EIG/dchkee.f
+   M /branches/june-release/lapack/TESTING/EIG/schkee.f
+   M /branches/june-release/lapack/TESTING/EIG/zchkee.f
+
+Modify the header of the output files for the EIG testing.
+Instead of writing "Lapack 3.0, released bla bla...", the tester will get the LAPACK version from a call to ilaver
+and then write "Lapack X.Y.Z" where X.Y.Z is the LAPACK version given by ilaver.
+
+------------------------------------------------------------------------
+Changed paths:
+   M /branches/june-release/lapack/SRC/dsgesv.f
+
+ Replace single precision by real in comment of SWORK
+------------------------------------------------------------------------
+Changed paths:
+   M /branches/june-release/lapack/SRC/dlaed6.f
+   M /branches/june-release/lapack/SRC/slaed6.f
+
+These problems have been found with the NAG Fortran compiler.
+with the following flag "-C -C=undefined -dcfuns -g -gline -info -nan -u"
+
+put the test
+
+         IF( D(1).EQ.TAU .OR. D(2).EQ.TAU .OR. D(3).EQ.TAU ) THEN
+            TAU = ZERO
+         ELSE
+before
+            TEMP = FINIT + TAU*Z(1)/( D(1)*( D( 1 )-TAU ) ) +
+     $                     TAU*Z(2)/( D(2)*( D( 2 )-TAU ) ) +
+     $                     TAU*Z(3)/( D(3)*( D( 3 )-TAU ) )
+
+at line 50 because in running the test
+
+./xeigtstd < svd.in > dsvd.out
+
+I got
+
+*** Arithmetic exception:  - aborting
+In DLAED6, line 150 of dlaed6.f
+Called by DLASD4, line 619 of dlasd4.f
+Called by DLASD3, line 239 of dlasd3.f
+Called by DLASD1, line 210 of dlasd1.f
+Called by DLASD0, line 217 of dlasd0.f
+Called by DBDSDC, line 353 of dbdsdc.f
+Called by DCHKBD, line 853 of dchkbd.f
+Called by DCHKEE, line 1869 of dchkee.f
+
+which was due to TAU being equal to D( 3 ).
+
+I was surprised that these could be equal, but the fix cures the problem for me, and looking at the later code it seemed reasonable.
+
+------------------------------------------------------------------------
+Changed paths:
+   M /branches/june-release/lapack/SRC/zgglse.f
+
+These problems have been found with the NAG Fortran compiler.
+with the following flag "-C -C=undefined -dcfuns -g -gline -info -nan -u"
+
+replaced two calls to CTRTRS with ZTRTRS. 
+
+------------------------------------------------------------------------
+Changed paths:
+   M /branches/june-release/lapack/TESTING/EIG/cchkee.f
+   M /branches/june-release/lapack/TESTING/EIG/dchkee.f
+   M /branches/june-release/lapack/TESTING/EIG/schkee.f
+   M /branches/june-release/lapack/TESTING/EIG/zchkee.f
+
+These problems have been found with the NAG Fortran compiler.
+with the following flag "-C -C=undefined -dcfuns -g -gline -info -nan -u"
+
+inserted a number of calls to XLAENV in order to initialise IPARMS before it is referenced. 
+
+
+------------------------------------------------------------------------
+Changed paths:
+   M /branches/june-release/lapack/TESTING/EIG/cchkhs.f
+   M /branches/june-release/lapack/TESTING/EIG/dchkhs.f
+   M /branches/june-release/lapack/TESTING/EIG/schkhs.f
+   M /branches/june-release/lapack/TESTING/EIG/zchkhs.f
+
+orrection submitted by Sven.
+
+These problems have been found with the NAG Fortran compiler.
+with the following flag "-C -C=undefined -dcfuns -g -gline -info -nan -u"
+
+replaced calls of the form
+
+      CALL SCOPY( N, WORK, 1, TAU, 1 )
+with
+      CALL SCOPY( N-1, WORK, 1, TAU, 1 )
+
+at line 694 for s/dchkhs and line 698 for c/zchkhs.  (TAU is only of length N-1.) 
+
+------------------------------------------------------------------------
+Changed paths:
+   M /branches/june-release/lapack/TESTING/EIG/cdrges.f
+   M /branches/june-release/lapack/TESTING/EIG/zdrges.f
+
+These problems have been found with the NAG Fortran compiler.
+with the following flag "-C -C=undefined -dcfuns -g -gline -info -nan -u"
+
+removed the declarations of IASIGN and IBSIGN as they are not used. 
+
+------------------------------------------------------------------------
+Changed paths:
+   M /branches/june-release/lapack/TESTING/EIG/cdrgev.f
+   M /branches/june-release/lapack/TESTING/EIG/zdrgev.f
+
+These problems have been found with the NAG Fortran compiler.
+with the following flag "-C -C=undefined -dcfuns -g -gline -info -nan -u"
+
+changed line 722 from
+
+            DO 200 JR = 1, 9
+to
+            DO 200 JR = 1, 7
+
+as only 7 results are formed, which led to an undefined reference to RESULT(8). 
+
+------------------------------------------------------------------------
+Changed paths:
+   M /branches/june-release/lapack/TESTING/EIG/cchkbb.f
+
+These problems have been found with the NAG Fortran compiler.
+with the following flag "-C -C=undefined -dcfuns -g -gline -info -nan -u"
+
+replaced 'ZBB' by 'CBB' in calls to SLAHD2 and SLASUM so that the test results referred to the correct tests. 
+
+------------------------------------------------------------------------
+Changed paths:
+   M /branches/june-release/lapack/TESTING/EIG/cslect.f
+   M /branches/june-release/lapack/TESTING/EIG/dslect.f
+   M /branches/june-release/lapack/TESTING/EIG/sslect.f
+   M /branches/june-release/lapack/TESTING/EIG/zslect.f
+
+we agree that this is probably what is intended for these routines, and it avoids the undefined references to SSLECT and DSLECT.
+
+Here is a note from Daniel Kressner
+-----------------------------------
+SSLECT is supposed to return whether a complex number zR + i*zI 
+corresponds to a selected eigenvalue. If SELOPT = 0, this is simply done 
+by checking whether zR < 0 (-> invariant subspace for stable eigenvalues). 
+If SELOPT > 0, I think it wants to find the eigenvalue closest to zR + 
+i*zI and checks whether this eigenvalue is selected (by looking up the 
+common array SELVAL). However, the following lines
+
+         RMIN = ZERO
+         DO 10 I = 1, SELDIM
+            X = SLAPY2( ZR-SELWR( I ), ZI-SELWI( I ) )
+            IF( X.LE.RMIN ) THEN 
+
+make little sense to me. RMIN should initially be set to a large number or 
+SLAPY2( ZR-SELWR( 1 ), ZI-SELWI( 1 ) ). Otherwise, the test will certainly 
+fail for real matrices, because the recomputed reordered eigenvalue will 
+not correspond exactly to an original eigenvalue if there are 2x2 blocks 
+in the Schur form.
+
+The common arrays SELWR, SELWI, SELVAL control the selection of 
+eigenvalues. They are set in SGET24 such that NSEL eigenvalues having 
+smallest real part are selected. SSGET24 is used in SDRVSX but not in 
+SDRVES (which uses SELOPT = 0).
+
+> > Surprisingly, the complex version does not fail with CSLECT undefined.
+
+The reordered eigenvalues for complex matrices correspond exactly to the 
+original eigenvalues (see CTREXC).
+
+------------------------------------------------------------------------
+Changed paths:
+   M /branches/june-release/lapack/BLAS/SRC/Makefile
+   M /branches/june-release/lapack/BLAS/TESTING/Makeblat1
+   M /branches/june-release/lapack/BLAS/TESTING/Makeblat2
+   M /branches/june-release/lapack/BLAS/TESTING/Makeblat3
+   M /branches/june-release/lapack/INSTALL/Makefile
+   M /branches/june-release/lapack/SRC/Makefile
+   M /branches/june-release/lapack/TESTING/EIG/Makefile
+   M /branches/june-release/lapack/TESTING/LIN/Makefile
+   M /branches/june-release/lapack/TESTING/MATGEN/Makefile
+
+Add -o $@ to the .f.o rule. + single file compilation
+
+------------------------------------------------------------------------
+Changed paths:
+   M /branches/june-release/lapack/SRC/clarrv.f
+   M /branches/june-release/lapack/SRC/dlarrv.f
+   M /branches/june-release/lapack/SRC/slarrv.f
+   M /branches/june-release/lapack/SRC/zlarrv.f
+   M /branches/june-release/lapack/TESTING/EIG/alahdg.f
+   M /branches/june-release/lapack/TESTING/EIG/cerrbd.f
+   M /branches/june-release/lapack/TESTING/LIN/cdrvls.f
+   M /branches/june-release/lapack/TESTING/LIN/sdrvls.f
+
+Remove useless external declaration ...
+This was a warning given by fort77 compiler
+
+------------------------------------------------------------------------
+Changed paths:
+    M /branches/june-release/lapack/TESTING/EIG/zdrgsx.f
+
+Add initilization of INFO to suppress the following error:
+*** XERBLA was called from ZTGSYL with INFO =     -6 instead of 20 ***
+*** XERBLA was called with SRNAME = ZDRGSX instead of ZTGSYL ***
+
+This bug was found while looking at the following INFO error with the Intel 2 Core Duo with ifort 9.1
+
+From zgd.out:
+>Matrix order=   10, type=16, seed=3602, 505,1199,2389, result  1 is 4.504D+15
+> ZGS drivers:      1 out of   1549 tests failed to pass the threshold
+> *** Error code from ZDRGES =    6
+>
+
+------------------------------------------------------------------------
+Changed paths:
+   M /branches/june-release/lapack/BLAS/TESTING/cblat2.f
+   M /branches/june-release/lapack/BLAS/TESTING/cblat3.f
+   M /branches/june-release/lapack/BLAS/TESTING/dblat2.f
+   M /branches/june-release/lapack/BLAS/TESTING/dblat3.f
+   M /branches/june-release/lapack/BLAS/TESTING/sblat2.f
+   M /branches/june-release/lapack/BLAS/TESTING/sblat3.f
+   M /branches/june-release/lapack/BLAS/TESTING/zblat2.f
+   M /branches/june-release/lapack/BLAS/TESTING/zblat3.f
+   M /branches/june-release/lapack/BLAS/cblat2.in
+   M /branches/june-release/lapack/BLAS/cblat3.in
+   M /branches/june-release/lapack/BLAS/dblat2.in
+   M /branches/june-release/lapack/BLAS/dblat3.in
+   M /branches/june-release/lapack/BLAS/sblat2.in
+   M /branches/june-release/lapack/BLAS/sblat3.in
+   M /branches/june-release/lapack/BLAS/zblat2.in
+   M /branches/june-release/lapack/BLAS/zblat3.in
+   M /branches/june-release/lapack/Makefile
+
+Instead of moving the .SUMM files to .out files in the Makefile for BLAS 2 and BLAS 3 testings,
+change the output name in the .in files to .out.
+
+Change the behaviour of make cleanblas_testing
+Before it was removing the BLAS/x* and BLAS/*.SUMM files
+Now it just removes the BLAS/x* files (like make cleantesting just remove TESTING/x* files)
+The make cleanall is removing the BLAS/*.out files
+
+------------------------------------------------------------------------
+Changed paths:
+   M /branches/june-release/lapack/INSTALL/Makefile
+   A /branches/june-release/lapack/INSTALL/dsecnd_EXT_ETIME.f
+   A /branches/june-release/lapack/INSTALL/dsecnd_EXT_ETIME_.f
+   A /branches/june-release/lapack/INSTALL/dsecnd_INT_CPU_TIME.f
+   A /branches/june-release/lapack/INSTALL/dsecnd_INT_ETIME.f
+   A /branches/june-release/lapack/INSTALL/dsecnd_NONE.f
+   M /branches/june-release/lapack/INSTALL/make.inc.ALPHA
+   M /branches/june-release/lapack/INSTALL/make.inc.HPPA
+   M /branches/june-release/lapack/INSTALL/make.inc.IRIX64
+   M /branches/june-release/lapack/INSTALL/make.inc.LINUX
+   M /branches/june-release/lapack/INSTALL/make.inc.O2K
+   M /branches/june-release/lapack/INSTALL/make.inc.RS6K
+   M /branches/june-release/lapack/INSTALL/make.inc.SGI5
+   M /branches/june-release/lapack/INSTALL/make.inc.SUN4
+   M /branches/june-release/lapack/INSTALL/make.inc.SUN4SOL2
+   A /branches/june-release/lapack/INSTALL/make.inc.gfortran
+   M /branches/june-release/lapack/INSTALL/make.inc.pghpf
+   A /branches/june-release/lapack/INSTALL/second_EXT_ETIME.f
+   A /branches/june-release/lapack/INSTALL/second_EXT_ETIME_.f
+   A /branches/june-release/lapack/INSTALL/second_INT_CPU_TIME.f
+   A /branches/june-release/lapack/INSTALL/second_INT_ETIME.f
+   A /branches/june-release/lapack/INSTALL/second_NONE.f
+   M /branches/june-release/lapack/make.inc.example
+
+modification for ETIME.
+I chose the approach suggested by Jason to have a variable in the make.inc to chose which SECOND and DSECND routine to use. 
+Give 5 flavours of SECOND(same for DSECND)
+    second_EXT_ETIME.f:  SECOND  will use a call to the EXTERNAL FUNCTION ETIME [Default] 
+	second_EXT_ETIME_.f: SECOND will use a call to the EXTERNAL FUNCTION ETIME_[RS6K]
+	second_INT_ETIME.f: SECOND  will use the INTERNAL FUNCTION ETIME [gfortran]
+	second_INT_CPU_TIME.f: SECOND  will use a call to the INTERNAL FUNCTION CPU\_TIME [Nag Compiler, etc..]
+	second_NONE.f: SECOND will always return 0
+
+More information on the discussion can be found on the LAPACK wiki:  http://icl.cs.utk.edu/trac/lapack-dev/wiki/Etime
+
+Added a new make.in for gfortran called make.inc.gfortran
+Made modication to existing make.inc 
+
+
+------------------------------------------------------------------------
+Changed paths:
+   D /branches/june-release/lapack/INSTALL/dsecnd.f
+   D /branches/june-release/lapack/INSTALL/dsecnd.f.RS6K
+   D /branches/june-release/lapack/INSTALL/lawn81.pdf
+   D /branches/june-release/lapack/INSTALL/lawn81.ps
+   M /branches/june-release/lapack/INSTALL/lawn81.tex
+   D /branches/june-release/lapack/INSTALL/second.f
+   D /branches/june-release/lapack/INSTALL/second.f.RS6K
+
+Made some modifications on the lawn81 for the 3.1.1 release (Comment from Sven + ETIME modification)
+Remove INSTALL/second.f INSTALL/dsecnd.f.RS6K INSTALL/second.f.RS6K INSTALL/dsecnd.f
+Remove INSTALL/lawn81.pdf INSTALL/lawn81.ps 
+
+----------------------------------------------------------------------------
+

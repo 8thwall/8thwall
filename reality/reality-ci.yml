@@ -1,0 +1,62 @@
+include:
+  - ci-support/util.yml
+
+cancel-redundant-jobs:
+  stage: build
+  extends: .cancel-redundant-jobs
+
+reality:build:macos_m1:fastbuild:macos_m1:
+  stage: build
+  interruptible: true
+  timeout: 300m
+  before_script:
+    - !reference [.global, before_script]
+  script:
+    - bazel build -- //c8/... //reality/... //apps/... -//reality/app/...
+    - bazel build --//c8/pixels/opengl:angle -- //c8/pixels/opengl/... //c8/dom/...
+    - ./ci-support/security/scan-cpp.sh bazel build --platforms=//bzl:wasm32 //reality/app/xr/js:serve-xr
+  after_script:
+    - !reference [.global, after_script]
+  rules:
+    - if: $REALITY_TRIGGER == "reality_trigger"
+  tags:
+    - m1
+
+reality:xrhome:typescript:
+  stage: build
+  interruptible: true
+  timeout: 30m
+  before_script:
+    - !reference [.global, before_script]
+  script: |2
+    cd reality/cloud/xrhome
+    bazel run //bzl/node:npm --run_under="cd $PWD && " -- ci --legacy-peer-deps
+    echo "Fetching $CI_MERGE_REQUEST_DIFF_BASE_SHA..."
+    git fetch origin $CI_MERGE_REQUEST_DIFF_BASE_SHA
+    npx gulp buildFromBazel
+    set +e
+    npx ts-node ./tools/ts/check.ts $CI_MERGE_REQUEST_DIFF_BASE_SHA > .ts-error-log.txt
+    if [[ "$?" -eq "0" ]]
+    then
+    bazel run //ci-support:clear-automated-mr-comments "📘"
+    echo "No errors to report."
+    else
+    cat .ts-error-log.txt
+    echo "Commenting on MR..."
+    >> .mr-comment.md echo "<details><summary>TypeScript errors</summary>"
+    >> .mr-comment.md echo ""
+    >> .mr-comment.md echo "\`\`\`"
+    >> .mr-comment.md cat <(cat .ts-error-log.txt | grep -vE "Comparing|npx ts-node|ts:check|^$" | tail -n 20)
+    >> .mr-comment.md echo "\`\`\`"
+    >> .mr-comment.md echo ""
+    >> .mr-comment.md echo "📘 [Full output]($CI_JOB_URL)"
+    >> .mr-comment.md echo "</details>"
+    cat .mr-comment.md | bazel run //ci-support:post-mr-comment
+    exit 1
+    fi
+  after_script:
+    - !reference [.global, after_script]
+  rules:
+    - if: $XRHOME_TRIGGER == "xrhome_trigger"
+  tags:
+    - linux

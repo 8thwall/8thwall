@@ -393,10 +393,10 @@ def _js_build_attrs(cli, buildonly, test):
         "webpack_mode": attr.string(default = "production"),
         "commonjs": attr.bool(default = False),
         "_generated_browser": attr.label(
-            default = Label("@niantic//bzl/js/generated:generated-browser"),
+            default = Label("@the8thwall//bzl/js/generated:generated-browser"),
         ),
         "_generated_node": attr.label(
-            default = Label("@niantic//bzl/js/generated:generated-node"),
+            default = Label("@the8thwall//bzl/js/generated:generated-node"),
         ),
         "_npm_mocha_chai": attr.label(
             default = Label("@npm-mocha//:npm-mocha") if test else None,
@@ -406,23 +406,23 @@ def _js_build_attrs(cli, buildonly, test):
             allow_single_file = True,
         ),
         "_mocha_reporters": attr.label(
-            default = Label("@niantic//bzl/js:mocha-reporters") if test else None,
+            default = Label("@the8thwall//bzl/js:mocha-reporters") if test else None,
             allow_single_file = True,
         ),
         "_target_mocha": attr.label(
-            default = Label("@niantic//bzl/js:mocha") if test else None,
+            default = Label("@the8thwall//bzl/js:mocha") if test else None,
             allow_single_file = True,
             executable = True,
             cfg = "target",
         ),
         "target_node": attr.label(
-            default = Label("@niantic//bzl/node:node"),
+            default = Label("@the8thwall//bzl/node:node"),
             allow_single_file = True,
             executable = True,
             cfg = "target",
         ),
         "_webpack_build": attr.label(
-            default = Label("@niantic//bzl/js:webpack-build"),
+            default = Label("@the8thwall//bzl/js:webpack-build"),
             allow_single_file = True,
             executable = True,
             cfg = "exec",
@@ -541,7 +541,7 @@ def js_binary(
         commonjs = commonjs,
         export_library = export_library,
         webpack_mode = select({
-            "@niantic//bzl/js:release": "production",
+            "@the8thwall//bzl/js:release": "production",
             "//conditions:default": "development",
         }),
         npm_rule = npm_rule,
@@ -580,13 +580,13 @@ def js_cli(
         commonjs = commonjs,
         node_bin = node,
         webpack_mode = select({
-            "@niantic//bzl/js:release": "production",
+            "@the8thwall//bzl/js:release": "production",
             "//conditions:default": "development",
         }),
         npm_rule = npm_rule,
         target_node = select({
-            "@niantic//bzl/node:source-built-true": Label("@node//:node-bin"),
-            "@niantic//bzl/node:source-built-false": Label("@niantic//bzl/node:node"),
+            "@the8thwall//bzl/node:source-built-true": Label("@node//:node-bin"),
+            "@the8thwall//bzl/node:source-built-false": Label("@the8thwall//bzl/node:node"),
         }),
         webpack_analyze = webpack_analyze,
         bundle_header = bundle_header,
@@ -603,8 +603,8 @@ def js_test(name, main = [], srcs = [], deps = [], data = [], npm_rule = None, *
         srcs = srcs,
         deps = deps,
         target_node = select({
-            "@niantic//bzl/node:source-built-true": Label("@node//:node-bin"),
-            "@niantic//bzl/node:source-built-false": Label("@niantic//bzl/node:node"),
+            "@the8thwall//bzl/node:source-built-true": Label("@node//:node-bin"),
+            "@the8thwall//bzl/node:source-built-false": Label("@the8thwall//bzl/node:node"),
         }),
         data = data,
         npm_rule = npm_rule,

@@ -1,0 +1,15 @@
+{
+  "name": "resolve",
+  "version": "1.0.0",
+  "description": "",
+  "main": "transitive.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "flat": "^4.1.1",
+    "is-buffer": "^1.1.6"
+  }
+}

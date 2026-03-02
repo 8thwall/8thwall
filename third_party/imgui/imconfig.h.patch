@@ -1,0 +1,13 @@
+--- imconfig.h	2020-10-29 22:59:43.000000000 -0700
++++ imconfig.h	2020-10-29 22:52:10.000000000 -0700
+@@ -14,6 +14,10 @@
+ 
+ #pragma once
+ 
++#include "c8/pixels/opengl/gl-version.h"
++
++#define IMGUI_IMPL_OPENGL_LOADER_CUSTOM C8_GL_H
++
+ //---- Define assertion handler. Defaults to calling assert().
+ // If your macro uses multiple statements, make sure is enclosed in a 'do { .. } while (0)' block so it can be used as a single statement.
+ //#define IM_ASSERT(_EXPR)  MyAssert(_EXPR)

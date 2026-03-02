@@ -1,0 +1,20 @@
+{
+  "name": "html-app-packager",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^22.9.1",
+    "undici-types": "^6.21.0"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.705.0",
+    "@aws-sdk/client-s3": "^3.705.0",
+    "htmlparser2": "^10.0.0"
+  }
+}

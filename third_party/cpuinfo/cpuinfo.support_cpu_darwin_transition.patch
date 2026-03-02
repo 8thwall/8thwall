@@ -1,0 +1,39 @@
+diff --git a/BUILD.bazel b/BUILD.bazel
+index eee72b5..07c1076 100644
+--- a/BUILD.bazel
++++ b/BUILD.bazel
+@@ -114,7 +114,9 @@ cc_library(
+         ":linux_mips64": COMMON_SRCS + LINUX_SRCS,
+         ":linux_riscv64": COMMON_SRCS + LINUX_SRCS,
+         ":linux_s390x": COMMON_SRCS + LINUX_SRCS,
+-        ":macos_x86_64": COMMON_SRCS + X86_SRCS + MACH_SRCS + MACH_X86_SRCS,
++        # ":macos_x86_64": COMMON_SRCS + X86_SRCS + MACH_SRCS + MACH_X86_SRCS,
++        # ":osx_x86_64": COMMON_SRCS + X86_SRCS + MACH_SRCS + MACH_X86_SRCS,
++        ":macos_intel": COMMON_SRCS + X86_SRCS + MACH_SRCS + MACH_X86_SRCS,
+         ":macos_arm64": COMMON_SRCS + MACH_SRCS + MACH_ARM_SRCS,
+         ":windows_x86_64": COMMON_SRCS + X86_SRCS + WINDOWS_X86_SRCS,
+         ":android_armv7": COMMON_SRCS + ARM_SRCS + LINUX_SRCS + LINUX_ARM32_SRCS + ANDROID_ARM_SRCS,
+@@ -245,6 +247,23 @@ config_setting(
+     },
+ )
+
++config_setting(
++    name = "osx_x86_64",
++    values = {
++        "apple_platform_type": "macos",
++        "cpu": "darwin_x86_64",
++    },
++)
++
++selects.config_setting_group(
++    name = "macos_intel",
++    match_any = [
++        ":macos_x86_64",
++        ":osx_x86_64"
++    ],
++)
++
++
+ config_setting(
+     name = "windows_x86_64",
+     values = {"cpu": "x64_windows"},

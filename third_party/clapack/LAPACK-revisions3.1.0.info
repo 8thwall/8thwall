@@ -1,0 +1,431 @@
+================
+== LAPACK 3.1 ==
+================
+
+Release date: Su 11/12/2006.
+
+  * LAPACK 3.1: What's new
+  * Contributor list
+  * Developer list
+  * Thanks
+  * LAPACK subroutine interface policy
+  * More details
+
+=============================
+== LAPACK 3.1: What's new  ==
+=============================
+
+ 1) Hessenberg QR algorithm with the small bulge multi-shift QR algorithm
+    together with aggressive early deflation. This is an implementation of the
+    2003 SIAM SIAG LA Prize winning algorithm of Braman, Byers and Mathias,
+    that significantly speeds up the nonsymmetric eigenproblem.
+
+ 2) Improvements of the Hessenberg reduction subroutines. These accelerate the
+    first phase of the nonsymmetric eigenvalue problem.
+
+ 3) New MRRR eigenvalue algorithms that also support subset computations.
+    These implementations of the 2006 SIAM SIAG LA Prize winning algorithm of
+    Dhillon and Parlett are also significantly more accurate than the version
+    in LAPACK 3.0.
+
+ 4) Mixed precision iterative refinement subroutines for exploiting fast single
+    precision hardware. On platforms like the Cell processor that do single
+    precision much faster than double, linear systems can be solved many times
+    faster. Even on commodity processors there is a factor of 2 in speed
+    between single and double precision. These are prototype routines in the
+    sense that their interfaces might changed based on user feedback.
+
+ 5) New partial column norm updating strategy for QR factorization with column
+    pivoting. This fixes a subtle numerical bug dating back to LINPACK that can
+    give completely wrong results.
+
+ 6) Thread safety: Removed all the SAVE and DATA statements (or provided
+    alternate routines without those statements), increasing reliability
+    on SMPs.
+
+ 7) Additional support for matrices with NaN/subnormal elements, optimization
+    of the balancing subroutines, improving reliability.
+
+ 8) Several bug fixes.
+
+ 9) Timing have been removed from the LAPACK package. The TIMING need to be updated with respect to the new algorithms in LAPACK. We are also renovating the way FLOPS are counted. 
+
+==================
+== Contributors ==
+==================
+
+ 1) Hessenberg QR algorithm with the small bulge multi-shift QR algorithm
+    together with aggressive early deflation.
+    Karen Braman and Ralph Byers, Dept. of Mathematics,
+    University of Kansas, USA
+
+ 2) Improvements of the Hessenberg reduction subroutines.
+    Daniel Kressner, Dept. of Mathematics,
+    University of Zagreb, Croatia
+
+ 3) New MRRR eigenvalue algorithms that also support subset computations
+    Christof Voemel, Lawrence Berkeley National Laboratory, USA.
+
+ 4) Mixed precision iterative refinement subroutines for exploiting fast
+    single precision hardware.
+    Julie Langou, UTK, Julien Langou, CU Denver, Jack Dongarra, UTK.
+
+ 5) New partial column norm updating strategy for QR factorization with
+    pivoting.
+    Zlatko Drmac and Zvonomir Bujanovic, Dept. of Mathematics,
+    University of Zagreb, Croatia
+
+ 6) Thread safety: Removed all the SAVE and DATA statements (or provided
+    alternate routines without those statements)
+    Sven Hammarling, NAG Ltd., UK
+
+ 7) Additional support for matrices with NaN/subnormal elements, optimization
+    of the balancing subroutines
+    Bobby Cheng, MathWorks, USA
+
+
+======================================
+== Thanks for bug-report/patches to ==
+======================================
+
+  * Eduardo Anglada (Universidad Autonoma de Madrid, Spain)
+  * David Barnes (University of Kent, England)
+  * Alberto Garcia (Universidad del Pais Vasco, Spain)
+  * Tim Hopkins (University of Kent, England)
+  * Javier Junquera (CITIMAC, Universidad de Cantabria, Spain)
+  * Mathworks: Penny Anderson, Bobby Cheng, Pat Quillen, Cleve Moler, Duncan
+    Po, Bin Shi, Greg Wolodkin (MathWorks, USA)
+  * George McBane (Grand Valley State University, USA)
+  * Matyas Sustik (University of Texas at Austin, USA)
+  * Michael Wimmer (Universität Regensburg, Germany)
+  * Simon Wood (University of Bath, UK) and in more generally all the R
+    developers
+
+===========================
+= Principal Investigators =
+===========================
+
+    Jim Demmel (University or California at Berkeley, USA)
+    Jack Dongarra (University of Tennessee and ORNL, USA)
+
+================================================
+== LAPACK developers involved in this release ==
+================================================
+
+    Ralph Byers (University of Kansas, USA)
+    Zlatko Drmac (University of Zagreb, Croatia)
+    Remi Delmas (University of Tennessee, USA)
+    Sven Hammarling (NAG Ltd., UK)
+    Yozo Hida (University of California at Berkeley, USA)
+    Daniel Kressner (University of Zagreb, Croatia)
+    Julie Langou (University of Tennessee, USA)
+    Julien Langou (CU Denver, USA)
+    Ren-Cang Li ( University of Texas at Arlington, USA)
+    Xiaoye Li (Lawrence Berkeley Laboratory, USA)
+    Osni Marques (Lawrence Berkeley Laboratory, USA)
+    E. Jason Riedy (University of California at Berkeley, USA)
+    Edward Smyth (NAG Ltd., UK)
+    Christof Voemel (Lawrence Berkeley Laboratory, USA)
+
+========================================
+== LAPACK subroutine interface policy ==
+========================================
+
+The interfaces to primary computational routines are fixed and
+will not be changed by minor LAPACK versions (e.g. 3.x).
+Primary routines are those prefixed by a precision and matrix
+type like SGERFS, CUNMQR, ZHEGV, etc., and these interfaces
+will remain the same for all LAPACK version 3 versions.
+
+Most routines labelled as auxiliary are implementation
+details for specific algorithms and may have their interfaces
+changed by minor versions. Auxiliary routines are those prefixed
+by a precision and LA like SLAQR3.  Some auxiliary routines
+are of general use and are subject to the same fixed-interface
+policy as the primary computational routines.  The current list
+of fixed-interface auxiliary routines is as follows, with x
+standing for a precision and yy standing for a matrix type:
+  * ILAENV : Environmental parameters
+  * SLAMCH, DLAMCH : Machine parameters
+  * xLACON : Norm estimation, not thread-safe
+  * xLACN2 : Norm estimation, thread-safe
+  * xLANyy : Simple norm calculations (note: xLANEG is not related
+    to these and may change)
+  * xLASWP : Row interchanges
+  * xLARF, xLARZ : Applying single elementary reflection
+This list may grow by user request. 
+
+The interface change for this LAPACK 3.1 version are:
+   SLAR1V SLARRB SLARRE SLARRF SLARRV
+   DLAR1V DLARRB DLARRE DLARRF DLARRV
+
+=================
+== More details =
+=================
+
+----------------------------------------------------------------------------
+1) Hessenberg QR algorithm with the small bulge multi-shift QR algorithm
+   together with aggressive early deflation.
+----------------------------------------------------------------------------
+
+  Contributors:
+  =============
+    Karen Braman and Ralph Byers, Dept. of Mathematics, University of
+    Kansas, USA,
+    July 2006.
+
+  Comments:
+  =========
+    This is an implementation of the 2003 SIAM SIAG LA Prize winning algorithm
+    of Braman, Byers and Mathias, that significantly speeds up the nonsymmetric
+    eigenproblem.
+
+  Changes:
+  ========
+     M   SRC/{c,d,s,z}gees.f
+     M   SRC/{c,d,s,z}geev.f
+     M   SRC/{c,d,s,z}geesx.f
+     M   SRC/{c,d,s,z}geevx.f
+     A   SRC/{c,d,s,z}laqr0.f
+     A   SRC/{c,d,s,z}laqr1.f
+     A   SRC/{c,d,s,z}laqr2.f
+     A   SRC/{c,d,s,z}laqr3.f
+     A   SRC/{c,d,s,z}laqr4.f
+     A   SRC/{c,d,s,z}laqr5.f
+     M   SRC/{c,d,s,z}hseqr.f
+     M   SRC/{c,d,s,z}lahqr.f
+     M   SRC/ilaenv.f
+     A   SRC/iparmq.f
+     A   SRC/{c,d,s,z}laqr0.f
+     A   SRC/{c,d,s,z}laqr1.f
+     A   SRC/{c,d,s,z}laqr2.f
+     A   SRC/{c,d,s,z}laqr3.f
+     A   SRC/{c,d,s,z}laqr4.f
+     A   SRC/{c,d,s,z}laqr5.f
+
+  References:
+  ===========
+  [1] K. Braman, R. Byers and R. Mathias, The Multi-Shift QR Algorithm Part
+      I: Maintaining Well Focused Shifts, and Level 3 Performance, SIAM
+      Journal of Matrix Analysis, 23:929-947, 2002.
+  [2] K. Braman, R. Byers and R. Mathias, The Multi-Shift QR Algorithm Part
+      II: Aggressive Early Deflation, SIAM Journal of Matrix Analysis,
+      23:948-973, 2002.
+
+----------------------------------------------------------------------------
+2) Improvements of the Hessenberg reduction subroutines.
+----------------------------------------------------------------------------
+
+  Contributor:
+  ============
+    Daniel Kressner, Dept. of Mathematics, University of Zagreb, Croatia.
+    June 2006.
+
+  Comments:
+  =========
+    These accelerate the first phase of the nonsymmetric eigenvalue problem.
+
+  Changes:
+  ========
+     M   SRC/{c,d,s,z}gehrd.f
+     A   SRC/{c,d,s,z}lahr2.f
+     D   SRC/{c,d,s,z}lahrd.f
+
+  Reference:
+  ==========
+  [1] Gregorio Quintana-Orti and Robert van de Geijn, Improving the
+      Performance of Reduction to Hessenberg Form.  ACM Transactions on
+      Mathematical Software, 32(2):180-194, June 2006.
+
+----------------------------------------------------------------------------
+3) New MRRR eigenvalue algorithms that also support subset computations
+----------------------------------------------------------------------------
+
+  Contributors:
+  =============
+    Inderjit Dhillon, University of Texas at Austin, USA
+    Beresford Parlett, Universtiy of California at Berkeley, USA
+    Christof Voemel, Lawrence Berkeley Laboratory, USA
+    July 2006.
+
+  Changes:
+  ========
+    New MRRR eigenvalue algorithms that also support subset computations.
+    These implementations of the 2006 SIAM SIAG LA Prize winning algorithm of
+    Dhillon and Parlett are also significantly more accurate than the version
+    in LAPACK 3.0.
+
+  References:
+  ===========
+
+  [1] Inderjit S. Dhillon and Beresford N. Parlett. Orthogonal Eigenvectors and
+      Relative Gaps.  SIAM J. Matrix Anal. Appl., 25(3):858-899, 2004.
+
+  [1] Inderjit S. Dhillon, Beresford N. Parlett, and Christof Vomel. LAPACK
+      Working Note 162. The Design and Implementation of the MRRR Algorithm.
+      December, 2004.
+
+  [3] Osni A. Marques, Beresford N. Parlett, and Christof Voemel. LAPACK
+      Working Note 167.  Subset Computations with the MRRR algorithm. August
+      2005.
+
+----------------------------------------------------------------------------
+4) Mixed precision iterative refinement subroutines for exploiting fast
+   single precision hardware.
+----------------------------------------------------------------------------
+
+  Contributors:
+  =============
+    Julie Langou, UTK, Julien Langou, CU Denver, Jack Dongarra, UTK,
+    June 2006.
+
+  Comments:
+  =========
+
+    This is a prototype routines in the sense that its interface might changed
+    based on user feedback.
+
+    Mixed precision iterative refinement subroutines for exploiting fast single
+    precision hardware. On platforms like the Cell processor that do single
+    precision much faster than double, linear systems can be solved many times
+    faster. Even on commodity processors there is a factor of 2 in speed
+    between single and double precision.
+
+  Changes:
+  ========
+     A   SRC/dsgesv.f
+     A   SRC/dlag2s.f
+     A   SRC/slag2d.f
+     A   SRC/zcgesv.f
+     A   SRC/zlag2c.f
+     A   SRC/clag2z.f
+
+  References:
+  ===========
+  [1] Julie Langou, Julien Langou, Piotr Luszczek, Jakub Kurzak, Alfredo
+      Buttari, and Jack Dongarra. LAPACK Working Note 176. Exploiting the
+      Performance of 32 bit Floating Point Arithmetic in Obtaining 64 bit
+      Accuracy (Revisiting Iterative Refinement for Linear Systems). June
+      2006.
+  [2] Jakub Kurzak and Jack Dongarra. LAPACK Working Note 177. Implementation
+      of the Mixed-Precision High Performance LINPACK Benchmark on the CELL
+      Processor. Sept 2006.
+
+
+----------------------------------------------------------------------------
+5) New partial column norm updating strategy for QR factorization with
+   pivoting.
+----------------------------------------------------------------------------
+
+  Contributors:
+  =============
+    Z. Drmac and Z. Bujanovic, Dept. of Mathematics, University of Zagreb,
+    Croatia,
+    June 2006.
+
+  Comments:
+  =========
+    This fixes a subtle numerical bug dating back to LINPACK that can
+    give completely wrong results.
+
+  Changes:
+  ========
+     M    SRC/{c,d,s,z}geqpf.f
+     M    SRC/{c,d,s,z}laqp2.f
+     M    SRC/{c,d,s,z}laqps.f
+
+  Reference:
+  ==========
+  [1] Z. Drmac and Z. Bujanovic, LAPACK Working Note 176, On the failure of
+      rank revealing QR factorization software - a case study, June 2006.
+
+----------------------------------------------------------------------------
+6) Thread safe version of the LAPACK routines.
+----------------------------------------------------------------------------
+
+  Contributor:
+  =============
+    Sven Hammarling, NAG Ltd., UK,
+    July 2005.
+
+  Comments:
+  =========
+    All the LAPACK routines are now thread safe except {s,d}LAMCH and the
+    triplet {c,d,s,z}lacon.f, {d,s}lasq3.f and {d,s}lasq4.f. By thread safe, 
+    we mean that your LAPACK library wil be thread safe provided that your 
+    compiler is. Regarding the 10 routines still containing DATA or SAVE
+    statement:
+    {s,d}LAMCH can be manually replace by thread-safe routines (e.g. using
+    F90).
+    {c,d,s,z}lacon.f, {d,s}lasq3.f and {d,s}lasq4.f are left in LAPACK for
+    backward compatibility, they are flagged as deprecated, and represent
+    dead codes in this current release (v3.1).
+
+  Changes:
+  ========
+     D   SRC/{c,d,s,z}lacon.f (D means deprecated)
+     D   SRC/{d,z}lasq3.f     (D means deprecated)
+     D   SRC/{d,z}lasq4.f     (D means deprecated)
+     M   SRC/{c,z}largv.f
+     M   SRC/{c,d,s,z}lartg.f
+     M   SRC/{d,s}laed6.f
+     A   SRC/{c,d,s,z}lacn2.f
+     A   SRC/{d,s}lazq3.f
+     A   SRC/{d,s}lazq4.f
+
+----------------------------------------------------------------------------
+7) Additional support for matrices with NaN/subnormal elements, optimization
+   of the balancing subroutines
+----------------------------------------------------------------------------
+
+  Contributors:
+  =============
+    Bobby Cheng, MathWorks, USA.
+    July 2006.
+
+  Changes:
+  ========
+     M   SRC/{c,d,s,z}gebal.f
+     M   SRC/{c,d,s,z}getf2.f
+     M   SRC/{d,s}lapy3.f
+     M   SRC/{d,s}sytf2.f
+     M   SRC/{c,z}hetf2.f
+
+  References:
+  ===========
+
+  [1] see svn log: r146, r296.
+
+----------------------------------------------------------------------------
+8) Several bug fixes and details.
+----------------------------------------------------------------------------
+
+  Changes:
+  ========
+    too long to list
+
+  Comments:
+  =========
+    add a subroutine to get the version number of a user's LAPACK
+    add a licence and a copyright to LAPACK.
+
+  Contributors:
+  =============
+    Remi Delmas (UTK, USA)
+    Sven Hammarling (NAG, UK)
+    Daniel Kressner (University of Zagreb, Croatia)
+    Julie Langou (UTK, USA)
+    Julien Langou (CU Denver, USA)
+    E. Jason Riedy (UCB, UK)
+    Ren-Cang Li ( Department of Mathematics, University of Texas at
+    Arlington, USA)
+    Osni Marques (Lawrence Berkeley Laboratory, USA)
+
+  References:
+  ===========
+
+  [1] too long to list, see svn logs for references.
+
+----------------------------------------------------------------------------
+
+

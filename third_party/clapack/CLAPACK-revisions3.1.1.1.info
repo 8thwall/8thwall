@@ -1,0 +1,10 @@
+=====================
+== CLAPACK 3.1.1.1 ==
+=====================
+
+Release date: We 10/08/2008.
+ 
+CLAPACK 3.1.1.1 is based like CLAPACK 3.1.1 on LAPACK 3.1.1 version.
+
+The only difference between CLAPACK 3.1.1.1 and CLAPACK 3.1.1 is in the automatic generation of the code.
+The way CLAPACK 3.1.1.1 was generated make sure CLAPACK is threadsafe.

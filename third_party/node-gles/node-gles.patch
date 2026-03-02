@@ -1,0 +1,1723 @@
+diff --git a/README-niantic.md b/README-niantic.md
+new file mode 100644
+index 0000000..e43a6b1
+--- /dev/null
++++ b/README-niantic.md
+@@ -0,0 +1,11 @@
++## Overview
++
++Niantic fork of node-gles. Changes made here should be diffed against the original origin
++and then added as a patch to repo/niantic.
++
++# For a new clone, add the original origin.
++git remote add old-origin https://github.com/google/node-gles.git
++git fetch
++
++# Compute and save the patch to repo/niantic.
++git diff old-origin/master > ../niantic/third_party/node-gles/node-gles.patch
+diff --git a/binding/binding.cc b/binding/binding.cc
+index d17564d..bf80d46 100644
+--- a/binding/binding.cc
++++ b/binding/binding.cc
+@@ -51,6 +51,7 @@ static napi_value InitBinding(napi_env env, napi_value exports) {
+   WebGLDebugRendererInfoExtension::Register(env, exports);
+   WebGLDepthTextureExtension::Register(env, exports);
+   WebGLLoseContextExtension::Register(env, exports);
++  WebGLDrawBuffersExtension::Register(env, exports);
+   WebGLRenderingContext::Register(env, exports);
+ 
+   napi_property_descriptor properties[] = {
+diff --git a/binding/egl_context_wrapper.cc b/binding/egl_context_wrapper.cc
+index 283f463..8119d0d 100644
+--- a/binding/egl_context_wrapper.cc
++++ b/binding/egl_context_wrapper.cc
+@@ -47,19 +47,17 @@ void EGLContextWrapper::InitEGL(napi_env env,
+                                 const GLContextOptions& context_options) {
+   std::vector<EGLAttrib> display_attributes;
+   display_attributes.push_back(EGL_PLATFORM_ANGLE_TYPE_ANGLE);
+-  // Most NVIDIA drivers will not work properly with
+-  // EGL_PLATFORM_ANGLE_TYPE_OPENGLES_ANGLE, only enable this option on ARM
+-  // devices for now:
+-#if defined(__arm__)
+-  display_attributes.push_back(EGL_PLATFORM_ANGLE_TYPE_OPENGLES_ANGLE);
++#ifdef __APPLE__
++  display_attributes.push_back(EGL_PLATFORM_ANGLE_TYPE_METAL_ANGLE);
+ #else
+   display_attributes.push_back(EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE);
+ #endif
+ 
+   display_attributes.push_back(EGL_NONE);
+ 
+-  display = eglGetPlatformDisplay(EGL_PLATFORM_ANGLE_ANGLE, nullptr,
++  display = eglGetPlatformDisplay(EGL_PLATFORM_ANGLE_ANGLE, context_options.native_window,
+                                   &display_attributes[0]);
++
+   if (display == EGL_NO_DISPLAY) {
+     // TODO(kreeger): This is the default path for Mac OS. Determine why egl has
+     // to be initialized this way on Mac OS.
+@@ -85,17 +83,27 @@ void EGLContextWrapper::InitEGL(napi_env env,
+   std::cerr << std::endl;
+ #endif
+ 
+-  EGLint attrib_list[] = {EGL_SURFACE_TYPE, EGL_PBUFFER_BIT,
+-                          EGL_RED_SIZE,     8,
+-                          EGL_GREEN_SIZE,   8,
+-                          EGL_BLUE_SIZE,    8,
+-                          EGL_ALPHA_SIZE,   8,
+-                          EGL_DEPTH_SIZE,   24,
+-                          EGL_STENCIL_SIZE, 8,
+-                          EGL_NONE};
++  std::vector<EGLint> attrib_list;
++  if (context_options.native_window == nullptr) {
++    // This is an offscreen context, use a Pbuffer.
++    attrib_list.push_back(EGL_SURFACE_TYPE);
++    attrib_list.push_back(EGL_PBUFFER_BIT);
++  }
++
++  attrib_list.insert(attrib_list.end(), {
++      EGL_RED_SIZE,     8,
++      EGL_GREEN_SIZE,   8,
++      EGL_BLUE_SIZE,    8,
++      EGL_ALPHA_SIZE,   8,
++      EGL_DEPTH_SIZE,   24,
++      EGL_STENCIL_SIZE, 8,
++      EGL_RENDERABLE_TYPE,
++      EGL_OPENGL_ES3_BIT,
++      EGL_NONE,
++  });
+ 
+   EGLint num_config;
+-  if (!eglChooseConfig(display, attrib_list, &config, 1, &num_config)) {
++  if (!eglChooseConfig(display, attrib_list.data(), &config, 1, &num_config)) {
+     NAPI_THROW_ERROR(env, "Failed creating a config");
+     return;
+   }
+@@ -146,15 +154,22 @@ void EGLContextWrapper::InitEGL(napi_env env,
+ 
+   context = eglCreateContext(display, config, EGL_NO_CONTEXT,
+                              context_attributes.data());
++
+   if (context == EGL_NO_CONTEXT) {
+     NAPI_THROW_ERROR(env, "Could not create context");
+     return;
+   }
+ 
+-  EGLint surface_attribs[] = {EGL_WIDTH, (EGLint)context_options.width,
+-                              EGL_HEIGHT, (EGLint)context_options.height,
+-                              EGL_NONE};
+-  surface = eglCreatePbufferSurface(display, config, surface_attribs);
++  if (context_options.native_window == nullptr) {
++    // This is an offscreen context, use a Pbuffer.
++    EGLint surface_attribs[] = {EGL_WIDTH, (EGLint)context_options.width,
++                                EGL_HEIGHT, (EGLint)context_options.height,
++                                EGL_NONE};
++    surface = eglCreatePbufferSurface(display, config, surface_attribs);
++  } else {
++    surface = eglCreateWindowSurface(display, config, context_options.native_window, nullptr);
++  }
++
+   if (surface == EGL_NO_SURFACE) {
+     NAPI_THROW_ERROR(env, "Could not create surface");
+     return;
+@@ -308,6 +323,8 @@ void EGLContextWrapper::BindProcAddresses() {
+           eglGetProcAddress("glGetRenderbufferParameteriv"));
+   glGetShaderiv = reinterpret_cast<PFNGLGETSHADERIVPROC>(
+       eglGetProcAddress("glGetShaderiv"));
++  glGetShaderSource = reinterpret_cast<PFNGLGETSHADERSOURCEPROC>(
++      eglGetProcAddress("glGetShaderSource"));
+   glGetShaderInfoLog = reinterpret_cast<PFNGLGETSHADERINFOLOGPROC>(
+       eglGetProcAddress("glGetShaderInfoLog"));
+   glGetShaderPrecisionFormat =
+@@ -441,9 +458,26 @@ void EGLContextWrapper::BindProcAddresses() {
+   glViewport =
+       reinterpret_cast<PFNGLVIEWPORTPROC>(eglGetProcAddress("glViewport"));
+ 
++  glTexImage3D =
++      reinterpret_cast<PFNGLTEXIMAGE3DPROC>(eglGetProcAddress("glTexImage3D"));
++  glFramebufferTextureLayer =
++      reinterpret_cast<PFNGLFRAMEBUFFERTEXTURELAYERPROC>(eglGetProcAddress("glFramebufferTextureLayer"));
++  glDrawBuffers =
++      reinterpret_cast<PFNGLDRAWBUFFERSPROC>(eglGetProcAddress("glDrawBuffers"));
++  glClearBufferuiv =
++      reinterpret_cast<PFNGLCLEARBUFFERUIVPROC>(eglGetProcAddress("glClearBufferuiv"));
++  glReadBuffer =
++      reinterpret_cast<PFNGLREADBUFFERPROC>(eglGetProcAddress("glReadBuffer"));
++
+   // ANGLE specific
+   glRequestExtensionANGLE = reinterpret_cast<PFNGLREQUESTEXTENSIONANGLEPROC>(
+       eglGetProcAddress("glRequestExtensionANGLE"));
++
++  // GL ES
++  glGetFloatv =
++      reinterpret_cast<PFNGLGETFLOATVPROC>(eglGetProcAddress("glGetFloatv"));
++  glGetBooleanv = reinterpret_cast<PFNGLGETBOOLEANVPROC>(
++      eglGetProcAddress("glGetBooleanv"));
+ }
+ 
+ void EGLContextWrapper::RefreshGLExtensions() {
+@@ -455,6 +489,10 @@ void EGLContextWrapper::RefreshGLExtensions() {
+           glGetString(GL_REQUESTABLE_EXTENSIONS_ANGLE))));
+ }
+ 
++void EGLContextWrapper::SwapBuffers() {
++  eglSwapBuffers(display, surface);
++}
++
+ EGLContextWrapper::~EGLContextWrapper() {
+   if (context) {
+     if (!eglDestroyContext(display, context)) {
+diff --git a/binding/egl_context_wrapper.h b/binding/egl_context_wrapper.h
+index 09c0cee..af9d1dd 100644
+--- a/binding/egl_context_wrapper.h
++++ b/binding/egl_context_wrapper.h
+@@ -41,6 +41,7 @@ struct GLContextOptions {
+   uint32_t client_minor_es_version = 0;
+   uint32_t width = 1;
+   uint32_t height = 1;
++  void* native_window = nullptr;
+ };
+ 
+ // Provides lookup of EGL/GL extensions.
+@@ -163,6 +164,7 @@ class EGLContextWrapper {
+   PFNGLGETPROGRAMINFOLOGPROC glGetProgramInfoLog;
+   PFNGLGETRENDERBUFFERPARAMETERIVPROC glGetRenderbufferParameteriv;
+   PFNGLGETSHADERIVPROC glGetShaderiv;
++  PFNGLGETSHADERSOURCEPROC glGetShaderSource;
+   PFNGLGETSHADERINFOLOGPROC glGetShaderInfoLog;
+   PFNGLGETSHADERPRECISIONFORMATPROC glGetShaderPrecisionFormat;
+   PFNGLGETSTRINGPROC glGetString;
+@@ -230,12 +232,26 @@ class EGLContextWrapper {
+   PFNGLVERTEXATTRIBPOINTERPROC glVertexAttribPointer;
+   PFNGLVIEWPORTPROC glViewport;
+ 
++  // WebGL2RenderingContextBase methods:
++  PFNGLTEXIMAGE3DPROC glTexImage3D;
++  PFNGLFRAMEBUFFERTEXTURELAYERPROC glFramebufferTextureLayer;
++  PFNGLDRAWBUFFERSPROC glDrawBuffers;
++  PFNGLCLEARBUFFERUIVPROC glClearBufferuiv;
++  PFNGLREADBUFFERPROC glReadBuffer;
++
+   // ANGLE specific
+   PFNGLREQUESTEXTENSIONANGLEPROC glRequestExtensionANGLE;
+ 
++  // GL ES
++  PFNGLGETFLOATVPROC glGetFloatv;
++  PFNGLGETBOOLEANVPROC glGetBooleanv;
++
+   // Refreshes extensions list:
+   void RefreshGLExtensions();
+ 
++  // Calls eglSwapBuffers.
++  void SwapBuffers();
++
+  private:
+   EGLContextWrapper(napi_env env, const GLContextOptions& context_options);
+ 
+diff --git a/binding/webgl_extensions.cc b/binding/webgl_extensions.cc
+index 1ece12e..aa9fcb0 100644
+--- a/binding/webgl_extensions.cc
++++ b/binding/webgl_extensions.cc
+@@ -936,4 +936,56 @@ napi_value WebGLLoseContextExtension::RestoreContext(napi_env env,
+   return nullptr;
+ }
+ 
++//==============================================================================
++// WebGLDrawBuffersExtension
++
++napi_ref WebGLDrawBuffersExtension::constructor_ref_;
++
++WebGLDrawBuffersExtension::WebGLDrawBuffersExtension(napi_env env)
++    : GLExtensionBase(env) {}
++
++/* static */
++bool WebGLDrawBuffersExtension::IsSupported(
++    EGLContextWrapper* egl_context_wrapper) {
++  IS_EXTENSION_NAME_AVAILABLE("GL_EXT_draw_buffers");
++}
++
++/* static */
++napi_status WebGLDrawBuffersExtension::Register(napi_env env,
++                                                napi_value exports) {
++  napi_status nstatus;
++
++  napi_property_descriptor properties[] = {
++      NapiDefineIntProperty(env, GL_MAX_COLOR_ATTACHMENTS,
++                            "MAX_COLOR_ATTACHMENTS_WEBGL"),
++      NapiDefineIntProperty(env, GL_MAX_DRAW_BUFFERS, "MAX_DRAW_BUFFERS_WEBGL"),
++  };
++
++  napi_value ctor_value;
++  nstatus = napi_define_class(env, "WEBGL_draw_buffers", NAPI_AUTO_LENGTH,
++                              GLExtensionBase::InitStubClass, nullptr,
++                              ARRAY_SIZE(properties), properties, &ctor_value);
++  ENSURE_NAPI_OK_RETVAL(env, nstatus, nstatus);
++
++  nstatus = napi_create_reference(env, ctor_value, 1, &constructor_ref_);
++  ENSURE_NAPI_OK_RETVAL(env, nstatus, nstatus);
++
++  return napi_ok;
++}
++
++/* static */
++napi_status WebGLDrawBuffersExtension::NewInstance(
++    napi_env env, napi_value* instance,
++    EGLContextWrapper* egl_context_wrapper) {
++  ENSURE_EXTENSION_IS_SUPPORTED
++
++  napi_status nstatus = NewInstanceBase(env, constructor_ref_, instance);
++  ENSURE_NAPI_OK_RETVAL(env, nstatus, nstatus);
++
++  egl_context_wrapper->glRequestExtensionANGLE("GL_EXT_draw_buffers");
++  egl_context_wrapper->RefreshGLExtensions();
++
++  return napi_ok;
++}
++
+ }  // namespace nodejsgl
+diff --git a/binding/webgl_extensions.h b/binding/webgl_extensions.h
+index 079a958..7df9c86 100644
+--- a/binding/webgl_extensions.h
++++ b/binding/webgl_extensions.h
+@@ -239,6 +239,16 @@ class WebGLLoseContextExtension : public GLExtensionBase {
+   static void Cleanup(napi_env env, void* native, void* hint);
+ };
+ 
++// Provides 'WEBGL_draw_buffers':
++// https://www.khronos.org/registry/webgl/extensions/WEBGL_draw_buffers/
++class WebGLDrawBuffersExtension : public GLExtensionBase {
++  NAPI_BOOTSTRAP_METHODS
++
++ protected:
++  WebGLDrawBuffersExtension(napi_env env);
++  virtual ~WebGLDrawBuffersExtension() {}
++};
++
+ }  // namespace nodejsgl
+ 
+ #endif  // NODEJS_GL_WEBGL_EXTENSIONS_H_
+diff --git a/binding/webgl_rendering_context.cc b/binding/webgl_rendering_context.cc
+index 40b981f..2834b37 100644
+--- a/binding/webgl_rendering_context.cc
++++ b/binding/webgl_rendering_context.cc
+@@ -36,6 +36,7 @@ namespace nodejsgl {
+ enum NodeJSGLArrayType {
+   kInt32 = 0,
+   kFloat32 = 1,
++  kUint32 = 2,
+ };
+ 
+ // Class to automatically handle V8 buffers (TypedArrays/Arrays) with
+@@ -61,6 +62,9 @@ class ArrayLikeBuffer {
+         case kFloat32:
+           delete static_cast<float *>(data);
+           break;
++        case kUint32:
++          delete static_cast<uint32_t *>(data);
++          break;
+         default:
+           fprintf(
+               stderr,
+@@ -75,6 +79,8 @@ class ArrayLikeBuffer {
+         return length / sizeof(int32_t);
+       case kFloat32:
+         return length / sizeof(float);
++      case kUint32:
++        return length / sizeof(uint32_t);
+       default:
+         fprintf(
+             stderr,
+@@ -125,6 +131,7 @@ bool WebGLRenderingContext::CheckForErrors() {
+ #define GL_UNPACK_COLORSPACE_CONVERSION_WEBGL 0x9243
+ #define GL_UNPACK_FLIP_Y_WEBGL 0x9240
+ #define GL_UNPACK_PREMULTIPLY_ALPHA_WEBGL 0x9241
++#define GL_MAX_CLIENT_WAIT_TIMEOUT_WEBGL 0x9247
+ 
+ // Returns wrapped context pointer only.
+ static napi_status GetContext(napi_env env, napi_callback_info info,
+@@ -348,6 +355,9 @@ static napi_status GetArrayLikeBuffer(napi_env env, napi_value array_like_value,
+       case kInt32:
+         alb->data = malloc(sizeof(int32_t) * length);
+         break;
++      case kUint32:
++        alb->data = malloc(sizeof(uint32_t) * length);
++        break;
+       default:
+         NAPI_THROW_ERROR(env, "Unsupported array type for generic arrays!");
+         return napi_invalid_arg;
+@@ -379,6 +389,14 @@ static napi_status GetArrayLikeBuffer(napi_env env, napi_value array_like_value,
+           static_cast<int32_t *>(alb->data)[i] = value;
+           break;
+         }
++        case kUint32: {
++          uint32_t value;
++          nstatus = napi_get_value_uint32(env, cur_value, &value);
++          ENSURE_NAPI_OK_RETVAL(env, nstatus, nstatus);
++
++          static_cast<uint32_t *>(alb->data)[i] = value;
++          break;
++        }
+         default:
+           NAPI_THROW_ERROR(env, "Unsupported array type for generic arrays!");
+           return napi_invalid_arg;
+@@ -499,7 +517,7 @@ napi_status WebGLRenderingContext::Register(napi_env env, napi_value exports) {
+       NAPI_DEFINE_METHOD("getShaderInfoLog", GetShaderInfoLog),
+       NAPI_DEFINE_METHOD("getShaderParameter", GetShaderParameter),
+       NAPI_DEFINE_METHOD("getShaderPrecisionFormat", GetShaderPrecisionFormat),
+-      NAPI_DEFINE_METHOD("getShaderSource", ShaderSource),
++      NAPI_DEFINE_METHOD("getShaderSource", GetShaderSource),
+       NAPI_DEFINE_METHOD("getSupportedExtensions", GetSupportedExtensions),
+       NAPI_DEFINE_METHOD("getTexParameter", GetTexParameter),
+ // getUniform(program: WebGLProgram | null, location: WebGLUniformLocation | null): any;
+@@ -565,6 +583,8 @@ napi_status WebGLRenderingContext::Register(napi_env env, napi_value exports) {
+       NAPI_DEFINE_METHOD("vertexAttrib4fv", VertexAttrib4fv),
+       NAPI_DEFINE_METHOD("vertexAttribPointer", VertexAttribPointer),
+       NAPI_DEFINE_METHOD("viewport", Viewport),
++
++      NAPI_DEFINE_METHOD("eglSwapBuffers", EglSwapBuffers),
+       // clang-format on
+ 
+       // WebGL attributes:
+@@ -960,6 +980,145 @@ napi_status WebGLRenderingContext::Register(napi_env env, napi_value exports) {
+       NapiDefineIntProperty(env, GL_RED, "RED"),
+       NapiDefineIntProperty(env, GL_SYNC_GPU_COMMANDS_COMPLETE,
+                             "SYNC_GPU_COMMANDS_COMPLETE"),
++      NapiDefineIntProperty(env, GL_MAX_VERTEX_UNIFORM_COMPONENTS,
++                            "MAX_VERTEX_UNIFORM_COMPONENTS"),
++      NapiDefineIntProperty(env, GL_MAX_VERTEX_UNIFORM_BLOCKS,
++                            "MAX_VERTEX_UNIFORM_BLOCKS"),
++      NapiDefineIntProperty(env, GL_MAX_VERTEX_OUTPUT_COMPONENTS,
++                            "MAX_VERTEX_OUTPUT_COMPONENTS"),
++      NapiDefineIntProperty(env, GL_MAX_VARYING_COMPONENTS,
++                            "MAX_VARYING_COMPONENTS"),
++      NapiDefineIntProperty(env, GL_MAX_FRAGMENT_UNIFORM_COMPONENTS,
++                            "MAX_FRAGMENT_UNIFORM_COMPONENTS"),
++      NapiDefineIntProperty(env, GL_MAX_FRAGMENT_UNIFORM_BLOCKS,
++                            "MAX_FRAGMENT_UNIFORM_BLOCKS"),
++      NapiDefineIntProperty(env, GL_MAX_FRAGMENT_INPUT_COMPONENTS,
++                            "MAX_FRAGMENT_INPUT_COMPONENTS"),
++      NapiDefineIntProperty(env, GL_MIN_PROGRAM_TEXEL_OFFSET,
++                            "MIN_PROGRAM_TEXEL_OFFSET"),
++      NapiDefineIntProperty(env, GL_MAX_PROGRAM_TEXEL_OFFSET,
++                            "MAX_PROGRAM_TEXEL_OFFSET"),
++      NapiDefineIntProperty(env, GL_MAX_DRAW_BUFFERS, "MAX_DRAW_BUFFERS"),
++      NapiDefineIntProperty(env, GL_MAX_COLOR_ATTACHMENTS,
++                            "MAX_COLOR_ATTACHMENTS"),
++      NapiDefineIntProperty(env, GL_MAX_SAMPLES, "MAX_SAMPLES"),
++      NapiDefineIntProperty(env, GL_MAX_3D_TEXTURE_SIZE, "MAX_3D_TEXTURE_SIZE"),
++      NapiDefineIntProperty(env, GL_MAX_ARRAY_TEXTURE_LAYERS,
++                            "MAX_ARRAY_TEXTURE_LAYERS"),
++      NapiDefineIntProperty(env, GL_MAX_TEXTURE_LOD_BIAS,
++                            "MAX_TEXTURE_LOD_BIAS"),
++      NapiDefineIntProperty(env, GL_MAX_UNIFORM_BUFFER_BINDINGS,
++                            "MAX_UNIFORM_BUFFER_BINDINGS"),
++      NapiDefineIntProperty(env, GL_MAX_UNIFORM_BLOCK_SIZE,
++                            "MAX_UNIFORM_BLOCK_SIZE"),
++      NapiDefineIntProperty(env, GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT,
++                            "UNIFORM_BUFFER_OFFSET_ALIGNMENT"),
++      NapiDefineIntProperty(env, GL_MAX_COMBINED_UNIFORM_BLOCKS,
++                            "MAX_COMBINED_UNIFORM_BLOCKS"),
++      NapiDefineIntProperty(env, GL_MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS,
++                            "MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS"),
++      NapiDefineIntProperty(env, GL_MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS,
++                            "MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS"),
++      NapiDefineIntProperty(env,
++                            GL_MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS,
++                            "MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS"),
++      NapiDefineIntProperty(env, GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS,
++                            "MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS"),
++      NapiDefineIntProperty(env, GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS,
++                            "MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS"),
++      NapiDefineIntProperty(env, GL_MAX_ELEMENT_INDEX, "MAX_ELEMENT_INDEX"),
++      NapiDefineIntProperty(env, GL_MAX_SERVER_WAIT_TIMEOUT,
++                            "MAX_SERVER_WAIT_TIMEOUT"),
++      NapiDefineIntProperty(env, GL_COPY_READ_BUFFER_BINDING,
++                            "COPY_READ_BUFFER_BINDING"),
++      NapiDefineIntProperty(env, GL_COPY_WRITE_BUFFER_BINDING,
++                            "COPY_WRITE_BUFFER_BINDING"),
++      NapiDefineIntProperty(env, GL_DRAW_FRAMEBUFFER_BINDING,
++                            "DRAW_FRAMEBUFFER_BINDING"),
++      NapiDefineIntProperty(env, GL_FRAGMENT_SHADER_DERIVATIVE_HINT,
++                            "FRAGMENT_SHADER_DERIVATIVE_HINT"),
++      NapiDefineIntProperty(env, GL_MAX_CLIENT_WAIT_TIMEOUT_WEBGL,
++                            "MAX_CLIENT_WAIT_TIMEOUT_WEBGL"),
++      NapiDefineIntProperty(env, GL_DRAW_BUFFER0, "DRAW_BUFFER0"),
++      NapiDefineIntProperty(env, GL_DRAW_BUFFER1, "DRAW_BUFFER1"),
++      NapiDefineIntProperty(env, GL_DRAW_BUFFER2, "DRAW_BUFFER2"),
++      NapiDefineIntProperty(env, GL_DRAW_BUFFER3, "DRAW_BUFFER3"),
++      NapiDefineIntProperty(env, GL_DRAW_BUFFER4, "DRAW_BUFFER4"),
++      NapiDefineIntProperty(env, GL_DRAW_BUFFER5, "DRAW_BUFFER5"),
++      NapiDefineIntProperty(env, GL_DRAW_BUFFER6, "DRAW_BUFFER6"),
++      NapiDefineIntProperty(env, GL_DRAW_BUFFER7, "DRAW_BUFFER7"),
++      NapiDefineIntProperty(env, GL_DRAW_BUFFER8, "DRAW_BUFFER8"),
++      NapiDefineIntProperty(env, GL_DRAW_BUFFER9, "DRAW_BUFFER9"),
++      NapiDefineIntProperty(env, GL_DRAW_BUFFER10, "DRAW_BUFFER10"),
++      NapiDefineIntProperty(env, GL_DRAW_BUFFER11, "DRAW_BUFFER11"),
++      NapiDefineIntProperty(env, GL_DRAW_BUFFER12, "DRAW_BUFFER12"),
++      NapiDefineIntProperty(env, GL_DRAW_BUFFER13, "DRAW_BUFFER13"),
++      NapiDefineIntProperty(env, GL_DRAW_BUFFER14, "DRAW_BUFFER14"),
++      NapiDefineIntProperty(env, GL_DRAW_BUFFER15, "DRAW_BUFFER15"),
++      NapiDefineIntProperty(env, GL_MAX_ELEMENTS_INDICES,
++                            "MAX_ELEMENTS_INDICES"),
++      NapiDefineIntProperty(env, GL_MAX_ELEMENTS_VERTICES,
++                            "MAX_ELEMENTS_VERTICES"),
++      NapiDefineIntProperty(env, GL_PACK_ROW_LENGTH, "PACK_ROW_LENGTH"),
++      NapiDefineIntProperty(env, GL_PACK_SKIP_PIXELS, "PACK_SKIP_PIXELS"),
++      NapiDefineIntProperty(env, GL_PACK_SKIP_ROWS, "PACK_SKIP_ROWS"),
++      NapiDefineIntProperty(env, GL_PIXEL_PACK_BUFFER_BINDING,
++                            "PIXEL_PACK_BUFFER_BINDING"),
++      NapiDefineIntProperty(env, GL_PIXEL_UNPACK_BUFFER_BINDING,
++                            "PIXEL_UNPACK_BUFFER_BINDING"),
++      NapiDefineIntProperty(env, GL_RASTERIZER_DISCARD, "RASTERIZER_DISCARD"),
++      NapiDefineIntProperty(env, GL_READ_BUFFER, "READ_BUFFER"),
++      NapiDefineIntProperty(env, GL_READ_FRAMEBUFFER_BINDING,
++                            "READ_FRAMEBUFFER_BINDING"),
++      NapiDefineIntProperty(env, GL_SAMPLER_BINDING, "SAMPLER_BINDING"),
++      NapiDefineIntProperty(env, GL_TEXTURE_BINDING_2D_ARRAY,
++                            "TEXTURE_BINDING_2D_ARRAY"),
++      NapiDefineIntProperty(env, GL_TEXTURE_BINDING_3D, "TEXTURE_BINDING_3D"),
++      NapiDefineIntProperty(env, GL_TRANSFORM_FEEDBACK_ACTIVE,
++                            "TRANSFORM_FEEDBACK_ACTIVE"),
++      NapiDefineIntProperty(env, GL_TRANSFORM_FEEDBACK_BINDING,
++                            "TRANSFORM_FEEDBACK_BINDING"),
++      NapiDefineIntProperty(env, GL_TRANSFORM_FEEDBACK_BUFFER_BINDING,
++                            "TRANSFORM_FEEDBACK_BUFFER_BINDING"),
++      NapiDefineIntProperty(env, GL_TRANSFORM_FEEDBACK_PAUSED,
++                            "TRANSFORM_FEEDBACK_PAUSED"),
++      NapiDefineIntProperty(env, GL_UNIFORM_BUFFER_BINDING,
++                            "UNIFORM_BUFFER_BINDING"),
++      NapiDefineIntProperty(env, GL_UNPACK_IMAGE_HEIGHT, "UNPACK_IMAGE_HEIGHT"),
++      NapiDefineIntProperty(env, GL_UNPACK_ROW_LENGTH, "UNPACK_ROW_LENGTH"),
++      NapiDefineIntProperty(env, GL_UNPACK_SKIP_IMAGES, "UNPACK_SKIP_IMAGES"),
++      NapiDefineIntProperty(env, GL_UNPACK_SKIP_PIXELS, "UNPACK_SKIP_PIXELS"),
++      NapiDefineIntProperty(env, GL_UNPACK_SKIP_ROWS, "UNPACK_SKIP_ROWS"),
++      NapiDefineIntProperty(env, GL_VERTEX_ARRAY_BINDING,
++                            "VERTEX_ARRAY_BINDING"),
++
++      // WebGL2RenderingContextBase methods:
++      NAPI_DEFINE_METHOD("texImage3D", TexImage3D),
++      NAPI_DEFINE_METHOD("framebufferTextureLayer", FramebufferTextureLayer),
++      NAPI_DEFINE_METHOD("drawBuffers", DrawBuffers),
++      NAPI_DEFINE_METHOD("clearBufferuiv", ClearBufferuiv),
++      NAPI_DEFINE_METHOD("readBuffer", ReadBuffer),
++
++      // WebGL2 attributes:
++      NapiDefineIntProperty(env, GL_TEXTURE_3D, "TEXTURE_3D"),
++      NapiDefineIntProperty(env, GL_RGBA8UI, "RGBA8UI"),
++      NapiDefineIntProperty(env, GL_RGBA_INTEGER, "RGBA_INTEGER"),
++      NapiDefineIntProperty(env, GL_COLOR, "COLOR"),
++      NapiDefineIntProperty(env, GL_COLOR_ATTACHMENT1, "COLOR_ATTACHMENT1"),
++      NapiDefineIntProperty(env, GL_COLOR_ATTACHMENT2, "COLOR_ATTACHMENT2"),
++      NapiDefineIntProperty(env, GL_COLOR_ATTACHMENT3, "COLOR_ATTACHMENT3"),
++      NapiDefineIntProperty(env, GL_COLOR_ATTACHMENT4, "COLOR_ATTACHMENT4"),
++      NapiDefineIntProperty(env, GL_COLOR_ATTACHMENT5, "COLOR_ATTACHMENT5"),
++      NapiDefineIntProperty(env, GL_COLOR_ATTACHMENT6, "COLOR_ATTACHMENT6"),
++      NapiDefineIntProperty(env, GL_COLOR_ATTACHMENT7, "COLOR_ATTACHMENT7"),
++      NapiDefineIntProperty(env, GL_COLOR_ATTACHMENT8, "COLOR_ATTACHMENT8"),
++      NapiDefineIntProperty(env, GL_COLOR_ATTACHMENT9, "COLOR_ATTACHMENT9"),
++      NapiDefineIntProperty(env, GL_COLOR_ATTACHMENT10, "COLOR_ATTACHMENT10"),
++      NapiDefineIntProperty(env, GL_COLOR_ATTACHMENT11, "COLOR_ATTACHMENT11"),
++      NapiDefineIntProperty(env, GL_COLOR_ATTACHMENT12, "COLOR_ATTACHMENT12"),
++      NapiDefineIntProperty(env, GL_COLOR_ATTACHMENT13, "COLOR_ATTACHMENT13"),
++      NapiDefineIntProperty(env, GL_COLOR_ATTACHMENT14, "COLOR_ATTACHMENT14"),
++      NapiDefineIntProperty(env, GL_COLOR_ATTACHMENT15, "COLOR_ATTACHMENT15"),
+   };
+ 
+   // Create constructor
+@@ -986,8 +1145,8 @@ napi_status WebGLRenderingContext::NewInstance(napi_env env,
+   nstatus = napi_get_reference_value(env, constructor_ref_, &ctor_value);
+   ENSURE_NAPI_OK_RETVAL(env, nstatus, nstatus);
+ 
+-  size_t argc = 5;
+-  napi_value args[5];
++  size_t argc = 7;
++  napi_value args[7];
+   napi_value js_this;
+   nstatus = napi_get_cb_info(env, info, &argc, args, &js_this, nullptr);
+   ENSURE_NAPI_OK_RETVAL(env, nstatus, nstatus);
+@@ -1006,8 +1165,8 @@ napi_value WebGLRenderingContext::InitInternal(napi_env env,
+ 
+   ENSURE_CONSTRUCTOR_CALL_RETVAL(env, info, nullptr);
+ 
+-  size_t argc = 5;
+-  napi_value args[5];
++  size_t argc = 7;
++  napi_value args[7];
+   napi_value js_this;
+   nstatus = napi_get_cb_info(env, info, &argc, args, &js_this, nullptr);
+   ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
+@@ -1029,6 +1188,15 @@ napi_value WebGLRenderingContext::InitInternal(napi_env env,
+   nstatus = napi_get_value_bool(env, args[4], &opts.webgl_compatibility);
+   ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
+ 
++  bool offscreen;
++  nstatus = napi_get_value_bool(env, args[5], &offscreen);
++  ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
++
++  if (!offscreen) {
++    nstatus = napi_get_value_external(env, args[6], &opts.native_window);
++    ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
++  }
++
+   WebGLRenderingContext *context = new WebGLRenderingContext(env, opts);
+   ENSURE_VALUE_IS_NOT_NULL_RETVAL(env, context, nullptr);
+ 
+@@ -2555,6 +2723,10 @@ napi_value WebGLRenderingContext::GetExtension(napi_env env,
+              WebGLLoseContextExtension::IsSupported(egl_ctx)) {
+     nstatus =
+         WebGLLoseContextExtension::NewInstance(env, &webgl_extension, egl_ctx);
++  } else if (strcmp(name, "WEBGL_draw_buffers") == 0 &&
++             WebGLDrawBuffersExtension::IsSupported(egl_ctx)) {
++    nstatus =
++        WebGLDrawBuffersExtension::NewInstance(env, &webgl_extension, egl_ctx);
+   } else {
+     fprintf(stderr, "Unsupported extension: %s\n", name);
+     nstatus = napi_get_null(env, &webgl_extension);
+@@ -2578,16 +2750,277 @@ napi_value WebGLRenderingContext::GetParameter(napi_env env,
+   nstatus = GetContextUint32Params(env, info, &context, 1, &name);
+   ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
+ 
++  // https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/getParameter
++  int length = 0;
+   switch (name) {
++    //// GLint
++    // WebGL 1
++    case GL_ALPHA_BITS:
++    case GL_BLUE_BITS:
++    case GL_DEPTH_BITS:
++    case GL_GREEN_BITS:
+     case GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS:
+-    case GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS:
+     case GL_MAX_CUBE_MAP_TEXTURE_SIZE:
+-    case GL_MAX_VERTEX_ATTRIBS:
+-    case GL_MAX_VERTEX_UNIFORM_VECTORS:
+-    case GL_MAX_VARYING_VECTORS:
+     case GL_MAX_FRAGMENT_UNIFORM_VECTORS:
+-    case GL_MAX_TEXTURE_SIZE:
++    case GL_MAX_RENDERBUFFER_SIZE:
+     case GL_MAX_TEXTURE_IMAGE_UNITS:
++    case GL_MAX_TEXTURE_SIZE:
++    case GL_MAX_VARYING_VECTORS:
++    case GL_MAX_VERTEX_ATTRIBS:
++    case GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS:
++    case GL_MAX_VERTEX_UNIFORM_VECTORS:
++    case GL_PACK_ALIGNMENT:
++    case GL_RED_BITS:
++    case GL_SAMPLE_BUFFERS:
++    case GL_SAMPLES:
++    case GL_STENCIL_BACK_REF:
++    case GL_STENCIL_BITS:
++    case GL_STENCIL_CLEAR_VALUE:
++    case GL_STENCIL_REF:
++    case GL_SUBPIXEL_BITS:
++    case GL_UNPACK_ALIGNMENT:
++    // WebGL 2
++    case GL_MAX_3D_TEXTURE_SIZE:
++    case GL_MAX_ARRAY_TEXTURE_LAYERS:
++    case GL_MAX_COLOR_ATTACHMENTS:
++    case GL_MAX_COMBINED_UNIFORM_BLOCKS:
++    case GL_MAX_DRAW_BUFFERS:
++    case GL_MAX_ELEMENTS_INDICES:
++    case GL_MAX_ELEMENTS_VERTICES:
++    case GL_MAX_FRAGMENT_INPUT_COMPONENTS:
++    case GL_MAX_FRAGMENT_UNIFORM_BLOCKS:
++    case GL_MAX_FRAGMENT_UNIFORM_COMPONENTS:
++    case GL_MAX_PROGRAM_TEXEL_OFFSET:
++    case GL_MAX_SAMPLES:
++    case GL_MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS:
++    case GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS:
++    case GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS:
++    case GL_MAX_UNIFORM_BUFFER_BINDINGS:
++    case GL_MAX_VARYING_COMPONENTS:
++    case GL_MAX_VERTEX_OUTPUT_COMPONENTS:
++    case GL_MAX_VERTEX_UNIFORM_BLOCKS:
++    case GL_MAX_VERTEX_UNIFORM_COMPONENTS:
++    case GL_MIN_PROGRAM_TEXEL_OFFSET:
++    case GL_PACK_ROW_LENGTH:
++    case GL_PACK_SKIP_PIXELS:
++    case GL_PACK_SKIP_ROWS:
++    case GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT:
++    case GL_UNPACK_IMAGE_HEIGHT:
++    case GL_UNPACK_ROW_LENGTH:
++    case GL_UNPACK_SKIP_IMAGES:
++    case GL_UNPACK_SKIP_PIXELS:
++    case GL_UNPACK_SKIP_ROWS:
++      goto getGLintValue;
++      break;
++
++    //// GLint64
++    // WebGL 2
++    // case GL_MAX_CLIENT_WAIT_TIMEOUT_WEBGL: // see specials below
++    case GL_MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS:
++    case GL_MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS:
++    case GL_MAX_ELEMENT_INDEX:
++    case GL_MAX_SERVER_WAIT_TIMEOUT:
++    case GL_MAX_UNIFORM_BLOCK_SIZE:
++      goto getGLint64Value;
++      break;
++
++    //// GLuint
++    // WebGL 1
++    case GL_STENCIL_BACK_VALUE_MASK:
++    case GL_STENCIL_BACK_WRITEMASK:
++    case GL_STENCIL_VALUE_MASK:
++    case GL_STENCIL_WRITEMASK:
++      goto getGLuintValue;
++      break;
++
++    //// GLenum
++    // WebGL 1
++    case GL_ACTIVE_TEXTURE:
++    case GL_BLEND_DST_ALPHA:
++    case GL_BLEND_DST_RGB:
++    case GL_BLEND_EQUATION:  // equals to GL_BLEND_EQUATION_RGB
++    case GL_BLEND_EQUATION_ALPHA:
++    case GL_BLEND_SRC_ALPHA:
++    case GL_BLEND_SRC_RGB:
++    case GL_CULL_FACE_MODE:
++    case GL_DEPTH_FUNC:
++    case GL_FRONT_FACE:
++    case GL_GENERATE_MIPMAP_HINT:
++    case GL_IMPLEMENTATION_COLOR_READ_FORMAT:
++    case GL_IMPLEMENTATION_COLOR_READ_TYPE:
++    case GL_STENCIL_BACK_FAIL:
++    case GL_STENCIL_BACK_FUNC:
++    case GL_STENCIL_BACK_PASS_DEPTH_FAIL:
++    case GL_STENCIL_BACK_PASS_DEPTH_PASS:
++    case GL_STENCIL_FAIL:
++    case GL_STENCIL_FUNC:
++    case GL_STENCIL_PASS_DEPTH_FAIL:
++    case GL_STENCIL_PASS_DEPTH_PASS:
++    // case GL_UNPACK_COLORSPACE_CONVERSION_WEBGL: // see specials below
++    // WebGL 2
++    case GL_DRAW_BUFFER0:
++    case GL_DRAW_BUFFER1:
++    case GL_DRAW_BUFFER2:
++    case GL_DRAW_BUFFER3:
++    case GL_DRAW_BUFFER4:
++    case GL_DRAW_BUFFER5:
++    case GL_DRAW_BUFFER6:
++    case GL_DRAW_BUFFER7:
++    case GL_DRAW_BUFFER8:
++    case GL_DRAW_BUFFER9:
++    case GL_DRAW_BUFFER10:
++    case GL_DRAW_BUFFER11:
++    case GL_DRAW_BUFFER12:
++    case GL_DRAW_BUFFER13:
++    case GL_DRAW_BUFFER14:
++    case GL_DRAW_BUFFER15:
++    case GL_FRAGMENT_SHADER_DERIVATIVE_HINT:
++    case GL_READ_BUFFER:
++      goto getGLenumValue;
++      break;
++
++    //// GLfloat
++    // WebGL 1
++    case GL_DEPTH_CLEAR_VALUE:
++    case GL_LINE_WIDTH:
++    case GL_POLYGON_OFFSET_FACTOR:
++    case GL_POLYGON_OFFSET_UNITS:
++    case GL_SAMPLE_COVERAGE_VALUE:
++    // WebGL 2
++    case GL_MAX_TEXTURE_LOD_BIAS:
++    // EXT_texture_filter_anisotropic extension
++    case GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT:
++      goto getGLfloatValue;
++      break;
++
++    //// GLboolean
++    // WebGL 1
++    case GL_BLEND:
++    case GL_CULL_FACE:
++    case GL_DEPTH_TEST:
++    case GL_DEPTH_WRITEMASK:
++    case GL_DITHER:
++    case GL_POLYGON_OFFSET_FILL:
++    case GL_SAMPLE_COVERAGE_INVERT:
++    case GL_SCISSOR_TEST:
++    case GL_STENCIL_TEST:
++    case GL_UNPACK_FLIP_Y_WEBGL:
++    case GL_UNPACK_PREMULTIPLY_ALPHA_WEBGL:
++    // WebGL 2
++    case GL_RASTERIZER_DISCARD:
++    case GL_SAMPLE_ALPHA_TO_COVERAGE:
++    case GL_SAMPLE_COVERAGE:
++    case GL_TRANSFORM_FEEDBACK_ACTIVE:
++    case GL_TRANSFORM_FEEDBACK_PAUSED:
++    // EXT_disjoint_timer_query extension
++    case GL_GPU_DISJOINT_EXT:
++      goto getGLbooleanValue;
++      break;
++
++    //// DOMString
++    // WebGL 1
++    case GL_RENDERER:
++    case GL_SHADING_LANGUAGE_VERSION:
++    case GL_VENDOR:
++    case GL_VERSION:
++      // WEBGL_debug_renderer_info extension
++      // case GL_UNMASKED_VENDOR_WEBGL:
++      // case GL_UNMASKED_RENDERER_WEBGL:
++      goto getDOMStringValue;
++      break;
++
++    //// Int32Array
++    // WebGL 1
++    case GL_MAX_VIEWPORT_DIMS:
++      length = 2;
++      goto getInt32ArrayValue;
++    case GL_SCISSOR_BOX:
++    case GL_VIEWPORT:
++      length = 4;
++      goto getInt32ArrayValue;
++      break;
++
++    //// Float32Array
++    // WebGL 1
++    case GL_ALIASED_LINE_WIDTH_RANGE:
++    case GL_ALIASED_POINT_SIZE_RANGE:
++    case GL_DEPTH_RANGE:
++      length = 2;
++      goto getFloat32ArrayValue;
++      break;
++    case GL_BLEND_COLOR:
++    case GL_COLOR_CLEAR_VALUE:
++      length = 4;
++      goto getFloat32ArrayValue;
++      break;
++
++    //// BINDING (as GLint)
++    // WebGL 1
++    case GL_ARRAY_BUFFER_BINDING:
++    case GL_ELEMENT_ARRAY_BUFFER_BINDING:
++    case GL_FRAMEBUFFER_BINDING:  // equals to GL_DRAW_FRAMEBUFFER_BINDING
++    case GL_RENDERBUFFER_BINDING:
++    case GL_TEXTURE_BINDING_2D:
++    case GL_TEXTURE_BINDING_CUBE_MAP:
++    case GL_CURRENT_PROGRAM:
++    // WebGL 2
++    case GL_COPY_READ_BUFFER_BINDING:
++    case GL_COPY_WRITE_BUFFER_BINDING:
++    case GL_PIXEL_PACK_BUFFER_BINDING:
++    case GL_PIXEL_UNPACK_BUFFER_BINDING:
++    case GL_READ_FRAMEBUFFER_BINDING:
++    case GL_SAMPLER_BINDING:
++    case GL_TEXTURE_BINDING_2D_ARRAY:
++    case GL_TEXTURE_BINDING_3D:
++    case GL_TRANSFORM_FEEDBACK_BINDING:
++    case GL_TRANSFORM_FEEDBACK_BUFFER_BINDING:
++    case GL_UNIFORM_BUFFER_BINDING:
++    case GL_VERTEX_ARRAY_BINDING:
++      goto getBindingValue;
++      break;
++
++    //// Specials
++    case GL_UNPACK_COLORSPACE_CONVERSION_WEBGL: {
++      napi_value params_value;
++      nstatus = napi_create_int32(env, GL_BROWSER_DEFAULT_WEBGL, &params_value);
++      ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
++      return params_value;
++    }
++    case GL_MAX_CLIENT_WAIT_TIMEOUT_WEBGL: {
++      napi_value params_value;
++      nstatus = napi_create_int64(env, 0, &params_value);
++      ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
++      return params_value;
++    }
++    case GL_COLOR_WRITEMASK: {
++      // sequence<GLboolean> (with 4 values)
++      GLboolean params[4] = {0};
++      context->eglContextWrapper_->glGetBooleanv(name, params);
++
++      napi_value array_value;
++      nstatus = napi_create_array_with_length(env, 4, &array_value);
++      ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
++
++      for (int i = 0; i < 4; i++) {
++        napi_value params_value;
++        nstatus = napi_create_int32(env, params[i], &params_value);
++        ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
++
++        napi_value params_bool_value;
++        nstatus = napi_coerce_to_bool(env, params_value, &params_bool_value);
++        ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
++
++        nstatus = napi_set_element(env, array_value, i, params_bool_value);
++        ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
++      }
++
++      return array_value;
++    }
++
++    getGLenumValue:
++    getGLuintValue:
++    getGLint64Value:
++    getGLintValue : {
+       GLint params;
+       context->eglContextWrapper_->glGetIntegerv(name, &params);
+ 
+@@ -2596,34 +3029,51 @@ napi_value WebGLRenderingContext::GetParameter(napi_env env,
+       ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
+ 
+       return params_value;
++    }
+ 
+-    case GL_VERSION: {
+-      const GLubyte *str = context->eglContextWrapper_->glGetString(name);
+-      if (str) {
+-        const char *str_c_str = reinterpret_cast<const char *>(str);
+-        napi_value str_value;
+-        nstatus = napi_create_string_utf8(env, str_c_str, strlen(str_c_str),
+-                                          &str_value);
++    getBindingValue : {
++      GLint params;
++      context->eglContextWrapper_->glGetIntegerv(name, &params);
++      // null
++      if (params == 0) {
++        napi_value null_value;
++        nstatus = napi_get_null(env, &null_value);
+         ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
+-
+-        return str_value;
++        return null_value;
+       }
+-      break;
++      napi_value params_value;
++      nstatus = napi_create_int32(env, params, &params_value);
++      ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
++      return params_value;
++    }
++
++    getGLfloatValue : {
++      GLfloat params;
++      context->eglContextWrapper_->glGetFloatv(name, &params);
++
++      napi_value params_value;
++      nstatus = napi_create_double(env, (double)params, &params_value);
++      ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
++
++      return params_value;
+     }
+ 
+-    case GL_ARRAY_BUFFER_BINDING: {
+-      GLint previous_buffer = 0;
+-      context->eglContextWrapper_->glGetIntegerv(GL_ARRAY_BUFFER_BINDING,
+-                                                 &previous_buffer);
++    getGLbooleanValue : {
++      GLboolean params;
++      context->eglContextWrapper_->glGetBooleanv(name, &params);
++
++      napi_value params_value;
++      nstatus = napi_create_int32(env, params, &params_value);
++      ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
+ 
+-      napi_value previous_buffer_value;
+-      nstatus = napi_create_int32(env, previous_buffer, &previous_buffer_value);
++      napi_value params_bool_value;
++      nstatus = napi_coerce_to_bool(env, params_value, &params_bool_value);
+       ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
+ 
+-      return previous_buffer_value;
++      return params_bool_value;
+     }
+ 
+-    case GL_RENDERER: {
++    getDOMStringValue : {
+       const GLubyte *str = context->eglContextWrapper_->glGetString(name);
+       if (str) {
+         const char *str_c_str = reinterpret_cast<const char *>(str);
+@@ -2637,6 +3087,48 @@ napi_value WebGLRenderingContext::GetParameter(napi_env env,
+       break;
+     }
+ 
++    getInt32ArrayValue : {
++      GLint params[4] = {0};
++      context->eglContextWrapper_->glGetIntegerv(name, params);
++
++      size_t byte_length = sizeof(GLint) * length;
++
++      napi_value arraybuffer;
++      void *arraybuffer_data = nullptr;
++      nstatus = napi_create_arraybuffer(env, byte_length, &arraybuffer_data,
++                                        &arraybuffer);
++      ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
++      memcpy(arraybuffer_data, params, byte_length);
++
++      napi_value int32array;
++      nstatus = napi_create_typedarray(env, napi_int32_array, length,
++                                       arraybuffer, 0, &int32array);
++      ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
++
++      return int32array;
++    }
++
++    getFloat32ArrayValue : {
++      GLfloat params[4] = {0};
++      context->eglContextWrapper_->glGetFloatv(name, params);
++
++      size_t byte_length = sizeof(GLfloat) * length;
++
++      napi_value arraybuffer;
++      void *arraybuffer_data = nullptr;
++      nstatus = napi_create_arraybuffer(env, byte_length, &arraybuffer_data,
++                                        &arraybuffer);
++      ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
++      memcpy(arraybuffer_data, params, byte_length);
++
++      napi_value float32array;
++      nstatus = napi_create_typedarray(env, napi_float32_array, length,
++                                       arraybuffer, 0, &float32array);
++      ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
++
++      return float32array;
++    }
++
+       // TODO(kreeger): Add more of these
+ 
+     default:
+@@ -2665,6 +3157,22 @@ napi_value WebGLRenderingContext::Flush(napi_env env, napi_callback_info info) {
+   return nullptr;
+ }
+ 
++/* static */
++napi_value WebGLRenderingContext::EglSwapBuffers(napi_env env, napi_callback_info info) {
++  LOG_CALL("EglSwapBuffers");
++
++  WebGLRenderingContext *context = nullptr;
++  napi_status nstatus = GetContext(env, info, &context);
++  ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
++
++  context->eglContextWrapper_->SwapBuffers();
++
++#if DEBUG
++  context->CheckForErrors();
++#endif
++  return nullptr;
++}
++
+ /* static */
+ napi_value WebGLRenderingContext::FramebufferRenderbuffer(
+     napi_env env, napi_callback_info info) {
+@@ -3136,7 +3644,7 @@ napi_value WebGLRenderingContext::GetContextAttributes(
+                                     stencil_value);
+   ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
+ 
+-  return stencil_value;
++  return context_attr_value;
+ }
+ 
+ /* static */
+@@ -4140,6 +4648,37 @@ napi_value WebGLRenderingContext::TexImage2D(napi_env env,
+   return nullptr;
+ }
+ 
++
++/* static */
++napi_value WebGLRenderingContext::GetShaderSource(napi_env env,
++                                               napi_callback_info info) {
++  LOG_CALL("GetShaderSource");
++  napi_status nstatus;
++
++  WebGLRenderingContext *context = nullptr;
++  GLuint shader;
++  nstatus = GetContextUint32Params(env, info, &context, 1, &shader);
++  ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
++
++  GLint source_length;
++  context->eglContextWrapper_->glGetShaderiv(shader, GL_SHADER_SOURCE_LENGTH,
++                                             &source_length);
++
++  char *error = new char[source_length];
++  context->eglContextWrapper_->glGetShaderSource(shader, source_length,
++                                                 &source_length, error);
++
++  napi_value error_value;
++  nstatus = napi_create_string_utf8(env, error, source_length, &error_value);
++  delete[] error;
++  ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
++
++#if DEBUG
++  context->CheckForErrors();
++#endif
++  return error_value;
++}
++
+ /* static */
+ napi_value WebGLRenderingContext::ShaderSource(napi_env env,
+                                                napi_callback_info info) {
+@@ -5643,4 +6182,248 @@ napi_value WebGLRenderingContext::Viewport(napi_env env,
+   return nullptr;
+ }
+ 
++/* static */
++napi_value WebGLRenderingContext::TexImage3D(napi_env env,
++                                             napi_callback_info info) {
++  LOG_CALL("TexImage3D");
++
++  napi_status nstatus;
++
++  size_t argc = 10;
++  napi_value args[10];
++  napi_value js_this;
++  nstatus = napi_get_cb_info(env, info, &argc, args, &js_this, nullptr);
++  ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
++
++  GLsizei width;
++  GLsizei height;
++  GLsizei depth;
++  GLsizei border;
++  GLenum format;
++  GLint type;
++  ArrayLikeBuffer alb;
++
++  if (argc == 10) {
++    ENSURE_ARGC_RETVAL(env, argc, 10, nullptr);
++
++    ENSURE_VALUE_IS_NUMBER_RETVAL(env, args[0], nullptr);
++    ENSURE_VALUE_IS_NUMBER_RETVAL(env, args[1], nullptr);
++    ENSURE_VALUE_IS_NUMBER_RETVAL(env, args[2], nullptr);
++    ENSURE_VALUE_IS_NUMBER_RETVAL(env, args[3], nullptr);
++    ENSURE_VALUE_IS_NUMBER_RETVAL(env, args[4], nullptr);
++    ENSURE_VALUE_IS_NUMBER_RETVAL(env, args[5], nullptr);
++    ENSURE_VALUE_IS_NUMBER_RETVAL(env, args[6], nullptr);
++    ENSURE_VALUE_IS_NUMBER_RETVAL(env, args[7], nullptr);
++    ENSURE_VALUE_IS_NUMBER_RETVAL(env, args[8], nullptr);
++
++    nstatus = napi_get_value_int32(env, args[3], &width);
++    ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
++
++    nstatus = napi_get_value_int32(env, args[4], &height);
++    ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
++
++    nstatus = napi_get_value_int32(env, args[5], &depth);
++    ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
++
++    nstatus = napi_get_value_int32(env, args[6], &border);
++    ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
++
++    nstatus = napi_get_value_uint32(env, args[7], &format);
++    ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
++
++    nstatus = napi_get_value_int32(env, args[8], &type);
++    ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
++
++  } else {
++      NAPI_THROW_ERROR(env, "invalid args");
++      return nullptr;
++  }
++
++  GLenum target;
++  nstatus = napi_get_value_uint32(env, args[0], &target);
++  ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
++
++  GLint level;
++  nstatus = napi_get_value_int32(env, args[1], &level);
++  ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
++
++  GLenum internal_format;
++  nstatus = napi_get_value_uint32(env, args[2], &internal_format);
++  ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
++
++  WebGLRenderingContext *context = nullptr;
++  nstatus = UnwrapContext(env, js_this, &context);
++  ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
++
++  context->eglContextWrapper_->glTexImage3D(target, level, internal_format,
++                                            width, height, depth, border, format, type,
++                                            alb.data);
++
++#if DEBUG
++  context->CheckForErrors();
++#endif
++  return nullptr;
++}
++
++/* static */
++napi_value WebGLRenderingContext::FramebufferTextureLayer(napi_env env,
++                                                          napi_callback_info info) {
++  LOG_CALL("FramebufferTextureLayer");
++
++  napi_status nstatus;
++
++  size_t argc = 5;
++  napi_value args[5];
++  napi_value js_this;
++  nstatus = napi_get_cb_info(env, info, &argc, args, &js_this, nullptr);
++  ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
++
++  ENSURE_ARGC_RETVAL(env, argc, 5, nullptr);
++
++  GLenum target;
++  ENSURE_VALUE_IS_NUMBER_RETVAL(env, args[0], nullptr);
++  nstatus = napi_get_value_uint32(env, args[0], &target);
++  ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
++
++  GLenum attachment;
++  ENSURE_VALUE_IS_NUMBER_RETVAL(env, args[1], nullptr);
++  nstatus = napi_get_value_uint32(env, args[1], &attachment);
++  ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
++
++  GLuint texture;
++  ENSURE_VALUE_IS_NUMBER_RETVAL(env, args[2], nullptr);
++  nstatus = napi_get_value_uint32(env, args[2], &texture);
++  ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
++
++  GLint level;
++  ENSURE_VALUE_IS_NUMBER_RETVAL(env, args[3], nullptr);
++  nstatus = napi_get_value_int32(env, args[3], &level);
++  ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
++
++  GLint layer;
++  ENSURE_VALUE_IS_NUMBER_RETVAL(env, args[4], nullptr);
++  nstatus = napi_get_value_int32(env, args[4], &layer);
++  ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
++
++  WebGLRenderingContext *context = nullptr;
++  nstatus = UnwrapContext(env, js_this, &context);
++  ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
++
++  context->eglContextWrapper_->glFramebufferTextureLayer(
++      target, attachment, texture, level, layer);
++
++#if DEBUG
++  context->CheckForErrors();
++#endif
++  return nullptr;
++}
++
++/* static */
++napi_value WebGLRenderingContext::DrawBuffers(napi_env env,
++                                              napi_callback_info info) {
++  LOG_CALL("DrawBuffers");
++
++  napi_status nstatus;
++
++  size_t argc = 1;
++  napi_value args[1];
++  napi_value js_this;
++  nstatus = napi_get_cb_info(env, info, &argc, args, &js_this, nullptr);
++  ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
++
++  ENSURE_ARGC_RETVAL(env, argc, 1, nullptr);
++
++  ArrayLikeBuffer buffers(kUint32);
++  nstatus = GetArrayLikeBuffer(env, args[0], &buffers);
++  ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
++
++  WebGLRenderingContext* context = nullptr;
++  nstatus = UnwrapContext(env, js_this, &context);
++  ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
++
++  context->eglContextWrapper_->glDrawBuffers(
++      static_cast<GLsizei>(buffers.length),
++      static_cast<GLenum*>(buffers.data));
++
++#if DEBUG
++  context->CheckForErrors();
++#endif
++  return nullptr;
++}
++
++/* static */
++napi_value WebGLRenderingContext::ClearBufferuiv(napi_env env,
++                                                 napi_callback_info info) {
++  LOG_CALL("ClearBufferuiv");
++
++  napi_status nstatus;
++
++  size_t argc = 3;
++  napi_value args[3];
++  napi_value js_this;
++  nstatus = napi_get_cb_info(env, info, &argc, args, &js_this, nullptr);
++  ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
++
++  ENSURE_ARGC_RETVAL(env, argc, 3, nullptr);
++
++  GLenum buffer;
++  ENSURE_VALUE_IS_NUMBER_RETVAL(env, args[0], nullptr);
++  nstatus = napi_get_value_uint32(env, args[0], &buffer);
++  ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
++
++  GLint drawbuffer;
++  ENSURE_VALUE_IS_NUMBER_RETVAL(env, args[1], nullptr);
++  nstatus = napi_get_value_int32(env, args[1], &drawbuffer);
++  ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
++
++  ArrayLikeBuffer value(kUint32);
++  nstatus = GetArrayLikeBuffer(env, args[2], &value);
++  ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
++
++  WebGLRenderingContext* context = nullptr;
++  nstatus = UnwrapContext(env, js_this, &context);
++  ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
++
++  context->eglContextWrapper_->glClearBufferuiv(
++      buffer, drawbuffer,
++      static_cast<GLuint*>(value.data));
++
++#if DEBUG
++  context->CheckForErrors();
++#endif
++  return nullptr;
++}
++
++/* static */
++napi_value WebGLRenderingContext::ReadBuffer(napi_env env,
++                                             napi_callback_info info) {
++  LOG_CALL("ReadBuffer");
++
++  napi_status nstatus;
++
++  size_t argc = 1;
++  napi_value args[1];
++  napi_value js_this;
++  nstatus = napi_get_cb_info(env, info, &argc, args, &js_this, nullptr);
++  ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
++
++  ENSURE_ARGC_RETVAL(env, argc, 1, nullptr);
++
++  GLenum src;
++  ENSURE_VALUE_IS_NUMBER_RETVAL(env, args[0], nullptr);
++  nstatus = napi_get_value_uint32(env, args[0], &src);
++  ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
++
++  WebGLRenderingContext* context = nullptr;
++  nstatus = UnwrapContext(env, js_this, &context);
++  ENSURE_NAPI_OK_RETVAL(env, nstatus, nullptr);
++
++  context->eglContextWrapper_->glReadBuffer(src);
++
++#if DEBUG
++  context->CheckForErrors();
++#endif
++  return nullptr;
++}
++
+ }  // namespace nodejsgl
+diff --git a/binding/webgl_rendering_context.h b/binding/webgl_rendering_context.h
+index 3fb9c2c..52e6aa5 100644
+--- a/binding/webgl_rendering_context.h
++++ b/binding/webgl_rendering_context.h
+@@ -119,6 +119,7 @@ class WebGLRenderingContext {
+   static napi_value GetProgramParameter(napi_env env, napi_callback_info info);
+   static napi_value GetRenderbufferParameter(napi_env env,
+                                              napi_callback_info info);
++  static napi_value GetShaderSource(napi_env env, napi_callback_info info);
+   static napi_value GetShaderPrecisionFormat(napi_env env,
+                                              napi_callback_info info);
+   static napi_value GetShaderInfoLog(napi_env env, napi_callback_info info);
+@@ -187,6 +188,15 @@ class WebGLRenderingContext {
+   static napi_value VertexAttribPointer(napi_env env, napi_callback_info info);
+   static napi_value Viewport(napi_env env, napi_callback_info info);
+ 
++  // WebGL2RenderingContextBase methods:
++  static napi_value TexImage3D(napi_env env, napi_callback_info info);
++  static napi_value FramebufferTextureLayer(napi_env env, napi_callback_info info);
++  static napi_value DrawBuffers(napi_env env, napi_callback_info info);
++  static napi_value ClearBufferuiv(napi_env env, napi_callback_info info);
++  static napi_value ReadBuffer(napi_env env, napi_callback_info info);
++
++  static napi_value EglSwapBuffers(napi_env env, napi_callback_info info);
++
+   static napi_ref constructor_ref_;
+ 
+   bool CheckForErrors();
+diff --git a/src/binding.d.ts b/src/binding.d.ts
+index f15c244..cefe57d 100644
+--- a/src/binding.d.ts
++++ b/src/binding.d.ts
+@@ -15,12 +15,16 @@
+  * =============================================================================
+  */
+ 
++export interface NativeWindowHandle {}
++
+ export interface NodeJsGlBinding {
+   createWebGLRenderingContext(
+     width: number, 
+     height: number,
+     client_major_es_version: number,
+     client_minor_es_version: number,
+-    webgl_compatbility: boolean
++    webgl_compatbility: boolean,
++    offscreen: boolean,
++    native_window: NativeWindowHandle,
+     ): WebGLRenderingContext | WebGL2RenderingContext;
+ }
+diff --git a/src/index.ts b/src/index.ts
+index d931684..b08fae7 100644
+--- a/src/index.ts
++++ b/src/index.ts
+@@ -16,11 +16,8 @@
+  */
+ 
+ // tslint:disable-next-line:no-require-imports
+-import bindings = require('bindings');
+-import {NodeJsGlBinding} from './binding';
+-
+-const binding = bindings('nodejs_gl_binding') as NodeJsGlBinding;
+-
++import binding from 'external/node-gles/node-gles-addon';
++import {NodeJsGlBinding, NativeWindowHandle} from './binding';
+ 
+ interface ContextArguments {
+     width?: number,
+@@ -28,6 +25,7 @@ interface ContextArguments {
+     webGLCompability?: boolean,
+     majorVersion?: number,
+     minorVersion?: number,
++    nativeWindow?: NativeWindowHandle,
+ };
+ 
+ const createWebGLRenderingContext = function(args: ContextArguments = {}) {
+@@ -36,12 +34,16 @@ const createWebGLRenderingContext = function(args: ContextArguments = {}) {
+     const webGLCompability = args.webGLCompability || false;
+     const majorVersion =  args.majorVersion || 3;
+     const minorVersion =  args.minorVersion || 0;
++    const nativeWindow = args.nativeWindow || null;
++    const offscreen = !nativeWindow;
+     return binding.createWebGLRenderingContext(
+         width,
+         height,
+         majorVersion,
+         minorVersion,
+         webGLCompability,
++        offscreen,
++        nativeWindow,
+     );
+ 
+ 
+diff --git a/src/tests/get_parameter_test.ts b/src/tests/get_parameter_test.ts
+new file mode 100644
+index 0000000..e187829
+--- /dev/null
++++ b/src/tests/get_parameter_test.ts
+@@ -0,0 +1,329 @@
++import * as gles from '../.';
++
++declare interface WebGLParameterDefinition {
++  name: string;
++  type: string;
++  subType?: string;
++  length?: number;
++  nullable?: boolean;
++  extension?: string;
++}
++class VerifyResult {
++  passed: boolean = false;
++  name: string = '';
++  message: string = '';
++  object: any;
++
++  constructor() {
++  }
++
++  setPassed(passed: boolean) {
++    this.passed = passed;
++    return this;
++  }
++
++  setName(name: string) {
++    this.name = name;
++    return this;
++  }
++
++  setMessage(message: string) {
++    this.message = message;
++    return this;
++  }
++
++  setObject(...args: any[]) {
++    this.object = args;
++    return this;
++  }
++
++  print() {
++    const { passed, name, message, object } = this;
++    const args = [passed ? '√' : 'x', name, passed ? 'passed.' : 'failed.'];
++    if (message) args.push(message);
++    if (object) {
++      if (Array.isArray(object)) object.forEach(o => args.push(o));
++      else args.push(object);
++    }
++    passed ? console.log.apply(console, args) : console.warn.apply(console, args);
++  }
++}
++
++// https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/getParameter
++const webGL1ParameterDefinitions: WebGLParameterDefinition[] = [
++  { "name": "ACTIVE_TEXTURE", "type": "GLenum" },
++  { "name": "ALIASED_LINE_WIDTH_RANGE", "type": "Float32Array", "length": 2 },
++  { "name": "ALIASED_POINT_SIZE_RANGE", "type": "Float32Array", "length": 2 },
++  { "name": "ALPHA_BITS", "type": "GLint" },
++  { "name": "ARRAY_BUFFER_BINDING", "type": "WebGLBuffer" },
++  { "name": "BLEND", "type": "GLboolean" },
++  { "name": "BLEND_COLOR", "type": "Float32Array", "length": 4 },
++  { "name": "BLEND_DST_ALPHA", "type": "GLenum" },
++  { "name": "BLEND_DST_RGB", "type": "GLenum" },
++  { "name": "BLEND_EQUATION", "type": "GLenum" },
++  { "name": "BLEND_EQUATION_ALPHA", "type": "GLenum" },
++  { "name": "BLEND_EQUATION_RGB", "type": "GLenum" },
++  { "name": "BLEND_SRC_ALPHA", "type": "GLenum" },
++  { "name": "BLEND_SRC_RGB", "type": "GLenum" },
++  { "name": "BLUE_BITS", "type": "GLint" },
++  { "name": "COLOR_CLEAR_VALUE", "type": "Float32Array", "length": 4 },
++  { "name": "COLOR_WRITEMASK", "type": "Array", "subType": "GLboolean", "length": 4 },
++  // { "name": "COMPRESSED_TEXTURE_FORMATS", "type": "Uint32Array" }, // TODO
++  { "name": "CULL_FACE", "type": "GLboolean" },
++  { "name": "CULL_FACE_MODE", "type": "GLenum" },
++  { "name": "CURRENT_PROGRAM", "type": "WebGLProgram", "nullable": true },
++  { "name": "DEPTH_BITS", "type": "GLint" },
++  { "name": "DEPTH_CLEAR_VALUE", "type": "GLfloat" },
++  { "name": "DEPTH_FUNC", "type": "GLenum" },
++  { "name": "DEPTH_RANGE", "type": "Float32Array", "length": 2 },
++  { "name": "DEPTH_TEST", "type": "GLboolean" },
++  { "name": "DEPTH_WRITEMASK", "type": "GLboolean" },
++  { "name": "DITHER", "type": "GLboolean" },
++  { "name": "ELEMENT_ARRAY_BUFFER_BINDING", "type": "WebGLBuffer" },
++  { "name": "FRAMEBUFFER_BINDING", "type": "WebGLFramebuffer", "nullable": true },
++  { "name": "FRONT_FACE", "type": "GLenum" },
++  { "name": "GENERATE_MIPMAP_HINT", "type": "GLenum" },
++  { "name": "GREEN_BITS", "type": "GLint" },
++  { "name": "IMPLEMENTATION_COLOR_READ_FORMAT", "type": "GLenum" },
++  { "name": "IMPLEMENTATION_COLOR_READ_TYPE", "type": "GLenum" },
++  { "name": "LINE_WIDTH", "type": "GLfloat" },
++  { "name": "MAX_COMBINED_TEXTURE_IMAGE_UNITS", "type": "GLint" },
++  { "name": "MAX_CUBE_MAP_TEXTURE_SIZE", "type": "GLint" },
++  { "name": "MAX_FRAGMENT_UNIFORM_VECTORS", "type": "GLint" },
++  { "name": "MAX_RENDERBUFFER_SIZE", "type": "GLint" },
++  { "name": "MAX_TEXTURE_IMAGE_UNITS", "type": "GLint" },
++  { "name": "MAX_TEXTURE_SIZE", "type": "GLint" },
++  { "name": "MAX_VARYING_VECTORS", "type": "GLint" },
++  { "name": "MAX_VERTEX_ATTRIBS", "type": "GLint" },
++  { "name": "MAX_VERTEX_TEXTURE_IMAGE_UNITS", "type": "GLint" },
++  { "name": "MAX_VERTEX_UNIFORM_VECTORS", "type": "GLint" },
++  { "name": "MAX_VIEWPORT_DIMS", "type": "Int32Array", "length": 2 },
++  { "name": "PACK_ALIGNMENT", "type": "GLint" },
++  { "name": "POLYGON_OFFSET_FACTOR", "type": "GLfloat" },
++  { "name": "POLYGON_OFFSET_FILL", "type": "GLboolean" },
++  { "name": "POLYGON_OFFSET_UNITS", "type": "GLfloat" },
++  { "name": "RED_BITS", "type": "GLint" },
++  { "name": "RENDERBUFFER_BINDING", "type": "WebGLRenderbuffer", "nullable": true },
++  { "name": "RENDERER", "type": "DOMString" },
++  { "name": "SAMPLE_BUFFERS", "type": "GLint" },
++  { "name": "SAMPLE_COVERAGE_INVERT", "type": "GLboolean" },
++  { "name": "SAMPLE_COVERAGE_VALUE", "type": "GLfloat" },
++  { "name": "SAMPLES", "type": "GLint" },
++  { "name": "SCISSOR_BOX", "type": "Int32Array", "length": 4 },
++  { "name": "SCISSOR_TEST", "type": "GLboolean" },
++  { "name": "SHADING_LANGUAGE_VERSION", "type": "DOMString" },
++  { "name": "STENCIL_BACK_FAIL", "type": "GLenum" },
++  { "name": "STENCIL_BACK_FUNC", "type": "GLenum" },
++  { "name": "STENCIL_BACK_PASS_DEPTH_FAIL", "type": "GLenum" },
++  { "name": "STENCIL_BACK_PASS_DEPTH_PASS", "type": "GLenum" },
++  { "name": "STENCIL_BACK_REF", "type": "GLint" },
++  { "name": "STENCIL_BACK_VALUE_MASK", "type": "GLuint" },
++  { "name": "STENCIL_BACK_WRITEMASK", "type": "GLuint" },
++  { "name": "STENCIL_BITS", "type": "GLint" },
++  { "name": "STENCIL_CLEAR_VALUE", "type": "GLint" },
++  { "name": "STENCIL_FAIL", "type": "GLenum" },
++  { "name": "STENCIL_FUNC", "type": "GLenum" },
++  { "name": "STENCIL_PASS_DEPTH_FAIL", "type": "GLenum" },
++  { "name": "STENCIL_PASS_DEPTH_PASS", "type": "GLenum" },
++  { "name": "STENCIL_REF", "type": "GLint" },
++  { "name": "STENCIL_TEST", "type": "GLboolean" },
++  { "name": "STENCIL_VALUE_MASK", "type": "GLuint" },
++  { "name": "STENCIL_WRITEMASK", "type": "GLuint" },
++  { "name": "SUBPIXEL_BITS", "type": "GLint" },
++  { "name": "TEXTURE_BINDING_2D", "type": "WebGLTexture", "nullable": true },
++  { "name": "TEXTURE_BINDING_CUBE_MAP", "type": "WebGLTexture", "nullable": true },
++  { "name": "UNPACK_ALIGNMENT", "type": "GLint" },
++  { "name": "UNPACK_COLORSPACE_CONVERSION_WEBGL", "type": "GLenum" },
++  { "name": "UNPACK_FLIP_Y_WEBGL", "type": "GLboolean" },
++  { "name": "UNPACK_PREMULTIPLY_ALPHA_WEBGL", "type": "GLboolean" },
++  { "name": "VENDOR", "type": "DOMString" },
++  { "name": "VERSION", "type": "DOMString" },
++  { "name": "VIEWPORT", "type": "Int32Array", "length": 4 },
++];
++const webGL2ParameterDefinitions: WebGLParameterDefinition[] = [
++  { "name": "COPY_READ_BUFFER_BINDING", "type": "WebGLBuffer", "nullable": true },
++  { "name": "COPY_WRITE_BUFFER_BINDING", "type": "WebGLBuffer", "nullable": true },
++  // DRAW_BUFFERi, i from 0 to gl.getParameter(ext.MAX_DRAW_BUFFERS)-1
++  { "name": "DRAW_BUFFER0", "type": "GLenum" },
++  { "name": "DRAW_FRAMEBUFFER_BINDING", "type": "WebGLFramebuffer", "nullable": true },
++  { "name": "FRAGMENT_SHADER_DERIVATIVE_HINT", "type": "GLenum" },
++  { "name": "MAX_3D_TEXTURE_SIZE", "type": "GLint" },
++  { "name": "MAX_ARRAY_TEXTURE_LAYERS", "type": "GLint" },
++  { "name": "MAX_CLIENT_WAIT_TIMEOUT_WEBGL", "type": "GLint64" },
++  { "name": "MAX_COLOR_ATTACHMENTS", "type": "GLint" },
++  { "name": "MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS", "type": "GLint64" },
++  { "name": "MAX_COMBINED_UNIFORM_BLOCKS", "type": "GLint" },
++  { "name": "MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS", "type": "GLint64" },
++  { "name": "MAX_DRAW_BUFFERS", "type": "GLint" },
++  { "name": "MAX_ELEMENT_INDEX", "type": "GLint64" },
++  { "name": "MAX_ELEMENTS_INDICES", "type": "GLint" },
++  { "name": "MAX_ELEMENTS_VERTICES", "type": "GLint" },
++  { "name": "MAX_FRAGMENT_INPUT_COMPONENTS", "type": "GLint" },
++  { "name": "MAX_FRAGMENT_UNIFORM_BLOCKS", "type": "GLint" },
++  { "name": "MAX_FRAGMENT_UNIFORM_COMPONENTS", "type": "GLint" },
++  { "name": "MAX_PROGRAM_TEXEL_OFFSET", "type": "GLint" },
++  { "name": "MAX_SAMPLES", "type": "GLint" },
++  { "name": "MAX_SERVER_WAIT_TIMEOUT", "type": "GLint64" },
++  { "name": "MAX_TEXTURE_LOD_BIAS", "type": "GLfloat" },
++  { "name": "MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS", "type": "GLint" },
++  { "name": "MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS", "type": "GLint" },
++  { "name": "MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS", "type": "GLint" },
++  { "name": "MAX_UNIFORM_BLOCK_SIZE", "type": "GLint64" },
++  { "name": "MAX_UNIFORM_BUFFER_BINDINGS", "type": "GLint" },
++  { "name": "MAX_VARYING_COMPONENTS", "type": "GLint" },
++  { "name": "MAX_VERTEX_OUTPUT_COMPONENTS", "type": "GLint" },
++  { "name": "MAX_VERTEX_UNIFORM_BLOCKS", "type": "GLint" },
++  { "name": "MAX_VERTEX_UNIFORM_COMPONENTS", "type": "GLint" },
++  { "name": "MIN_PROGRAM_TEXEL_OFFSET", "type": "GLint" },
++  { "name": "PACK_ROW_LENGTH", "type": "GLint" },
++  { "name": "PACK_SKIP_PIXELS", "type": "GLint" },
++  { "name": "PACK_SKIP_ROWS", "type": "GLint" },
++  { "name": "PIXEL_PACK_BUFFER_BINDING", "type": "WebGLBuffer", "nullable": true },
++  { "name": "PIXEL_UNPACK_BUFFER_BINDING", "type": "WebGLBuffer", "nullable": true },
++  { "name": "RASTERIZER_DISCARD", "type": "GLboolean" },
++  { "name": "READ_BUFFER", "type": "GLenum" },
++  { "name": "READ_FRAMEBUFFER_BINDING", "type": "WebGLFramebuffer", "nullable": true },
++  { "name": "SAMPLE_ALPHA_TO_COVERAGE", "type": "GLboolean" },
++  { "name": "SAMPLE_COVERAGE", "type": "GLboolean" },
++  { "name": "SAMPLER_BINDING", "type": "WebGLSampler", "nullable": true },
++  { "name": "TEXTURE_BINDING_2D_ARRAY", "type": "WebGLTexture", "nullable": true },
++  { "name": "TEXTURE_BINDING_3D", "type": "WebGLTexture", "nullable": true },
++  { "name": "TRANSFORM_FEEDBACK_ACTIVE", "type": "GLboolean" },
++  { "name": "TRANSFORM_FEEDBACK_BINDING", "type": "WebGLTransformFeedback", "nullable": true },
++  { "name": "TRANSFORM_FEEDBACK_BUFFER_BINDING", "type": "WebGLBuffer", "nullable": true },
++  { "name": "TRANSFORM_FEEDBACK_PAUSED", "type": "GLboolean" },
++  { "name": "UNIFORM_BUFFER_BINDING", "type": "WebGLBuffer", "nullable": true },
++  { "name": "UNIFORM_BUFFER_OFFSET_ALIGNMENT", "type": "GLint" },
++  { "name": "UNPACK_IMAGE_HEIGHT", "type": "GLint" },
++  { "name": "UNPACK_ROW_LENGTH", "type": "GLint" },
++  { "name": "UNPACK_SKIP_IMAGES", "type": "GLint" },
++  { "name": "UNPACK_SKIP_PIXELS", "type": "GLint" },
++  { "name": "UNPACK_SKIP_ROWS", "type": "GLint" },
++  { "name": "VERTEX_ARRAY_BINDING", "type": "WebGLVertexArrayObject", "nullable": true },
++];
++const webGLExtensionsParameterDefinitions: WebGLParameterDefinition[] = [
++  { "name": "MAX_TEXTURE_MAX_ANISOTROPY_EXT", "type": "GLfloat", "extension": "EXT_texture_filter_anisotropic" },
++  { "name": "FRAGMENT_SHADER_DERIVATIVE_HINT_OES", "type": "GLenum", "extension": "OES_standard_derivatives" },
++  { "name": "MAX_COLOR_ATTACHMENTS_WEBGL", "type": "GLint", "extension": "WEBGL_draw_buffers" },
++  { "name": "MAX_DRAW_BUFFERS_WEBGL", "type": "GLint", "extension": "WEBGL_draw_buffers" },
++  // DRAW_BUFFERi_WEBGL, i from 0 to gl.getParameter(ext.MAX_DRAW_BUFFERS_WEBGL)-1
++  { "name": "DRAW_BUFFER0_WEBGL", "type": "GLenum", "extension": "WEBGL_draw_buffers" },
++  { "name": "VERTEX_ARRAY_BINDING_OES", "type": "WebGLVertexArrayObjectOES", "extension": "OES_vertex_array_object" },
++  { "name": "TIMESTAMP_EXT", "type": "GLuint64EXT", "extension": "EXT_disjoint_timer_query" },
++  { "name": "GPU_DISJOINT_EXT", "type": "GLboolean", "extension": "EXT_disjoint_timer_query" },
++  { "name": "MAX_VIEWS_OVR", "type": "GLint", "extension": "OVR_multiview2" },
++  // https://developer.mozilla.org/en-US/docs/Web/API/WEBGL_debug_renderer_info
++  { "name": "UNMASKED_VENDOR_WEBGL", "type": "DOMString", "extension": "WEBGL_debug_renderer_info" },
++  { "name": "UNMASKED_RENDERER_WEBGL", "type": "DOMString", "extension": "WEBGL_debug_renderer_info" },
++];
++
++let GLenumNameMap: any;
++const getGLenumName = function (gl: WebGLRenderingContext, value: GLenum) {
++  if (!GLenumNameMap) {
++    GLenumNameMap = {};
++    Object.getOwnPropertyNames(Object.getPrototypeOf(gl)).forEach(name => {
++      if (/^[A-Z]/.test(name)) GLenumNameMap[(gl as any)[name]] = name;
++    });
++  }
++  return GLenumNameMap[value];
++}
++
++const verifyParameterDefinition = function (
++  gl: WebGLRenderingContext,
++  parameterDefinition: WebGLParameterDefinition
++): VerifyResult {
++  const { name, type, subType, length, /*nullable,*/ extension } = parameterDefinition;
++  let ptarget: any = gl, pname: GLenum;
++  const result = new VerifyResult();
++  // if (name === 'DRAW_BUFFER?_WEBGL') return verifyDrawBuffersWebgl(gl, parameterDefinition);
++  if (extension) {
++    const ext = gl.getExtension(extension);
++    if (!ext) return result
++      .setName(`gl.getParameter(ext.${name})`)
++      .setMessage(`Can NOT get extension ${extension}.`);
++    ptarget = ext;
++  }
++  pname = ptarget[name] as GLenum;
++  const info0 = `${ptarget === gl ? 'gl' : 'ext'}.${name}`;
++  const info1 = `gl.getParameter(${info0})`;
++  result.setName(info1);
++  const infoType = `${type}${subType ? `<${subType}>` : ''}${length ? `[${length}]` : ''}`;
++  if (typeof pname !== 'number') return result.setMessage(`${info0} is NOT a GLenum.`);
++  let value;
++  try {
++    value = gl.getParameter(pname);
++  }
++  catch (error) {
++    // return result.setObject(error);
++    return result.setMessage(error.toString());
++  }
++  let infoValue = `${value}`;
++  result.setMessage(`Got ${infoValue} does NOT satisfy type ${infoType}.`);
++  switch (type) {
++    case 'GLenum': {
++      if (typeof value !== 'number') return result;
++      const s = getGLenumName(gl, value);
++      if (!s) return result;
++      infoValue = `gl.${s}(0x${value.toString(16)})`;
++      break;
++    }
++    case 'GLfloat':
++    case 'GLint64':
++    case 'GLuint':
++    case 'GLint': {
++      if (typeof value !== 'number') return result;
++      break;
++    }
++    case 'Int32Array': {
++      if (value.constructor !== Int32Array) return result;
++      if (length && value.length !== length) return result;
++      infoValue = `[${value}]`;
++      break;
++    }
++    case 'Float32Array': {
++      if (value.constructor !== Float32Array) return result;
++      if (length && value.length !== length) return result;
++      infoValue = `[${value}]`;
++      break;
++    }
++    case 'Array': {
++      if (!Array.isArray(value)) return result;
++      if (length && value.length !== length) return result;
++      if (subType) {
++        for (let i = 0; i < length; i++) {
++          const v = value[i];
++          if (subType === 'GLboolean' && typeof v !== 'boolean') return result;
++        }
++      }
++      infoValue = `[${value}]`;
++      break;
++    }
++    case 'DOMString': {
++      if (typeof value !== 'string') return result;
++      infoValue = `"${value}"`;
++      break;
++    }
++  }
++  return result.setPassed(true).setMessage(`Got ${infoValue} satisfies type ${infoType}.`);
++};
++
++const verifyParameterDefinitions = function (title: string, gl: WebGLRenderingContext, parameterDefinitions: WebGLParameterDefinition[]) {
++  const total = parameterDefinitions.length;
++  console.log(`# Verify ${total} parameter definitions for ${title}.`);
++  let numPassed = 0;
++  parameterDefinitions.forEach((parameterDefinition, index) => {
++    const result = verifyParameterDefinition(gl, parameterDefinition);
++    result.passed ? process.stdout.write(`\u001b[92m`) : process.stdout.write(`\u001b[91m`);
++    process.stdout.write(`  ${index + 1}/${total} `);
++    if (result.passed) numPassed++;
++    result.print();
++    process.stdout.write(`\u001b[39m`);
++  })
++  process.stdout.write(`\u001b[0m`);
++  console.log(`RESULT: ${numPassed} parameter definition${numPassed > 1 ? 's' : ''} passed, ${(numPassed / total * 100).toFixed(2)}%`);
++}
++
++const gl = gles.createWebGLRenderingContext({ width: 512, height: 512 });
++verifyParameterDefinitions('WebGL 1', gl, webGL1ParameterDefinitions);
++verifyParameterDefinitions('WebGL 2', gl, webGL2ParameterDefinitions);
++verifyParameterDefinitions('WebGL Extensions', gl, webGLExtensionsParameterDefinitions);

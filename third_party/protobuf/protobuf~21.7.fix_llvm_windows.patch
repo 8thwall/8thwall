@@ -1,0 +1,11 @@
+diff -ruN A/build_defs/cpp_opts.bzl B/build_defs/cpp_opts.bzl
+--- A/build_defs/cpp_opts.bzl	2022-09-29 19:05:00
++++ B/build_defs/cpp_opts.bzl	2024-02-06 15:31:37
+@@ -33,6 +33,7 @@
+         # Suppress linker warnings about files with no symbols defined.
+         "-ignore:4221",
+     ],
++    "@bazel_tools//src/conditions:windows": [],
+     "//conditions:default": [
+         "-lpthread",
+         "-lm",

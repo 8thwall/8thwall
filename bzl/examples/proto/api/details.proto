@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+message Details {
+  int32 answer = 1;
+  int64 min = 2;
+  uint64 max = 3;
+  bytes fib = 4;
+}

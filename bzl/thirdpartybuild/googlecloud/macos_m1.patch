@@ -1,0 +1,66 @@
+diff --git a/bazel/curl.BUILD b/bazel/curl.BUILD
+index 853fc5e61..9688f05f1 100644
+--- a/bazel/curl.BUILD
++++ b/bazel/curl.BUILD
+@@ -13,6 +13,7 @@ config_setting(
+     visibility = ["//visibility:public"],
+ )
+ 
++# --cpu=darwin_arm64
+ config_setting(
+     name = "linux_x86_64",
+     values = {"cpu": "k8"},
+@@ -25,6 +26,12 @@ config_setting(
+     visibility = ["//visibility:public"],
+ )
+ 
++config_setting(
++    name = "macos_m1",
++    values = {"cpu": "darwin_arm64"},
++    visibility = ["//visibility:public"],
++)
++
+ # On Linux, libcurl needs to know, at compile time, the location for the
+ # Certificate Authority (CA) bundle file. By default we dynamically guess the
+ # location for most common Linux distribution, but this guessing makes the build
+@@ -119,6 +126,7 @@ cc_library(
+     deps = select({
+         ":windows": [],
+         ":macos": [],
++        ":macos_m1": [],
+         "//conditions:default": [":define-ca-bundle-location-linux"],
+     }),
+ )
+@@ -373,6 +381,9 @@ cc_library(
+         ":macos": [
+             "lib/vtls/sectransp.c",
+         ],
++        ":macos_m1": [
++            "lib/vtls/sectransp.c",
++        ],
+         ":windows": CURL_WIN_SRCS,
+         "//conditions:default": [
+             "lib/vtls/openssl.c",
+@@ -406,6 +417,9 @@ cc_library(
+         ":macos": [
+             "-fno-constant-cfstrings",
+         ],
++        ":macos_m1": [
++            "-fno-constant-cfstrings",
++        ],
+         "//conditions:default": [],
+     }),
+     defines = ["CURL_STATICLIB"] + select({
+@@ -425,6 +439,12 @@ cc_library(
+             "-Wl,-framework",
+             "-Wl,Security",
+         ],
++        ":macos_m1": [
++            "-Wl,-framework",
++            "-Wl,CoreFoundation",
++            "-Wl,-framework",
++            "-Wl,Security",
++        ],
+         ":windows": [
+             "-DEFAULTLIB:ws2_32.lib",
+             "-DEFAULTLIB:advapi32.lib",

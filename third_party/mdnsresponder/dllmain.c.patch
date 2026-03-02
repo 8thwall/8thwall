@@ -1,0 +1,26 @@
+--- mDNSWindows/DLL/dllmain.c	2011-07-18 16:30:01.000000000 -0700
++++ mDNSWindows/DLL/dllmain.c	2021-09-30 16:18:26.000000000 -0700
+@@ -19,23 +19,6 @@
+ #include <DebugServices.h>
+ #include <stdlib.h>
+ 
+-BOOL APIENTRY	DllMain( HANDLE inModule, DWORD inReason, LPVOID inReserved )
+-{
+-	(void) inModule;
+-	(void) inReserved;
+-	
+-	switch( inReason )
+-	{
+-		case DLL_PROCESS_ATTACH:
+-		case DLL_THREAD_ATTACH:
+-		case DLL_THREAD_DETACH:
+-		case DLL_PROCESS_DETACH:
+-			break;
+-	}
+-    return( TRUE );
+-}
+-
+-
+ BOOL
+ IsSystemServiceDisabled()
+ {
