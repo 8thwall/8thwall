@@ -1429,17 +1429,6 @@ new_git_repository(
     shallow_since = "1482491383 +0200",
 )
 
-http_archive(
-    name = "libuuid",
-    build_file = "//bzl/thirdpartybuild:libuuid.BUILD",
-    patches = [
-        "//third_party/libuuid:gen_uuid.c.patch",
-    ],
-    sha256 = "46af3275291091009ad7f1b899de3d0cea0252737550e7919d17237997db5644",
-    strip_prefix = "libuuid-1.0.3",
-    urls = ["https://downloads.sourceforge.net/project/libuuid/libuuid-1.0.3.tar.gz"],
-)
-
 new_git_repository(
     name = "vectorclass",
     build_file = "//bzl/thirdpartybuild:vectorclass.BUILD",
