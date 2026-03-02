@@ -1599,14 +1599,6 @@ http_archive(
 )
 
 new_git_repository(
-    name = "qrcodegen",
-    build_file = "//bzl/thirdpartybuild:qrcodegen.BUILD",
-    commit = "8ef73d23250768273e1e7816fa83e1771b620199",
-    remote = "https://github.com/nayuki/QR-Code-generator",
-    shallow_since = "1504714809 +0000",
-)
-
-new_git_repository(
     name = "tinygltf",
     build_file = "//bzl/thirdpartybuild:tinygltf.BUILD",
     commit = "e0b393c6958c0a7cbe134a240fad7915aae53db3",
@@ -1920,15 +1912,6 @@ http_archive(
     url = "https://github.com/nodejs/node-addon-api/archive/refs/tags/v7.0.0.zip",
 )
 
-# NAN nodejs bindings.
-http_archive(
-    name = "nodejs-nan",
-    build_file = "//bzl/thirdpartybuild:nodejs-nan.BUILD",
-    sha256 = "980e873c202421d0523accacce86dd9d35c684b36ac49235f5f31269f25b22ae",
-    strip_prefix = "nan-2.17.0",
-    url = "https://github.com/nodejs/nan/archive/refs/tags/v2.17.0.zip",
-)
-
 http_archive(
     name = "addon-tools-raub",
     build_file = "//bzl/thirdpartybuild:addon-tools-raub.BUILD",
@@ -2020,14 +2003,6 @@ new_git_repository(
     commit = "6bb8d1123d8a55d407b19fd3357c724d0f5c9d3c",
     remote = "https://github.com/bulletphysics/bullet3.git",
     shallow_since = "1701210212 -0800",
-)
-
-new_git_repository(
-    name = "joltphysics",
-    build_file = "//bzl/thirdpartybuild:joltphysics.BUILD",
-    commit = "0373ec0dd762e4bc2f6acdb08371ee84fa23c6db",  #  v5.3.0
-    remote = "https://github.com/jrouwe/JoltPhysics.git",
-    shallow_since = "1742071981 +0100",
 )
 
 new_git_repository(
