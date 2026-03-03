@@ -24,7 +24,18 @@ const getConinessForRadii = (topRadius, bottomRadius) => {
   return signedConiness
 }
 
+/**
+ * @param {number} targetCircumferenceTop
+ * @param {number} cylinderCircumferenceTop
+ * @param {number} cylinderCircumferenceBottom
+ * @returns {number}
+ */
+const getTargetCircumferenceBottom = (
+  targetCircumferenceTop, cylinderCircumferenceTop, cylinderCircumferenceBottom
+) => (targetCircumferenceTop * cylinderCircumferenceBottom) / cylinderCircumferenceTop
+
 export {
   getCircumferenceRatio,
   getConinessForRadii,
+  getTargetCircumferenceBottom,
 }

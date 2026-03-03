@@ -1,0 +1,9 @@
+test/cone-cup.png
+cone
+top
+1500
+600
+180
+y
+tmp
+cone-cup-default

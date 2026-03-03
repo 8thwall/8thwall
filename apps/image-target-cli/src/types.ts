@@ -42,7 +42,7 @@ type CylinderCropGeometry = CropGeometry & {
   unit: 'mm' | 'in'
 }
 
-type ConicalCropGeometry = Omit<CylinderCropGeometry, 'cylinderSideLength'> & {
+type ConicalCropGeometry = CylinderCropGeometry & {
   topRadius: number
   bottomRadius: number
 }

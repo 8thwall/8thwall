@@ -20,8 +20,6 @@ const CONSTANTS = require('./constants.json')
 const applyCrop = async (rawImage, crop, folder, name, overwriteFiles) => {
   const baseMetadata = await rawImage.metadata()
 
-  console.log('Base image metadata:', baseMetadata)
-
   /** @type {import("./types").ImageMetadata} */
   let metadata
 

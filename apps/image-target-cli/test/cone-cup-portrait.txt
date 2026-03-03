@@ -1,0 +1,13 @@
+test/cone-cup.png
+cone
+top
+1500
+600
+180
+n
+portrait
+0
+692
+617
+tmp
+cone-cup-portrait

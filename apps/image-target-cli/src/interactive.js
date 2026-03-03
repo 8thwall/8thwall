@@ -6,7 +6,7 @@ import os from 'os'
 import {getDefaultCrop} from './crop.js'
 import {applyCrop} from './apply.js'
 import {computePixelPointsFromRadius, getUnconifiedData} from './unconify.js'
-import {getCircumferenceRatio, getConinessForRadii} from './curved-geometry.js'
+import {getCircumferenceRatio, getConinessForRadii, getTargetCircumferenceBottom} from './curved-geometry.js'
 
 /**
  * @import {
@@ -145,8 +145,12 @@ const selectConicalGeometry = async (rl, imageMetadata) => {
 
   const points = computePixelPointsFromRadius(topRadius, bottomRadius, imageMetadata.width)
   const {outputHeight} = getUnconifiedData(points, imageMetadata.width)
+  const geometryMetdata = {
+    width: imageMetadata.width,
+    height: outputHeight,
+  }
 
-  const crop = getDefaultCrop({width: imageMetadata.width, height: outputHeight}, false)
+  const crop = await selectPlanarGeometry(rl, geometryMetdata)
 
   const cylinderCircumferenceTop = 100
   const targetCircumferenceTop = (cylinderCircumferenceTop * arcAngle) / 360
@@ -154,11 +158,24 @@ const selectConicalGeometry = async (rl, imageMetadata) => {
   const cylinderCircumferenceBottom = cylinderCircumferenceTop / circumferenceRatio
   const coniness = getConinessForRadii(topRadius, bottomRadius)
 
+  const widerTargetCircumference = Math.max(
+    targetCircumferenceTop,
+    getTargetCircumferenceBottom(
+      targetCircumferenceTop,
+      cylinderCircumferenceTop,
+      cylinderCircumferenceBottom
+    )
+  )
+
+  const cylinderSideLength = widerTargetCircumference *
+    (geometryMetdata.height / geometryMetdata.width)
+
   return {
     ...crop,
     cylinderCircumferenceTop,
     cylinderCircumferenceBottom,
     targetCircumferenceTop,
+    cylinderSideLength,
     coniness,
     arcAngle,
     inputMode: 'ADVANCED',
