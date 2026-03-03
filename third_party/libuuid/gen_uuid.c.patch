@@ -1,0 +1,13 @@
+--- gen_uuid.c	2023-07-11 09:38:42
++++ gen_uuid.c	2023-07-11 09:39:29
+@@ -358,8 +358,8 @@
+ 	if (state_fd >= 0) {
+ 		rewind(state_f);
+ 		len = fprintf(state_f,
+-			      "clock: %04x tv: %016lu %08lu adj: %08d\n",
+-			      clock_seq, last.tv_sec, last.tv_usec, adjustment);
++ 			      "clock: %04x tv: %016ld %08ld adj: %08d\n",
++ 			      clock_seq, (long)last.tv_sec, (long)last.tv_usec, adjustment);
+ 		fflush(state_f);
+ 		if (ftruncate(state_fd, len) < 0) {
+ 			fprintf(state_f, "                   \n");

@@ -1,8 +1,0 @@
-test/large-cone.png
-cone
-top
-1600
-640
-180
-tmp
-cone

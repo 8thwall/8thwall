@@ -1,0 +1,12 @@
+diff --git i/build_defs.bzl w/build_defs.bzl
+index b8217a18d..7432a237f 100644
+--- i/build_defs.bzl
++++ w/build_defs.bzl
+@@ -202,6 +202,7 @@ def xnnpack_cc_library(
+             ":linux_armv7a": ["-lpthread"],
+             ":linux_arm64": ["-lpthread"],
+             ":android": ["-lm"],
++            ":android_x86_64": ["-lm"],
+             "//conditions:default": [],
+         }),
+         textual_hdrs = hdrs,

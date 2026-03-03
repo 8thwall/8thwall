@@ -1,0 +1,15 @@
+diff --git a/node_modules/html-element/index.js b/node_modules/html-element/index.js
+index 79ae914..ef2e871 100644
+--- a/node_modules/html-element/index.js
++++ b/node_modules/html-element/index.js
+@@ -44,8 +44,8 @@ function dispatchEvent(event) {
+   event.target = this; // native browser dispatchEvent mutates event to set target, so do that here
+   var listeners = this._eventListeners && this._eventListeners[event.type];
+   if (listeners) {
+-    listeners.forEach(function(listener) {
+-      listener(event);
++    listeners.forEach(listener => {
++      listener.call(this, event);
+     });
+   }
+   return true; // event stopPropagation not implemented so always return true

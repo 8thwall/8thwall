@@ -1,0 +1,2 @@
+Checks: 'modernize-use-equals-default,performance-*'
+HeaderFilterRegex: '^\.\/.*'

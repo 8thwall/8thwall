@@ -1,0 +1,36 @@
+load("//bzl/redist:linux_binary_redist.bzl","linux_redist")
+
+package(
+    default_visibility = ["//visibility:public"],
+)
+
+linux_redist(
+    name = "flatc_linux_redist",
+    binary_executable = "@flatbuffers//:flatc",
+    target_compatible_with = select({
+        "//bzl/conditions:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    tags = [
+        "manual",
+    ],
+)
+
+alias(
+    name = "flatc",
+    actual = select({
+        "//bzl/conditions:linux": ":flatc_linux_redist",
+        "//conditions:default": "@flatbuffers//:flatc",
+    }),
+    tags = [
+        "manual",
+    ],
+)
+
+alias(
+    name = "flatc_library",
+    actual = "@flatbuffers//:flatc_library",
+    tags = [
+        "manual",
+    ],
+)

@@ -1,0 +1,189 @@
+diff -ruN A/bazel/cc_grpc_library.bzl B/bazel/cc_grpc_library.bzl
+--- A/bazel/cc_grpc_library.bzl	2020-02-26 19:12:33
++++ B/bazel/cc_grpc_library.bzl	2024-05-20 16:50:54
+@@ -100,6 +100,9 @@
+             hdrs = [":" + codegen_grpc_target],
+             deps = deps +
+                    extra_deps +
+-                   ["@com_github_grpc_grpc//:grpc++_codegen_proto"],
++                   [
++                    "@com_github_grpc_grpc//:grpc++_codegen_proto",
++                    "@com_google_protobuf//:protobuf",
++                   ],
+             **kwargs
+         )
+diff -ruN A/include/grpcpp/impl/codegen/config_protobuf.h B/include/grpcpp/impl/codegen/config_protobuf.h
+--- A/include/grpcpp/impl/codegen/config_protobuf.h	2020-02-26 19:12:33
++++ B/include/grpcpp/impl/codegen/config_protobuf.h	2024-05-20 16:41:52
+@@ -66,7 +66,7 @@
+ #ifndef GRPC_CUSTOM_JSONUTIL
+ #include <google/protobuf/util/json_util.h>
+ #define GRPC_CUSTOM_JSONUTIL ::google::protobuf::util
+-#define GRPC_CUSTOM_UTIL_STATUS ::google::protobuf::util::Status
++#define GRPC_CUSTOM_UTIL_STATUS absl::Status
+ #endif
+ 
+ namespace grpc {
+diff -ruN A/src/compiler/BUILD B/src/compiler/BUILD
+--- A/src/compiler/BUILD	2020-02-26 19:12:33
++++ B/src/compiler/BUILD	2024-05-20 16:41:20
+@@ -69,6 +69,7 @@
+         "schema_interface.h",
+     ],
+     external_deps = [
++        "protobuf",
+         "protobuf_clib",
+     ],
+     language = "c++",
+diff -ruN A/src/compiler/csharp_generator.cc B/src/compiler/csharp_generator.cc
+--- A/src/compiler/csharp_generator.cc	2020-02-26 19:12:33
++++ B/src/compiler/csharp_generator.cc	2024-05-20 16:44:00
+@@ -195,7 +195,7 @@
+     case METHODTYPE_BIDI_STREAMING:
+       return "grpc::MethodType.DuplexStreaming";
+   }
+-  GOOGLE_LOG(FATAL) << "Can't get here.";
++  ABSL_LOG(FATAL) << "Can't get here.";
+   return "";
+ }
+ 
+@@ -210,7 +210,7 @@
+     case METHODTYPE_BIDI_STREAMING:
+       return "grpc::DuplexStreamingServerMethod";
+   }
+-  GOOGLE_LOG(FATAL) << "Can't get here.";
++  ABSL_LOG(FATAL) << "Can't get here.";
+   return "";
+ }
+ 
+@@ -257,7 +257,7 @@
+              GetClassName(method->input_type()) + ", " +
+              GetClassName(method->output_type()) + ">";
+   }
+-  GOOGLE_LOG(FATAL) << "Can't get here.";
++  ABSL_LOG(FATAL) << "Can't get here.";
+   return "";
+ }
+ 
+@@ -271,7 +271,7 @@
+       return "grpc::IAsyncStreamReader<" + GetClassName(method->input_type()) +
+              "> requestStream";
+   }
+-  GOOGLE_LOG(FATAL) << "Can't get here.";
++  ABSL_LOG(FATAL) << "Can't get here.";
+   return "";
+ }
+ 
+@@ -285,7 +285,7 @@
+     case METHODTYPE_BIDI_STREAMING:
+       return "global::System.Threading.Tasks.Task";
+   }
+-  GOOGLE_LOG(FATAL) << "Can't get here.";
++  ABSL_LOG(FATAL) << "Can't get here.";
+   return "";
+ }
+ 
+@@ -299,7 +299,7 @@
+       return ", grpc::IServerStreamWriter<" +
+              GetClassName(method->output_type()) + "> responseStream";
+   }
+-  GOOGLE_LOG(FATAL) << "Can't get here.";
++  ABSL_LOG(FATAL) << "Can't get here.";
+   return "";
+ }
+ 
+@@ -570,7 +570,7 @@
+             "methodfield", GetMethodFieldName(method));
+         break;
+       default:
+-        GOOGLE_LOG(FATAL) << "Can't get here.";
++        ABSL_LOG(FATAL) << "Can't get here.";
+     }
+     out->Outdent();
+     out->Print("}\n");
+diff -ruN A/src/compiler/csharp_generator.h B/src/compiler/csharp_generator.h
+--- A/src/compiler/csharp_generator.h	2020-02-26 19:12:33
++++ B/src/compiler/csharp_generator.h	2024-05-20 16:42:29
+@@ -21,7 +21,7 @@
+ 
+ #include "src/compiler/config.h"
+ 
+-#include <google/protobuf/compiler/csharp/csharp_names.h>
++#include <google/protobuf/compiler/csharp/names.h>
+ 
+ namespace grpc_csharp_generator {
+ 
+diff -ruN A/src/compiler/objective_c_generator_helpers.h B/src/compiler/objective_c_generator_helpers.h
+--- A/src/compiler/objective_c_generator_helpers.h	2020-02-26 19:12:33
++++ B/src/compiler/objective_c_generator_helpers.h	2024-05-20 16:44:44
+@@ -23,7 +23,8 @@
+ #include "src/compiler/config.h"
+ #include "src/compiler/generator_helpers.h"
+ 
+-#include <google/protobuf/compiler/objectivec/objectivec_helpers.h>
++#include <google/protobuf/compiler/objectivec/names.h>
++#include <google/protobuf/compiler/objectivec/helpers.h>
+ 
+ namespace grpc_objective_c_generator {
+ 
+diff -ruN A/src/core/lib/gprpp/atomic.h B/src/core/lib/gprpp/atomic.h
+--- A/src/core/lib/gprpp/atomic.h	2020-02-26 19:12:33
++++ B/src/core/lib/gprpp/atomic.h	2024-05-20 16:40:12
+@@ -28,12 +28,12 @@
+ namespace grpc_core {
+ 
+ enum class MemoryOrder {
+-  RELAXED = std::memory_order_relaxed,
+-  CONSUME = std::memory_order_consume,
+-  ACQUIRE = std::memory_order_acquire,
+-  RELEASE = std::memory_order_release,
+-  ACQ_REL = std::memory_order_acq_rel,
+-  SEQ_CST = std::memory_order_seq_cst
++  RELAXED = static_cast<int>(std::memory_order_relaxed),
++  CONSUME = static_cast<int>(std::memory_order_consume),
++  ACQUIRE = static_cast<int>(std::memory_order_acquire),
++  RELEASE = static_cast<int>(std::memory_order_release),
++  ACQ_REL = static_cast<int>(std::memory_order_acq_rel),
++  SEQ_CST = static_cast<int>(std::memory_order_seq_cst)
+ };
+ 
+ template <typename T>
+diff -ruN A/third_party/cares/cares.BUILD B/third_party/cares/cares.BUILD
+--- A/third_party/cares/cares.BUILD	2020-02-26 19:12:33
++++ B/third_party/cares/cares.BUILD	2024-05-20 16:47:15
+@@ -9,6 +9,11 @@
+ )
+ 
+ config_setting(
++    name = "darwin_arm64",
++    values = {"cpu": "darwin_arm64"},
++)
++
++config_setting(
+     name = "windows",
+     values = {"cpu": "x64_windows"},
+ )
+@@ -98,6 +103,7 @@
+         ":watchos_arm64_32": ["@com_github_grpc_grpc//third_party/cares:config_darwin/ares_config.h"],
+         ":darwin": ["@com_github_grpc_grpc//third_party/cares:config_darwin/ares_config.h"],
+         ":darwin_x86_64": ["@com_github_grpc_grpc//third_party/cares:config_darwin/ares_config.h"],
++        ":darwin_arm64": ["@com_github_grpc_grpc//third_party/cares:config_darwin/ares_config.h"],
+         ":windows": ["@com_github_grpc_grpc//third_party/cares:config_windows/ares_config.h"],
+         ":android": ["@com_github_grpc_grpc//third_party/cares:config_android/ares_config.h"],
+         "//conditions:default": ["@com_github_grpc_grpc//third_party/cares:config_linux/ares_config.h"],
+@@ -113,6 +119,7 @@
+         "ares__get_hostent.c",
+         "ares__read_line.c",
+         "ares__timeval.c",
++        "ares_android.c",
+         "ares_cancel.c",
+         "ares_create_query.c",
+         "ares_data.c",
+@@ -162,6 +169,7 @@
+     ],
+     hdrs = [
+         "ares.h",
++        "ares_android.h",
+         "ares_build.h",
+         "ares_config.h",
+         "ares_data.h",

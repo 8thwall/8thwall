@@ -1,0 +1,53 @@
+diff --git a/BUILD.bazel b/BUILD.bazel
+index 8099642a..43325997 100644
+--- a/BUILD.bazel
++++ b/BUILD.bazel
+@@ -31,6 +31,7 @@
+ #   Bazel Build for Google C++ Testing Framework(Google Test)
+ 
+ load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
++load("@bazel_skylib//lib:selects.bzl", "selects")
+ 
+ package(default_visibility = ["//visibility:public"])
+ 
+@@ -43,6 +44,24 @@ config_setting(
+     constraint_values = ["@bazel_tools//platforms:windows"],
+ )
+ 
++config_setting(
++    name = "wasm32",
++    constraint_values = ["@platforms//cpu:wasm32"],
++)
++
++config_setting(
++    name = "wasm64",
++    constraint_values = ["@platforms//cpu:wasm64"],
++)
++
++selects.config_setting_group(
++    name = "wasm",
++    match_any = [
++        ":wasm32",
++        ":wasm64",
++    ],
++)
++
+ config_setting(
+     name = "has_absl",
+     values = {"define": "absl=1"},
+@@ -79,6 +98,7 @@ cc_library(
+     ]),
+     copts = select({
+         ":windows": [],
++        ":wasm": [],
+         "//conditions:default": ["-pthread"],
+     }),
+     defines = select({
+@@ -97,6 +117,7 @@ cc_library(
+     ],
+     linkopts = select({
+         ":windows": [],
++        ":wasm": [],
+         "//conditions:default": ["-pthread"],
+     }),
+     deps = select({

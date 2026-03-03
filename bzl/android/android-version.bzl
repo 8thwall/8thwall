@@ -1,0 +1,7 @@
+# Crosstool definitions for Android SDK and NDK.
+DEFAULT_ANDROID_API_LEVEL = 34
+ANDROID_API_LEVELS = [DEFAULT_ANDROID_API_LEVEL, 32, 30]
+ANDROID_NDK_VERSION = "24.0.8215888"
+ANDROID_BUILD_TOOLS_VERSION = "34.0.0"
+# TODO: add constraits for host_platform on aarch64 to have
+# ANDROID_BUILD_TOOLS_VERSION = "31.0.0"

@@ -1,0 +1,10 @@
+load("@bazel_skylib//lib:selects.bzl", "selects")
+
+py_binary(
+    name = "test_python_version",
+    srcs = ["test_python_version.py"],
+    target_compatible_with = selects.with_or({
+        ("//bzl/conditions:macos", "//bzl/conditions:linux", "//bzl/conditions:windows"): [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+)

@@ -1,0 +1,6 @@
+{
+  "rules": {
+    "no-restricted-properties": ["error", {"property": "stringToUTF8", "message": "Use writeStringToEmscriptenHeap instead."}],
+    "react-hooks/rules-of-hooks": "off"
+  }
+}

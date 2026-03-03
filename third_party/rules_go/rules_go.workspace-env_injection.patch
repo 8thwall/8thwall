@@ -1,0 +1,171 @@
+diff -ruN A/MODULE.bazel B/MODULE.bazel
+--- A/MODULE.bazel	2024-07-04 11:03:56
++++ B/MODULE.bazel	2024-07-03 13:51:21
+@@ -13,18 +13,28 @@
+ bazel_dep(name = "rules_proto", version = "6.0.0")
+ bazel_dep(name = "protobuf", version = "3.19.2", repo_name = "com_google_protobuf")
+ 
++workspace_env = use_repo_rule("//injection:workspace-env.bzl", "workspace_env")
++
++workspace_env(
++    name = "workspace-env",
++    workspace_name = "niantic",
++)
++
+ go_sdk = use_extension("//go:extensions.bzl", "go_sdk")
+ go_sdk.download(
+     name = "go_default_sdk",
+     version = "1.21.8",
+ )
++
+ use_repo(
+     go_sdk,
+     "go_toolchains",
+     # This name is ugly on purpose to avoid a conflict with a user-named SDK.
+     "io_bazel_rules_nogo",
+ )
++
+ register_toolchains("@go_toolchains//:all")
++
+ 
+ bazel_dep(name = "gazelle", version = "0.36.0")
+ 
+diff -ruN A/go/private/go_toolchain.bzl B/go/private/go_toolchain.bzl
+--- A/go/private/go_toolchain.bzl	2024-07-04 11:03:56
++++ B/go/private/go_toolchain.bzl	2024-07-03 14:14:09
+@@ -46,6 +46,8 @@
+         ),
+         sdk = sdk,
+ 
++        all_files = [ctx.file.workspace_env],
++
+         # Internal fields -- may be read by emit functions.
+         _builder = ctx.executable.builder,
+     )]
+@@ -59,6 +61,10 @@
+             cfg = "exec",
+             executable = True,
+             doc = "Tool used to execute most Go actions",
++        ),
++        "workspace_env": attr.label(
++            default = "@workspace-env//:workspace-env", 
++            allow_single_file = True
+         ),
+         "goos": attr.string(
+             mandatory = True,
+diff -ruN A/go/tools/builders/stdlib.go B/go/tools/builders/stdlib.go
+--- A/go/tools/builders/stdlib.go	2024-07-04 11:03:56
++++ B/go/tools/builders/stdlib.go	2024-07-04 10:20:42
+@@ -83,6 +83,8 @@
+ 	// Make sure we have an absolute path to the C compiler.
+ 	os.Setenv("CC", quotePathIfNeeded(abs(os.Getenv("CC"))))
+ 
++	os.Setenv("WORKSPACE_ENV", quotePathIfNeeded(abs(os.Getenv("WORKSPACE_ENV"))))
++
+ 	// Ensure paths are absolute.
+ 	absPaths := []string{}
+ 	for _, path := range filepath.SplitList(os.Getenv("PATH")) {
+@@ -165,6 +167,12 @@
+ 	}
+ 
+ 	installArgs = append(installArgs, packages...)
++
++	// Print the value of installArgs for debugging purposes.
++	fmt.Println("----------------- Running command:")
++	fmt.Println(strings.Join(installArgs, " "))
++	fmt.Println("----------------------------------")
++
+ 	if err := goenv.runCommand(installArgs); err != nil {
+ 		return err
+ 	}
+diff -ruN A/injection/BUILD B/injection/BUILD
+--- A/injection/BUILD	1970-01-01 01:00:00
++++ B/injection/BUILD	2024-07-04 11:05:13
+@@ -0,0 +1 @@
++# Dummy file for package
+diff -ruN A/injection/workspace-env.bzl B/injection/workspace-env.bzl
+--- A/injection/workspace-env.bzl	1970-01-01 01:00:00
++++ B/injection/workspace-env.bzl	2024-07-03 14:00:39
+@@ -0,0 +1,82 @@
++def _workspace_env_impl(repository_ctx):
++    """Implementation for the workspace_env rule."""
++    pwd_result = repository_ctx.execute(["pwd"])
++    execroot = repository_ctx.path(pwd_result.stdout.strip()).dirname
++    output_base = repository_ctx.path(execroot).dirname
++    execution_root = "{}/execroot/_main".format(output_base)
++
++    repository_ctx.file(
++        "workspace-env.sh",
++        content = (
++            """#!/bin/sh --norc
++function get_realpath() {
++    local previous="$1"
++    local next=$(readlink "${previous}")
++    while [ -n "${next}" ]; do
++        previous="${next}"
++        next=$(readlink "${previous}")
++    done
++    echo "${previous}"
++}
++
++shellpath=$(get_realpath $BASH_SOURCE)
++source "$(dirname $shellpath)/workspace-env-vars"
++"""
++        ),
++        executable = True,
++    )
++
++    repository_ctx.file(
++        "workspace-env-vars",
++        content = (
++            """
++export BAZEL_EXECUTION_ROOT="{execroot}"
++export BAZEL_OUTPUT_BASE="{base}"
++""".format(execroot = execution_root, base = output_base)
++        ),
++    )
++
++    repository_ctx.file(
++        "workspace-env.json",
++        content = (
++"{\n" +
++"   \"BAZEL_EXECUTION_ROOT\": \"{execroot}\",\n".format(execroot = execution_root) +
++"   \"BAZEL_OUTPUT_BASE\": \"{base}\",\n".format(base = output_base) +
++"}\n"
++        ),
++    )
++
++    repository_ctx.file(
++        "BUILD",
++        content = (
++"""
++filegroup(
++    name = "workspace-env-json",
++    srcs = [
++        "workspace-env.json",
++    ],
++    visibility = [ "//visibility:public" ],
++)
++
++filegroup(
++    name = "workspace-env",
++    srcs = [
++        "workspace-env.sh",
++    ],
++    visibility = [ "//visibility:public" ],
++)
++
++"""
++    ))
++
++
++# Some rules need to access to varying global environment variables without
++# bazel knowing, since these would affect Bazel's cache key but are logically
++# equal. This rule provides a target that can bring these into shell scripts.
++workspace_env = repository_rule(
++    implementation = _workspace_env_impl,
++    local = True,
++    attrs = {
++        "workspace_name": attr.string(mandatory = True),
++    },
++)

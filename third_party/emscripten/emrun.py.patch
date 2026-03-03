@@ -1,0 +1,29 @@
+--- upstream/emscripten/emrun.py	2022-10-07 14:36:55.000000000 -0700
++++ upstream/emscripten/emrun.py	2022-10-26 09:07:01.000000000 -0700
+@@ -677,6 +677,7 @@
+   def do_POST(self):
+     self.protocol_version = 'HTTP/1.1'
+     global page_exit_code, have_received_messages
++    do_shutdown = False
+ 
+     (_, _, path, query, _) = urlsplit(self.path)
+     logv('POST: "' + self.path + '" (path: "' + path + '", query: "' + query + '")')
+@@ -722,8 +723,7 @@
+         if not emrun_options.serve_after_exit:
+           page_exit_code = int(data[6:])
+           logv('Web page has quit with a call to exit() with return code ' + str(page_exit_code) + '. Shutting down web server. Pass --serve_after_exit to keep serving even after the page terminates with exit().')
+-          self.server.shutdown()
+-          return
++          do_shutdown = True
+       else:
+         # The user page sent a message with POST. Parse the message and log it to stdout/stderr.
+         is_stdout = False
+@@ -753,6 +753,8 @@
+     self.end_headers()
+     self.wfile.write(b'OK')
+ 
++    if do_shutdown:
++        self.server.shutdown()
+ 
+ # Returns stdout by running command with universal_newlines=True
+ def check_output(cmd, universal_newlines=True, *args, **kwargs):

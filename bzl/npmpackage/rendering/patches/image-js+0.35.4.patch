@@ -1,0 +1,74 @@
+diff --git a/node_modules/image-js/lib/image/core/environment.js b/node_modules/image-js/lib/image/core/environment.js
+index d008497..f903197 100644
+--- a/node_modules/image-js/lib/image/core/environment.js
++++ b/node_modules/image-js/lib/image/core/environment.js
+@@ -19,28 +19,13 @@ Object.defineProperty(exports, "writeFile", {
+   }
+ });
+ var _fs = require("fs");
+-const message = 'requires the canvas library. Install it with `npm install canvas@next`.';
+-let createCanvas, DOMImage, ImageData;
+-exports.ImageData = ImageData;
+-exports.DOMImage = DOMImage;
+-exports.createCanvas = createCanvas;
+-try {
+-  // eslint-disable-next-line import/no-unresolved
+-  const canvas = require('canvas');
+-  exports.createCanvas = createCanvas = canvas.createCanvas;
+-  exports.DOMImage = DOMImage = canvas.Image;
+-  exports.ImageData = ImageData = canvas.ImageData;
+-} catch (e) {
+-  exports.createCanvas = createCanvas = function () {
+-    throw new Error(`createCanvas ${message}`);
+-  };
+-  exports.DOMImage = DOMImage = function () {
+-    throw new Error(`DOMImage ${message}`);
+-  };
+-  exports.ImageData = ImageData = function () {
+-    throw new Error(`ImageData ${message}`);
+-  };
+-}
++
++function DOMImage(...args) { return new globalThis.window.Image(...args)}
++function ImageData(...args) { return new globalThis.window.ImageData(...args)}
++
++exports.ImageData = ImageData
++exports.DOMImage = DOMImage
++exports.createCanvas = () => globalThis.document?.createElement('canvas')
+ const env = 'node';
+ exports.env = env;
+ function fetchBinary(path) {
+diff --git a/node_modules/image-js/src/image/core/environment.js b/node_modules/image-js/src/image/core/environment.js
+index a4e2296..1648164 100644
+--- a/node_modules/image-js/src/image/core/environment.js
++++ b/node_modules/image-js/src/image/core/environment.js
+@@ -1,26 +1,8 @@
+ import { readFile, createWriteStream, writeFile } from 'fs';
+ 
+-const message =
+-  'requires the canvas library. Install it with `npm install canvas@next`.';
+-
+-let createCanvas, DOMImage, ImageData;
+-try {
+-  // eslint-disable-next-line import/no-unresolved
+-  const canvas = require('canvas');
+-  createCanvas = canvas.createCanvas;
+-  DOMImage = canvas.Image;
+-  ImageData = canvas.ImageData;
+-} catch (e) {
+-  createCanvas = function () {
+-    throw new Error(`createCanvas ${message}`);
+-  };
+-  DOMImage = function () {
+-    throw new Error(`DOMImage ${message}`);
+-  };
+-  ImageData = function () {
+-    throw new Error(`ImageData ${message}`);
+-  };
+-}
++let createCanvas = () => globalThis.document?.createElement('canvas')
++function DOMImage(...args) { return new globalThis.window.Image(...args)}
++function ImageData(...args) { return new globalThis.window.ImageData(...args)}
+ 
+ export const env = 'node';
+ 

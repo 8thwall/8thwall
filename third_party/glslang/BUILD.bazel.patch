@@ -1,0 +1,22 @@
+--- BUILD.bazel	2023-07-13 14:50:24
++++ BUILD.bazel	2023-07-13 14:50:56
+@@ -65,9 +65,9 @@
+ 
+ genrule(
+     name = "gen_extension_headers_h",
+-    srcs = ["glslang/ExtensionHeaders", "gen_extension_headers.py"],
++    srcs = ["glslang/ExtensionHeaders/GL_EXT_shader_realtime_clock.glsl", "gen_extension_headers.py"],
+     outs = ["glslang/glsl_intrinsic_header.h"],
+-    cmd_bash = "$(location gen_extension_headers) -i  $(location glslang/ExtensionHeaders) -o $(location glslang/glsl_intrinsic_header.h)",
++    cmd_bash = "$(location gen_extension_headers) -i $$(dirname $(location glslang/ExtensionHeaders/GL_EXT_shader_realtime_clock.glsl)) -o $(location glslang/glsl_intrinsic_header.h)",
+     tools = [":gen_extension_headers"],
+ )
+ 
+@@ -82,6 +82,7 @@
+         "-Wunused-value",
+         "-Wunused-variable",
+         "-Wno-reorder",
++        "-Wno-unused-but-set-variable",
+         "-std=c++11",
+         "-fvisibility=hidden",
+         "-fvisibility-inlines-hidden",

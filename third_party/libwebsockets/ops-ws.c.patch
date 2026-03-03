@@ -1,0 +1,25 @@
+From b9e7ed9e86aa20cc0fa039d4debd3e86b2389120 Mon Sep 17 00:00:00 2001
+From: koichi Mori <kmori@nianticlabs.com>
+Date: Mon, 15 Jul 2024 16:30:20 -0700
+Subject: [PATCH] increase "sanity" count in ops-ws
+
+---
+ lib/roles/ws/ops-ws.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git lib/roles/ws/ops-ws.c lib/roles/ws/ops-ws.c
+index 37fbd34d..aecff510 100644
+--- lib/roles/ws/ops-ws.c
++++ lib/roles/ws/ops-ws.c
+@@ -943,7 +943,7 @@ rops_handle_POLLIN_ws(struct lws_context_per_thread *pt, struct lws *wsi,
+ 	unsigned int pending = 0;
+ 	struct lws_tokens ebuf;
+ 	char buffered = 0;
+-	int n = 0, m, sanity = 10;
++	int n = 0, m, sanity = 100;
+ #if defined(LWS_WITH_HTTP2)
+ 	struct lws *wsi1;
+ #endif
+-- 
+2.38.0
+

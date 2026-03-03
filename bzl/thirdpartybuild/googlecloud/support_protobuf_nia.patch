@@ -1,0 +1,11 @@
+diff -ruN A/google/cloud/BUILD B/google/cloud/BUILD
+--- A/google/cloud/BUILD	2024-05-21 11:13:29
++++ B/google/cloud/BUILD	2024-05-21 11:12:26
+@@ -99,6 +99,7 @@
+         "@com_google_absl//absl/time",
+         "@com_google_googleapis//:googleapis_system_includes",
+         "@com_google_googleapis//google/rpc:status_cc_proto",
++        "@com_google_protobuf//build_defs:timestamp_cc_proto",
+     ],
+ )
+ 
