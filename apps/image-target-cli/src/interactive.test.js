@@ -2,7 +2,9 @@ import {describe, it} from 'node:test'
 import assert from 'node:assert/strict'
 import os from 'os'
 
-import {normalizePath, selectPlanarGeometry, selectCylindricalGeometry} from './interactive.js'
+import {
+  normalizePath, selectPlanarGeometry, selectCylindricalGeometry, selectConicalGeometry,
+} from './interactive.js'
 
 const mockRl = (...values) => {
   let i = 0
@@ -179,6 +181,117 @@ describe('selectCylindricalGeometry', () => {
       coniness: 0,
       arcAngle: 90,
       unit: 'mm',
+    })
+  })
+})
+describe('selectConicalGeometry', () => {
+  it('handles wide top cone with default crop', async () => {
+    const crop = await selectConicalGeometry(
+      mockRl('top', 1500, 600, 180, true),
+      {width: 2000, height: 1250}
+    )
+
+    // NOTE(christoph): This is comparing to the 8thwall.com behavior
+    assert.deepEqual(crop, {
+      top: 452,
+      left: 0,
+      width: 823,
+      height: 1097,
+      isRotated: true,
+      originalWidth: 823,
+      originalHeight: 2000,
+      cylinderCircumferenceTop: 100,
+      cylinderCircumferenceBottom: 40,
+      targetCircumferenceTop: 50,
+      cylinderSideLength: 20.575,
+      inputMode: 'ADVANCED',
+      coniness: 1.3219280948873624,
+      arcAngle: 180,
+      unit: 'mm',
+      topRadius: 1500,
+      bottomRadius: 600,
+    })
+  })
+
+  it('handles wide top cone with portrait crop', async () => {
+    const crop = await selectConicalGeometry(
+      mockRl('top', 1500, 600, 180, false, 'portrait', 0, 692, 617, 823),
+      {width: 2000, height: 1250}
+    )
+
+    assert.deepEqual(crop, {
+      top: 0,
+      left: 692,
+      width: 617,
+      height: 823,
+      isRotated: false,
+      originalWidth: 2000,
+      originalHeight: 823,
+      cylinderCircumferenceTop: 100,
+      cylinderCircumferenceBottom: 40,
+      targetCircumferenceTop: 50,
+      cylinderSideLength: 20.575,
+      inputMode: 'ADVANCED',
+      coniness: 1.3219280948873624,
+      arcAngle: 180,
+      unit: 'mm',
+      topRadius: 1500,
+      bottomRadius: 600,
+    })
+  })
+
+  it('handles wide bottom cone with default crop', async () => {
+    const crop = await selectConicalGeometry(
+      mockRl('bottom', 1500, 600, 180, true),
+      {width: 2000, height: 1250}
+    )
+
+    // NOTE(christoph): This is comparing to the 8thwall.com behavior
+    assert.deepEqual(crop, {
+      top: 452,
+      left: 0,
+      width: 823,
+      height: 1097,
+      isRotated: true,
+      originalWidth: 823,
+      originalHeight: 2000,
+      cylinderCircumferenceTop: 100,
+      cylinderCircumferenceBottom: 250,
+      targetCircumferenceTop: 50,
+      cylinderSideLength: 51.4375,
+      inputMode: 'ADVANCED',
+      coniness: -1.3219280948873624,
+      arcAngle: 180,
+      unit: 'mm',
+      topRadius: -1500,
+      bottomRadius: 600,
+    })
+  })
+
+  it('handles wide bottom cone with portrait crop', async () => {
+    const crop = await selectConicalGeometry(
+      mockRl('bottom', 1500, 600, 180, false, 'portrait', 0, 692, 617, 823),
+      {width: 2000, height: 1250}
+    )
+
+    assert.deepEqual(crop, {
+      top: 0,
+      left: 692,
+      width: 617,
+      height: 823,
+      isRotated: false,
+      originalWidth: 2000,
+      originalHeight: 823,
+      cylinderCircumferenceTop: 100,
+      cylinderCircumferenceBottom: 250,
+      targetCircumferenceTop: 50,
+      cylinderSideLength: 51.4375,
+      inputMode: 'ADVANCED',
+      coniness: -1.3219280948873624,
+      arcAngle: 180,
+      unit: 'mm',
+      topRadius: -1500,
+      bottomRadius: 600,
     })
   })
 })
