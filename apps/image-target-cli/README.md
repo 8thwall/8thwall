@@ -6,10 +6,7 @@ This CLI tool allows the creation of image targets in the format supported by th
 ## Usage
 
 ```
-git clone https://github.com/8thwall/8thwall.git
-cd ./8thwall/apps/image-target-cli
-npm install
-node ./src/index.js
+npx @8thwall/image-target-cli@latest
 ```
 
 You will be prompted to enter an image path, select crop, and choose a folder/image target name. You can either use a default centered crop, or choose your crop dimensions according to this diagram:
