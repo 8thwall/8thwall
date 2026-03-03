@@ -1,0 +1,9 @@
+test/cone-fez.png
+cone
+bottom
+1500
+600
+180
+y
+tmp
+cone-fez-default

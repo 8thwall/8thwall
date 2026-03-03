@@ -16,7 +16,7 @@ type ImageTargetData = {
   metadata: null
   name: string
   type: 'PLANAR' | 'CYLINDER' | 'CONICAL'
-  properties: CropGeometry | CylinderCropGeometry
+  properties: CropGeometry | CylinderCropGeometry | ConicalCropGeometry
   resources: ReferencedResources
   created: number
   updated: number
@@ -42,6 +42,11 @@ type CylinderCropGeometry = CropGeometry & {
   unit: 'mm' | 'in'
 }
 
+type ConicalCropGeometry = CylinderCropGeometry & {
+  topRadius: number
+  bottomRadius: number
+}
+
  type PlanarCropResult = {
    type: 'PLANAR'
    geometry: CropGeometry
@@ -52,12 +57,14 @@ type CylinderCropGeometry = CropGeometry & {
  }
  type ConicalCropResult = {
    type: 'CONICAL'
-   geometry: CropGeometry
+   geometry: ConicalCropGeometry
  }
+
  type CropResult =
   | PlanarCropResult
   | CylinderCropResult
   | ConicalCropResult
+
 interface CliInterface {
   prompt(question: string): Promise<string>
   choose<T extends string>(
@@ -71,6 +78,29 @@ interface CliInterface {
   promptFloat(question: string): Promise<number>
 }
 
+type Point = {
+  x: number
+  y: number
+}
+
+type Color = [number, number, number]
+
+type ConePixelPoints = {
+  tl: Point
+  bl: Point
+  tr: Point
+  apex: Point
+  theta?: number
+  isFez?: boolean
+}
+
+type UnconifiedData = {
+  topRadius: number
+  bottomRadius: number
+  theta: number
+  outputHeight: number
+}
+
 export type {
   CliInterface,
   CropGeometry,
@@ -80,4 +110,10 @@ export type {
   ImageMetadata,
   ImageTargetData,
   ReferencedResources,
+  Point,
+  Color,
+  ConePixelPoints,
+  ConicalCropResult,
+  PlanarCropResult,
+  UnconifiedData,
 }

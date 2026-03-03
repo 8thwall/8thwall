@@ -1,8 +1,11 @@
 import fs from 'fs/promises'
 import path from 'path'
 import {createRequire} from 'module'
+import sharp from 'sharp'
 
 import {validateCrop} from './crop.js'
+import {computePixelPointsFromRadius, unconify} from './unconify.js'
+import {ImageData} from './image-data.js'
 
 const require = createRequire(import.meta.url)
 const CONSTANTS = require('./constants.json')
@@ -15,16 +18,54 @@ const CONSTANTS = require('./constants.json')
  * @param {boolean} overwriteFiles
  */
 const applyCrop = async (rawImage, crop, folder, name, overwriteFiles) => {
-  if (crop.type === 'CONICAL') {
-    throw new Error('TODO: Add cone support')
-  }
   const baseMetadata = await rawImage.metadata()
-  const metadata = crop.geometry.isRotated
-    ? {
-      width: baseMetadata.height,
-      height: baseMetadata.width,
+
+  /** @type {import("./types").ImageMetadata} */
+  let metadata
+
+  /** @type {import("sharp").Sharp | undefined} */
+  let originalImage
+
+  /** @type {import("sharp").Sharp | undefined} */
+  let geometryImage
+
+  if (crop.type === 'CONICAL') {
+    const originalImageData = new ImageData(baseMetadata.width, baseMetadata.height)
+    originalImageData.data.set(await rawImage.clone().raw().toBuffer())
+    const points = computePixelPointsFromRadius(
+      crop.geometry.topRadius,
+      crop.geometry.bottomRadius,
+      baseMetadata.width
+    )
+    const geometryImageData = unconify(originalImageData, points, baseMetadata.width)
+    originalImage = rawImage
+    geometryImage = sharp(geometryImageData.data, {
+      raw: {
+        width: geometryImageData.width,
+        height: geometryImageData.height,
+        channels: 4,
+      },
+    })
+    if (crop.geometry.isRotated) {
+      geometryImage = geometryImage.rotate(90)
     }
-    : baseMetadata
+
+    metadata = crop.geometry.isRotated
+      ? {
+        width: geometryImageData.height,
+        height: geometryImageData.width,
+      }
+      : {
+        width: geometryImageData.width,
+        height: geometryImageData.height,
+      }
+  } else if (crop.geometry.isRotated) {
+    originalImage = rawImage.clone().rotate(90)
+    metadata = {width: baseMetadata.height, height: baseMetadata.width}
+  } else {
+    originalImage = rawImage
+    metadata = baseMetadata
+  }
 
   const issues = validateCrop(crop.geometry, metadata)
   if (issues.length) {
@@ -40,6 +81,10 @@ const applyCrop = async (rawImage, crop, folder, name, overwriteFiles) => {
     croppedImage: `${name}_cropped.${extension}`,
     thumbnailImage: `${name}_thumbnail.${extension}`,
     luminanceImage: `${name}_luminance.${extension}`,
+  }
+
+  if (geometryImage) {
+    resources.geometryImage = `${name}_geometry.${extension}`
   }
 
   // Final JSON
@@ -58,10 +103,8 @@ const applyCrop = async (rawImage, crop, folder, name, overwriteFiles) => {
 
   const dataPath = path.join(folder, `${name}.json`)
 
-  const originalImage = rawImage
-    .clone()
-    .rotate(crop.geometry.isRotated ? 90 : 0)
-  const croppedImage = originalImage.clone().extract(crop.geometry)
+  const cropSourceImage = geometryImage || originalImage
+  const croppedImage = cropSourceImage.clone().extract(crop.geometry)
 
   const thumbnailImage = croppedImage
     .clone()
@@ -97,6 +140,9 @@ const applyCrop = async (rawImage, crop, folder, name, overwriteFiles) => {
     thumbnailImage.toFile(path.join(folder, resources.thumbnailImage)),
     luminanceImage.toFile(path.join(folder, resources.luminanceImage)),
     croppedImage.toFile(path.join(folder, resources.croppedImage)),
+    geometryImage
+      ? geometryImage.toFile(path.join(folder, resources.geometryImage))
+      : null,
     fs.writeFile(dataPath, `${JSON.stringify(data, null, 2)}\n`),
   ])
 
