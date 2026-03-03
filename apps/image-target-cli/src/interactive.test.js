@@ -2,7 +2,9 @@ import {describe, it} from 'node:test'
 import assert from 'node:assert/strict'
 import os from 'os'
 
-import {normalizePath, selectPlanarGeometry, selectCylindricalGeometry, selectConicalGeometry} from './interactive.js'
+import {
+  normalizePath, selectPlanarGeometry, selectCylindricalGeometry, selectConicalGeometry,
+} from './interactive.js'
 
 const mockRl = (...values) => {
   let i = 0

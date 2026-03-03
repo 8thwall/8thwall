@@ -6,7 +6,9 @@ import os from 'os'
 import {getDefaultCrop} from './crop.js'
 import {applyCrop} from './apply.js'
 import {computePixelPointsFromRadius, getUnconifiedData} from './unconify.js'
-import {getCircumferenceRatio, getConinessForRadii, getTargetCircumferenceBottom} from './curved-geometry.js'
+import {
+  getCircumferenceRatio, getConinessForRadii, getTargetCircumferenceBottom,
+} from './curved-geometry.js'
 
 /**
  * @import {
