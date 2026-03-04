@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>ECS Entity Component Stress Test</title>
+  <style>
+    body {
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<script src="../dist/runtime.js"></script>
+<script>
+  const THREE = window.THREE
+  const bigIntPrinter = (value) => `${value}n`
+
+  const jsonReplacer = (_, value) => (
+    (typeof value === 'bigint') ? bigIntPrinter(value) : value
+  )
+
+  const log = (...args) => {
+    const text = args
+      .map(e => ((typeof e === 'string') ? e : JSON.stringify(e, jsonReplacer)))
+      .join(' ')
+
+    document.body.textContent += '\n'
+    document.body.textContent += text
+  }
+
+  const logError = (error) => {
+    console.error(error)
+    const errorElement = document.createElement('div')
+    errorElement.style.color = 'red'
+    errorElement.textContent = `🚫Error🚫: ${error.message}`
+    document.body.appendChild(errorElement)
+  }
+
+  const ENTITY_COUNTS = [
+    1,
+    10,
+    100,
+    1000,
+    10000,
+    100000,
+  ]
+
+  const SCHEMA_FIELD_COUNTS = [
+    1,
+    5,
+    10,
+  ]
+
+  const runTest = () => {
+    let componentCounter = 0
+    const callbackCounts = new Map()
+
+    const resetCounts = () => {
+      callbackCounts.set('add', 0)
+      callbackCounts.set('remove', 0)
+    }
+
+    const createSchema = (count) => {
+      const schema = {}
+      for (let i = 0; i < count; i++) {
+        schema[`field${i}`] = window.ecs.f32
+      }
+      return schema
+    }
+
+    const createTestComponent = (schema) => {
+      return window.ecs.registerComponent({
+        name: `test-${componentCounter++}`,
+        schema,
+        add: (world, component) => {
+          callbackCounts.set('add', (callbackCounts.get('add') || 0) + 1)
+        },
+        remove: (world, component) => {
+          callbackCounts.set('remove', (callbackCounts.get('remove') || 0) + 1)
+        },
+      })
+    }
+
+    const assert = (statement, label) => {
+      log(statement ? '✅' : '❌', label)
+    }
+
+    resetCounts()
+
+    const scene = new THREE.Scene()
+    const camera = new THREE.PerspectiveCamera(
+      75, window.innerWidth / window.innerHeight, 0.1, 1000
+    )
+    const renderer = new THREE.WebGLRenderer()
+
+    {
+      SCHEMA_FIELD_COUNTS.forEach(fieldCount => {
+        const TestComponent = createTestComponent(createSchema(fieldCount))
+        ENTITY_COUNTS.forEach((count) => {
+          const label = `Field count: ${fieldCount}, entity count: ${count}`
+          const world = window.ecs.createWorld(scene, renderer, camera)
+          world.tick()
+          log(label)
+
+          try {
+            for (let i = 0; i < count; i++) {
+              const eid = world.createEntity()
+              TestComponent.set(world, eid)
+            }
+          } catch (error) {
+            const currentCount = world.allEntities.size
+            log(`Current entity count: ${currentCount},\ntesting count x${count}:\nerror: ${error}`)
+          }
+          world.tick()
+          assert(world.allEntities.size === count, `world.allEntities.size === ${count}`)
+          assert(scene.children.length === count, `scene.children.length === ${count}`)
+          assert(callbackCounts.get('add'), `Add callback is called ${count} times`)
+          try {
+            world.destroy()
+          } catch (error) {
+            log(`Current entity count: ${world.allEntities.size}, destroy error: ${error}`)
+          }
+          assert(world.allEntities.size === 0, `world.allEntities.size === 0`)
+          assert(scene.children.length === 0, ` world destroyed, no children on scene`)
+          assert(callbackCounts.get('remove'), `Remove callback is called ${count} times`)
+          resetCounts()
+        })
+      })
+    }
+
+    {
+      log('Multiple components')
+      SCHEMA_FIELD_COUNTS.forEach(fieldCount => {
+        const TestComponentA = createTestComponent(createSchema(fieldCount))
+        const TestComponentB = createTestComponent(createSchema(fieldCount))
+        ENTITY_COUNTS.forEach((count) => {
+          const label = `Field count: ${fieldCount}, entity count: ${count}`
+          const world = window.ecs.createWorld(scene, renderer, camera)
+          world.tick()
+          log(label)
+
+          try {
+            for (let i = 0; i < count; i++) {
+              const eid = world.createEntity()
+              if (i % 2 === 0) {
+                TestComponentA.set(world, eid)
+              } else {
+                TestComponentB.set(world, eid)
+              }
+            }
+          } catch (error) {
+            const currentCount = world.allEntities.size
+            log(`Current entity count: ${currentCount},\ntesting count x${count}:\nerror: ${error}`)
+          }
+          world.tick()
+          assert(world.allEntities.size === count, `world.allEntities.size === ${count}`)
+          assert(scene.children.length === count, `scene.children.length === ${count}`)
+          assert(callbackCounts.get('add'), `Add callback is called ${count} times`)
+          try {
+            world.destroy()
+          } catch (error) {
+            log(`Current entity count: ${world.allEntities.size}, destroy error: ${error}`)
+          }
+          assert(world.allEntities.size === 0, `world.allEntities.size === 0`)
+          assert(scene.children.length === 0, ` world destroyed, no children on scene`)
+          assert(callbackCounts.get('remove'), `Remove callback is called ${count} times`)
+          resetCounts()
+        })
+      })
+    }
+
+    {
+      log('Multiple worlds')
+      SCHEMA_FIELD_COUNTS.forEach(fieldCount => {
+        const TestComponent = createTestComponent(createSchema(fieldCount))
+        ENTITY_COUNTS.slice(0, 5).forEach((count) => {
+          const label = `Field count: ${fieldCount}, entity count: ${count}`
+          const world1 = window.ecs.createWorld(scene, renderer, camera)
+          const world2 = window.ecs.createWorld(scene, renderer, camera)
+          log(label)
+
+          world1.tick()
+          world2.tick()
+
+          try {
+            for (let i = 0; i < count; i++) {
+              if (i % 2 === 0) {
+                const eid = world1.createEntity()
+                TestComponent.set(world1, eid)
+              } else {
+                const eid = world2.createEntity()
+                TestComponent.set(world2, eid)
+              }
+            }
+          } catch (error) {
+            const w1Count = world1.allEntities.size
+            const w2Count = world2.allEntities.size
+            const worldCounts = { w1Count, w2Count }
+            log(`Worlds entity count: ${worldCounts},\ntesting count x${count}:\nerror: ${error}`)
+          }
+
+          world1.tick()
+          world2.tick()
+
+          const totalEntities = world1.allEntities.size + world2.allEntities.size
+          assert(totalEntities === count, `size of world1 and world2 entities  === ${count}`)
+          assert(scene.children.length === count, `scene.children.length === ${count}`)
+          assert(callbackCounts.get('add'), `Add callback is called ${count} times`)
+          try {
+            world1.destroy()
+          } catch (error) {
+            log(`World1 current entity count: ${world1.allEntities.size}, destroy error: ${error}`)
+          }
+          assert(world1.allEntities.size === 0, `world1.allEntities.size === 0`)
+          const remaining = Math.floor(count / 2)
+          assert(scene.children.length === remaining, `world1 destroyed, half remaining on scene`)
+          try {
+            world2.destroy()
+          } catch (error) {
+            log(`World2 current entity count: ${world2.allEntities.size}, destroy error: ${error}`)
+          }
+          assert(world2.allEntities.size === 0, `world2.allEntities.size === 0`)
+          assert(scene.children.length === 0, ` world2 destroyed, no children on scene`)
+          assert(callbackCounts.get('remove'), `Remove callback is called ${count} times`)
+          resetCounts()
+        })
+      })
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    window.ecs.ready().then(runTest).catch(logError)
+  })
+
+</script>
+
+</html>

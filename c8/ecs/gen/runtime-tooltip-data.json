@@ -1,0 +1,3401 @@
+{
+  "components": {
+    "Position": {
+      "textKey": "tooltip.position.text",
+      "link": "https://www.8thwall.com/docs/api/studio/ecs/position/"
+    },
+    "Quaternion": {
+      "textKey": "tooltip.quaternion.text",
+      "link": "https://www.8thwall.com/docs/api/studio/ecs/quaternion/"
+    },
+    "Scale": {
+      "textKey": "tooltip.scale.text",
+      "link": "https://www.8thwall.com/docs/api/studio/ecs/scale"
+    },
+    "SphereGeometry": {
+      "textKey": "tooltip.sphere_geometry.text",
+      "link": "https://www.8thwall.com/docs/api/studio/ecs/geometry/sphere-geometry/"
+    },
+    "CapsuleGeometry": {
+      "textKey": "tooltip.capsule_geometry.text",
+      "link": "https://www.8thwall.com/docs/api/studio/ecs/geometry/capsule-geometry/"
+    },
+    "PolyhedronGeometry": {
+      "textKey": "tooltip.polyhedron_geometry.text",
+      "link": "https://www.8thwall.com/docs/api/studio/ecs/geometry/polyhedron-geometry/"
+    },
+    "TorusGeometry": {
+      "textKey": "tooltip.torus_geometry.text",
+      "link": "https://www.8thwall.com/docs/api/studio/ecs/geometry/torus-geometry/"
+    },
+    "RingGeometry": {
+      "textKey": "tooltip.ring_geometry.text",
+      "link": "https://www.8thwall.com/docs/api/studio/ecs/geometry/ring-geometry/"
+    },
+    "ConeGeometry": {
+      "textKey": "tooltip.cone_geometry.text",
+      "link": "https://www.8thwall.com/docs/api/studio/ecs/geometry/cone-geometry/"
+    },
+    "PlaneGeometry": {
+      "textKey": "tooltip.plane_geometry.text",
+      "link": "https://www.8thwall.com/docs/api/studio/ecs/geometry/plane-geometry/"
+    },
+    "CircleGeometry": {
+      "textKey": "tooltip.circle_geometry.text",
+      "link": "https://www.8thwall.com/docs/api/studio/ecs/geometry/circle-geometry/"
+    },
+    "BoxGeometry": {
+      "textKey": "tooltip.box_geometry.text",
+      "link": "https://www.8thwall.com/docs/api/studio/ecs/geometry/box-geometry/"
+    },
+    "CylinderGeometry": {
+      "textKey": "tooltip.cylinder_geometry.text",
+      "link": "https://www.8thwall.com/docs/api/studio/ecs/geometry/cylinder-geometry/"
+    },
+    "TetrahedronGeometry": {
+      "link": "X"
+    },
+    "Material": {
+      "textKey": "tooltip.material.text",
+      "link": "https://www.8thwall.com/docs/api/studio/ecs/material/"
+    },
+    "ShadowMaterial": {
+      "textKey": "tooltip.shadow_material.text",
+      "link": "https://www.8thwall.com/docs/api/studio/ecs/shadow-material/"
+    },
+    "UnlitMaterial": {
+      "textKey": "tooltip.unlit_material.text",
+      "link": "https://www.8thwall.com/docs/api/studio/ecs/material/unlit-material/"
+    },
+    "VideoMaterial": {
+      "textKey": "tooltip.video_material.text",
+      "link": "https://www.8thwall.com/docs/api/studio/ecs/material/video-material/"
+    },
+    "Camera": {
+      "textKey": "tooltip.camera.text",
+      "link": "https://www.8thwall.com/docs/api/studio/ecs/camera/"
+    },
+    "Audio": {
+      "textKey": "tooltip.audio.text",
+      "link": "https://www.8thwall.com/docs/api/studio/ecs/audio/"
+    },
+    "Light": {
+      "textKey": "tooltip.light.text",
+      "link": "https://www.8thwall.com/docs/api/studio/ecs/light/"
+    },
+    "VideoControls": {
+      "textKey": "tooltip.video_controls.text",
+      "link": "https://www.8thwall.com/docs/api/studio/ecs/videocontrols/"
+    },
+    "Collider": {
+      "textKey": "tooltip.collider.text",
+      "link": "https://www.8thwall.com/docs/api/studio/ecs/collider/"
+    },
+    "FollowAnimation": {
+      "textKey": "tooltip.follow_animation.text",
+      "link": "https://www.8thwall.com/docs/api/studio/ecs/animation/follow-animation/"
+    },
+    "ScaleAnimation": {
+      "textKey": "tooltip.scale_animation.text",
+      "link": "https://www.8thwall.com/docs/api/studio/ecs/animation/scale-animation/"
+    },
+    "CustomVec3Animation": {
+      "textKey": "tooltip.custom_vec3_animation.text",
+      "link": "https://www.8thwall.com/docs/api/studio/ecs/animation/custom-vec3-animation/"
+    },
+    "CustomPropertyAnimation": {
+      "textKey": "tooltip.custom_property_animation.text",
+      "link": "https://www.8thwall.com/docs/api/studio/ecs/animation/custom-property-animation/"
+    },
+    "LookAtAnimation": {
+      "textKey": "tooltip.look_at_animation.text",
+      "link": "https://www.8thwall.com/docs/api/studio/ecs/animation/look-at-animation/"
+    },
+    "PositionAnimation": {
+      "textKey": "tooltip.position_animation.text",
+      "link": "https://www.8thwall.com/docs/api/studio/ecs/animation/position-animation/"
+    },
+    "RotateAnimation": {
+      "textKey": "tooltip.rotate_animation.text",
+      "link": "https://www.8thwall.com/docs/api/studio/ecs/animation/rotate-animation/"
+    },
+    "ParticleEmitter": {
+      "textKey": "tooltip.particle_emitter.text",
+      "link": "https://www.8thwall.com/docs/api/studio/ecs/particle-emitter/"
+    },
+    "Ui": {
+      "textKey": "tooltip.ui.text",
+      "link": "https://www.8thwall.com/docs/api/studio/ecs/ui/"
+    },
+    "Shadow": {
+      "textKey": "tooltip.shadow.text",
+      "link": "https://www.8thwall.com/docs/api/studio/ecs/shadow/"
+    },
+    "GltfModel": {
+      "textKey": "tooltip.gltf_model.text",
+      "link": "https://www.8thwall.com/docs/api/studio/ecs/gltf-model/"
+    },
+    "OrbitControls": {
+      "textKey": "tooltip.orbit_controls.text",
+      "link": "https://www.8thwall.com/docs/api/studio/ecs/orbit-controls/"
+    },
+    "FlyController": {
+      "textKey": "tooltip.fly_controller.text",
+      "link": "https://www.8thwall.com/docs/api/studio/ecs/fly-controller/"
+    },
+    "ImageTarget": {
+      "textKey": "tooltip.image_target.text",
+      "link": "https://www.8thwall.com/docs/api/studio/ecs/image-target/"
+    },
+    "Face": {
+      "textKey": "tooltip.face.text",
+      "link": "https://www.8thwall.com/docs/api/studio/ecs/face/"
+    },
+    "Splat": {
+      "textKey": "tooltip.splat.text",
+      "link": "https://www.8thwall.com/docs/api/studio/ecs/splat/"
+    },
+    "FaceAttachment": {
+      "textKey": "tooltip.face_attachment.text",
+      "link": "https://www.8thwall.com/docs/api/studio/ecs/face-attachment/"
+    },
+    "ThreeObject": {
+      "link": "X"
+    },
+    "Disabled": {
+      "textKey": "tooltip.disabled.text",
+      "link": "https://www.8thwall.com/docs/api/studio/ecs/disabled/"
+    },
+    "Persistent": {
+      "textKey": "tooltip.persistent.text",
+      "link": "https://www.8thwall.com/docs/api/studio/ecs/persistent/"
+    },
+    "HiderMaterial": {
+      "textKey": "tooltip.hider_material.text",
+      "link": "https://www.8thwall.com/docs/api/studio/ecs/material/hider-material/"
+    },
+    "Hidden": {
+      "textKey": "tooltip.hidden.text",
+      "link": "https://www.8thwall.com/docs/api/studio/ecs/hidden/"
+    },
+    "LocationAnchor": {
+      "link": "X"
+    },
+    "FaceMeshAnchor": {
+      "textKey": "tooltip.face_mesh_anchor.text",
+      "link": "X"
+    },
+    "FaceGeometry": {
+      "textKey": "tooltip.face_geometry.text",
+      "link": "X"
+    },
+    "FaceAnchor": {
+      "link": "X"
+    }
+  },
+  "propertiesByRuntime": {
+    "Position.x": {
+      "accessor": "Position",
+      "name": "x",
+      "textKey": "tooltip.position.x.text",
+      "defaultValue": "0",
+      "exampleValue": "2",
+      "type": "number"
+    },
+    "Position.y": {
+      "accessor": "Position",
+      "name": "y",
+      "textKey": "tooltip.position.y.text",
+      "defaultValue": "0",
+      "exampleValue": "2",
+      "type": "number"
+    },
+    "Position.z": {
+      "accessor": "Position",
+      "name": "z",
+      "textKey": "tooltip.position.z.text",
+      "defaultValue": "0",
+      "exampleValue": "2",
+      "type": "number"
+    },
+    "Quaternion.x": {
+      "accessor": "Quaternion",
+      "name": "x",
+      "textKey": "tooltip.quaternion.x.text",
+      "defaultValue": "0",
+      "type": "number"
+    },
+    "Quaternion.y": {
+      "accessor": "Quaternion",
+      "name": "y",
+      "textKey": "tooltip.quaternion.y.text",
+      "defaultValue": "0",
+      "type": "number"
+    },
+    "Quaternion.z": {
+      "accessor": "Quaternion",
+      "name": "z",
+      "textKey": "tooltip.quaternion.z.text",
+      "defaultValue": "0",
+      "type": "number"
+    },
+    "Quaternion.w": {
+      "accessor": "Quaternion",
+      "name": "w",
+      "textKey": "tooltip.quaternion.w.text",
+      "defaultValue": "1",
+      "type": "number"
+    },
+    "Scale.x": {
+      "accessor": "Scale",
+      "name": "x",
+      "textKey": "tooltip.scale.x.text",
+      "defaultValue": "1",
+      "exampleValue": "2",
+      "type": "number"
+    },
+    "Scale.y": {
+      "accessor": "Scale",
+      "name": "y",
+      "textKey": "tooltip.scale.y.text",
+      "defaultValue": "1",
+      "exampleValue": "2",
+      "type": "number"
+    },
+    "Scale.z": {
+      "accessor": "Scale",
+      "name": "z",
+      "textKey": "tooltip.scale.z.text",
+      "defaultValue": "1",
+      "exampleValue": "2",
+      "type": "number"
+    },
+    "SphereGeometry.radius": {
+      "accessor": "SphereGeometry",
+      "name": "radius",
+      "textKey": "tooltip.sphere_geometry.radius.text",
+      "defaultValue": "0",
+      "exampleValue": "1",
+      "type": "number"
+    },
+    "CapsuleGeometry.radius": {
+      "accessor": "CapsuleGeometry",
+      "name": "radius",
+      "textKey": "tooltip.capsule_geometry.radius.text",
+      "defaultValue": "0",
+      "exampleValue": "1",
+      "type": "number"
+    },
+    "CapsuleGeometry.height": {
+      "accessor": "CapsuleGeometry",
+      "name": "height",
+      "textKey": "tooltip.capsule_geometry.height.text",
+      "defaultValue": "0",
+      "exampleValue": "1",
+      "type": "number"
+    },
+    "PolyhedronGeometry.radius": {
+      "accessor": "PolyhedronGeometry",
+      "name": "radius",
+      "textKey": "tooltip.polyhedron_geometry.radius.text",
+      "defaultValue": "0",
+      "exampleValue": "1",
+      "type": "number"
+    },
+    "PolyhedronGeometry.faces": {
+      "accessor": "PolyhedronGeometry",
+      "name": "faces",
+      "textKey": "tooltip.polyhedron_geometry.faces.text",
+      "defaultValue": "0",
+      "exampleValue": "4",
+      "type": "number"
+    },
+    "TorusGeometry.radius": {
+      "accessor": "TorusGeometry",
+      "name": "radius",
+      "textKey": "tooltip.torus_geometry.radius.text",
+      "defaultValue": "0",
+      "exampleValue": "1",
+      "type": "number"
+    },
+    "TorusGeometry.tubeRadius": {
+      "accessor": "TorusGeometry",
+      "name": "tubeRadius",
+      "textKey": "tooltip.torus_geometry.tube_radius.text",
+      "defaultValue": "0",
+      "exampleValue": "1",
+      "type": "number"
+    },
+    "RingGeometry.innerRadius": {
+      "accessor": "RingGeometry",
+      "name": "innerRadius",
+      "textKey": "tooltip.ring_geometry.inner_radius.text",
+      "defaultValue": "0",
+      "exampleValue": "1",
+      "type": "number"
+    },
+    "RingGeometry.outerRadius": {
+      "accessor": "RingGeometry",
+      "name": "outerRadius",
+      "textKey": "tooltip.ring_geometry.outer_radius.text",
+      "defaultValue": "0",
+      "exampleValue": "1",
+      "type": "number"
+    },
+    "ConeGeometry.radius": {
+      "accessor": "ConeGeometry",
+      "name": "radius",
+      "textKey": "tooltip.cone_geometry.radius.text",
+      "defaultValue": "0",
+      "exampleValue": "1",
+      "type": "number"
+    },
+    "ConeGeometry.height": {
+      "accessor": "ConeGeometry",
+      "name": "height",
+      "textKey": "tooltip.cone_geometry.height.text",
+      "defaultValue": "0",
+      "exampleValue": "1",
+      "type": "number"
+    },
+    "PlaneGeometry.width": {
+      "accessor": "PlaneGeometry",
+      "name": "width",
+      "textKey": "tooltip.plane_geometry.width.text",
+      "defaultValue": "0",
+      "exampleValue": "1",
+      "type": "number"
+    },
+    "PlaneGeometry.height": {
+      "accessor": "PlaneGeometry",
+      "name": "height",
+      "textKey": "tooltip.plane_geometry.height.text",
+      "defaultValue": "0",
+      "exampleValue": "1",
+      "type": "number"
+    },
+    "CircleGeometry.radius": {
+      "accessor": "CircleGeometry",
+      "name": "radius",
+      "textKey": "tooltip.circle_geometry.radius.text",
+      "defaultValue": "0",
+      "exampleValue": "1",
+      "type": "number"
+    },
+    "BoxGeometry.width": {
+      "accessor": "BoxGeometry",
+      "name": "width",
+      "textKey": "tooltip.box_geometry.width.text",
+      "defaultValue": "0",
+      "exampleValue": "1",
+      "type": "number"
+    },
+    "BoxGeometry.height": {
+      "accessor": "BoxGeometry",
+      "name": "height",
+      "textKey": "tooltip.box_geometry.height.text",
+      "defaultValue": "0",
+      "exampleValue": "1",
+      "type": "number"
+    },
+    "BoxGeometry.depth": {
+      "accessor": "BoxGeometry",
+      "name": "depth",
+      "textKey": "tooltip.box_geometry.depth.text",
+      "defaultValue": "0",
+      "exampleValue": "1",
+      "type": "number"
+    },
+    "CylinderGeometry.radius": {
+      "accessor": "CylinderGeometry",
+      "name": "radius",
+      "textKey": "tooltip.cylinder_geometry.radius.text",
+      "defaultValue": "0",
+      "exampleValue": "1",
+      "type": "number"
+    },
+    "CylinderGeometry.height": {
+      "accessor": "CylinderGeometry",
+      "name": "height",
+      "textKey": "tooltip.cylinder_geometry.height.text",
+      "defaultValue": "0",
+      "exampleValue": "1",
+      "type": "number"
+    },
+    "TetrahedronGeometry.radius": {
+      "accessor": "TetrahedronGeometry",
+      "name": "radius",
+      "defaultValue": "0",
+      "exampleValue": "1",
+      "type": "number"
+    },
+    "Material.r": {
+      "accessor": "Material",
+      "name": "r",
+      "textKey": "tooltip.material.r.text",
+      "defaultValue": "0",
+      "exampleValue": "123",
+      "type": "number"
+    },
+    "Material.g": {
+      "accessor": "Material",
+      "name": "g",
+      "textKey": "tooltip.material.g.text",
+      "defaultValue": "0",
+      "exampleValue": "123",
+      "type": "number"
+    },
+    "Material.b": {
+      "accessor": "Material",
+      "name": "b",
+      "textKey": "tooltip.material.b.text",
+      "defaultValue": "0",
+      "exampleValue": "123",
+      "type": "number"
+    },
+    "Material.textureSrc": {
+      "accessor": "Material",
+      "name": "textureSrc",
+      "textKey": "tooltip.material.texture_src.text",
+      "defaultValue": "''",
+      "type": "string"
+    },
+    "Material.roughness": {
+      "accessor": "Material",
+      "name": "roughness",
+      "textKey": "tooltip.material.roughness.text",
+      "defaultValue": "0.5",
+      "type": "number"
+    },
+    "Material.roughnessMap": {
+      "accessor": "Material",
+      "name": "roughnessMap",
+      "textKey": "tooltip.material.roughness_map.text",
+      "defaultValue": "''",
+      "type": "string"
+    },
+    "Material.metalness": {
+      "accessor": "Material",
+      "name": "metalness",
+      "textKey": "tooltip.material.metalness.text",
+      "defaultValue": "0.5",
+      "type": "number"
+    },
+    "Material.metalnessMap": {
+      "accessor": "Material",
+      "name": "metalnessMap",
+      "textKey": "tooltip.material.metalness_map.text",
+      "defaultValue": "''",
+      "type": "string"
+    },
+    "Material.normalScale": {
+      "accessor": "Material",
+      "name": "normalScale",
+      "textKey": "tooltip.material.normal_scale.text",
+      "defaultValue": "1",
+      "exampleValue": "0.5",
+      "type": "number"
+    },
+    "Material.normalMap": {
+      "accessor": "Material",
+      "name": "normalMap",
+      "textKey": "tooltip.material.normal_map.text",
+      "defaultValue": "''",
+      "type": "string"
+    },
+    "Material.opacity": {
+      "accessor": "Material",
+      "name": "opacity",
+      "textKey": "tooltip.material.opacity.text",
+      "defaultValue": "1",
+      "exampleValue": "0.5",
+      "type": "number"
+    },
+    "Material.opacityMap": {
+      "accessor": "Material",
+      "name": "opacityMap",
+      "textKey": "tooltip.material.opacity_map.text",
+      "defaultValue": "''",
+      "type": "string"
+    },
+    "Material.emissiveIntensity": {
+      "accessor": "Material",
+      "name": "emissiveIntensity",
+      "textKey": "tooltip.material.emissive_intensity.text",
+      "defaultValue": "0",
+      "type": "number"
+    },
+    "Material.emissiveMap": {
+      "accessor": "Material",
+      "name": "emissiveMap",
+      "textKey": "tooltip.material.emissive_map.text",
+      "defaultValue": "''",
+      "type": "string"
+    },
+    "Material.emissiveR": {
+      "accessor": "Material",
+      "name": "emissiveR",
+      "textKey": "tooltip.material.emissive_r.text",
+      "defaultValue": "0",
+      "exampleValue": "123",
+      "type": "number"
+    },
+    "Material.emissiveG": {
+      "accessor": "Material",
+      "name": "emissiveG",
+      "textKey": "tooltip.material.emissive_g.text",
+      "defaultValue": "0",
+      "exampleValue": "123",
+      "type": "number"
+    },
+    "Material.emissiveB": {
+      "accessor": "Material",
+      "name": "emissiveB",
+      "textKey": "tooltip.material.emissive_b.text",
+      "defaultValue": "0",
+      "exampleValue": "123",
+      "type": "number"
+    },
+    "Material.side": {
+      "accessor": "Material",
+      "name": "side",
+      "textKey": "tooltip.material.side.text",
+      "defaultValue": "'front'",
+      "exampleValue": "'double'",
+      "type": "string"
+    },
+    "Material.blending": {
+      "accessor": "Material",
+      "name": "blending",
+      "textKey": "tooltip.material.blending.text",
+      "defaultValue": "'normal'",
+      "type": "string"
+    },
+    "Material.repeatX": {
+      "accessor": "Material",
+      "name": "repeatX",
+      "textKey": "tooltip.material.repeat_x.text",
+      "defaultValue": "1",
+      "type": "number"
+    },
+    "Material.repeatY": {
+      "accessor": "Material",
+      "name": "repeatY",
+      "textKey": "tooltip.material.repeat_y.text",
+      "defaultValue": "1",
+      "type": "number"
+    },
+    "Material.offsetX": {
+      "accessor": "Material",
+      "name": "offsetX",
+      "textKey": "tooltip.material.offset_x.text",
+      "defaultValue": "0",
+      "type": "number"
+    },
+    "Material.offsetY": {
+      "accessor": "Material",
+      "name": "offsetY",
+      "textKey": "tooltip.material.offset_y.text",
+      "defaultValue": "0",
+      "type": "number"
+    },
+    "Material.depthTest": {
+      "accessor": "Material",
+      "name": "depthTest",
+      "textKey": "tooltip.material.depth_test.text",
+      "defaultValue": "true",
+      "exampleValue": "false",
+      "type": "boolean"
+    },
+    "Material.depthWrite": {
+      "accessor": "Material",
+      "name": "depthWrite",
+      "textKey": "tooltip.material.depth_write.text",
+      "defaultValue": "true",
+      "exampleValue": "false",
+      "type": "boolean"
+    },
+    "Material.wireframe": {
+      "accessor": "Material",
+      "name": "wireframe",
+      "textKey": "tooltip.material.wireframe.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "Material.forceTransparent": {
+      "accessor": "Material",
+      "name": "forceTransparent",
+      "textKey": "tooltip.material.force_transparent.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "Material.mipmaps": {
+      "accessor": "Material",
+      "name": "mipmaps",
+      "textKey": "tooltip.material.mipmaps.text",
+      "defaultValue": "true",
+      "exampleValue": "false",
+      "type": "boolean"
+    },
+    "Material.textureFiltering": {
+      "accessor": "Material",
+      "name": "textureFiltering",
+      "textKey": "tooltip.material.texture_filtering.text",
+      "defaultValue": "'smooth'",
+      "exampleValue": "'sharp'",
+      "type": "string"
+    },
+    "Material.wrap": {
+      "accessor": "Material",
+      "name": "wrap",
+      "textKey": "tooltip.material.wrap.text",
+      "defaultValue": "'repeat'",
+      "exampleValue": "'clamp'",
+      "type": "string"
+    },
+    "ShadowMaterial.r": {
+      "accessor": "ShadowMaterial",
+      "name": "r",
+      "textKey": "tooltip.shadow_material.r.text",
+      "defaultValue": "0",
+      "exampleValue": "123",
+      "type": "number"
+    },
+    "ShadowMaterial.g": {
+      "accessor": "ShadowMaterial",
+      "name": "g",
+      "textKey": "tooltip.shadow_material.g.text",
+      "defaultValue": "0",
+      "exampleValue": "123",
+      "type": "number"
+    },
+    "ShadowMaterial.b": {
+      "accessor": "ShadowMaterial",
+      "name": "b",
+      "textKey": "tooltip.shadow_material.b.text",
+      "defaultValue": "0",
+      "exampleValue": "123",
+      "type": "number"
+    },
+    "ShadowMaterial.opacity": {
+      "accessor": "ShadowMaterial",
+      "name": "opacity",
+      "textKey": "tooltip.shadow_material.opacity.text",
+      "defaultValue": "0.4",
+      "type": "number"
+    },
+    "ShadowMaterial.side": {
+      "accessor": "ShadowMaterial",
+      "name": "side",
+      "textKey": "tooltip.shadow_material.side.text",
+      "defaultValue": "'front'",
+      "type": "string"
+    },
+    "ShadowMaterial.depthTest": {
+      "accessor": "ShadowMaterial",
+      "name": "depthTest",
+      "textKey": "tooltip.shadow_material.depth_test.text",
+      "defaultValue": "true",
+      "exampleValue": "false",
+      "type": "boolean"
+    },
+    "ShadowMaterial.depthWrite": {
+      "accessor": "ShadowMaterial",
+      "name": "depthWrite",
+      "textKey": "tooltip.shadow_material.depth_write.text",
+      "defaultValue": "true",
+      "exampleValue": "false",
+      "type": "boolean"
+    },
+    "UnlitMaterial.r": {
+      "accessor": "UnlitMaterial",
+      "name": "r",
+      "textKey": "tooltip.unlit_material.r.text",
+      "defaultValue": "0",
+      "exampleValue": "100",
+      "type": "number"
+    },
+    "UnlitMaterial.g": {
+      "accessor": "UnlitMaterial",
+      "name": "g",
+      "textKey": "tooltip.unlit_material.g.text",
+      "defaultValue": "0",
+      "exampleValue": "200",
+      "type": "number"
+    },
+    "UnlitMaterial.b": {
+      "accessor": "UnlitMaterial",
+      "name": "b",
+      "textKey": "tooltip.unlit_material.b.text",
+      "defaultValue": "0",
+      "exampleValue": "255",
+      "type": "number"
+    },
+    "UnlitMaterial.textureSrc": {
+      "accessor": "UnlitMaterial",
+      "name": "textureSrc",
+      "textKey": "tooltip.unlit_material.texture_src.text",
+      "defaultValue": "''",
+      "type": "string"
+    },
+    "UnlitMaterial.opacity": {
+      "accessor": "UnlitMaterial",
+      "name": "opacity",
+      "textKey": "tooltip.unlit_material.opacity.text",
+      "defaultValue": "1",
+      "type": "number"
+    },
+    "UnlitMaterial.side": {
+      "accessor": "UnlitMaterial",
+      "name": "side",
+      "textKey": "tooltip.unlit_material.side.text",
+      "defaultValue": "'front'",
+      "type": "string"
+    },
+    "UnlitMaterial.opacityMap": {
+      "accessor": "UnlitMaterial",
+      "name": "opacityMap",
+      "textKey": "tooltip.unlit_material.opacity_map.text",
+      "defaultValue": "''",
+      "type": "string"
+    },
+    "UnlitMaterial.blending": {
+      "accessor": "UnlitMaterial",
+      "name": "blending",
+      "textKey": "tooltip.unlit_material.blending.text",
+      "defaultValue": "'normal'",
+      "type": "string"
+    },
+    "UnlitMaterial.repeatX": {
+      "accessor": "UnlitMaterial",
+      "name": "repeatX",
+      "textKey": "tooltip.unlit_material.repeat_x.text",
+      "defaultValue": "1",
+      "type": "number"
+    },
+    "UnlitMaterial.repeatY": {
+      "accessor": "UnlitMaterial",
+      "name": "repeatY",
+      "textKey": "tooltip.unlit_material.repeat_y.text",
+      "defaultValue": "1",
+      "type": "number"
+    },
+    "UnlitMaterial.offsetX": {
+      "accessor": "UnlitMaterial",
+      "name": "offsetX",
+      "textKey": "tooltip.unlit_material.offset_x.text",
+      "defaultValue": "0",
+      "type": "number"
+    },
+    "UnlitMaterial.offsetY": {
+      "accessor": "UnlitMaterial",
+      "name": "offsetY",
+      "textKey": "tooltip.unlit_material.offset_y.text",
+      "defaultValue": "0",
+      "type": "number"
+    },
+    "UnlitMaterial.wrap": {
+      "accessor": "UnlitMaterial",
+      "name": "wrap",
+      "textKey": "tooltip.unlit_material.wrap.text",
+      "defaultValue": "'repeat'",
+      "exampleValue": "'clamp'",
+      "type": "string"
+    },
+    "UnlitMaterial.depthTest": {
+      "accessor": "UnlitMaterial",
+      "name": "depthTest",
+      "textKey": "tooltip.unlit_material.depth_test.text",
+      "defaultValue": "true",
+      "exampleValue": "false",
+      "type": "boolean"
+    },
+    "UnlitMaterial.depthWrite": {
+      "accessor": "UnlitMaterial",
+      "name": "depthWrite",
+      "textKey": "tooltip.unlit_material.depth_write.text",
+      "defaultValue": "true",
+      "exampleValue": "false",
+      "type": "boolean"
+    },
+    "UnlitMaterial.wireframe": {
+      "accessor": "UnlitMaterial",
+      "name": "wireframe",
+      "textKey": "tooltip.unlit_material.wireframe.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "UnlitMaterial.forceTransparent": {
+      "accessor": "UnlitMaterial",
+      "name": "forceTransparent",
+      "textKey": "tooltip.unlit_material.force_transparent.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "UnlitMaterial.textureFiltering": {
+      "accessor": "UnlitMaterial",
+      "name": "textureFiltering",
+      "textKey": "tooltip.unlit_material.texture_filtering.text",
+      "defaultValue": "'smooth'",
+      "type": "string"
+    },
+    "UnlitMaterial.mipmaps": {
+      "accessor": "UnlitMaterial",
+      "name": "mipmaps",
+      "textKey": "tooltip.unlit_material.mipmaps.text",
+      "defaultValue": "true",
+      "exampleValue": "false",
+      "type": "boolean"
+    },
+    "VideoMaterial.r": {
+      "accessor": "VideoMaterial",
+      "name": "r",
+      "textKey": "tooltip.video_material.r.text",
+      "defaultValue": "0",
+      "exampleValue": "123",
+      "type": "number"
+    },
+    "VideoMaterial.g": {
+      "accessor": "VideoMaterial",
+      "name": "g",
+      "textKey": "tooltip.video_material.g.text",
+      "defaultValue": "0",
+      "exampleValue": "123",
+      "type": "number"
+    },
+    "VideoMaterial.b": {
+      "accessor": "VideoMaterial",
+      "name": "b",
+      "textKey": "tooltip.video_material.b.text",
+      "defaultValue": "0",
+      "exampleValue": "123",
+      "type": "number"
+    },
+    "VideoMaterial.textureSrc": {
+      "accessor": "VideoMaterial",
+      "name": "textureSrc",
+      "textKey": "tooltip.video_material.texture_src.text",
+      "defaultValue": "''",
+      "exampleValue": "'assets/my-video.mp4'",
+      "type": "string"
+    },
+    "VideoMaterial.opacity": {
+      "accessor": "VideoMaterial",
+      "name": "opacity",
+      "textKey": "tooltip.video_material.opacity.text",
+      "defaultValue": "1",
+      "exampleValue": "0.5",
+      "type": "number"
+    },
+    "Camera.type": {
+      "accessor": "Camera",
+      "name": "type",
+      "textKey": "tooltip.camera.type.text",
+      "defaultValue": "'perspective'",
+      "exampleValue": "'orthogonal'",
+      "type": "string"
+    },
+    "Camera.nearClip": {
+      "accessor": "Camera",
+      "name": "nearClip",
+      "textKey": "tooltip.camera.near_clip.text",
+      "defaultValue": "0.1",
+      "type": "number"
+    },
+    "Camera.farClip": {
+      "accessor": "Camera",
+      "name": "farClip",
+      "textKey": "tooltip.camera.far_clip.text",
+      "defaultValue": "2000",
+      "type": "number"
+    },
+    "Camera.zoom": {
+      "accessor": "Camera",
+      "name": "zoom",
+      "textKey": "tooltip.camera.zoom.text",
+      "defaultValue": "1",
+      "type": "number"
+    },
+    "Camera.fov": {
+      "accessor": "Camera",
+      "name": "fov",
+      "textKey": "tooltip.camera.fov.text",
+      "defaultValue": "80",
+      "type": "number"
+    },
+    "Camera.left": {
+      "accessor": "Camera",
+      "name": "left",
+      "textKey": "tooltip.camera.left.text",
+      "defaultValue": "-1",
+      "type": "number"
+    },
+    "Camera.right": {
+      "accessor": "Camera",
+      "name": "right",
+      "textKey": "tooltip.camera.right.text",
+      "defaultValue": "1",
+      "type": "number"
+    },
+    "Camera.top": {
+      "accessor": "Camera",
+      "name": "top",
+      "textKey": "tooltip.camera.top.text",
+      "defaultValue": "1",
+      "type": "number"
+    },
+    "Camera.bottom": {
+      "accessor": "Camera",
+      "name": "bottom",
+      "textKey": "tooltip.camera.bottom.text",
+      "defaultValue": "-1",
+      "type": "number"
+    },
+    "Camera.direction": {
+      "accessor": "Camera",
+      "name": "direction",
+      "textKey": "tooltip.camera.direction.text",
+      "defaultValue": "'front'",
+      "exampleValue": "'back'",
+      "type": "string"
+    },
+    "Camera.xrCameraType": {
+      "accessor": "Camera",
+      "name": "xrCameraType",
+      "textKey": "tooltip.camera.xr_camera_type.text",
+      "defaultValue": "'3dOnly'",
+      "type": "string"
+    },
+    "Camera.phone": {
+      "accessor": "Camera",
+      "name": "phone",
+      "defaultValue": "'3D'",
+      "type": "string"
+    },
+    "Camera.desktop": {
+      "accessor": "Camera",
+      "name": "desktop",
+      "defaultValue": "'3D'",
+      "type": "string"
+    },
+    "Camera.headset": {
+      "accessor": "Camera",
+      "name": "headset",
+      "defaultValue": "'3D'",
+      "type": "string"
+    },
+    "Camera.uvType": {
+      "accessor": "Camera",
+      "name": "uvType",
+      "textKey": "tooltip.camera.uv_type.text",
+      "defaultValue": "'standard'",
+      "type": "string"
+    },
+    "Camera.leftHandedAxes": {
+      "accessor": "Camera",
+      "name": "leftHandedAxes",
+      "textKey": "tooltip.camera.left_handed_axes.text",
+      "defaultValue": "false",
+      "type": "boolean"
+    },
+    "Camera.disableWorldTracking": {
+      "accessor": "Camera",
+      "name": "disableWorldTracking",
+      "textKey": "tooltip.camera.disable_world_tracking.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "Camera.enableLighting": {
+      "accessor": "Camera",
+      "name": "enableLighting",
+      "textKey": "tooltip.camera.enable_lighting.text",
+      "defaultValue": "false",
+      "type": "boolean"
+    },
+    "Camera.scale": {
+      "accessor": "Camera",
+      "name": "scale",
+      "textKey": "tooltip.camera.scale.text",
+      "defaultValue": "'responsive'",
+      "type": "string"
+    },
+    "Camera.enableWorldPoints": {
+      "accessor": "Camera",
+      "name": "enableWorldPoints",
+      "textKey": "tooltip.camera.enable_world_points.text",
+      "defaultValue": "false",
+      "type": "boolean"
+    },
+    "Camera.enableVps": {
+      "accessor": "Camera",
+      "name": "enableVps",
+      "textKey": "tooltip.camera.enable_vps.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "Camera.mirroredDisplay": {
+      "accessor": "Camera",
+      "name": "mirroredDisplay",
+      "textKey": "tooltip.camera.mirrored_display.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "Camera.meshGeometryFace": {
+      "accessor": "Camera",
+      "name": "meshGeometryFace",
+      "textKey": "tooltip.camera.mesh_geometry_face.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "Camera.meshGeometryEyes": {
+      "accessor": "Camera",
+      "name": "meshGeometryEyes",
+      "textKey": "tooltip.camera.mesh_geometry_eyes.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "Camera.meshGeometryIris": {
+      "accessor": "Camera",
+      "name": "meshGeometryIris",
+      "textKey": "tooltip.camera.mesh_geometry_iris.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "Camera.meshGeometryMouth": {
+      "accessor": "Camera",
+      "name": "meshGeometryMouth",
+      "textKey": "tooltip.camera.mesh_geometry_mouth.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "Camera.enableEars": {
+      "accessor": "Camera",
+      "name": "enableEars",
+      "textKey": "tooltip.camera.enable_ears.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "Camera.maxDetections": {
+      "accessor": "Camera",
+      "name": "maxDetections",
+      "textKey": "tooltip.camera.max_detections.text",
+      "defaultValue": "1",
+      "exampleValue": "3",
+      "type": "number"
+    },
+    "Audio.url": {
+      "accessor": "Audio",
+      "name": "url",
+      "textKey": "tooltip.audio.url.text",
+      "defaultValue": "''",
+      "exampleValue": "'assets/my-sound.mp3'",
+      "type": "string"
+    },
+    "Audio.volume": {
+      "accessor": "Audio",
+      "name": "volume",
+      "textKey": "tooltip.audio.volume.text",
+      "defaultValue": "1",
+      "exampleValue": "0.5",
+      "type": "number"
+    },
+    "Audio.loop": {
+      "accessor": "Audio",
+      "name": "loop",
+      "textKey": "tooltip.audio.loop.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "Audio.paused": {
+      "accessor": "Audio",
+      "name": "paused",
+      "textKey": "tooltip.audio.paused.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "Audio.pitch": {
+      "accessor": "Audio",
+      "name": "pitch",
+      "textKey": "tooltip.audio.pitch.text",
+      "defaultValue": "1",
+      "type": "number"
+    },
+    "Audio.positional": {
+      "accessor": "Audio",
+      "name": "positional",
+      "textKey": "tooltip.audio.positional.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "Audio.refDistance": {
+      "accessor": "Audio",
+      "name": "refDistance",
+      "textKey": "tooltip.audio.ref_distance.text",
+      "defaultValue": "1",
+      "type": "number"
+    },
+    "Audio.distanceModel": {
+      "accessor": "Audio",
+      "name": "distanceModel",
+      "textKey": "tooltip.audio.distance_model.text",
+      "defaultValue": "'inverse'",
+      "type": "string"
+    },
+    "Audio.rolloffFactor": {
+      "accessor": "Audio",
+      "name": "rolloffFactor",
+      "textKey": "tooltip.audio.rolloff_factor.text",
+      "defaultValue": "1",
+      "type": "number"
+    },
+    "Audio.maxDistance": {
+      "accessor": "Audio",
+      "name": "maxDistance",
+      "textKey": "tooltip.audio.max_distance.text",
+      "defaultValue": "10000",
+      "type": "number"
+    },
+    "Light.type": {
+      "accessor": "Light",
+      "name": "type",
+      "textKey": "tooltip.light.type.text",
+      "defaultValue": "''",
+      "exampleValue": "'directional'",
+      "type": "string"
+    },
+    "Light.castShadow": {
+      "accessor": "Light",
+      "name": "castShadow",
+      "textKey": "tooltip.light.cast_shadow.text",
+      "defaultValue": "true",
+      "exampleValue": "false",
+      "type": "boolean"
+    },
+    "Light.intensity": {
+      "accessor": "Light",
+      "name": "intensity",
+      "textKey": "tooltip.light.intensity.text",
+      "defaultValue": "0.5",
+      "exampleValue": "1",
+      "type": "number"
+    },
+    "Light.r": {
+      "accessor": "Light",
+      "name": "r",
+      "textKey": "tooltip.light.r.text",
+      "defaultValue": "255",
+      "exampleValue": "123",
+      "type": "number"
+    },
+    "Light.g": {
+      "accessor": "Light",
+      "name": "g",
+      "textKey": "tooltip.light.g.text",
+      "defaultValue": "255",
+      "exampleValue": "123",
+      "type": "number"
+    },
+    "Light.b": {
+      "accessor": "Light",
+      "name": "b",
+      "textKey": "tooltip.light.b.text",
+      "defaultValue": "255",
+      "exampleValue": "123",
+      "type": "number"
+    },
+    "Light.colorMap": {
+      "accessor": "Light",
+      "name": "colorMap",
+      "textKey": "tooltip.light.color_map.text",
+      "defaultValue": "''",
+      "exampleValue": "'assets/my-image.png'",
+      "type": "string"
+    },
+    "Light.shadowBias": {
+      "accessor": "Light",
+      "name": "shadowBias",
+      "textKey": "tooltip.light.shadow_bias.text",
+      "defaultValue": "-0.005",
+      "type": "number"
+    },
+    "Light.shadowNormalBias": {
+      "accessor": "Light",
+      "name": "shadowNormalBias",
+      "textKey": "tooltip.light.shadow_normal_bias.text",
+      "defaultValue": "0",
+      "type": "number"
+    },
+    "Light.shadowRadius": {
+      "accessor": "Light",
+      "name": "shadowRadius",
+      "textKey": "tooltip.light.shadow_radius.text",
+      "defaultValue": "1",
+      "exampleValue": "0.5",
+      "type": "number"
+    },
+    "Light.shadowAutoUpdate": {
+      "accessor": "Light",
+      "name": "shadowAutoUpdate",
+      "textKey": "tooltip.light.shadow_auto_update.text",
+      "defaultValue": "true",
+      "exampleValue": "false",
+      "type": "boolean"
+    },
+    "Light.shadowBlurSamples": {
+      "accessor": "Light",
+      "name": "shadowBlurSamples",
+      "textKey": "tooltip.light.shadow_blur_samples.text",
+      "defaultValue": "8",
+      "type": "number"
+    },
+    "Light.shadowMapSizeHeight": {
+      "accessor": "Light",
+      "name": "shadowMapSizeHeight",
+      "textKey": "tooltip.light.shadow_map_size_height.text",
+      "defaultValue": "1024",
+      "exampleValue": "512",
+      "type": "number"
+    },
+    "Light.shadowMapSizeWidth": {
+      "accessor": "Light",
+      "name": "shadowMapSizeWidth",
+      "textKey": "tooltip.light.shadow_map_size_width.text",
+      "defaultValue": "1024",
+      "exampleValue": "512",
+      "type": "number"
+    },
+    "Light.shadowCameraNear": {
+      "accessor": "Light",
+      "name": "shadowCameraNear",
+      "textKey": "tooltip.light.shadow_camera_near.text",
+      "defaultValue": "0.5",
+      "type": "number"
+    },
+    "Light.shadowCameraFar": {
+      "accessor": "Light",
+      "name": "shadowCameraFar",
+      "textKey": "tooltip.light.shadow_camera_far.text",
+      "defaultValue": "200",
+      "type": "number"
+    },
+    "Light.shadowCameraLeft": {
+      "accessor": "Light",
+      "name": "shadowCameraLeft",
+      "textKey": "tooltip.light.shadow_camera_left.text",
+      "defaultValue": "-50",
+      "type": "number"
+    },
+    "Light.shadowCameraRight": {
+      "accessor": "Light",
+      "name": "shadowCameraRight",
+      "textKey": "tooltip.light.shadow_camera_right.text",
+      "defaultValue": "50",
+      "type": "number"
+    },
+    "Light.shadowCameraBottom": {
+      "accessor": "Light",
+      "name": "shadowCameraBottom",
+      "textKey": "tooltip.light.shadow_camera_bottom.text",
+      "defaultValue": "-50",
+      "type": "number"
+    },
+    "Light.shadowCameraTop": {
+      "accessor": "Light",
+      "name": "shadowCameraTop",
+      "textKey": "tooltip.light.shadow_camera_top.text",
+      "defaultValue": "50",
+      "type": "number"
+    },
+    "Light.targetX": {
+      "accessor": "Light",
+      "name": "targetX",
+      "textKey": "tooltip.light.target_x.text",
+      "defaultValue": "0",
+      "type": "number"
+    },
+    "Light.targetY": {
+      "accessor": "Light",
+      "name": "targetY",
+      "textKey": "tooltip.light.target_y.text",
+      "defaultValue": "0",
+      "type": "number"
+    },
+    "Light.targetZ": {
+      "accessor": "Light",
+      "name": "targetZ",
+      "textKey": "tooltip.light.target_z.text",
+      "defaultValue": "0",
+      "type": "number"
+    },
+    "Light.width": {
+      "accessor": "Light",
+      "name": "width",
+      "textKey": "tooltip.light.width.text",
+      "defaultValue": "10",
+      "type": "number"
+    },
+    "Light.height": {
+      "accessor": "Light",
+      "name": "height",
+      "textKey": "tooltip.light.height.text",
+      "defaultValue": "10",
+      "type": "number"
+    },
+    "Light.penumbra": {
+      "accessor": "Light",
+      "name": "penumbra",
+      "textKey": "tooltip.light.penumbra.text",
+      "defaultValue": "0",
+      "exampleValue": "0.5",
+      "type": "number"
+    },
+    "Light.decay": {
+      "accessor": "Light",
+      "name": "decay",
+      "textKey": "tooltip.light.decay.text",
+      "defaultValue": "2",
+      "exampleValue": "1",
+      "type": "number"
+    },
+    "Light.angle": {
+      "accessor": "Light",
+      "name": "angle",
+      "textKey": "tooltip.light.angle.text",
+      "defaultValue": "Math.PI / 3",
+      "exampleValue": "Math.PI / 4",
+      "type": "number"
+    },
+    "Light.followCamera": {
+      "accessor": "Light",
+      "name": "followCamera",
+      "textKey": "tooltip.light.follow_camera.text",
+      "defaultValue": "true",
+      "exampleValue": "false",
+      "type": "boolean"
+    },
+    "Light.distance": {
+      "accessor": "Light",
+      "name": "distance",
+      "textKey": "tooltip.light.distance.text",
+      "defaultValue": "0",
+      "type": "number"
+    },
+    "VideoControls.volume": {
+      "accessor": "VideoControls",
+      "name": "volume",
+      "textKey": "tooltip.video_controls.volume.text",
+      "defaultValue": "1",
+      "type": "number"
+    },
+    "VideoControls.loop": {
+      "accessor": "VideoControls",
+      "name": "loop",
+      "textKey": "tooltip.video_controls.loop.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "VideoControls.paused": {
+      "accessor": "VideoControls",
+      "name": "paused",
+      "textKey": "tooltip.video_controls.paused.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "VideoControls.speed": {
+      "accessor": "VideoControls",
+      "name": "speed",
+      "textKey": "tooltip.video_controls.speed.text",
+      "defaultValue": "1",
+      "type": "number"
+    },
+    "VideoControls.positional": {
+      "accessor": "VideoControls",
+      "name": "positional",
+      "textKey": "tooltip.video_controls.positional.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "VideoControls.refDistance": {
+      "accessor": "VideoControls",
+      "name": "refDistance",
+      "textKey": "tooltip.video_controls.ref_distance.text",
+      "defaultValue": "1",
+      "type": "number"
+    },
+    "VideoControls.distanceModel": {
+      "accessor": "VideoControls",
+      "name": "distanceModel",
+      "textKey": "tooltip.video_controls.distance_model.text",
+      "defaultValue": "'inverse'",
+      "type": "string"
+    },
+    "VideoControls.rolloffFactor": {
+      "accessor": "VideoControls",
+      "name": "rolloffFactor",
+      "textKey": "tooltip.video_controls.rolloff_factor.text",
+      "defaultValue": "1",
+      "type": "number"
+    },
+    "VideoControls.maxDistance": {
+      "accessor": "VideoControls",
+      "name": "maxDistance",
+      "textKey": "tooltip.video_controls.max_distance.text",
+      "defaultValue": "10000",
+      "type": "number"
+    },
+    "Collider.type": {
+      "accessor": "Collider",
+      "name": "type",
+      "textKey": "tooltip.collider.type.text",
+      "defaultValue": "ecs.ColliderType.Static",
+      "exampleValue": "ecs.ColliderType.Dynamic",
+      "type": "ecs.ColliderType"
+    },
+    "Collider.shape": {
+      "accessor": "Collider",
+      "name": "shape",
+      "textKey": "tooltip.collider.shape.text",
+      "defaultValue": "ecs.ColliderShape.Box",
+      "type": "ecs.ColliderShape"
+    },
+    "Collider.width": {
+      "accessor": "Collider",
+      "name": "width",
+      "textKey": "tooltip.collider.width.text",
+      "defaultValue": "0",
+      "exampleValue": "1",
+      "type": "number"
+    },
+    "Collider.height": {
+      "accessor": "Collider",
+      "name": "height",
+      "textKey": "tooltip.collider.height.text",
+      "defaultValue": "0",
+      "exampleValue": "1",
+      "type": "number"
+    },
+    "Collider.depth": {
+      "accessor": "Collider",
+      "name": "depth",
+      "textKey": "tooltip.collider.depth.text",
+      "defaultValue": "0",
+      "exampleValue": "1",
+      "type": "number"
+    },
+    "Collider.radius": {
+      "accessor": "Collider",
+      "name": "radius",
+      "textKey": "tooltip.collider.radius.text",
+      "defaultValue": "0",
+      "exampleValue": "1",
+      "type": "number"
+    },
+    "Collider.mass": {
+      "accessor": "Collider",
+      "name": "mass",
+      "textKey": "tooltip.collider.mass.text",
+      "defaultValue": "0",
+      "exampleValue": "1",
+      "type": "number"
+    },
+    "Collider.eventOnly": {
+      "accessor": "Collider",
+      "name": "eventOnly",
+      "textKey": "tooltip.collider.event_only.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "Collider.gravityFactor": {
+      "accessor": "Collider",
+      "name": "gravityFactor",
+      "textKey": "tooltip.collider.gravity_factor.text",
+      "defaultValue": "1",
+      "type": "number"
+    },
+    "Collider.lockXAxis": {
+      "accessor": "Collider",
+      "name": "lockXAxis",
+      "textKey": "tooltip.collider.lock_x_axis.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "Collider.lockYAxis": {
+      "accessor": "Collider",
+      "name": "lockYAxis",
+      "textKey": "tooltip.collider.lock_y_axis.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "Collider.lockZAxis": {
+      "accessor": "Collider",
+      "name": "lockZAxis",
+      "textKey": "tooltip.collider.lock_z_axis.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "Collider.friction": {
+      "accessor": "Collider",
+      "name": "friction",
+      "textKey": "tooltip.collider.friction.text",
+      "defaultValue": "0.5",
+      "type": "number"
+    },
+    "Collider.restitution": {
+      "accessor": "Collider",
+      "name": "restitution",
+      "textKey": "tooltip.collider.restitution.text",
+      "defaultValue": "0",
+      "type": "number"
+    },
+    "Collider.linearDamping": {
+      "accessor": "Collider",
+      "name": "linearDamping",
+      "textKey": "tooltip.collider.linear_damping.text",
+      "defaultValue": "0",
+      "type": "number"
+    },
+    "Collider.angularDamping": {
+      "accessor": "Collider",
+      "name": "angularDamping",
+      "textKey": "tooltip.collider.angular_damping.text",
+      "defaultValue": "0",
+      "type": "number"
+    },
+    "Collider.lockXPosition": {
+      "accessor": "Collider",
+      "name": "lockXPosition",
+      "textKey": "tooltip.collider.lock_x_position.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "Collider.lockYPosition": {
+      "accessor": "Collider",
+      "name": "lockYPosition",
+      "textKey": "tooltip.collider.lock_y_position.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "Collider.lockZPosition": {
+      "accessor": "Collider",
+      "name": "lockZPosition",
+      "textKey": "tooltip.collider.lock_z_position.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "Collider.highPrecision": {
+      "accessor": "Collider",
+      "name": "highPrecision",
+      "textKey": "tooltip.collider.high_precision.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "Collider.offsetX": {
+      "accessor": "Collider",
+      "name": "offsetX",
+      "textKey": "tooltip.collider.offset_x.text",
+      "defaultValue": "0",
+      "exampleValue": "1",
+      "type": "number"
+    },
+    "Collider.offsetY": {
+      "accessor": "Collider",
+      "name": "offsetY",
+      "textKey": "tooltip.collider.offset_y.text",
+      "defaultValue": "0",
+      "exampleValue": "1",
+      "type": "number"
+    },
+    "Collider.offsetZ": {
+      "accessor": "Collider",
+      "name": "offsetZ",
+      "textKey": "tooltip.collider.offset_z.text",
+      "defaultValue": "0",
+      "exampleValue": "1",
+      "type": "number"
+    },
+    "Collider.simplificationMode": {
+      "accessor": "Collider",
+      "name": "simplificationMode",
+      "defaultValue": "'convex'",
+      "exampleValue": "'concave'",
+      "type": "string"
+    },
+    "Collider.offsetQuaternionX": {
+      "accessor": "Collider",
+      "name": "offsetQuaternionX",
+      "textKey": "tooltip.collider.offset_quaternion_x.text",
+      "defaultValue": "0",
+      "exampleValue": "1",
+      "type": "number"
+    },
+    "Collider.offsetQuaternionY": {
+      "accessor": "Collider",
+      "name": "offsetQuaternionY",
+      "textKey": "tooltip.collider.offset_quaternion_y.text",
+      "defaultValue": "0",
+      "exampleValue": "0",
+      "type": "number"
+    },
+    "Collider.offsetQuaternionZ": {
+      "accessor": "Collider",
+      "name": "offsetQuaternionZ",
+      "textKey": "tooltip.collider.offset_quaternion_z.text",
+      "defaultValue": "0",
+      "exampleValue": "0",
+      "type": "number"
+    },
+    "Collider.offsetQuaternionW": {
+      "accessor": "Collider",
+      "name": "offsetQuaternionW",
+      "textKey": "tooltip.collider.offset_quaternion_w.text",
+      "defaultValue": "1",
+      "exampleValue": "0",
+      "type": "number"
+    },
+    "FollowAnimation.target": {
+      "accessor": "FollowAnimation",
+      "name": "target",
+      "textKey": "tooltip.follow_animation.target.text",
+      "defaultValue": "undefined",
+      "type": "eid"
+    },
+    "FollowAnimation.minDistance": {
+      "accessor": "FollowAnimation",
+      "name": "minDistance",
+      "textKey": "tooltip.follow_animation.min_distance.text",
+      "defaultValue": "0",
+      "type": "number"
+    },
+    "FollowAnimation.maxDistance": {
+      "accessor": "FollowAnimation",
+      "name": "maxDistance",
+      "textKey": "tooltip.follow_animation.max_distance.text",
+      "defaultValue": "0",
+      "type": "number"
+    },
+    "FollowAnimation.elasticity": {
+      "accessor": "FollowAnimation",
+      "name": "elasticity",
+      "textKey": "tooltip.follow_animation.elasticity.text",
+      "defaultValue": "1",
+      "type": "number"
+    },
+    "ScaleAnimation.target": {
+      "accessor": "ScaleAnimation",
+      "name": "target",
+      "textKey": "tooltip.scale_animation.target.text",
+      "defaultValue": "undefined",
+      "type": "eid"
+    },
+    "ScaleAnimation.fromX": {
+      "accessor": "ScaleAnimation",
+      "name": "fromX",
+      "textKey": "tooltip.scale_animation.from_x.text",
+      "defaultValue": "0",
+      "exampleValue": "1",
+      "type": "number"
+    },
+    "ScaleAnimation.fromY": {
+      "accessor": "ScaleAnimation",
+      "name": "fromY",
+      "textKey": "tooltip.scale_animation.from_y.text",
+      "defaultValue": "0",
+      "exampleValue": "2",
+      "type": "number"
+    },
+    "ScaleAnimation.fromZ": {
+      "accessor": "ScaleAnimation",
+      "name": "fromZ",
+      "textKey": "tooltip.scale_animation.from_z.text",
+      "defaultValue": "0",
+      "exampleValue": "3",
+      "type": "number"
+    },
+    "ScaleAnimation.toX": {
+      "accessor": "ScaleAnimation",
+      "name": "toX",
+      "textKey": "tooltip.scale_animation.to_x.text",
+      "defaultValue": "0",
+      "exampleValue": "4",
+      "type": "number"
+    },
+    "ScaleAnimation.toY": {
+      "accessor": "ScaleAnimation",
+      "name": "toY",
+      "textKey": "tooltip.scale_animation.to_y.text",
+      "defaultValue": "0",
+      "exampleValue": "5",
+      "type": "number"
+    },
+    "ScaleAnimation.toZ": {
+      "accessor": "ScaleAnimation",
+      "name": "toZ",
+      "textKey": "tooltip.scale_animation.to_z.text",
+      "defaultValue": "0",
+      "exampleValue": "6",
+      "type": "number"
+    },
+    "ScaleAnimation.autoFrom": {
+      "accessor": "ScaleAnimation",
+      "name": "autoFrom",
+      "textKey": "tooltip.scale_animation.auto_from.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "ScaleAnimation.duration": {
+      "accessor": "ScaleAnimation",
+      "name": "duration",
+      "textKey": "tooltip.scale_animation.duration.text",
+      "defaultValue": "1000",
+      "exampleValue": "5000",
+      "type": "number"
+    },
+    "ScaleAnimation.loop": {
+      "accessor": "ScaleAnimation",
+      "name": "loop",
+      "textKey": "tooltip.scale_animation.loop.text",
+      "defaultValue": "true",
+      "exampleValue": "false",
+      "type": "boolean"
+    },
+    "ScaleAnimation.reverse": {
+      "accessor": "ScaleAnimation",
+      "name": "reverse",
+      "textKey": "tooltip.scale_animation.reverse.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "ScaleAnimation.easeIn": {
+      "accessor": "ScaleAnimation",
+      "name": "easeIn",
+      "textKey": "tooltip.scale_animation.ease_in.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "ScaleAnimation.easeOut": {
+      "accessor": "ScaleAnimation",
+      "name": "easeOut",
+      "textKey": "tooltip.scale_animation.ease_out.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "ScaleAnimation.easingFunction": {
+      "accessor": "ScaleAnimation",
+      "name": "easingFunction",
+      "textKey": "tooltip.scale_animation.easing_function.text",
+      "defaultValue": "''",
+      "exampleValue": "'Quadratic'",
+      "type": "string"
+    },
+    "CustomVec3Animation.attribute": {
+      "accessor": "CustomVec3Animation",
+      "name": "attribute",
+      "textKey": "tooltip.custom_vec3_animation.attribute.text",
+      "defaultValue": "''",
+      "type": "string"
+    },
+    "CustomVec3Animation.target": {
+      "accessor": "CustomVec3Animation",
+      "name": "target",
+      "textKey": "tooltip.custom_vec3_animation.target.text",
+      "defaultValue": "undefined",
+      "type": "eid"
+    },
+    "CustomVec3Animation.fromX": {
+      "accessor": "CustomVec3Animation",
+      "name": "fromX",
+      "textKey": "tooltip.custom_vec3_animation.from_x.text",
+      "defaultValue": "0",
+      "exampleValue": "1",
+      "type": "number"
+    },
+    "CustomVec3Animation.fromY": {
+      "accessor": "CustomVec3Animation",
+      "name": "fromY",
+      "textKey": "tooltip.custom_vec3_animation.from_y.text",
+      "defaultValue": "0",
+      "exampleValue": "2",
+      "type": "number"
+    },
+    "CustomVec3Animation.fromZ": {
+      "accessor": "CustomVec3Animation",
+      "name": "fromZ",
+      "textKey": "tooltip.custom_vec3_animation.from_z.text",
+      "defaultValue": "0",
+      "exampleValue": "3",
+      "type": "number"
+    },
+    "CustomVec3Animation.toX": {
+      "accessor": "CustomVec3Animation",
+      "name": "toX",
+      "textKey": "tooltip.custom_vec3_animation.to_x.text",
+      "defaultValue": "0",
+      "exampleValue": "4",
+      "type": "number"
+    },
+    "CustomVec3Animation.toY": {
+      "accessor": "CustomVec3Animation",
+      "name": "toY",
+      "textKey": "tooltip.custom_vec3_animation.to_y.text",
+      "defaultValue": "0",
+      "exampleValue": "5",
+      "type": "number"
+    },
+    "CustomVec3Animation.toZ": {
+      "accessor": "CustomVec3Animation",
+      "name": "toZ",
+      "textKey": "tooltip.custom_vec3_animation.to_z.text",
+      "defaultValue": "0",
+      "exampleValue": "6",
+      "type": "number"
+    },
+    "CustomVec3Animation.autoFrom": {
+      "accessor": "CustomVec3Animation",
+      "name": "autoFrom",
+      "textKey": "tooltip.custom_vec3_animation.auto_from.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "CustomVec3Animation.duration": {
+      "accessor": "CustomVec3Animation",
+      "name": "duration",
+      "textKey": "tooltip.custom_vec3_animation.duration.text",
+      "defaultValue": "1000",
+      "exampleValue": "5000",
+      "type": "number"
+    },
+    "CustomVec3Animation.loop": {
+      "accessor": "CustomVec3Animation",
+      "name": "loop",
+      "textKey": "tooltip.custom_vec3_animation.loop.text",
+      "defaultValue": "true",
+      "exampleValue": "false",
+      "type": "boolean"
+    },
+    "CustomVec3Animation.reverse": {
+      "accessor": "CustomVec3Animation",
+      "name": "reverse",
+      "textKey": "tooltip.custom_vec3_animation.reverse.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "CustomVec3Animation.easeIn": {
+      "accessor": "CustomVec3Animation",
+      "name": "easeIn",
+      "textKey": "tooltip.custom_vec3_animation.ease_in.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "CustomVec3Animation.easeOut": {
+      "accessor": "CustomVec3Animation",
+      "name": "easeOut",
+      "textKey": "tooltip.custom_vec3_animation.ease_out.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "CustomVec3Animation.easingFunction": {
+      "accessor": "CustomVec3Animation",
+      "name": "easingFunction",
+      "textKey": "tooltip.custom_vec3_animation.easing_function.text",
+      "defaultValue": "''",
+      "exampleValue": "'Quadratic'",
+      "type": "string"
+    },
+    "CustomPropertyAnimation.attribute": {
+      "accessor": "CustomPropertyAnimation",
+      "name": "attribute",
+      "textKey": "tooltip.custom_property_animation.attribute.text",
+      "defaultValue": "''",
+      "type": "string"
+    },
+    "CustomPropertyAnimation.property": {
+      "accessor": "CustomPropertyAnimation",
+      "name": "property",
+      "textKey": "tooltip.custom_property_animation.property.text",
+      "defaultValue": "''",
+      "type": "string"
+    },
+    "CustomPropertyAnimation.target": {
+      "accessor": "CustomPropertyAnimation",
+      "name": "target",
+      "textKey": "tooltip.custom_property_animation.target.text",
+      "defaultValue": "undefined",
+      "type": "eid"
+    },
+    "CustomPropertyAnimation.from": {
+      "accessor": "CustomPropertyAnimation",
+      "name": "from",
+      "textKey": "tooltip.custom_property_animation.from.text",
+      "defaultValue": "0",
+      "type": "number"
+    },
+    "CustomPropertyAnimation.to": {
+      "accessor": "CustomPropertyAnimation",
+      "name": "to",
+      "textKey": "tooltip.custom_property_animation.to.text",
+      "defaultValue": "0",
+      "type": "number"
+    },
+    "CustomPropertyAnimation.autoFrom": {
+      "accessor": "CustomPropertyAnimation",
+      "name": "autoFrom",
+      "textKey": "tooltip.custom_property_animation.auto_from.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "CustomPropertyAnimation.duration": {
+      "accessor": "CustomPropertyAnimation",
+      "name": "duration",
+      "textKey": "tooltip.custom_property_animation.duration.text",
+      "defaultValue": "1000",
+      "type": "number"
+    },
+    "CustomPropertyAnimation.loop": {
+      "accessor": "CustomPropertyAnimation",
+      "name": "loop",
+      "textKey": "tooltip.custom_property_animation.loop.text",
+      "defaultValue": "true",
+      "exampleValue": "false",
+      "type": "boolean"
+    },
+    "CustomPropertyAnimation.reverse": {
+      "accessor": "CustomPropertyAnimation",
+      "name": "reverse",
+      "textKey": "tooltip.custom_property_animation.reverse.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "CustomPropertyAnimation.easeIn": {
+      "accessor": "CustomPropertyAnimation",
+      "name": "easeIn",
+      "textKey": "tooltip.custom_property_animation.ease_in.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "CustomPropertyAnimation.easeOut": {
+      "accessor": "CustomPropertyAnimation",
+      "name": "easeOut",
+      "textKey": "tooltip.custom_property_animation.ease_out.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "CustomPropertyAnimation.easingFunction": {
+      "accessor": "CustomPropertyAnimation",
+      "name": "easingFunction",
+      "textKey": "tooltip.custom_property_animation.easing_function.text",
+      "defaultValue": "''",
+      "exampleValue": "'Quadratic'",
+      "type": "string"
+    },
+    "LookAtAnimation.target": {
+      "accessor": "LookAtAnimation",
+      "name": "target",
+      "textKey": "tooltip.look_at_animation.target.text",
+      "defaultValue": "undefined",
+      "type": "eid"
+    },
+    "LookAtAnimation.targetX": {
+      "accessor": "LookAtAnimation",
+      "name": "targetX",
+      "textKey": "tooltip.look_at_animation.target_x.text",
+      "defaultValue": "0",
+      "type": "number"
+    },
+    "LookAtAnimation.targetY": {
+      "accessor": "LookAtAnimation",
+      "name": "targetY",
+      "textKey": "tooltip.look_at_animation.target_y.text",
+      "defaultValue": "0",
+      "type": "number"
+    },
+    "LookAtAnimation.targetZ": {
+      "accessor": "LookAtAnimation",
+      "name": "targetZ",
+      "textKey": "tooltip.look_at_animation.target_z.text",
+      "defaultValue": "0",
+      "type": "number"
+    },
+    "LookAtAnimation.lockX": {
+      "accessor": "LookAtAnimation",
+      "name": "lockX",
+      "textKey": "tooltip.look_at_animation.lock_x.text",
+      "defaultValue": "false",
+      "type": "boolean"
+    },
+    "LookAtAnimation.lockY": {
+      "accessor": "LookAtAnimation",
+      "name": "lockY",
+      "textKey": "tooltip.look_at_animation.lock_y.text",
+      "defaultValue": "false",
+      "type": "boolean"
+    },
+    "PositionAnimation.target": {
+      "accessor": "PositionAnimation",
+      "name": "target",
+      "textKey": "tooltip.position_animation.target.text",
+      "defaultValue": "undefined",
+      "type": "eid"
+    },
+    "PositionAnimation.fromX": {
+      "accessor": "PositionAnimation",
+      "name": "fromX",
+      "textKey": "tooltip.position_animation.from_x.text",
+      "defaultValue": "0",
+      "type": "number"
+    },
+    "PositionAnimation.fromY": {
+      "accessor": "PositionAnimation",
+      "name": "fromY",
+      "textKey": "tooltip.position_animation.from_y.text",
+      "defaultValue": "0",
+      "type": "number"
+    },
+    "PositionAnimation.fromZ": {
+      "accessor": "PositionAnimation",
+      "name": "fromZ",
+      "textKey": "tooltip.position_animation.from_z.text",
+      "defaultValue": "0",
+      "type": "number"
+    },
+    "PositionAnimation.toX": {
+      "accessor": "PositionAnimation",
+      "name": "toX",
+      "textKey": "tooltip.position_animation.to_x.text",
+      "defaultValue": "0",
+      "type": "number"
+    },
+    "PositionAnimation.toY": {
+      "accessor": "PositionAnimation",
+      "name": "toY",
+      "textKey": "tooltip.position_animation.to_y.text",
+      "defaultValue": "0",
+      "type": "number"
+    },
+    "PositionAnimation.toZ": {
+      "accessor": "PositionAnimation",
+      "name": "toZ",
+      "textKey": "tooltip.position_animation.to_z.text",
+      "defaultValue": "0",
+      "type": "number"
+    },
+    "PositionAnimation.autoFrom": {
+      "accessor": "PositionAnimation",
+      "name": "autoFrom",
+      "textKey": "tooltip.position_animation.auto_from.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "PositionAnimation.duration": {
+      "accessor": "PositionAnimation",
+      "name": "duration",
+      "textKey": "tooltip.position_animation.duration.text",
+      "defaultValue": "1000",
+      "type": "number"
+    },
+    "PositionAnimation.loop": {
+      "accessor": "PositionAnimation",
+      "name": "loop",
+      "textKey": "tooltip.position_animation.loop.text",
+      "defaultValue": "true",
+      "exampleValue": "false",
+      "type": "boolean"
+    },
+    "PositionAnimation.reverse": {
+      "accessor": "PositionAnimation",
+      "name": "reverse",
+      "textKey": "tooltip.position_animation.reverse.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "PositionAnimation.easeIn": {
+      "accessor": "PositionAnimation",
+      "name": "easeIn",
+      "textKey": "tooltip.position_animation.ease_in.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "PositionAnimation.easeOut": {
+      "accessor": "PositionAnimation",
+      "name": "easeOut",
+      "textKey": "tooltip.position_animation.ease_out.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "PositionAnimation.easingFunction": {
+      "accessor": "PositionAnimation",
+      "name": "easingFunction",
+      "textKey": "tooltip.position_animation.easing_function.text",
+      "defaultValue": "''",
+      "exampleValue": "'Quadratic'",
+      "type": "string"
+    },
+    "RotateAnimation.target": {
+      "accessor": "RotateAnimation",
+      "name": "target",
+      "textKey": "tooltip.rotate_animation.target.text",
+      "defaultValue": "undefined",
+      "type": "eid"
+    },
+    "RotateAnimation.fromX": {
+      "accessor": "RotateAnimation",
+      "name": "fromX",
+      "textKey": "tooltip.rotate_animation.from_x.text",
+      "defaultValue": "0",
+      "type": "number"
+    },
+    "RotateAnimation.fromY": {
+      "accessor": "RotateAnimation",
+      "name": "fromY",
+      "textKey": "tooltip.rotate_animation.from_y.text",
+      "defaultValue": "0",
+      "type": "number"
+    },
+    "RotateAnimation.fromZ": {
+      "accessor": "RotateAnimation",
+      "name": "fromZ",
+      "textKey": "tooltip.rotate_animation.from_z.text",
+      "defaultValue": "0",
+      "type": "number"
+    },
+    "RotateAnimation.toX": {
+      "accessor": "RotateAnimation",
+      "name": "toX",
+      "textKey": "tooltip.rotate_animation.to_x.text",
+      "defaultValue": "0",
+      "type": "number"
+    },
+    "RotateAnimation.toY": {
+      "accessor": "RotateAnimation",
+      "name": "toY",
+      "textKey": "tooltip.rotate_animation.to_y.text",
+      "defaultValue": "0",
+      "type": "number"
+    },
+    "RotateAnimation.toZ": {
+      "accessor": "RotateAnimation",
+      "name": "toZ",
+      "textKey": "tooltip.rotate_animation.to_z.text",
+      "defaultValue": "0",
+      "type": "number"
+    },
+    "RotateAnimation.autoFrom": {
+      "accessor": "RotateAnimation",
+      "name": "autoFrom",
+      "textKey": "tooltip.rotate_animation.auto_from.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "RotateAnimation.duration": {
+      "accessor": "RotateAnimation",
+      "name": "duration",
+      "textKey": "tooltip.rotate_animation.duration.text",
+      "defaultValue": "1000",
+      "type": "number"
+    },
+    "RotateAnimation.loop": {
+      "accessor": "RotateAnimation",
+      "name": "loop",
+      "textKey": "tooltip.rotate_animation.loop.text",
+      "defaultValue": "true",
+      "exampleValue": "false",
+      "type": "boolean"
+    },
+    "RotateAnimation.reverse": {
+      "accessor": "RotateAnimation",
+      "name": "reverse",
+      "textKey": "tooltip.rotate_animation.reverse.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "RotateAnimation.easeIn": {
+      "accessor": "RotateAnimation",
+      "name": "easeIn",
+      "textKey": "tooltip.rotate_animation.ease_in.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "RotateAnimation.easeOut": {
+      "accessor": "RotateAnimation",
+      "name": "easeOut",
+      "textKey": "tooltip.rotate_animation.ease_out.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "RotateAnimation.easingFunction": {
+      "accessor": "RotateAnimation",
+      "name": "easingFunction",
+      "textKey": "tooltip.rotate_animation.easing_function.text",
+      "defaultValue": "''",
+      "exampleValue": "'Quadratic'",
+      "type": "string"
+    },
+    "RotateAnimation.shortestPath": {
+      "accessor": "RotateAnimation",
+      "name": "shortestPath",
+      "textKey": "tooltip.rotate_animation.shortest_path.text",
+      "defaultValue": "true",
+      "exampleValue": "false",
+      "type": "boolean"
+    },
+    "ParticleEmitter.stopped": {
+      "accessor": "ParticleEmitter",
+      "name": "stopped",
+      "textKey": "tooltip.particle_emitter.stopped.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "ParticleEmitter.emitterLife": {
+      "accessor": "ParticleEmitter",
+      "name": "emitterLife",
+      "textKey": "tooltip.particle_emitter.emitter_life.text",
+      "defaultValue": "1",
+      "exampleValue": "0",
+      "type": "number"
+    },
+    "ParticleEmitter.particlesPerShot": {
+      "accessor": "ParticleEmitter",
+      "name": "particlesPerShot",
+      "textKey": "tooltip.particle_emitter.particles_per_shot.text",
+      "defaultValue": "1",
+      "exampleValue": "20",
+      "type": "number"
+    },
+    "ParticleEmitter.emitDelay": {
+      "accessor": "ParticleEmitter",
+      "name": "emitDelay",
+      "textKey": "tooltip.particle_emitter.emit_delay.text",
+      "defaultValue": "1",
+      "exampleValue": "0.1",
+      "type": "number"
+    },
+    "ParticleEmitter.minimumLifespan": {
+      "accessor": "ParticleEmitter",
+      "name": "minimumLifespan",
+      "textKey": "tooltip.particle_emitter.minimum_lifespan.text",
+      "defaultValue": "1",
+      "exampleValue": "5",
+      "type": "number"
+    },
+    "ParticleEmitter.maximumLifespan": {
+      "accessor": "ParticleEmitter",
+      "name": "maximumLifespan",
+      "textKey": "tooltip.particle_emitter.maximum_lifespan.text",
+      "defaultValue": "10",
+      "exampleValue": "1",
+      "type": "number"
+    },
+    "ParticleEmitter.mass": {
+      "accessor": "ParticleEmitter",
+      "name": "mass",
+      "textKey": "tooltip.particle_emitter.mass.text",
+      "defaultValue": "1",
+      "exampleValue": "5",
+      "type": "number"
+    },
+    "ParticleEmitter.gravity": {
+      "accessor": "ParticleEmitter",
+      "name": "gravity",
+      "textKey": "tooltip.particle_emitter.gravity.text",
+      "defaultValue": "0",
+      "exampleValue": "0.2",
+      "type": "number"
+    },
+    "ParticleEmitter.scale": {
+      "accessor": "ParticleEmitter",
+      "name": "scale",
+      "textKey": "tooltip.particle_emitter.scale.text",
+      "defaultValue": "1",
+      "exampleValue": "0.2",
+      "type": "number"
+    },
+    "ParticleEmitter.forceX": {
+      "accessor": "ParticleEmitter",
+      "name": "forceX",
+      "textKey": "tooltip.particle_emitter.force_x.text",
+      "defaultValue": "0",
+      "exampleValue": "5",
+      "type": "number"
+    },
+    "ParticleEmitter.forceY": {
+      "accessor": "ParticleEmitter",
+      "name": "forceY",
+      "textKey": "tooltip.particle_emitter.force_y.text",
+      "defaultValue": "0",
+      "exampleValue": "12",
+      "type": "number"
+    },
+    "ParticleEmitter.forceZ": {
+      "accessor": "ParticleEmitter",
+      "name": "forceZ",
+      "textKey": "tooltip.particle_emitter.force_z.text",
+      "defaultValue": "0",
+      "exampleValue": "5",
+      "type": "number"
+    },
+    "ParticleEmitter.spread": {
+      "accessor": "ParticleEmitter",
+      "name": "spread",
+      "textKey": "tooltip.particle_emitter.spread.text",
+      "defaultValue": "0",
+      "exampleValue": "360",
+      "type": "number"
+    },
+    "ParticleEmitter.radialVelocity": {
+      "accessor": "ParticleEmitter",
+      "name": "radialVelocity",
+      "textKey": "tooltip.particle_emitter.radial_velocity.text",
+      "defaultValue": "0",
+      "exampleValue": "5",
+      "type": "number"
+    },
+    "ParticleEmitter.spawnAreaType": {
+      "accessor": "ParticleEmitter",
+      "name": "spawnAreaType",
+      "textKey": "tooltip.particle_emitter.spawn_area_type.text",
+      "defaultValue": "'point'",
+      "exampleValue": "'sphere'",
+      "type": "string"
+    },
+    "ParticleEmitter.spawnAreaWidth": {
+      "accessor": "ParticleEmitter",
+      "name": "spawnAreaWidth",
+      "textKey": "tooltip.particle_emitter.spawn_area_width.text",
+      "defaultValue": "0",
+      "exampleValue": "1",
+      "type": "number"
+    },
+    "ParticleEmitter.spawnAreaHeight": {
+      "accessor": "ParticleEmitter",
+      "name": "spawnAreaHeight",
+      "textKey": "tooltip.particle_emitter.spawn_area_height.text",
+      "defaultValue": "0",
+      "exampleValue": "1",
+      "type": "number"
+    },
+    "ParticleEmitter.spawnAreaDepth": {
+      "accessor": "ParticleEmitter",
+      "name": "spawnAreaDepth",
+      "textKey": "tooltip.particle_emitter.spawn_area_depth.text",
+      "defaultValue": "0",
+      "exampleValue": "1",
+      "type": "number"
+    },
+    "ParticleEmitter.spawnAreaRadius": {
+      "accessor": "ParticleEmitter",
+      "name": "spawnAreaRadius",
+      "textKey": "tooltip.particle_emitter.spawn_area_radius.text",
+      "defaultValue": "0",
+      "exampleValue": "1",
+      "type": "number"
+    },
+    "ParticleEmitter.boundingZoneType": {
+      "accessor": "ParticleEmitter",
+      "name": "boundingZoneType",
+      "textKey": "tooltip.particle_emitter.bounding_zone_type.text",
+      "defaultValue": "''",
+      "exampleValue": "'sphere'",
+      "type": "string"
+    },
+    "ParticleEmitter.boundingZoneWidth": {
+      "accessor": "ParticleEmitter",
+      "name": "boundingZoneWidth",
+      "textKey": "tooltip.particle_emitter.bounding_zone_width.text",
+      "defaultValue": "0",
+      "exampleValue": "1",
+      "type": "number"
+    },
+    "ParticleEmitter.boundingZoneHeight": {
+      "accessor": "ParticleEmitter",
+      "name": "boundingZoneHeight",
+      "textKey": "tooltip.particle_emitter.bounding_zone_height.text",
+      "defaultValue": "0",
+      "exampleValue": "1",
+      "type": "number"
+    },
+    "ParticleEmitter.boundingZoneDepth": {
+      "accessor": "ParticleEmitter",
+      "name": "boundingZoneDepth",
+      "textKey": "tooltip.particle_emitter.bounding_zone_depth.text",
+      "defaultValue": "0",
+      "exampleValue": "1",
+      "type": "number"
+    },
+    "ParticleEmitter.boundingZoneRadius": {
+      "accessor": "ParticleEmitter",
+      "name": "boundingZoneRadius",
+      "textKey": "tooltip.particle_emitter.bounding_zone_radius.text",
+      "defaultValue": "0",
+      "exampleValue": "1",
+      "type": "number"
+    },
+    "ParticleEmitter.resourceType": {
+      "accessor": "ParticleEmitter",
+      "name": "resourceType",
+      "textKey": "tooltip.particle_emitter.resource_type.text",
+      "defaultValue": "'none'",
+      "exampleValue": "'sprite'",
+      "type": "string"
+    },
+    "ParticleEmitter.resourceUrl": {
+      "accessor": "ParticleEmitter",
+      "name": "resourceUrl",
+      "textKey": "tooltip.particle_emitter.resource_url.text",
+      "defaultValue": "''",
+      "exampleValue": "'multiply'",
+      "type": "string"
+    },
+    "ParticleEmitter.blendingMode": {
+      "accessor": "ParticleEmitter",
+      "name": "blendingMode",
+      "textKey": "tooltip.particle_emitter.blending_mode.text",
+      "defaultValue": "''",
+      "exampleValue": "'none'",
+      "type": "string"
+    },
+    "ParticleEmitter.animateColor": {
+      "accessor": "ParticleEmitter",
+      "name": "animateColor",
+      "textKey": "tooltip.particle_emitter.animate_color.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "ParticleEmitter.colorStart": {
+      "accessor": "ParticleEmitter",
+      "name": "colorStart",
+      "textKey": "tooltip.particle_emitter.color_start.text",
+      "defaultValue": "''",
+      "exampleValue": "#FF00FF",
+      "type": "string"
+    },
+    "ParticleEmitter.colorEnd": {
+      "accessor": "ParticleEmitter",
+      "name": "colorEnd",
+      "textKey": "tooltip.particle_emitter.color_end.text",
+      "defaultValue": "''",
+      "exampleValue": "#00FF00",
+      "type": "string"
+    },
+    "ParticleEmitter.randomDrift": {
+      "accessor": "ParticleEmitter",
+      "name": "randomDrift",
+      "textKey": "tooltip.particle_emitter.random_drift.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "ParticleEmitter.randomDriftRange": {
+      "accessor": "ParticleEmitter",
+      "name": "randomDriftRange",
+      "textKey": "tooltip.particle_emitter.random_drift_range.text",
+      "defaultValue": "0",
+      "exampleValue": "undefined",
+      "type": "number"
+    },
+    "ParticleEmitter.collisions": {
+      "accessor": "ParticleEmitter",
+      "name": "collisions",
+      "textKey": "tooltip.particle_emitter.collisions.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "Ui.type": {
+      "accessor": "Ui",
+      "name": "type",
+      "textKey": "tooltip.ui.type.text",
+      "defaultValue": "'overlay'",
+      "exampleValue": "'3d'",
+      "type": "string"
+    },
+    "Ui.font": {
+      "accessor": "Ui",
+      "name": "font",
+      "textKey": "tooltip.ui.font.text",
+      "defaultValue": "'Nunito'",
+      "exampleValue": "'Baskerville'",
+      "type": "string"
+    },
+    "Ui.fontSize": {
+      "accessor": "Ui",
+      "name": "fontSize",
+      "textKey": "tooltip.ui.font_size.text",
+      "defaultValue": "16",
+      "exampleValue": "12",
+      "type": "number"
+    },
+    "Ui.position": {
+      "accessor": "Ui",
+      "name": "position",
+      "textKey": "tooltip.ui.position.text",
+      "defaultValue": "'static'",
+      "exampleValue": "'absolute'",
+      "type": "string"
+    },
+    "Ui.opacity": {
+      "accessor": "Ui",
+      "name": "opacity",
+      "textKey": "tooltip.ui.opacity.text",
+      "defaultValue": "1",
+      "exampleValue": "0.8",
+      "type": "number"
+    },
+    "Ui.backgroundOpacity": {
+      "accessor": "Ui",
+      "name": "backgroundOpacity",
+      "textKey": "tooltip.ui.background_opacity.text",
+      "defaultValue": "-1",
+      "exampleValue": "0.5",
+      "type": "number"
+    },
+    "Ui.backgroundSize": {
+      "accessor": "Ui",
+      "name": "backgroundSize",
+      "textKey": "tooltip.ui.background_size.text",
+      "defaultValue": "'contain'",
+      "exampleValue": "'cover'",
+      "type": "string"
+    },
+    "Ui.background": {
+      "accessor": "Ui",
+      "name": "background",
+      "textKey": "tooltip.ui.background.text",
+      "defaultValue": "'#ffffff'",
+      "exampleValue": "'#958f97'",
+      "type": "string"
+    },
+    "Ui.borderColor": {
+      "accessor": "Ui",
+      "name": "borderColor",
+      "textKey": "tooltip.ui.border_color.text",
+      "defaultValue": "'#000000'",
+      "exampleValue": "'#8106fb'",
+      "type": "string"
+    },
+    "Ui.color": {
+      "accessor": "Ui",
+      "name": "color",
+      "textKey": "tooltip.ui.color.text",
+      "defaultValue": "'#ffffff'",
+      "exampleValue": "'#600ce0'",
+      "type": "string"
+    },
+    "Ui.text": {
+      "accessor": "Ui",
+      "name": "text",
+      "textKey": "tooltip.ui.text.text",
+      "defaultValue": "''",
+      "exampleValue": "'Hello world!'",
+      "type": "string"
+    },
+    "Ui.image": {
+      "accessor": "Ui",
+      "name": "image",
+      "textKey": "tooltip.ui.image.text",
+      "defaultValue": "''",
+      "exampleValue": "'assets/my-image.png'",
+      "type": "string"
+    },
+    "Ui.fixedSize": {
+      "accessor": "Ui",
+      "name": "fixedSize",
+      "textKey": "tooltip.ui.fixed_size.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "Ui.width": {
+      "accessor": "Ui",
+      "name": "width",
+      "textKey": "tooltip.ui.width.text",
+      "defaultValue": "'100'",
+      "exampleValue": "'80%'",
+      "type": "string"
+    },
+    "Ui.height": {
+      "accessor": "Ui",
+      "name": "height",
+      "textKey": "tooltip.ui.height.text",
+      "defaultValue": "'100'",
+      "exampleValue": "'80%'",
+      "type": "string"
+    },
+    "Ui.top": {
+      "accessor": "Ui",
+      "name": "top",
+      "textKey": "tooltip.ui.top.text",
+      "defaultValue": "''",
+      "exampleValue": "'-20'",
+      "type": "string"
+    },
+    "Ui.left": {
+      "accessor": "Ui",
+      "name": "left",
+      "textKey": "tooltip.ui.left.text",
+      "defaultValue": "''",
+      "exampleValue": "'15'",
+      "type": "string"
+    },
+    "Ui.bottom": {
+      "accessor": "Ui",
+      "name": "bottom",
+      "textKey": "tooltip.ui.bottom.text",
+      "defaultValue": "''",
+      "exampleValue": "'20'",
+      "type": "string"
+    },
+    "Ui.right": {
+      "accessor": "Ui",
+      "name": "right",
+      "textKey": "tooltip.ui.right.text",
+      "defaultValue": "''",
+      "exampleValue": "'-10'",
+      "type": "string"
+    },
+    "Ui.borderRadius": {
+      "accessor": "Ui",
+      "name": "borderRadius",
+      "textKey": "tooltip.ui.border_radius.text",
+      "defaultValue": "0",
+      "exampleValue": "20",
+      "type": "number"
+    },
+    "Ui.borderRadiusTopLeft": {
+      "accessor": "Ui",
+      "name": "borderRadiusTopLeft",
+      "textKey": "tooltip.ui.border_radius_top_left.text",
+      "defaultValue": "''",
+      "exampleValue": "'30'",
+      "type": "string"
+    },
+    "Ui.borderRadiusTopRight": {
+      "accessor": "Ui",
+      "name": "borderRadiusTopRight",
+      "textKey": "tooltip.ui.border_radius_top_right.text",
+      "defaultValue": "''",
+      "exampleValue": "'10'",
+      "type": "string"
+    },
+    "Ui.borderRadiusBottomLeft": {
+      "accessor": "Ui",
+      "name": "borderRadiusBottomLeft",
+      "textKey": "tooltip.ui.border_radius_bottom_left.text",
+      "defaultValue": "''",
+      "exampleValue": "'20'",
+      "type": "string"
+    },
+    "Ui.borderRadiusBottomRight": {
+      "accessor": "Ui",
+      "name": "borderRadiusBottomRight",
+      "textKey": "tooltip.ui.border_radius_bottom_right.text",
+      "defaultValue": "''",
+      "exampleValue": "'25'",
+      "type": "string"
+    },
+    "Ui.alignContent": {
+      "accessor": "Ui",
+      "name": "alignContent",
+      "textKey": "tooltip.ui.align_content.text",
+      "defaultValue": "'flex-start'",
+      "exampleValue": "'space-between'",
+      "type": "string"
+    },
+    "Ui.alignItems": {
+      "accessor": "Ui",
+      "name": "alignItems",
+      "textKey": "tooltip.ui.align_items.text",
+      "defaultValue": "'flex-start'",
+      "exampleValue": "'flex-end'",
+      "type": "string"
+    },
+    "Ui.alignSelf": {
+      "accessor": "Ui",
+      "name": "alignSelf",
+      "textKey": "tooltip.ui.align_self.text",
+      "defaultValue": "''",
+      "exampleValue": "'center'",
+      "type": "string"
+    },
+    "Ui.borderWidth": {
+      "accessor": "Ui",
+      "name": "borderWidth",
+      "textKey": "tooltip.ui.border_width.text",
+      "defaultValue": "0",
+      "exampleValue": "5",
+      "type": "number"
+    },
+    "Ui.columnGap": {
+      "accessor": "Ui",
+      "name": "columnGap",
+      "textKey": "tooltip.ui.column_gap.text",
+      "defaultValue": "''",
+      "exampleValue": "'5'",
+      "type": "string"
+    },
+    "Ui.direction": {
+      "accessor": "Ui",
+      "name": "direction",
+      "textKey": "tooltip.ui.direction.text",
+      "defaultValue": "'ltr'",
+      "exampleValue": "'rtl'",
+      "type": "string"
+    },
+    "Ui.display": {
+      "accessor": "Ui",
+      "name": "display",
+      "textKey": "tooltip.ui.display.text",
+      "defaultValue": "''",
+      "exampleValue": "'none'",
+      "type": "string"
+    },
+    "Ui.flex": {
+      "accessor": "Ui",
+      "name": "flex",
+      "textKey": "tooltip.ui.flex.text",
+      "defaultValue": "0",
+      "exampleValue": "2",
+      "type": "number"
+    },
+    "Ui.flexBasis": {
+      "accessor": "Ui",
+      "name": "flexBasis",
+      "textKey": "tooltip.ui.flex_basis.text",
+      "defaultValue": "''",
+      "exampleValue": "'200px'",
+      "type": "string"
+    },
+    "Ui.flexDirection": {
+      "accessor": "Ui",
+      "name": "flexDirection",
+      "textKey": "tooltip.ui.flex_direction.text",
+      "defaultValue": "'row'",
+      "exampleValue": "'column-reverse'",
+      "type": "string"
+    },
+    "Ui.flexGrow": {
+      "accessor": "Ui",
+      "name": "flexGrow",
+      "textKey": "tooltip.ui.flex_grow.text",
+      "defaultValue": "0",
+      "exampleValue": "3",
+      "type": "number"
+    },
+    "Ui.flexShrink": {
+      "accessor": "Ui",
+      "name": "flexShrink",
+      "textKey": "tooltip.ui.flex_shrink.text",
+      "defaultValue": "0",
+      "exampleValue": "1",
+      "type": "number"
+    },
+    "Ui.flexWrap": {
+      "accessor": "Ui",
+      "name": "flexWrap",
+      "textKey": "tooltip.ui.flex_wrap.text",
+      "defaultValue": "'nowrap'",
+      "exampleValue": "'wrap'",
+      "type": "string"
+    },
+    "Ui.gap": {
+      "accessor": "Ui",
+      "name": "gap",
+      "textKey": "tooltip.ui.gap.text",
+      "defaultValue": "''",
+      "exampleValue": "'5'",
+      "type": "string"
+    },
+    "Ui.justifyContent": {
+      "accessor": "Ui",
+      "name": "justifyContent",
+      "textKey": "tooltip.ui.justify_content.text",
+      "defaultValue": "'flex-start'",
+      "exampleValue": "'space-around'",
+      "type": "string"
+    },
+    "Ui.margin": {
+      "accessor": "Ui",
+      "name": "margin",
+      "textKey": "tooltip.ui.margin.text",
+      "defaultValue": "''",
+      "exampleValue": "'10'",
+      "type": "string"
+    },
+    "Ui.marginBottom": {
+      "accessor": "Ui",
+      "name": "marginBottom",
+      "textKey": "tooltip.ui.margin_bottom.text",
+      "defaultValue": "''",
+      "exampleValue": "'10'",
+      "type": "string"
+    },
+    "Ui.marginLeft": {
+      "accessor": "Ui",
+      "name": "marginLeft",
+      "textKey": "tooltip.ui.margin_left.text",
+      "defaultValue": "''",
+      "exampleValue": "'10'",
+      "type": "string"
+    },
+    "Ui.marginRight": {
+      "accessor": "Ui",
+      "name": "marginRight",
+      "textKey": "tooltip.ui.margin_right.text",
+      "defaultValue": "''",
+      "exampleValue": "'10'",
+      "type": "string"
+    },
+    "Ui.marginTop": {
+      "accessor": "Ui",
+      "name": "marginTop",
+      "textKey": "tooltip.ui.margin_top.text",
+      "defaultValue": "''",
+      "exampleValue": "'10'",
+      "type": "string"
+    },
+    "Ui.maxHeight": {
+      "accessor": "Ui",
+      "name": "maxHeight",
+      "textKey": "tooltip.ui.max_height.text",
+      "defaultValue": "''",
+      "exampleValue": "'100'",
+      "type": "string"
+    },
+    "Ui.maxWidth": {
+      "accessor": "Ui",
+      "name": "maxWidth",
+      "textKey": "tooltip.ui.max_width.text",
+      "defaultValue": "''",
+      "exampleValue": "'100'",
+      "type": "string"
+    },
+    "Ui.minHeight": {
+      "accessor": "Ui",
+      "name": "minHeight",
+      "textKey": "tooltip.ui.min_height.text",
+      "defaultValue": "''",
+      "exampleValue": "'10'",
+      "type": "string"
+    },
+    "Ui.minWidth": {
+      "accessor": "Ui",
+      "name": "minWidth",
+      "textKey": "tooltip.ui.min_width.text",
+      "defaultValue": "''",
+      "exampleValue": "'10'",
+      "type": "string"
+    },
+    "Ui.overflow": {
+      "accessor": "Ui",
+      "name": "overflow",
+      "textKey": "tooltip.ui.overflow.text",
+      "defaultValue": "''",
+      "exampleValue": "'hidden'",
+      "type": "string"
+    },
+    "Ui.padding": {
+      "accessor": "Ui",
+      "name": "padding",
+      "textKey": "tooltip.ui.padding.text",
+      "defaultValue": "''",
+      "exampleValue": "'10'",
+      "type": "string"
+    },
+    "Ui.paddingBottom": {
+      "accessor": "Ui",
+      "name": "paddingBottom",
+      "textKey": "tooltip.ui.padding_bottom.text",
+      "defaultValue": "''",
+      "exampleValue": "'10'",
+      "type": "string"
+    },
+    "Ui.paddingLeft": {
+      "accessor": "Ui",
+      "name": "paddingLeft",
+      "textKey": "tooltip.ui.padding_left.text",
+      "defaultValue": "''",
+      "exampleValue": "'10'",
+      "type": "string"
+    },
+    "Ui.paddingRight": {
+      "accessor": "Ui",
+      "name": "paddingRight",
+      "textKey": "tooltip.ui.padding_right.text",
+      "defaultValue": "''",
+      "exampleValue": "'10'",
+      "type": "string"
+    },
+    "Ui.paddingTop": {
+      "accessor": "Ui",
+      "name": "paddingTop",
+      "textKey": "tooltip.ui.padding_top.text",
+      "defaultValue": "''",
+      "exampleValue": "'10'",
+      "type": "string"
+    },
+    "Ui.rowGap": {
+      "accessor": "Ui",
+      "name": "rowGap",
+      "textKey": "tooltip.ui.row_gap.text",
+      "defaultValue": "''",
+      "exampleValue": "'5'",
+      "type": "string"
+    },
+    "Ui.textAlign": {
+      "accessor": "Ui",
+      "name": "textAlign",
+      "textKey": "tooltip.ui.text_align.text",
+      "defaultValue": "'center'",
+      "exampleValue": "'left'",
+      "type": "string"
+    },
+    "Ui.stackingOrder": {
+      "accessor": "Ui",
+      "name": "stackingOrder",
+      "textKey": "tooltip.ui.stacking_order.text",
+      "defaultValue": "0",
+      "exampleValue": "3",
+      "type": "number"
+    },
+    "Ui.ignoreRaycast": {
+      "accessor": "Ui",
+      "name": "ignoreRaycast",
+      "textKey": "tooltip.ui.ignore_raycast.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "Ui.nineSliceBorderTop": {
+      "accessor": "Ui",
+      "name": "nineSliceBorderTop",
+      "textKey": "tooltip.ui.nine_slice_border_top.text",
+      "defaultValue": "'0'",
+      "exampleValue": "'125'",
+      "type": "string"
+    },
+    "Ui.nineSliceBorderBottom": {
+      "accessor": "Ui",
+      "name": "nineSliceBorderBottom",
+      "textKey": "tooltip.ui.nine_slice_border_bottom.text",
+      "defaultValue": "'0'",
+      "exampleValue": "'125'",
+      "type": "string"
+    },
+    "Ui.nineSliceBorderLeft": {
+      "accessor": "Ui",
+      "name": "nineSliceBorderLeft",
+      "textKey": "tooltip.ui.nine_slice_border_left.text",
+      "defaultValue": "'0'",
+      "exampleValue": "'125'",
+      "type": "string"
+    },
+    "Ui.nineSliceBorderRight": {
+      "accessor": "Ui",
+      "name": "nineSliceBorderRight",
+      "textKey": "tooltip.ui.nine_slice_border_right.text",
+      "defaultValue": "'0'",
+      "exampleValue": "'125'",
+      "type": "string"
+    },
+    "Ui.nineSliceScaleFactor": {
+      "accessor": "Ui",
+      "name": "nineSliceScaleFactor",
+      "textKey": "tooltip.ui.nine_slice_scale_factor.text",
+      "defaultValue": "1",
+      "exampleValue": "0.8",
+      "type": "number"
+    },
+    "Ui.verticalTextAlign": {
+      "accessor": "Ui",
+      "name": "verticalTextAlign",
+      "textKey": "tooltip.ui.vertical_text_align.text",
+      "defaultValue": "'start'",
+      "exampleValue": "'center'",
+      "type": "string"
+    },
+    "Ui.video": {
+      "accessor": "Ui",
+      "name": "video",
+      "defaultValue": "''",
+      "type": "string"
+    },
+    "Shadow.castShadow": {
+      "accessor": "Shadow",
+      "name": "castShadow",
+      "textKey": "tooltip.shadow.cast_shadow.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "Shadow.receiveShadow": {
+      "accessor": "Shadow",
+      "name": "receiveShadow",
+      "textKey": "tooltip.shadow.receive_shadow.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "GltfModel.url": {
+      "accessor": "GltfModel",
+      "name": "url",
+      "textKey": "tooltip.gltf_model.url.text",
+      "defaultValue": "''",
+      "type": "string"
+    },
+    "GltfModel.animationClip": {
+      "accessor": "GltfModel",
+      "name": "animationClip",
+      "textKey": "tooltip.gltf_model.animation_clip.text",
+      "defaultValue": "''",
+      "type": "string"
+    },
+    "GltfModel.loop": {
+      "accessor": "GltfModel",
+      "name": "loop",
+      "textKey": "tooltip.gltf_model.loop.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "GltfModel.paused": {
+      "accessor": "GltfModel",
+      "name": "paused",
+      "textKey": "tooltip.gltf_model.paused.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "GltfModel.time": {
+      "accessor": "GltfModel",
+      "name": "time",
+      "textKey": "tooltip.gltf_model.time.text",
+      "defaultValue": "0",
+      "type": "number"
+    },
+    "GltfModel.timeScale": {
+      "accessor": "GltfModel",
+      "name": "timeScale",
+      "textKey": "tooltip.gltf_model.time_scale.text",
+      "defaultValue": "1",
+      "type": "number"
+    },
+    "GltfModel.collider": {
+      "accessor": "GltfModel",
+      "name": "collider",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "GltfModel.reverse": {
+      "accessor": "GltfModel",
+      "name": "reverse",
+      "textKey": "tooltip.gltf_model.reverse.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "GltfModel.repetitions": {
+      "accessor": "GltfModel",
+      "name": "repetitions",
+      "textKey": "tooltip.gltf_model.repetitions.text",
+      "defaultValue": "0",
+      "type": "number"
+    },
+    "GltfModel.crossFadeDuration": {
+      "accessor": "GltfModel",
+      "name": "crossFadeDuration",
+      "textKey": "tooltip.gltf_model.cross_fade_duration.text",
+      "defaultValue": "0",
+      "type": "number"
+    },
+    "OrbitControls.speed": {
+      "accessor": "OrbitControls",
+      "name": "speed",
+      "textKey": "tooltip.orbit_controls.speed.text",
+      "defaultValue": "5",
+      "exampleValue": "2",
+      "type": "number"
+    },
+    "OrbitControls.maxAngularSpeed": {
+      "accessor": "OrbitControls",
+      "name": "maxAngularSpeed",
+      "textKey": "tooltip.orbit_controls.max_angular_speed.text",
+      "defaultValue": "10",
+      "exampleValue": "3",
+      "type": "number"
+    },
+    "OrbitControls.maxZoomSpeed": {
+      "accessor": "OrbitControls",
+      "name": "maxZoomSpeed",
+      "textKey": "tooltip.orbit_controls.max_zoom_speed.text",
+      "defaultValue": "10",
+      "exampleValue": "3",
+      "type": "number"
+    },
+    "OrbitControls.distanceMin": {
+      "accessor": "OrbitControls",
+      "name": "distanceMin",
+      "textKey": "tooltip.orbit_controls.distance_min.text",
+      "defaultValue": "5",
+      "exampleValue": "1",
+      "type": "number"
+    },
+    "OrbitControls.distanceMax": {
+      "accessor": "OrbitControls",
+      "name": "distanceMax",
+      "textKey": "tooltip.orbit_controls.distance_max.text",
+      "defaultValue": "20",
+      "exampleValue": "10",
+      "type": "number"
+    },
+    "OrbitControls.pitchAngleMin": {
+      "accessor": "OrbitControls",
+      "name": "pitchAngleMin",
+      "textKey": "tooltip.orbit_controls.pitch_angle_min.text",
+      "defaultValue": "-90",
+      "exampleValue": "-30",
+      "type": "number"
+    },
+    "OrbitControls.pitchAngleMax": {
+      "accessor": "OrbitControls",
+      "name": "pitchAngleMax",
+      "textKey": "tooltip.orbit_controls.pitch_angle_max.text",
+      "defaultValue": "90",
+      "exampleValue": "30",
+      "type": "number"
+    },
+    "OrbitControls.constrainYaw": {
+      "accessor": "OrbitControls",
+      "name": "constrainYaw",
+      "textKey": "tooltip.orbit_controls.constrain_yaw.text",
+      "defaultValue": "false",
+      "type": "boolean"
+    },
+    "OrbitControls.yawAngleMin": {
+      "accessor": "OrbitControls",
+      "name": "yawAngleMin",
+      "textKey": "tooltip.orbit_controls.yaw_angle_min.text",
+      "defaultValue": "0",
+      "exampleValue": "-45",
+      "type": "number"
+    },
+    "OrbitControls.yawAngleMax": {
+      "accessor": "OrbitControls",
+      "name": "yawAngleMax",
+      "textKey": "tooltip.orbit_controls.yaw_angle_max.text",
+      "defaultValue": "0",
+      "exampleValue": "45",
+      "type": "number"
+    },
+    "OrbitControls.inertiaFactor": {
+      "accessor": "OrbitControls",
+      "name": "inertiaFactor",
+      "textKey": "tooltip.orbit_controls.inertia_factor.text",
+      "defaultValue": "0.3",
+      "exampleValue": "1",
+      "type": "number"
+    },
+    "OrbitControls.invertedX": {
+      "accessor": "OrbitControls",
+      "name": "invertedX",
+      "textKey": "tooltip.orbit_controls.inverted_x.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "OrbitControls.invertedY": {
+      "accessor": "OrbitControls",
+      "name": "invertedY",
+      "textKey": "tooltip.orbit_controls.inverted_y.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "OrbitControls.invertedZoom": {
+      "accessor": "OrbitControls",
+      "name": "invertedZoom",
+      "textKey": "tooltip.orbit_controls.inverted_zoom.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "OrbitControls.controllerSupport": {
+      "accessor": "OrbitControls",
+      "name": "controllerSupport",
+      "textKey": "tooltip.orbit_controls.controller_support.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "OrbitControls.verticalSensitivity": {
+      "accessor": "OrbitControls",
+      "name": "verticalSensitivity",
+      "textKey": "tooltip.orbit_controls.vertical_sensitivity.text",
+      "defaultValue": "1",
+      "exampleValue": "2",
+      "type": "number"
+    },
+    "OrbitControls.horizontalSensitivity": {
+      "accessor": "OrbitControls",
+      "name": "horizontalSensitivity",
+      "textKey": "tooltip.orbit_controls.horizontal_sensitivity.text",
+      "defaultValue": "1",
+      "exampleValue": "2",
+      "type": "number"
+    },
+    "OrbitControls.focusEntity": {
+      "accessor": "OrbitControls",
+      "name": "focusEntity",
+      "textKey": "tooltip.orbit_controls.focus_entity.text",
+      "defaultValue": "undefined",
+      "type": "eid"
+    },
+    "FlyController.verticalSensitivity": {
+      "accessor": "FlyController",
+      "name": "verticalSensitivity",
+      "textKey": "tooltip.fly_controller.vertical_sensitivity.text",
+      "defaultValue": "1",
+      "type": "number"
+    },
+    "FlyController.horizontalSensitivity": {
+      "accessor": "FlyController",
+      "name": "horizontalSensitivity",
+      "textKey": "tooltip.fly_controller.horizontal_sensitivity.text",
+      "defaultValue": "1",
+      "type": "number"
+    },
+    "FlyController.moveSpeedX": {
+      "accessor": "FlyController",
+      "name": "moveSpeedX",
+      "textKey": "tooltip.fly_controller.move_speed_x.text",
+      "defaultValue": "10",
+      "type": "number"
+    },
+    "FlyController.moveSpeedY": {
+      "accessor": "FlyController",
+      "name": "moveSpeedY",
+      "textKey": "tooltip.fly_controller.move_speed_y.text",
+      "defaultValue": "10",
+      "type": "number"
+    },
+    "FlyController.moveSpeedZ": {
+      "accessor": "FlyController",
+      "name": "moveSpeedZ",
+      "textKey": "tooltip.fly_controller.move_speed_z.text",
+      "defaultValue": "10",
+      "type": "number"
+    },
+    "FlyController.invertedX": {
+      "accessor": "FlyController",
+      "name": "invertedX",
+      "textKey": "tooltip.fly_controller.inverted_x.text",
+      "defaultValue": "false",
+      "type": "boolean"
+    },
+    "FlyController.invertedY": {
+      "accessor": "FlyController",
+      "name": "invertedY",
+      "textKey": "tooltip.fly_controller.inverted_y.text",
+      "defaultValue": "false",
+      "type": "boolean"
+    },
+    "ImageTarget.name": {
+      "accessor": "ImageTarget",
+      "name": "name",
+      "textKey": "tooltip.image_target.name.text",
+      "defaultValue": "''",
+      "exampleValue": "'target'",
+      "type": "string"
+    },
+    "Face.id": {
+      "accessor": "Face",
+      "name": "id",
+      "textKey": "tooltip.face.id.text",
+      "defaultValue": "1",
+      "type": "number"
+    },
+    "Face.addAttachmentState": {
+      "accessor": "Face",
+      "name": "addAttachmentState",
+      "defaultValue": "false",
+      "type": "boolean"
+    },
+    "Splat.url": {
+      "accessor": "Splat",
+      "name": "url",
+      "textKey": "tooltip.splat.url.text",
+      "defaultValue": "''",
+      "exampleValue": "'assets/my-splat.spz'",
+      "type": "string"
+    },
+    "Splat.skybox": {
+      "accessor": "Splat",
+      "name": "skybox",
+      "textKey": "tooltip.splat.skybox.text",
+      "defaultValue": "false",
+      "exampleValue": "true",
+      "type": "boolean"
+    },
+    "FaceAttachment.point": {
+      "accessor": "FaceAttachment",
+      "name": "point",
+      "textKey": "tooltip.face_attachment.point.text",
+      "defaultValue": "'forehead'",
+      "exampleValue": "'rightEyebrowInner'",
+      "type": "string"
+    },
+    "ThreeObject.order": {
+      "accessor": "ThreeObject",
+      "name": "order",
+      "defaultValue": "0",
+      "exampleValue": "3",
+      "type": "number"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+diff --git a/node_modules/@types/css-font-loading-module/index.d.ts b/node_modules/@types/css-font-loading-module/index.d.ts
+index 728dd9c..a246978 100644
+--- a/node_modules/@types/css-font-loading-module/index.d.ts
++++ b/node_modules/@types/css-font-loading-module/index.d.ts
+@@ -41,8 +41,11 @@ declare global {
+ 
+     interface FontFaceSet extends Set<FontFace>, EventTarget {
+         // events for when loading state changes
++        // @ts-ignore
+         onloading: ((this: FontFaceSet, event: FontFaceSetLoadEvent) => any) | null;
++        // @ts-ignore
+         onloadingdone: ((this: FontFaceSet, event: FontFaceSetLoadEvent) => any) | null;
++        // @ts-ignore
+         onloadingerror: ((this: FontFaceSet, event: FontFaceSetLoadEvent) => any) | null;
+ 
+         // EventTarget

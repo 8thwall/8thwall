@@ -1,0 +1,31 @@
+const DEFAULT_VOLUME = 1
+const DEFAULT_PITCH = 1
+
+// Defaults from https://developer.mozilla.org/en-US/docs/Web/API/PannerNode
+const DEFAULT_REF_DISTANCE = 1
+const DEFAULT_DISTANCE_MODEL = 'inverse'
+const DEFAULT_ROLLOFF_FACTOR = 1
+const DEFAULT_MAX_DISTANCE = 10000
+
+// sound compression settings
+// our goal is to simply achieve downward compression to avoid clipping
+// https://en.wikipedia.org/wiki/Dynamic_range_compression
+const DEFAULT_COMPRESSOR_THRESHOLD = -50
+const DEFAULT_COMPRESSOR_KNEE = 40
+const DEFAULT_COMPRESSOR_RATIO = 12
+const DEFAULT_COMPRESSOR_ATTACK = 0.003
+const DEFAULT_COMPRESSOR_RELEASE = 0.25
+
+export {
+  DEFAULT_VOLUME,
+  DEFAULT_PITCH,
+  DEFAULT_REF_DISTANCE,
+  DEFAULT_DISTANCE_MODEL,
+  DEFAULT_ROLLOFF_FACTOR,
+  DEFAULT_MAX_DISTANCE,
+  DEFAULT_COMPRESSOR_THRESHOLD,
+  DEFAULT_COMPRESSOR_KNEE,
+  DEFAULT_COMPRESSOR_RATIO,
+  DEFAULT_COMPRESSOR_ATTACK,
+  DEFAULT_COMPRESSOR_RELEASE,
+}

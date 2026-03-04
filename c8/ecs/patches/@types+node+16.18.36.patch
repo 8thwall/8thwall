@@ -1,0 +1,17 @@
+diff --git a/node_modules/@types/node/globals.d.ts b/node_modules/@types/node/globals.d.ts
+index 16e7cdc..84f0ad3 100755
+--- a/node_modules/@types/node/globals.d.ts
++++ b/node_modules/@types/node/globals.d.ts
+@@ -70,11 +70,11 @@ declare var AbortController: {
+     new(): AbortController;
+ };
+ 
++// @ts-ignore
+ declare var AbortSignal: {
+     prototype: AbortSignal;
+     new(): AbortSignal;
+     abort(reason?: any): AbortSignal;
+-    timeout(milliseconds: number): AbortSignal;
+ };
+ //#endregion borrowed
+ 
