@@ -1,0 +1,86 @@
+name: 📖 Documentation Issue
+description: Report issues with documentation, tutorials, or examples
+title: "[Docs]: "
+labels: ["documentation", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping us improve our documentation! 
+        
+        **Note**: For questions about usage, please use [GitHub Discussions](https://github.com/8thwall/8thwall/discussions/categories/q-a) instead.
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Pre-flight Checklist
+      description: Please ensure you've completed the following
+      options:
+        - label: I have searched existing issues to avoid duplicates
+          required: true
+        - label: This is about documentation/examples, not a usage question (usage questions should go in [Discussions](https://github.com/8thwall/8thwall/discussions/categories/q-a))
+          required: true
+
+  - type: dropdown
+    id: doc-type
+    attributes:
+      label: Documentation Type
+      description: What type of documentation issue is this?
+      options:
+        - API Documentation
+        - Tutorial/Guide
+        - Code Examples
+        - README/Setup Instructions
+        - Comments in Code
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: location
+    attributes:
+      label: Documentation Location
+      description: Where is the problematic documentation located?
+      placeholder: |
+        - URL: https://...
+        - File: docs/api.md
+        - Section: "Getting Started"
+        - Line numbers: 45-50
+    validations:
+      required: true
+
+  - type: textarea
+    id: issue-description
+    attributes:
+      label: What's Wrong?
+      description: Describe the issue with the documentation
+      placeholder: |
+        Be specific about what is:
+        - Incorrect
+        - Missing
+        - Unclear
+        - Outdated
+        - Hard to understand
+    validations:
+      required: true
+
+  - type: textarea
+    id: suggested-fix
+    attributes:
+      label: Suggested Improvement
+      description: How would you improve this documentation?
+      placeholder: |
+        - What should be added/changed/removed?
+        - Suggested wording improvements
+        - Additional examples needed
+        - Better organization/structure
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Any other helpful information
+      placeholder: |
+        - What were you trying to accomplish when you found this issue?
+        - Your experience level with the project
+        - Any related issues or discussions

@@ -1,0 +1,128 @@
+name: 🐛 Bug Report
+description: Report a bug or unexpected behavior
+title: "[Bug]: "
+labels: ["bug", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report! 
+        
+        **Before submitting**: Please check if a similar issue already exists and consider using [GitHub Discussions](https://github.com/8thwall/8thwall/discussions) for questions or feature requests.
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Pre-flight Checklist
+      description: Please ensure you've completed the following before submitting this bug report
+      options:
+        - label: I have searched existing issues and discussions to avoid duplicates
+          required: true
+        - label: I have tested this with the latest version
+          required: true
+        - label: This is a bug report, not a feature request (feature requests should go in [Discussions](https://github.com/8thwall/8thwall/discussions/categories/ideas))
+          required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of what the bug is
+      placeholder: Describe what happened and what you expected to happen
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: Detailed steps to reproduce the behavior
+      placeholder: |
+        1. Go to '...'
+        2. Click on '...'
+        3. Scroll down to '...'
+        4. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What should have happened?
+      placeholder: A clear and concise description of what you expected to happen
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      description: What actually happened?
+      placeholder: A clear and concise description of what actually happened
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Please provide your environment details
+      placeholder: |
+        - OS: [e.g. macOS 13.0, Windows 11, Ubuntu 20.04]
+        - Browser: [e.g. Chrome 108, Safari 16.1, Firefox 107]
+        - Device: [e.g. iPhone 14, Samsung Galaxy S21, iPad Pro]
+        - 8th Wall version: [e.g. 8.14.0]
+        - Node.js version: [e.g. 18.12.0]
+      render: markdown
+    validations:
+      required: true
+
+  - type: textarea
+    id: code-sample
+    attributes:
+      label: Code Sample
+      description: If applicable, provide a minimal code sample that reproduces the issue
+      placeholder: |
+        ```javascript
+        // Your code here
+        ```
+      render: javascript
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Error Logs/Console Output
+      description: If applicable, provide relevant error messages or console output
+      placeholder: |
+        ```
+        Paste your error logs here
+        ```
+      render: shell
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots/Videos
+      description: If applicable, add screenshots or videos to help explain your problem
+      placeholder: Drag and drop images/videos here or paste links
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Add any other context about the problem here
+      placeholder: Any additional information that might be helpful
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority/Severity
+      description: How severe is this issue?
+      options:
+        - Critical (blocks development/production)
+        - High (significant impact) 
+        - Medium (some impact)
+        - Low (minor issue)
+    validations:
+      required: true

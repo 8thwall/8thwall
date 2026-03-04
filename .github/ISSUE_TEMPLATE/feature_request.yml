@@ -1,0 +1,48 @@
+name: 💡 Feature Request
+description: "⚠️ Please use GitHub Discussions instead!"
+title: "[Feature]: "
+labels: ["feature-request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # ⚠️ Hold on! Feature requests should go in GitHub Discussions
+        
+        We've moved feature requests to **GitHub Discussions** to encourage community engagement and collaboration.
+        
+        ## 👉 Please submit your feature request here instead:
+        **[💡 Feature Requests & Ideas](https://github.com/8thwall/8thwall/discussions/categories/ideas)**
+        
+        ## Why use Discussions for feature requests?
+        - 🗨️ **Community discussion** - Others can comment and build on your idea
+        - 👍 **Upvoting** - Popular requests get more visibility  
+        - 🔄 **Iteration** - Ideas can evolve through conversation
+        - 📋 **Better organization** - Feature requests don't clutter the issue tracker
+        - 🚀 **Faster response** - The community can provide feedback even before maintainers review
+        
+        ## What belongs in Issues vs Discussions?
+        
+        ### ✅ Use **Issues** for:
+        - 🐛 **Bug reports** - Something is broken or not working as expected
+        - 📖 **Documentation issues** - Problems with docs, tutorials, or examples
+        
+        ### ✅ Use **Discussions** for:
+        - 💡 **Feature requests** - New functionality you'd like to see
+        - 🤔 **Ideas & brainstorming** - Concepts that need community input
+        - ❓ **Questions** - How to use existing features
+        - 💬 **General discussion** - Anything that doesn't fit elsewhere
+        
+        ---
+        
+        **If you still believe this is a bug report rather than a feature request, please close this issue and use the [🐛 Bug Report template](https://github.com/8thwall/8thwall/issues/new?template=bug_report.yml) instead.**
+
+  - type: checkboxes
+    id: acknowledge
+    attributes:
+      label: Acknowledgment
+      description: Please confirm you understand where to submit feature requests
+      options:
+        - label: "I understand that feature requests should be submitted in [GitHub Discussions](https://github.com/8thwall/8thwall/discussions/categories/ideas)"
+          required: true
+        - label: "I will close this issue and submit my feature request in Discussions instead"
+          required: true

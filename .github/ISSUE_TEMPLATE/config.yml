@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💡 Feature Request or Idea
+    url: https://github.com/8thwall/8thwall/discussions/categories/ideas
+    about: Please use GitHub Discussions to propose new features, ideas, or enhancements. This helps foster community discussion and allows others to upvote and contribute to your ideas.
+  - name: ❓ Questions & Help
+    url: https://github.com/8thwall/8thwall/discussions/categories/q-a
+    about: Ask questions about usage, implementation, or get help from the community.
+  - name: 📖 Documentation Issue
+    url: https://github.com/8thwall/8thwall/issues/new?template=documentation.yml
+    about: Report issues with documentation, tutorials, or examples.
