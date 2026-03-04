@@ -1,7 +1,5 @@
 # ECS
 
-This folder contains the game engine supporting 8th Wall Studio. ECS is short for "Entity Component System". It is based on FLECS for state management, three.js for rendering, and Jolt for physics.
-
 ## Development
 
 1. Follow the shared setup steps in [CONTRIBUTING.md](../../CONTRIBUTING.md)

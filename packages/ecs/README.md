@@ -1,6 +1,6 @@
 # ECS
 
-The game engine behind 8th Wall Studio
+The game engine behind 8th Wall Studio. ECS is short for "Entity Component System". It is based on FLECS for state management, three.js for rendering, and Jolt for physics.
 
 ## Usage
 
