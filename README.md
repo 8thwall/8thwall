@@ -16,3 +16,4 @@ Otherwise, you can browse our [examples](./examples/README.md) to find a jumping
 
 - [xrextras](./packages/xrextras/README.md)
 - [engine](./packages/engine/README.md)
+- [ecs](./packages/ecs/README.md)

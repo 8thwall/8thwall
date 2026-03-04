@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>ECS Component Stress Test</title>
+  <style>
+    body {
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<script src="../dist/runtime.js"></script>
+<script>
+  const THREE = window.THREE
+  const bigIntPrinter = (value) => `${value}n`
+
+  const jsonReplacer = (_, value) => (
+    (typeof value === 'bigint') ? bigIntPrinter(value) : value
+  )
+
+  const log = (...args) => {
+    const text = args
+      .map(e => ((typeof e === 'string') ? e : JSON.stringify(e, jsonReplacer)))
+      .join(' ')
+
+    document.body.textContent += '\n'
+    document.body.textContent += text
+  }
+
+  const logError = (error) => {
+    console.error(error)
+    const errorElement = document.createElement('div')
+    errorElement.style.color = 'red'
+    errorElement.textContent = `🚫Error🚫: ${error.message}`
+    document.body.appendChild(errorElement)
+  }
+
+  const runTest = () => {
+    const componentA = window.ecs.registerComponent(
+      {
+        name: 'componentA',
+        schema: { value: ecs.i32 },
+      }
+    )
+
+    const componentB = window.ecs.registerComponent(
+      {
+        name: 'componentB',
+        schema: { value: ecs.i32 },
+      }
+    )
+
+    const componentC = window.ecs.registerComponent(
+      {
+        name: 'componentC',
+        schema: { value: ecs.i32 },
+      }
+    )
+    log(`created componentA, componentB, componentC, SparseA, SparseB`)
+
+
+    const sparseComponentA = window.ecs.registerComponent(
+      {
+        name: 'sparseA',
+        schema: { value: ecs.i32 },
+      }
+    )
+
+    const sparseComponentB = window.ecs.registerComponent(
+      {
+        name: 'sparseC',
+        schema: { value: ecs.i32 },
+      }
+    )
+
+
+    const scene = new THREE.Scene()
+    const camera = new THREE.PerspectiveCamera(
+      75, window.innerWidth / window.innerHeight, 0.1, 1000
+    )
+    const renderer = new THREE.WebGLRenderer()
+    const world = window.ecs.createWorld(scene, renderer, camera)
+
+    const eid = world.createEntity()
+
+    // initial start
+    world.tick()
+
+    const queryA = window.ecs.defineQuery([componentA, componentB, componentC])
+    const queryB = window.ecs.defineQuery([componentB, componentC])
+    const queryC = window.ecs.defineQuery([componentC])
+    const querySparseA = window.ecs.defineQuery([sparseComponentA])
+    const querySparseB = window.ecs.defineQuery([sparseComponentB])
+
+    const entities = [100, 1000, 10000, 15000]
+    for (numberOfEntities of entities) {
+      const sparseACount = numberOfEntities * .10
+      const sparseBCount = numberOfEntities * .15
+      log(`Testing ${numberOfEntities + sparseACount + sparseBCount} entities`)
+      const eids = []
+
+      const c0 = performance.now()
+      for (let i = 0; i < numberOfEntities / 2; i++) {
+        const eid = world.createEntity()
+        componentA.set(world, eid)
+        componentB.set(world, eid)
+        componentC.set(world, eid)
+        eids.push(eid)
+      }
+
+      for (let i = 0; i < sparseACount; i++) {
+        const eid = world.createEntity()
+        sparseComponentA.set(world, eid)
+        eids.push(eid)
+      }
+
+      for (let i = 0; i < numberOfEntities / 4; i++) {
+        const eid = world.createEntity()
+        componentB.set(world, eid)
+        componentC.set(world, eid)
+        eids.push(eid)
+      }
+
+      for (let i = 0; i < numberOfEntities / 4; i++) {
+        const eid = world.createEntity()
+        componentC.set(world, eid)
+        eids.push(eid)
+      }
+
+      for (let i = 0; i < sparseBCount; i++) {
+        const eid = world.createEntity()
+        sparseComponentB.set(world, eid)
+        eids.push(eid)
+      }
+      const c1 = performance.now()
+
+      world.tick()
+
+      log(`finished creating ${numberOfEntities + sparseACount + sparseBCount} entities`)
+      log(`Creation took: ${((c1 - c0)).toFixed(5)}ms`)
+
+      const testQueries = (showResults) => {
+        const t0 = performance.now()
+        const entities = queryA(world)
+        const t1 = performance.now()
+        const entitiesB = queryB(world)
+        const t2 = performance.now()
+        const entitiesC = queryC(world)
+        const t3 = performance.now()
+        const entitiesSparseA = querySparseA(world)
+        const t4 = performance.now()
+        const entitiesSparseB = querySparseB(world)
+        const t5 = performance.now()
+
+        if (showResults) {
+          // log(`entities with componentA, componentB, componentC: ${entities.length}`)
+          // log(`entities with componentB, componentC: ${entitiesB.length}`)
+          // log(`entities with componentC: ${entitiesC.length}`)
+
+          log(`Query A took: ${((t1 - t0)).toFixed(5)}ms`)
+          log(`Query B took: ${((t2 - t1)).toFixed(5)}ms`)
+          log(`Query C took: ${((t3 - t2)).toFixed(5)}ms`)
+          log(`Query sparseA took: ${((t4 - t3)).toFixed(5)}ms`)
+          log(`Query sparseB took: ${((t5 - t4)).toFixed(5)}ms`)
+          log(`Total query time: ${((t5 - t0)).toFixed(5)}ms`)
+        }
+        return t5 - t0
+      }
+
+      testQueries(true)
+
+      // This simulates a game loop
+      times = []
+      for (let i = 0; i < 100; i++) {
+        times.push(testQueries(false))
+        world.tick()
+      }
+
+      const avg = times.reduce((a, b) => a + b) / times.length
+      log(`Average total query time (100 times) : ${avg.toFixed(5)}ms`)
+
+      const d0 = performance.now()
+      for (const eid of eids) {
+        componentA.remove(world, eid)
+        componentB.remove(world, eid)
+        componentC.remove(world, eid)
+        sparseComponentA.remove(world, eid)
+        sparseComponentB.remove(world, eid)
+      }
+      const d1 = performance.now()
+
+      log(`Removal of all entities took: ${((d1 - d0)).toFixed(5)} ms`)
+
+      world.tick()
+
+      log(`\n\n------------------------------------------------------------------\n`)
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    window.ecs.ready().then(runTest).catch(logError)
+  })
+
+
+
+</script>
+
+</html>

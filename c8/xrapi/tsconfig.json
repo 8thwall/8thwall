@@ -1,0 +1,28 @@
+{
+    "compilerOptions": {
+        "target": "es2020",
+        "lib": [
+            "esnext",
+        ],
+        "types": [
+            "node"
+        ],
+        "allowJs": true,
+        "skipLibCheck": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "strict": true,
+        "forceConsistentCasingInFileNames": true,
+        "noFallthroughCasesInSwitch": true,
+        "module": "Preserve",
+        "moduleResolution": "Bundler",
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "jsx": "react-jsx",
+        "paths": {
+            "@nia/*": [
+                "../../*",
+            ],
+        },
+    }
+}

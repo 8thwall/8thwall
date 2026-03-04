@@ -1,0 +1,13 @@
+ecs/trigger:
+  stage: build
+  variables:
+    ECS_TRIGGER: "ecs_trigger"
+  trigger:
+    include:
+      - c8/ecs/ecs-ci.yml
+    strategy: depend
+  needs: []
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        - c8/ecs/**/*
