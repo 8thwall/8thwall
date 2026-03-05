@@ -23,7 +23,7 @@ If any questions come up, please refer to our [documentation](https://8th.io/doc
 ### Packages
 
 - [engine](./packages/engine/README.md) - AR modules (Face Effects, Image Targets, Sky Effects, and more)
-  - SLAM functionality is available via the [distributed engine binary](https://github.com/8thwall/engine/tree/main).
+  - SLAM functionality is available via the [distributed engine binary](https://8th.io/xrjs).
 - [ecs](./packages/ecs/README.md) - The game engine behind 8th Wall Studio
 - [xrextras](./packages/xrextras/README.md) - Helper code for XR and 3D needs
 
