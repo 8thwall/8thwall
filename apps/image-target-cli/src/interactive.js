@@ -9,6 +9,8 @@ import {computePixelPointsFromRadius, getUnconifiedData} from './unconify.js'
 import {
   getCircumferenceRatio, getConinessForRadii, getTargetCircumferenceBottom,
 } from './curved-geometry.js'
+import {isDirectory, getImageFiles} from './files.js'
+import {processBatch, printBatchSummary} from './batch.js'
 
 /**
  * @import {
@@ -217,6 +219,106 @@ const selectGeometry = async (rl, imageMetadata) => {
   }
 }
 
+/**
+ * Select geometry for batch mode, tracking if default crop was chosen
+ * @param {CliInterface} rl
+ * @param {ImageMetadata} imageMetadata
+ * @returns {Promise<{geometry: CropResult, useDefaultCrop: boolean}>}
+ */
+const selectGeometryForBatch = async (rl, imageMetadata) => {
+  const type = await rl.choose(
+    'Select the image type:',
+    ['flat', 'cylinder', 'cone'],
+    true
+  )
+
+  // For flat images, track if user chose default crop
+  if (type === 'flat') {
+    const sourceIsLandscape = imageMetadata.width >= imageMetadata.height
+    const useDefaultCrop = await rl.confirm('Use default crop? (recommended for batch with varying image sizes)', true)
+
+    if (useDefaultCrop) {
+      return {
+        geometry: {
+          type: 'PLANAR',
+          geometry: getDefaultCrop(imageMetadata, sourceIsLandscape),
+        },
+        useDefaultCrop: true,
+      }
+    }
+
+    // Manual crop - use exact values (may fail for different-sized images)
+    const orientationOptions = sourceIsLandscape
+      ? ['landscape', 'portrait']
+      : ['portrait', 'landscape']
+    const isRotated = await rl.choose(
+      'Select the image orientation of the trackable region:',
+      orientationOptions,
+      true
+    ) === 'landscape'
+
+    const visualTop = await rl.promptInteger('Enter the top offset of the crop')
+    const visualLeft = await rl.promptInteger('Enter the left offset of the crop')
+    const visualWidth = await rl.promptInteger('Enter the width of the crop')
+
+    let geometry
+    if (isRotated) {
+      const height = visualWidth
+      const width = Math.round((height * 3) / 4)
+      console.log('Computed height based on 4:3 aspect ratio:', width)
+      geometry = {
+        top: visualLeft,
+        left: imageMetadata.height - visualTop - width,
+        width,
+        height,
+        isRotated,
+        originalWidth: imageMetadata.height,
+        originalHeight: imageMetadata.width,
+      }
+    } else {
+      const height = Math.round((visualWidth * 4) / 3)
+      console.log('Computed height based on 3:4 aspect ratio:', height)
+      geometry = {
+        top: visualTop,
+        left: visualLeft,
+        width: visualWidth,
+        height,
+        isRotated,
+        originalWidth: imageMetadata.width,
+        originalHeight: imageMetadata.height,
+      }
+    }
+
+    console.log('\nWarning: Manual crop values will be applied to all images.')
+    console.log('Images with different dimensions may fail processing.\n')
+
+    return {
+      geometry: {type: 'PLANAR', geometry},
+      useDefaultCrop: false,
+    }
+  }
+
+  // For cylinder/cone, use standard geometry selection (no per-image recalculation)
+  if (type === 'cylinder') {
+    return {
+      geometry: {
+        type: 'CYLINDER',
+        geometry: await selectCylindricalGeometry(rl, imageMetadata),
+      },
+      useDefaultCrop: false,
+    }
+  }
+
+  if (type === 'cone') {
+    return {
+      geometry: {type: 'CONICAL', geometry: await selectConicalGeometry(rl, imageMetadata)},
+      useDefaultCrop: false,
+    }
+  }
+
+  throw new Error(`Unknown type: ${type}`)
+}
+
 // Takes in a raw string which may contain quotes, backslashes, and ~,
 // and returns a normalized path.
 const normalizePath = (input) => {
@@ -243,14 +345,11 @@ const normalizePath = (input) => {
 }
 
 /**
+ * Process a single image (existing behavior)
  * @param {CliInterface} rl
- * @returns {Promise<void>}
+ * @param {string} imagePath
  */
-const selectProcessorOptions = async (rl) => {
-  const rawPath = (
-    await rl.prompt('Enter the path to the image file: ')
-  ).trim()
-  const imagePath = normalizePath(rawPath)
+const processSingleMode = async (rl, imagePath) => {
   const image = sharp(imagePath)
   const imageMetadata = await image.metadata()
 
@@ -270,10 +369,91 @@ const selectProcessorOptions = async (rl) => {
   console.log('Image target data saved to:', dataPath)
 }
 
+/**
+ * Process all images in a directory
+ * @param {CliInterface} rl
+ * @param {string} dirPath
+ */
+const processBatchMode = async (rl, dirPath) => {
+  const imageFiles = await getImageFiles(dirPath)
+
+  if (imageFiles.length === 0) {
+    throw new Error(`No image files found in directory: ${dirPath}`)
+  }
+
+  console.log(`\nFound ${imageFiles.length} image(s) in directory:`)
+  for (const file of imageFiles) {
+    console.log(`  - ${path.basename(file)}`)
+  }
+
+  // Use first image as reference for geometry
+  const referenceImagePath = imageFiles[0]
+  const referenceImage = sharp(referenceImagePath)
+  const imageMetadata = await referenceImage.metadata()
+
+  console.log(`\nUsing "${path.basename(referenceImagePath)}" as reference for geometry settings.`)
+  console.log(`Reference image dimensions: ${imageMetadata.width}x${imageMetadata.height}`)
+  console.log('These settings will be applied to all images in the batch.\n')
+
+  const {geometry, useDefaultCrop} = await selectGeometryForBatch(rl, imageMetadata)
+
+  const folder = normalizePath(await rl.prompt('Enter the output folder: '))
+
+  const overwrite = process.env.OVERWRITE_FILES === 'true'
+
+  const onProgress = (current, total, filename) => {
+    console.log(`\nProcessing image ${current} of ${total}: ${filename}`)
+  }
+
+  const results = await processBatch(
+    imageFiles,
+    geometry,
+    folder,
+    overwrite,
+    useDefaultCrop,
+    onProgress
+  )
+
+  printBatchSummary(results)
+}
+
+/**
+ * @param {CliInterface} rl
+ * @returns {Promise<void>}
+ */
+const selectProcessorOptions = async (rl) => {
+  const mode = await rl.choose(
+    'Select processing mode:',
+    ['single', 'batch'],
+    true
+  )
+
+  if (mode === 'batch') {
+    const rawPath = (
+      await rl.prompt('Enter the path to the directory containing images: ')
+    ).trim()
+    const dirPath = normalizePath(rawPath)
+
+    if (!(await isDirectory(dirPath))) {
+      throw new Error(`Not a directory: ${dirPath}`)
+    }
+
+    await processBatchMode(rl, dirPath)
+  } else {
+    const rawPath = (
+      await rl.prompt('Enter the path to the image file: ')
+    ).trim()
+    const imagePath = normalizePath(rawPath)
+    await processSingleMode(rl, imagePath)
+  }
+}
+
 export {
   normalizePath,
   selectPlanarGeometry,
   selectCylindricalGeometry,
   selectConicalGeometry,
   selectProcessorOptions,
+  processSingleMode,
+  processBatchMode,
 }
