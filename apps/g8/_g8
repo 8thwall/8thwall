@@ -1,0 +1,316 @@
+#compdef g8
+
+function _g8 {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '(- : *)'{-h,--help}'[Display help information]' \
+        '(-h --help)1: :_geight_commands' \
+        '(-h --help)*:: :->command_args'
+
+    case $state in
+        command_args)
+        (( $+functions[_geight_${words[1]}_args] )) && _geight_${words[1]}_args
+        ;;
+    esac
+}
+
+(( $+functions[_geight_commands] )) ||
+_geight_commands() {
+    local repo_commands changeset_commands misc_commands
+    repo_commands=(
+        'client:Create or change client'
+        'newclient:[Deprecated] Create new client'
+        'clone:Clone a remote repository'
+        'dry-sync:Dry sync to uncover mergeability'
+        'fetch-new-clients:Fetch new clients'
+        'info:Get information about the repository'
+        'log:Commit history for repo'
+        'sync:Sync and rebase client'
+        'initial-commit:Create the initial commit on a new repo'
+        'status:List files and statuses'
+        'ls:List files'
+    )
+    changeset_commands=(
+        'newchange:Create new changeset'
+        'add:Add files to changeset'
+        'unadd:Remove files from changeset'
+        'change:Query changeset'
+        'update:Update changesets'
+        'land:Land a changeset'
+        'diff:Diff between changes'
+        'patch:Patch changes'
+        'files:Move files in and out of changesets'
+        'revert:Revert files'
+        'save:Save work'
+        'send:Send a changeset for review'
+        'pr:Open PR in browser'
+        'mr:Open MR in browser'
+    )
+    misc_commands=(
+        'keep-house:Perform house keeping'
+    )
+    _describe "commands" repo_commands -- changeset_commands -- misc_commands
+}
+
+(( $+functions[_geight_add_args] )) ||
+_geight_add_args() {
+  _arguments \
+    '-h[Display help information]' \
+    '--help[Display help information]' \
+    '-v[Verbose]' \
+    '-c+[Changset]:TEXT' \
+    '1::Files:_files -f'
+}
+
+(( $+functions[_geight_client_args] )) ||
+_geight_client_args() {
+  _arguments \
+    '-h[Display help information]' \
+    '--help[Display help information]' \
+    '-v[Verbose]' \
+    '-d[Delete client]' \
+    '--cloud-info[Fetch time of latest remote save commit]' \
+    '1::Client name: '
+}
+
+# g8 clone [OPTIONS] name [path]
+(( $+functions[_geight_clone_args] )) ||
+_geight_clone_args() {
+  _arguments \
+    '-h[Display help information]' \
+    '--help[Display help information]' \
+    '-v[Verbose]' \
+    '-c[After clone, checkout master to this commit]' \
+    '--ccommit[After clone, checkout master to this commit]' \
+    '1:https clone url:_urls' \
+    '2::local directory path to clone into:_files -/'
+}
+
+# Usage: g8 change [OPTIONS] [id...]
+# TODO: search valid changesets
+(( $+functions[_geight_change_args] )) ||
+_geight_change_args() {
+  _arguments \
+    '-h[Display help information]' \
+    '--help[Display help information]' \
+    '-v[Verbose]' \
+    '-d[Delete changeset]' \
+    '1::Changeset ID: '
+}
+
+# sage: g8 diff [OPTIONS] [files...]
+(( $+functions[_geight_diff_args] )) ||
+_geight_diff_args() {
+  _arguments \
+    '-h[Display help information]' \
+    '--help[Display help information]' \
+    '-v[Verbose]' \
+    '--from+[partial commit ID, branch/client names, changeset IDs, EMPTY, WORKING. default: FORK]: : ' \
+    '--to+[partial commit ID, branch/client names, changeset IDs, EMPTY, FORK. default: WORKING]: : ' \
+    '1::default diffs working changes against forkpoint. two arguments diff change points (like branches, changesets, etc), single argument diffs that file against fork point. three arguments diffs the file between two change points:_files -f'
+}
+
+(( $+functions[_geight_dry-sync_args] )) ||
+_geight_dry-sync_args() {
+  _arguments \
+    '-h[Display help information]' \
+    '--help[Display help information]' \
+    '-v[Verbose]' \
+    '1::Client name: '
+}
+
+(( $+functions[_geight_fetch-new-clients_args] )) ||
+_geight_fetch-new-clients_args() {
+  _arguments \
+    '-h[Display help information]' \
+    '--help[Display help information]' \
+    '-v[Verbose]'
+}
+
+(( $+functions[_geight_files_args] )) ||
+_geight_files_args() {
+  _arguments \
+    '-h[Display help information]' \
+    '--help[Display help information]' \
+    '-v[Verbose]'
+}
+
+(( $+functions[_geight_initial-commit_args] )) ||
+_geight_initial-commit_args() {
+  _arguments \
+    '-h[Display help information]' \
+    '--help[Display help information]' \
+    '-v[Verbose]' \
+    '-m+[Message]:: : '
+}
+
+(( $+functions[_geight_info_args] )) ||
+_geight_info_args() {
+  _arguments \
+    '-h[Display help information]' \
+    '--help[Display help information]' \
+    '-v[Verbose]'
+}
+
+# TODO: serach valid changesets?
+(( $+functions[_geight_land_args] )) ||
+_geight_land_args() {
+  _arguments \
+    '-h[Display help information]' \
+    '--help[Display help information]' \
+    '-v[Verbose]' \
+    '--with-ci[With CI]' \
+    '1::Changeset ID: '
+}
+
+(( $+functions[_geight_log_args] )) ||
+_geight_log_args() {
+  _arguments \
+    '-h[Display help information]' \
+    '--help[Display help information]' \
+    '-v[Verbose]' \
+    '-n+[The number of commits to output]:: :_guard  "[[\:digit\:]]#" "number of commits to output"'
+}
+
+(( $+functions[_geight_newchange_args] )) ||
+_geight_newchange_args() {
+  _arguments \
+    '-h[Display help information]' \
+    '--help[Display help information]' \
+    '-v[Verbose]' \
+    '-m+[Changeset description]:: : '
+}
+
+# TODO: search valid revert point?
+(( $+functions[_geight_revert_args] )) ||
+_geight_revert_args() {
+  _arguments \
+    '-h[Display help information]' \
+    '--help[Display help information]' \
+    '-v[Verbose]' \
+    '--dry-run[Dry run]' \
+    '-p[Preserve changes by default]' \
+    '-c+[Revert point]::TEXT' \
+    '1::Files:_files -f'
+}
+
+(( $+functions[_geight_save_args] )) ||
+_geight_save_args() {
+  _arguments \
+    '-h[Display help information]' \
+    '--help[Display help information]' \
+    '-v[Verbose]'
+}
+
+# TODO: search valid changeset ids and reviewers?
+(( $+functions[_geight_send_args] )) ||
+_geight_send_args() {
+  _arguments \
+    '-h[Display help information]' \
+    '--help[Display help information]' \
+    '-v[Verbose]' \
+    '-t+[Reviewers to notify]:: :' \
+    '-m+[Changeset description]::TEXT:' \
+    '1::Changeset ID: '
+}
+
+(( $+functions[_geight_status_args] )) ||
+_geight_status_args() {
+  _arguments \
+    '-h[Display help information]' \
+    '--help[Display help information]' \
+    '-v[Verbose]'
+}
+
+# TODO: search valid client names and commit ids
+(( $+functions[_geight_sync_args] )) ||
+_geight_sync_args() {
+  _arguments \
+    '-h[Display help information]' \
+    '--help[Display help information]' \
+    '-v[Verbose]' \
+    '-c+[Commit ID to sync to]:: :' \
+    '--commit+[Commit ID to sync to]:: :' \
+    '--all[Sync all clients]' \
+    '1::Client name: '
+}
+
+(( $+functions[_geight_unadd_args] )) ||
+_geight_unadd_args() {
+  _arguments \
+    '-h[Display help information]' \
+    '--help[Display help information]' \
+    '-v[Verbose]' \
+    '1::Files:_files -f'
+}
+
+# TODO: search valid changeset id
+(( $+functions[_geight_update_args] )) ||
+_geight_update_args() {
+  _arguments \
+    '-h[Display help information]' \
+    '--help[Display help information]' \
+    '-v[Verbose]' \
+    '-m+[Changeset description]::TEXT:' \
+    '1::Changeset ID: '
+}
+
+# TODO: search valid client, user, changeset, PR, MR, number
+(( $+functions[_geight_patch_args] )) ||
+_geight_patch_args() {
+  _arguments \
+    '-h[Display help information]' \
+    '--help[Display help information]' \
+    '-v[Verbose]' \
+    '-c+[Source client to get changes from]:: :' \
+    '--client+[Source client to get changes from]:: :' \
+    '-u+[Source user to get changes from]:: :' \
+    '--user+[Source user to get changes from]:: :' \
+    '-s+[Source changeset to get changes from]:: :' \
+    '--changeset+[Source changeset to get changes from]:: :' \
+    '--pr+[GitHub PR number to patch changes from]:: :' \
+    '--mr+[GitLab MR number to patch changes from]:: :' \
+    '1::Client name: '
+}
+
+# TODO: search valid changeset id
+(( $+functions[_geight_pr_args] )) ||
+_geight_pr_args() {
+  _arguments \
+    '-h[Display help information]' \
+    '--help[Display help information]' \
+    '-v[Verbose]' \
+    '1::Changeset ID: '
+}
+
+# TODO: search valid changeset id
+(( $+functions[_geight_mr_args] )) ||
+_geight_mr_args() {
+  _arguments \
+    '-h[Display help information]' \
+    '--help[Display help information]' \
+    '-v[Verbose]' \
+    '1::Changeset ID: '
+}
+
+(( $+functions[_geight_keep-house_args] )) ||
+_geight_keep-house_args() {
+  _arguments \
+    '-h[Display help information]' \
+    '--help[Display help information]' \
+    '-v[Verbose]'
+}
+
+# TODO: search valid changeset id
+(( $+functions[_geight_newclient_args] )) ||
+_geight_mr_args() {
+  _arguments \
+    '-h[Display help information]' \
+    '--help[Display help information]' \
+    '-v[Verbose]' \
+    '1:Client name: '
+}
+
+_g8 "$@"

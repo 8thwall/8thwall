@@ -207,9 +207,9 @@ env_vars(
 http_toolchain(
     name = "llvm-macosx-arm64",
     build_file = "//third_party/llvm:llvm.BUILD",
-    sha256 = "710d01db427e2d5016a49de6fa482379cf9a8bc383ec126ef85ce4643c9a2894",
+    sha256 = "b4a76987199c768c62d007f6a24b2a5ec7c9a454fc9a583ec0b102aa16d18e5a",
     strip_prefix = "llvm-16.0.6-7cbf1a2-macosx-arm64",
-    url = "https://huggingface.co/datasets/8thWall/bazel-dependencies/resolve/main/llvm/llvm-16.0.6-7cbf1a2-macosx-arm64.tar",
+    url = "https://huggingface.co/datasets/8thWall/bazel-dependencies/resolve/main/llvm/llvm-16.0.6-7cbf1a2-macosx-arm64.tar.gz",
 )
 
 http_toolchain(
