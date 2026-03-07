@@ -1,0 +1,93 @@
+include:
+  - ci-support/util.yml
+
+cancel-redundant-jobs:
+  stage: build
+  extends: .cancel-redundant-jobs
+
+ecs:build:
+  stage: build
+  interruptible: true
+  timeout: 15m
+  before_script:
+    - !reference [.global, before_script]
+  script: |2
+    set -e
+    ecs_directory="$PWD/c8/ecs"
+    bazel run --run_under="cd $ecs_directory && " //bzl/node:npm  -- run inliner
+    git diff --name-only HEAD -- c8/ecs | tee .diff-output.txt
+    if [[ -n $(cat .diff-output.txt) ]]; then
+      echo "👾 Please run \`npm run inliner\` and add the BUILD files to this MR" | bazel run //ci-support:post-mr-comment
+      exit 1
+    fi
+
+    set +e
+    bazel build //c8/ecs:serve-runtime //c8/ecs/... --config=wasm 2>&1 | tee .build-output.txt
+    if [[ $? -ne 0 ]]; then
+      >> .mr-comment.md echo "<details><summary>ECS Bazel Error</summary>"
+      >> .mr-comment.md echo ""
+      >> .mr-comment.md echo "\`\`\`"
+      >> .mr-comment.md tail -n 20 <.build-output.txt
+      >> .mr-comment.md echo "\`\`\`"
+      >> .mr-comment.md echo ""
+      >> .mr-comment.md echo "👾 [Full output]($CI_JOB_URL)"
+      >> .mr-comment.md echo "</details>"
+      cat .mr-comment.md | bazel run //ci-support:post-mr-comment
+      exit 1
+    fi
+
+    bazel test --keep_going //c8/ecs/... 2>&1 | tee .test-output.txt
+    if [[ $? -ne 0 ]]; then
+      >> .mr-comment.md echo "<details><summary>Native ECS Test Error</summary>"
+      >> .mr-comment.md echo ""
+      >> .mr-comment.md echo "\`\`\`"
+      >> .mr-comment.md tail -n 20 <.test-output.txt
+      >> .mr-comment.md echo "\`\`\`"
+      >> .mr-comment.md echo ""
+      >> .mr-comment.md echo "👾 [Full output]($CI_JOB_URL)"
+      >> .mr-comment.md echo "</details>"
+      cat .mr-comment.md | bazel run //ci-support:post-mr-comment
+      exit 1
+    fi
+    set -e
+    
+    bazel test --keep_going //c8/ecs/... --config=node 2>&1 | tee .test-output.txt
+    if [[ $? -ne 0 ]]; then
+      >> .mr-comment.md echo "<details><summary>Wasm ECS Test Error</summary>"
+      >> .mr-comment.md echo ""
+      >> .mr-comment.md echo "\`\`\`"
+      >> .mr-comment.md tail -n 20 <.test-output.txt
+      >> .mr-comment.md echo "\`\`\`"
+      >> .mr-comment.md echo ""
+      >> .mr-comment.md echo "👾 [Full output]($CI_JOB_URL)"
+      >> .mr-comment.md echo "</details>"
+      cat .mr-comment.md | bazel run //ci-support:post-mr-comment
+      exit 1
+    fi
+    set -e
+
+    bazel run --run_under="cd $ecs_directory && " //bzl/node:npm  -- ci
+
+    set +e
+    bazel run --run_under="cd $ecs_directory && " //bzl/node:npm  -- run runtime:build 2>&1 | tee .build-output.txt
+    if [[ $? -ne 0 ]]; then
+      >> .mr-comment.md echo "<details><summary>ECS Runtime Build Error</summary>"
+      >> .mr-comment.md echo ""
+      >> .mr-comment.md echo "\`\`\`"
+      >> .mr-comment.md tail -n 20 <.build-output.txt
+      >> .mr-comment.md echo "\`\`\`"
+      >> .mr-comment.md echo ""
+      >> .mr-comment.md echo "👾 [Full output]($CI_JOB_URL)"
+      >> .mr-comment.md echo "</details>"
+      cat .mr-comment.md | bazel run //ci-support:post-mr-comment
+      exit 1
+    fi
+    set -e
+
+    bazel run //ci-support:clear-automated-mr-comments "👾"
+  after_script:
+    - !reference [.global, after_script]
+  rules:
+    - if: $ECS_TRIGGER == "ecs_trigger"
+  tags:
+    - linux

@@ -8,18 +8,18 @@ Today, the easiest way to add the engine is to use the [Distributed Engine Binar
 First, serve the engine:
 
 ```bash
-bazel run --platforms=//bzl:wasm32 //reality/app/xr/js:serve-xr 
+bazel run --config=wasm //reality/app/xr/js:serve-xr
 ```
 
 Then use the served `xr.js` file in your project, e.g. `https://192.168.68.65:8888/reality/app/xr/js/xr.js`.
 
 ## Building
-To build the engine, run:
+To build the engine for distribution, run:
 ```bash
-bazel build --config=wasmreleasesimd //reality/app/xr/js:xr-js
+bazel build --config=wasmreleasesimd //reality/app/xr/js:bundle
 ```
 
 Or, if building for a non-SIMD environment, run:
 ```bash
-bazel build --config=wasmrelease //reality/app/xr/js:xr-js
+bazel build --config=wasmrelease //reality/app/xr/js:bundle
 ```

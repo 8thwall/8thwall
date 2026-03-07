@@ -1945,6 +1945,14 @@ new_git_repository(
 )
 
 new_git_repository(
+    name = "joltphysics",
+    build_file = "//bzl/thirdpartybuild:joltphysics.BUILD",
+    commit = "0373ec0dd762e4bc2f6acdb08371ee84fa23c6db",  #  v5.3.0
+    remote = "https://github.com/jrouwe/JoltPhysics.git",
+    shallow_since = "1742071981 +0100",
+)
+
+new_git_repository(
     name = "sophus",
     build_file = "//bzl/thirdpartybuild:sophus.BUILD",
     commit = "de0f8d3d92bf776271e16de56d1803940ebccab9",  # 1.22.10

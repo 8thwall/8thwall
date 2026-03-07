@@ -1,0 +1,17 @@
+{
+  "inherit": true,
+  "tasks": [
+    {
+      "task": "TEST",
+      "args": ["--test_output=errors"],
+      "targets": [
+        "//c8/ecs/..."
+      ]
+    },
+    {
+      "task": "TEST",
+      "args": ["--config=node", "--test_output=errors"],
+      "targets": [ "//c8/ecs/..."]
+    }
+  ]
+}
