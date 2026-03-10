@@ -37,10 +37,10 @@ import {
   ImageTargetData,
   ProcessedImageTargetData,
   DetectedImageTarget,
-} from '@nia/reality/shared/engine/image-targets'
+} from '@repo/reality/shared/engine/image-targets'
 
-import type {XrccModule} from '@nia/reality/app/xr/js/src/types/xrcc'
-import type {XrTrackingccModule} from '@nia/reality/app/xr/js/src/types/xrtrackingcc'
+import type {XrccModule} from '@repo/reality/app/xr/js/src/types/xrcc'
+import type {XrTrackingccModule} from '@repo/reality/app/xr/js/src/types/xrtrackingcc'
 
 // For window._c8
 // @dep(//reality/app/xr/js/src/types:xrmodule)

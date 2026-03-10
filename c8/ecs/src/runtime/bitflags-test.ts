@@ -1,4 +1,4 @@
-import {describe, it, beforeEach, assert} from '@nia/bzl/js/chai-js'
+import {describe, it, beforeEach, assert} from '@repo/bzl/js/chai-js'
 
 import {setBitFlag, enableBitFlag, disableBitFlag, isBitFlagEnabled} from './bitflags'
 

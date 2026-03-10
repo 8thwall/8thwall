@@ -1,6 +1,6 @@
 // @package(npm-ecs)
 // @attr(externalize_npm = 1)
-import {describe, it, assert, chai, chaiExclude} from '@nia/bzl/js/chai-js'
+import {describe, it, assert, chai, chaiExclude} from '@repo/bzl/js/chai-js'
 
 import {parseComponentAst} from './parse-component-ast'
 import type {Schema} from './schema'

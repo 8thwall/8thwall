@@ -4,7 +4,7 @@
 // @dep(//bzl/examples/js/import:type-only-lib-declarations)
 
 // @inliner-skip-next
-import type * as Lib from '@nia/bzl/examples/js/import/type-only-lib'
+import type * as Lib from '@repo/bzl/examples/js/import/type-only-lib'
 
 const myFn = (argument: Lib.ExampleType) => {
   // eslint-disable-next-line no-console

@@ -1,6 +1,6 @@
 const path = require('path')
 
-const DISALLOWED_PREFIX = '@nia/reality/shared/'
+const DISALLOWED_PREFIX = '@repo/reality/shared/'
 
 // NOTE(christoph): This list reflects what is present in the reality/shared directory
 // eslint-disable-next-line max-len
@@ -57,7 +57,7 @@ module.exports = {
     fixable: 'code',
     messages: {
       invalidMessage:
-        'Imports of @nia/reality/shared are only valid if the file exists in reality/shared',
+        'Imports of @repo/reality/shared are only valid if the file exists in reality/shared',
     },
   },
   create(context) {

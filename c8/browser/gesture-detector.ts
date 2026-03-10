@@ -1,6 +1,6 @@
-import BROWSERWASM from '@nia/c8/browser/browser-wasm'
+import BROWSERWASM from '@repo/c8/browser/browser-wasm'
 
-import {writeStringToEmscriptenHeap} from '@nia/c8/ems/ems'
+import {writeStringToEmscriptenHeap} from '@repo/c8/ems/ems'
 import {createMouseToTouchTranslator} from './mouse-to-touch-translater'
 
 interface GestureState {

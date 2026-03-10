@@ -1,4 +1,4 @@
-import type {ImageTargetData} from '@nia/reality/shared/engine/image-targets'
+import type {ImageTargetData} from '@repo/reality/shared/engine/image-targets'
 
 import type * as Pipeline from './pipeline'
 import type {CameraStatusChangeDetails} from './pipeline'

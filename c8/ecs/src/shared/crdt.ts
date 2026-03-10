@@ -1,6 +1,6 @@
 import type {DeepReadonly} from 'ts-essentials'
 
-import * as Automerge from '@nia/c8/ecs/src/shared/automerge'
+import * as Automerge from '@repo/c8/ecs/src/shared/automerge'
 
 import type {
   GraphObject, PrefabInstanceChildren, PrefabInstanceDeletions, SceneGraph, Space, Spaces,

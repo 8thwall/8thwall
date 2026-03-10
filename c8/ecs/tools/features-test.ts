@@ -1,9 +1,9 @@
-import {assert} from '@nia/bzl/js/chai-js'
+import {assert} from '@repo/bzl/js/chai-js'
 
 // @dep(//c8/ecs/tools:generated-features-list)
-import * as FEATURES from '@nia/c8/ecs/tools/generated-features-list'
+import * as FEATURES from '@repo/c8/ecs/tools/generated-features-list'
 
-import {EDITIONS} from '@nia/c8/ecs/src/shared/features/edition'
+import {EDITIONS} from '@repo/c8/ecs/src/shared/features/edition'
 
 const EXPECTED_EDITIONS: string[][] = []
 

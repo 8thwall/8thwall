@@ -10,7 +10,7 @@ import {
   cppTypeToTs,
   findDeclarations,
   parameterToTs,
-} from '@nia/bzl/js/codegen/generate-ts-from-cpp'
+} from '@repo/bzl/js/codegen/generate-ts-from-cpp'
 
 const run = async (ccPaths: string[]) => {
   const declarations: Declaration[] = []

@@ -1,7 +1,7 @@
 // @package(npm-ecs)
 // @attr(externalize_npm = 1)
 
-import {describe, it, assert} from '@nia/bzl/js/chai-js'
+import {describe, it, assert} from '@repo/bzl/js/chai-js'
 
 import {
   getDefaults, getSchemaAlignment, getSchemaSize, toOrderedSchema,

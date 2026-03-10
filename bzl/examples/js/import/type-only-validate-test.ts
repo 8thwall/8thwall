@@ -2,9 +2,9 @@
 
 import {promises as fs} from 'fs'
 
-import {DATA} from '@nia/bzl/examples/js/import/type-only-lib'
+import {DATA} from '@repo/bzl/examples/js/import/type-only-lib'
 
-import {describe, it, assert} from '@nia/bzl/js/chai-js'
+import {describe, it, assert} from '@repo/bzl/js/chai-js'
 
 describe('type only import', () => {
   it('Does not contain direct import of lib', async () => {

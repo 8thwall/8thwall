@@ -1,7 +1,7 @@
 // @package(npm-ecs)
 // @attr(externalize_npm = 1)
 // @attr(esnext = 1)
-import {describe, it, assert, beforeEach, afterEach} from '@nia/bzl/js/chai-js'
+import {describe, it, assert, beforeEach, afterEach} from '@repo/bzl/js/chai-js'
 
 import {initThree} from './test-env'
 import {ecs} from './test-runtime-lib'

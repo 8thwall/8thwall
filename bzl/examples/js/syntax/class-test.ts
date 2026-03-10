@@ -3,7 +3,7 @@
 
 import {promises as fs} from 'fs'
 
-import {describe, it, assert} from '@nia/bzl/js/chai-js'
+import {describe, it, assert} from '@repo/bzl/js/chai-js'
 
 describe('class statements in ts', () => {
   it('are left as-is', async () => {

@@ -19,7 +19,7 @@
     "resolveJsonModule": true,
     "target": "es2019",
     "paths": {
-      "@nia/*": ["../../../../*"],
+      "@repo/*": ["../../../../*"],
       "reality/engine/api/*": ["../../../../bazel-out/wasm32-fastbuild/bin/reality/engine/api/*"],
       "reality/engine/api/device/*": ["../../../../bazel-out/wasm32-fastbuild/bin/reality/engine/api/device/*"],
       "reality/engine/api/base/*": ["../../../../bazel-out/wasm32-fastbuild/bin/reality/engine/api/base/*"],

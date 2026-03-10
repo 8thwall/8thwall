@@ -211,7 +211,7 @@ module.exports = {
       'typescript': {},  // this loads <rootdir>/tsconfig.json to eslint
       'alias': {
         'map': [
-          ['@nia', `${__dirname}/`],
+          ['@repo', `${__dirname}/`],
         ],
         'extensions': ['.js', '.jsx', '.ts', '.tsx'],
       },

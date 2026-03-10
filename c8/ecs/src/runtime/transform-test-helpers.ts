@@ -1,6 +1,6 @@
 // @attr(testonly = 1)
 
-import {assert} from '@nia/bzl/js/chai-js'
+import {assert} from '@repo/bzl/js/chai-js'
 
 import {ecs} from './test-runtime-lib'
 import type {QuatSource} from './math/quat'

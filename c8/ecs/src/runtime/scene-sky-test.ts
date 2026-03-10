@@ -3,7 +3,7 @@
 // @attr(externalize_npm = 0)
 // @attr(esnext = 1)
 
-import {describe, it, assert} from '@nia/bzl/js/chai-js'
+import {describe, it, assert} from '@repo/bzl/js/chai-js'
 
 import {convertSceneSkyToEffectsManagerSky} from './scene-sky'
 

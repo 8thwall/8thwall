@@ -1,9 +1,9 @@
 // @package(npm-ecs)
 // @attr(externalize_npm = 1)
-import {describe, it, assert} from '@nia/bzl/js/chai-js'
+import {describe, it, assert} from '@repo/bzl/js/chai-js'
 import type {DeepReadonly} from 'ts-essentials'
 
-import * as Automerge from '@nia/c8/ecs/src/shared/automerge'
+import * as Automerge from '@repo/c8/ecs/src/shared/automerge'
 
 import {
   createEmptySceneDoc, loadSceneDoc, fixStringDuplication, Json, SceneDoc,

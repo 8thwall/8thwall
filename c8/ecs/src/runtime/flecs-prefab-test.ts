@@ -2,7 +2,7 @@
 // @attr(externalize_npm = 1)
 // @attr(esnext = 1)
 
-import {describe, it, assert, beforeEach, afterEach, before} from '@nia/bzl/js/chai-js'
+import {describe, it, assert, beforeEach, afterEach, before} from '@repo/bzl/js/chai-js'
 
 import './test-env'
 import {asm, asmReady} from './asm'

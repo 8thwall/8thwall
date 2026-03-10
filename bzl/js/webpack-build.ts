@@ -105,12 +105,12 @@ type BeforeResolveData = {
 // NOTE(christoph): This is supposed to do the same thing as NormalModuleReplacementPlugin
 // but for some reason there were these resource.dependencies that were present that
 // also needed to be rewritten for it to work.
-const createNiaResolverPlugin = (roots: string[]) => {
+const createRootResolverPlugin = (roots: string[]) => {
   const handleBeforeResolve = (resource: BeforeResolveData) => {
-    if (!resource.request?.startsWith('@nia/')) {
+    if (!resource.request?.startsWith('@repo/')) {
       return
     }
-    const importPath = resource.request.substring('@nia/'.length)
+    const importPath = resource.request.substring('@repo/'.length)
     const resolvedPath = mapAndFind(EXTENSIONS, ext => mapAndFind(roots, (root) => {
       const fullPath = path.join(root, importPath + ext)
       try {
@@ -142,9 +142,9 @@ const createNiaResolverPlugin = (roots: string[]) => {
   return {
     apply(compiler: Webpack.Compiler) {
       compiler.hooks.normalModuleFactory.tap(
-        'NiaResolverPlugin',
+        'RootResolverPlugin',
         (factory) => {
-          factory.hooks.beforeResolve.tap('NiaResolverPlugin', handleBeforeResolve)
+          factory.hooks.beforeResolve.tap('RootResolverPlugin', handleBeforeResolve)
         }
       )
     },
@@ -263,7 +263,7 @@ const resolveBuildPaths = async (npmRule, includes) => {
   // the same resolution logic specified in the normal webpack config.
   const typescriptIncludes = {
     'tslib': [resolveLib('tslib')],
-    '@nia/*': topLevelImportPaths,
+    '@repo/*': topLevelImportPaths,
     '*': topLevelImportPaths,
   }
 
@@ -486,7 +486,7 @@ const genConfig = async ({
   const plugins: Webpack.Configuration['plugins'] = [
     // Allow only one chunk, as bazel is expecting a single output.
     new LimitChunkCountPlugin({maxChunks: 1}),
-    createNiaResolverPlugin([cwd, ...includes.map((e: string) => path.join(cwd, e))]),
+    createRootResolverPlugin([cwd, ...includes.map((e: string) => path.join(cwd, e))]),
   ]
 
   if (headerPath || footerPath) {

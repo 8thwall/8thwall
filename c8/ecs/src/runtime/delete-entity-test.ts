@@ -2,7 +2,7 @@
 // @attr(externalize_npm = 1)
 // @attr(esnext = 1)
 
-import {describe, it, before, assert as chaiAssert} from '@nia/bzl/js/chai-js'
+import {describe, it, before, assert as chaiAssert} from '@repo/bzl/js/chai-js'
 
 import {initThree} from './test-env'
 import {ecs} from './test-runtime-lib'

@@ -19,8 +19,8 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "paths": {
-      "@nia/c8/ecs/*": ["./*"],
-      "@nia/bzl/js/*": ["../../bzl/js/*"]
+      "@repo/c8/ecs/*": ["./*"],
+      "@repo/bzl/js/*": ["../../bzl/js/*"]
     }
   },
   "include": [

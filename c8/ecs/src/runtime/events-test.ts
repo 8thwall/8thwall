@@ -1,4 +1,4 @@
-import {describe, it, before, assert, beforeEach} from '@nia/bzl/js/chai-js'
+import {describe, it, before, assert, beforeEach} from '@repo/bzl/js/chai-js'
 // @package(npm-ecs)
 // @attr(externalize_npm = 1)
 // @attr(esnext = 1)
