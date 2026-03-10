@@ -1,0 +1,2 @@
+public_logger.patch
+- Changes some protected members to public, mostly for the purpose of allowing a multi-logger.

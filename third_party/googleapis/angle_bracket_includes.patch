@@ -1,0 +1,16 @@
+diff --git a/BUILD.bazel b/BUILD.bazel
+index d014c3636..09acc430d 100644
+--- a/BUILD.bazel
++++ b/BUILD.bazel
+@@ -4,3 +4,11 @@ alias(
+     name = "build_gen",
+     actual = "@rules_gapic//bazel:build_file_generator",
+ )
++
++cc_library(
++    name = "googleapis_system_includes",
++    includes = [
++        ".",
++    ],
++    visibility = ["//visibility:public"],
++)

@@ -1,0 +1,10 @@
+--- A/deps/v8/BUILD.bazel	2023-12-01 23:26:22
++++ B/deps/v8/BUILD.bazel	2024-02-12 18:53:47
+@@ -3730,6 +3730,7 @@
+         "third_party/inspector_protocol/templates/TypeBuilder_h.template",
+     ],
+     python_version = "PY3",
++    imports = ["third_party/inspector_protocol/"],
+     deps = [
+         requirement("jinja2"),
+     ],

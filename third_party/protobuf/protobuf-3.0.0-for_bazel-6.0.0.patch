@@ -1,0 +1,331 @@
+From cfb56f7b49723b52f5091618dc95dad4175cd0eb Mon Sep 17 00:00:00 2001
+From: Filippo Trimoldi <filippotrimoldi@nianticlabs.com>
+Date: Tue, 16 Aug 2022 14:03:44 +0100
+Subject: [PATCH 1/6] Support for including in bazel 5.2.0 projects
+
+---
+ BUILD        |  2 +-
+ protobuf.bzl | 16 +++++++---------
+ 2 files changed, 8 insertions(+), 10 deletions(-)
+
+diff --git a/BUILD b/BUILD
+index 0941d8c43..966dfcf9b 100644
+--- a/BUILD
++++ b/BUILD
+@@ -29,7 +29,7 @@ LINK_OPTS = select({
+ })
+ 
+ load(
+-    "protobuf",
++    ":protobuf.bzl",
+     "cc_proto_library",
+     "py_proto_library",
+     "internal_copied_filegroup",
+diff --git a/protobuf.bzl b/protobuf.bzl
+index c5555fde8..358d074bf 100644
+--- a/protobuf.bzl
++++ b/protobuf.bzl
+@@ -67,7 +67,7 @@ def _proto_gen_impl(ctx):
+     args += ["--grpc_out=" + ctx.var["GENDIR"] + "/" + gen_dir]
+ 
+   if args:
+-    ctx.action(
++    ctx.actions.run(
+         inputs=srcs + deps,
+         outputs=ctx.outputs.outs,
+         arguments=args + import_flags + [s.path for s in srcs],
+@@ -88,15 +88,13 @@ _proto_gen = rule(
+         "deps": attr.label_list(providers = ["proto"]),
+         "includes": attr.string_list(),
+         "protoc": attr.label(
+-            cfg = HOST_CFG,
++            cfg = "host",
+             executable = True,
+-            single_file = True,
+             mandatory = True,
+         ),
+         "grpc_cpp_plugin": attr.label(
+-            cfg = HOST_CFG,
++            cfg = "host",
+             executable = True,
+-            single_file = True,
+         ),
+         "gen_cc": attr.bool(),
+         "gen_py": attr.bool(),
+@@ -183,9 +181,9 @@ def cc_proto_library(
+   )
+ 
+   if default_runtime and not default_runtime in cc_libs:
+-    cc_libs += [default_runtime]
++    cc_libs = cc_libs + [default_runtime]
+   if use_grpc_plugin:
+-    cc_libs += ["//external:grpc_lib"]
++    cc_libs = cc_libs + ["//external:grpc_lib"]
+ 
+   native.cc_library(
+       name=name,
+@@ -201,7 +199,7 @@ def internal_gen_well_known_protos_java(srcs):
+   Args:
+     srcs: the well known protos
+   """
+-  root = Label("%s//protobuf_java" % (REPOSITORY_NAME)).workspace_root
++  root = Label("%s//protobuf_java" % (native.repository_name())).workspace_root
+   if root == "":
+     include = " -Isrc "
+   else:
+@@ -298,7 +296,7 @@ def py_proto_library(
+   )
+ 
+   if default_runtime and not default_runtime in py_libs + deps:
+-    py_libs += [default_runtime]
++    py_libs = py_libs + [default_runtime]
+ 
+   native.py_library(
+       name=name,
+-- 
+2.39.2
+
+
+From 7acaa306dc96d0b1202cc065c1833be05eca3f14 Mon Sep 17 00:00:00 2001
+From: Filippo Trimoldi <filippotrimoldi@nianticlabs.com>
+Date: Wed, 17 Aug 2022 13:10:03 +0100
+Subject: [PATCH 2/6] Fix for target without any proto files
+
+---
+ protobuf.bzl | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/protobuf.bzl b/protobuf.bzl
+index 358d074bf..823b3b287 100644
+--- a/protobuf.bzl
++++ b/protobuf.bzl
+@@ -66,7 +66,7 @@ def _proto_gen_impl(ctx):
+     args += ["--plugin=protoc-gen-grpc=" + ctx.executable.grpc_cpp_plugin.path]
+     args += ["--grpc_out=" + ctx.var["GENDIR"] + "/" + gen_dir]
+ 
+-  if args:
++  if args and len(ctx.outputs.outs) > 0:
+     ctx.actions.run(
+         inputs=srcs + deps,
+         outputs=ctx.outputs.outs,
+-- 
+2.39.2
+
+
+From b0850e261c722888a8edf81b7a5df1205ee86a51 Mon Sep 17 00:00:00 2001
+From: Filippo Trimoldi <filippotrimoldi@nianticlabs.com>
+Date: Wed, 17 Aug 2022 14:53:08 +0100
+Subject: [PATCH 3/6] Removing ios flags which conflict with newer bazel (I
+ think)
+
+---
+ BUILD | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/BUILD b/BUILD
+index 966dfcf9b..0c3c4fd02 100644
+--- a/BUILD
++++ b/BUILD
+@@ -59,13 +59,13 @@ config_setting(
+ )
+ 
+ IOS_ARM_COPTS = COPTS + [
+-    "-DOS_IOS",
+-    "-miphoneos-version-min=7.0",
+-    "-arch armv7",
+-    "-arch armv7s",
+-    "-arch arm64",
+-    "-D__thread=",
+-    "-isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.2.sdk/",
++    # "-DOS_IOS",
++    # "-miphoneos-version-min=7.0",
++    # "-arch armv7",
++    # "-arch armv7s",
++    # "-arch arm64",
++    # "-D__thread=",
++    # "-isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.2.sdk/",
+ ]
+ 
+ cc_library(
+-- 
+2.39.2
+
+
+From a3aaed3a4b3cc049798c00b4f147943f9eb0dde4 Mon Sep 17 00:00:00 2001
+From: Filippo Trimoldi <filippotrimoldi@nianticlabs.com>
+Date: Fri, 26 Aug 2022 13:33:17 +0200
+Subject: [PATCH 4/6] Added first support for generating CSharp proto
+ interfaces
+
+---
+ protobuf.bzl | 59 ++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 59 insertions(+)
+
+diff --git a/protobuf.bzl b/protobuf.bzl
+index 823b3b287..76c34a564 100644
+--- a/protobuf.bzl
++++ b/protobuf.bzl
+@@ -1,5 +1,7 @@
+ # -*- mode: python; -*- PYTHON-PREPROCESSING-REQUIRED
+ 
++load("@bazel_skylib//lib:paths.bzl", "paths")
++
+ def _GetPath(ctx, path):
+   if ctx.label.workspace_root:
+     return ctx.label.workspace_root + '/' + path
+@@ -26,6 +28,12 @@ def _CcOuts(srcs, use_grpc_plugin=False):
+ def _PyOuts(srcs):
+   return [s[:-len(".proto")] + "_pb2.py" for s in srcs]
+ 
++def _CsharpOuts(srcs):
++    print(["".join([token.capitalize() for token in src[:-len(".proto")].split("_")]) + ".cs" for src in srcs])
++    return [
++        "".join([token.capitalize() for token in src[:-len(".proto")].split("_")]) + ".cs"
++    for src in srcs]
++
+ def _RelativeOutputPath(path, include, dest=""):
+   if include == None:
+     return path
+@@ -61,6 +69,9 @@ def _proto_gen_impl(ctx):
+     args += ["--cpp_out=" + ctx.var["GENDIR"] + "/" + gen_dir]
+   if ctx.attr.gen_py:
+     args += ["--python_out=" + ctx.var["GENDIR"] + "/" + gen_dir]
++  if ctx.attr.gen_csharp:
++    gen_dir = ctx.attr.csharp_package
++    args += ["--csharp_out=" + ctx.var["GENDIR"] + "/" + gen_dir]
+ 
+   if ctx.executable.grpc_cpp_plugin:
+     args += ["--plugin=protoc-gen-grpc=" + ctx.executable.grpc_cpp_plugin.path]
+@@ -98,7 +109,9 @@ _proto_gen = rule(
+         ),
+         "gen_cc": attr.bool(),
+         "gen_py": attr.bool(),
++        "gen_csharp": attr.bool(),
+         "outs": attr.output_list(),
++        "csharp_package": attr.string()
+     },
+     output_to_genfiles = True,
+     implementation = _proto_gen_impl,
+@@ -305,6 +318,52 @@ def py_proto_library(
+       imports=includes,
+       **kargs)
+ 
++def csharp_proto_library_gen(
++        name,
++        package,
++        srcs=[],
++        deps=[],
++        include=None,
++        protoc="//:protoc",
++        **kargs):
++  """Bazel rule to create a CSharp protobuf file
++
++  NOTE: 
++  - It does not support grpc and it support one C# package at this time
++  - It requires the bazel package of the generated file 
++  - It does not allow to pass more protofile in different directories
++
++  Args:
++    name: the name of the py_proto_library.
++    package: the output bazel package (this should be removed later and automatically inferred)
++    srcs: the .proto files of the py_proto_library.
++    deps: a list of dependency labels; must be py_proto_library.
++    include: a string indicating the include path of the .proto files.
++    protoc: the label of the protocol compiler to generate the sources.
++  """
++  includes = []
++  if include != None:
++    includes = [include]
++
++  first_path = paths.dirname(srcs[0])
++  for src in srcs:
++    if first_path != paths.dirname(src):
++        fail("All srcs file for csharp_proto_library_gen must me in same package, but got " + ",".join([srcs]) + " that are in different packages.")
++
++  outs = _CsharpOuts(srcs)
++
++  _proto_gen(
++      name=name + "",
++      srcs=srcs,
++      deps=[s + "_genproto" for s in deps],
++      includes=includes,
++      protoc=protoc,
++      gen_csharp=1,
++      outs=outs,
++      visibility=["//visibility:public"],
++      csharp_package=package,
++  )
++
+ def internal_protobuf_py_tests(
+     name,
+     modules=[],
+-- 
+2.39.2
+
+
+From 00a5b56bd86e271d3471be2174d3f1d3754fdace Mon Sep 17 00:00:00 2001
+From: Filippo Trimoldi <filippotrimoldi@nianticlabs.com>
+Date: Fri, 26 Aug 2022 13:39:18 +0200
+Subject: [PATCH 5/6] Removed debug messages
+
+---
+ protobuf.bzl | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/protobuf.bzl b/protobuf.bzl
+index 76c34a564..895801035 100644
+--- a/protobuf.bzl
++++ b/protobuf.bzl
+@@ -29,7 +29,6 @@ def _PyOuts(srcs):
+   return [s[:-len(".proto")] + "_pb2.py" for s in srcs]
+ 
+ def _CsharpOuts(srcs):
+-    print(["".join([token.capitalize() for token in src[:-len(".proto")].split("_")]) + ".cs" for src in srcs])
+     return [
+         "".join([token.capitalize() for token in src[:-len(".proto")].split("_")]) + ".cs"
+     for src in srcs]
+-- 
+2.39.2
+
+
+From 9a0ae7a9eb8bafe50e118c5fc5d804df4147765b Mon Sep 17 00:00:00 2001
+From: Filippo Trimoldi <filippotrimoldi@nianticlabs.com>
+Date: Wed, 1 Mar 2023 14:18:06 +0000
+Subject: [PATCH 6/6] Compatibility with bazel 6.0.0
+
+---
+ BUILD | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/BUILD b/BUILD
+index 0c3c4fd02..43cadfbaa 100644
+--- a/BUILD
++++ b/BUILD
+@@ -40,21 +40,21 @@ load(
+ config_setting(
+     name = "ios_armv7",
+     values = {
+-        "ios_cpu": "armv7",
++        "cpu": "armv7",
+     },
+ )
+ 
+ config_setting(
+     name = "ios_armv7s",
+     values = {
+-        "ios_cpu": "armv7s",
++        "cpu": "armv7s",
+     },
+ )
+ 
+ config_setting(
+     name = "ios_arm64",
+     values = {
+-        "ios_cpu": "arm64",
++        "cpu": "arm64",
+     },
+ )
+ 
+-- 
+2.39.2
+

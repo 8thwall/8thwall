@@ -1,0 +1,13 @@
+--- third_party/absl/workspace.bzl	2022-08-08 16:00:08.000000000 -0700
++++ third_party/absl/workspace.bzl	2022-09-07 13:15:33.000000000 -0700
+@@ -6,8 +6,8 @@
+     """Imports absl."""
+ 
+     # Attention: tools parse and update these lines.
+-    ABSL_COMMIT = "997aaf3a28308eba1b9156aa35ab7bca9688e9f6"
+-    ABSL_SHA256 = "35f22ef5cb286f09954b7cc4c85b5a3f6221c9d4df6b8c4a1e9d399555b366ee"
++    ABSL_COMMIT = "8c0b94e793a66495e0b1f34a5eb26bd7dc672db0"
++    ABSL_SHA256 = "a6be76f59c474a215f2df5116b312257462e97f2e38b2bfa6df8b6a55710b058"
+ 
+     tf_http_archive(
+         name = "com_google_absl",

@@ -1,0 +1,11 @@
+--- Configure	2022-06-21 06:39:39.000000000 -0700
++++ Configure	2022-07-02 18:53:02.000000000 -0700
+@@ -556,7 +556,7 @@
+ # (we supported those before the change to "make variable" support.
+ my %user = (
+     AR          => env('AR'),
+-    ARFLAGS     => [],
++    ARFLAGS     => [ env('ARFLAGS') || () ],
+     AS          => undef,
+     ASFLAGS     => [],
+     CC          => env('CC'),

@@ -1,0 +1,8 @@
+--- third_party/flatbuffers/workspace.bzl	2022-04-27 08:38:47.000000000 -0700
++++ third_party/flatbuffers/workspace.bzl	2022-04-27 10:31:00.000000000 -0700
+@@ -16,4 +16,5 @@
+         link_files = {
+             "//third_party/flatbuffers:build_defs.bzl": "build_defs.bzl",
+         },
++        patch_file = "@the8thwall//third_party/flatbuffers:ror-flatbuffers.patch",
+     )

@@ -1,0 +1,16 @@
+--- Eigen/src/SparseCore/TriangularSolver.h	2021-08-18 13:41:58
++++ Eigen/src/SparseCore/TriangularSolver.h	2023-07-11 09:57:19
+@@ -270,11 +270,11 @@
+       }
+ 
+ 
+-      Index count = 0;
++      // Index count = 0;
+       // FIXME compute a reference value to filter zeros
+       for (typename AmbiVector<Scalar,StorageIndex>::Iterator it(tempVector/*,1e-12*/); it; ++it)
+       {
+-        ++ count;
++        // ++ count;
+ //         std::cerr << "fill " << it.index() << ", " << col << "\n";
+ //         std::cout << it.value() << "  ";
+         // FIXME use insertBack

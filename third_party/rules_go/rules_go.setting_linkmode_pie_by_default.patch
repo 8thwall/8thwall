@@ -1,0 +1,21 @@
+diff -ruN A/go/config/BUILD.bazel B/go/config/BUILD.bazel
+--- A/go/config/BUILD.bazel	2024-08-20 12:29:34.121922689 +0000
++++ B/go/config/BUILD.bazel	2024-08-20 12:25:02.538406374 +0000
+@@ -6,7 +6,7 @@
+ )
+ load(
+     "//go/private:mode.bzl",
+-    "LINKMODE_NORMAL",
++    "LINKMODE_PIE",
+ )
+ 
+ bool_flag(
+@@ -41,7 +41,7 @@
+ 
+ string_flag(
+     name = "linkmode",
+-    build_setting_default = LINKMODE_NORMAL,
++    build_setting_default = LINKMODE_PIE,
+     visibility = ["//visibility:public"],
+ )
+ 

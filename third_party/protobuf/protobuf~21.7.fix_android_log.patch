@@ -1,0 +1,12 @@
+diff -ruN A/build_defs/cpp_opts.bzl B/build_defs/cpp_opts.bzl
+--- A/build_defs/cpp_opts.bzl	2024-02-08 14:04:56
++++ B/build_defs/cpp_opts.bzl	2024-02-08 15:29:34
+@@ -24,7 +24,7 @@
+ 
+ # Android and MSVC builds do not need to link in a separate pthread library.
+ LINK_OPTS = select({
+-    "//build_defs:config_android": [],
++    "//build_defs:config_android": ["-llog"],
+     "//build_defs:config_android-stlport": [],
+     "//build_defs:config_android-libcpp": [],
+     "//build_defs:config_android-gnu-libstdcpp": [],

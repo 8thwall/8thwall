@@ -1,0 +1,103 @@
+diff -ruN tensorflow/compiler/xla/mlir_hlo/WORKSPACE tensorflow/compiler/xla/mlir_hlo/WORKSPACE
+--- tensorflow/compiler/xla/mlir_hlo/WORKSPACE	2023-09-28 00:49:33
++++ tensorflow/compiler/xla/mlir_hlo/WORKSPACE	2024-08-12 11:10:40
+@@ -26,20 +26,20 @@
+     ],
+ )
+ 
+-LLVM_COMMIT = "<LLVM_COMMIT>"
++# LLVM_COMMIT = "<LLVM_COMMIT>"
+ 
+-LLVM_SHA256 = "<LLVM_SHA256>"
++# LLVM_SHA256 = "<LLVM_SHA256>"
+ 
+-http_archive(
+-    name = "llvm-raw",
+-    build_file_content = "# empty",
+-    sha256 = LLVM_SHA256,
+-    strip_prefix = "llvm-project-" + LLVM_COMMIT,
+-    urls = ["https://github.com/llvm/llvm-project/archive/{commit}.tar.gz".format(commit = LLVM_COMMIT)],
+-)
++# http_archive(
++#     name = "llvm-raw",
++#     build_file_content = "# empty",
++#     sha256 = LLVM_SHA256,
++#     strip_prefix = "llvm-project-" + LLVM_COMMIT,
++#     urls = ["https://github.com/llvm/llvm-project/archive/{commit}.tar.gz".format(commit = LLVM_COMMIT)],
++# )
+ 
+-load("@llvm-raw//utils/bazel:configure.bzl", "llvm_configure", "llvm_disable_optional_support_deps")
++# load("@llvm-raw//utils/bazel:configure.bzl", "llvm_configure", "llvm_disable_optional_support_deps")
+ 
+-llvm_configure(name = "llvm-project")
++# llvm_configure(name = "llvm-project")
+ 
+-llvm_disable_optional_support_deps()
++# llvm_disable_optional_support_deps()
+diff -ruN tensorflow/workspace2.bzl tensorflow/workspace2.bzl
+--- tensorflow/workspace2.bzl	2024-08-12 11:58:47
++++ tensorflow/workspace2.bzl	2024-08-12 11:15:48
+@@ -14,7 +14,7 @@
+ load("//third_party:repo.bzl", "tf_http_archive", "tf_mirror_urls")
+ load("//third_party/clang_toolchain:cc_configure_clang.bzl", "cc_download_clang_toolchain")
+ load("//tensorflow/tools/def_file_filter:def_file_filter_configure.bzl", "def_file_filter_configure")
+-load("//third_party/llvm:setup.bzl", "llvm_setup")
++# load("//third_party/llvm:setup.bzl", "llvm_setup")
+ 
+ # Import third party repository rules. See go/tfbr-thirdparty.
+ load("//third_party/FP16:workspace.bzl", FP16 = "repo")
+@@ -537,7 +537,7 @@
+         urls = tf_mirror_urls("https://github.com/antirez/linenoise/archive/4ce393a66b10903a0ef52edf9775ed526a17395f.tar.gz"),
+     )
+ 
+-    llvm_setup(name = "llvm-project")
++    # llvm_setup(name = "llvm-project")
+ 
+     # Intel openMP that is part of LLVM sources.
+     tf_http_archive(
+diff -ruN tensorflow/workspace3.bzl tensorflow/workspace3.bzl
+--- tensorflow/workspace3.bzl	2023-09-28 00:49:33
++++ tensorflow/workspace3.bzl	2024-08-12 11:11:06
+@@ -47,7 +47,7 @@
+ 
+     # Load the raw llvm-project.  llvm does not have build rules set up by default,
+     # but provides a script for setting up build rules via overlays.
+-    llvm("llvm-raw")
++    # llvm("llvm-raw")
+ 
+ # Alias so it can be loaded without assigning to a different symbol to prevent
+ # shadowing previous loads and trigger a buildifier warning.
+diff -ruN third_party/llvm/setup.bzl third_party/llvm/setup.bzl
+--- third_party/llvm/setup.bzl	2023-09-28 00:49:33
++++ third_party/llvm/setup.bzl	2024-08-12 11:14:42
+@@ -1,6 +1,6 @@
+ """TensorFlow workspace initialization. Consult the WORKSPACE on how to use it."""
+ 
+-load("@llvm-raw//utils/bazel:configure.bzl", "llvm_configure", "llvm_disable_optional_support_deps")
++# load("@llvm-raw//utils/bazel:configure.bzl", "llvm_configure", "llvm_disable_optional_support_deps")
+ 
+ # The subset of LLVM targets that TensorFlow cares about.
+ _LLVM_TARGETS = [
+@@ -14,13 +14,13 @@
+     "X86",
+ ]
+ 
+-def llvm_setup(name):
+-    # Disable terminfo and zlib that are bundled with LLVM.
+-    llvm_disable_optional_support_deps()
++# def llvm_setup(name):
++#     # Disable terminfo and zlib that are bundled with LLVM.
++#     llvm_disable_optional_support_deps()
+ 
+-    # Build @llvm-project from @llvm-raw using overlays.
+-    llvm_configure(
+-        name = name,
+-        repo_mapping = {"@python_runtime": "@local_config_python"},
+-        targets = _LLVM_TARGETS,
+-    )
++#     # Build @llvm-project from @llvm-raw using overlays.
++#     llvm_configure(
++#         name = name,
++#         repo_mapping = {"@python_runtime": "@local_config_python"},
++#         targets = _LLVM_TARGETS,
++#     )

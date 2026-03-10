@@ -1,0 +1,155 @@
+diff --git a/cuda/private/toolchain_configs/nvcc.bzl b/cuda/private/toolchain_configs/nvcc.bzl
+index 2e20a16..35d89da 100644
+--- a/cuda/private/toolchain_configs/nvcc.bzl
++++ b/cuda/private/toolchain_configs/nvcc.bzl
+@@ -41,24 +41,59 @@ def _impl(ctx):
+         ),
+     ]
+ 
+-    cc_toolchain = find_cpp_toolchain(ctx)
++    llvminfo = ctx.toolchains["@the8thwall//bzl/llvm:toolchain_type"].llvminfo
++    host_target = "x86_64-niantic_v1.0-linux-gnu"
++    toolchain = "BAZEL_OUTPUT_BASE/%s" % ctx.attr.linux.label.workspace_root
++    sysroot = "%s/%s/%s" % (toolchain, host_target, host_target)
+ 
+-    nvcc_compile_env_feature = feature(
+-        name = "nvcc_compile_env",
+-        env_sets = [
+-            env_set(
++    host_toolchain_include_directories_feature = feature(
++        name = "host_toolchain_include_directories",
++        enabled = True,
++        flag_sets = [
++            flag_set(
+                 actions = [ACTION_NAMES.cuda_compile],
+-                env_entries = [env_entry("PATH", paths.dirname(cc_toolchain.compiler_executable))],
++                flag_groups = [
++                    flag_group(
++                        flags = [
++                            "-Xcompiler", "-nostdinc",
++                            "-Xcompiler", "-isystem %s/sysroot/usr/include" % sysroot,
++                            "-Xcompiler", "-isystem %s/include/c++/11.2.0" % sysroot,
++                            "-Xcompiler", "-isystem %s/include/c++/11.2.0/%s" % (sysroot, host_target),
++                            "-Xcompiler", "-isystem BAZEL_OUTPUT_BASE/%s/include" % llvminfo.runtime,
++                        ],
++                    ),
++                ],
+             ),
+         ],
+     )
+ 
+-    nvcc_device_link_env_feature = feature(
+-        name = "nvcc_device_link_env",
+-        env_sets = [
+-            env_set(
+-                actions = [ACTION_NAMES.device_link],
+-                env_entries = [env_entry("PATH", paths.dirname(cc_toolchain.compiler_executable))],
++    default_host_compile_flags_feature = feature(
++        name = "default_host_compile_flags",
++        enabled = True,
++        flag_sets = [
++            flag_set(
++                actions = [ACTION_NAMES.cuda_compile],
++                flag_groups = [flag_group(flags = [
++                    "-std=c++17", # CUDA 11.2 does not support C++20
++                ])],
++            ),
++            flag_set(
++                actions = [ACTION_NAMES.cuda_compile],
++                flag_groups = [flag_group(flags = [
++                    "-Xcompiler", "-fPIC",
++                    "-Xcompiler", "-target %s" % host_target,
++                    "-Xcompiler", "--gcc-toolchain=%s" % toolchain,
++                    "-Xcompiler", "-fexceptions",
++                    "-Xcompiler", "-fno-threadsafe-statics",
++                    "-Xcompiler", "-Wall",  # All warnings are enabled.
++                    "-Xcompiler", "-Wthread-safety",  # Enable additional warnings not part of -Wall.
++                    "-Xcompiler", "-Wself-assign",  # Enable additional warnings not part of -Wall.
++                    "-Xcompiler", "-fno-omit-frame-pointer",  # Keep stack frames for debugging, even in opt mode.
++                    "-Xcompiler", "-fcolor-diagnostics",  # Enable coloring.
++                    "-Xcompiler", "-DLINUX",
++                    "-Xcompiler", "-DC8_HAS_X11",
++                    "-Xcompiler", "--sysroot=%s/sysroot" % sysroot,
++                ])],
+             ),
+         ],
+     )
+@@ -111,7 +146,6 @@ def _impl(ctx):
+             "host_defines",
+             "compiler_input_flags",
+             "compiler_output_flags",
+-            "nvcc_compile_env",
+         ],
+     )
+ 
+@@ -149,9 +183,7 @@ def _impl(ctx):
+         ],
+         implies = [
+             "host_compiler_path",
+-            # "linker_input_flags",
+             "compiler_output_flags",
+-            "nvcc_device_link_env",
+             "supports_compiler_device_link",
+         ],
+     )
+@@ -377,6 +409,7 @@ def _impl(ctx):
+ 
+     nvcc_allow_unsupported_compiler_feature = feature(
+         name = "nvcc_allow_unsupported_compiler",
++        enabled = True, # Enabled because CUDA 11.2 does not support clang-15 by default
+         flag_sets = [
+             flag_set(
+                 actions = [
+@@ -416,14 +449,29 @@ def _impl(ctx):
+         ],
+     )
+ 
++    default_env_feature = feature(
++        name = "default_env",
++        enabled = True,
++        env_sets = [
++            env_set(
++                actions = [
++                    ACTION_NAMES.cuda_compile,
++                    ACTION_NAMES.device_link,
++                ],
++                env_entries = [
++                    env_entry("LLVM_USR", llvminfo.usr),
++                    env_entry("WORKSPACE_ENV", ctx.file.workspace_env.path),
++                ],
++            ),
++        ],
++    )
++
+     action_configs = [
+         cuda_compile_action,
+         cuda_device_link_action,
+     ]
+ 
+     features = [
+-        nvcc_compile_env_feature,
+-        nvcc_device_link_env_feature,
+         arch_native_feature,
+         pic_feature,
+         host_compiler_feature,
+@@ -442,6 +490,9 @@ def _impl(ctx):
+         nvcc_allow_unsupported_compiler_feature,
+         nvcc_relaxed_constexpr_feature,
+         nvcc_extended_lambda_feature,
++        default_env_feature,
++        host_toolchain_include_directories_feature,
++        default_host_compile_flags_feature,
+     ]
+ 
+     return [CudaToolchainConfigInfo(
+@@ -461,7 +512,9 @@ cuda_toolchain_config = rule(
+         "nvcc_version_major": attr.int(doc = "The CUDA Toolkit major version, e.g, 11 for 11.6"),
+         "nvcc_version_minor": attr.int(doc = "The CUDA Toolkit minor version, e.g, 6 for 11.6"),
+         "_cc_toolchain": attr.label(default = "@bazel_tools//tools/cpp:current_cc_toolchain"),  # legacy behaviour
++        "workspace_env": attr.label(default = "@workspace-env//:workspace-env", allow_single_file = True),
++        "linux": attr.label(default = "@v1-linux//:stub"),
+     },
+     provides = [CudaToolchainConfigInfo],
+-    toolchains = use_cpp_toolchain(),
++    toolchains = use_cpp_toolchain() + ["@the8thwall//bzl/llvm:toolchain_type"],
+ )

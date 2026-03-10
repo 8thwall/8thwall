@@ -1,0 +1,34 @@
+diff -ruN boringssl/BUILD boringssl-patched/BUILD
+--- boringssl/BUILD	2023-03-01 13:23:40
++++ boringssl-patched/BUILD	2024-02-15 15:40:49
+@@ -101,7 +101,7 @@
+ boringssl_copts = select({
+     "@platforms//os:linux": linux_copts,
+     "@platforms//os:macos": posix_copts,
+-    "@platforms//os:windows": ["-DWIN32_LEAN_AND_MEAN"],
++    "@platforms//os:windows": ["-DWIN32_LEAN_AND_MEAN", "-DNOMINMAX"],
+     "//conditions:default": [],
+ })
+ 
+@@ -160,7 +160,7 @@
+         # to link against.
+         "@platforms//os:android": [],
+         "@platforms//os:macos": [],
+-        "@platforms//os:windows": ["-defaultlib:advapi32.lib"],
++        "@platforms//os:windows": ["-ladvapi32"],
+         "//conditions:default": ["-lpthread"],
+     }),
+     visibility = ["//visibility:public"],
+@@ -184,4 +184,12 @@
+     copts = boringssl_copts_cxx,
+     visibility = ["//visibility:public"],
+     deps = [":ssl"],
++    linkopts = select({
++        # Android supports pthreads, but does not provide a libpthread
++        # to link against.
++        "@platforms//os:android": [],
++        "@platforms//os:macos": [],
++        "@platforms//os:windows": ["-ladvapi32"],
++        "//conditions:default": ["-lpthread"],
++    }),
+ )

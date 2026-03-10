@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+import "bzl/examples/proto/api/details.proto";
+
+message Hello {
+  string greeting = 1;
+  Details details = 2;
+}
