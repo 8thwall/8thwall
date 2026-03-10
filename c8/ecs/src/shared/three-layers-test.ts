@@ -1,6 +1,6 @@
 // @package(npm-ecs)
 // @attr(externalize_npm = 1)
-import {assert, it, describe} from '@nia/bzl/js/chai-js'
+import {assert, it, describe} from '@repo/bzl/js/chai-js'
 
 import {THREE_LAYERS} from './three-layers'
 

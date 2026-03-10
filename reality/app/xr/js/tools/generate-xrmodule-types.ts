@@ -8,7 +8,7 @@ import {
   Declaration,
   findDeclarations,
   findWindowObjects,
-} from '@nia/bzl/js/codegen/generate-ts-from-cpp'
+} from '@repo/bzl/js/codegen/generate-ts-from-cpp'
 
 const run = async (ccPaths: string[]) => {
   const declarations: Declaration[] = []
@@ -27,7 +27,7 @@ const run = async (ccPaths: string[]) => {
 //   npm run refresh-types
 
 // @inliner-off
-import type {EmscriptenTexture} from '@nia/reality/app/xr/js/src/types/emscripten'
+import type {EmscriptenTexture} from '@repo/reality/app/xr/js/src/types/emscripten'
 
 /* eslint-disable import/group-exports, camelcase, max-len */
 `)

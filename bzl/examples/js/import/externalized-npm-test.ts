@@ -3,7 +3,7 @@
 
 import webpack from 'webpack'
 
-import {describe, it, assert} from '@nia/bzl/js/chai-js'
+import {describe, it, assert} from '@repo/bzl/js/chai-js'
 
 describe('webpack', () => {
   it('exposes the expected API', async () => {

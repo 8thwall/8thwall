@@ -10,12 +10,12 @@
 import {promises as fs} from 'fs'
 import path from 'path'
 
-import * as FEATURES from '@nia/c8/ecs/tools/generated-features-list'
+import * as FEATURES from '@repo/c8/ecs/tools/generated-features-list'
 
-import {EDITIONS} from '@nia/c8/ecs/src/shared/features/edition'
+import {EDITIONS} from '@repo/c8/ecs/src/shared/features/edition'
 
-import type {RuntimeMetadata} from '@nia/c8/ecs/src/shared/runtime-version'
-import {parseComponentAst} from '@nia/c8/ecs/src/shared/parse-component-ast'
+import type {RuntimeMetadata} from '@repo/c8/ecs/src/shared/runtime-version'
+import {parseComponentAst} from '@repo/c8/ecs/src/shared/parse-component-ast'
 
 const FILES_TO_INCLUDE = [
   'src/runtime/animation.ts',

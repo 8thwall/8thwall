@@ -9,7 +9,7 @@ import {
   cppTypeToTs,
   findDeclarations,
   parameterToTs,
-} from '@nia/bzl/js/codegen/generate-ts-from-cpp'
+} from '@repo/bzl/js/codegen/generate-ts-from-cpp'
 
 const run = async (ccPaths: string[]) => {
   const chunkName = process.argv[2]
@@ -29,7 +29,7 @@ const run = async (ccPaths: string[]) => {
   console.log(`\
 
 // @inliner-off
-import type {EmscriptenModule} from '@nia/reality/app/xr/js/src/types/emscripten'
+import type {EmscriptenModule} from '@repo/reality/app/xr/js/src/types/emscripten'
 
 /* eslint-disable import/group-exports, camelcase, max-len */
 `)

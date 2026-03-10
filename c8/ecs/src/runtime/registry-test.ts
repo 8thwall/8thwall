@@ -2,7 +2,7 @@
 // @attr(externalize_npm = 1)
 // @attr(esnext = 1)
 
-import {describe, it, assert} from '@nia/bzl/js/chai-js'
+import {describe, it, assert} from '@repo/bzl/js/chai-js'
 
 import './test-env'
 import {ecs} from './test-runtime-lib'

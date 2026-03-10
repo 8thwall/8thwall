@@ -2,7 +2,7 @@
 // @attr[](data = "transform-manager.ts")
 // @attr(esnext = 1)
 // @attr(externalize_npm = 1)
-import {describe, it, assert} from '@nia/bzl/js/chai-js'
+import {describe, it, assert} from '@repo/bzl/js/chai-js'
 
 import {parse} from '@babel/parser'
 import type {ArrowFunctionExpression, VariableDeclaration} from '@babel/types'

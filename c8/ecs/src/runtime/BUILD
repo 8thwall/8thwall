@@ -910,7 +910,7 @@ js_library(
 genrule(
     name = "ecs-asm",
     outs = ["ecs-asm.ts"],
-    cmd = "echo \"import ECS from '@nia/c8/ecs/ecs-asm';export default ECS;\" > $@",
+    cmd = "echo \"import ECS from '@repo/c8/ecs/ecs-asm';export default ECS;\" > $@",
 )
 
 js_library(

@@ -1,12 +1,12 @@
-import WEBMODELVIEW from '@nia/c8/model/web/web-model-view-wasm'
+import WEBMODELVIEW from '@repo/c8/model/web/web-model-view-wasm'
 
-import {writeStringToEmscriptenHeap, writeArrayToEmscriptenHeap} from '@nia/c8/ems/ems'
-// TODO: Import from @nia/c8/xrapi/xrapi-types
+import {writeStringToEmscriptenHeap, writeArrayToEmscriptenHeap} from '@repo/c8/ems/ems'
+// TODO: Import from @repo/c8/xrapi/xrapi-types
 // import type {
 //   DomHighResTimeStamp, XrFrame, XrFrameCallback, XrReferenceSpace, XrSession,
-// } from '@nia/c8/xrapi/xrapi-types'
+// } from '@repo/c8/xrapi/xrapi-types'
 
-import {createMouseToTouchTranslator} from '@nia/c8/browser/mouse-to-touch-translater'
+import {createMouseToTouchTranslator} from '@repo/c8/browser/mouse-to-touch-translater'
 
 import {ModelManager} from './model-manager'
 import type {ModelSrc} from './model-manager-types'

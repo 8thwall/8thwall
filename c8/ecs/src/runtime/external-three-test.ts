@@ -1,7 +1,7 @@
 // @attr[](data = "//c8/ecs/src/runtime")
 // @attr[](data = "//c8/ecs/src/runtime:plugin")
 
-import {describe, it, assert} from '@nia/bzl/js/chai-js'
+import {describe, it, assert} from '@repo/bzl/js/chai-js'
 import path from 'path'
 import {promises as fs} from 'fs'
 

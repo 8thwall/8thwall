@@ -68,7 +68,7 @@ module.exports = (ctx) => {
     resolve: {
       extensions: ['.ts', '.js', '.json'],
       alias: {
-        '@nia/c8/ecs': __dirname,
+        '@repo/c8/ecs': __dirname,
       },
     },
     module: {rules},

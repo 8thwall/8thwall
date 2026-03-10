@@ -5,7 +5,7 @@
 import {promises as fs} from 'fs'
 import path from 'path'
 
-import {describe, it, assert} from '@nia/bzl/js/chai-js'
+import {describe, it, assert} from '@repo/bzl/js/chai-js'
 
 const runfiles = process.env.RUNFILES_DIR!
 

@@ -1,4 +1,4 @@
-import {chai} from '@nia/bzl/js/chai-js'
+import {chai} from '@repo/bzl/js/chai-js'
 
 const {describe, it} = globalThis as any
 

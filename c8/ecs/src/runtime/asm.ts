@@ -3,10 +3,10 @@
 // @attr[](srcs = ":ecs-asm")
 // @dep(//c8/ecs:ecs-asm)
 // @inliner-skip-next
-import ECS from '@nia/c8/ecs/src/runtime/ecs-asm'
+import ECS from '@repo/c8/ecs/src/runtime/ecs-asm'
 /* eslint-enable */
 
-import type {EcsAsm} from '@nia/c8/ecs/gen/asm-types'
+import type {EcsAsm} from '@repo/c8/ecs/gen/asm-types'
 
 let verbose = false
 let loaded = false

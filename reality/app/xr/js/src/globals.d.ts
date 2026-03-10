@@ -14,4 +14,4 @@ declare var AFRAME: any
 declare var omni8: any
 
 // @dep(//reality/app/xr/js:buildif)
-declare var BuildIf: import('@nia/reality/app/xr/js/buildif').BuildIfReplacements
+declare var BuildIf: import('@repo/reality/app/xr/js/buildif').BuildIfReplacements

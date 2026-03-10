@@ -1,7 +1,7 @@
 // @package(npm-ecs)
 // @attr(externalize_npm = 1)
 // @attr(esnext = 1)
-import {describe, it, assert} from '@nia/bzl/js/chai-js'
+import {describe, it, assert} from '@repo/bzl/js/chai-js'
 
 import type {BaseGraphObject, GraphObject, PrefabInstanceChildren, SceneGraph} from './scene-graph'
 import {getParentInstanceId, isDescendantOf} from './object-hierarchy'
