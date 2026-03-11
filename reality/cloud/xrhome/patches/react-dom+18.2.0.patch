@@ -1,0 +1,14 @@
+diff --git a/node_modules/react-dom/cjs/react-dom.development.js b/node_modules/react-dom/cjs/react-dom.development.js
+index e4ed5ae..7fa9e32 100644
+--- a/node_modules/react-dom/cjs/react-dom.development.js
++++ b/node_modules/react-dom/cjs/react-dom.development.js
+@@ -11470,7 +11470,8 @@ function errorHydratingContainer(parentContainer) {
+   {
+     // TODO: This gets logged by onRecoverableError, too, so we should be
+     // able to remove it.
+-    error('An error occurred during hydration. The server HTML was replaced with client content in <%s>.', parentContainer.nodeName.toLowerCase());
++    // error('An error occurred during hydration. The server HTML was replaced with client content in <%s>.', parentContainer.nodeName.toLowerCase());
++    // NOTE(kyle): Suppress this error. Seems like the React team plans to remove this anway.
+   }
+ }
+ function preparePortalMount(portalInstance) {

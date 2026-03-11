@@ -1,0 +1,194 @@
+@use "sass:color";
+@import 'settings';
+
+.pwa-settings-card {
+  .form-buttons {
+    @media screen and (min-width: $tiny-width-breakpoint) {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+    }
+
+    .cancel-button {
+      background: none;
+    }
+  }
+
+  .enabled-loader {
+    vertical-align: top !important;
+    margin-left: 1em !important;
+  }
+
+  .field {
+    & > label {
+      display: inline-block !important;
+      font-size: 1.2em !important;
+      margin-right: 0.75em !important;
+      margin-bottom: 1em !important;
+    }
+
+    & > p {
+      display: inline-block !important;
+    }
+  }
+
+  .color-editor {
+    display: flex;
+
+    .color-preview {
+      cursor: pointer;
+      display: inline-block;
+      position: relative;
+      width: 2.5em;
+      height: 2.5em;
+      border-radius: 0.5em;
+      border: 1px #0000001A solid;
+
+      & > img {
+        position: absolute;
+        top: 1.5em;
+        left: 1.75em;
+        height: 1.25em;
+        width: 1.25em;
+      }
+    }
+
+    .color-value {
+      cursor: pointer;
+      display: inline-block;
+      margin-top: auto;
+      margin-bottom: auto;
+      font-weight: bold;
+    }
+
+    .color-preview + .color-value {
+      margin-left: 1em;
+    }
+  }
+
+  .pwa-beta-label {
+    border-width: 1px !important;
+    border-style: solid !important;
+    line-height: 0.25 !important;
+    text-align: center !important;
+    color: $gray-4;
+    border-color: $brand-black;
+    background-color: rgba($gray-3, 0.15);
+  }
+
+  .color-picker {
+    margin-top: 0.5em;
+    position: absolute !important;
+    z-index: 100 !important;
+  }
+
+  .color-picker input {
+    padding: 1px 1px 1px 8px !important;
+  }
+
+  .color-picker-cover {
+    position: fixed;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+  }
+
+  .icon-field {
+    .icon-field-container {
+      display: flex;
+
+      button {
+        margin-left: 1em;
+        align-self: flex-end;
+      }
+
+      input {
+        display: none;
+      }
+    }
+    .icon-error {
+      margin-top: 1em;
+      color: $danger-red;
+    }
+  }
+}
+
+.pwa-example-code {
+  .code-example {
+    display: block;
+    background: $gray-1;
+    white-space: inherit;
+    height: 100%;
+    padding: 0 1em;
+    margin: 0;
+    white-space: pre-wrap;
+    font-family: monospace;
+  }
+}
+
+.splash-screen-container {
+  width: 16em;
+  height: 28em;
+  box-shadow: 0 1px 2px;
+  border-radius: 0.5em;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1em;
+
+  .app-title {
+    display: block;
+    position: absolute;
+    align-self: flex-end;
+    width: inherit;
+    text-align: center;
+    margin: auto;
+    padding-bottom: 2em;
+  }
+}
+
+.icon-preview-container {
+  display: inline-block;
+
+  .icon-preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .icon-shadow {
+      filter: drop-shadow(0px 1px 2px rgba(0,0,0,0.3));
+    }
+    img {
+      max-width: 6em;
+      box-sizing: content-box;
+      clip-path: inset(0);
+      background: black;
+    }
+
+    img.circle {
+      clip-path: inset(0 round 50%);
+      -webkit-clip-path: inset(0 round 50%);
+    }
+
+    img.squircle {
+      clip-path: inset(0 round 17.543%);
+      -webkit-clip-path: inset(0 round 17.543%);
+    }
+
+    img.drop {
+      clip-path: inset(0 round 50% 50% 17.543%);
+      -webkit-clip-path: inset(0 round 50% 50% 17.543%);
+    }
+
+    p {
+      font-weight: bold;
+      margin-top: 0.5em;
+    }
+  }
+}
+
+.icon-preview-container + .icon-preview-container {
+  margin-left: 2em;
+}

@@ -1,0 +1,22 @@
+/*******************************
+     User Global Variables
+*******************************/
+/*
+@emSize: 1rem;
+@fontSize : 1rem;
+*/
+/* Colors */
+@green: #00EDAF;
+@darkPurple: #7611B7;
+@lightPurple: #AD50FF;
+@red: #DD0065;
+@primaryColor: @darkPurple;
+@secondaryColor: @lightPurple;
+
+/* Fonts */
+@bold: 600;
+@fontName: 'Nunito';
+/* NOTE(dat): Find your font family parameter on fonts.google.com . Customize then look at the Standard Embed option
+e.g. <link href="https://fonts.googleapis.com/css?family=Nunito:400,400i,700,700i|Roboto+Mono:400,700&display=swap" rel="stylesheet">
+*/
+@googleFontFamily: 'Nunito:300,400,500,600,700,400i,600i|Roboto+Mono:400,600,700|Noto+Sans+JP:300,400,500,600,700,800,900|Mozilla+Headline:400,700|Geist:400,600|Geist+Mono:500,700';

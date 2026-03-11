@@ -1,0 +1,11 @@
+{
+  "button.login_email": "Eメールを続ける",
+  "description": "8th Wallアカウントにログインする",
+  "heading": "おかえりなさい！",
+  "label.email": "メールアドレス",
+  "login_error.account_missing": "この情報を含む8th Wallアカウントは見つかりませんでした。 <signUpLink>サインアップ</signUpLink>するか、別の方法でログインしてみてください。",
+  "login_error.incorrect_email_password": "申し訳ありませんが、ログインに問題が発生しました。Eメールとパスワードを再度ご確認ください。",
+  "login_error.invalid_login_token": "提供されたログインリンクが無効であるか、有効期限が切れています。別の方法でログインしてください。",
+  "login_options.divider_text": "OR",
+  "sign_up": "初めてですか？<newAccountLink>登録する</newAccountLink>"
+}

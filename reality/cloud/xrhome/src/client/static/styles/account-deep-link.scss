@@ -1,0 +1,560 @@
+@import 'settings';
+
+.with-sidebar {
+  display: flex;
+  flex-direction: row;
+  flex: 1 0;
+
+
+  .sidebar-dismiss {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 500;
+    color: transparent,
+  }
+
+  >.sidebar {
+    flex: 0 0 auto;
+    background-color: $left-nav-background;
+    z-index: 2; // has to be higher than the pusher z-index
+    user-select: none;
+    font-size: 1em;
+    min-width: 4em;
+    padding: 1em 0;
+
+    &.dev {
+      border-left: 4px dashed $mango;
+      box-sizing: border-box;
+    }
+
+    .title {
+      padding-left: 1.5em !important;
+    }
+
+    .item {
+      display: block;
+      padding: 1em 1.5em;
+      color: $gray-4;
+      border-left: 4px solid transparent;
+
+      &:hover,
+      &:focus {
+        color: $gray-3;
+      }
+
+      &.active {
+        color: $brand-white;
+      }
+
+      &.active {
+        background-color: $gray-5;
+        border-left: 4px solid $brand-highlight;
+      }
+
+      .icon {
+        &.big8 {
+          font-size: 1.6em;
+        }
+
+        &.default {
+          font-size: 1.2em;
+        }
+      }
+    }
+
+    &.wide {
+      min-width: 16rem;
+
+      .item .icon {
+        margin-right: 1em;
+      }
+    }
+
+    &.thin {
+      .item {
+        padding-left: 0;
+        padding-right: 0;
+        text-align: center;
+
+        .icon {
+          margin: 0;
+        }
+      }
+    }
+
+    @media screen and (max-width: $mobile-width-breakpoint) {
+      position: absolute;
+      left: 0;
+      transform: translateX(-100%);
+
+      &.show-nav {
+        transform: translateX(0%);
+        height: 100%;
+        z-index: 501;
+      }
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+  }
+}
+
+h1 {
+  font-size: 1.6rem;
+  flex: 1 0;
+}
+
+.page {
+  flex: 1 0 0;
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+
+  user-select: none;
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p {
+    user-select: text;
+  }
+
+  .section {
+    &.centered {
+      width: calc(100% - 2 * #{$centered-section-margin});
+      max-width: $centered-section-max-width;
+      margin: 0 auto;
+    }
+
+    &.centered-wider {
+      width: calc(100% - 2rem);
+      max-width: 80em;
+      margin: 0 auto;
+    }
+
+    &:not(:last-child):not(:empty) {
+      margin-bottom: 1rem;
+    }
+
+    h2.heading {
+      margin-top: 1.5em;
+    }
+  }
+
+  .main-before-footer {
+    margin-bottom: 2rem;
+  }
+
+  // TODO(christoph) remove after finalizing scoped urls
+  .header.main,
+  .ui.fluid.container,
+  .ui.header.full,
+  p.full {
+    padding-top: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .usage-section {
+    margin: 1rem 0;
+  }
+
+  .split {
+    display: flex;
+
+    @media screen and (max-width: $tiny-width-breakpoint) {
+      flex-direction: column;
+    }
+
+    >* {
+      flex: 1 1;
+    }
+
+    .logo {
+      flex-grow: 0;
+      text-align: center;
+    }
+  }
+
+  .cover-image {
+    img {
+      width: 100%;
+      border-radius: 1em;
+    }
+
+    &+.app-info {
+      padding-left: 1em;
+
+      @media screen and (max-width: $tiny-width-breakpoint) {
+        padding-left: 0;
+      }
+    }
+  }
+}
+
+.page-content {
+  flex: 1 0 auto;
+  position: relative;
+
+  >.segment {
+    margin-top: 0;
+  }
+
+  header+.segment {
+    margin-top: 1em;
+  }
+}
+
+.page-footer {
+  flex: 0 0 auto;
+  color: $gray-2;
+  line-height: 1.75;
+
+  div {
+    // Allow selection of footer text.
+    user-select: text;
+  }
+
+  .left,
+  .right {
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+  }
+
+  a {
+    color: $gray-3;
+
+    &:hover {
+      color: $gray-4;
+    }
+  }
+
+  @media screen and (min-width: $mobile-width-breakpoint + 1px) {
+    display: flex;
+
+    .left,
+    .right {
+      flex: 1 0 0;
+    }
+
+    .right {
+      margin-left: 1rem;
+      text-align: right;
+    }
+  }
+
+  .left {
+    display: flex;
+
+    .footer-logo {
+      flex: 0 0 auto;
+      height: 3.5em;
+      margin-right: 1.5em;
+      user-select: none;
+    }
+  }
+}
+
+.non-commercial-warning {
+  padding: 1.5em;
+  font-weight: 300;
+
+  strong {
+    font-weight: 600;
+  }
+}
+
+$fluid-card-spacing: 0.5em;
+
+.fluid-card-container {
+  margin: (-$fluid-card-spacing) (-$fluid-card-spacing) $fluid-card-spacing (
+    -$fluid-card-spacing
+  );
+display: flex;
+flex-wrap: wrap;
+align-items: stretch;
+
+>* {
+  margin: $fluid-card-spacing !important;
+}
+
+.segment {
+  flex: 1 0 auto;
+
+  &.fluid {
+    flex-basis: 0;
+    flex-grow: 1;
+
+    &.max-content {
+      min-width: max-content;
+    }
+
+    &.min-content {
+      min-width: min-content;
+    }
+
+    &.percent-50 {
+      min-width: calc(50% - #{2 * $fluid-card-spacing});
+    }
+  }
+}
+
+.non-commercial-warning {
+  flex: 2 0 40em;
+  max-width: calc(100% - 1em);
+}
+}
+
+.right-section {
+  >* {
+    float: right;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  &:after {
+    content: "";
+    display: block;
+    clear: both;
+  }
+}
+
+.top-project-section {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  margin: -0.5rem;
+
+  >* {
+    margin: 0.5rem;
+  }
+
+  .disabled-warning {
+    min-width: 0;
+    flex: 1 0 40em;
+    max-width: calc(100% - 1rem);
+    padding: 1rem;
+    border: 1px solid $brand-highlight;
+    background-color: rgba($brand-purple, 0.1);
+    display: flex;
+    align-items: center;
+    color: $brand-purple;
+
+    .icon {
+      font-size: 1.5rem;
+    }
+
+    p {
+      margin-left: 1rem;
+      color: $brand-purple;
+    }
+  }
+
+  .button-container {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 100%;
+    gap: 0.5rem;
+    justify-content: flex-end;
+
+    @media screen and (max-width: $tiny-width-breakpoint) {
+      justify-content: flex-start;
+    }
+
+    >* {
+      margin: 0;
+    }
+
+    &:first-child {
+      flex: 1 0 auto;
+      text-align: right;
+    }
+  }
+}
+
+.empty-projects-section {
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  padding: 3rem 0;
+  text-align: center;
+
+  p {
+    color: $gray-3;
+  }
+
+  strong {
+    font-weight: bold;
+    color: $gray-4;
+    font-size: 1.5em;
+  }
+
+  img {
+    display: inline-block;
+    max-width: 100%;
+    width: 30em;
+  }
+}
+
+.visible.transition.diff-modal {
+  // NOTE(pawel) sometimes we need a little extra persuasion
+  display: flex !important;
+}
+
+.diff-modal {
+  padding-top: 1em;
+  padding-bottom: 1em;
+  background: $gray-5 !important;
+  color: $moonlight;
+  text-align: center;
+  height: 75vh;
+  overflow: auto;
+  display: flex !important;
+  flex-direction: column;
+
+  .title {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 1em;
+
+    & :first-child {
+      flex: 0 0 auto;
+      margin-right: 1em;
+    }
+
+    & :last-child {
+      flex: 0 0 auto;
+    }
+  }
+
+  .description {
+    text-align: center;
+  }
+
+  .description-strip {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 1em 2em 1em 2em;
+    background-color: $dark-blue;
+
+    :first-child,
+    :last-child {
+      flex: 0 0 auto;
+    }
+
+    :nth-child(2) {
+      flex: 1 1 auto;
+      text-align: left;
+      padding-left: 2em;
+    }
+
+    :last-child {
+      flex: 0 0 auto;
+      text-align: right;
+    }
+
+    .commit-hash {
+      font-weight: 700;
+      font-family: $editor-monospace;
+      padding-right: 0.5em;
+    }
+  }
+
+  .rows-header {
+    border-radius: 5px;
+    color: $brand-white !important;
+    background: $dark-blue !important;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    :first-child,
+    :last-child {
+      flex: 1 0 0;
+    }
+
+    :last-child {
+      text-align: right;
+    }
+
+    .green {
+      color: $go-green !important;
+    }
+
+    .red {
+      color: $danger-red !important;
+    }
+
+    .yellow {
+      color: $yellow !important;
+    }
+
+  }
+
+  .rows-content {
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    background: $dark-blue !important;
+    padding: 0 0 5px 0 !important; // to override accordion content
+  }
+
+  .file-diff {
+    margin: 1em;
+    background: $dark-blue !important;
+    border-radius: 5px;
+  }
+
+  .diff-list {
+    background: $gray-5 !important;
+    box-shadow: none !important;
+    flex-grow: 1;
+    min-height: 0;
+    height: 100%;
+    overflow: auto;
+    margin: auto;
+    border-radius: 0px !important;
+  }
+}
+
+.merge-diff-editor {
+  .codeMarker {
+    position: absolute;
+  }
+
+  .diff-left {
+    background-color: rgba($danger-red, 0.5);
+  }
+
+  .diff-right {
+    background-color: rgba($go-green, 0.5);
+  }
+}
+
+.land-item-row {
+  display: flex;
+  flex-direction: row;
+
+  .check-box {
+    flex: 0 0 auto;
+    margin-left: 1em;
+    margin-top: 1.5em;
+  }
+
+  .diff {
+    flex: 1 1 auto;
+  }
+
+}

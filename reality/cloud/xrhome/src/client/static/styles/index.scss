@@ -1,0 +1,969 @@
+@import 'settings';
+* {
+  font-family: inherit;
+}
+.ui.button {
+  font-family: inherit;
+  font-weight: normal;
+}
+
+body {
+  font-size: unset;
+  background: transparent;
+  color: var(--fgMain);
+  font-family: var(--bodyFontFamily);
+}
+
+:root {
+  scroll-padding-top: 8em;
+  --bgMain: $main-background-color;
+  --fgMain: $brand-black;
+  --bodyFontFamily: 'Nunito', sans-serif;
+  --linkFg: $brand-purple;
+  --sfcBackgroundDefault: $brand-white;
+  --sfcBackgroundError: transparentize($cherry, 0.98);
+  --sfcBorderDefault: $gray-2;
+  --sfcBorderFocus: $blueberry;
+  --sfcBorderError: $cherry;
+  --sfcDisabledBackground: $moonlight;
+}
+
+#xrhome-root {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  min-height:100%;
+  height: auto;
+  width: 100%;
+}
+.header {
+  font-family: 'Nunito', sans-serif !important;
+}
+.menu .header {
+  color: #333;
+}
+
+.primary:not(.ui.button) {
+  background-color: $brand-purple !important;
+}
+
+/* Customize Semantic UI default styling */
+h2.ui.header {
+  color: $text-color;
+  letter-spacing: 0.3px;
+}
+.ui.button {
+  font-family: 'Nunito', sans-serif;
+}
+
+.shown-in-mobile {
+  display: none !important;
+}
+
+html {
+  font-size: $font-size;
+  background-color: var(--bgMain);
+}
+
+.hidden-input {
+  display: none;
+}
+
+@media screen and (max-width: $mobile-width-breakpoint) {
+  .hidden-in-mobile {
+    display: none !important;
+  }
+  .shown-in-mobile {
+    display: inline-block !important;
+  }
+
+  .avatar-cell {
+    .avatar {
+      display: block;
+    }
+  }
+}
+
+.truncate {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.truncate-span {
+  white-space: nowrap;
+  display: inline-block;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 100%;
+}
+
+.ui.button img.image.icon {
+  height: auto;
+  width: 1.4em;
+  margin: -0.2em 0;
+  vertical-align: bottom;
+
+  &:right {
+    margin-left: 0.2em;
+  }
+}
+
+.header.full, p.full {
+  padding: 25px 0px 0px 20px !important;
+  // font-weight:normal;
+}
+.header.nopadleft {
+  padding: 25px 0px 0px 0px !important;
+}
+.header.main {
+  padding: 25px 20px 10px 20px!important;
+  text-transform: uppercase;
+  letter-spacing: 1.1px;
+  font-size: 1.4rem !important;
+  font-weight: 400;
+
+  @media screen and (max-width: $mobile-width-breakpoint) {
+    display: flex;
+    align-items: flex-start;
+  }
+}
+
+.topContainer {
+  padding: 20px;
+
+  @media screen and (max-width: $mobile-width-breakpoint) {
+    &.ui.container {
+      margin: 0 !important;
+    }
+  }
+
+  &.content {
+    h2 {
+      margin-top: 2em;
+    }
+  }
+   &.markdown {
+     h2 {
+       margin-top: 0;
+     }
+   }
+}
+.progress.nomargin {
+  margin-bottom: 0 !important;
+}
+.error-message {
+  padding: 0px 20px 10px 20px;
+  z-index: 100;
+}
+
+a {
+  color: var(--linkFg);
+}
+// For really small size images
+.icon.image {
+  display: inline-block;
+  width: 18px !important;
+  margin-right: 3.5px;
+  margin-top: -0.3em !important;
+
+  &.right {
+    float: right;
+  }
+}
+
+// Since each component has to return a single element, use this class on your div to make it fits into
+// the placement of the rest of the elements in the main content container.
+.withTopMargin {
+  margin-top: 20px !important;
+}
+
+.avatar {
+  vertical-align: middle;
+  margin-right: 5px;
+
+  &.circular {
+    border-radius: 50%;
+  }
+}
+
+.purple.card.selected{
+  background-color: #f9e6ff;
+}
+.icon.darkblue {
+  color: $light-text !important;
+}
+
+/** Support new colors
+*/
+.ui.purple8.label, .ui.purple8.labels .label {
+  background-color: $brand-purple !important;
+  color: #fff !important;
+}
+.ui.purple8-hilite.label, .ui.purple8-hilite.labels .label {
+  background-color: $brand-highlight !important;
+  color: #fff !important;
+}
+
+.ui[class*="right ribbon"].label:after {
+  left: auto;
+  right: 0;
+  border-style: solid;
+  border-width: 1.2em 1.2em 0 0;
+  border-color: transparent;
+  border-top-color: rgba(117, 0, 191, 0.5);
+}
+
+.ui.error.message {
+  margin-top: 0.5em;
+}
+
+.link {
+  cursor: pointer;
+}
+.field {
+  .link + .link {
+    margin-left: 1em;
+  }
+}
+
+.ui.compact.table td.breaking {
+  word-break: normal;
+}
+
+.ui.table td.centered {
+  text-align: center;
+}
+
+.ui.table.borderless {
+  border: none;
+}
+
+.ui.table.narrow {
+  max-width: 650px;
+}
+.ui.table th {
+  padding-left: 6px;
+}
+
+.ui.basic.modal {
+  font-size: 1.2em !important;
+}
+
+.cam-section {
+  font-family: 'Nunito', sans-serif !important;
+  font-size: 1em;
+  font-weight: 400;
+  line-height: 1.5em;
+  color: $gray-4;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 1rem !important;
+}
+
+.upgrade-popup {
+  .thin-label:hover {
+    cursor: pointer;
+  }
+}
+
+.ui.top.left.popup {
+  margin-left: -0.75em;
+}
+
+.ui.inverted.popup {
+  background-color: $brand-black;
+  &:before {
+    background-color: $brand-black !important;
+  }
+}
+
+// We want our ribbon text to be a bit stronger since our purple background is hard to read
+// with small text
+.corner-ribbon.strong {
+  font-size: 1em !important;
+  font-weight: bold;
+}
+
+// Stripe elements
+.Checkout {
+  margin: 0 auto;
+  max-width: 800px;
+  box-sizing: border-box;
+  padding: 0 5px;
+}
+.StripeElement {
+  display: block;
+  margin: 10px 0 20px 0;
+  max-width: 500px;
+  padding: 10px 14px;
+  font-size: 1em;
+  font-family: 'Source Code Pro', monospace;
+  box-shadow: rgba(50, 50, 93, 0.14902) 0px 1px 3px, rgba(0, 0, 0, 0.0196078) 0px 1px 0px;
+  border: 0;
+  outline: 0;
+  border-radius: 4px;
+  background: white;
+
+  &.StripeElement--invalid {
+    border: 1px solid $cherry;
+  }
+}
+
+.code-example-text {
+  overflow-wrap: break-word;
+  word-break: break-all;
+  background: #ECECF2;
+  font-size: 1em;
+  font-family: 'Nunito-Light', monospace;
+}
+
+.card.box-shadow {
+  box-shadow: 0px 3px 10px 0 #33445511;
+}
+.ui.grid.camera-summary {
+  margin: 0 !important;
+  z-index: 1;
+
+  .clickable-head {
+    cursor: pointer;
+
+    &.disabled {
+      opacity: 0.7;
+    }
+
+    &:hover {
+      box-shadow: 0px 1px 5px 0 rgba($brand-black, 0.25);
+    }
+
+    .ui.label {
+      margin-left: 1em;
+    }
+  }
+
+  .name {
+    font-weight: bold;
+    word-break: break-all;
+    .label {
+      word-break: initial;
+    }
+  }
+
+  .views {
+    .count {
+      margin-right: 5px;
+    }
+  }
+}
+.camera-detail {
+  .checkbox label {
+    z-index: 0;
+  }
+
+  p {
+    font-size: 1em;
+  }
+}
+
+.page-content .camera-summary .statistic {
+  font-size: 0.9em;
+}
+
+.loading-indicator {
+  margin: 5px;
+}
+
+.upgrade-button {
+  display: inline-flex !important;
+  align-items: center !important;
+}
+
+.header.main {
+  position: relative;
+  word-break: break-all;
+  .ui.label {
+    word-break: initial;
+  }
+}
+
+.accent {
+  color: $brand-purple;
+}
+.actionable-text {
+  color: $brand-purple;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.accountTypeCard>.content>img {
+  padding-bottom: 10px;
+}
+
+.accountTypeCard>.content>.header {
+  color: $brand-purple !important;
+}
+
+.accountTypeCard>.content>.description>span {
+  color: $brand-purple;
+  font-weight: bold;
+}
+
+.ui.label.mango {
+  background-color: $mango;
+  color: white;
+}
+
+.web-url-input {
+  word-break: break-all;
+  &.form {
+    margin-bottom: 0.25em;
+
+    &, .ui.button, .ui.label {
+      font-size: 0.9em;
+    }
+
+    .ui.label {
+      padding-top: 1em !important;
+    }
+  }
+
+  input {
+    flex: 0 1 100% !important;
+    width: 100% !important;
+  }
+
+  .edit-icon {
+    margin-left: 0.5em;
+    cursor: pointer;
+  }
+}
+
+.qr-code-download-options {
+  .ui.button {
+    margin: 0;
+
+    &:first-child {
+      margin-right: 0.75em;
+    }
+  }
+}
+
+.ui.button.sharing-button {
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  font-size: 1em;
+  margin: 0.25em 0.5em;
+  min-width: 9em;
+
+  &:first-child {
+    margin-left: 0 !important;
+  }
+}
+
+.ui.button.gray-4, .ui.label.gray-4 {
+  background-color: $gray-4;
+  color: $brand-white;
+}
+
+.ui.button.gray-4:hover {
+  color: rgba($brand-white, 0.8);
+}
+
+.ui.button.eggshell {
+  background-color: $eggshell;
+  color: $brand-black;
+}
+
+.ui.button.eggshell:hover {
+  color: rgba($brand-black, 0.8);
+}
+
+.ui.label.highlight {
+  background-color: $brand-highlight;
+  color: $brand-white;
+}
+
+p.inline {
+  display: inline-block;
+}
+
+p.no-margin {
+  margin: 0;
+}
+
+p.gray-3 {
+  color: $gray-3;
+}
+
+i.icon.gray-2 {
+  color: $gray-2;
+}
+
+i.icon.cherry, .cherry {
+  color: $cherry;
+}
+
+p.error {
+  color: $cherry;
+  font-weight: 700;
+}
+
+span.emphasized {
+  font-weight: 700;
+}
+
+a {
+  cursor: pointer;
+}
+
+a.deemphasized {
+  color: $gray-4;
+
+  &.purple {
+    color: $brand-purple;
+  }
+}
+.ui.button + a.deemphasized {
+  margin-left: 2em;
+
+  &.compact {
+   margin-left: 1em;
+  }
+}
+p.deemphasized {
+  margin-top: 1em;
+  color: $gray-3;
+  strong {
+    color: $gray-4;
+  }
+}
+
+.info-paragraph {
+  border: 1px solid $brand-highlight;
+  background-color: $main-background-color;
+  padding: 0.75em 1em;
+
+  &.light {
+    background-color: $brand-white;
+  }
+}
+
+.break-word {
+  word-break: break-word;
+}
+.web-app-list-modal {
+  margin: 1em;
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
+.add-right-padding {
+  padding-right: 1em;
+}
+
+.web-origins {
+  display: flex;
+  flex-direction: column;
+  .web-origin {
+    height: 2em;
+    line-height: 2em;
+    margin-bottom: 1em;
+    margin-left: 1em;
+  }
+}
+.ui.menu + .chartjs-render-monitor {
+  margin-top: 1em;
+}
+
+.apps-list-loader {
+  display: block !important;
+  margin-top: 8rem !important;
+  left: 50% !important;
+}
+
+.dev.indicator {
+  background-color: $mango !important;
+  color: $brand-white !important;
+}
+.radios {
+  .ui.radio, >.field {
+    display: inline-block;
+    margin-bottom: 0;
+  }
+  .ui.radio + .ui.radio, .field + .field {
+    padding-left: 2em;
+  }
+}
+
+.campaign-duration-time-selection {
+  z-index: 2;
+  div { // SingleDatePicker
+    div { // container
+      div { // SingleDatePickerInput
+        border: none !important;
+      }
+    }
+  }
+}
+
+.equal-input-heights input {
+  height: 100%;
+}
+
+.campaign-duration-time-field-group {
+  max-width: 20em !important;
+  margin-bottom: 0em !important;
+}
+
+.cancel-commercial-app-modal {
+  padding: 1em 2em !important;
+  h2, h3 {
+    border-bottom: 0 !important;
+  }
+  p {
+    text-align: center !important;
+  }
+  input {
+    max-width: 10em !important;
+    margin: auto !important;
+  }
+  .cancel-commercial-app-buttons {
+    margin: auto !important;
+    max-width: 15em !important;
+    display: flex !important;
+    justify-content: center !important;
+  }
+}
+
+.change-payment-method-popup {
+  padding: 0 0 !important;
+  .content {
+    width: 25em !important;
+    .buttons {
+      width: 100% !important;
+      .button {
+        padding: 1.5em !important;
+      }
+    }
+  }
+}
+
+.ui.basic.button.no-outline {
+  box-shadow: unset !important;
+}
+
+.ui.basic.primary.button.no-outline {
+  box-shadow: unset !important;
+}
+
+.contract-link {
+  font-weight: bold;
+  text-decoration: underline;
+
+  &:hover {
+    text-decoration: none;
+    cursor: pointer;
+  }
+}
+
+.ui.button.deemphasized-button {
+  background-color: transparent !important;
+  border: none;
+  color: $gray-4;
+  outline: none;
+  display: inline;
+  font-size: inherit;
+  margin: 0;
+  padding: 0;
+  font-weight: normal !important;
+
+  &.purple {
+    color: $brand-purple !important;
+    background-color: transparent !important;
+  }
+}
+
+.ui.button + .ui.button.deemphasized-button {
+  margin-left: 2em;
+
+  &.compact {
+    margin-left: 1em;
+  }
+}
+
+.promote.button {
+  background-color: $eggshell;
+  color: $brand-black;
+  display: inline-block;
+  padding: 0.5833em 0.833em;
+  font-weight: 600;
+  font-size: .85714286rem !important;
+  text-transform: initial;
+  margin-left: 0.5em;
+  line-height: 0.4;
+  border: 1px solid $eggshell;
+  white-space: nowrap;
+}
+
+.style-reset, {
+  margin: 0;
+  padding: 0;
+  outline: none;
+  border: none;
+  border-radius: 0;
+  display: inline;
+  background-color: transparent;
+  text-align: inherit;
+  line-height: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
+.style-reset:is(:link:hover) {
+  color: inherit;
+}
+
+.attention-grabber {
+  animation: pulse 1s linear;
+}
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.ui.dropdown.profile-dropdown {
+  white-space: nowrap;
+  span {
+    font-weight: 700;
+  }
+  .menu {
+    padding: 0.5rem 0 !important;
+    & > .header {
+      margin: 0.25rem 0;
+    }
+    .item {
+      vertical-align: middle;
+      &.workspace {
+        padding: 0.4em 0.4em 0.4em 2em !important;
+        color: $brand-purple;
+        width: 100%;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        @media screen and (max-width: $mobile-width-breakpoint) {
+          padding: 0.4em !important;
+        }
+      }
+      &.subitem {
+        padding: 0.4em !important;
+      }
+      & > img {
+        vertical-align: middle;
+        height: 1em;
+        margin: 0;
+        padding: 0em 0.5em;
+      }
+    }
+    .menu {
+      left: 50% !important;
+      transform: translateX(-50%);
+      min-width: fit-content;
+      width: fit-content;
+      margin: 0;
+      .item {
+        font-weight: 400;
+      }
+    }
+  }
+  &.small-screen > .menu {
+    width: 100vw;
+    top: calc(100% + 1em);
+    right: -1em !important;
+    .item {
+      margin-left: 0;
+      text-align: center;
+      font-size: calc(1rem / 3 * 4);
+      font-weight: 700;
+      padding-top: 1rem !important;
+      padding-bottom: 1rem !important;
+
+      & > .menu {
+        .item {
+          font-weight: 400;
+        }
+      }
+    }
+  }
+}
+
+.pop-gradient {
+  color: white;
+  background: $pop-gradient;
+
+  .gradient-content {
+    display: flex;
+    color: white;
+    align-items: center;
+
+    img {
+      color: white;
+      margin-right: 1em;
+      height: 2em;
+    }
+
+    a {
+      color: white;
+      text-decoration: underline;
+    }
+
+    p {
+      color: white;
+    }
+
+    i {
+      margin-right: 0.3em;
+    }
+  }
+}
+
+.usage-disclaimer {
+  font-size: inherit;
+  font-style: italic;
+  color: $gray-3;
+}
+
+.inline-link {
+  font-size: inherit;
+  color: inherit;
+  font-style: inherit;
+  text-decoration: underline;
+
+  &:hover {
+    text-decoration: none;
+    color: inherit;
+  }
+}
+
+.ui.toggle.checkbox.cherry {
+  input:checked~.box:before, input:checked~label:before {
+    background-color: $cherry !important;
+  }
+}
+
+.offset-shadow {
+  box-shadow: -0.5em 0.5em 1em 0 #0004 !important
+}
+
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+
+  &.right {
+    justify-content: flex-end;
+  }
+
+  >.ui.button:not(:last-child), >button {
+    margin-right: 1em;
+  }
+}
+
+.align-right {
+  text-align: right;
+}
+
+.custom-domain-modal {
+  width: 1200px !important;
+  max-width: 80vw !important;
+
+  .accordion {
+    .title {
+      font-size: 1.25rem !important;
+    }
+  }
+
+  .raw {
+    padding: 1em 1em 1em 1em;
+  }
+
+  .status-section {
+    background-color: $gray-1;
+    margin: 0 -5000px 1em;
+    padding: 0.5em calc(5000px + 0.5em);
+  }
+
+  .stage {
+    &:not(:last-child) {
+      margin-bottom: 1.5em;
+    }
+    &.faded {
+      opacity: 0.6;
+    }
+
+    .step-title {
+      &:after {
+        content: '';
+      }
+    }
+
+    &.complete {
+      .step-title:after {
+        content: ' \2713'; // https://www.fileformat.info/info/unicode/char/2713/index.htm
+      }
+    }
+
+    &.current .step-title {
+      text-decoration: underline;
+    }
+  }
+}
+
+.align-center {
+  text-align: center;
+}
+
+.preview-not-available {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--text-color, inherit);
+}
+
+.ui.dimmer {
+  background-color: rgba($brand-black, 0.8);
+}
+
+.project-section-header-with-link {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+
+  a {
+    > * {
+      vertical-align: top;
+    }
+
+    span {
+      text-decoration: underline;
+    }
+  }
+}
+
+#default-map {
+  display: none;
+}
+
+@font-face {
+  font-family: 'Menloish';
+  font-display: swap;
+  src: local('Menlo'),
+       local('Menlo Regular'),
+       url(../fonts/VeraSansMono.woff);
+}

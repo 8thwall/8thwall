@@ -1,0 +1,72 @@
+@import '../../static/styles/_settings';
+
+$border-radius: 0.5em;
+
+.floating-input-wrapper {
+  border: 1px solid var(--sfcBorderDefault);
+  border-radius: $border-radius;
+  background-color: var(--sfcBackgroundDefault);
+  position: relative;
+  z-index: 1;
+  height: 3em;
+
+  &.hide-overflow {
+    overflow: hidden;
+  }
+
+  &.has-error {
+    border-color: var(--sfcBorderError);
+    background-color: var(--sfcBackgroundError);
+  }
+
+  &:hover {
+    box-shadow: inset 0 1px 3px #0002;
+  }
+
+  &:focus-within,
+  &.has-focus {
+    border-color: var(--sfcBorderFocus);
+    box-shadow: 0 1px 3px #0003;
+  }
+}
+
+$input-horizontal-spacing: 1em;
+
+.floating-input {
+  position: relative;
+  display: block;
+  height: 100%;
+
+  &:first-child {
+    --input-left-spacing: #{$input-horizontal-spacing};
+  }
+
+  &:last-child {
+    --input-right-spacing: #{$input-horizontal-spacing};
+  }
+
+  &:not(:last-child) {
+    margin-right: 0.25em;
+  }
+
+  .input-inner {
+    width: 100%;
+    padding: 1.5em 0 0.5em;
+    height: 100%;
+    padding-left: var(--input-left-spacing, 0);
+    padding-right: var(--input-right-spacing, 0);
+
+    &:disabled {
+      background-color: var(--sfcDisabledBackground);
+    }
+  }
+}
+
+@media screen and (max-width: $mobile-width-breakpoint) {
+  .floating-input {
+    .input-inner {
+      font-size: 16px;
+      padding-bottom: 0.75em;
+    }
+  }
+}

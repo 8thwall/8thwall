@@ -1,0 +1,1533 @@
+@import 'settings';
+
+.code-editor {
+  .ace_editor {
+    font-size: $editor-font-size !important;
+  }
+
+  height: max-content;
+
+  * {
+    font-family: $editor-monospace;
+  }
+
+  &:focus {
+    // so when you click on it with an empty pane, it doesn't show anything
+    outline: unset;
+  }
+
+  // This controls the font size inside ace
+  p,
+  * {
+    font-size: $editor-font-size;
+  }
+}
+
+.studio-editor {
+  position: relative;
+
+  --file-list-title-color: none;
+  --file-list-heading-color: none;
+  --file-list-heading-border-color: 1px solid #{$gray-2};
+  --file-list-subtitle-color: #{$gray-5};
+  --file-list-item-color: none;
+  --file-list-item-hover-color: none;
+  --file-list-item-hover-background: #{$gray-1};
+  --file-list-item-active-color: none;
+  --file-list-item-active-background: #{$gray-2};
+  --file-list-drag-color: #{$almost-black};
+  --file-list-new-item-background-color: #{$moonlight};
+  --upload-background: #{$gray-1};
+  --asset-preview-background: none;
+  --asset-preview-border-width: 0;
+  --asset-preview-border-color: none;
+  --log-container-resizer-color: #{$gray-3};
+  --log-container-resizer-hover-color: #{$brand-highlight};
+  --log-container-resizer-height: 1px;
+  --log-container-resizer-buffer: 2px;
+  --left-pane-resizer-width: 3px;
+  --left-pane-resizer-highlight-color: #{$gray-1};
+  --left-pane-resizer-color: #{$brand-white};
+  --icon-filter: invert(1);
+  --text-color: inherit;
+  --text-inverted-color: #{$gray-3};
+  --pane-background: #{$moonlight};
+  --scrollbar-color: #{$light-background-2};
+  --scrolltrack-color: #{$moonlight};
+  --asset-metadata-background: #{$gray-1};
+  --asset-metadata-color: #{$brand-black};
+  --status-bar-color: #{$almost-black};
+  --command-text-color: #{$brand-black};
+  --lil-gui-title-text-color: #{$almost-black};
+  --lil-gui-widget-color: #{$gray-3};
+
+  &.dark {
+    background-color: $dark-blue;
+    --pane-border-style: none;
+    --file-list-heading-color: #{$gray-2};
+    --file-list-heading-border-color: 1px solid #{$gray-4}80;
+    --file-list-title-color: #{$brand-white};
+    --file-list-subtitle-color: #{$gray-3};
+    --file-list-item-color: #{$gray-2};
+    --file-list-item-hover-color: #{$brand-white};
+    --file-list-item-hover-background: #{$gray-6};
+    --file-list-item-active-color: #{$brand-white};
+    --file-list-item-active-background: #{$gray-4};
+    --file-list-drag-color: #{$dusty-violet};
+    --file-list-new-item-background-color: #{$gray-5};
+    --upload-background: #{$brand-black};
+    --asset-preview-background: #{$dark-blue};
+    --asset-preview-border-width: 0.5em;
+    --asset-preview-border-color: #{$gray-5};
+    --log-container-resizer-color: #{$brand-highlight};
+    --log-container-resizer-hover-color: #{$brand-highlight};
+    --log-container-resizer-height: 3px;
+    --log-container-resizer-buffer: 1px;
+    --left-pane-resizer-width: 3px;
+    --left-pane-resizer-highlight-color: #{$gray-4};
+    --left-pane-resizer-color: none;
+    --icon-filter: none;
+    --text-color: #{$brand-white};
+    --text-inverted-color: #{$gray-3};
+    --pane-background: #{$gray-5};
+    --scrollbar-color: #{$gray-5};
+    --scrolltrack-color: #{$dark-blue};
+    --asset-metadata-background: #{$gray-6};
+    --asset-metadata-color: #{$brand-white};
+    --status-bar-color: #{$brand-white};
+    --command-text-color: #{$gray-3};
+    --lil-gui-title-text-color: #{$brand-white};
+    --lil-gui-widget-color: #{$gray-4};
+
+    .green {
+      color: $go-green !important;
+    }
+
+    .orange {
+      color: $warn-orange !important;
+    }
+
+    .yellow {
+      color: $mango !important;
+    }
+
+    .red {
+      color: $editor-red !important;
+    }
+
+    .blue {
+      color: $editor-blue !important;
+    }
+
+    .purple {
+      color: $brand-highlight !important;
+    }
+  }
+
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+
+  // Reset the fonts
+  .ui.button {
+    font-size: 13px;
+    padding: 0.6em 0.8em;
+    line-height: $editor-font-size;
+  }
+
+  .menu>.item,
+  .ui.dropdown .menu>.item {
+    font-size: $editor-font-size;
+  }
+
+  .top-pane {
+    --repo-button-active-color: #{$almost-black};
+    --repo-button-active-background-color: #{$gray-3};
+    --repo-button-disabled-color: #{$gray-5};
+    --repo-button-disabled-background-color: #{$gray-2};
+    --repo-button-disabled-opacity: 1.0;
+    --repo-button-primary-color: #{$brand-white};
+    --repo-button-primary-background-color: #{$brand-purple};
+    --repo-button-green-color: #{$brand-white};
+    --repo-button-green-background-color: #{$green};
+    --repo-button-icon-opacity: 1.0;
+
+    background-color: $gray-1;
+    border-bottom: var(--pane-border-style);
+    padding: 0.35em 0.5em;
+
+    &.dark {
+      --repo-button-active-color: #{almost-black};
+      --repo-button-active-background-color: #{$gray-1};
+      --repo-button-disabled-color: #{$almost-black};
+      --repo-button-disabled-background-color: #{$gray-4};
+      --repo-button-disabled-opacity: 1.0;
+      --repo-button-primary-color: #{$brand-white};
+      --repo-button-primary-background-color: #{$brand-highlight};
+      --repo-button-green-color: #{$brand-white};
+      --repo-button-green-background-color: #{$go-green};
+      --repo-button-icon-opacity: 1.0;
+
+      background-color: $left-nav-background;
+    }
+
+    .ui.button {
+      align-self: flex-start !important;
+
+      font-weight: 700;
+      color: var(--repo-button-active-color);
+      background-color: var(--repo-button-active-background-color);
+
+      &.primary {
+        color: var(--repo-button-primary-color);
+        background-color: var(--repo-button-primary-background-color) !important;
+      }
+
+      &.disabled {
+        color: var(--repo-button-disabled-color);
+        background-color: var(--repo-button-disabled-background-color);
+        opacity: var(--repo-button-disabled-opacity) !important;
+      }
+
+      &.green {
+        color: var(--repo-button-green-color) !important;
+        background-color: var(--repo-button-green-background-color) !important;
+      }
+
+      .icon {
+        opacity: var(--repo-button-icon-opacity);
+      }
+    }
+
+    .top-pane-label {
+      color: var(--text-color);
+      display: block;
+      text-align: center;
+      line-height: 1em;
+      padding-top: 0.35em;
+    }
+
+    .sync-button {
+      &.primary {
+        color: $brand-black !important;
+        background: linear-gradient(var(--repo-button-active-background-color) 0%,
+            var(--repo-button-active-background-color) 85%,
+            var(--repo-button-primary-background-color) 85%,
+            var(--repo-button-primary-background-color) 100%,
+          ) !important;
+      }
+
+      &.secondary {
+        background: linear-gradient(var(--repo-button-active-background-color) 0%,
+            var(--repo-button-active-background-color) 85%,
+            $warn-orange 85%,
+            $warn-orange 100%,
+          ) !important;
+      }
+    }
+  }
+
+  .log-container {
+    width: 100%;
+
+    &.expanded {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .menu {
+      min-height: 0;
+      margin-bottom: 0;
+      margin-top: 0;
+      border-radius: 0;
+      flex-shrink: 0;
+
+      .item {
+        height: 1em;
+        line-height: 1em;
+
+        .button.close-tab {
+          color: var(--text-color) !important;
+          margin: 0 0 0 0.5em;
+          padding: 0;
+          line-height: 0.75em;
+          box-shadow: none; // semantic uses box-shadow for border
+
+          &:hover {
+            color: var(--text-inverted-color) !important;
+          }
+        }
+      }
+    }
+
+    .log-list-container {
+      flex-grow: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+
+      .command-form {
+        font-family: $editor-monospace;
+        font-size: $console-font-size;
+        background-color: $brand-white;
+        flex-grow: 1;
+        position: relative;
+
+        &:before {
+          content: '\203A';
+          position: absolute;
+          padding: 0.1em 0.3em;
+          font-size: 15px;
+          pointer-events: none;
+        }
+
+        textarea {
+          border-top: var(--pane-border-style);
+          padding: 0.25em;
+          padding-left: 1.5em; // consistent with .log-item.log
+          resize: none;
+          height: 100%;
+          width: 100%;
+          display: block;
+        }
+
+        &.dark {
+          background-color: $brand-alt-black;
+        }
+      }
+
+      .log-list {
+        margin: 0;
+        padding: 0;
+        flex: none;
+        min-height: 0;
+        background-color: $moonlight;
+        color: $brand-black;
+
+        * {
+          font-family: $editor-monospace;
+          font-size: $console-font-size;
+        }
+
+        .log-item {
+          line-height: 140%;
+          display: flex;
+          align-items: top;
+          justify-content: space-between;
+          list-style: none;
+          padding: 0.25em 1em 0.25em 0;
+          white-space: pre-wrap;
+          border-left: 2px solid transparent;
+          border-bottom: 1px solid $gray-3;
+
+          .text {
+            white-space: pre-wrap;
+            flex: 1 0 0;
+            word-break: break-all;
+          }
+
+          .time {
+            flex: 0 0 auto;
+          }
+
+          .redundant {
+            border-radius: 30%;
+            padding-left: 0.35em;
+            padding-right: 0.35em;
+            margin-right: 0.5em;
+            color: $brand-black;
+            background-color: $gray-3;
+            max-height: 15px;
+          }
+
+          .log-expander {
+            width: 100%;
+
+            &:focus {
+              outline: auto;
+              outline-color: unset;
+            }
+          }
+
+          &.log {
+            // compensate for not having an icon
+            background: $gray-2;
+            padding-left: 1.85em;
+
+            .text {
+              color: $gray-5;
+            }
+          }
+
+          &.error {
+            border-bottom: 1px solid $editor-red;
+            background-color: $error-red;
+
+            &:before {
+              padding-right: 0.6em;
+              padding-left: 0.25em;
+              content: "\f057";
+              font-family: Icons;
+              color: $editor-red;
+            }
+
+            .redundant {
+              background-color: $editor-red;
+            }
+
+            .text {
+              color: $dark-red;
+            }
+          }
+
+          &.warn {
+            border-bottom: 1px solid $mango;
+            background-color: $warning-yellow;
+
+            &:before {
+              padding-right: 0.5em;
+              padding-left: 0.25em;
+              content: "\f071";
+              font-family: Icons;
+              color: $mango;
+            }
+
+            .redundant {
+              background-color: $mango;
+            }
+
+            .text {
+              color: $dark-yellow;
+            }
+          }
+
+          &.success {
+            border-left: 2px solid $mint;
+
+            .redundant {
+              background-color: $go-green;
+            }
+          }
+        }
+
+        &.dark {
+          background-color: $brand-alt-black;
+          color: $gray-2;
+
+          .log-item {
+            &.log {
+              background: $gray-5;
+
+              .text {
+                color: $gray-2;
+              }
+            }
+
+            &.error {
+              background-color: $dark-red;
+
+              .text {
+                color: $error-red;
+              }
+            }
+
+            &.warn {
+              background-color: $dark-yellow;
+
+              .text {
+                color: $warning-yellow;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .device-menu {
+      .item {
+        border-radius: 0;
+
+        &.active {
+          border-bottom-left-radius: 4px;
+          border-bottom-right-radius: 4px;
+        }
+      }
+    }
+
+    .filter-menu {
+      .sub-filter-menu {
+        border-width: 0 !important;
+
+        .item:first-child {
+          border-top-left-radius: 4px;
+          border-bottom-left-radius: 4px;
+        }
+
+        .item:last-child {
+          border-top-right-radius: 4px;
+          border-bottom-right-radius: 4px;
+        }
+      }
+
+      .item>.input input {
+        padding-top: 0.25em;
+        padding-bottom: 0.25em;
+      }
+
+      .ui.checkbox {
+
+        label:before,
+        label:after {
+          border-radius: 30%;
+        }
+
+        label {
+          color: inherit;
+          font-size: $editor-font-size;
+        }
+
+        &.dark {
+
+          label:before,
+          label:after {
+            border: 0px;
+            background: $gray-3;
+          }
+        }
+      }
+    }
+  }
+
+  .footer-pane {
+    line-height: 30px;
+    justify-content: space-between;
+
+    &.dark {
+      background-color: $brand-alt-black;
+      color: $brand-white;
+
+      .log-container {
+        background: $brand-alt-black;
+
+        .menu {
+          background-color: $dark-blue;
+          border-width: 2px;
+          border-top-width: 0;
+
+          .item {
+            margin-right: 1px;
+            color: white;
+
+            &.active {
+              background-color: $gray-5;
+            }
+          }
+        }
+
+        .log-item {
+          background-color: $brand-alt-black;
+
+          .text,
+          .time {
+            color: $gray-2;
+          }
+        }
+      }
+    }
+  }
+
+  .horizontal-flex:not(.Pane) {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+  }
+
+  .vertical {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .scrollable-pane-container {
+    flex: 1 0 0;
+  }
+
+  .left-pane {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    --log-container-resizer-color: #8083A280;
+
+    .file-browser {
+      width: inherit;
+      height: inherit;
+      position: relative;
+      padding: 0.25em 0;
+      border-right: var(--pane-border-style);
+      transition: 1s background-color;
+      color: var(--file-list-heading-color);
+      background-color: var(--pane-background);
+
+      background-color: var(--pane-background);
+
+      &.active {
+        --pane-background: var(--upload-background);
+      }
+    }
+  }
+
+  .upload-prompt {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding: 2em;
+    text-align: center;
+    transition: 1s background-color;
+    border-top: var(--file-list-heading-border-color);
+    color: var(--file-list-heading-color);
+    background-color: var(--pane-background);
+
+    &.active {
+      --pane-background: var(--upload-background);
+    }
+
+    &.dark {
+      .drop-instructions p {
+        color: white;
+      }
+    }
+  }
+
+  .pane-segment>.ui.header:first-child {
+    margin-top: 5px !important;
+  }
+
+  .main-pane {
+    flex: 1 0 0;
+    min-width: 0;
+    display: flex;
+    color: var(--status-bar-color);
+    flex-direction: column;
+    min-height: 0;
+
+    .command-text {
+      color: var(--command-text-color);
+      flex: 1 0 0;
+      overflow: hidden;
+
+      span {
+        display: flex;
+      }
+
+      input {
+        border: none;
+        background: none;
+        color: inherit;
+        outline: none;
+        width: 100%;
+      }
+    }
+
+    .markdown-button-bar {
+      position: absolute;
+      right: 10px;
+      float: right;
+      z-index: 1;
+      top: 10px;
+    }
+
+    .markdown-preview {
+      border-style: hidden;
+      overflow: auto;
+      margin-top: 0px;
+      border-radius: 0px;
+      padding-top: 5px;
+      color: $brand-black;
+      flex: 1 0 0;
+
+      &::-webkit-scrollbar-corner {
+        background: rgba(0, 0, 0, .1);
+      }
+
+      a {
+        color: $brand-highlight;
+      }
+
+      &.dark {
+        background-color: $dark-blue;
+        color: $brand-white;
+      }
+    }
+
+    .markdown-btn-dark {
+      border-color: $brand-highlight;
+      border-width: 2px;
+      border-style: solid;
+      background-color: $dark-blue;
+      color: $brand-white;
+
+      &.icon {
+        color: $brand-white;
+      }
+    }
+
+    .markdown-btn-light {
+      border-color: $brand-highlight;
+      border-width: 2px;
+      border-style: solid;
+      background-color: $brand-white;
+    }
+  }
+
+  .hoverable {
+    &:hover {
+      background-color: $gray-1;
+
+      .on-hover {
+        display: unset;
+      }
+    }
+
+    &.active {
+      background-color: $gray-2;
+    }
+  }
+
+  .app-file-list {
+    padding: 0.5em 0 1em 0;
+    height: 100%;
+    overflow-y: scroll;
+    border-bottom: var(--file-list-heading-border-color);
+  }
+
+  .file-list-heading {
+    display: flex;
+    align-items: center;
+    top: 0;
+    width: 100%;
+    line-height: 1.5em;
+    transition: 1s background-color;
+    color: var(--file-list-heading-color);
+    border-bottom: var(--file-list-heading-border-color);
+    background-color: var(--pane-background);
+
+    &:not(.no-padding) {
+      padding: 0.25em 0 0.25em 0;
+    }
+
+    .file-list-heading-text {
+      width: 100%;
+      margin: 0;
+      color: var(--file-list-heading-color);
+      font-family: $system-font-family;
+      font-weight: $system-font-weight;
+      font-size: $system-font-size;
+    }
+  }
+
+  .file-list-bar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0.5em 0.75em 0 0.5em;
+
+    .file-list-title {
+      flex: 0 0 auto;
+      margin: 0;
+      padding: 0.5em 0 0.5em 0.5em;
+      color: var(--file-list-title-color);
+      line-height: 1.5em;
+      font-family: $system-font-family;
+      font-weight: $system-font-weight;
+      font-size: $system-font-size;
+      user-select: none;
+    }
+
+    .file-list-subtitle {
+      margin-left: 0.5em;
+      opacity: 1.0;
+      color: var(--file-list-subtitle-color);
+      flex: 0 0 auto;
+      font-family: $system-font-family;
+      font-weight: $system-font-weight;
+      font-size: $system-font-size;
+    }
+
+    .right-actions {
+      flex: 1 0 0;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+  }
+
+  .tab-bar::-webkit-scrollbar-thumb {
+    background-color: var(--scrolltrack-color);
+  }
+
+  .tab-bar::-webkit-scrollbar-track {
+    background-color: var(--scrolltrack-color);
+  }
+
+  .tab-bar {
+    font-weight: 700;
+    overflow-x: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-color) var(--scrolltrack-color);
+    min-height: 36px !important;
+
+    &.dark {
+      background-color: $almost-black;
+      color: white;
+    }
+
+    &:hover::-webkit-scrollbar-thumb {
+      background-color: var(--scrollbar-color);
+    }
+  }
+
+  .clickable {
+    cursor: pointer;
+  }
+
+  .switchable-main {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .button-bar {
+    margin-top: 0em !important;
+    display: flex;
+    flex-direction: row;
+    align-items: top;
+
+    &.center {
+      flex-direction: column;
+    }
+
+    &.left {
+      justify-content: flex-start;
+    }
+
+    &.right {
+      justify-content: flex-end;
+
+      // fix the weird margin for right arrow
+      .arrow.right.icon {
+        margin: 0 0.42em 0 -.21em !important;
+      }
+
+      // Fix weird clipping with cloud upload
+      .cloud.upload.icon {
+        width: 1em;
+      }
+    }
+
+    &.center {
+      justify-content: center;
+    }
+
+    &.compact {
+      flex-grow: 0;
+    }
+
+    >.label {
+      margin: auto 5px auto 0;
+    }
+  }
+
+  .file-icon {
+    width: 16px;
+    margin-right: 0.5em;
+    vertical-align: sub;
+    filter: var(--icon-filter);
+  }
+
+  .measure-container {
+    overflow: hidden;
+  }
+
+  .main-view {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    overflow: hidden;
+
+    >.scrollable-pane-container {
+      min-height: 0;
+    }
+  }
+
+  // NOTE(christoph): "Resizer" is from the SplitPane component
+  .Resizer.horizontal {
+    transition: border-color 0.5s linear;
+    z-index: 10;
+    box-sizing: content-box;
+    background-color: var(--log-container-resizer-color);
+
+    &:hover {
+      background-color: var(--log-container-resizer-hover-color);
+    }
+
+    background-clip: content-box;
+    border-top: var(--log-container-resizer-buffer) solid transparent;
+    border-bottom: var(--log-container-resizer-buffer) solid transparent;
+    margin: calc(-1 * var(--log-container-resizer-buffer)) 0;
+    height: var(--log-container-resizer-height);
+    width: 100%;
+    cursor: row-resize;
+  }
+
+  .Resizer.horizontal:hover {
+    border-color: #0002;
+  }
+
+  .Resizer.vertical {
+    transition: border-color 0.5s linear;
+    z-index: 10;
+    box-sizing: content-box;
+    background-clip: content-box;
+    background-color: var(--left-pane-resizer-color);
+    height: 100%;
+    width: var(--left-pane-resizer-width);
+    cursor: col-resize;
+  }
+
+  .Resizer.vertical:hover {
+    background-color: var(--left-pane-resizer-highlight-color);
+  }
+
+  .Pane1.horizontal {
+    scrollbar-track-color: var(--pane-background);
+  }
+
+  .Pane2.vertical {
+    overflow: hidden;
+  }
+
+  .tab-hide-close {
+    cursor: pointer;
+    float: right;
+    padding: 0.25em;
+    color: var(--text-color);
+  }
+
+  .find-file-icon {
+    cursor: pointer;
+    float: right;
+    color: var(--text-color);
+  }
+
+  .error-message .content * {
+    color: $gray-5;
+  }
+
+  // .studio-editor
+}
+
+.expand-2 {
+  flex: 2 0 0;
+}
+
+.expand-1 {
+  flex: 1 0 0;
+}
+
+.commit-crumb {
+  strong {
+    // color: $cherry;
+    margin-right: 0.25em;
+  }
+}
+
+.file-list {
+
+  &,
+  ul,
+  li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .file-bar {
+    cursor: pointer;
+    text-overflow: ellipsis;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    color: var(--file-list-item-color);
+
+    &:hover,
+    &:focus {
+      color: var(--file-list-item-hover-color);
+      background: var(--file-list-item-hover-background);
+    }
+
+    &:not(.no-padding) {
+      padding: 0.05em 0.75em 0.05em 0.5em;
+    }
+
+    .options-dropdown:not(.active) {
+      visibility: hidden;
+    }
+
+    &:hover {
+      .options-dropdown {
+        visibility: initial;
+      }
+    }
+
+    &.new-item {
+      padding-right: 4em;
+    }
+
+    .file-name {
+      white-space: nowrap;
+      flex: 1 0 0;
+      font-family: $system-font-family;
+      font-weight: $system-font-weight;
+      font-size: $system-font-size;
+
+      &:not(.edit) {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      &.edit {
+        display: flex;
+        align-items: stretch;
+
+        .file-input {
+          flex: 1 0 0;
+          z-index: 10;
+          padding: 0.125em;
+          margin: calc(-0.125em - 1px);
+          border: 1px solid $gray-3;
+          border-radius: 0.125em;
+          background-color: var(--file-list-new-item-background-color);
+        }
+      }
+    }
+
+    .status .icon {
+      font-size: 0.75em;
+    }
+  }
+
+  .file-list-item {
+    user-select: none;
+
+    &.active {
+      >.file-bar {
+        color: var(--file-list-item-active-color);
+        background: var(--file-list-item-active-background);
+
+        .options-dropdown {
+          visibility: initial;
+        }
+      }
+    }
+  }
+
+  .folder {
+    ul {
+      border-left: 2px solid $gray-2;
+      margin-left: 1em;
+      padding-left: 0.5em;
+    }
+  }
+
+  // Special padding for root items
+  >.file-list-item {
+    >.file-bar {
+      &:not(.no-padding) {
+        padding-left: 1em;
+      }
+    }
+
+    &.folder {
+      >ul {
+        margin-left: 1.5em;
+      }
+    }
+  }
+}
+
+.editor-container {
+  width: 100%;
+  height: 70vh;
+}
+
+// NOTE(christoph): This weirdness is needed to allow the options dropdown exanding items to show
+.options-dropdown.ui.dropdown {
+  &>.menu {
+    right: unset !important;
+    top: 0 !important;
+    transform: translate(calc(-100% + (1em + 12px)), 0.5em);
+    z-index: 15;
+  }
+
+  // NOTE(wayne): This prevents horizontal scrollbar from appearing when option submenu is clicked
+  & .left.menu {
+    margin-right: 0 !important;
+  }
+}
+
+.loading-progress {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60%;
+  max-width: 600px;
+
+  .progress-message {
+    padding-bottom: 1em;
+    text-align: center;
+    color: var(--text-color);
+  }
+
+  .ui.purple.progress .bar {
+    background: $pop-gradient;
+
+    .progress {
+      color: $brand-white;
+    }
+  }
+}
+
+.ui.modal {
+  &.dark {
+    color: $brand-white;
+    background-color: $gray-5;
+
+    .header {
+      color: inherit;
+      background-color: inherit;
+    }
+
+    .ui.button {
+      &.primary {
+        background-color: $brand-highlight;
+      }
+
+      &.deemphasized-button {
+        color: inherit;
+      }
+    }
+  }
+
+  &.form-modal {
+    h2 {
+      text-align: center;
+    }
+
+    .content>p {
+      margin-bottom: .75em;
+      margin-top: .75em;
+      overflow-wrap: anywhere;
+    }
+
+    &.dark {
+      .header {
+        border-color: $brand-black;
+      }
+
+      .content {
+        color: inherit;
+        background-color: inherit;
+
+        .form .field>label {
+          color: $brand-white;
+          background-color: inherit;
+        }
+
+        .form .field .ui.input input {
+          color: $brand-white;
+          background-color: inherit;
+          border-color: $gray-4;
+        }
+      }
+
+      .actions {
+        color: inherit;
+        background-color: inherit;
+        border-top-color: $brand-black;
+      }
+    }
+  }
+}
+
+.publish-modal {
+  overflow: hidden;
+
+  --background-color: #{$brand-white};
+  --accent-background: #{$moonlight};
+
+  &.dark {
+    --background-color: #{$gray-5};
+    --accent-background: #{$dark-blue};
+    color: $brand-white;
+  }
+
+  background-color: var(--background-color);
+
+  h2+p,
+  .editor-heading-message {
+    padding: 0.5em 1.5em;
+    text-align: center;
+  }
+
+  .ui.form {
+    margin-top: 2em;
+
+    .scrollable-commit-list {
+      max-height: 30vh;
+      overflow-y: auto;
+
+      table {
+        width: 100%;
+        table-layout: fixed;
+        position: relative;
+
+        &,
+        tr,
+        th,
+        td {
+          border: none;
+          border-spacing: 0;
+        }
+
+        td,
+        th {
+          padding: 0.5em;
+
+          &.commit {
+            width: 7em;
+          }
+
+          &.radio {
+            text-align: center;
+            width: 7em;
+          }
+
+          &.date {
+            width: 15em;
+          }
+        }
+
+        thead {
+          th {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background-color: var(--accent-background);
+          }
+        }
+
+        tbody {
+          tr {
+            border-radius: 50%;
+
+            td {
+              white-space: nowrap;
+              text-overflow: ellipsis;
+              overflow: hidden;
+
+              &:first-of-type {
+                padding-left: 0.5em;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.error-modal {
+  overflow: hidden;
+
+  --background-color: #{$brand-white};
+  --accent-color: #{$eggshell};
+
+  &.dark {
+    --background-color: #{$gray-5};
+    --accent-color: #{$dark-blue};
+    color: $brand-white;
+  }
+
+  background-color: var(--background-color) !important;
+
+  h1 {
+    text-align: center;
+    margin-top: 1em;
+  }
+
+  p {
+    padding: 1em;
+    margin: 0;
+    text-align: center;
+  }
+
+  .msg {
+    color: $cherry;
+  }
+
+  .buttons {
+    text-align: center;
+  }
+
+  padding-bottom: 1em;
+}
+
+.editor-monospace {
+  font-family: $editor-monospace;
+}
+
+.asset-bundle-modal {
+
+  .split-header {
+    margin-bottom: 0.5rem;
+  }
+
+  .inline {
+    display: inline;
+  }
+
+  .learn-more {
+    float: right;
+  }
+
+  .pane {
+    position: relative;
+    height: 20em;
+    border: 2px solid #0005;
+
+    &.upload {
+      border-style: dashed;
+
+      label {
+        cursor: pointer;
+      }
+    }
+
+    &.file {
+      overflow: auto;
+    }
+  }
+
+  .form-controls {
+    @media screen and (min-width: $mobile-width-breakpoint + 1px) {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-gap: 1rem;
+      grid-template-areas:
+        "input1 input2 buttons";
+      align-items: end;
+
+      .field {
+        margin-bottom: 0;
+      }
+    }
+
+    .buttons {
+      text-align: right;
+      grid-area: buttons;
+    }
+  }
+
+  .centered-parent {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    display: grid;
+    grid-template-columns: 1fr minmax(10em, 20em) 1fr;
+    grid-template-rows: 1fr auto 1fr;
+
+    .centered {
+      grid-area: 2 / 2 / 3 / 3;
+      text-align: center;
+
+      .ui.purple.progress .bar {
+        background: $pop-gradient;
+
+        .progress {
+          color: $brand-white;
+        }
+      }
+    }
+  }
+}
+
+.read-only-indicator {
+  position: absolute;
+  right: 1.5rem;
+  bottom: 0.5rem;
+  z-index: 10;
+  pointer-events: none;
+  color: var(--text-color, inherit);
+}
+
+
+.studio-editor.dark {
+  .themed-field {
+    color: var(--text-color, inherit);
+
+    input {
+      background: $dark-blue !important;
+      color: var(--text-color, inherit);
+      border: none !important;
+    }
+
+    .labeled {
+      .basic.label {
+        color: var(--text-color, inherit);
+        background: $dark-blue;
+        border: none;
+      }
+    }
+
+    .ui.selection.dropdown {
+      color: var(--text-color);
+      background: $dark-blue;
+      border: none;
+      vertical-align: sub;
+
+      .menu {
+        background: $dark-blue;
+        border-color: transparent;
+
+        .item {
+          border-top: none;
+
+          &:hover {
+            background-color: #fff1;
+          }
+        }
+      }
+
+      .text {
+        color: var(--text-color);
+      }
+    }
+  }
+}
+
+/*
+ * We're using a library called react-sortable-hoc for displaying and organzing our file tabs.
+ * This library creates a new tab element and appends it to the end of <body> whenever a tab is
+ * dragged. Consequently, in order for .editor-file-tab to receive styling it cannot be scoped
+ * under any any parent selectors.
+ */
+.editor-file-tab {
+  --background-opacity: 1;
+  font-weight: 700;
+  padding: 7px 10px;
+  cursor: pointer;
+  white-space: nowrap;
+  border-top: 2px solid #00000000;
+  background-color: rgba($moonlight, var(--background-opacity));
+  color: rgba($brand-black, var(--background-opacity));
+  display: flex;
+
+  &.dragged {
+    --background-opacity: 0.75;
+    z-index: 100; // dragged tabs should always be on top
+  }
+
+  &.active {
+    background-color: rgba($brand-white, var(--background-opacity));
+    border-top-color: $mint;
+  }
+
+  &.ephemeral {
+    font-style: italic;
+  }
+
+  &.deleted {
+    text-decoration: line-through;
+    color: #ff4747 !important;
+  }
+
+  &.dirty:before {
+    content: '\2022';
+    margin-right: 0.35em;
+  }
+
+  .icon {
+    font-size: 0.8em;
+  }
+
+  .status-icon {
+    width: 0.8em;
+  }
+
+  .file-path {
+    padding: 0 0.5em 0 0.375em;
+  }
+
+  .close-button {
+    display: flex;
+    width: 1em;
+    justify-content: center;
+
+    .icon {
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+    }
+
+    .circle.icon {
+      font-size: 0.62em;
+      vertical-align: text-top;
+      margin-left: .85em;
+    }
+  }
+
+  &.dark {
+    color: rgba($brand-white, var(--background-opacity));
+    background-color: rgba($dark-blue, var(--background-opacity));
+    border-right-color: $almost-black;
+    border-right-width: 1px;
+    margin-right: 1px;
+
+    &.active {
+      background-color: rgba($dark-blue, var(--background-opacity));
+      border-top-color: $brand-highlight;
+      border-top-width: 3px;
+    }
+
+    &.icon {
+      background-color: rgba($almost-black, var(--background-opacity));
+    }
+  }
+}
+
+.lil-gui.root {
+  border-radius: 0px 0px 0px 10px;
+  right: 0px !important;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.lil-gui {
+  border-radius: 0px 0px 0px 10px;
+  --background-color: var(--asset-metadata-background);
+  --text-color: var(--asset-metadata-color);
+  --title-text-color: var(--lil-gui-title-text-color);
+  --title-background-color: unset;
+  --widget-color: var(--lil-gui-widget-color);
+  --hover-color: #686b8d;
+  --focus-color: var(--asset-metadata-background);
+  --number-color: var(--asset-metadata-color);
+  --string-color: var(--asset-metadata-color);
+  max-height: 100%;
+}

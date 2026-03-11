@@ -1,0 +1,11 @@
+{
+  "button.login_email": "Continuar con el correo electrónico",
+  "description": "Acceda a su cuenta de 8th Wall",
+  "heading": "Bienvenidos de nuevo!",
+  "label.email": "Correo electrónico",
+  "login_error.account_missing": "No pudimos encontrar ninguna cuenta de 8th Wall con esta información. <signUpLink>Regístrate</signUpLink> o prueba otra forma de iniciar sesión.",
+  "login_error.incorrect_email_password": "Lo sentimos, hay un problema con su inicio de sesión. Por favor, vuelva a comprobar su correo electrónico y contraseña.",
+  "login_error.invalid_login_token": "El enlace de acceso proporcionado no es válido o ha caducado. Por favor, inténtelo de otra forma.",
+  "login_options.divider_text": "O",
+  "sign_up": "¿Eres nuevo aquí? <newAccountLink>Regístrate</newAccountLink>"
+}

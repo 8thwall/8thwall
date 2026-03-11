@@ -1345,10 +1345,10 @@ npm_package(
 )
 
 npm_package(
-    name = "npm-studiohub",
+    name = "npm-desktop",
     export_zip = True,
-    package = "//reality/cloud/studiohub:package.json",
-    package_lock = "//reality/cloud/studiohub:package-lock.json",
+    package = "//apps/desktop:package.json",
+    package_lock = "//apps/desktop:package-lock.json",
 )
 
 npm_package(

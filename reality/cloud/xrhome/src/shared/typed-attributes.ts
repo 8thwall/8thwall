@@ -1,0 +1,1 @@
+../../../../shared/typed-attributes.ts

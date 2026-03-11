@@ -1,0 +1,5 @@
+{
+  "create_login_token.error.exceeded_token_limit": "Sie haben die maximale Anzahl von Login-Links überschritten. Bitte versuchen Sie es später noch einmal.",
+  "create_login_token.error.invalid_user_session": "Es ist ein Fehler aufgetreten. Bitte melden Sie sich erneut an, um einen neuen Anmeldelink zu erstellen.",
+  "create_login_token.error.unexpected": "Es ist ein unerwarteter Fehler aufgetreten. Bitte versuchen Sie es später noch einmal."
+}
