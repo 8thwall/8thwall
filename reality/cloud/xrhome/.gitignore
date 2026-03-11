@@ -1,0 +1,21 @@
+dist/**
+desktop-dist/**
+server-dist/**
+ui-dist/**
+node_modules/**
+npm-debug.log
+console-server.zip
+migration-sql.*.gz
+.env
+src/client/static/semantic
+semantic/dist
+production/
+coverage/
+.nyc_output/
+storybook-static/
+
+.ts-baseline.txt
+
+# Contains login state used when testing against rc. Do NOT commit.
+playwright/.auth
+playwright-report/

@@ -1,0 +1,104 @@
+$font-size: 14px;
+
+// Colors from go/brand
+$brand-purple: #7611b6;
+$brand-highlight: #ad50ff; // A lighter purple
+$brand-black: #2d2e43;
+$brand-alt-black: #2c2d41;
+$brand-white: #ffffff;
+$brand-pop: #c86dd7;
+$brand-light: #f4f0f8;
+$pop-gradient: linear-gradient(-75deg, $brand-pop, $brand-purple);
+
+$gray-1: #ebebf1; // Lightest
+$gray-2: #d5d7e4;
+$gray-3: #b5b8d2;
+$gray-4: #8083a2;
+$gray-5: #464766;
+$gray-6: #3a3b55; // Darkest
+
+$dark-blue: #1c1d2a;
+$almost-black: #101118;
+
+$dusty-violet: #d9d0e3;
+$eggshell: #f2f1f3;
+$moonlight: #f9f9fa;
+
+$mango: #ffc700;
+$cherry: #dd0065;
+$mint: #00edaf;
+$green: #4cd964;
+$orange: #ff9500;
+$dark-red: #450005;
+$sky-blue : #b2ddfa;
+$black: #000000;
+$blueberry: #57bfff;
+$dark-blueberry: #408cba;
+
+// Editor colors
+$go-green: #4cd964;
+$disabled-gray: #9d9d9d;
+$danger-red: #d0021b;
+$warn-orange: #ff9500;
+$editor-red: #ff0f19;
+$editor-blue: #59c8fa;
+$error-red: #ff9fa2;
+$warning-yellow: #ffecab;
+$dark-yellow: #544500;
+
+// Colors for diff-merge-land line highlighting
+$diff-line-deletion: #4c232d;
+$diff-line-addition: #1f482f;
+$diff-line-modification: #c4a5598f;
+$diff-line-conflict: #c4a5598f;
+$diff-line-conflict-body: #c4a5594c;
+$diff-line-furled: $brand-black;
+$diff-line-furled-highlight: $gray-4;
+
+// Color variables used by Semantic UI
+$red: $cherry;
+$green: $mint;
+$yellow: $mango;
+
+// Margins and such
+$top-menu-height: 44px;
+$pusher-horizontal-padding: 45px;
+
+// Largest width that is rendered with a mobile view.
+// A mobile-only rule would use max-width: 1024px
+// A desktop-only rule would use min-width: 1025px
+$tiny-width-breakpoint: 515px;
+$mobile-width-breakpoint: 1024px;
+
+$text-color: $gray-5;
+$main-background-color: #fafafb;
+$left-nav-background: #2d2e43;
+
+$light-text: #8184a3;
+$dark-background: #20292e;
+$dark-background-2: #2f3940;
+$dark-background-3: #262e34;
+$dark-background-4: #29292b;
+$dark-background-5: #323232;
+$light-background-2: #d7d7d7;
+$light-background-1: #f0f1f1;
+
+$light-gray: #33445511;
+
+$card-image-ratio: 52.5%;
+
+$card-shadow-blur: 14px;
+$card-shadow-spread: 4px;
+$card-shadow-color: rgba(70, 71, 102, 0.15);
+
+$console-font-size: 11px;
+
+$editor-monospace: 'Menloish', monospace;
+$editor-font-size: 12px;
+
+$system-font-family: -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', sans-serif;
+$system-font-weight: 500;
+$system-font-size: 13px;
+
+$centered-section-max-width: 70em;
+$centered-section-margin: 1.5rem;

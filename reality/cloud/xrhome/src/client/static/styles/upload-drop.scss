@@ -1,0 +1,56 @@
+@import 'settings';
+
+.upload-drop {
+  border: 3px dashed #e3e2e4;
+  border-radius: 0.5rem;
+  position: relative;
+  padding: 1rem;
+
+  &.centered {
+    text-align: center;
+  }
+
+  &.clickable {
+    cursor: pointer;
+  }
+
+  .drop-message {
+    display: none;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    color: darkgrey;
+    pointer-events: none;
+  }
+  .drop-instructions {
+    margin-top: 7px;
+  }
+
+  &.hovering {
+    background: repeating-linear-gradient(45deg, #fff, #fff 10px, $light-gray 10px, $light-gray 20px);
+
+    .drop-message {
+      display: block;
+    }
+
+    .drop-target {
+      opacity: 0;
+      pointer-events: none;
+    }
+  }
+
+  h3.ui.header {
+    color: $gray-5;
+    margin: 0.2em 0;
+  }
+
+  p {
+    font-size: 0.95em;
+  }
+
+  .drop-error-message {
+    color: $mango;
+    text-align: center;
+  }
+}

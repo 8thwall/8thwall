@@ -1,0 +1,53 @@
+// Note(Dale): This file are for component names as they appear on scene graph. Some components
+// like imageTarget are used in the runtime as image-target for the ecs attribute name.
+
+const GEOMETRY_COMPONENT = 'geometry'
+const MATERIAL_COMPONENT = 'material'
+const GLTF_MODEL_COMPONENT = 'gltfModel'
+const SPLAT_COMPONENT = 'splat'
+const LOCATION_COMPONENT = 'location'
+const MAP_COMPONENT = 'map'
+const MAP_POINT_COMPONENT = 'mapPoint'
+const FACE_COMPONENT = 'face'
+const CAMERA_COMPONENT = 'camera'
+const SHADOW_COMPONENT = 'shadow'
+const HIDDEN_COMPONENT = 'hidden'
+const LIGHT_COMPONENT = 'light'
+const AUDIO_COMPONENT = 'audio'
+const VIDEO_COMPONENT = 'videoControls'
+const IMAGE_TARGET_COMPONENT = 'imageTarget'
+const COLLIDER_COMPONENT = 'collider'
+const UI_COMPONENT = 'ui'
+
+const MESH_COMPONENTS = [
+  GEOMETRY_COMPONENT, MATERIAL_COMPONENT, GLTF_MODEL_COMPONENT, SPLAT_COMPONENT,
+  SHADOW_COMPONENT, HIDDEN_COMPONENT,
+]
+
+const POSITION_COMPONENT = 'position'
+const ROTATION_COMPONENT = 'rotation'
+const SCALE_COMPONENT = 'scale'
+
+export {
+  GEOMETRY_COMPONENT,
+  MATERIAL_COMPONENT,
+  GLTF_MODEL_COMPONENT,
+  SPLAT_COMPONENT,
+  LOCATION_COMPONENT,
+  MAP_COMPONENT,
+  MAP_POINT_COMPONENT,
+  FACE_COMPONENT,
+  CAMERA_COMPONENT,
+  SHADOW_COMPONENT,
+  HIDDEN_COMPONENT,
+  MESH_COMPONENTS,
+  LIGHT_COMPONENT,
+  AUDIO_COMPONENT,
+  VIDEO_COMPONENT,
+  IMAGE_TARGET_COMPONENT,
+  COLLIDER_COMPONENT,
+  UI_COMPONENT,
+  POSITION_COMPONENT,
+  ROTATION_COMPONENT,
+  SCALE_COMPONENT,
+}

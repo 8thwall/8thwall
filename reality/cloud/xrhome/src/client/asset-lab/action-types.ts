@@ -1,0 +1,20 @@
+import type {AssetLabState} from './types'
+
+type Handler = (state: AssetLabState, action: any) => AssetLabState
+
+const AL_GET_ASSET_GENERATIONS = 'AL_GET_ASSET_GENERATIONS'
+const AL_GET_ASSET_REQUESTS = 'AL_GET_ASSET_REQUESTS'
+const AL_UPDATE_ASSET_GENERATION_METADATA = 'AL_UPDATE_ASSET_GENERATION_METADATA'
+
+type ActionType =
+  typeof AL_GET_ASSET_GENERATIONS
+  | typeof AL_GET_ASSET_REQUESTS
+  | typeof AL_UPDATE_ASSET_GENERATION_METADATA
+
+export {
+  ActionType,
+  Handler,
+  AL_GET_ASSET_GENERATIONS,
+  AL_GET_ASSET_REQUESTS,
+  AL_UPDATE_ASSET_GENERATION_METADATA,
+}

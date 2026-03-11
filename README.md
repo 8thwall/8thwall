@@ -18,6 +18,7 @@ If any questions come up, please refer to our [documentation](https://8th.io/doc
 
 ### Apps
 
+- [Desktop](./apps/desktop/README.md) - Desktop app supporting 3D Game Development
 - [image-target-cli](./apps/image-target-cli/README.md) - Process image targets for use in the engine
 
 ### Packages
@@ -29,7 +30,7 @@ If any questions come up, please refer to our [documentation](https://8th.io/doc
 
 ### More coming soon!
 
-We're working to bring additional features into the open, like the desktop app, native app export, and more! In the meantime, the [8th Wall Archive](https://github.com/8thwall/archive) has been published for code that hasn't yet been absorbed into this repo.
+We're working to bring additional features into the open. In the meantime, the [8th Wall Archive](https://github.com/8thwall/archive) has been published for code that hasn't yet been absorbed into this repo.
 
 ## Contributing
 

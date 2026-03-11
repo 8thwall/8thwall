@@ -1,0 +1,11 @@
+{
+  "button.login_email": "Continuer avec l'email",
+  "description": "Connectez-vous à votre compte 8th Wall",
+  "heading": "Bienvenue !",
+  "label.email": "Courriel",
+  "login_error.account_missing": "Nous n'avons pas trouvé de comptes 8th Wall contenant cette information. <signUpLink>Inscrivez-vous sur</signUpLink> ou essayez de vous connecter d’une autre façon.",
+  "login_error.incorrect_email_password": "Nous sommes désolés, il y a un problème avec votre connexion. Veuillez revérifier votre email et votre mot de passe.",
+  "login_error.invalid_login_token": "Le lien de connexion fourni n'est pas valide ou a expiré. Veuillez essayer un autre moyen de vous connecter.",
+  "login_options.divider_text": "OU",
+  "sign_up": "Vous êtes nouveau ici ? <newAccountLink>S'inscrire</newAccountLink>"
+}

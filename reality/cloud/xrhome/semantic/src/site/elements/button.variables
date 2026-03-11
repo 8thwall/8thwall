@@ -1,0 +1,8 @@
+/*******************************
+    User Variable Overrides
+*******************************/
+
+@textColor: #000000;
+@borderRadius: .5em;
+@fontWeight: bold;
+@backgroundColor: #d5d7e4;

@@ -1,0 +1,1 @@
+Niantic VPS offers a generous free tier, allowing developers to make up to 10,000 calls per month without any charges. Once a developer exceeds this limit, they will be billed starting from their 10,001st call in the first month. Billing is invoiced through Niantic Spatial. See [Spatial VPS pricing here](http://8th.io/vps-pricing).

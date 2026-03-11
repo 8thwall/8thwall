@@ -1,0 +1,5 @@
+{
+  "create_login_token.error.exceeded_token_limit": "ログインリンクの最大数を超えました。後でもう一度お試しください。",
+  "create_login_token.error.invalid_user_session": "エラーが発生しました。もう一度ログインして、新しいログインリンクを作成してください。",
+  "create_login_token.error.unexpected": "予期せぬエラーが発生しました。後でもう一度お試しください。"
+}

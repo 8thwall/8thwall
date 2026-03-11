@@ -1,0 +1,5 @@
+{
+  "rules": {
+    "local-rules/hardcoded-copy": "off"
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "create_login_token.error.exceeded_token_limit": "Vous avez dépassé le nombre maximum de liens de connexion. Veuillez réessayer plus tard.",
+  "create_login_token.error.invalid_user_session": "Une erreur s'est produite. Veuillez vous connecter à nouveau pour créer un nouveau lien de connexion.",
+  "create_login_token.error.unexpected": "Une erreur inattendue s'est produite. Veuillez réessayer plus tard."
+}

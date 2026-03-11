@@ -1,0 +1,7 @@
+{
+  "caught_error_page.heading": "Etwas ist schief gelaufen.",
+  "caught_error_page.description": "Wenn dieses Problem weiterhin besteht, wenden Sie sich bitte an <supportLink>support@8thwall.com.</supportLink>",
+  "caught_error_page.not_found": "Nicht gefunden",
+  "caught_error_page.button.show_details": "Details anzeigen",
+  "caught_error_page.client_version.label": "Client-Version:"
+}

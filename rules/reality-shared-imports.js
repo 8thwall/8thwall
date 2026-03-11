@@ -8,6 +8,7 @@ const DISALLOWED_PREFIX = '@repo/reality/shared/'
 const ALLOWED_SUBPATHS = [
   'asset-pointer',
   'convert-case',
+  'desktop',
   'dynamodb',
   'dynamodb-impl',
   'gateway',
@@ -20,7 +21,6 @@ const ALLOWED_SUBPATHS = [
   's3',
   's3-impl',
   'studio',
-  'studiohub',
   'typed-attributes',
 ]
 

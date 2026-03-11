@@ -1,0 +1,15 @@
+{
+  "download_page.badge.beta": "BETA",
+  "download_page.button.download_app_apple_silicon": "Descarga para Apple Silicon",
+  "download_page.button.download_app_intel_v2": "Descargar para Intel",
+  "download_page.button.download_app_windows_x64": "Descargar para x64",
+  "download_page.button.download_app_windows_arm": "Descargar para arm64",
+  "download_page.button.download_vsix": "Descargar archivo .vsix",
+  "download_page.button.download_vscode_extension": "Descargar desde VS Code Marketplace",
+  "download_page.description.download_desktop_app": "Instala 8th Wall localmente para disfrutar de la mejor experiencia de desarrollo",
+  "download_page.heading.download_desktop_app": "Descargar escritorio",
+  "download_page.heading.vscode_extension": "8º Agente de muro VS Extensión de código",
+  "download_page.heading.mac_os": "Mac",
+  "download_page.heading.windows_os": "Windows",
+  "download_page.link.install_vsix": "Cómo instalar archivos .vsix"
+}

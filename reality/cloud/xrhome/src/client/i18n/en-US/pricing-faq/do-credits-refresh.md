@@ -1,0 +1,1 @@
+Credits on a free or paid account refresh monthly. From time to time, 8th Wall may grant promotional credits which expire at the time specified. You can see your available credits and next refresh on your Accounts page. There are no prorations or refunds for unused or expired credits. Credits do not rollover to your next monthly period.

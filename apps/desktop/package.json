@@ -1,0 +1,61 @@
+{
+  "name": "@8thwall/desktop",
+  "version": "1.0.1",
+  "description": "",
+  "main": "app/dist/_start.js",
+  "engines": {
+    "node": "22.x"
+  },
+  "scripts": {
+    "app:build": "./app-build.sh",
+    "app:start": "DEPLOY_STAGE=dev BUILDER_COMMAND=start ./app-package.sh",
+    "app:start:cd-qa": "DEPLOY_STAGE=cd-qa BUILDER_COMMAND=start ./app-package.sh",
+    "app:start:cd-prod": "DEPLOY_STAGE=cd-prod BUILDER_COMMAND=start ./app-package.sh",
+    "app:start:prod": "DEPLOY_STAGE=prod BUILDER_COMMAND=start ./app-package.sh",
+    "make:cd-qa": "DEPLOY_STAGE=cd-qa BUILDER_COMMAND=build ./app-package.sh",
+    "make:cd-prod": "DEPLOY_STAGE=cd-prod BUILDER_COMMAND=build ./app-package.sh",
+    "make:rc-prod": "DEPLOY_STAGE=rc-prod BUILDER_COMMAND=build ./app-package.sh",
+    "make:prod": "DEPLOY_STAGE=prod BUILDER_COMMAND=build ./app-package.sh",
+    "make:prod:mac:x64": "PLATFORM=mac ARCH=x64 DEPLOY_STAGE=prod BUILDER_COMMAND=build ./app-package.sh",
+    "make:prod:win:x64": "PLATFORM=win ARCH=x64 DEPLOY_STAGE=prod BUILDER_COMMAND=build ./app-package.sh",
+    "publish:cd-qa": "DEPLOY_STAGE=cd-qa BUILDER_COMMAND=publish ./app-package.sh",
+    "publish:cd-prod": "DEPLOY_STAGE=cd-prod BUILDER_COMMAND=publish ./app-package.sh",
+    "publish:rc-prod": "DEPLOY_STAGE=rc-prod BUILDER_COMMAND=publish ./app-package.sh",
+    "publish:prod": "DEPLOY_STAGE=prod BUILDER_COMMAND=publish ./app-package.sh",
+    "publish:prod:mac:x64": "PLATFORM=mac ARCH=x64 DEPLOY_STAGE=prod BUILDER_COMMAND=publish ./app-package.sh",
+    "publish:prod:win:x64": "PLATFORM=win ARCH=x64 DEPLOY_STAGE=prod BUILDER_COMMAND=publish ./app-package.sh",
+    "mcp:serve": "bazel run //apps/desktop:mcp-websocket-server",
+    "postinstall": "patch-package",
+    "inliner": "./tools/inliner.sh"
+  },
+  "author": "8th Wall Team",
+  "dependencies": {
+    "archiver": "^7.0.1",
+    "better-sqlite3": "^12.4.1",
+    "chokidar": "^4.0.1",
+    "electron-log": "^5.4.2",
+    "electron-squirrel-startup": "^1.0.1",
+    "electron-updater": "^6.6.2",
+    "express": "^4.21.2",
+    "get-port": "^7.1.0",
+    "handlebars": "^4.7.8",
+    "jszip": "^3.10.1",
+    "mime-types": "^3.0.1",
+    "npm": "^11.5.2",
+    "undici": "^6.21.2",
+    "update-electron-app": "^3.1.1",
+    "ws": "^8.18.1",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/archiver": "^7.0.0",
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/express": "^5.0.0",
+    "@types/mime-types": "^2.1.4",
+    "@types/node": "^20.17.38",
+    "@types/ws": "^8.18.1",
+    "electron": "^38.2.0",
+    "electron-builder": "^26.0.12",
+    "patch-package": "^8.0.0"
+  }
+}

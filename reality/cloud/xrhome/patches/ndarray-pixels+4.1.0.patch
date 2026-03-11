@@ -1,0 +1,114 @@
+diff --git a/node_modules/ndarray-pixels/dist/ndarray-pixels-browser.cjs b/node_modules/ndarray-pixels/dist/ndarray-pixels-browser.cjs
+index 1a88d7a..70612ef 100644
+--- a/node_modules/ndarray-pixels/dist/ndarray-pixels-browser.cjs
++++ b/node_modules/ndarray-pixels/dist/ndarray-pixels-browser.cjs
+@@ -1,3 +1,4 @@
++/* eslint-disable */
+ var ndarray = require('ndarray');
+ var ops = require('ndarray-ops');
+ 
+@@ -16,23 +17,28 @@ function getPixelsInternal(buffer, mimeType) {
+   });
+   var path = URL.createObjectURL(blob);
+   // Decode image with Canvas API.
+-  return new Promise(function (resolve, reject) {
+-    var img = new Image();
+-    img.crossOrigin = 'anonymous';
+-    img.onload = function () {
+-      URL.revokeObjectURL(path);
+-      var canvas = new OffscreenCanvas(img.width, img.height);
+-      var context = canvas.getContext('2d');
+-      context.drawImage(img, 0, 0);
+-      var pixels = context.getImageData(0, 0, img.width, img.height);
+-      resolve(ndarray__default["default"](new Uint8Array(pixels.data), [img.width, img.height, 4], [4, 4 * img.width, 1], 0));
+-    };
+-    img.onerror = function (err) {
+-      URL.revokeObjectURL(path);
+-      reject(err);
+-    };
+-    img.src = path;
+-  });
++  return new Promise((resolve, reject) => {
++    createImageBitmap(blob)
++      .then((imgBitmap) => {
++        URL.revokeObjectURL(path)
++        const canvas = new OffscreenCanvas(imgBitmap.width, imgBitmap.height)
++        const context = canvas.getContext('2d')
++        context.drawImage(imgBitmap, 0, 0)
++        const pixels = context.getImageData(0, 0, imgBitmap.width, imgBitmap.height)
++        resolve(
++          ndarray(
++            new Uint8Array(pixels.data),
++            [imgBitmap.width, imgBitmap.height, 4],
++            [4, 4 * imgBitmap.width, 1],
++            0
++          )
++        )
++      })
++      .catch((err) => {
++        URL.revokeObjectURL(path)
++        reject(err)
++      })
++  })
+ }
+ 
+ function putPixelData(array, data, frame) {
+diff --git a/node_modules/ndarray-pixels/src/browser-get-pixels.ts b/node_modules/ndarray-pixels/src/browser-get-pixels.ts
+index e54d85f..eca5e79 100644
+--- a/node_modules/ndarray-pixels/src/browser-get-pixels.ts
++++ b/node_modules/ndarray-pixels/src/browser-get-pixels.ts
+@@ -1,3 +1,4 @@
++/* eslint-disable */
+ import ndarray from 'ndarray';
+ import type { NdArray } from 'ndarray';
+ 
+@@ -15,28 +16,25 @@ export function getPixelsInternal(
+ 
+ 	// Decode image with Canvas API.
+ 	return new Promise((resolve, reject) => {
+-		const img = new Image();
+-		img.crossOrigin = 'anonymous';
+-		img.onload = function () {
+-			URL.revokeObjectURL(path as string);
+-
+-			const canvas = new OffscreenCanvas(img.width, img.height);
+-			const context = canvas.getContext('2d')!;
+-			context.drawImage(img, 0, 0);
+-			const pixels = context.getImageData(0, 0, img.width, img.height);
+-			resolve(
+-				ndarray(
+-					new Uint8Array(pixels.data),
+-					[img.width, img.height, 4],
+-					[4, 4 * img.width, 1],
+-					0
+-				)
+-			);
+-		};
+-		img.onerror = (err) => {
+-			URL.revokeObjectURL(path as string);
+-			reject(err);
+-		};
+-		img.src = path;
+-	});
++    createImageBitmap(blob)
++      .then((imgBitmap) => {
++        URL.revokeObjectURL(path)
++        const canvas = new OffscreenCanvas(imgBitmap.width, imgBitmap.height)
++        const context = canvas.getContext('2d')!
++        context.drawImage(imgBitmap, 0, 0)
++        const pixels = context.getImageData(0, 0, imgBitmap.width, imgBitmap.height)
++        resolve(
++          ndarray(
++            new Uint8Array(pixels.data),
++            [imgBitmap.width, imgBitmap.height, 4],
++            [4, 4 * imgBitmap.width, 1],
++            0
++          )
++        )
++      })
++      .catch((err) => {
++        URL.revokeObjectURL(path as string)
++        reject(err)
++      })
++  })
+ }

@@ -1,0 +1,1 @@
+Non-Commercial and non-branded experiences can be made with the Basic plan. This plan is great for students, artists, and hobbyists. Basic plan allows for experiences to be created using Niantic Studio, it does not include the Cloud Editor.

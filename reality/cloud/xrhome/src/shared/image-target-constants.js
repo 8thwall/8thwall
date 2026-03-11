@@ -1,0 +1,8 @@
+const DISALLOWED_NAME_CHARACTERS = ['~', '^', '*', ';', '`', '<', '>']
+
+const IMAGE_TESTER_APPKEY = '<REMOVED_BEFORE_OPEN_SOURCING>'
+
+module.exports = {
+  DISALLOWED_NAME_CHARACTERS,
+  IMAGE_TESTER_APPKEY,
+}

@@ -1,0 +1,18 @@
+{
+  "page.button.project_not_appearing": "Das Projekt wird nicht angezeigt?",
+  "page.content.empty_cta": "Öffnen Sie <1>Vorschau</1> im Cloud Editor<br/> und das Projekt wird hier erscheinen",
+  "page.footer.stream_message": "Horchen nach Projekten über das lokale Netzwerk...",
+  "page.footer.wifi_icon.alt": "Wifi-Symbol",
+  "page.linkcard.hmd.connect_controllers": "Steuergeräte anschließen",
+  "page.meta.title": "Link Sharing Seite",
+  "page.meta.description": "8. Wall Head Mount Display Link Sharing Utility Seite",
+  "page.modal.help.how_it_works.title": "Wie funktioniert das?",
+  "page.modal.help.how_it_works.instruction": "<p>Wenn ein Entwickler in einem beliebigen 8th Wall Cloud Editor-Projekt \"Vorschau\" auswählt, wird ein authentifizierter Vorschaulink über das lokale Netzwerk freigegeben und auf dieser Seite angezeigt. Der Vorschaulink bleibt so lange auf dieser Seite, bis der Entwickler das Dropdown-Menü \"Vorschau\" im Cloud Editor schließt.</p> <p> Wenn Ihr Link hier nicht erscheint, vergewissern Sie sich, dass sich Ihr Headset im selben lokalen Netzwerk befindet wie das Gerät, auf dem der Cloud Editor läuft.  </p> ",
+  "page.modal.help.how_to_turn_it_off.title": "Wie kann ich die Vorschau im lokalen Netzwerk deaktivieren?",
+  "page.modal.help.how_to_turn_it_off.instruction": "Wenn Sie nicht möchten, dass Ihre Projektvorschau-Links über Ihr lokales Netzwerk angezeigt werden (z. B. wenn Sie sich in einem öffentlichen WLAN befinden), können Sie diese Funktion deaktivieren, indem Sie das Dropdown-Menü „Vorschau“ im Cloud-Editor öffnen, auf das Headset-Symbol klicken und die Linkfreigabe deaktivieren.",
+  "page.modal.help.project_not_appearing.title": "Das Projekt wird nicht angezeigt?",
+  "page.modal.help.project_not_appearing.instruction": "Wenn Sie Probleme mit dem Netzwerk haben, können Sie sich jederzeit über Ihr Headset in 8th Wall einloggen, um die Links zur Projektvorschau zu öffnen.",
+  "page.modal.help.project_not_appearing.step1": "Melden Sie sich mit Ihrem Headset auf <1>8thwall.com</1> an",
+  "page.modal.help.project_not_appearing.step2": "Navigieren Sie zu Ihrem Projekt und öffnen Sie den Editor",
+  "page.modal.help.project_not_appearing.step3": "Öffnen Sie \"Vorschau\" und klicken Sie auf \"Neuer Tab\", um sich zu authentifizieren"
+}

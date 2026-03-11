@@ -1,0 +1,13 @@
+diff --git a/node_modules/three/package.json b/node_modules/three/package.json
+index 501348b..6267b92 100644
+--- a/node_modules/three/package.json
++++ b/node_modules/three/package.json
+@@ -8,7 +8,7 @@
+   "exports": {
+     ".": {
+       "import": "./build/three.module.js",
+-      "require": "./build/three.cjs"
++      "require": "./build/three.module.js"
+     },
+     "./examples/fonts/*": "./examples/fonts/*",
+     "./examples/jsm/*": "./examples/jsm/*",
