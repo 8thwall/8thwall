@@ -35,7 +35,12 @@ const loadSpecificChunk = async (
 
     // @ts-ignore
     // eslint-disable-next-line
-    const slamChunk = await import(/* webpackIgnore: true */ baseUrl + 'xr-tracking.js')
+    // const slamChunk = await import(/* webpackIgnore: true */ baseUrl + 'xr-tracking.js')
+    const slamUrl = window.location.origin + '/external/xr/xr-slam.js'
+    console.log('LOADING SLAM CHUNK FROM:', slamUrl)
+    // @ts-ignore
+    // eslint-disable-next-line
+    const slamChunk = await import(/* webpackIgnore: true */ slamUrl)
     const {XrControllerFactory} = slamChunk
     slamChunk.ResourceUrls.setBaseUrl(baseUrl)
     jsxr.XrController = await XrControllerFactory(
