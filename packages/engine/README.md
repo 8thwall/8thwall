@@ -25,6 +25,10 @@ bazel build --config=wasmrelease //reality/app/xr/js:bundle
 ```
 
 ## Using the open source engine alongside the distributed engine binary
+
+> [!WARNING]
+> This approach is a work in progress, the real end state will be a version which doesn't require you to serve the open source engine alongside your app.
+
 This open source version of the engine doesn't include SLAM. But the [distributed engine binary](https://github.com/8thwall/engine) does. To use the open source engine for the camera pipeline and the distributed engine binary for SLAM, you can do the following:
 
 1. In `8thwall/reality/app/xr/js/src/chunk-loader.ts`, update from:
