@@ -36,7 +36,6 @@
     "electron-log": "^5.4.2",
     "electron-squirrel-startup": "^1.0.1",
     "electron-updater": "^6.6.2",
-    "express": "^4.21.2",
     "get-port": "^7.1.0",
     "handlebars": "^4.7.8",
     "jszip": "^3.10.1",
