@@ -9,7 +9,6 @@
 /coverage
 
 # production
-/build
 /dist
 
 src/runtime/ecs-asm.js
