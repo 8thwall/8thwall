@@ -8,7 +8,7 @@
 
 import {STUDIO_HUB_PROTOCOL} from './app/desktop-protocol'
 
-const {S3_BUCKET_KEY, DEPLOY_PATH} = process.env
+const {RELEASE} = process.env
 
 const suffix = process.env.DEPLOY_STAGE === 'prod' ? '' : ` (${process.env.DEPLOY_STAGE})`
 const name = `8th Wall${suffix}`
@@ -106,12 +106,6 @@ export default {
       provider: 'github',
       owner: '8thwall',
       repo: 'desktop',
-    }, {
-      provider: 's3',
-      bucket: `${S3_BUCKET_KEY}`,
-      region: 'us-west-2',
-      path: `/${DEPLOY_PATH}`,
-      acl: null,
     },
   ],
 }

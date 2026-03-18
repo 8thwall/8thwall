@@ -12,18 +12,19 @@ if [ -z "$BUILDER_COMMAND" ]; then
 fi
 
 export PLATFORM=${PLATFORM:-mac}
-export ARCH=${ARCH:-arm64}
 
 export DEPLOY_STAGE="$DEPLOY_STAGE"
 
-if [ "$RELEASE" = "true" ] && [ "$DEPLOY_STAGE" = "prod" ]; then
-  export S3_BUCKET_KEY="8w-us-west-2-web"
-  export DEPLOY_PATH="web/desktop/rc/${PLATFORM}/${ARCH}"
-  export CDN_URL="https://cdn.8thwall.com/web/desktop/latest/${PLATFORM}/${ARCH}"
-else
-  export S3_BUCKET_KEY="8w-us-west-2-web-test"
-  export DEPLOY_PATH="web/desktop-test/${DEPLOY_STAGE}/${PLATFORM}/${ARCH}"
-  export CDN_URL="https://cdn-dev.8thwall.com/${DEPLOY_PATH}"
+ARCH=""
+if [ "$PLATFORM" == "win" ]; then
+  ARCH="--x64"
+fi
+
+# NOTE(christoph): When we run a release build, we build for both x64 and arm64 so that
+# latest-mac.yml can be used for both architectures. For non-release builds, we just build for
+# the default.
+if [ "$DEPLOY_STAGE" == "prod" ] && [ "$PLATFORM" == "mac" ]; then
+  ARCH="--x64 --arm64"
 fi
 
 # build electron app
@@ -39,11 +40,11 @@ case "$BUILDER_COMMAND" in
   ;;
 "build")
   echo "Building Electron app with electron-builder..."
-  npx electron-builder --config ../../bazel-bin/apps/desktop/builder.js --${PLATFORM} --${ARCH}
+  npx electron-builder --config ../../bazel-bin/apps/desktop/builder.js --${PLATFORM} ${ARCH}
   ;;
 "publish")
   echo "Publishing Electron app with electron-builder..."
-  npx electron-builder --config ../../bazel-bin/apps/desktop/builder.js --${PLATFORM} --${ARCH} --publish always
+  npx electron-builder --config ../../bazel-bin/apps/desktop/builder.js --${PLATFORM} ${ARCH} --publish always
   ;;
 *)
   echo "Error: Unknown BUILDER_COMMAND '$BUILDER_COMMAND'. Use 'start', 'build', or 'publish'"

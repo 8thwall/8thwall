@@ -11,6 +11,5 @@ cd $ROOT/apps/desktop
 npm ci
 TS=$(date +%Y%m%d%H%M)
 npm version 1.0.$TS --no-git-tag-version
-RELEASE=true npm run publish:prod
-RELEASE=true npm run publish:prod:mac:x64
-RELEASE=true npm run publish:prod:win:x64
+RELEASE=true npm run publish:prod:mac
+RELEASE=true npm run publish:prod:win
