@@ -101,11 +101,13 @@ export default {
     // eslint-disable-next-line no-template-curly-in-string
     artifactName: '8th-Wall-Setup-${version}-${os}-${arch}.${ext}',
   },
-  publish: [
-    {
-      provider: 'github',
-      owner: '8thwall',
-      repo: 'desktop',
-    },
-  ],
+  publish: RELEASE === 'true'
+    ? [
+      {
+        provider: 'github',
+        owner: '8thwall',
+        repo: 'desktop',
+      },
+    ]
+    : [],
 }

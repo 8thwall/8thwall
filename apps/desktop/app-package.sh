@@ -23,7 +23,7 @@ fi
 # NOTE(christoph): When we run a release build, we build for both x64 and arm64 so that
 # latest-mac.yml can be used for both architectures. For non-release builds, we just build for
 # the default.
-if [ "$DEPLOY_STAGE" == "prod" ] && [ "$PLATFORM" == "mac" ]; then
+if [ "$RELEASE" == "true" ] && [ "$PLATFORM" == "mac" ]; then
   ARCH="--x64 --arm64"
 fi
 

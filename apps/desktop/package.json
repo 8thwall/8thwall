@@ -13,7 +13,6 @@
     "make:prod:win": "PLATFORM=win DEPLOY_STAGE=prod BUILDER_COMMAND=build ./app-package.sh",
     "publish:prod:mac": "PLATFORM=mac DEPLOY_STAGE=prod BUILDER_COMMAND=publish ./app-package.sh",
     "publish:prod:win": "PLATFORM=win DEPLOY_STAGE=prod BUILDER_COMMAND=publish ./app-package.sh",
-    "mcp:serve": "bazel run //apps/desktop:mcp-websocket-server",
     "postinstall": "patch-package",
     "inliner": "./tools/inliner.sh"
   },
