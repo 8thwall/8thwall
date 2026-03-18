@@ -40,3 +40,7 @@ nvm use desktop
 npm install
 npm run app:start
 ```
+
+### Publishing Releases
+
+See [RELEASING.md](./RELEASING.md)

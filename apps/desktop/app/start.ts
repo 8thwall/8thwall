@@ -30,6 +30,8 @@ const CONSOLE_WEBSOCKET_PORT = 62009
 const UPDATE_CHECK_INTERVAL = 60 * 60 * 1000
 
 const setupAutoUpdater = (win: BrowserWindow) => {
+  autoUpdater.logger = log
+
   const appVersion = app.getVersion()
   if (appVersion.includes('-beta')) {
     autoUpdater.channel = 'beta'
