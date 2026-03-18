@@ -58,4 +58,4 @@ https://8th.io/mac-arm64-latest
 https://8th.io/mac-intel-latest
 https://8th.io/win-x64-latest
  
-Update these shortlinks to point to the latest release URLs, the matching dmgs and Setup exe
+Update these shortlinks to point to the latest release URLs: the .dmg files for each Mac link, and .exe for windows.
