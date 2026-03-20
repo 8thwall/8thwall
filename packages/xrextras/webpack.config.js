@@ -14,7 +14,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(png|svg|jpg|jpeg|gif|ico|min\.js)$/,
+        test: /\.(png|svg|jpg|jpeg|gif|ico|woff|ttf|min\.js)$/,
         exclude: /node_modules/,
         type: 'asset/resource',
         generator: {
