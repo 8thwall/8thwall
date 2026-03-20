@@ -54,7 +54,7 @@ function create() {
         img.src = headerImgSrc
       } else {
         img.classList.add('foreground-image')
-        img.src = './external/xrextras/resources/img/almostthere/v2/safari-fallback.png'
+        img.src = require('./safari-fallback.png')
       }
     })
 

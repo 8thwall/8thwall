@@ -63,9 +63,9 @@ const setMuted = (muted) => {
   videoPreview.muted = muted
 
   if (muted) {
-    muteButtonImg.src = './external/xrextras/resources/img/mediarecorder/sound-off-v1.svg'
+    muteButtonImg.src = require('./sound-off.svg')
   } else {
-    muteButtonImg.src = './external/xrextras/resources/img/mediarecorder/sound-on-v1.svg'
+    muteButtonImg.src = require('./sound-on.svg')
   }
 }
 
@@ -287,7 +287,7 @@ const initMediaPreview = (options = {}) => {
   if (navigator.canShare && navigator.canShare(shareTestObj)) {
     webShareAPILevel2 = true
     actionButtonText.textContent = options.actionButtonShareText || 'Share'
-    actionButtonImg.src = './external/xrextras/resources/img/mediarecorder/share-v1.svg'
+    actionButtonImg.src = require('./share.svg')
     actionButton.addEventListener('click', share)
     if (window.XR8.XrDevice.deviceEstimate().os === 'iOS') {
       // Hide the download button on iOS and only allow sharing.
@@ -301,7 +301,7 @@ const initMediaPreview = (options = {}) => {
     downloadButton.parentNode.removeChild(downloadButton)
   } else if (window.XR8.XrDevice.deviceEstimate().os === 'iOS') {
     actionButtonText.textContent = options.actionButtonViewText || 'View'
-    actionButtonImg.src = './external/xrextras/resources/img/mediarecorder/view-v1.svg'
+    actionButtonImg.src = require('./view.svg')
     actionButton.addEventListener('click', openIosDownload)
     actionButton.classList.add('show-after-download')
   } else {

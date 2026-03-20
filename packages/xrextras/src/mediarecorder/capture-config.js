@@ -3,7 +3,7 @@
 const currentConfig = {
   enableEndCard: true,
   footerImageUrl:
-    './external/xrextras/resources/img/almostthere/v2/poweredby-horiz-white-4.svg',
+    require('../almosttheremodule/poweredby-horiz-white.svg'),
 }
 
 const internalConfig = {}

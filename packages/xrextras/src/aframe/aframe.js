@@ -2,7 +2,6 @@
 
 import {xrComponents} from './xr-components'
 import {xrPrimitives} from './xr-primitives'
-import {ensureXrAndExtras} from './ensure'
 
 let xrextrasAframe = null
 
@@ -114,13 +113,8 @@ function create() {
     primitives => Object.keys(primitives).map(k => AFRAME.registerPrimitive(k, primitives[k]))
 
   // Load the 8th Wall preferred version of AFrame at runtime ensuring that xr components are added.
-  const loadAFrameForXr = (args) => {
-    const {version = 'latest', components = {}} = args || {}
-    return checkAllowed8FrameVersions(version)
-      .then(ver => loadJsPromise(`./external/scripts/8frame-${ver}.min.js`))
-      .then(ensureAFrameComponents)
-      .then(ensureXrAndExtras)
-      .then(_ => registerComponents(components))
+  const loadAFrameForXr = () => {
+    throw new Error('loadAFrameForXr is no longer supported.')
   }
 
   // Register XRExtras AFrame components.

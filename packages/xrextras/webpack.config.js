@@ -2,24 +2,35 @@ const path = require('path')
 const CopyPlugin = require('copy-webpack-plugin')
 
 module.exports = {
-  entry: './src/index.js',
+  entry: {
+    xrextras: './src/index.js',
+    index: './src/entry.js',
+  },
   output: {
-    filename: 'external/xrextras/xrextras.js',
+    filename: '[name].js',
     path: path.resolve(__dirname, 'dist'),
+    publicPath: 'auto',
   },
   module: {
     rules: [
       {
+        test: /\.(png|svg|jpg|jpeg|gif|ico|min\.js)$/,
+        exclude: /node_modules/,
+        type: 'asset/resource',
+        generator: {
+          filename: 'resources/[name]-[hash][ext]',
+        },
+      },
+      {
         test: /\.css$/,
         use: [
           'style-loader',
-          {loader: 'css-loader', options: {url: false}},
+          'css-loader',
         ],
       }, {
         test: /\.html$/,
         use: {
           loader: 'html-loader',
-          options: {sources: false},
         },
       },
       {
@@ -37,11 +48,10 @@ module.exports = {
   plugins: [
     new CopyPlugin({
       patterns: [
-        {from: 'resources', to: 'external/xrextras/resources'},
-        {from: 'test/index.html', to: 'index.html'},
-        {from: 'test/index-aframe.html', to: 'index-aframe.html'},
-        {from: 'test/index.js', to: 'index.js'},
-        {from: 'LICENSE', to: 'external/xrextras/'},
+        {from: 'LICENSE', to: '.'},
+        {from: 'test/index.html', to: 'test/index.html'},
+        {from: 'test/index-aframe.html', to: 'test/index-aframe.html'},
+        {from: 'test/index.js', to: 'test/index.js'},
       ],
     }),
   ],

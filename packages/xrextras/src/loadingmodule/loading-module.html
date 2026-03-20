@@ -2,22 +2,22 @@
   <!--Loading screen-->
   <div id="loadBackground" class="absolute-fill">
     <div id="loadImageContainer" class="absolute-fill">
-      <img src="./external/xrextras/resources/img/loading/v2/load-grad.png" id="loadImage" class="spin" />
+      <img src="./load-grad.png" id="loadImage" class="spin" />
       <img class='foreground-image poweredby-img'
-        src="./external/xrextras/resources/img/almostthere/v2/poweredby-horiz-white-4.svg" />
+        src="../almosttheremodule/poweredby-horiz-white.svg" />
     </div>
   </div>
 
   <!--Camera Permissions-->
   <div id="requestingCameraPermissions" class="hidden">
-    <img id="requestingCameraIcon" src="./external/xrextras/resources/img/loading/v2/camera.svg" />
+    <img id="requestingCameraIcon" src="./camera.svg" />
     Tap 'Allow' to access AR
   </div>
 
   <!--Permission error, camera, iOS-->
   <div id="cameraPermissionsErrorApple" class="absolute-fill hidden">
     <div class="permissionIconIos">
-      <img class='foreground-image' src="./external/xrextras/resources/img/loading/v2/camera.svg" />
+      <img class='foreground-image' src="./camera.svg" />
     </div>
     <p id="cameraPermissionsErrorAppleMessage">
       Reload the page and enable camera access
@@ -30,11 +30,11 @@
   <!--Permission error, camera, Android-->
   <div id="cameraPermissionsErrorAndroid" class="absolute-fill hidden">
     <div class="permissionIcon">
-      <img class='foreground-image' src="./external/xrextras/resources/img/loading/v2/camera.svg" />
+      <img class='foreground-image' src="./camera.svg" />
     </div>
     <div class="loading-error-header">Let's enable your camera</div>
     <ol class="loading-error-instructions">
-      <li>Tap the <img class='foreground-image' src="./external/xrextras/resources/img/loading/v2/dots.svg"> in the top right
+      <li>Tap the <img class='foreground-image' src="./dots.svg"> in the top right
       </li>
       <li>Tap Settings</li>
       <li class="chrome-instruction hidden">
@@ -67,7 +67,7 @@
     </ol>
     <div class="loading-error-footer">
       <img class='foreground-image' style="transform: rotate(130deg);"
-        src="./external/xrextras/resources/img/loading/v2/reload.svg" />
+        src="./reload.svg" />
       Then, reload the page for AR!
     </div>
   </div>
@@ -75,8 +75,8 @@
   <!--Permission error, microphone + camera, iOS-->
   <div id="microphonePermissionsErrorApple" class="absolute-fill hidden">
     <div class='permissionIconIos'>
-      <img class='foreground-image' src="./external/xrextras/resources/img/loading/v2/camera.svg" />
-      <img class='foreground-image' src="./external/xrextras/resources/img/loading/v2/microphone.svg" />
+      <img class='foreground-image' src="./camera.svg" />
+      <img class='foreground-image' src="./microphone.svg" />
     </div>
     <p id="microphonePermissionsErrorAppleMessage">
       Reload the page and enable camera + microphone access
@@ -89,11 +89,11 @@
   <!--Permission error, microphone + camera, Android-->
   <div id="microphonePermissionsErrorAndroid" class="absolute-fill hidden">
     <div class="permissionIcon">
-      <img class='foreground-image' src="./external/xrextras/resources/img/loading/v2/microphone.svg" />
+      <img class='foreground-image' src="./microphone.svg" />
     </div>
     <div class="loading-error-header">Let's enable your microphone</div>
     <ol class="loading-error-instructions">
-      <li>Tap the <img class='foreground-image' src="./external/xrextras/resources/img/loading/v2/dots.svg"> in the top right
+      <li>Tap the <img class='foreground-image' src="./dots.svg"> in the top right
       </li>
       <li>Tap Settings</li>
       <li class="chrome-instruction hidden">
@@ -129,7 +129,7 @@
     </ol>
     <div class="loading-error-footer">
       <img class='foreground-image' style="transform: rotate(130deg);"
-        src="./external/xrextras/resources/img/loading/v2/reload.svg" />
+        src="./reload.svg" />
       Then, reload the page for AR!
     </div>
   </div>
@@ -140,7 +140,7 @@
         <img id="app_img" class="app-header-img unknown">
         <br />
         <a id="open_browser_android" class="start-ar-button">Start AR</a>
-        <img class="foreground-image poweredby-img" src="./external/xrextras/resources/img/almostthere/v2/poweredby-horiz-white-4.svg">
+        <img class="foreground-image poweredby-img" src="../almosttheremodule/poweredby-horiz-white.svg">
       </div>
     </div>
   </div>
@@ -155,7 +155,7 @@
         <br />
         <span id="app_link" class="desktop-home-link mobile"></span>
         <button id="copy_link_android" class="copy-link-btn">Copy Link</button>
-        <img class="foreground-image poweredby-img" src="./external/xrextras/resources/img/almostthere/v2/poweredby-horiz-white-4.svg">
+        <img class="foreground-image poweredby-img" src="../almosttheremodule/poweredby-horiz-white.svg">
       </div>
     </div>
   </div>
@@ -164,12 +164,12 @@
   <div id="deviceMotionErrorApple" class="absolute-fill hidden">
     <div class="loading-error-header">Let's enable your motion sensors</div>
     <ol class="loading-error-instructions">
-      <li>Open <img src="./external/xrextras/resources/img/loading/v1/settings-icon-ios.png"
+      <li>Open <img src="./settings-icon-ios.png"
           style="max-height: 4vh"><b>Settings</b></li>
-      <li>Select <img src="./external/xrextras/resources/img/loading/v1/safari-icon.png"
+      <li>Select <img src="./safari-icon.png"
           style="max-height: 4vh"><b>Safari</b></li>
       <li>Enable <span class="highlight">Motion&nbsp;&amp;&nbsp;Orientation Access</span></li>
-      <li>Reload the page <img class="foreground-image" style="transform: rotate(130deg);" src="./external/xrextras/resources/img/loading/v2/reload.svg"></li>
+      <li>Reload the page <img class="foreground-image" style="transform: rotate(130deg);" src="./reload.svg"></li>
     </ol>
     <!-- Empty footer to take up space -->
     <div class="loading-error-footer"></div>
@@ -188,7 +188,7 @@
   </div>
 
   <div id="cameraSelectionWorldTrackingError" class="permission-error absolute-fill hidden">
-    <p><img height="75px" src="./external/xrextras/resources/img/runtimeerror/v1/computer-voxel.png" class="floater"></p>
+    <p><img height="75px" src="../runtimeerrormodule/computer-voxel.png" class="floater"></p>
     <div class="error-text-header">Oops, something went wrong!</div>
     <p id="camera_mode_world_tracking_error"></p>
   </div>

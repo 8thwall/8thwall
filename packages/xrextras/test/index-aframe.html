@@ -1,18 +1,18 @@
 <!doctype html>
 <html>
-  <head>
-    <title>XRExtras: A-FRAME</title>
 
-    <!-- 8thWall Web - Replace the app key here with your own app key -->
-    <script async src="https://apps.8thwall.com/xrweb?appKey=XXXXXXXX"></script>
+<head>
+  <title>XRExtras: A-FRAME</title>
+  <script async src="https://localhost:8888/reality/app/xr/js/xr.js" data-preload-chunks="slam"></script>
+  <script src="
+https://cdn.jsdelivr.net/npm/aframe@1.7.1/dist/aframe-master.min.js
+"></script>
+  <script src="/xrextras.js"></script>
+</head>
 
-    <!-- XR Extras - provides utilities like load screen, almost there, and error handling.
-         See github.com/8thwall/web/tree/master/xrextras -->
-    <script src="external/xrextras/xrextras.js"></script>
-  </head>
-
-  <body>
-    <script>
+<body>
+  <script>
+    const load = () => {
       const xrScene = `
 <a-scene xrweb xrextras-tap-recenter xrextras-almost-there xrextras-loading xrextras-runtime-error
     xrextras-gesture-detector throw-error>
@@ -21,23 +21,26 @@
   <a-box scale="100 2 100" position="0 -1 0" material="shader: shadow" shadow></a-box>
 </a-scene>
       `
-      const throwErrorComponent = {
-        init: function() {
+      
+      AFRAME.registerComponent('throw-error', {
+        init: function () {
           // A pipeline module that throws an error after 300 frames -- illustrates the error
           // handinling in xrweb-runtime-error.
           const throwerrorPipelineModule = () => {
             let frame = 0
             return {
               name: 'throwerror',
-              onUpdate: () => {if (++frame > 300) { throw Error('Too many frames!') }},
+              onUpdate: () => {if (++frame > 300) {throw Error('Too many frames!')} },
             }
           }
-          const load = () => { XR.addCameraPipelineModule(throwerrorPipelineModule()) }
-          window.XRExtras && window.XR ? load() : window.addEventListener('xrandextrasloaded', load)
+          XR8.addCameraPipelineModule(throwerrorPipelineModule())
         }
-      }
-      window.XRExtras.AFrame.loadAFrameForXr({version: 'latest', components: {'throw-error': throwErrorComponent}})
-        .then(() => document.body.insertAdjacentHTML('beforeend', xrScene))
-    </script>
-  </body>
+      })
+
+      document.body.insertAdjacentHTML('beforeend', xrScene)
+    }
+    (window.XRExtras && window.XR8) ? load() : window.addEventListener('xrandextrasloaded', load)
+  </script>
+</body>
+
 </html>

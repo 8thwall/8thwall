@@ -211,7 +211,7 @@ function create() {
         img.src = headerImgSrc
       } else {
         img.classList.add('foreground-image')
-        img.src = './external/xrextras/resources/img/almostthere/v2/android-fallback.png'
+        img.src = require('../almosttheremodule/android-fallback.png')
       }
     })
 
@@ -236,7 +236,7 @@ function create() {
         img.src = headerImgSrc
       } else {
         img.classList.add('foreground-image')
-        img.src = './external/xrextras/resources/img/almostthere/v2/android-fallback.png'
+        img.src = require('../almosttheremodule/android-fallback.png')
       }
     })
 

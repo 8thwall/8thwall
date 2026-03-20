@@ -1,4 +1,7 @@
-const STATS_URL = './external/xrextras/resources/aframe/stats.16.min.js'
+// NOTE(christoph): min.js is handled by webpack as an asset
+// eslint-disable-next-line import/extensions
+const STATS_URL = require('./stats.16.min.js')
+
 let statsModule = null
 
 const loadJsPromise = url => new Promise((resolve, reject) => (

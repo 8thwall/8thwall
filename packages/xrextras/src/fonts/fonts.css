@@ -1,11 +1,11 @@
 @font-face {
   font-family: 'Nunito';
-  src: url('./external/xrextras/resources/fonts/Nunito-Regular.woff') format('woff'), /* Modern Browsers */
-       url('./external/xrextras/resources/fonts/Nunito-Regular.ttf')  format('truetype') /* Safari, Android, iOS */
+  src: url('./Nunito-Regular.woff') format('woff'), /* Modern Browsers */
+       url('./Nunito-Regular.ttf')  format('truetype') /* Safari, Android, iOS */
 }
 
 @font-face {
   font-family: 'Nunito-SemiBold';
-  src: url('./external/xrextras/resources/fonts/Nunito-SemiBold.woff') format('woff'), /* Modern Browsers */
-       url('./external/xrextras/resources/fonts/Nunito-SemiBold.ttf')  format('truetype') /* Safari, Android, iOS */
+  src: url('./Nunito-SemiBold.woff') format('woff'), /* Modern Browsers */
+       url('./Nunito-SemiBold.ttf')  format('truetype') /* Safari, Android, iOS */
 }
