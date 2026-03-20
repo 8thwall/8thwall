@@ -2,7 +2,7 @@
 
 import type S3ClientApi from '@aws-sdk/client-s3'
 
-import {entry} from '@nia/reality/cloud/xrhome/src/shared/registry'
+import {entry} from '@repo/reality/cloud/xrhome/src/shared/registry'
 
 type CommandFunction<Command> = Command extends S3ClientApi.$Command<
 infer I, infer O, any, any, any

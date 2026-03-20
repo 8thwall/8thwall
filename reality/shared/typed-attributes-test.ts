@@ -1,4 +1,4 @@
-import {describe, it, assert} from '@nia/bzl/js/chai-js'
+import {describe, it, assert} from '@repo/bzl/js/chai-js'
 
 import {fromAttribute, fromAttributes, toAttribute, toAttributes}
   from './typed-attributes'
