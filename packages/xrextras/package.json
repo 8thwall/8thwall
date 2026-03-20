@@ -1,16 +1,40 @@
 {
-  "name": "xrextras",
-  "version": "0.1.0",
-  "description": "",
-  "private": true,
+  "name": "@8thwall/xrextras",
+  "version": "1.0.0-alpha.1",
+  "description": "Helper libraries that support and extend the capabilities of the 8th Wall Engine.",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
+    "prepack": "npm run clean && npm run build",
     "dev": "webpack server --devtool eval --mode development",
-    "clean": "rm -r dist/*"
+    "clean": "rm -rf dist"
   },
-  "keywords": [],
-  "author": "",
+  "homepage": "https://8thwall.org",
+  "bugs": {
+    "url": "https://github.com/8thwall/8thwall/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/8thwall/8thwall.git",
+    "directory": "packages/xrextras"
+  },
+  "keywords": [
+    "8thwall",
+    "xrextras",
+    "xr",
+    "augmented reality",
+    "webxr"
+  ],
+  "main": "dist/index.js",
+  "jsdelivr": "dist/xrextras.js",
+  "files": [
+    "dist/index.js",
+    "dist/xrextras.js",
+    "dist/resources",
+    "dist/LICENSE",
+    "LICENSE",
+    "README.md"
+  ],
+  "author": "8th Wall Team",
   "license": "MIT",
   "devDependencies": {
     "@types/aframe": "^1.2.2",
