@@ -22,7 +22,11 @@ const onxrloaded = () => {
     throwerrorPipelineModule(),  // Throw an error after 300 frames.
   ])
 
-  XR8.run({canvas: document.getElementById('camerafeed')})  // Request permissions and run camera.
+  XR8.run({
+    canvas: document.getElementById('camerafeed'),
+
+    allowedDevices: XR8.XrConfig.device().ANY,
+  })  // Request permissions and run camera.
 }
 
 // Show loading screen before the full XR library has been loaded.

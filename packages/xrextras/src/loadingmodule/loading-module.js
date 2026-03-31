@@ -2,7 +2,7 @@
 
 import '../fonts/fonts.css'
 import './loading-module.css'
-import html from './loading-module.html'
+import {show} from './render'
 
 const FIRST_FRAME_DELAY = 5
 
@@ -16,14 +16,10 @@ function hasGetUserMedia() {
 let loadingModule = null
 
 function create() {
-  let rootNode_ = null
+  const rootNode_ = null
   let loadBackground_
   let loadImageContainer_
   let camPermissionsRequest_
-  let camPermissionsFailedAndroid_
-  let camPermissionsFailedApple_
-  let micPermissionsFailedAndroid_
-  let micPermissionsFailedApple_
   let linkOutViewAndroid_
   let copyLinkViewAndroid_
   let userPromptError_
@@ -65,43 +61,6 @@ function create() {
   }
   window.addEventListener('message', iframeMotionListener)
 
-  const setRoot = (rootNode) => {
-    rootNode_ = rootNode
-    loadBackground_ = rootNode_.querySelector('#loadBackground')
-    loadImageContainer_ = rootNode_.querySelector('#loadImageContainer')
-    camPermissionsRequest_ = document.getElementById('requestingCameraPermissions')
-    camPermissionsFailedAndroid_ = document.getElementById('cameraPermissionsErrorAndroid')
-    camPermissionsFailedApple_ = document.getElementById('cameraPermissionsErrorApple')
-    micPermissionsFailedAndroid_ = document.getElementById('microphonePermissionsErrorAndroid')
-    micPermissionsFailedApple_ = document.getElementById('microphonePermissionsErrorApple')
-    linkOutViewAndroid_ = document.getElementById('linkOutViewAndroid')
-    copyLinkViewAndroid_ = document.getElementById('copyLinkViewAndroid')
-    deviceMotionErrorApple_ = document.getElementById('deviceMotionErrorApple')
-    userPromptError_ = document.getElementById('userPromptError')
-    cameraSelectionError_ = document.getElementById('cameraSelectionWorldTrackingError')
-    motionPermissionsErrorApple_ = document.getElementById('motionPermissionsErrorApple')
-  }
-
-  const clearRoot = () => {
-    if (rootNode_ && rootNode_.parentNode) {
-      rootNode_.parentNode.removeChild(rootNode_)
-    }
-    rootNode_ = null
-    loadBackground_ = null
-    loadImageContainer_ = null
-    camPermissionsRequest_ = null
-    camPermissionsFailedAndroid_ = null
-    camPermissionsFailedApple_ = null
-    micPermissionsFailedAndroid_ = null
-    micPermissionsFailedApple_ = null
-    linkOutViewAndroid_ = null
-    copyLinkViewAndroid_ = null
-    deviceMotionErrorApple_ = null
-    userPromptError_ = null
-    cameraSelectionError_ = null
-    motionPermissionsErrorApple_ = null
-  }
-
   // Hide the loading screen.
   const hideLoadingScreenNow = (removeRoot = true) => {
     if (loadBackground_) {
@@ -135,67 +94,40 @@ function create() {
   }
 
   const promptUserToChangeBrowserSettingsMicrophone = () => {
-    // We only really handle Android variants (Samsung/Chrome browsers)
     if (ua.includes('Linux')) {
-      let instructionsToShow
-
-      const domainViews = rootNode_.querySelectorAll('.domain-view')
-      for (let i = 0; i < domainViews.length; i++) {
-        domainViews[i].textContent = window.location.hostname
-      }
-
-      if (navigator.userAgent.includes('SamsungBrowser')) {
-        instructionsToShow = rootNode_.querySelectorAll('.samsung-instruction')
-      } else {
-        instructionsToShow = rootNode_.querySelectorAll('.chrome-instruction')
-      }
-      micPermissionsFailedAndroid_.classList.remove('hidden')
-      instructionsToShow.forEach((instruction) => {
-        instruction.classList.remove('hidden')
+      show({
+        view: 'mic-permissions-failed-android',
+        browserType: navigator.userAgent.includes('SamsungBrowser') ? 'samsung' : 'chrome',
       })
     } else {
-      // Show permission error for iOS
-      micPermissionsFailedApple_.classList.remove('hidden')
-      micPermissionsFailedApple_.getElementsByClassName('wk-app-name')[0]
-        .innerText = getAppNameForDisplay()
+      show({
+        view: 'mic-permissions-failed-apple',
+        appName: getAppNameForDisplay(),
+      })
     }
   }
 
   const promptUserToChangeBrowserSettingsCamera = () => {
     // We only really handle Android variants (Samsung/Chrome browsers)
     if (ua.includes('Linux')) {
-      let instructionsToShow
-
-      const domainViews = rootNode_.querySelectorAll('.domain-view')
-      for (let i = 0; i < domainViews.length; i++) {
-        domainViews[i].textContent = window.location.hostname
-      }
-
-      if (navigator.userAgent.includes('SamsungBrowser')) {
-        instructionsToShow = rootNode_.querySelectorAll('.samsung-instruction')
-      } else {
-        instructionsToShow = rootNode_.querySelectorAll('.chrome-instruction')
-      }
-      camPermissionsFailedAndroid_.classList.remove('hidden')
-      instructionsToShow.forEach((instruction) => {
-        instruction.classList.remove('hidden')
+      show({
+        view: 'camera-permissions-error-android',
+        browserType: navigator.userAgent.includes('SamsungBrowser') ? 'samsung' : 'chrome',
       })
     } else {
-      // Show permission error for iOS
-      camPermissionsFailedApple_.classList.remove('hidden')
-      camPermissionsFailedApple_.getElementsByClassName('wk-app-name')[0]
-        .innerText = getAppNameForDisplay()
+      show({
+        view: 'camera-permissions-error-apple',
+        appName: getAppNameForDisplay(),
+      })
     }
   }
 
   const promptUserToChangeBrowserSettings = (reason) => {
-    camPermissionsRequest_.classList.add('hidden')
     if (reason === 'NO_MICROPHONE' || reason === 'DENY_MICROPHONE') {
       promptUserToChangeBrowserSettingsMicrophone()
     } else {
       promptUserToChangeBrowserSettingsCamera()
     }
-    hideLoadingScreen(false)
 
     XR8.pause()
     XR8.stop()
@@ -218,9 +150,9 @@ function create() {
     const cBtn = document.getElementById('open_browser_android')
     const link = window.location.href.replace(/^https:\/\//, '')
     cBtn.href = `intent://${link}#Intent;scheme=https;action=android.intent.action.VIEW;end;`
-
-    linkOutViewAndroid_.classList.remove('hidden')
-    hideLoadingScreen(false)
+    show({
+      view: 'android-link-out-view',
+    })
 
     XR8.pause()
     XR8.stop()
@@ -298,17 +230,7 @@ function create() {
   }
 
   const showLoading = (args) => {
-    if (rootNode_) {
-      return
-    }
-
-    // Show the loading UI.
-    const e = document.createElement('template')
-    e.innerHTML = html.trim()
-    const rootNode = e.content.firstChild
-
-    document.getElementsByTagName('body')[0].appendChild(rootNode)
-    setRoot(rootNode)
+    show({view: 'loading'})
     waitingToHideLoadingScreen_ = true
 
     if (args && args.waitForRealityTexture) {

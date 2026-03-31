@@ -13,10 +13,10 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@types/aframe": "^1.2.2",
     "copy-webpack-plugin": "^13.0.1",
     "css-loader": "^6.8.1",
     "html-loader": "^4.2.0",
+    "preact": "^10.29.0",
     "style-loader": "^3.3.3",
     "text-loader": "^0.0.1",
     "ts-loader": "^9.4.4",

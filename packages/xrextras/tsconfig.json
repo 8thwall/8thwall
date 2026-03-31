@@ -7,8 +7,13 @@
     "experimentalDecorators": true,
     "importHelpers": true,
     "isolatedModules": false,
+    "lib": [
+      "dom",
+      "es2019"
+    ],
     "module": "commonjs",
     "moduleResolution": "node",
+    "jsx": "react",
     "noImplicitAny": false,
     "noImplicitUseStrict": false,
     "noLib": false,
