@@ -5,7 +5,7 @@ cd $(bazel info workspace 2>/dev/null)
 
 build_files=$(find c8/ecs -path c8/ecs/node_modules -prune -o -name "BUILD" -print)
 
-echo "$build_files" | xargs bazel run --run_under="cd $PWD && " //apps/client/inlinerjs
+echo "$build_files" | xargs bazel run --run_under="cd $PWD && " //bzl/inlinerjs
 
 if [[ "$@" == *"--cc"* ]]; then
   cc_files=$(find c8/ecs -path c8/ecs/node_modules -prune -o -name "*.cc" -print)
