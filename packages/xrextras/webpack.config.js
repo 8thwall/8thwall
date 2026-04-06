@@ -47,7 +47,6 @@ module.exports = {
   plugins: [
     new CopyPlugin({
       patterns: [
-        {from: 'LICENSE', to: '.'},
         {from: 'test/index.html', to: 'test/index.html'},
         {from: 'test/index-aframe.html', to: 'test/index-aframe.html'},
         {from: 'test/index.js', to: 'test/index.js'},
