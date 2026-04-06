@@ -3,10 +3,9 @@
 
 <head>
   <title>XRExtras: A-FRAME</title>
-  <script async src="https://localhost:8888/reality/app/xr/js/xr.js" data-preload-chunks="slam"></script>
-  <script src="
-https://cdn.jsdelivr.net/npm/aframe@1.7.1/dist/aframe-master.min.js
-"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aframe@1.7.1/dist/aframe-master.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@8thwall/engine-binary@1/dist/xr.js" async crossorigin="anonymous"
+    data-preload-chunks="slam"></script>
   <script src="/xrextras.js"></script>
 </head>
 
@@ -21,7 +20,7 @@ https://cdn.jsdelivr.net/npm/aframe@1.7.1/dist/aframe-master.min.js
   <a-box scale="100 2 100" position="0 -1 0" material="shader: shadow" shadow></a-box>
 </a-scene>
       `
-      
+
       AFRAME.registerComponent('throw-error', {
         init: function () {
           // A pipeline module that throws an error after 300 frames -- illustrates the error

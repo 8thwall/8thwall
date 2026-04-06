@@ -4,7 +4,6 @@ const CopyPlugin = require('copy-webpack-plugin')
 module.exports = {
   entry: {
     xrextras: './src/index.js',
-    index: './src/entry.js',
   },
   output: {
     filename: '[name].js',
