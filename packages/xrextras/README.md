@@ -46,7 +46,7 @@ XRExtras.DebugWebViews.enableLogToScreen()
 
 ## Development
 
-A development server can be run by running:
+Start the development server with:
 
 ```bash
 npm install

@@ -11,6 +11,7 @@ const throwerrorPipelineModule = () => {
 }
 
 const onxrloaded = () => {
+  const {XR8, XRExtras} = window
   XR8.addCameraPipelineModules([  // Add camera pipeline modules.
     // Existing pipeline modules.
     XR8.GlTextureRenderer.pipelineModule(),      // Draws the camera feed.
@@ -26,9 +27,8 @@ const onxrloaded = () => {
   XR8.run({
     canvas: document.getElementById('camerafeed'),
     allowedDevices: XR8.XrConfig.device().ANY,
-  })  
+  })
 }
 
 // Show loading screen before the full XR library has been loaded.
-const load = () => { XRExtras.Loading.showLoading({onxrloaded}) }
-window.onload = () => { window.XRExtras ? load() : window.addEventListener('xrextrasloaded', load) }
+window.XRExtras.Loading.showLoading({onxrloaded})
