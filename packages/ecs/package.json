@@ -1,0 +1,33 @@
+{
+  "name": "@8thwall/ecs",
+  "version": "3.0.0",
+  "description": "The game engine behind 8th Wall Studio",
+  "author": "8th Wall Team",
+  "license": "MIT",
+  "homepage": "https://8thwall.org",
+  "bugs": {
+    "url": "https://github.com/8thwall/8thwall/issues"
+  },
+  "types": "./index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/8thwall/8thwall.git",
+    "directory": "packages/ecs"
+  },
+  "keywords": [
+    "8thwall",
+    "studio",
+    "xr",
+    "game engine",
+    "ecs",
+    "3d"
+  ],
+  "main": "index.js",
+  "files": [
+    "LICENSE",
+    "README.md",
+    "index.js",
+    "index.d.ts",
+    "dist"
+  ]
+}

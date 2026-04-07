@@ -20,8 +20,4 @@ You can also use the included demo app for a self-contained test by running `baz
 
 ## Creating a Release
 
-The following will create a zip that contains the distributable version of the engine.
-
-```bash
-bazel build //c8/ecs:bundle
-```
+See [packages/ecs/RELEASING.md](../../packages/ecs/RELEASING.md)
