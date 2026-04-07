@@ -1,6 +1,6 @@
 {
   "name": "@8thwall/xrextras",
-  "version": "1.0.0-alpha.5",
+  "version": "1.0.0",
   "description": "Helper utilities building on top of the 8th Wall Engine",
   "author": "8th Wall Team",
   "license": "MIT",
