@@ -4,12 +4,62 @@ This library provides modules that extend the
 [Camera Pipeline Module framework](https://docs.8thwall.com/web/#camerapipelinemodule) in
 [8th Wall XR](https://8thwall.com/products-web.html) to handle common application needs.
 
-The library can be built by running
+## Usage
+
+### Option 1: Script tag
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/@8thwall/xrextras@1/dist/xrextras.js" crossorigin="anonymous"></script>
+```
+
+### Option 2: npm
+
+```
+npm install @8thwall/xrextras
+```
+
+You will need to copy the included artifacts into your dist folder, for example in webpack:
+
+```js
+new CopyWebpackPlugin({
+  patterns: [
+    {
+      from: 'node_modules/@8thwall/xrextras/dist',
+      to: 'external/xrextras',
+    }
+  ]
+})
+```
+
+You can then load the library by adding the following to index.html:
+
+```html
+<script src="./external/xrextras/xrextras.js"></script>
+```
+
+When you import the package, a simple helper for accessing window.XRExtras is provided. The expectation is still that the script tag is added to the HTML. 
+
+```js
+import * as XRExtras from '@8thwall/xrextras'
+XRExtras.DebugWebViews.enableLogToScreen()
+```
+
+## Development
+
+Start the development server with:
 
 ```bash
-$ npm install
-$ npm run build
+npm install
+npm run dev
 ```
+
+Test pages will be available at https://localhost:9000/test/index.html and https://localhost:9000/test/index-aframe.html, and xrextras itself can be tested on other projects by replacing the existing script tag with:
+
+```html
+<script src="https://localhost:9000/xrextras.js"></script>
+```
+
+See [RELEASING.md](./RELEASING.md) for release instructions.
 
 ## Hello World
 
