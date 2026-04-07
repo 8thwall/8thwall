@@ -12,7 +12,8 @@ timestamp=$(echo "console.log(Date.now().toString(36))" | node)
 git_commit=$(git log -n 1 --format="%H")
 
 cd tmp
-bazel run //c8/ecs/tools:generate-metadata -- "$timestamp" "$git_commit" "$version_identifier" > "metadata.json"
+
+bazel run //c8/ecs/tools:generate-metadata --config=wasmrelease -- "$timestamp" "$git_commit" "$version_identifier" > "metadata.json"
 
 bazel build //c8/ecs:bundle-without-metadata --config=wasmrelease
 
