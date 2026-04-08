@@ -12,11 +12,18 @@ import {basename} from '../editor/editor-common'
 
 const API = Build8.PLATFORM_TARGET === 'desktop' ? 'file-sync://' : 'https://0.0.0.0:9033'
 
+type ApiFetchError = Error & {
+  res?: Response
+}
+
 // eslint-disable-next-line arrow-parens
 const fetchJson = async <T>(url: string, options?: RequestInit): Promise<T> => {
   const response = await fetch(url, options)
   if (!response.ok) {
-    throw new Error(`fetch error status code: ${response.status}, ${response.statusText}`)
+    throw Object.assign(
+      new Error(`fetch error status code: ${response.status}, ${response.statusText}`),
+      {res: response}
+    )
   }
   return response.json()
 }
@@ -359,4 +366,8 @@ export {
   renameFile,
   checkConfigStatus,
   applyProjectConfigFix,
+}
+
+export type {
+  ApiFetchError,
 }

@@ -3,7 +3,7 @@ import {useQueryClient} from '@tanstack/react-query'
 import {useTranslation} from 'react-i18next'
 import {useHistory} from 'react-router-dom'
 
-import {openDiskLocation} from '../studio/local-sync-api'
+import {ApiFetchError, openDiskLocation} from '../studio/local-sync-api'
 import {SecondaryButton} from '../ui/components/secondary-button'
 import {getLocalStudioPath} from './desktop-paths'
 import useActions from '../common/use-actions'
@@ -28,8 +28,12 @@ const OpenProjectButton = () => {
           history.push(getLocalStudioPath(appKey))
         }
       }
-    } catch (err) {
-      error(t('project_list_page.error.invalid_open_location', {ns: 'studio-desktop-pages'}))
+    } catch (err: any) {
+      if ((await (err as ApiFetchError)?.res?.json())?.containsPackageJsonAndReadme) {
+        error(t('project_list_page.error.non_studio_project', {ns: 'studio-desktop-pages'}))
+      } else {
+        error(t('project_list_page.error.invalid_open_location', {ns: 'studio-desktop-pages'}))
+      }
     } finally {
       setLoading(false)
     }
