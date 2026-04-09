@@ -1,9 +1,7 @@
 import type {RunConfig} from './xr'
-
 import html from '../../xrextras/src/almosttheremodule/almost-there-module.html'
 import safariIcon from '../../xrextras/src/almosttheremodule/safari-fallback.png'
 
-console.log('fonts should be loaded now.')
 
 declare const XR8: any
 

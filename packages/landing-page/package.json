@@ -6,9 +6,9 @@
   "license": "MIT",
   "main": "index.js",
   "scripts": {
-    "prepack": "npm run build && cp src/entry.js index.js",
     "build": "npx webpack",
     "postinstall": "patch-package",
+    "prepack": "npm run build && cp src/entry.js index.js",
     "watch": "echo \"Test page will be available at: https://localhost:9002\" && npx webpack-dev-server"
   },
   "keywords": [

@@ -2,9 +2,11 @@
 
 Fallback page displayed when an 8th Wall experience cannot run on the current device
 
-![
+![Preview of the landing page showing a splash image and QR code](./docs/preview.png)
 
 ## Usage
+
+See https://8thwall.org/docs/engine/guides/landing-pages for a complete guide to customizing the landing page.
 
 ### Option 1: Script tag
 
@@ -37,7 +39,7 @@ You can then load the library by adding the following to index.html:
 <script src="./external/landing-page/landing-page.js"></script>
 ```
 
-When you import the package, a simple helper for accessing window.LandingPage is provided. The expectation is still that the script tag is added to the HTML. 
+When you import the package, a simple helper for accessing window.LandingPage is provided. The expectation is still that the script tag is added to the HTML. This is not needed for A-Frame.
 
 ```js
 import * as LandingPage from '@8thwall/landing-page'
@@ -45,13 +47,6 @@ LandingPage.configure({
   font: 'Arial',
 })
 ```
-
-### A-Frame
-
-When using A-Frame, add the `landing-page` component to `<a-scene>`. 
-
-## Configuration
-
 
 
 ## Development
