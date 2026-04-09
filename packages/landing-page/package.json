@@ -1,13 +1,12 @@
 {
   "name": "@8thwall/landing-page",
-  "version": "1.0.0-alpha.0",
+  "version": "1.0.0-alpha.1",
   "description": "Fallback page displayed when an 8th Wall experience cannot run on the current device",
   "author": "8th Wall Team",
   "license": "MIT",
   "main": "index.js",
   "scripts": {
-    "build": "npx webpack",
-    "postinstall": "patch-package",
+    "build": "npx patch-package && npx webpack",
     "prepack": "npm run build && cp src/entry.js index.js",
     "watch": "echo \"Test page will be available at: https://localhost:9002\" && npx webpack-dev-server"
   },

@@ -39,7 +39,7 @@ You can then load the library by adding the following to index.html:
 <script src="./external/landing-page/landing-page.js"></script>
 ```
 
-When you import the package, a simple helper for accessing window.LandingPage is provided. The expectation is still that the script tag is added to the HTML. This is not needed for A-Frame.
+When you import the package, a simple helper for accessing window.LandingPage is provided. The expectation is still that the script tag is added to the HTML. Note that configuring the landing page in this way is not required for A-Frame projects as the configuration is passed through the component schema.
 
 ```js
 import * as LandingPage from '@8thwall/landing-page'
@@ -47,7 +47,6 @@ LandingPage.configure({
   font: 'Arial',
 })
 ```
-
 
 ## Development
 
