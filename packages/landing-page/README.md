@@ -16,7 +16,7 @@ See https://8thwall.org/docs/engine/guides/landing-pages for a complete guide to
 
 ### Option 2: npm
 
-```
+```bash
 npm install @8thwall/landing-page
 ```
 
@@ -51,6 +51,9 @@ LandingPage.configure({
 ## Development
 
 - Start a local server with `npm run watch`
-- Try out the test project at `https://localhost:9002/`
-  - Query parameters allow custom presets an overrides, for example https://localhost:9002/?helmet&basic=0 and https://localhost:9002/?helmet&basic=0&textColor=red, see [test-parameters.ts](./src/test-parameters.ts)
-- In order to use your local version in, add `<script crossorigin="anonymous" src="https://localhost:9002/landing8.js"></script>`
+- Try out the test project at `https://localhost:9002/`. Query parameters allow custom presets and overrides, for example:
+  - https://localhost:9002/?video
+  - https://localhost:9002/?helmet&basic=0&textColor=red
+  - https://localhost:9002/?portrait
+  - See [test-parameters.ts](./src/test-parameters.ts) for full list
+- In order to use your local version in a project, replace the existing script tag with `<script crossorigin="anonymous" src="https://localhost:9002/landing8.js"></script>`
