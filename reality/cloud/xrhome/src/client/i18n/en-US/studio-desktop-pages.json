@@ -66,6 +66,7 @@
   "project_list_item.modal.text.delete_warning": "This folder and all of its contents will be deleted:",
   "project_list_item.modal.title.remove_project": "Remove project",
   "project_list_page.error.invalid_open_location": "Invalid folder selected. Please choose a valid project folder.",
+  "project_list_page.error.non_studio_project": "Selected folder is not a Studio project. Please check the setup instructions for this project in README.md.",
   "project_list_page.heading.projects": "Projects",
   "project_list_page.search.label.search_apps": "Search for Apps",
   "project_list_page.search.placeholder.search_apps": "Search for apps...",

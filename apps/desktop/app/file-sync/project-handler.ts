@@ -126,7 +126,18 @@ const openDiskLocation = withErrorHandlingResponse(async () => {
     isValid = (await fs.stat(path.join(projectPath, 'src/.expanse.json'))).isFile()
   } catch (error: any) {
     if (error.code === 'ENOENT') {
-      throw makeCodedError(`The provided path does not exist: ${projectPath}`, 404)
+      let containsPackageJsonAndReadme = false
+      try {
+        await fs.stat(path.join(projectPath, 'package.json'))
+        await fs.stat(path.join(projectPath, 'README.md'))
+        containsPackageJsonAndReadme = true
+      } catch (err) {
+        // Ignore
+      }
+      return makeJsonResponse({
+        message: `The provided path does not contain an expanse file: ${projectPath}`,
+        containsPackageJsonAndReadme,
+      }, 409)
     }
     throw makeCodedError(`Failed to access folder: ${projectPath}: ${error.message}`, 500)
   }
