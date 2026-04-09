@@ -28,6 +28,7 @@
     "README.md",
     "index.js",
     "index.d.ts",
+    "metadata.json",
     "dist"
   ]
 }
