@@ -1,6 +1,6 @@
 {
   "name": "@8thwall/landing-page",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0",
   "description": "Fallback page displayed when an 8th Wall experience cannot run on the current device",
   "author": "8th Wall Team",
   "license": "MIT",
