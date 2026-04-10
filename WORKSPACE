@@ -444,7 +444,7 @@ load("//bzl/crosstool:node-toolchain.bzl", "node_toolchain")
 
 node_toolchain(name = "node-toolchain")
 
-EMCC_NODE = "@nodejs_host//:bin/node"
+EMCC_NODE = "@nodejs_host//:node"
 
 emscripten_config(
     name = "emscripten-config",
@@ -650,13 +650,13 @@ register_execution_platforms(
 )
 
 # Register x86_64 as a secondary execution platform for Apple silicon Macs with rosetta.
-load("//bzl/apple:rosetta-platform-configure.bzl", "configure_rosetta")
+# load("//bzl/apple:rosetta-platform-configure.bzl", "configure_rosetta")
 
-configure_rosetta(name = "rosetta")
+# configure_rosetta(name = "rosetta")
 
-load("@rosetta//:repo.bzl", "register_rosetta_execution_platform")
+# load("@rosetta//:repo.bzl", "register_rosetta_execution_platform")
 
-register_rosetta_execution_platform()
+# register_rosetta_execution_platform()
 
 # These are toolchains for compiling code. They are defined in
 # //bzl/crosstool/BUILD, where they describe the supported execution and target
@@ -773,30 +773,30 @@ load("//bzl/unity:unity-version.bzl", "unity_version")
 #
 # If a new Unity version is installed that matches any of the below versions,
 # run 'bazel clean' to update future executions.
-unity_version(
-    name = "unity-version",
-    unity_search_paths = [
-        "/Applications/Unity/Hub/Editor",  # Default for macOS
-        "/opt/niantic/public/unity",  # Default for Linux
-        "/c/Program Files/Unity/Hub/Editor",  # Default for Windows (WSL or msys2 format)
-    ],
-    # Each string below creates a version constraint_value that can be used in
-    # unity rules. Valid strings are major versions, e.g "2022", minor version
-    # "2021.3" or patch versions "2021.3.37f1". These are then accessed as
-    # targets such as "@unity-version//:2021.3".
-    versions = [
-        "6000.0",
-        "2022.3",
-        "2021.3",
-        "2020.3",
-        "2019.4",
-        "2018.4",
-    ],
-)
+# unity_version(
+#     name = "unity-version",
+#     unity_search_paths = [
+#         "/Applications/Unity/Hub/Editor",  # Default for macOS
+#         "/opt/niantic/public/unity",  # Default for Linux
+#         "/c/Program Files/Unity/Hub/Editor",  # Default for Windows (WSL or msys2 format)
+#     ],
+#     # Each string below creates a version constraint_value that can be used in
+#     # unity rules. Valid strings are major versions, e.g "2022", minor version
+#     # "2021.3" or patch versions "2021.3.37f1". These are then accessed as
+#     # targets such as "@unity-version//:2021.3".
+#     versions = [
+#         "6000.0",
+#         "2022.3",
+#         "2021.3",
+#         "2020.3",
+#         "2019.4",
+#         "2018.4",
+#     ],
+# )
 
-load("@unity-version//:repo.bzl", "register_unity_toolchains")
+# load("@unity-version//:repo.bzl", "register_unity_toolchains")
 
-register_unity_toolchains()
+# register_unity_toolchains()
 
 # Install a newer version of googletest than is provided in org_tensorflow.
 http_archive(
@@ -1002,7 +1002,7 @@ http_archive(
         "//third_party/tensorflow:tf_protobuf_nia_v0.1.patch",
         "//third_party/tensorflow:tensorflow_minosversion.patch",
         "//third_party/tensorflow:tensorflow-v2.11.0-p8-disable_llvm-raw.patch",
-        "//third_party/tensorflow:tensorflow-v2.11.0-p8-fix_ubuntu_local_python_configuration.patch",
+        # "//third_party/tensorflow:tensorflow-v2.11.0-p8-fix_ubuntu_local_python_configuration.patch",
     ],
     sha256 = "dcf38db689396ac3ae846b060639a0b0f88589acd61fb9100ef30b101d529172",
     strip_prefix = "tensorflow-v2.11.0-p8",
@@ -1032,16 +1032,16 @@ cuda_triplet(
     url = "https://huggingface.co/datasets/8thWall/bazel-dependencies/resolve/main/cuda/v1-cuda-triplet.tar",
 )
 
-git_repository(
-    name = "build_bazel_rules_cuda",
-    commit = "29f3ced1b7541ae629bbfabe0c07dbfe76f29f4d",
-    remote = "https://github.com/liuliu/rules_cuda.git",
-    shallow_since = "1599856094 -0400",
-)
+# git_repository(
+#     name = "build_bazel_rules_cuda",
+#     commit = "29f3ced1b7541ae629bbfabe0c07dbfe76f29f4d",
+#     remote = "https://github.com/liuliu/rules_cuda.git",
+#     shallow_since = "1599856094 -0400",
+# )
 
-load("@build_bazel_rules_cuda//gpus:cuda_configure.bzl", "cuda_configure")
+# load("@build_bazel_rules_cuda//gpus:cuda_configure.bzl", "cuda_configure")
 
-cuda_configure(name = "local_config_cuda")
+# cuda_configure(name = "local_config_cuda")
 
 ### Protobuf 3.0.0 from github with the windows protoc.exe patched for supporting bazel 7.0.0
 #
@@ -1788,40 +1788,40 @@ http_toolchain(
     url = "https://huggingface.co/datasets/8thWall/bazel-dependencies/resolve/main/linux/x86_64-niantic_v2.0-linux-gnu--230202_120122.tar",
 )
 
-http_archive(
-    name = "bazel-contrib-rules_cuda",
-    patch_args = ["-p1"],
-    patches = [
-        "//bzl/thirdpartybuild/bazel-contrib-rules_cuda:change_generated_external_repo_name.patch",
-        "//bzl/thirdpartybuild/bazel-contrib-rules_cuda:hermetic_host_compiler.patch",
-        "//bzl/thirdpartybuild/bazel-contrib-rules_cuda:dummy_local_cuda_BUILD.patch",
-    ],
-    sha256 = "dc1f4f704ca56e3d5edd973f98a45f0487d0f28c689d0a57ba236112148b1833",
-    strip_prefix = "rules_cuda-v0.1.2",
-    urls = [
-        "https://github.com/bazel-contrib/rules_cuda/releases/download/v0.1.2/rules_cuda-v0.1.2.tar.gz",
-    ],
-)
+# http_archive(
+#     name = "bazel-contrib-rules_cuda",
+#     patch_args = ["-p1"],
+#     patches = [
+#         "//bzl/thirdpartybuild/bazel-contrib-rules_cuda:change_generated_external_repo_name.patch",
+#         "//bzl/thirdpartybuild/bazel-contrib-rules_cuda:hermetic_host_compiler.patch",
+#         "//bzl/thirdpartybuild/bazel-contrib-rules_cuda:dummy_local_cuda_BUILD.patch",
+#     ],
+#     sha256 = "dc1f4f704ca56e3d5edd973f98a45f0487d0f28c689d0a57ba236112148b1833",
+#     strip_prefix = "rules_cuda-v0.1.2",
+#     urls = [
+#         "https://github.com/bazel-contrib/rules_cuda/releases/download/v0.1.2/rules_cuda-v0.1.2.tar.gz",
+#     ],
+# )
 
-load(
-    "@bazel-contrib-rules_cuda//cuda:repositories.bzl",
-    "register_detected_cuda_toolchains",
-    "rules_cuda_dependencies",
-)
+# load(
+#     "@bazel-contrib-rules_cuda//cuda:repositories.bzl",
+#     "register_detected_cuda_toolchains",
+#     "rules_cuda_dependencies",
+# )
 
-rules_cuda_dependencies()
+# rules_cuda_dependencies()
 
-register_detected_cuda_toolchains()
+# register_detected_cuda_toolchains()
 
 # The following two lines are present to avoid build failures during analysis of
 # targets that require a CUDA toolchain for unsupported platforms.
 # See 'register_dummy_toolchains.bzl' for more details/explanation.
-load(
-    "//bzl/thirdpartybuild/bazel-contrib-rules_cuda:register_dummy_toolchains.bzl",
-    "register_dummy_cuda_toolchain",
-)
+# load(
+#     "//bzl/thirdpartybuild/bazel-contrib-rules_cuda:register_dummy_toolchains.bzl",
+#     "register_dummy_cuda_toolchain",
+# )
 
-register_dummy_cuda_toolchain()
+# register_dummy_cuda_toolchain()
 
 load("@com_google_protobuf//:protobuf_deps.bzl", nia_protobuf_deps = "protobuf_deps")
 

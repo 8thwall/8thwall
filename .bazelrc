@@ -14,6 +14,8 @@ common --experimental_writable_outputs
 # Access to more information
 common --ui_actions_shown=32
 
+common --repo_env=PYTHON_BIN_PATH=C:/Users/cmb/venv-8thwall/Scripts/python
+
 # Use the hermetic XCode toolchain for host and target by default.
 # Note: the crosstool_top is explicitly specified here due to a bad interaction
 # between the built-in (legacy) apple transition, the platform_mappings file,

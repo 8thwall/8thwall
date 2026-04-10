@@ -36,9 +36,13 @@ def _npm_package_impl(repository_ctx):
     for patchFile in repository_ctx.attr.patches:
         repository_ctx.symlink(patchFile, "patches/%s" % repository_ctx.path(patchFile).basename)
 
+    print("attr.node", repository_ctx.path(repository_ctx.attr.node))
     node = repository_ctx.path(repository_ctx.attr.node).realpath
+    print("node=" + node)
     node_bin_dir = node.dirname
+    print("node_bin_dir=" + node_bin_dir)
     npm = "{}/npm".format(node_bin_dir)
+    print("npm=" + npm)
 
     env_vars = dict(repository_ctx.attr.env)
     env_vars.update({
@@ -127,7 +131,7 @@ npm_package = repository_rule(
         "package": attr.label(mandatory = True, allow_single_file = True),
         "package_lock": attr.label(mandatory = True, allow_single_file = True),
         "patches": attr.label_list(default = [], allow_files = True),
-        "node": attr.label(default = "@nodejs_host//:bin/node", allow_single_file = True),
+        "node": attr.label(default = "@nodejs_host//:node_bin", allow_single_file = True),
         "exports_files": attr.label_list(default = [], allow_files = True),
         "excluded_files": attr.string_list(default = []),
         "export_zip": attr.bool(default = False),

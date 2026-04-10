@@ -54,6 +54,37 @@ If there is a snag, additional setup instructions are [available in the archive]
 
 Some projects may have their own setup steps, for example running `npm install` in project folders. Check the README.md files in any folders you plan to work in.
 
+## Using Windows
+
+Using Windows with projects that utilize bazel is not very well supported. This branch contains a number of tweaks that improve the supported builds, but doesn't achieve support across the board.
+
+Projects that don't depend on bazel:
+
+1. Sample projects: https://github.com/orgs/8thwall/repositories?q=example
+2. Documentation: https://github.com/8thwall/8thwall.github.io
+3. image-target-cli, xrextras, landing-page
+
+Some things that helped:
+
+- Use "bash" mode in VS Code
+- `npm config set script-shell /usr/bin/bash`
+- Enable "Developer mode" in Windows settings
+- Run `source ~/venv-8thwall/Scripts/activate` to activate the venv (not `bin/activate`)
+- Add the relevant `--repo_env=PYTHON_BIN_PATH` in bazelrc
+- If everything is set up correctly, `bazel run //bzl/examples:hello` should work.
+
+Still trying to figure out:
+
+- bin/node to bin/node.exe? Or node.cmd?
+- Clang errors when building clang:
+```
+INFO: From Compiling c++/src/kj/thread.c++ [for tool]:
+========= clang stderr ========:
+In file included from <built-in>:440:
+<command line>:14:9: error: macro name must be an identifier
+#define -lAdvAPI32 1
+```
+
 ## Code Style
 
 Please run the following before sending Pull Requests.
@@ -73,3 +104,5 @@ A more detailed style guide is available [here](https://github.com/8thwall/archi
 ## Community
 
 Have a question or want to discuss an idea before opening an issue? Use [GitHub Discussions](https://github.com/orgs/8thwall/discussions).
+
+
