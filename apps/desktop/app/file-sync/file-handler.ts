@@ -1,5 +1,5 @@
 import {shell} from 'electron'
-import {createReadStream, createWriteStream, ReadStream, Stats} from 'fs'
+import {createWriteStream, Stats} from 'fs'
 import {mkdir, rm, rename, readdir, stat} from 'fs/promises'
 import path from 'path'
 import {Readable} from 'stream'
@@ -26,24 +26,7 @@ import {
 import {makeJsonResponse} from '../../json-response'
 import {getQueryParams} from '../../query-params'
 import {openInCodeEditor} from '../preferences/code-editor'
-
-const createReadStreamPromise = (filePath: string) => new Promise<ReadStream>((resolve, reject) => {
-  const contentStream = createReadStream(filePath)
-
-  contentStream.on('open', () => {
-    resolve(contentStream)
-  })
-
-  contentStream.on('error', (error) => {
-    if ('code' in error && error.code === 'ENOENT') {
-      reject(makeCodedError('File not found', 404))
-    } else {
-      // eslint-disable-next-line no-console
-      console.error('Error reading file: ', error)
-      reject(makeCodedError('Error reading file', 500))
-    }
-  })
-})
+import {createReadStreamPromise, makeStreamFileResponse} from '../../stream-file-response'
 
 const getLocalFile = withErrorHandlingResponse(async (req: Request) => {
   const requestUrl = new URL(req.url)
@@ -84,19 +67,7 @@ const getLocalFile = withErrorHandlingResponse(async (req: Request) => {
     }
   }
 
-  const contentStream = await createReadStreamPromise(fullPath)
-
-  // log errors that occur when streaming
-  contentStream.on('error', (error) => {
-    // eslint-disable-next-line no-console
-    console.error(`Error reading file '${contentStream.path}':`, error)
-  })
-
-  return new Response(contentStream, {
-    headers: {
-      'Content-Type': mime.lookup(filePath) || 'application/octet-stream',
-    },
-  })
+  return makeStreamFileResponse(fullPath)
 })
 
 const headLocalFile = withErrorHandlingResponse(async (req: Request) => {

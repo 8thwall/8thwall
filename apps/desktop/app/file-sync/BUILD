@@ -17,6 +17,7 @@ js_library(
         "//apps/desktop:local-project-db",
         "//apps/desktop:project-helpers",
         "//apps/desktop:query-params",
+        "//apps/desktop:stream-file-response",
         "//apps/desktop/app/file-sync:file-handler-types",
         "//apps/desktop/app/file-sync:paths",
         "//apps/desktop/app/preferences:code-editor",

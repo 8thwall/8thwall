@@ -107,3 +107,23 @@ js_binary(
         "//apps/desktop/app:desktop-protocol",
     ],
 )
+
+js_library(
+    name = "requests",
+    srcs = [
+        "requests.ts",
+    ],
+    deps = [
+        "//apps/desktop:errors",
+    ],
+)
+
+js_library(
+    name = "stream-file-response",
+    srcs = [
+        "stream-file-response.ts",
+    ],
+    deps = [
+        "//apps/desktop:errors",
+    ],
+)

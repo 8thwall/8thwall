@@ -25,6 +25,7 @@ js_binary(
         "//apps/desktop/app/dev8-socket:dev8-socket-server",
         "//apps/desktop/app/file-sync:protocol",
         "//apps/desktop/app/file-watch:ports",
+        "//apps/desktop/app/image-targets:protocol",
         "//apps/desktop/app/preferences:protocol",
     ],
 )
