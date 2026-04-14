@@ -10,12 +10,6 @@ const createReadStreamPromise = (filePath: string) => new Promise<ReadStream>((r
     resolve(contentStream)
   })
 
-  // log errors that occur when streaming
-  contentStream.on('error', (error) => {
-    // eslint-disable-next-line no-console
-    console.error(`Error reading file '${contentStream.path}':`, error)
-  })
-
   contentStream.on('error', (error) => {
     if ('code' in error && error.code === 'ENOENT') {
       reject(makeCodedError('File not found', 404))
