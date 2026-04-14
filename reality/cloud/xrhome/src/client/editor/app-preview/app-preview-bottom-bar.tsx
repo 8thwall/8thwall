@@ -19,7 +19,8 @@ import {StandardFieldLabel} from '../../ui/components/standard-field-label'
 import {isCloudStudioApp} from '../../../shared/app-utils'
 import useCurrentApp from '../../common/use-current-app'
 import {ImageTargetLoader} from '../../image-targets/image-target-loader'
-import {useGalleryTargets, useImageTarget} from '../../image-targets/use-image-targets'
+import {useImageTarget} from '../../studio/hooks/use-image-target'
+import {useGalleryTargets} from '../../image-targets/use-image-targets'
 
 const useStyles = createThemedStyles(theme => ({
   textButton: {
@@ -123,6 +124,15 @@ const AppPreviewBottomBar: React.FC<IAppPreviewBottomBar> = ({
     targets = [...targets, selectedTarget]
   }
 
+  const getTranslatedType = (type: string) => {
+    switch (type) {
+      case 'PLANAR': return t('image_target_page.label.flat', {ns: 'app-pages'})
+      case 'CYLINDER': return t('image_target_page.label.cylindrical', {ns: 'app-pages'})
+      case 'CONICAL': return t('image_target_page.label.conical', {ns: 'app-pages'})
+      default: return type
+    }
+  }
+
   const isLiveView = !!simulatorState?.isLiveView
 
   const variations = selectedSequence?.variations
@@ -140,15 +150,6 @@ const AppPreviewBottomBar: React.FC<IAppPreviewBottomBar> = ({
     section: item.section,
     rightContent: item.tag,
   }))
-
-  const getTranslatedType = (type: string) => {
-    switch (type) {
-      case 'PLANAR': return t('image_target_page.label.flat')
-      case 'CYLINDER': return t('image_target_page.label.cylindrical')
-      case 'CONICAL': return t('image_target_page.label.conical')
-      default: return type
-    }
-  }
 
   const imageTargetOptionsData: SequenceOptionData[] = targets?.map(({name, type}) => ({
     name,
