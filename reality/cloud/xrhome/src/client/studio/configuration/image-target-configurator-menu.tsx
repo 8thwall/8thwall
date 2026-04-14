@@ -27,6 +27,7 @@ import {createThemedStyles} from '../../ui/theme'
 import {
   AddImageTargetSubMenu, ImageTargetUploadInput, useImageTargetUpload,
 } from '../image-target-upload'
+import {useGalleryTargets} from '../../image-targets/use-image-targets'
 
 const useStyles = createThemedStyles(theme => ({
   searchBarContainer: {
@@ -162,10 +163,7 @@ const ImageTargetConfiguratorMenu: React.FC<IImageTargetConfiguratorMenu> = (
   const {options, inputRefs} = useImageTargetUpload()
 
   const app = useEnclosedApp()
-  const targetInfo = useSelector(s => s.imageTargets.targetInfoByApp[app.uuid])
-  const targetsByUuid = useSelector(s => s.imageTargets.targetsByUuid)
-  const gallery = targetInfo?.galleries?.[ENTITY_GALLERY_ID]
-  const imageTargets = gallery?.uuids?.map(uuid => targetsByUuid[uuid])
+  const imageTargets = useGalleryTargets(ENTITY_GALLERY_ID)
   const {
     resetGalleryFilterOptionsForApp, fetchImageTargetsForApp, setGalleryFilterOptionsForApp,
   } = useActions(imageTargetsActions)
@@ -250,7 +248,7 @@ const ImageTargetConfiguratorMenu: React.FC<IImageTargetConfiguratorMenu> = (
                           clearSearch()
                           collapse()
                         }}
-                        disabled={gallery?.status === 'loading-initial'}
+                        // disabled={gallery?.status === 'loading-initial'}
                       />
                     ))}
                     <ImageTargetLoader galleryUuid={ENTITY_GALLERY_ID} />

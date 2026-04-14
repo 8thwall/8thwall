@@ -25,6 +25,7 @@ import {
 import {ContextMenu, useContextMenuState} from './ui/context-menu'
 import FileUploadProgressBar from '../editor/file-upload-progress-bar'
 import {useStudioStateContext} from './studio-state-context'
+import {useGalleryTargets} from '../image-targets/use-image-targets'
 
 const useStyles = createUseStyles({
   targetsContainer: {
@@ -101,12 +102,9 @@ const StudioImageTargetBrowser: React.FC = () => {
   const {t} = useTranslation(['cloud-studio-pages', 'common'])
   const app = useEnclosedApp()
   const stateCtx = useStudioStateContext()
-  const targetInfo = useSelector(s => s.imageTargets.targetInfoByApp[app.uuid])
-  const targetsByUuid = useSelector(s => s.imageTargets.targetsByUuid)
-  const gallery = targetInfo?.galleries?.[BROWSER_GALLERY_ID]
-  const imageTargets = gallery?.uuids?.map(uuid => targetsByUuid[uuid])
-  const loadingInitial = gallery?.status === 'loading-initial'
-  const hasMoreTargets = !!gallery?.continuation
+  const imageTargets = useGalleryTargets(BROWSER_GALLERY_ID)
+  const loadingInitial = false  // TODO(christoph): Ensure suspense is handled
+  const hasMoreTargets = false  // TODO(christoph): Clean up
   const classes = useStyles()
   const menuState = useContextMenuState()
   const {options, inputRefs} = useImageTargetUpload()

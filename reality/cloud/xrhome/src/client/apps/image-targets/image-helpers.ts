@@ -1,6 +1,6 @@
 import {MINIMUM_SHORT_LENGTH, MINIMUM_LONG_LENGTH} from '../../../shared/xrengine-config'
 import type {CropAreaPixels} from '../../common/image-cropper'
-import type {CanvasPool} from '../../common/resource-pool'
+import type {CanvasPool, Resource, ResourcePool} from '../../common/resource-pool'
 import {computePixelPointsFromRadius, getUnconifiedData} from './conical/unconify'
 
 type ImageInfo = {url: string, data: ImageData}
@@ -48,7 +48,10 @@ const getDefaultBottomRadius = (width, height, rTop): number => {
   return Math.min(rBottom, rTop - minUnconifiedHeight)
 }
 
-const loadImage = (url: string, imgPool): Promise<HTMLImageElement> => new Promise((resolve) => {
+const loadImage = (
+  url: string,
+  imgPool: ResourcePool<HTMLImageElement>
+) => new Promise<Resource<HTMLImageElement>>((resolve) => {
   const img = imgPool.get()
   img.onload = () => {
     resolve(img)
@@ -57,7 +60,8 @@ const loadImage = (url: string, imgPool): Promise<HTMLImageElement> => new Promi
 })
 
 const getImageBlobFromUrl = async (
-  img: HTMLImageElement, w: number, h: number, fileType: string, canvasPool
+  img: HTMLImageElement, w: number, h: number, fileType: string,
+  canvasPool: ResourcePool<HTMLCanvasElement>
 ): Promise<Blob> => {
   const canvas = canvasPool.get()
   const canvasCtx = canvas.getContext('2d')

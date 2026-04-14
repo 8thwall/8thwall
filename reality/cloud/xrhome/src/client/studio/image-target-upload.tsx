@@ -23,13 +23,12 @@ import {
 import {makeFileName} from '../apps/image-targets/naming'
 import useActions from '../common/use-actions'
 import appsActions, {TargetGeometry} from '../apps/apps-actions'
-import {useSelector} from '../hooks'
-import {selectImageTargetsForApp} from '../image-targets/state-selectors'
 import {useEnclosedApp} from '../apps/enclosed-app-context'
 import type {IImageTarget} from '../common/types/models'
 import {SubMenuHeading} from './ui/submenu-heading'
 import imageTargetsActions from '../image-targets/actions'
 import {useStudioStateContext} from './studio-state-context'
+import {useImageTargets} from '../image-targets/use-image-targets'
 
 const DEFAULT_TOP_RADIUS = 4479
 const UPLOAD_PROGRESS_EXIF_LOADED = 0.1
@@ -78,7 +77,7 @@ const ImageTargetUploadInput: React.FC<IImageTargetUploadInput> = ({
   const canvasPool = useCanvasPool()
   const {uploadImageTarget} = useActions(appsActions)
   const {fetchImageTargetsForApp} = useActions(imageTargetsActions)
-  const imageTargets = useSelector(s => (selectImageTargetsForApp(app.uuid, s.imageTargets))) ?? []
+  const imageTargets = useImageTargets()
   const stateCtx = useStudioStateContext()
 
   const onUploadFail = (error: string) => {

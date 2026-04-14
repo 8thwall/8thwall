@@ -5,7 +5,7 @@ import type {DeepReadonly} from 'ts-essentials'
 import type {ImageTarget as ImageTargetConfig} from '@ecs/shared/scene-graph'
 
 import {Tooltip} from '../ui/components/tooltip'
-import {useImageTarget} from './hooks/use-image-target'
+import {useImageTarget} from '../image-targets/use-image-targets'
 
 const useStyles = createUseStyles({
   tooltipContent: {
