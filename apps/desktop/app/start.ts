@@ -24,6 +24,7 @@ import {registerPermissionHandler} from './desktop-app/permissions'
 import {navigateToDeepLink} from './desktop-app/deep-link'
 import {setupMenu} from './menu'
 import {createDev8WebSocketServer} from './dev8-socket/dev8-socket-server'
+import {IMAGE_TARGETS_SCHEME, registerImageTargetsHandler} from './image-targets/protocol'
 
 const CONSOLE_WEBSOCKET_PORT = 62009
 
@@ -144,7 +145,12 @@ app.on('window-all-closed', () => {
   app.quit()
 })
 
-protocol.registerSchemesAsPrivileged([DESKTOP_SCHEME, FILE_SYNC_SCHEME, PREFERENCES_SCHEME])
+protocol.registerSchemesAsPrivileged([
+  DESKTOP_SCHEME,
+  FILE_SYNC_SCHEME,
+  PREFERENCES_SCHEME,
+  IMAGE_TARGETS_SCHEME,
+])
 
 // NOTE(johnny): Remove trailing colon
 const protocolName = STUDIO_HUB_PROTOCOL.slice(0, -1)
@@ -162,6 +168,7 @@ app.whenReady()
     registerDesktopAppHandler(distRoot)
     registerFileSyncHandler()
     registerPreferencesHandler()
+    registerImageTargetsHandler()
     maybeUpdateOnBeforeRequest()
 
     const win = createWindow()

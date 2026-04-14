@@ -50,3 +50,10 @@ js_library(
         "unix-path.ts",
     ],
 )
+
+js_library(
+    name = "image-target-api",
+    srcs = [
+        "image-target-api.ts",
+    ],
+)
