@@ -1,11 +1,11 @@
 import {useEffect} from 'react'
 
 // An Abandonable function returns a promise or is a promise itself.
-type Abandonable = (() => Promise<any>) | Promise<any>
+type Abandonable<T> = (() => Promise<T>) | Promise<T>
 
 // The executor of abandonable functions may or may not resolve.
 // If it does resolve, it returns whatever the given returned.
-type AbandonableExecutor = (abandonable: Abandonable) => Promise<any | never>
+type AbandonableExecutor = <T>(abandonable: Abandonable<T>) => Promise<T | never>
 
 // This is the function you make and pass into useAbandonable()
 type AbandonableEffect = (executor: AbandonableExecutor) => (void | Promise<void>)
@@ -45,7 +45,7 @@ const useAbandonableEffect = (effectBodyFn: AbandonableEffect, deps?: any[]) => 
     let canceled = false
 
     // !! Don't forget to await the executor's promise in your code otherwise things won't work !!
-    const executor = (possiblyAbandon: Abandonable) => new Promise((resolve, reject) => {
+    const executor: AbandonableExecutor = possiblyAbandon => new Promise((resolve, reject) => {
       // Early exit, don't even execute the given function.
       if (canceled) {
         return

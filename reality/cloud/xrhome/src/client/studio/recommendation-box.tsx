@@ -118,7 +118,7 @@ const AssetBundleRecommendation = () => {
 
 const WebpackInjectFixRecommendation = () => {
   const {t} = useTranslation(['cloud-studio-pages', 'common'])
-  const [visible, setVisible] = React.useState()
+  const [visible, setVisible] = React.useState(false)
   const {appKey} = useCurrentApp()
   const localSyncContext = useLocalSyncContext()
   useAbandonableEffect(async (abandon) => {
@@ -138,12 +138,12 @@ const WebpackInjectFixRecommendation = () => {
           <BoldButton onClick={async () => {
             await applyProjectConfigFix(appKey, 'inject')
             await localSyncContext.restartServer()
-            setVisible(null)
+            setVisible(false)
           }}
           >
             {t('recommendation_box.fix')}
           </BoldButton>
-          <BoldButton onClick={() => setVisible(null)}>
+          <BoldButton onClick={() => setVisible(false)}>
             {t('recommendation_box.dismiss')}
           </BoldButton>
         </SpaceBetween>

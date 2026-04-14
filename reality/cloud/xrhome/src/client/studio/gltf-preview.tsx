@@ -73,7 +73,7 @@ const GltfPreviewInner: React.FC<IGltfPreview> = ({
     const isSpecial = ext === 'hdr' || ext === 'exr'
     const loader = isSpecial ? new RGBELoader() : new TextureLoader()
     if (finalEnvMap && finalEnvMap !== 'none') {
-      const texture = await abandon(new Promise((resolve, reject) => {
+      const texture = await abandon(new Promise<Texture>((resolve, reject) => {
         loader.load(finalEnvMap, (text) => {
           text.mapping = EquirectangularReflectionMapping
           resolve(text)
