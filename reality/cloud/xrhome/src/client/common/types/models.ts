@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 import type {DeepReadonly} from 'ts-essentials'
+import type {ImageTargetData} from '@repo/reality/shared/desktop/image-target-api'
 
 import type {
   Accounts,
@@ -63,9 +64,10 @@ interface IFullAccount extends DeepReadonly<Omit<Accounts, 'icon'> & {
   shortNameChangeRequired: boolean
 }> {}
 
-interface ImageTarget extends Omit<ImageTargets,
+interface ImageTarget extends Omit<ImageTargets & ImageTargetData,
   'originalImagePath' | 'imagePath'|'luminanceImagePath' | 'thumbnailImagePath' |
-  'geometryTextureImagePath'
+  'geometryTextureImagePath' | 'physicalWidthInMeters' | 'moveable' |
+  'geometryTexturePath' | 'scanDataPath'
 > {}
 
 interface IImageTarget extends ImageTarget {

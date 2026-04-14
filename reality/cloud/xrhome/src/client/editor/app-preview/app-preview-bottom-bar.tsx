@@ -14,13 +14,13 @@ import {StandardStepper, StepperOption} from '../../ui/components/standard-stepp
 import {AppPreviewPlaybar} from './app-preview-playbar'
 import {brandBlack, darkMango, mango} from '../../static/styles/settings'
 import {useSimulator} from './use-simulator-state'
-import {useAppImageTargets, type ImageTarget} from '../../studio/hooks/use-app-image-targets'
 import {Tooltip} from '../../ui/components/tooltip'
 import {StandardFieldLabel} from '../../ui/components/standard-field-label'
 import {isCloudStudioApp} from '../../../shared/app-utils'
 import useCurrentApp from '../../common/use-current-app'
 import {ImageTargetLoader} from '../../image-targets/image-target-loader'
 import {useImageTarget} from '../../studio/hooks/use-image-target'
+import {useGalleryTargets} from '../../image-targets/use-image-targets'
 
 const useStyles = createThemedStyles(theme => ({
   textButton: {
@@ -118,21 +118,19 @@ const AppPreviewBottomBar: React.FC<IAppPreviewBottomBar> = ({
   const {t} = useTranslation(['cloud-editor-pages', 'app-pages'])
 
   const {simulatorState, updateSimulatorState} = useSimulator()
-  const targets = useAppImageTargets(targetsGalleryUuid)
+  let targets = useGalleryTargets(targetsGalleryUuid)
   const [selectedTarget] = useImageTarget(selectedImageTargetName)
   if (selectedTarget && !targets.find(({name}) => name === selectedTarget.name)) {
-    targets.push({
-      name: selectedTarget.name,
-      translatedType: {
-        'PLANAR': t('image_target_page.label.flat', {ns: 'app-pages'}),
-        'CYLINDER': t('image_target_page.label.cylindrical', {ns: 'app-pages'}),
-        'CONICAL': t('image_target_page.label.conical', {ns: 'app-pages'}),
-      }[selectedTarget.type],
-      type: selectedTarget.type,
-      imageUrl: selectedTarget.imageSrc,
-      originalImageUrl: selectedTarget.geometryTextureImageSrc || selectedTarget.originalImageSrc,
-      metadata: selectedTarget.metadata,
-    })
+    targets = [...targets, selectedTarget]
+  }
+
+  const getTranslatedType = (type: string) => {
+    switch (type) {
+      case 'PLANAR': return t('image_target_page.label.flat', {ns: 'app-pages'})
+      case 'CYLINDER': return t('image_target_page.label.cylindrical', {ns: 'app-pages'})
+      case 'CONICAL': return t('image_target_page.label.conical', {ns: 'app-pages'})
+      default: return type
+    }
   }
 
   const isLiveView = !!simulatorState?.isLiveView
@@ -153,16 +151,16 @@ const AppPreviewBottomBar: React.FC<IAppPreviewBottomBar> = ({
     rightContent: item.tag,
   }))
 
-  const imageTargetOptionsData: SequenceOptionData[] = targets?.map(({name, translatedType}) => ({
+  const imageTargetOptionsData: SequenceOptionData[] = targets?.map(({name, type}) => ({
     name,
     section: 'IMAGE_TARGETS',
-    rightContent: translatedType,
+    rightContent: getTranslatedType(type),
   })) ?? []
 
   const sequenceOptions: DropdownOption[] = sequenceOptionData.map(makeSequenceOption)
   const imageTargetOptions: DropdownOption[] = imageTargetOptionsData.map(makeSequenceOption)
 
-  const getImageTarget = (name: string): ImageTarget => (
+  const getImageTarget = (name: string) => (
     targets?.find(target => target.name === name)
   )
 
@@ -225,7 +223,7 @@ const AppPreviewBottomBar: React.FC<IAppPreviewBottomBar> = ({
       isPaused: false,
       imageTargetName: imageTarget?.name,
       imageTargetType: imageTarget?.type,
-      imageTargetOriginalUrl: imageTarget?.originalImageUrl,
+      imageTargetOriginalUrl: imageTarget?.geometryTextureImageSrc || imageTarget?.originalImageSrc,
       imageTargetMetadata: imageTarget?.metadata,
     })
   }

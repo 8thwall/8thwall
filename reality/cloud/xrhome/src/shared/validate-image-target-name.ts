@@ -1,13 +1,9 @@
-import {useEnclosedApp} from '../client/apps/enclosed-app-context'
-import {useSelector} from '../client/hooks'
+import {useImageTargets} from '../client/image-targets/use-image-targets'
 import {DISALLOWED_NAME_CHARACTERS} from './image-target-constants'
 
 const useOtherImageNames = (thisUuid: string) => {
-  const app = useEnclosedApp()
-  const targetsByUuid = useSelector(s => s.imageTargets.targetsByUuid)
-  const targetInfo = useSelector(s => s.imageTargets.targetInfoByApp[app.uuid])
-  const imageTargets = targetInfo?.targetUuids?.map(uuid => targetsByUuid[uuid])
-  return imageTargets?.filter(it => it.uuid !== thisUuid).map(it => it.name)
+  const targets = useImageTargets()
+  return targets.filter(e => e.uuid !== thisUuid).map(e => e.name)
 }
 
 type ValidateOptions = {

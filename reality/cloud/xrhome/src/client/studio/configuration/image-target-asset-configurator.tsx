@@ -9,7 +9,6 @@ import {useEnclosedApp} from '../../apps/enclosed-app-context'
 import useActions from '../../common/use-actions'
 import imageTargetsActions from '../../image-targets/actions'
 import appsActions from '../../apps/apps-actions'
-import {useSelector} from '../../hooks'
 import {
   useOtherImageNames, validateImageTargetName,
 } from '../../../shared/validate-image-target-name'
@@ -44,6 +43,7 @@ import {MINIMUM_LONG_LENGTH, MINIMUM_SHORT_LENGTH} from '../../../shared/xrengin
 import type {ImageInfo} from '../../apps/image-targets/image-helpers'
 import type {CropAreaPixels} from '../../common/image-cropper'
 import {Tooltip} from '../../ui/components/tooltip'
+import {useImageTarget} from '../hooks/use-image-target'
 
 type VisualizerFocus = 'main' | 'trackingRegion' | 'arcCurves'
 interface VisualizerState {
@@ -580,7 +580,7 @@ const ImageTargetAssetConfigurator: React.FC = () => {
   const app = useEnclosedApp()
   const stateCtx = useStudioStateContext()
   const {selectedImageTarget} = stateCtx.state
-  const imageTarget = useSelector(s => s.imageTargets.targetsByUuid[selectedImageTarget])
+  const [imageTarget, loading] = useImageTarget(selectedImageTarget)
   const {fetchSingleTargetForApp} = useActions(imageTargetsActions)
 
   useEffect(() => {
@@ -589,6 +589,10 @@ const ImageTargetAssetConfigurator: React.FC = () => {
     }
   }, [app.uuid, selectedImageTarget])
 
+  if (loading) {
+    return <Loader />
+  }
+
   return imageTarget
     ? (
       <LoadedImageTargetAssetConfigurator
@@ -596,9 +600,7 @@ const ImageTargetAssetConfigurator: React.FC = () => {
         imageTarget={imageTarget}
       />
     )
-    : (
-      <Loader />
-    )
+    : null
 }
 
 export type {

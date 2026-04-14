@@ -4,7 +4,6 @@ import {createUseStyles} from 'react-jss'
 
 import {useEvent} from '../hooks/use-event'
 import {useEnclosedApp} from '../apps/enclosed-app-context'
-import {useSelector} from '../hooks'
 import useActions from '../common/use-actions'
 import imageTargetsActions from './actions'
 import {FloatingPanelButton} from '../ui/components/floating-panel-button'
@@ -38,11 +37,10 @@ const ImageTargetLoader: React.FC<IImageTargetLoaderProps> = ({galleryUuid}) => 
   const app = useEnclosedApp()
   const {t} = useTranslation(['cloud-studio-pages'])
   const classes = useStyles()
-  const targetInfo = useSelector(s => s.imageTargets.targetInfoByApp[app.uuid])
-  const gallery = targetInfo?.galleries?.[galleryUuid]
-  const loadingAdditional = gallery?.status === 'loading-additional'
-  const loadingInitial = gallery?.status === 'loading-initial'
-  const hasMoreTargets = !!gallery?.continuation
+  // TODO(christoph): Add pagination to the local API, or remove fully?
+  const loadingAdditional = false
+  const loadingInitial = false
+  const hasMoreTargets = false
   const {fetchAdditionalGalleryTargets} = useActions(imageTargetsActions)
 
   const canLoadMore = !loadingInitial && !loadingAdditional && hasMoreTargets
