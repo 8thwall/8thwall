@@ -5,9 +5,6 @@ import {quat, vec3} from '@ecs/runtime/math/math'
 
 import {calculateGlobalTransform} from '../global-transform'
 import type {DerivedScene} from '../derive-scene'
-import {useGalleryTargets} from '../../image-targets/use-image-targets'
-
-const useAppImageTargets = useGalleryTargets
 
 const getImageTargetRotation = (
   derivedScene: DerivedScene, name: string | undefined
@@ -26,6 +23,5 @@ const getImageTargetRotation = (
 }
 
 export {
-  useAppImageTargets,
   getImageTargetRotation,
 }

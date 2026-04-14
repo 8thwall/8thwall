@@ -14,13 +14,12 @@ import {StandardStepper, StepperOption} from '../../ui/components/standard-stepp
 import {AppPreviewPlaybar} from './app-preview-playbar'
 import {brandBlack, darkMango, mango} from '../../static/styles/settings'
 import {useSimulator} from './use-simulator-state'
-import {useAppImageTargets} from '../../studio/hooks/use-app-image-targets'
 import {Tooltip} from '../../ui/components/tooltip'
 import {StandardFieldLabel} from '../../ui/components/standard-field-label'
 import {isCloudStudioApp} from '../../../shared/app-utils'
 import useCurrentApp from '../../common/use-current-app'
 import {ImageTargetLoader} from '../../image-targets/image-target-loader'
-import {useImageTarget} from '../../image-targets/use-image-targets'
+import {useGalleryTargets, useImageTarget} from '../../image-targets/use-image-targets'
 
 const useStyles = createThemedStyles(theme => ({
   textButton: {
@@ -118,7 +117,7 @@ const AppPreviewBottomBar: React.FC<IAppPreviewBottomBar> = ({
   const {t} = useTranslation(['cloud-editor-pages', 'app-pages'])
 
   const {simulatorState, updateSimulatorState} = useSimulator()
-  let targets = useAppImageTargets(targetsGalleryUuid)
+  let targets = useGalleryTargets(targetsGalleryUuid)
   const [selectedTarget] = useImageTarget(selectedImageTargetName)
   if (selectedTarget && !targets.find(({name}) => name === selectedTarget.name)) {
     targets = [...targets, selectedTarget]

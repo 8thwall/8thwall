@@ -248,7 +248,6 @@ const ImageTargetConfiguratorMenu: React.FC<IImageTargetConfiguratorMenu> = (
                           clearSearch()
                           collapse()
                         }}
-                        // disabled={gallery?.status === 'loading-initial'}
                       />
                     ))}
                     <ImageTargetLoader galleryUuid={ENTITY_GALLERY_ID} />

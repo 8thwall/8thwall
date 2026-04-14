@@ -14,10 +14,10 @@ import {ImageTargetConfiguratorMenu} from './image-target-configurator-menu'
 import {ImageTargetVisualizer, ImageTargetVisualizerFrame} from './image-target-visualizer'
 import {copyDirectProperties} from './copy-component'
 import {useStudioStateContext, type ImageTargetShowOption} from '../studio-state-context'
+import {useImageTarget} from '../hooks/use-image-target'
 import {FloatingPanelButton} from '../../ui/components/floating-panel-button'
 import {RowMultiSelect, RowTextField} from './row-fields'
 import {IMAGE_TARGET_COMPONENT} from './direct-property-components'
-import {useImageTarget} from '../../image-targets/use-image-targets'
 
 const useStyles = createUseStyles({
   container: {

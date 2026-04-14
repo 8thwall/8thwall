@@ -37,7 +37,7 @@ const ImageTargetLoader: React.FC<IImageTargetLoaderProps> = ({galleryUuid}) => 
   const app = useEnclosedApp()
   const {t} = useTranslation(['cloud-studio-pages'])
   const classes = useStyles()
-  // TODO(christoph): Decide what to do here
+  // TODO(christoph): Add pagination to the local API, or remove fully?
   const loadingAdditional = false
   const loadingInitial = false
   const hasMoreTargets = false

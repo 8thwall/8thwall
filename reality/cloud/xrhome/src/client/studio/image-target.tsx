@@ -5,8 +5,8 @@ import type {Mesh} from 'three'
 
 import {mango} from '../static/styles/settings'
 import {enableOutline, removeOutline} from './selected-outline'
+import {useImageTarget} from './hooks/use-image-target'
 import {useStudioStateContext} from './studio-state-context'
-import {useImageTarget} from '../image-targets/use-image-targets'
 
 interface IImageTargetMesh {
   name?: string

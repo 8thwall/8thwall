@@ -82,15 +82,8 @@ const useGalleryTargets = (galleryUuid: string | undefined) => {
   return React.useMemo(() => targets, [targets, filter])
 }
 
-const useImageTarget = (name?: string | null) => {
-  const targets = useImageTargetsOrLoading()
-  const target = targets.data?.find(e => e.name === name)
-  return [target, targets.isLoading] as const
-}
-
 export {
   useImageTargets,
   useGalleryTargets,
   useImageTargetsOrLoading,
-  useImageTarget,
 }

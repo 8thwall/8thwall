@@ -43,7 +43,7 @@ import {MINIMUM_LONG_LENGTH, MINIMUM_SHORT_LENGTH} from '../../../shared/xrengin
 import type {ImageInfo} from '../../apps/image-targets/image-helpers'
 import type {CropAreaPixels} from '../../common/image-cropper'
 import {Tooltip} from '../../ui/components/tooltip'
-import {useImageTarget} from '../../image-targets/use-image-targets'
+import {useImageTarget} from '../hooks/use-image-target'
 
 type VisualizerFocus = 'main' | 'trackingRegion' | 'arcCurves'
 interface VisualizerState {
