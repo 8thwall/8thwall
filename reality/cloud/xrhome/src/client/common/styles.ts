@@ -1,4 +1,6 @@
-const combine = (class1: string, class2: string, ...rest: string[]) => (
+type MaybeClass = string | false | undefined | null
+
+const combine = (class1: MaybeClass, class2: MaybeClass, ...rest: MaybeClass[]) => (
   [class1, class2, ...rest].filter(v => v).join(' ')
 )
 
