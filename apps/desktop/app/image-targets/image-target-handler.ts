@@ -9,7 +9,7 @@ import {branches, methods, RequestHandler} from '../../requests'
 import {getLocalProject} from '../../local-project-db'
 import {makeJsonResponse} from '../../json-response'
 import {
-  GetTargetParams, GetTextureParams, ListTargetsParams,
+  GetTextureParams, ListTargetsParams,
 } from './image-target-types'
 import {makeStreamFileResponse} from '../../stream-file-response'
 import {getQueryParams} from '../../query-params'
@@ -64,16 +64,6 @@ const handleListTargets: RequestHandler = async (req) => {
   }
 }
 
-const handleTargetGet: RequestHandler = async (req) => {
-  const url = new URL(req.url)
-  const parsedParams = GetTargetParams.safeParse(getQueryParams(url))
-  if (!parsedParams.data) {
-    throw makeCodedError('Invalid params', 400)
-  }
-  const project = await loadProject(parsedParams.data.appKey)
-  return makeJsonResponse(await readTarget(getTargetPath(project, parsedParams.data.name)))
-}
-
 const extractImagePath = (target: TargetApi.ImageTargetData, type: TargetApi.TargetTextureType) => {
   switch (type) {
     case 'cropped':
@@ -117,11 +107,8 @@ const handleGetTexture: RequestHandler = async (req) => {
 }
 
 const handleImageTargetRequest = withErrorHandlingResponse(branches({
-  [TargetApi.LIST_TARGETS_PATH]: methods({
+  [TargetApi.LIST_PATH]: methods({
     GET: handleListTargets,
-  }),
-  [TargetApi.TARGET_PATH]: methods({
-    GET: handleTargetGet,
   }),
   [TargetApi.TEXTURE_PATH]: methods({
     GET: handleGetTexture,
