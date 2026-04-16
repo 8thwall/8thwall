@@ -86,6 +86,12 @@ const handleTargetPatch: RequestHandler = async (req) => {
     ...parsedBody.data,
   }
 
+  // NOTE(christoph): At one point during the sunset period, exported image targets were including
+  // this parameter, but it is not required going forward since we're storing the (user) metadata
+  // field as the final object, not stringifying to fit into a database column.
+  // @ts-expect-error
+  delete newData.userMetadataIsJson
+
   await writeTarget(targetPath, newData)
   return makeJsonResponse(newData)
 }

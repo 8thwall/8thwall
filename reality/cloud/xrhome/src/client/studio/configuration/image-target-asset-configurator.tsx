@@ -578,7 +578,7 @@ const ImageTargetAssetConfigurator: React.FC = () => {
   return imageTarget
     ? (
       <LoadedImageTargetAssetConfigurator
-        key={imageTarget.uuid}
+        key={`${imageTarget.uuid}/${imageTarget.updated}`}
         imageTarget={imageTarget}
       />
     )
