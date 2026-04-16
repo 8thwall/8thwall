@@ -3,13 +3,15 @@ import fs from 'fs/promises'
 import * as TargetApi from '@repo/reality/shared/desktop/image-target-api'
 import {makeRunQueue} from '@repo/reality/shared/run-queue'
 import type {Project} from '@repo/reality/shared/desktop/local-sync-types'
+import {applyCrop} from '@repo/apps/image-target-cli/src/apply'
+import sharp from 'sharp'
 
 import {makeCodedError, withErrorHandlingResponse} from '../../errors'
 import {branches, methods, RequestHandler} from '../../requests'
 import {getLocalProject} from '../../local-project-db'
 import {makeJsonResponse} from '../../json-response'
 import {
-  GetTextureParams, ListTargetsParams,
+  GetTextureParams, ListTargetsParams, UploadTargetParams, CropResult,
 } from './image-target-types'
 import {makeStreamFileResponse} from '../../stream-file-response'
 import {getQueryParams} from '../../query-params'
@@ -64,6 +66,35 @@ const handleListTargets: RequestHandler = async (req) => {
   }
 }
 
+const handleUpload: RequestHandler = async (req) => {
+  const url = new URL(req.url)
+  const parsedParams = UploadTargetParams.safeParse(getQueryParams(url))
+  if (!parsedParams.data) {
+    return makeJsonResponse({
+      message: 'Invalid upload params',
+      issues: parsedParams.error.issues,
+    }, 400)
+  }
+
+  const parsedCrop = CropResult.safeParse(JSON.parse(parsedParams.data.crop))
+  if (!parsedCrop.data) {
+    return makeJsonResponse({
+      message: 'Invalid crop params',
+      issues: parsedCrop.error.issues,
+    }, 400)
+  }
+
+  const project = await loadProject(parsedParams.data.appKey)
+  await applyCrop(
+    sharp(await req.arrayBuffer()),
+    parsedCrop.data,
+    path.join(project.location, 'image-targets'),
+    parsedParams.data.name,
+    true /* overwrite */
+  )
+  return makeJsonResponse(await readTarget(getTargetPath(project, parsedParams.data.name)))
+}
+
 const extractImagePath = (target: TargetApi.ImageTargetData, type: TargetApi.TargetTextureType) => {
   switch (type) {
     case 'cropped':
@@ -112,6 +143,9 @@ const handleImageTargetRequest = withErrorHandlingResponse(branches({
   }),
   [TargetApi.TEXTURE_PATH]: methods({
     GET: handleGetTexture,
+  }),
+  [TargetApi.UPLOAD_PATH]: methods({
+    POST: handleUpload,
   }),
 }))
 

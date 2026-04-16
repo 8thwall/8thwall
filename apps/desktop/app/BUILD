@@ -7,7 +7,7 @@ package(default_visibility = [
 js_binary(
     name = "start",
     esnext = 1,
-    externals = "electron",
+    externals = "electron, sharp",
     main = [
         "start.ts",
     ],
