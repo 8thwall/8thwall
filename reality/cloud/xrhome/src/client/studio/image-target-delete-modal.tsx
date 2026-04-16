@@ -5,9 +5,8 @@ import {createThemedStyles, useUiTheme} from '../ui/theme'
 import {FloatingTrayModal} from '../ui/components/floating-tray-modal'
 import {Icon} from '../ui/components/icon'
 import type {IImageTarget} from '../common/types/models'
-import useActions from '../common/use-actions'
-import appsActions from '../apps/apps-actions'
 import {useStudioStateContext} from './studio-state-context'
+import {useImageTargetActions} from '../image-targets/use-image-targets'
 
 const useStyles = createThemedStyles(theme => ({
   content: {
@@ -59,10 +58,10 @@ const DeleteImageTargetModal: React.FC<IDeleteImageTargetModal> = ({
   const theme = useUiTheme()
   const stateCtx = useStudioStateContext()
   const classes = useStyles()
-  const {deleteImageTarget} = useActions(appsActions)
+  const {deleteImageTarget} = useImageTargetActions()
 
   const deleteTarget = (collapse) => {
-    deleteImageTarget(imageTarget.AppUuid, imageTarget.uuid)
+    deleteImageTarget(imageTarget.name)
     stateCtx.update((state) => {
       if (state.selectedImageTarget === imageTarget.uuid) {
         return {...state, selectedImageTarget: undefined}

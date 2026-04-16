@@ -11,7 +11,7 @@ import {branches, methods, RequestHandler} from '../../requests'
 import {getLocalProject} from '../../local-project-db'
 import {makeJsonResponse} from '../../json-response'
 import {
-  GetTextureParams, ListTargetsParams, UploadTargetParams, CropResult,
+  GetTextureParams, ListTargetsParams, UploadTargetParams, CropResult, DeleteTargetParams,
 } from './image-target-types'
 import {makeStreamFileResponse} from '../../stream-file-response'
 import {getQueryParams} from '../../query-params'
@@ -137,6 +137,28 @@ const handleGetTexture: RequestHandler = async (req) => {
   return makeStreamFileResponse(imagePath)
 }
 
+const handleTargetDelete: RequestHandler = async (req) => {
+  const url = new URL(req.url)
+  const parsedParams = DeleteTargetParams.safeParse(getQueryParams(url))
+  if (!parsedParams.data) {
+    throw makeCodedError('Invalid params', 400)
+  }
+  const project = await loadProject(parsedParams.data.appKey)
+  const filePath = getTargetPath(project, parsedParams.data.name)
+
+  const target = await readTarget(filePath)
+
+  const filesToDelete = [filePath]
+
+  if (target.resources) {
+    filesToDelete.push(
+      ...Object.values(target.resources).map(e => path.join(path.dirname(filePath), e))
+    )
+  }
+  await Promise.allSettled(filesToDelete.map(e => fs.unlink(e)))
+  return makeJsonResponse({})
+}
+
 const handleImageTargetRequest = withErrorHandlingResponse(branches({
   [TargetApi.LIST_PATH]: methods({
     GET: handleListTargets,
@@ -146,6 +168,9 @@ const handleImageTargetRequest = withErrorHandlingResponse(branches({
   }),
   [TargetApi.UPLOAD_PATH]: methods({
     POST: handleUpload,
+  }),
+  [TargetApi.TARGET_PATH]: methods({
+    DELETE: handleTargetDelete,
   }),
 }))
 
