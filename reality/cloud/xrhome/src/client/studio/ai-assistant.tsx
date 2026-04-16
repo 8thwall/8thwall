@@ -205,7 +205,7 @@ const AiAssistant = () => {
   const account = useCurrentAccount()
 
   const imageTargetFetch = async () => {
-    throw new Error('Image target fetching not supported')
+    throw new Error('Not implemented: fetching target data through assistant')
   }
 
   const StudioAgentApi = makeStudioAgentApi(sceneCtx, derivedScene, studioStateCtx, studioAgentCtx,
