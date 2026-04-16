@@ -101,6 +101,11 @@ type UpdateTargetParams = {
   name: string
 }
 
+type DeleteTargetParams = {
+  appKey: string
+  name: string
+}
+
 export {
   LIST_PATH,
   TEXTURE_PATH,
@@ -118,4 +123,5 @@ export type {
   UpdateTargetParams,
   UploadTargetResponse,
   CropResult,
+  DeleteTargetParams,
 }

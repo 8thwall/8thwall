@@ -63,9 +63,15 @@ const GetTextureParams = z.object({
   ]),
 })
 
+const DeleteTargetParams = z.object({
+  appKey: z.string().nonempty(),
+  name: z.string().nonempty(),
+})
+
 export {
   ListTargetsParams,
   GetTextureParams,
   CropResult,
   UploadTargetParams,
+  DeleteTargetParams,
 }
