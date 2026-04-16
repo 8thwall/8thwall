@@ -126,7 +126,7 @@ const handleGetTexture: RequestHandler = async (req) => {
   const url = new URL(req.url)
   const parsedParams = GetTextureParams.safeParse(getQueryParams(url))
   if (!parsedParams.data) {
-    throw makeCodedError(`Invalid params: ${parsedParams.error.toString()}`, 400)
+    throw makeCodedError('Invalid params', 400)
   }
   const project = await loadProject(parsedParams.data.appKey)
   const targetPath = getTargetPath(project, parsedParams.data.name)
