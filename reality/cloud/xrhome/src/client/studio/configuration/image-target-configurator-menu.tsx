@@ -165,7 +165,7 @@ const ImageTargetConfiguratorMenu: React.FC<IImageTargetConfiguratorMenu> = (
   const app = useEnclosedApp()
   const imageTargets = useGalleryTargets(ENTITY_GALLERY_ID)
   const {
-    resetGalleryFilterOptionsForApp, fetchImageTargetsForApp, setGalleryFilterOptionsForApp,
+    resetGalleryFilterOptionsForApp, setGalleryFilterOptionsForApp,
   } = useActions(imageTargetsActions)
 
   const galleryOptions = useSelector(
@@ -182,7 +182,6 @@ const ImageTargetConfiguratorMenu: React.FC<IImageTargetConfiguratorMenu> = (
 
   const clearSearch = () => {
     resetGalleryFilterOptionsForApp(app.uuid, ENTITY_GALLERY_ID)
-    fetchImageTargetsForApp(app.uuid, ENTITY_GALLERY_ID)
   }
 
   React.useEffect(() => {

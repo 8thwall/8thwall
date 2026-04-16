@@ -5,9 +5,7 @@ import {quat} from '@ecs/runtime/math/math'
 import type {Vec4Tuple} from '@ecs/shared/scene-graph'
 
 import {createThemedStyles} from '../../ui/theme'
-import {useEnclosedApp} from '../../apps/enclosed-app-context'
 import useActions from '../../common/use-actions'
-import imageTargetsActions from '../../image-targets/actions'
 import appsActions from '../../apps/apps-actions'
 import {
   useOtherImageNames, validateImageTargetName,
@@ -566,17 +564,9 @@ const LoadedImageTargetAssetConfigurator: React.FC<ILoadedImageTargetAssetConfig
 }
 
 const ImageTargetAssetConfigurator: React.FC = () => {
-  const app = useEnclosedApp()
   const stateCtx = useStudioStateContext()
   const {selectedImageTarget} = stateCtx.state
   const [imageTarget, loading] = useImageTarget(selectedImageTarget)
-  const {fetchSingleTargetForApp} = useActions(imageTargetsActions)
-
-  useEffect(() => {
-    if (selectedImageTarget) {
-      fetchSingleTargetForApp(app.uuid, selectedImageTarget)
-    }
-  }, [app.uuid, selectedImageTarget])
 
   if (loading) {
     return <Loader />

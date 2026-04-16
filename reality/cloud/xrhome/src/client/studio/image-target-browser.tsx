@@ -100,7 +100,7 @@ const StudioImageTargetBrowser: React.FC = () => {
   const menuState = useContextMenuState()
   const {options, inputRefs} = useImageTargetUpload()
   const {
-    fetchImageTargetsForApp, setGalleryFilterOptionsForApp, resetGalleryFilterOptionsForApp,
+    setGalleryFilterOptionsForApp, resetGalleryFilterOptionsForApp,
   } = useActions(imageTargetsActions)
 
   const galleryOptions = useSelector(
@@ -141,7 +141,6 @@ const StudioImageTargetBrowser: React.FC = () => {
 
   useEffect(() => {
     resetGalleryFilterOptionsForApp(app.uuid, BROWSER_GALLERY_ID)
-    fetchImageTargetsForApp(app.uuid, BROWSER_GALLERY_ID)
   }, [app.uuid])
 
   return (

@@ -3,9 +3,6 @@ import {useTranslation} from 'react-i18next'
 import {createUseStyles} from 'react-jss'
 
 import {useEvent} from '../hooks/use-event'
-import {useEnclosedApp} from '../apps/enclosed-app-context'
-import useActions from '../common/use-actions'
-import imageTargetsActions from './actions'
 import {FloatingPanelButton} from '../ui/components/floating-panel-button'
 import {Loader} from '../ui/components/loader'
 
@@ -33,20 +30,18 @@ interface IImageTargetLoaderProps {
 // NOTE(chloe): This component is designed to be used at the bottom of a listed gallery of image
 // targets where the load-additional Loader will appear inline at the bottom of list and the
 // load-initial Loader will appear centered in the list's container.
-const ImageTargetLoader: React.FC<IImageTargetLoaderProps> = ({galleryUuid}) => {
-  const app = useEnclosedApp()
+const ImageTargetLoader: React.FC<IImageTargetLoaderProps> = () => {
   const {t} = useTranslation(['cloud-studio-pages'])
   const classes = useStyles()
   // TODO(christoph): Add pagination to the local API, or remove fully?
   const loadingAdditional = false
   const loadingInitial = false
   const hasMoreTargets = false
-  const {fetchAdditionalGalleryTargets} = useActions(imageTargetsActions)
 
   const canLoadMore = !loadingInitial && !loadingAdditional && hasMoreTargets
   const loadMoreTargets = () => {
     if (canLoadMore) {
-      fetchAdditionalGalleryTargets(app.uuid, galleryUuid)
+      // NOTE(christoph): Pagination was removed when switching to offline
     }
   }
 

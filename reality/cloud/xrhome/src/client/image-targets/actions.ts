@@ -16,12 +16,6 @@ const resetGalleryFilterOptionsForApp = (
   galleryUuid,
 })
 
-// TODO(christoph): Clean up
-const noopAction = (name: string): any => () => () => {
-  // eslint-disable-next-line no-console
-  console.warn(`${name} is a noop, will be deleted`)
-}
-
 // Performs a fresh fetch after setting options.
 const setGalleryFilterOptionsForApp = (
   appUuid: string, galleryUuid: string, options: Partial<ImageTargetFilterOptions>
@@ -33,9 +27,6 @@ const setGalleryFilterOptionsForApp = (
 })
 
 export const rawActions = {
-  fetchSingleTargetForApp: noopAction('fetchSingleTargetForApp'),
-  fetchImageTargetsForApp: noopAction('fetchImageTargetsForApp'),
-  fetchAdditionalGalleryTargets: noopAction('fetchAdditionalGalleryTargets'),
   setGalleryFilterOptionsForApp,
   resetGalleryFilterOptionsForApp,
 }

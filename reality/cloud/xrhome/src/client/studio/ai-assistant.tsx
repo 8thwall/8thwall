@@ -25,9 +25,6 @@ import {useLocalSyncContext} from './local-sync-context'
 import {useUpdateEffect} from '../hooks/use-change-effect'
 import {useCurrentGit} from '../git/hooks/use-current-git'
 import {useEnclosedApp} from '../apps/enclosed-app-context'
-import imageTargetsActions from '../image-targets/actions'
-import useActions from '../common/use-actions'
-import {IMAGE_TARGET_STUDIO_USE_GALLERY_ID} from '../apps/image-targets/image-target-constants'
 import useCurrentAccount from '../common/use-current-account'
 
 // TODO: Finish translating
@@ -207,10 +204,9 @@ const AiAssistant = () => {
   const user: unknown = null
   const account = useCurrentAccount()
 
-  const {fetchImageTargetsForApp} = useActions(imageTargetsActions)
-  const imageTargetFetch = () => fetchImageTargetsForApp(
-    app.uuid, IMAGE_TARGET_STUDIO_USE_GALLERY_ID, 500
-  )
+  const imageTargetFetch = async () => {
+    throw new Error('Image target fetching not supported')
+  }
 
   const StudioAgentApi = makeStudioAgentApi(sceneCtx, derivedScene, studioStateCtx, studioAgentCtx,
     studioComponentCtx, authFetch, accountUuid, app.uuid, git, imageTargetFetch, t)
