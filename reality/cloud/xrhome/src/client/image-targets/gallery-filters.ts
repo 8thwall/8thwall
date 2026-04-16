@@ -3,7 +3,8 @@ import type {ImageTargetFilterOptions} from './types'
 
 const targetMatchesFilter = (target: IImageTarget, filter: ImageTargetFilterOptions): boolean => {
   if (filter.nameLike) {
-    if (!target.name.includes(filter.nameLike)) {
+    const lowerFilter = filter.nameLike.toLowerCase()
+    if (!target.name.toLowerCase().includes(lowerFilter)) {
       return false
     }
   }
