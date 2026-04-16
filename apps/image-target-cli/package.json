@@ -1,6 +1,6 @@
 {
   "name": "@8thwall/image-target-cli",
-  "version": "2.0.0",
+  "version": "1.0.0",
   "description": "Generate 8th Wall Image Target Metadata",
   "main":  "src/index.js",
   "bin": {
