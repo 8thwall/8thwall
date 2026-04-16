@@ -82,8 +82,10 @@ const useGalleryTargets = (galleryUuid: string | undefined) => {
       ? selectTargetsGalleryFilterOptions(appKey, galleryUuid, s.imageTargets)
       : DEFAULT_FILTER_OPTIONS
   ))
-  // TODO(christoph): Filter based on gallery filters
-  return React.useMemo(() => targets.filter(t => targetMatchesFilter(t, filter)), [targets, filter])
+  return React.useMemo(
+    () => targets.filter(t => targetMatchesFilter(t, filter)),
+    [targets, filter]
+  )
 }
 
 const useImageTargetActions = () => {
