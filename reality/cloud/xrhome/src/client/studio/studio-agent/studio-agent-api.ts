@@ -2,7 +2,6 @@
 import type {DeepReadonly} from 'ts-essentials'
 import {v4 as uuid} from 'uuid'
 import type {TFunction} from 'react-i18next'
-
 import type {
   GetObjectsPropertyRequest, GetObjectsPropertyResponse,
   SetObjectsPropertyRequest, SetObjectsPropertyResponse,
