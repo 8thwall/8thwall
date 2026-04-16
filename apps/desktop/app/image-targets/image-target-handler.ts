@@ -116,8 +116,21 @@ const resolveImagePath = async (targetPath: string, type: TargetApi.TargetTextur
   const target = await readTarget(targetPath)
   const relativePath = extractImagePath(target, type)
   if (!relativePath) {
+    const extensionOptions = ['.jpg', '.png', '.jpeg']
+    const basePath = path.join(path.dirname(targetPath), `${target.name}_${type}`)
+    for (const extension of extensionOptions) {
+      try {
+        const fullPath = basePath + extension
+        // eslint-disable-next-line no-await-in-loop
+        await fs.stat(fullPath)
+        return fullPath
+      } catch (err: any) {
+        if (err.code !== 'ENOENT') {
+          throw err
+        }
+      }
+    }
     return null
-    // TODO(christoph): Add fallback heuristic for legacy image format
   }
   return path.join(path.dirname(targetPath), relativePath)
 }
