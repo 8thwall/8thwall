@@ -1,15 +1,6 @@
 import {dispatchify, onError} from '../common'
 import type {DispatchifiedActions} from '../common/types/actions'
 
-// TODO(christoph): Add topRadius/bottomRadius for conical
-type TargetGeometry = {
-  originalWidth: number
-  originalHeight: number
-  isRotated: boolean
-  topRadius?: number
-  bottomRadius?: number
-}
-
 const unimplemented = (name: string): any => () => ({
   type: 'ERROR',
   // eslint-disable-next-line local-rules/hardcoded-copy
@@ -18,7 +9,6 @@ const unimplemented = (name: string): any => () => ({
 
 const rawActions = {
   error: onError,
-  uploadImageTarget: unimplemented('uploadImageTarget'),
   updateImageTarget: unimplemented('updateImageTarget'),
   deleteImageTarget: unimplemented('deleteImageTarget'),
   testImageTarget: unimplemented('testImageTarget'),
@@ -35,5 +25,4 @@ export {
 
 export type {
   AppsActions,
-  TargetGeometry,
 }

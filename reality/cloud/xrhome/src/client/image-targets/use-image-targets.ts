@@ -1,8 +1,8 @@
 import React from 'react'
-import {useQuery, useSuspenseQuery} from '@tanstack/react-query'
+import {useQuery, useQueryClient, useSuspenseQuery} from '@tanstack/react-query'
 
 import {
-  GetTargetTextureParams, ImageTargetData, TargetTextureType,
+  CropResult, GetTargetTextureParams, ImageTargetData, TargetTextureType,
   TEXTURE_PATH,
 } from '@repo/reality/shared/desktop/image-target-api'
 
@@ -10,7 +10,7 @@ import type {DeepReadonly} from 'ts-essentials'
 
 import {useEnclosedAppKey} from '../apps/enclosed-app-context'
 import {
-  listImageTargets,
+  listImageTargets, uploadImageTarget,
 } from './image-target-api'
 import {selectTargetsGalleryFilterOptions} from './state-selectors'
 import {useSelector} from '../hooks'
@@ -29,28 +29,30 @@ const makeImageTargetTextureUrl = (
   return `image-targets://${TEXTURE_PATH}?${new URLSearchParams(params)}`
 }
 
+const expandTargetData = (appKey: string, target: ImageTargetData): IImageTarget => ({
+  ...target,
+  metadata: JSON.stringify(target.properties),
+  AppUuid: appKey,
+  appKey,
+  originalImageSrc: makeImageTargetTextureUrl(appKey, target, 'original'),
+  imageSrc: makeImageTargetTextureUrl(appKey, target, 'cropped'),
+  geometryTextureImageSrc: makeImageTargetTextureUrl(appKey, target, 'geometry'),
+  thumbnailImageSrc: makeImageTargetTextureUrl(appKey, target, 'thumbnail'),
+  loadAutomatically: false,
+  uuid: target.name,
+  userMetadata: typeof target.metadata === 'string'
+    ? target.metadata
+    : JSON.stringify(target.metadata),
+  userMetadataIsJson: typeof target.metadata !== 'string',
+  status: 'DISABLED',
+  createdAt: new Date(target.created).toString(),
+  updatedAt: new Date(target.updated).toString(),
+  isRotated: !!target.properties.isRotated,
+})
+
 const fetchImageTargets = async (appKey: string): Promise<DeepReadonly<IImageTarget[]>> => {
   const {targets} = await listImageTargets(appKey)
-  return targets.map(target => ({
-    ...target,
-    metadata: JSON.stringify(target.properties),
-    AppUuid: appKey,
-    appKey,
-    originalImageSrc: makeImageTargetTextureUrl(appKey, target, 'original'),
-    imageSrc: makeImageTargetTextureUrl(appKey, target, 'cropped'),
-    geometryTextureImageSrc: makeImageTargetTextureUrl(appKey, target, 'geometry'),
-    thumbnailImageSrc: makeImageTargetTextureUrl(appKey, target, 'thumbnail'),
-    loadAutomatically: false,
-    uuid: target.name,
-    userMetadata: typeof target.metadata === 'string'
-      ? target.metadata
-      : JSON.stringify(target.metadata),
-    userMetadataIsJson: typeof target.metadata !== 'string',
-    status: 'DISABLED',
-    createdAt: new Date(target.created).toString(),
-    updatedAt: new Date(target.updated).toString(),
-    isRotated: !!target.properties.isRotated,
-  }))
+  return targets.map(target => expandTargetData(appKey, target))
 }
 
 const useImageTargets = () => {
@@ -82,8 +84,34 @@ const useGalleryTargets = (galleryUuid: string | undefined) => {
   return React.useMemo(() => targets, [targets, filter])
 }
 
+const useImageTargetActions = () => {
+  const appKey = useEnclosedAppKey()
+  const client = useQueryClient()
+  return React.useMemo(() => {
+    const refresh = () => {
+      client.invalidateQueries({queryKey: ['image-targets', appKey]})
+    }
+
+    const upload = async (
+      image: Blob,
+      name: string,
+      crop: CropResult
+    ) => {
+      const target = await uploadImageTarget(appKey, image, name, crop)
+      refresh()
+      return expandTargetData(appKey, target)
+    }
+
+    return {
+      uploadImageTarget: upload,
+      refresh,
+    }
+  }, [appKey, client])
+}
+
 export {
   useImageTargets,
   useGalleryTargets,
   useImageTargetsOrLoading,
+  useImageTargetActions,
 }

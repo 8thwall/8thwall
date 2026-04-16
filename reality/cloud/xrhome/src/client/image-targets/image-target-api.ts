@@ -1,6 +1,9 @@
 import {
-  LIST_PATH, ListTargetsResponse,
+  ImageTargetData, LIST_PATH, ListTargetsResponse,
+  UPLOAD_PATH,
+  UploadTargetParams,
 } from '@repo/reality/shared/desktop/image-target-api'
+import type {CropResult} from '@repo/reality/shared/desktop/image-target-api'
 
 type FetchOptions = {}
 
@@ -21,6 +24,25 @@ const listImageTargets = (appKey: string) => (
   )
 )
 
+const uploadImageTarget = (
+  appKey: string,
+  image: Blob,
+  name: string,
+  crop: CropResult
+) => {
+  const params: UploadTargetParams = {
+    appKey,
+    name,
+    crop: JSON.stringify(crop),
+  }
+
+  return fetchJson<ImageTargetData>(
+    `image-targets://${UPLOAD_PATH}?${new URLSearchParams(params)}`,
+    {method: 'POST', body: image}
+  )
+}
+
 export {
   listImageTargets,
+  uploadImageTarget,
 }

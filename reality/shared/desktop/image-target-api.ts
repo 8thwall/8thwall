@@ -34,8 +34,8 @@ type CylinderCropGeometry = CropGeometry & {
   cylinderCircumferenceBottom: number
   arcAngle: number
   coniness: number
-  inputMode: 'ADVANCED' | 'BASIC'
-  unit: 'mm' | 'in'
+  inputMode?: 'ADVANCED' | 'BASIC'
+  unit?: 'mm' | 'in'
 }
 
 type ConicalCropGeometry = CylinderCropGeometry & {
@@ -65,6 +65,8 @@ type CropResult =
 
 const LIST_PATH = '/list'
 const TEXTURE_PATH = '/texture'
+const TARGET_PATH = '/target'
+const UPLOAD_PATH = '/upload'
 
 type ListTargetsParams = {
   appKey: string
@@ -74,6 +76,24 @@ type ListTargetsResponse = {
   targets: ImageTargetData[]
   invalidPaths: string[]
 }
+
+type UploadTargetParams = {
+  appKey: string
+  name: string
+  crop: string  // JSON encoded CropResult
+}
+
+type UploadTargetResponse = {
+  target: ImageTargetData
+}
+
+type UpdateTargetParams = {
+  appKey: string
+  name: string
+}
+
+type UpdateTargetRequest =
+  Partial<Pick<ImageTargetData, 'name' | 'metadata' | 'properties'>>
 
 type TargetTextureType = 'original' | 'cropped' | 'geometry' | 'thumbnail' | 'luminance'
 
@@ -87,12 +107,19 @@ type GetTargetTextureParams = {
 export {
   LIST_PATH,
   TEXTURE_PATH,
+  TARGET_PATH,
+  UPLOAD_PATH,
 }
 
 export type {
   ImageTargetData,
   ListTargetsParams,
   ListTargetsResponse,
+  UploadTargetParams,
+  UpdateTargetParams,
+  UpdateTargetRequest,
+  UploadTargetResponse,
   GetTargetTextureParams,
+  CropResult,
   TargetTextureType,
 }

@@ -1,34 +1,29 @@
 import React from 'react'
-import * as ExifJs from 'exif-js'
 import {createUseStyles} from 'react-jss'
 import {useTranslation} from 'react-i18next'
+
+import type {CropResult} from '@repo/reality/shared/desktop/image-target-api'
 
 import {SelectMenu} from './ui/select-menu'
 import {FloatingPanelIconButton} from '../ui/components/floating-panel-icon-button'
 import {useStudioMenuStyles} from './ui/studio-menu-styles'
 import {MenuOption, MenuOptions} from './ui/option-menu'
 import {Icon, type IconStroke} from '../ui/components/icon'
-import {useCanvasPool, useImgPool} from '../common/resource-pool'
 import {
-  EXIF_ORIENTATION_TO_ROTATION, MINIMUM_LONG_LENGTH, MINIMUM_SHORT_LENGTH,
+  MINIMUM_LONG_LENGTH, MINIMUM_SHORT_LENGTH,
 } from '../../shared/xrengine-config'
 import {
   getDefaultBottomRadius,
-  getDownScaledImage, getImageBlobFromUrl, getImageDataRotated, getImageDataWithBackground,
-  getLuminosity, getMaximumCropAreaPixels, getUnconifiedHeight, isUsableDimensions, loadImage,
+  getMaximumCropAreaPixels, getUnconifiedHeight, isUsableDimensions,
 } from '../apps/image-targets/image-helpers'
-import {
-  IMAGE_TARGET_BROWSER_GALLERY_ID, IMAGE_TARGET_MAX_HEIGHT, IMAGE_TARGET_MAX_WIDTH,
-} from '../apps/image-targets/image-target-constants'
 import {makeFileName} from '../apps/image-targets/naming'
-import useActions from '../common/use-actions'
-import appsActions, {TargetGeometry} from '../apps/apps-actions'
-import {useEnclosedApp} from '../apps/enclosed-app-context'
 import type {IImageTarget} from '../common/types/models'
 import {SubMenuHeading} from './ui/submenu-heading'
-import imageTargetsActions from '../image-targets/actions'
 import {useStudioStateContext} from './studio-state-context'
-import {useImageTargets} from '../image-targets/use-image-targets'
+import {useImageTargetActions, useImageTargets} from '../image-targets/use-image-targets'
+import {
+  getCircumferenceRatio, getConinessForRadii, getTargetCircumferenceBottom,
+} from '../apps/image-targets/curved-geometry'
 
 const DEFAULT_TOP_RADIUS = 4479
 const UPLOAD_PROGRESS_EXIF_LOADED = 0.1
@@ -72,11 +67,7 @@ const ImageTargetUploadInput: React.FC<IImageTargetUploadInput> = ({
   inputRefs, onUploadComplete,
 }) => {
   const {t} = useTranslation(['app-pages', 'cloud-studio-pages'])
-  const app = useEnclosedApp()
-  const imgPool = useImgPool()
-  const canvasPool = useCanvasPool()
-  const {uploadImageTarget} = useActions(appsActions)
-  const {fetchImageTargetsForApp} = useActions(imageTargetsActions)
+  const {uploadImageTarget} = useImageTargetActions()
   const imageTargets = useImageTargets()
   const stateCtx = useStudioStateContext()
 
@@ -85,13 +76,12 @@ const ImageTargetUploadInput: React.FC<IImageTargetUploadInput> = ({
   }
 
   const processFile = async (
-    name: string, data: string, type: IImageTarget['type'], appUuid: string
+    file: File, type: IImageTarget['type']
   ) => {
     stateCtx.update({imageTargetUploadProgress: 0})
-    const validName = makeFileName(name, imageTargets.map(it => it.name))
-    const fileType = data.includes('data:image/png;') ? 'image/png' : 'image/jpeg'
-    const img = await loadImage(data, imgPool)
-    const imgValid = isUsableDimensions(img.naturalWidth, img.naturalHeight)
+    const validName = makeFileName(file.name, imageTargets.map(it => it.name))
+    const img = await createImageBitmap(file)
+    const imgValid = isUsableDimensions(img.width, img.height)
     if (!imgValid) {
       onUploadFail(t('image_target_page.edit_image_target.error_invalid_image', {
         min_long_length: MINIMUM_LONG_LENGTH, min_short_length: MINIMUM_SHORT_LENGTH,
@@ -99,67 +89,109 @@ const ImageTargetUploadInput: React.FC<IImageTargetUploadInput> = ({
       return
     }
 
-    img.exifdata = null
-    await new Promise<void>(resolve => ExifJs.getData(img, resolve))
     stateCtx.update({imageTargetUploadProgress: UPLOAD_PROGRESS_EXIF_LOADED})
-    const scaledImg = await getDownScaledImage(
-      img, IMAGE_TARGET_MAX_WIDTH, IMAGE_TARGET_MAX_HEIGHT, fileType, canvasPool, imgPool
-    )
 
-    if (!isUsableDimensions(scaledImg.naturalWidth, scaledImg.naturalHeight)) {
-      if (scaledImg.naturalWidth > scaledImg.naturalHeight) {
-        onUploadFail(t('image_target_page.edit_image_target.error_image_width_too_big'))
-      } else {
-        onUploadFail(t('image_target_page.edit_image_target.error_image_height_too_big'))
-      }
-      return
-    }
-
-    let rotatedImg = scaledImg
-    const rotation = scaledImg.exifdata &&
-      EXIF_ORIENTATION_TO_ROTATION[scaledImg.exifdata.Orientation]
-    if (rotation) {
-      const rotatedData = getImageDataRotated(scaledImg, rotation, fileType, canvasPool)
-      rotatedImg = await loadImage(rotatedData, imgPool)
-    }
     stateCtx.update({imageTargetUploadProgress: UPLOAD_PROGRESS_IMAGE_LOADED})
 
-    const fillColor = getLuminosity(rotatedImg, canvasPool) > 128 ? 'black' : 'white'
-    const isRotated = rotatedImg.naturalWidth > rotatedImg.naturalHeight
-    const {dataURL} = getImageDataWithBackground(
-      rotatedImg, fillColor, type !== 'CONICAL' && isRotated, fileType, canvasPool
-    )
-
-    const imgTag = await loadImage(dataURL, imgPool)
-    const imgBlob = await getImageBlobFromUrl(
-      imgTag, imgTag.naturalWidth, imgTag.naturalHeight, fileType, canvasPool
-    )
     stateCtx.update({imageTargetUploadProgress: UPLOAD_PROGRESS_IMAGE_BLOB_LOADED})
 
-    let geometry: TargetGeometry
+    let crop: CropResult
     if (type === 'CONICAL') {
       const topRadius = DEFAULT_TOP_RADIUS
       const bottomRadius = getDefaultBottomRadius(
-        imgTag.naturalWidth, imgTag.naturalHeight, topRadius
+        img.width, img.height, topRadius
       )
-      const unconifiedWidth = imgTag.naturalWidth
+      const unconifiedWidth = img.width
       const unconifiedHeight = getUnconifiedHeight(topRadius, bottomRadius, unconifiedWidth)
+      const isRotated = unconifiedWidth > unconifiedHeight
       const originalWidth = isRotated ? unconifiedHeight : unconifiedWidth
       const originalHeight = isRotated ? unconifiedWidth : unconifiedHeight
-      geometry = {isRotated, originalWidth, originalHeight, topRadius, bottomRadius}
+      const targetCircumferenceTop = 100
+      const cylinderCircumferenceTop = 100
+      const arcAngle = (targetCircumferenceTop / cylinderCircumferenceTop) * 360
+
+      const circumferenceRatio = getCircumferenceRatio(topRadius, bottomRadius)
+      const cylinderCircumferenceBottom = cylinderCircumferenceTop / circumferenceRatio
+
+      const widerTargetCircumference = Math.max(
+        targetCircumferenceTop,
+        getTargetCircumferenceBottom(
+          targetCircumferenceTop,
+          cylinderCircumferenceTop,
+          cylinderCircumferenceBottom
+        )
+      )
+
+      const cylinderSideLength = widerTargetCircumference *
+          (unconifiedHeight / unconifiedWidth)
+
+      const coniness = getConinessForRadii(topRadius, bottomRadius)
+
+      crop = {
+        type,
+        properties: {
+          arcAngle,
+          bottomRadius,
+          coniness,
+          cylinderCircumferenceBottom,
+          cylinderCircumferenceTop,
+          cylinderSideLength,
+          inputMode: 'ADVANCED',
+          isRotated,
+          originalHeight,
+          originalWidth,
+          targetCircumferenceTop,
+          topRadius,
+          unit: 'mm',
+          ...getMaximumCropAreaPixels(originalWidth, originalHeight, 3 / 4),
+        },
+      }
+    } else if (type === 'CYLINDER') {
+      const isRotated = img.width > img.height
+      const originalWidth = isRotated ? img.height : img.width
+      const originalHeight = isRotated ? img.width : img.height
+      const cylinderCircumferenceTop = 100
+      const cylinderCircumferenceBottom = 100
+      const targetCircumferenceTop = 50
+      const arcAngle = (targetCircumferenceTop / cylinderCircumferenceTop) * 360
+      const cylinderSideLength = (originalHeight / originalWidth) * 50
+
+      crop = {
+        type,
+        properties: {
+          arcAngle,
+          coniness: 0,
+          cylinderCircumferenceBottom,
+          cylinderCircumferenceTop,
+          cylinderSideLength,
+          inputMode: 'ADVANCED',
+          isRotated,
+          originalHeight,
+          originalWidth,
+          targetCircumferenceTop,
+          unit: 'mm',
+          ...getMaximumCropAreaPixels(originalWidth, originalHeight, 3 / 4),
+        },
+      }
     } else {
-      const originalWidth = imgTag.naturalWidth
-      const originalHeight = imgTag.naturalHeight
-      geometry = {isRotated, originalWidth, originalHeight}
+      const isRotated = img.width > img.height
+      const originalWidth = isRotated ? img.height : img.width
+      const originalHeight = isRotated ? img.width : img.height
+      crop = {
+        type,
+        properties: {
+          isRotated,
+          originalWidth,
+          originalHeight,
+          ...getMaximumCropAreaPixels(originalWidth, originalHeight, 3 / 4),
+        },
+      }
     }
 
-    const crop = getMaximumCropAreaPixels(geometry.originalWidth, geometry.originalHeight, 3 / 4)
-
     try {
-      const target = await uploadImageTarget(appUuid, imgBlob, validName, type, crop, geometry)
+      const target = await uploadImageTarget(file, validName, crop)
       stateCtx.update({imageTargetUploadProgress: undefined})
       if (target) {
-        fetchImageTargetsForApp(app.uuid, IMAGE_TARGET_BROWSER_GALLERY_ID)
         onUploadComplete?.(target)
         stateCtx.selectImageTarget(target.uuid)
       } else {
@@ -176,14 +208,7 @@ const ImageTargetUploadInput: React.FC<IImageTargetUploadInput> = ({
   const handleFileUpload = (type: IImageTarget['type']) => (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    const file = event.target.files[0]
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      if (typeof e.target.result === 'string') {
-        processFile(file.name, e.target.result, type, app.uuid)
-      }
-    }
-    reader.readAsDataURL(file)
+    processFile(event.target.files[0], type)
   }
 
   return (

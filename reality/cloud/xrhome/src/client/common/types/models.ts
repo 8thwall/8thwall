@@ -67,10 +67,11 @@ interface IFullAccount extends DeepReadonly<Omit<Accounts, 'icon'> & {
 interface ImageTarget extends Omit<ImageTargets & ImageTargetData,
   'originalImagePath' | 'imagePath'|'luminanceImagePath' | 'thumbnailImagePath' |
   'geometryTextureImagePath' | 'physicalWidthInMeters' | 'moveable' |
-  'geometryTexturePath' | 'scanDataPath'
+  'geometryTexturePath' | 'scanDataPath' | 'type'
 > {}
 
 interface IImageTarget extends ImageTarget {
+  type: ImageTargetData['type']
   originalImageSrc: string
   imageSrc: string
   thumbnailImageSrc: string
