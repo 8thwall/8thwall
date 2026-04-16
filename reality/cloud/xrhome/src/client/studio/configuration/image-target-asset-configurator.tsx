@@ -404,14 +404,14 @@ const LoadedImageTargetAssetConfigurator: React.FC<ILoadedImageTargetAssetConfig
           </div>
         )}
       />
-      <ImageTargetSections
+      {BuildIf.IMAGE_TARGET_TEST_20260415 && <ImageTargetSections
         section={section}
         setSection={setSection}
         saveChanges={saveChanges}
         hasChanges={hasChanges}
         saveButtonDisabled={saveButtonDisabled}
         saveButtonLoading={isSaving}
-      />
+      />}
       {section === 'configure' &&
         <div className={classes.configuratorBody}>
           <ImageTargetTrackingConfigurator
