@@ -1,16 +1,19 @@
 import {
   SET_GALLERY_FILTER,
   ImageTargetFilterOptions,
+  RESET_GALLERY_FILTER,
+  ResetTargetsGalleryFilterAction,
+  SetTargetsGalleryFilterAction,
 } from './types'
 import type {DispatchifiedActions} from '../common/types/actions'
 import {dispatchify} from '../common'
-import {DEFAULT_FILTER_OPTIONS} from './reducer'
 
-const resetGalleryFilterOptionsForApp = (appUuid: string, galleryUuid: string) => ({
-  type: SET_GALLERY_FILTER,
+const resetGalleryFilterOptionsForApp = (
+  appUuid: string, galleryUuid: string
+): ResetTargetsGalleryFilterAction => ({
+  type: RESET_GALLERY_FILTER || 'IMAGE_TARGET/RESET_GALLERY_FILTER',
   appUuid,
   galleryUuid,
-  options: {...DEFAULT_FILTER_OPTIONS},
 })
 
 // TODO(christoph): Clean up
@@ -22,17 +25,12 @@ const noopAction = (name: string): any => () => () => {
 // Performs a fresh fetch after setting options.
 const setGalleryFilterOptionsForApp = (
   appUuid: string, galleryUuid: string, options: Partial<ImageTargetFilterOptions>
-) => (dispatch, getState) => {
-  dispatch({
-    type: SET_GALLERY_FILTER,
-    appUuid,
-    galleryUuid,
-    options: {
-      ...getState().imageTargets.targetInfoByApp[appUuid]?.galleryFilters,
-      ...options,
-    },
-  })
-}
+): SetTargetsGalleryFilterAction => ({
+  type: SET_GALLERY_FILTER,
+  appUuid,
+  galleryUuid,
+  options,
+})
 
 export const rawActions = {
   fetchSingleTargetForApp: noopAction('fetchSingleTargetForApp'),

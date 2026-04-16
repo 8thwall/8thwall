@@ -1,7 +1,6 @@
 import React, {useEffect} from 'react'
 import {createUseStyles} from 'react-jss'
 import {useTranslation} from 'react-i18next'
-import type {DeepReadonly} from 'ts-essentials'
 
 import {useEnclosedApp} from '../apps/enclosed-app-context'
 import {useSelector} from '../hooks'
@@ -10,11 +9,10 @@ import imageTargetsActions from '../image-targets/actions'
 import useActions from '../common/use-actions'
 import {OptionalFilters, SearchBar, SearchToolbar} from './ui/search-bar'
 import type {
-  ImageTargetFilterFlagValue, ImageTargetFilterOptions, ImageTargetGeometryFilter,
+  ImageTargetFilterFlag,
 } from '../image-targets/types'
 import {combine} from '../common/styles'
 import {selectTargetsGalleryFilterOptions} from '../image-targets/state-selectors'
-import {DEFAULT_FILTER_OPTIONS} from '../image-targets/reducer'
 import {
   AddImageTargetButton, ImageTargetUploadInput, useImageTargetUpload,
 } from './image-target-upload'
@@ -26,6 +24,7 @@ import {ContextMenu, useContextMenuState} from './ui/context-menu'
 import FileUploadProgressBar from '../editor/file-upload-progress-bar'
 import {useStudioStateContext} from './studio-state-context'
 import {useGalleryTargets} from '../image-targets/use-image-targets'
+import type {ImageTargetType} from '../common/types/db'
 
 const useStyles = createUseStyles({
   targetsContainer: {
@@ -64,29 +63,25 @@ const useStyles = createUseStyles({
   },
 })
 
-type GeometryFilter = {type: ImageTargetGeometryFilter, label: string}
+type GeometryFilter = {type: ImageTargetType, label: string}
 const GEOMETRY_FILTERS: GeometryFilter[] = [{
-  type: 'flat',
+  type: 'PLANAR',
   label: 'file_browser.image_targets.flat',
 }, {
-  type: 'cylindrical',
+  type: 'CYLINDER',
   label: 'file_browser.image_targets.cylindrical',
 }, {
-  type: 'conical',
+  type: 'CONICAL',
   label: 'file_browser.image_targets.conical',
 }]
 
-type FlagKey = keyof {
-  [P in keyof ImageTargetFilterOptions as ImageTargetFilterOptions[P] extends
-  DeepReadonly<ImageTargetFilterFlagValue[]>? P : never]: any
-}
 type FlagFilter = {
-  type: FlagKey, label: string, enabledValue: ImageTargetFilterFlagValue
+  type: ImageTargetFilterFlag
+  label: string
 }
 const FLAG_FILTERS: FlagFilter[] = [{
-  type: 'metadata',
+  type: 'hasMetadata',
   label: 'file_browser.image_targets.metadata',
-  enabledValue: 'set',
 }]
 
 const IMAGE_TARGET_FILTERS = [
@@ -115,15 +110,15 @@ const StudioImageTargetBrowser: React.FC = () => {
   const searchValue = galleryOptions.nameLike || ''
   const filters = [
     ...galleryOptions.type,
-    ...FLAG_FILTERS.map(({type, enabledValue}) => (
-      galleryOptions[type].includes(enabledValue) ? type : null
+    ...FLAG_FILTERS.map(({type}) => (
+      galleryOptions[type] ? type : null
     )).filter(Boolean),
   ]
 
   const searching = searchValue.length > 0 || filters.length > 0
 
   const clearSearch = () => {
-    setGalleryFilterOptionsForApp(app.uuid, BROWSER_GALLERY_ID, DEFAULT_FILTER_OPTIONS)
+    resetGalleryFilterOptionsForApp(app.uuid, BROWSER_GALLERY_ID)
   }
 
   const setSearchValue = (value: string) => {
@@ -136,9 +131,9 @@ const StudioImageTargetBrowser: React.FC = () => {
     setGalleryFilterOptionsForApp(app.uuid, BROWSER_GALLERY_ID, {
       type: GEOMETRY_FILTERS.filter(({type}) => newFilters.includes(type)).map(({type}) => type),
       ...Object.fromEntries(
-        FLAG_FILTERS.map(({type, enabledValue}) => [
+        FLAG_FILTERS.map(({type}) => [
           type,
-          newFilters.includes(type) ? [enabledValue] : [],
+          newFilters.includes(type),
         ])
       ),
     })

@@ -1,7 +1,7 @@
 import {
   AppImageTargetInfo,
   SET_GALLERY_FILTER, SetTargetsGalleryFilterAction, ImageTargetAction, ImageTargetMessage,
-  ImageTargetReduxState,
+  ImageTargetReduxState, ResetTargetsGalleryFilterAction, RESET_GALLERY_FILTER,
   ImageTargetFilterOptions,
   ImageTargetGallery,
 } from './types'
@@ -16,9 +16,7 @@ const initialState: ImageTargetReduxState = {
 const DEFAULT_FILTER_OPTIONS: ImageTargetFilterOptions = {
   nameLike: null,
   type: [],
-  metadata: [],
-  by: ['created'],
-  dir: ['desc'],
+  hasMetadata: false,
 }
 
 const DEFAULT_GALLERY: ImageTargetGallery = {
@@ -45,7 +43,7 @@ const getUpdateForAppState = (
 const filterGalleryTargets = (
   state: ImageTargetReduxState,
   action: SetTargetsGalleryFilterAction
-) => {
+): ImageTargetReduxState => {
   const {galleryUuid, appUuid, options} = action
   const galleries = state.targetInfoByApp[appUuid]?.galleries
   const update: ImageTargetGallery = galleries?.[galleryUuid] || DEFAULT_GALLERY
@@ -60,8 +58,25 @@ const filterGalleryTargets = (
   })
 }
 
+const resetGalleryFilter = (
+  state: ImageTargetReduxState,
+  action: ResetTargetsGalleryFilterAction
+): ImageTargetReduxState => {
+  const {galleryUuid, appUuid} = action
+  const galleries = state.targetInfoByApp[appUuid]?.galleries
+  return getUpdateForAppState(state, appUuid, {
+    galleries: {
+      ...galleries,
+      [galleryUuid]: {
+        filters: DEFAULT_FILTER_OPTIONS,
+      },
+    },
+  })
+}
+
 const actions: Record<ImageTargetMessage, ActionFunction> = {
   [SET_GALLERY_FILTER]: filterGalleryTargets,
+  [RESET_GALLERY_FILTER]: resetGalleryFilter,
 }
 
 const Reducer = (state = initialState, action: ImageTargetAction): ImageTargetReduxState => {

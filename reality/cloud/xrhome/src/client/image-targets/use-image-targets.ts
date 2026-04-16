@@ -16,6 +16,7 @@ import {selectTargetsGalleryFilterOptions} from './state-selectors'
 import {useSelector} from '../hooks'
 import {DEFAULT_FILTER_OPTIONS} from './reducer'
 import type {IImageTarget} from '../common/types/models'
+import {targetMatchesFilter} from './gallery-filters'
 
 const makeImageTargetTextureUrl = (
   appKey: string, target: ImageTargetData, type: TargetTextureType
@@ -51,7 +52,9 @@ const expandTargetData = (appKey: string, target: ImageTargetData): IImageTarget
 
 const fetchImageTargets = async (appKey: string): Promise<DeepReadonly<IImageTarget[]>> => {
   const {targets} = await listImageTargets(appKey)
-  return targets.map(target => expandTargetData(appKey, target))
+  return targets
+    .map(target => expandTargetData(appKey, target))
+    .sort((a, b) => b.created - a.created)
 }
 
 const useImageTargets = () => {
@@ -80,7 +83,7 @@ const useGalleryTargets = (galleryUuid: string | undefined) => {
       : DEFAULT_FILTER_OPTIONS
   ))
   // TODO(christoph): Filter based on gallery filters
-  return React.useMemo(() => targets, [targets, filter])
+  return React.useMemo(() => targets.filter(t => targetMatchesFilter(t, filter)), [targets, filter])
 }
 
 const useImageTargetActions = () => {

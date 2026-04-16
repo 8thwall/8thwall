@@ -1,8 +1,12 @@
 import type {DeepReadonly} from 'ts-essentials'
 
+import type {ImageTargetType} from '../common/types/db'
+
 const SET_GALLERY_FILTER = 'IMAGE_TARGET/SET_GALLERY_FILTER'
+const RESET_GALLERY_FILTER = 'IMAGE_TARGET/RESET_GALLERY_FILTER'
 
  type ImageTargetMessage = typeof SET_GALLERY_FILTER
+  | typeof RESET_GALLERY_FILTER
 
  type ImageTargetStatus = 'loading-initial' | 'loading-additional' | 'loaded' | 'cleared'
 
@@ -14,18 +18,12 @@ interface AppImageTargetInfo extends DeepReadonly<{
   galleries: Record<string, ImageTargetGallery>
 }> {}
 
- type ImageTargetOrdering = 'created' | 'updated' | 'name'
- type ImageTargetOrderDirection = 'asc' | 'desc'
- type ImageTargetGeometryFilter = 'flat' | 'cylindrical' | 'conical'
- type ImageTargetFilterFlag = 'metadata'
- type ImageTargetFilterFlagValue = 'set' | 'unset' | 'true' | 'false'
+ type ImageTargetFilterFlag = 'hasMetadata'
 
 interface ImageTargetFilterOptions extends DeepReadonly<{
   nameLike: string | null
-  type: ImageTargetGeometryFilter[]
-  metadata: ImageTargetFilterFlagValue[]
-  by: ImageTargetOrdering[]
-  dir: ImageTargetOrderDirection[]
+  type: ImageTargetType[]
+  hasMetadata: boolean
 }> {}
 
 interface ImageTargetReduxState extends DeepReadonly<{
@@ -36,13 +34,21 @@ interface SetTargetsGalleryFilterAction {
   type: typeof SET_GALLERY_FILTER
   appUuid: string
   galleryUuid: string
-  options: ImageTargetFilterOptions
+  options: Partial<ImageTargetFilterOptions>
+}
+
+interface ResetTargetsGalleryFilterAction {
+  type: typeof RESET_GALLERY_FILTER
+  appUuid: string
+  galleryUuid: string
 }
 
  type ImageTargetAction = SetTargetsGalleryFilterAction
+  | ResetTargetsGalleryFilterAction
 
 export {
   SET_GALLERY_FILTER,
+  RESET_GALLERY_FILTER,
 }
 
 export type {
@@ -50,13 +56,10 @@ export type {
   ImageTargetMessage,
   ImageTargetStatus,
   AppImageTargetInfo,
-  ImageTargetOrdering,
-  ImageTargetOrderDirection,
-  ImageTargetGeometryFilter,
   ImageTargetFilterFlag,
-  ImageTargetFilterFlagValue,
   ImageTargetFilterOptions,
   ImageTargetReduxState,
   SetTargetsGalleryFilterAction,
   ImageTargetAction,
+  ResetTargetsGalleryFilterAction,
 }
