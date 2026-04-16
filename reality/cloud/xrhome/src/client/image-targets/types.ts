@@ -17,13 +17,12 @@ interface AppImageTargetInfo extends DeepReadonly<{
  type ImageTargetOrdering = 'created' | 'updated' | 'name'
  type ImageTargetOrderDirection = 'asc' | 'desc'
  type ImageTargetGeometryFilter = 'flat' | 'cylindrical' | 'conical'
- type ImageTargetFilterFlag = 'autoload' | 'metadata'
+ type ImageTargetFilterFlag = 'metadata'
  type ImageTargetFilterFlagValue = 'set' | 'unset' | 'true' | 'false'
 
 interface ImageTargetFilterOptions extends DeepReadonly<{
   nameLike: string | null
   type: ImageTargetGeometryFilter[]
-  autoload: ImageTargetFilterFlagValue[]
   metadata: ImageTargetFilterFlagValue[]
   by: ImageTargetOrdering[]
   dir: ImageTargetOrderDirection[]

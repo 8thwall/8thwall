@@ -16,7 +16,6 @@ const initialState: ImageTargetReduxState = {
 const DEFAULT_FILTER_OPTIONS: ImageTargetFilterOptions = {
   nameLike: null,
   type: [],
-  autoload: [],
   metadata: [],
   by: ['created'],
   dir: ['desc'],

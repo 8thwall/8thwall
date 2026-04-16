@@ -38,7 +38,6 @@ const expandTargetData = (appKey: string, target: ImageTargetData): IImageTarget
   imageSrc: makeImageTargetTextureUrl(appKey, target, 'cropped'),
   geometryTextureImageSrc: makeImageTargetTextureUrl(appKey, target, 'geometry'),
   thumbnailImageSrc: makeImageTargetTextureUrl(appKey, target, 'thumbnail'),
-  loadAutomatically: false,
   uuid: target.name,
   userMetadata: typeof target.metadata === 'string'
     ? target.metadata

@@ -84,10 +84,6 @@ type FlagFilter = {
   type: FlagKey, label: string, enabledValue: ImageTargetFilterFlagValue
 }
 const FLAG_FILTERS: FlagFilter[] = [{
-  type: 'autoload',
-  label: 'file_browser.image_targets.auto_loaded.label',
-  enabledValue: 'true',
-}, {
   type: 'metadata',
   label: 'file_browser.image_targets.metadata',
   enabledValue: 'set',

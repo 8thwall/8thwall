@@ -137,7 +137,6 @@ const LoadedImageTargetAssetConfigurator: React.FC<ILoadedImageTargetAssetConfig
 
     return {
       name: imageTarget.name,
-      autoLoad: imageTarget.loadAutomatically,
       hasUserMetadata: !!imageTarget.userMetadata,
       userMetadataIsJson: imageTarget.userMetadataIsJson,
       userMetadata: imageTarget.userMetadata,
@@ -185,7 +184,6 @@ const LoadedImageTargetAssetConfigurator: React.FC<ILoadedImageTargetAssetConfig
   }
 
   const [name, setName] = React.useState(defaults.name)
-  const [autoLoad, setAutoLoad] = React.useState(defaults.autoLoad)
   const [hasUserMetadata, setHasUserMetadata] = React.useState(defaults.hasUserMetadata)
   const [userMetadataIsJson, setUserMetadataIsJson] = React.useState(defaults.userMetadataIsJson)
   const [userMetadata, setUserMetadata] = React.useState(defaults.userMetadata)
@@ -225,7 +223,6 @@ const LoadedImageTargetAssetConfigurator: React.FC<ILoadedImageTargetAssetConfig
     setNameError(null)
     setUserMetadataError(null)
     setName(defaults.name)
-    setAutoLoad(defaults.autoLoad)
     setHasUserMetadata(defaults.hasUserMetadata)
     setUserMetadataIsJson(defaults.userMetadataIsJson)
     setUserMetadata(defaults.userMetadata)
@@ -256,7 +253,6 @@ const LoadedImageTargetAssetConfigurator: React.FC<ILoadedImageTargetAssetConfig
 
   const hasChanges =
     name !== defaults.name ||
-    autoLoad !== defaults.autoLoad ||
     effectiveIsJson !== defaults.userMetadataIsJson ||
     effectiveUserMetadata !== defaults.userMetadata ||
     arcAngle !== defaults.arcAngle ||
@@ -295,7 +291,6 @@ const LoadedImageTargetAssetConfigurator: React.FC<ILoadedImageTargetAssetConfig
         uuid: imageTarget.uuid,
         AppUuid: imageTarget.AppUuid,
         name,
-        status: autoLoad ? 'ENABLED' : 'DISABLED',
         userMetadata: effectiveUserMetadata,
         userMetadataIsJson: effectiveIsJson,
         arcAngle,
@@ -428,12 +423,6 @@ const LoadedImageTargetAssetConfigurator: React.FC<ILoadedImageTargetAssetConfig
             onVisualizerStateChange={updateVisualizerState}
           />
           <ImageTargetMetadataInfo imageTarget={imageTarget} />
-          <RowBooleanField
-            id='auto-load'
-            label={t('asset_configurator.image_target_configurator.auto_load')}
-            checked={autoLoad}
-            onChange={e => setAutoLoad(e.target.checked)}
-          />
           {(imageTarget.type === 'CONICAL' || imageTarget.type === 'CYLINDER') && (
             <ImageTargetGeometryConfigurator
               targetType={imageTarget.type}

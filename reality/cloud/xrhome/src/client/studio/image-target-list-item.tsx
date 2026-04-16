@@ -3,7 +3,6 @@ import {useTranslation} from 'react-i18next'
 
 import type {IImageTarget} from '../common/types/models'
 import {createThemedStyles} from '../ui/theme'
-import {Badge} from '../ui/components/badge'
 import {Icon} from '../ui/components/icon'
 import type {ImageTargetType} from '../common/types/db'
 import {useStudioStateContext} from './studio-state-context'
@@ -237,13 +236,6 @@ const ImageTargetListItem: React.FC<IImageTargetListItem> = ({
             alt={imageTarget.name}
           />
         </div>
-        {imageTarget.loadAutomatically &&
-          <div className={classes.badgeContainer}>
-            <Badge color='blue' variant='pastel'>
-              {t('file_browser.image_targets.auto_loaded.badge')}
-            </Badge>
-          </div>
-      }
         <div className={classes.nameContainer}>
           {renaming
             ? <InlineTextInput
