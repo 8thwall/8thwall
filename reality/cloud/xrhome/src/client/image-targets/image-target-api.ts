@@ -1,7 +1,5 @@
 import {
-  ImageTargetData, LIST_PATH, ListTargetsResponse,
-  UPLOAD_PATH,
-  UploadTargetParams,
+  ImageTargetData, LIST_PATH, ListTargetsResponse, UPLOAD_PATH, UploadTargetParams,
 } from '@repo/reality/shared/desktop/image-target-api'
 import type {CropResult} from '@repo/reality/shared/desktop/image-target-api'
 

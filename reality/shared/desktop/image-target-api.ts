@@ -34,8 +34,8 @@ type CylinderCropGeometry = CropGeometry & {
   cylinderCircumferenceBottom: number
   arcAngle: number
   coniness: number
-  inputMode?: 'ADVANCED' | 'BASIC'
-  unit?: 'mm' | 'in'
+  inputMode: 'ADVANCED' | 'BASIC'
+  unit: 'mm' | 'in'
 }
 
 type ConicalCropGeometry = CylinderCropGeometry & {
@@ -92,18 +92,6 @@ type UpdateTargetParams = {
   name: string
 }
 
-type UpdateTargetRequest =
-  Partial<Pick<ImageTargetData, 'name' | 'metadata' | 'properties'>>
-
-type TargetTextureType = 'original' | 'cropped' | 'geometry' | 'thumbnail' | 'luminance'
-
-type GetTargetTextureParams = {
-  appKey: string
-  name: string
-  type: TargetTextureType
-  v?: string  // Optional, to bust the cache
-}
-
 export {
   LIST_PATH,
   TEXTURE_PATH,
@@ -117,9 +105,6 @@ export type {
   ListTargetsResponse,
   UploadTargetParams,
   UpdateTargetParams,
-  UpdateTargetRequest,
   UploadTargetResponse,
-  GetTargetTextureParams,
   CropResult,
-  TargetTextureType,
 }
