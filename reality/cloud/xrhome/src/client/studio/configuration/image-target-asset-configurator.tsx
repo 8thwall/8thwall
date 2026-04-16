@@ -294,6 +294,8 @@ const LoadedImageTargetAssetConfigurator: React.FC<ILoadedImageTargetAssetConfig
       await updateImageTarget(imageTarget.name, {
         name,
         metadata: finalMetadata,
+        // @ts-expect-error
+        type: imageTarget.type,
         properties: {
           arcAngle,
           coniness,
@@ -310,6 +312,8 @@ const LoadedImageTargetAssetConfigurator: React.FC<ILoadedImageTargetAssetConfig
           isRotated,
           topRadius,
           bottomRadius,
+          originalWidth: metadata.originalWidth,
+          originalHeight: metadata.originalHeight,
           // @ts-expect-error
           staticOrientation: newStaticOrientation,
         },

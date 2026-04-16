@@ -36,7 +36,7 @@ type CylinderCropGeometry = CropGeometry & {
   cylinderCircumferenceBottom: number
   arcAngle: number
   coniness: number
-  inputMode: 'ADVANCED'
+  inputMode: 'ADVANCED' | 'BASIC'
   unit: 'mm' | 'in'
 }
 

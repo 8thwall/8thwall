@@ -2,6 +2,7 @@ import React from 'react'
 import {Vector2, DoubleSide, TextureLoader} from 'three'
 import {Wireframe, Edges} from '@react-three/drei'
 import type {Mesh} from 'three'
+import {useThree} from '@react-three/fiber'
 
 import {mango} from '../static/styles/settings'
 import {enableOutline, removeOutline} from './selected-outline'
@@ -47,20 +48,25 @@ interface IPlane {
 
 const WIREFRAME_OPACITY = 0.6
 
-const useRotatedTexture = (texturePath: string, isRotated: boolean) => React.useMemo(() => {
-  if (!texturePath) {
-    return null
-  }
-  const tex = new TextureLoader().load(texturePath)
-  tex.anisotropy = 16
+const useRotatedTexture = (texturePath: string, isRotated: boolean) => {
+  const three = useThree()
+  return React.useMemo(() => {
+    if (!texturePath) {
+      return null
+    }
+    const tex = new TextureLoader().load(texturePath, () => {
+      three.invalidate()
+    })
+    tex.anisotropy = 16
 
-  if (isRotated) {
-    tex.center = new Vector2(0.5, 0.5)
-    tex.rotation = Math.PI / 2
-    tex.updateMatrix()
-  }
-  return tex
-}, [texturePath, isRotated])
+    if (isRotated) {
+      tex.center = new Vector2(0.5, 0.5)
+      tex.rotation = Math.PI / 2
+      tex.updateMatrix()
+    }
+    return tex
+  }, [texturePath, isRotated])
+}
 
 const Plane = React.forwardRef<Mesh, IPlane>(({
   imagePath, width, height, textureLandscape, greyTexture = false,

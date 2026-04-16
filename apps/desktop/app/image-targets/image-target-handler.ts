@@ -4,7 +4,8 @@ import * as TargetApi from '@repo/reality/shared/desktop/image-target-api'
 import {makeRunQueue} from '@repo/reality/shared/run-queue'
 import type {Project} from '@repo/reality/shared/desktop/local-sync-types'
 import {applyCrop} from '@repo/apps/image-target-cli/src/apply'
-import sharp from 'sharp'
+import sharp, {Sharp} from 'sharp'
+import log from 'electron-log'
 
 import {makeCodedError, withErrorHandlingResponse} from '../../errors'
 import {branches, methods, RequestHandler} from '../../requests'
@@ -159,6 +160,16 @@ const handleGetTexture: RequestHandler = async (req) => {
   return makeStreamFileResponse(imagePath)
 }
 
+const deleteTarget = async (filePath: string, target: TargetApi.ImageTargetData) => {
+  const filesToDelete = [filePath]
+  if (target.resources) {
+    filesToDelete.push(
+      ...Object.values(target.resources).map(e => path.join(path.dirname(filePath), e))
+    )
+  }
+  await Promise.allSettled(filesToDelete.map(e => fs.unlink(e)))
+}
+
 const handleTargetDelete: RequestHandler = async (req) => {
   const url = new URL(req.url)
   const parsedParams = DeleteTargetParams.safeParse(getQueryParams(url))
@@ -170,14 +181,7 @@ const handleTargetDelete: RequestHandler = async (req) => {
 
   const target = await readTarget(filePath)
 
-  const filesToDelete = [filePath]
-
-  if (target.resources) {
-    filesToDelete.push(
-      ...Object.values(target.resources).map(e => path.join(path.dirname(filePath), e))
-    )
-  }
-  await Promise.allSettled(filesToDelete.map(e => fs.unlink(e)))
+  await deleteTarget(filePath, target)
   return makeJsonResponse({})
 }
 
@@ -221,20 +225,44 @@ const renameResources = async (
   }
 }
 
+const loadOriginalImageForRecrop = async (
+  targetPath: string,
+  target: TargetApi.ImageTargetData
+): Promise<Sharp> => {
+  const imagePath = await resolveImagePath(targetPath, target, 'original')
+  if (!imagePath) {
+    throw new Error('Unable to locate original image')
+  }
+  let image = sharp(imagePath)
+
+  // NOTE(christoph): Conical images are flattened first, then rotated if needed by the crop
+  if (target.type !== 'CONICAL' && target.properties.isRotated) {
+    image = image.rotate(-90)
+  }
+  // NOTE(christoph): Sharp doesn't allow the input path and output path to be the same, so we need
+  // to go through a buffer regardless, no need to attempt any optimization.
+  return sharp(await image.toBuffer())
+}
+
 const handleTargetPatch: RequestHandler = async (req) => {
   const params = new URL(req.url).searchParams
   const project = await loadProject(params.get('appKey')!)
   const sourcePath = getTargetPath(project, params.get('name')!)
   const parsedBody = UpdateTargetRequest.safeParse(await req.json())
   if (parsedBody.error) {
-    throw makeCodedError(`Invalid update data: ${parsedBody.error.toString()}`, 400)
+    return makeJsonResponse({
+      message: 'Invalid update params',
+      issues: parsedBody.error.issues,
+    }, 400)
   }
+
+  log.info(parsedBody.data)
   const oldData = await readTarget(sourcePath)
-  const newData: TargetApi.ImageTargetData = {
-    ...oldData,
-    updated: Date.now(),
-    ...parsedBody.data,
-  }
+  const newData: TargetApi.ImageTargetData = Object.assign(
+    oldData,
+    {updated: Date.now()},
+    parsedBody.data
+  )
 
   // NOTE(christoph): At one point during the sunset period, exported image targets were including
   // this parameter, but it is not required going forward since we're storing the (user) metadata
@@ -257,6 +285,37 @@ const handleTargetPatch: RequestHandler = async (req) => {
     if (exists) {
       throw makeCodedError('A target with this name already exists, cannot rename', 409)
     }
+  }
+
+  const coneRadiusChanged = oldData.type === 'CONICAL' && newData.type === 'CONICAL' && (
+    oldData.properties.topRadius !== newData.properties.topRadius ||
+    oldData.properties.bottomRadius === newData.properties.bottomRadius
+  )
+
+  const cropChanged = (
+    oldData.type !== newData.type ||
+    coneRadiusChanged ||
+    Boolean(oldData.properties.isRotated) !== Boolean(newData.properties.isRotated) ||
+    oldData.properties.top !== newData.properties.top ||
+    oldData.properties.height === newData.properties.height ||
+    oldData.properties.left === newData.properties.left ||
+    oldData.properties.width === newData.properties.width
+  )
+
+  if (cropChanged) {
+    // TODO(christoph): Preserve metadata
+    applyCrop(
+      await loadOriginalImageForRecrop(targetPath, oldData),
+      newData,
+      path.dirname(targetPath),
+      newData.name,
+      true /* overwriteFiles */
+    )
+
+    if (sourcePath !== targetPath) {
+      await deleteTarget(sourcePath, oldData)
+    }
+    return makeJsonResponse(newData)
   }
 
   if (newData.name !== oldData.name) {

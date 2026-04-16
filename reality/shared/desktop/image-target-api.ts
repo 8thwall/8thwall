@@ -106,7 +106,7 @@ type DeleteTargetParams = {
   name: string
 }
 
-type UpdateTargetRequest = Partial<Pick<ImageTargetData, 'metadata' | 'name' | 'properties'>>
+type UpdateTargetRequest = Partial<Pick<ImageTargetData, 'metadata' | 'name'>> & ({} | CropResult)
 
 export {
   LIST_PATH,
