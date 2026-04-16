@@ -77,6 +77,15 @@ type ListTargetsResponse = {
   invalidPaths: string[]
 }
 
+type TargetTextureType = 'original' | 'cropped' | 'geometry' | 'thumbnail' | 'luminance'
+
+type GetTargetTextureParams = {
+  appKey: string
+  name: string
+  type: TargetTextureType
+  v?: string  // Optional, to bust the cache
+}
+
 type UploadTargetParams = {
   appKey: string
   name: string
@@ -103,6 +112,8 @@ export type {
   ImageTargetData,
   ListTargetsParams,
   ListTargetsResponse,
+  GetTargetTextureParams,
+  TargetTextureType,
   UploadTargetParams,
   UpdateTargetParams,
   UploadTargetResponse,
