@@ -3,12 +3,6 @@ import type {DeepReadonly} from 'ts-essentials'
 import {v4 as uuid} from 'uuid'
 import type {TFunction} from 'react-i18next'
 
-import type {StudioComponentData} from '@ecs/shared/studio-component'
-import type {BaseGraphObject, SceneGraph, Space, InputMap, Action} from '@ecs/shared/scene-graph'
-import {isPrefab, isPrefabInstance} from '@ecs/shared/object-hierarchy'
-import {parseComponentAst} from '@ecs/shared/parse-component-ast'
-import {DEFAULT_ACTION_MAP} from '@ecs/shared/default-action-maps'
-
 import type {
   GetObjectsPropertyRequest, GetObjectsPropertyResponse,
   SetObjectsPropertyRequest, SetObjectsPropertyResponse,
@@ -17,6 +11,11 @@ import type {
   UpdateComponentsRequest, RemoveComponentsRequest, UpdateComponentsResponse,
   RemoveComponentsResponse,
 } from '@studiomcp/schema/scene-tools'
+import type {StudioComponentData} from '@ecs/shared/studio-component'
+import type {BaseGraphObject, SceneGraph, Space, InputMap, Action} from '@ecs/shared/scene-graph'
+import {isPrefab, isPrefabInstance} from '@ecs/shared/object-hierarchy'
+import {parseComponentAst} from '@ecs/shared/parse-component-ast'
+import {DEFAULT_ACTION_MAP} from '@ecs/shared/default-action-maps'
 
 import {makeObjectName} from '../common/studio-files'
 import {deleteObjects} from '../configuration/delete-object'

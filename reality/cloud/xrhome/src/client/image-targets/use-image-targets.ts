@@ -10,7 +10,7 @@ import type {DeepReadonly} from 'ts-essentials'
 
 import {useEnclosedAppKey} from '../apps/enclosed-app-context'
 import {
-  listImageTargets, uploadImageTarget,
+  listImageTargets, uploadImageTarget, deleteImageTarget,
 } from './image-target-api'
 import {selectTargetsGalleryFilterOptions} from './state-selectors'
 import {useSelector} from '../hooks'
@@ -91,6 +91,11 @@ const useImageTargetActions = () => {
       client.invalidateQueries({queryKey: ['image-targets', appKey]})
     }
 
+    const deleteTarget = async (name: string) => {
+      await deleteImageTarget(appKey, name)
+      refresh()
+    }
+
     const upload = async (
       image: Blob,
       name: string,
@@ -103,6 +108,7 @@ const useImageTargetActions = () => {
 
     return {
       uploadImageTarget: upload,
+      deleteImageTarget: deleteTarget,
       refresh,
     }
   }, [appKey, client])
