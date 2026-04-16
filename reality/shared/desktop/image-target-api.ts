@@ -106,6 +106,8 @@ type DeleteTargetParams = {
   name: string
 }
 
+type UpdateTargetRequest = Partial<Pick<ImageTargetData, 'metadata' | 'name' | 'properties'>>
+
 export {
   LIST_PATH,
   TEXTURE_PATH,
@@ -124,4 +126,5 @@ export type {
   UploadTargetResponse,
   CropResult,
   DeleteTargetParams,
+  UpdateTargetRequest,
 }

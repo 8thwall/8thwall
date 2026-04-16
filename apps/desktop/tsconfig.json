@@ -2,6 +2,7 @@
   "compilerOptions": {
     "target": "es2020",
     "lib": [
+      "dom",
       "esnext"
     ],
     "allowJs": true,
@@ -10,8 +11,8 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
-    "module": "Preserve",
-    "moduleResolution": "Bundler",
+    "module": "nodenext",
+    "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "paths": {

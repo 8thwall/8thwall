@@ -5,8 +5,6 @@ import {quat} from '@ecs/runtime/math/math'
 import type {Vec4Tuple} from '@ecs/shared/scene-graph'
 
 import {createThemedStyles} from '../../ui/theme'
-import useActions from '../../common/use-actions'
-import appsActions from '../../apps/apps-actions'
 import {
   useOtherImageNames, validateImageTargetName,
 } from '../../../shared/validate-image-target-name'
@@ -22,7 +20,7 @@ import {useSceneContext} from '../scene-context'
 import {useDerivedScene} from '../derived-scene-context'
 import type {IImageTarget} from '../../common/types/models'
 import {ImageTargetMetadataInfo} from './image-target-metadata-info'
-import {ImageTargetUserMetadata} from './image-target-user-metadata'
+import {ImageTargetUserMetadata, validateMetadata} from './image-target-user-metadata'
 import {
   ImageTargetConfiguratorSection, ImageTargetSections, ImageTargetTestSection,
 } from './image-target-asset-sections'
@@ -42,6 +40,7 @@ import type {ImageInfo} from '../../apps/image-targets/image-helpers'
 import type {CropAreaPixels} from '../../common/image-cropper'
 import {Tooltip} from '../../ui/components/tooltip'
 import {useImageTarget} from '../hooks/use-image-target'
+import {useImageTargetActions} from '../../image-targets/use-image-targets'
 
 type VisualizerFocus = 'main' | 'trackingRegion' | 'arcCurves'
 interface VisualizerState {
@@ -102,7 +101,7 @@ const LoadedImageTargetAssetConfigurator: React.FC<ILoadedImageTargetAssetConfig
   const stateCtx = useStudioStateContext()
   const {t} = useTranslation('cloud-studio-pages')
   const classes = useStyles()
-  const {updateImageTarget} = useActions(appsActions)
+  const {updateImageTarget} = useImageTargetActions()
   const otherImageNames = useOtherImageNames(imageTarget.uuid)
   const ctx = useSceneContext()
   const derivedScene = useDerivedScene()
@@ -113,7 +112,6 @@ const LoadedImageTargetAssetConfigurator: React.FC<ILoadedImageTargetAssetConfig
   const [section, setSection] = React.useState<ImageTargetConfiguratorSection>('configure')
   const [isSaving, setIsSaving] = React.useState(false)
   const [nameError, setNameError] = React.useState<string | null>(null)
-  const [userMetadataError, setUserMetadataError] = React.useState<string | null>(null)
 
   const updateErrorMsg = (error: string | null, previous: string | null) => {
     if (error) {
@@ -123,8 +121,7 @@ const LoadedImageTargetAssetConfigurator: React.FC<ILoadedImageTargetAssetConfig
     }
   }
 
-  const jsonMetadata: ImageTargetMetadata =
-    React.useMemo(() => JSON.parse(imageTarget.metadata), [imageTarget.metadata])
+  const jsonMetadata = imageTarget.properties as ImageTargetMetadata
 
   // savable state
   const defaults = useMemo(() => {
@@ -219,7 +216,6 @@ const LoadedImageTargetAssetConfigurator: React.FC<ILoadedImageTargetAssetConfig
     updateVisualizerState({focus: 'main'})
     setIsSaving(false)
     setNameError(null)
-    setUserMetadataError(null)
     setName(defaults.name)
     setHasUserMetadata(defaults.hasUserMetadata)
     setUserMetadataIsJson(defaults.userMetadataIsJson)
@@ -248,6 +244,8 @@ const LoadedImageTargetAssetConfigurator: React.FC<ILoadedImageTargetAssetConfig
 
   const effectiveUserMetadata = hasUserMetadata ? userMetadata : null
   const effectiveIsJson = hasUserMetadata ? userMetadataIsJson : defaults.userMetadataIsJson
+
+  const userMetadataError = hasUserMetadata && validateMetadata(userMetadata, userMetadataIsJson, t)
 
   const hasChanges =
     name !== defaults.name ||
@@ -285,28 +283,36 @@ const LoadedImageTargetAssetConfigurator: React.FC<ILoadedImageTargetAssetConfig
       if (BuildIf.STATIC_IMAGE_TARGETS_20250721 && imageTarget.type === 'PLANAR') {
         newStaticOrientation = staticImageEnabled ? staticOrientation : {}
       }
-      await updateImageTarget({
-        uuid: imageTarget.uuid,
-        AppUuid: imageTarget.AppUuid,
+      let finalMetadata: unknown = null
+      if (hasUserMetadata) {
+        if (userMetadataIsJson) {
+          finalMetadata = JSON.parse(userMetadata)
+        } else {
+          finalMetadata = userMetadata
+        }
+      }
+      await updateImageTarget(imageTarget.name, {
         name,
-        userMetadata: effectiveUserMetadata,
-        userMetadataIsJson: effectiveIsJson,
-        arcAngle,
-        coniness,
-        cylinderCircumferenceTop,
-        cylinderCircumferenceBottom,
-        cylinderSideLength,
-        targetCircumferenceTop,
-        inputMode,
-        unit,
-        top,
-        left,
-        width,
-        height,
-        isRotated,
-        topRadius,
-        bottomRadius,
-        staticOrientation: newStaticOrientation,
+        metadata: finalMetadata,
+        properties: {
+          arcAngle,
+          coniness,
+          cylinderCircumferenceTop,
+          cylinderCircumferenceBottom,
+          cylinderSideLength,
+          targetCircumferenceTop,
+          inputMode,
+          unit,
+          top,
+          left,
+          width,
+          height,
+          isRotated,
+          topRadius,
+          bottomRadius,
+          // @ts-expect-error
+          staticOrientation: newStaticOrientation,
+        },
       })
 
       updateVisualizerState({focus: 'main'})
@@ -435,10 +441,7 @@ const LoadedImageTargetAssetConfigurator: React.FC<ILoadedImageTargetAssetConfig
             setUserMetadata={setUserMetadata}
             userMetadataIsJson={userMetadataIsJson}
             setUserMetadataIsJson={setUserMetadataIsJson}
-            setUserMetadataError={(error) => {
-              updateErrorMsg(error, userMetadataError)
-              setUserMetadataError(error)
-            }}
+            userMetadataError={userMetadataError}
           />
           {BuildIf.STATIC_IMAGE_TARGETS_20250721 && (
             <>

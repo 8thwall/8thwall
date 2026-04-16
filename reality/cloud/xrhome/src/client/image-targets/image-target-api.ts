@@ -1,6 +1,8 @@
 import {
-  ImageTargetData, LIST_PATH, ListTargetsResponse, UPLOAD_PATH, UploadTargetParams,
-  DeleteTargetParams, TARGET_PATH,
+  ImageTargetData, LIST_PATH, ListTargetsResponse, TARGET_PATH, UpdateTargetParams,
+  UpdateTargetRequest, DeleteTargetParams,
+  UPLOAD_PATH,
+  UploadTargetParams,
 } from '@repo/reality/shared/desktop/image-target-api'
 import type {CropResult} from '@repo/reality/shared/desktop/image-target-api'
 
@@ -33,6 +35,16 @@ const deleteImageTarget = (appKey: string, name: string) => {
   )
 }
 
+const updateImageTarget = (appKey: string, name: string, update: UpdateTargetRequest) => {
+  const params: UpdateTargetParams = {
+    appKey, name,
+  }
+  return fetchJson<void>(
+    `image-targets://${TARGET_PATH}?${new URLSearchParams(params)}`,
+    {body: JSON.stringify(update), method: 'PATCH'}
+  )
+}
+
 const uploadImageTarget = (
   appKey: string,
   image: Blob,
@@ -55,4 +67,5 @@ export {
   listImageTargets,
   uploadImageTarget,
   deleteImageTarget,
+  updateImageTarget,
 }

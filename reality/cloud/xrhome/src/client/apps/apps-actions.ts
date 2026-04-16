@@ -9,7 +9,6 @@ const unimplemented = (name: string): any => () => ({
 
 const rawActions = {
   error: onError,
-  updateImageTarget: unimplemented('updateImageTarget'),
   testImageTarget: unimplemented('testImageTarget'),
   testImageTargetClear: unimplemented('testImageTargetClear'),
 }

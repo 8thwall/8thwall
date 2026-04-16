@@ -10,13 +10,12 @@ import {combine} from '../common/styles'
 import {SrOnly} from '../ui/components/sr-only'
 import {ContextMenu, useContextMenuState} from './ui/context-menu'
 import InlineTextInput from '../common/inline-text-input'
-import useActions from '../common/use-actions'
-import appsActions from '../apps/apps-actions'
 import {Loader} from '../ui/components/loader'
 import {useTreeElementStyles} from './ui/tree-element-styles'
 import {DeleteImageTargetModal} from './image-target-delete-modal'
 import {useOtherImageNames, validateImageTargetName} from '../../shared/validate-image-target-name'
 import {ImageTargetModal} from './image-target-modal'
+import {useImageTargetActions} from '../image-targets/use-image-targets'
 
 const useStyles = createThemedStyles(theme => ({
   listItem: {
@@ -141,7 +140,7 @@ const ImageTargetListItem: React.FC<IImageTargetListItem> = ({
   const classes = useStyles()
   const elementClasses = useTreeElementStyles()
   const menuState = useContextMenuState()
-  const {updateImageTarget} = useActions(appsActions)
+  const {updateImageTarget} = useImageTargetActions()
   const otherImageNames = useOtherImageNames(imageTarget.uuid)
 
   const [loading, setLoading] = React.useState(false)
@@ -171,9 +170,7 @@ const ImageTargetListItem: React.FC<IImageTargetListItem> = ({
 
     setLoading(true)
     try {
-      await updateImageTarget({
-        uuid: imageTarget.uuid,
-        AppUuid: imageTarget.AppUuid,
+      await updateImageTarget(imageTarget.name, {
         name: newName,
       })
     } catch (e) {

@@ -2,7 +2,7 @@ import React from 'react'
 import {useQuery, useQueryClient, useSuspenseQuery} from '@tanstack/react-query'
 
 import {
-  CropResult, GetTargetTextureParams, ImageTargetData, TargetTextureType,
+  CropResult, GetTargetTextureParams, ImageTargetData, TargetTextureType, UpdateTargetRequest,
   TEXTURE_PATH,
 } from '@repo/reality/shared/desktop/image-target-api'
 
@@ -10,7 +10,8 @@ import type {DeepReadonly} from 'ts-essentials'
 
 import {useEnclosedAppKey} from '../apps/enclosed-app-context'
 import {
-  listImageTargets, uploadImageTarget, deleteImageTarget,
+  listImageTargets, updateImageTarget, deleteImageTarget,
+  uploadImageTarget,
 } from './image-target-api'
 import {selectTargetsGalleryFilterOptions} from './state-selectors'
 import {useSelector} from '../hooks'
@@ -40,9 +41,9 @@ const expandTargetData = (appKey: string, target: ImageTargetData): IImageTarget
   geometryTextureImageSrc: makeImageTargetTextureUrl(appKey, target, 'geometry'),
   thumbnailImageSrc: makeImageTargetTextureUrl(appKey, target, 'thumbnail'),
   uuid: target.name,
-  userMetadata: typeof target.metadata === 'string'
+  userMetadata: target.metadata && (typeof target.metadata === 'string'
     ? target.metadata
-    : JSON.stringify(target.metadata),
+    : JSON.stringify(target.metadata, null, 2)),
   userMetadataIsJson: typeof target.metadata !== 'string',
   status: 'DISABLED',
   createdAt: new Date(target.created).toString(),
@@ -111,12 +112,24 @@ const useImageTargetActions = () => {
       return expandTargetData(appKey, target)
     }
 
+    const update = async (name: string, data: UpdateTargetRequest) => {
+      await updateImageTarget(appKey, name, data)
+      refresh()
+    }
+
     return {
       uploadImageTarget: upload,
       deleteImageTarget: deleteTarget,
+      updateImageTarget: update,
       refresh,
     }
   }, [appKey, client])
+}
+
+const useImageTarget = (name?: string | null) => {
+  const targets = useImageTargetsOrLoading()
+  const target = targets.data?.find(e => e.name === name)
+  return [target, targets.isLoading] as const
 }
 
 export {
@@ -124,4 +137,5 @@ export {
   useGalleryTargets,
   useImageTargetsOrLoading,
   useImageTargetActions,
+  useImageTarget,
 }

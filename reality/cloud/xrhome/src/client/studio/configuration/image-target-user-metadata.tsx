@@ -1,11 +1,12 @@
 import React from 'react'
-import {useTranslation} from 'react-i18next'
+import {TFunction, useTranslation} from 'react-i18next'
 
 import {RowBooleanField, RowSelectField} from './row-fields'
 import {StandardTextAreaField} from '../../ui/components/standard-text-area-field'
 import {USER_METADATA_LIMIT} from '../../../shared/xrengine-config'
+import {StaticBanner} from '../../ui/components/banner'
 
-const validateMetadata = (input, isJson, t) => {
+const validateMetadata = (input: string, isJson: boolean, t: TFunction) => {
   if (!input) {
     return null
   } else if (input.length > USER_METADATA_LIMIT) {
@@ -20,7 +21,7 @@ const validateMetadata = (input, isJson, t) => {
     JSON.parse(input)
     return null
   } catch (err) {
-    return t('asset_configurator.image_target_configurator.error.invalid_json')
+    return t('asset_configurator.image_target_configurator.error.json_parse_error')
   }
 }
 
@@ -31,12 +32,12 @@ interface IImageTargetUserMetadata {
   setUserMetadata(userMetadata: string | null): void
   userMetadataIsJson: boolean
   setUserMetadataIsJson(userMetadataIsJson: boolean): void
-  setUserMetadataError(jsonError: string | null): void
+  userMetadataError?: string | null
 }
 
 const ImageTargetUserMetadata: React.FC<IImageTargetUserMetadata> = ({
   hasUserMetadata, setHasUserMetadata, userMetadata, setUserMetadata, userMetadataIsJson,
-  setUserMetadataIsJson, setUserMetadataError,
+  setUserMetadataIsJson, userMetadataError,
 }) => {
   const {t} = useTranslation(['cloud-studio-pages', 'app-pages'])
 
@@ -49,44 +50,40 @@ const ImageTargetUserMetadata: React.FC<IImageTargetUserMetadata> = ({
         onChange={(event) => {
           const {checked} = event.target
           setHasUserMetadata(checked)
-          setUserMetadataError(checked
-            ? validateMetadata(userMetadata, userMetadataIsJson, t)
-            : null)
         }}
       />
       {hasUserMetadata &&
-        <RowSelectField
-          id='user-metadata-format'
-          label={t('asset_configurator.image_target_configurator.user_metadata.format')}
-          value={userMetadataIsJson ? 'json' : 'text'}
-          options={[
-            {
-              value: 'json',
-              content: t('asset_configurator.image_target_configurator.user_metadata.json'),
-            },
-            {
-              value: 'text',
-              content: t('asset_configurator.image_target_configurator.user_metadata.text'),
-            },
-          ]}
-          onChange={(format) => {
-            const isJson = format === 'json'
-            setUserMetadataIsJson(isJson)
-            setUserMetadataError(validateMetadata(userMetadata, isJson, t))
-          }}
-        />
-      }
-      {hasUserMetadata &&
-        <StandardTextAreaField
-          id='user-metadata'
-          label=''
-          value={userMetadata ?? ''}
-          onChange={(e) => {
-            const {value} = e.target
-            setUserMetadata(value || null)
-            setUserMetadataError(validateMetadata(value, userMetadataIsJson, t))
-          }}
-        />
+        <>
+          <RowSelectField
+            id='user-metadata-format'
+            label={t('asset_configurator.image_target_configurator.user_metadata.format')}
+            value={userMetadataIsJson ? 'json' : 'text'}
+            options={[
+              {
+                value: 'json',
+                content: t('asset_configurator.image_target_configurator.user_metadata.json'),
+              },
+              {
+                value: 'text',
+                content: t('asset_configurator.image_target_configurator.user_metadata.text'),
+              },
+            ]}
+            onChange={(format) => {
+              const isJson = format === 'json'
+              setUserMetadataIsJson(isJson)
+            }}
+          />
+          <StandardTextAreaField
+            id='user-metadata'
+            label=''
+            value={userMetadata ?? ''}
+            onChange={(e) => {
+              const {value} = e.target
+              setUserMetadata(value || null)
+            }}
+          />
+          {userMetadataError && <StaticBanner type='warning' message={userMetadataError} />}
+        </>
       }
     </>
   )
@@ -94,4 +91,5 @@ const ImageTargetUserMetadata: React.FC<IImageTargetUserMetadata> = ({
 
 export {
   ImageTargetUserMetadata,
+  validateMetadata,
 }

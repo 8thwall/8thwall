@@ -12,6 +12,7 @@ import {getLocalProject} from '../../local-project-db'
 import {makeJsonResponse} from '../../json-response'
 import {
   GetTextureParams, ListTargetsParams, UploadTargetParams, CropResult, DeleteTargetParams,
+  UpdateTargetRequest,
 } from './image-target-types'
 import {makeStreamFileResponse} from '../../stream-file-response'
 import {getQueryParams} from '../../query-params'
@@ -31,6 +32,10 @@ const getTargetPath = (project: Project, name: string) => (
 const readTarget = async (targetPath: string): Promise<TargetApi.ImageTargetData> => {
   const dataString = await fs.readFile(targetPath, 'utf8')
   return JSON.parse(dataString)
+}
+
+const writeTarget = async (targetPath: string, data: TargetApi.ImageTargetData): Promise<void> => {
+  await fs.writeFile(targetPath, `${JSON.stringify(data, null, 2)}\n`)
 }
 
 const handleListTargets: RequestHandler = async (req) => {
@@ -64,6 +69,28 @@ const handleListTargets: RequestHandler = async (req) => {
     }
     return makeJsonResponse({targets: []})
   }
+}
+
+const handleTargetPatch: RequestHandler = async (req) => {
+  const params = new URL(req.url).searchParams
+  const project = await loadProject(params.get('appKey')!)
+  const targetPath = getTargetPath(project, params.get('name')!)
+  const parsedBody = UpdateTargetRequest.safeParse(await req.json())
+  if (parsedBody.error) {
+    throw makeCodedError(`Invalid update data: ${parsedBody.error.toString()}`, 400)
+  }
+  const data = await readTarget(targetPath)
+  const newData: TargetApi.ImageTargetData = {
+    ...data,
+    ...parsedBody.data,
+    metadata: typeof parsedBody.data.metadata === 'undefined'
+      ? data.metadata
+      : parsedBody.data.metadata ?? undefined,
+  }
+  // TODO(christoph): Rename files if necessary
+  // TODO(christoph): Recrop/reconify if necessary
+  await writeTarget(targetPath, newData)
+  return makeJsonResponse(newData)
 }
 
 const handleUpload: RequestHandler = async (req) => {
@@ -184,6 +211,7 @@ const handleImageTargetRequest = withErrorHandlingResponse(branches({
   }),
   [TargetApi.TARGET_PATH]: methods({
     DELETE: handleTargetDelete,
+    PATCH: handleTargetPatch,
   }),
 }))
 
