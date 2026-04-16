@@ -119,7 +119,7 @@ const selectCylindricalGeometry = async (rl, imageMetadata) => {
 /**
  * @param {CliInterface} rl
  * @param {ImageMetadata} imageMetadata
- * @returns {Promise<ConicalCropResult['geometry']>}
+ * @returns {Promise<ConicalCropResult['properties']>}
  */
 const selectConicalGeometry = async (rl, imageMetadata) => {
   const widerSide = await rl.choose('Which side of the cone is wider?', ['top', 'bottom'], true)
@@ -203,15 +203,15 @@ const selectGeometry = async (rl, imageMetadata) => {
     case 'flat':
       return {
         type: 'PLANAR',
-        geometry: await selectPlanarGeometry(rl, imageMetadata),
+        properties: await selectPlanarGeometry(rl, imageMetadata),
       }
     case 'cylinder':
       return {
         type: 'CYLINDER',
-        geometry: await selectCylindricalGeometry(rl, imageMetadata),
+        properties: await selectCylindricalGeometry(rl, imageMetadata),
       }
     case 'cone':
-      return {type: 'CONICAL', geometry: await selectConicalGeometry(rl, imageMetadata)}
+      return {type: 'CONICAL', properties: await selectConicalGeometry(rl, imageMetadata)}
     default:
       throw new Error(`Unknown type: ${type}`)
   }

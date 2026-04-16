@@ -1,6 +1,6 @@
 {
   "name": "@8thwall/image-target-cli",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Generate 8th Wall Image Target Metadata",
   "main":  "src/index.js",
   "bin": {
@@ -8,7 +8,7 @@
   },
   "type": "module",
   "scripts": {
-    "test": "npx tsc -P tsconfig.json && node --test src/*.test.js"
+    "test": "npx tsc -P tsconfig.json && node --test src/*.test.js && ./test/all.sh"
   },
   "homepage": "https://8thwall.org",
   "bugs": {

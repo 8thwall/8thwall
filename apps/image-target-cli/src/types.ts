@@ -19,7 +19,6 @@ type ImageTargetData = CropResult & {
   created: number
   updated: number
 }
-
 interface CropGeometry {
   top: number
   left: number
