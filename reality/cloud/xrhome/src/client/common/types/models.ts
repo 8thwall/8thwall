@@ -75,7 +75,7 @@ interface IImageTarget extends ImageTarget {
   originalImageSrc: string
   imageSrc: string
   thumbnailImageSrc: string
-  geometryTextureImageSrc: string
+  geometryTextureImageSrc: string | null
   appKey: string
 }
 
