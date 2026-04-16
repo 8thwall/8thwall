@@ -33,8 +33,8 @@ const applyCrop = async (rawImage, crop, folder, name, overwriteFiles) => {
     const originalImageData = new ImageData(baseMetadata.width, baseMetadata.height)
     originalImageData.data.set(await rawImage.clone().raw().toBuffer())
     const points = computePixelPointsFromRadius(
-      crop.geometry.topRadius,
-      crop.geometry.bottomRadius,
+      crop.properties.topRadius,
+      crop.properties.bottomRadius,
       baseMetadata.width
     )
     const geometryImageData = unconify(originalImageData, points, baseMetadata.width)
@@ -46,11 +46,11 @@ const applyCrop = async (rawImage, crop, folder, name, overwriteFiles) => {
         channels: 4,
       },
     })
-    if (crop.geometry.isRotated) {
+    if (crop.properties.isRotated) {
       geometryImage = geometryImage.rotate(90)
     }
 
-    metadata = crop.geometry.isRotated
+    metadata = crop.properties.isRotated
       ? {
         width: geometryImageData.height,
         height: geometryImageData.width,
@@ -59,7 +59,7 @@ const applyCrop = async (rawImage, crop, folder, name, overwriteFiles) => {
         width: geometryImageData.width,
         height: geometryImageData.height,
       }
-  } else if (crop.geometry.isRotated) {
+  } else if (crop.properties.isRotated) {
     originalImage = rawImage.clone().rotate(90)
     metadata = {width: baseMetadata.height, height: baseMetadata.width}
   } else {
@@ -67,7 +67,7 @@ const applyCrop = async (rawImage, crop, folder, name, overwriteFiles) => {
     metadata = baseMetadata
   }
 
-  const issues = validateCrop(crop.geometry, metadata)
+  const issues = validateCrop(crop.properties, metadata)
   if (issues.length) {
     throw new Error(`Invalid crop geometry:\n${issues.join('\n')}`)
   }
@@ -90,12 +90,11 @@ const applyCrop = async (rawImage, crop, folder, name, overwriteFiles) => {
   // Final JSON
   /** @type {import("./types").ImageTargetData} */
   const data = {
+    ...crop,
     // NOTE(christoph): This is a URL, not a relative path
     imagePath: `image-targets/${resources.luminanceImage}`,
     metadata: null,
     name,
-    type: crop.type,
-    properties: crop.geometry,
     resources,
     created: Date.now(),
     updated: Date.now(),
@@ -104,7 +103,7 @@ const applyCrop = async (rawImage, crop, folder, name, overwriteFiles) => {
   const dataPath = path.join(folder, `${name}.json`)
 
   const cropSourceImage = geometryImage || originalImage
-  const croppedImage = cropSourceImage.clone().extract(crop.geometry)
+  const croppedImage = cropSourceImage.clone().extract(crop.properties)
 
   const thumbnailImage = croppedImage
     .clone()
@@ -140,7 +139,7 @@ const applyCrop = async (rawImage, crop, folder, name, overwriteFiles) => {
     thumbnailImage.toFile(path.join(folder, resources.thumbnailImage)),
     luminanceImage.toFile(path.join(folder, resources.luminanceImage)),
     croppedImage.toFile(path.join(folder, resources.croppedImage)),
-    geometryImage
+    (geometryImage && resources.geometryImage)
       ? geometryImage.toFile(path.join(folder, resources.geometryImage))
       : null,
     fs.writeFile(dataPath, `${JSON.stringify(data, null, 2)}\n`),
