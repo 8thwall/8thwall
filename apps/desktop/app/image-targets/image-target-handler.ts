@@ -71,31 +71,6 @@ const handleListTargets: RequestHandler = async (req) => {
   }
 }
 
-const handleTargetPatch: RequestHandler = async (req) => {
-  const params = new URL(req.url).searchParams
-  const project = await loadProject(params.get('appKey')!)
-  const targetPath = getTargetPath(project, params.get('name')!)
-  const parsedBody = UpdateTargetRequest.safeParse(await req.json())
-  if (parsedBody.error) {
-    throw makeCodedError(`Invalid update data: ${parsedBody.error.toString()}`, 400)
-  }
-  const oldData = await readTarget(targetPath)
-  const newData: TargetApi.ImageTargetData = {
-    ...oldData,
-    updated: Date.now(),
-    ...parsedBody.data,
-  }
-
-  // NOTE(christoph): At one point during the sunset period, exported image targets were including
-  // this parameter, but it is not required going forward since we're storing the (user) metadata
-  // field as the final object, not stringifying to fit into a database column.
-  // @ts-expect-error
-  delete newData.userMetadataIsJson
-
-  await writeTarget(targetPath, newData)
-  return makeJsonResponse(newData)
-}
-
 const handleUpload: RequestHandler = async (req) => {
   const url = new URL(req.url)
   const parsedParams = UploadTargetParams.safeParse(getQueryParams(url))
@@ -142,8 +117,11 @@ const extractImagePath = (target: TargetApi.ImageTargetData, type: TargetApi.Tar
   }
 }
 
-const resolveImagePath = async (targetPath: string, type: TargetApi.TargetTextureType) => {
-  const target = await readTarget(targetPath)
+const resolveImagePath = async (
+  targetPath: string,
+  target: TargetApi.ImageTargetData,
+  type: TargetApi.TargetTextureType
+) => {
   const relativePath = extractImagePath(target, type)
   if (!relativePath) {
     const extensionOptions = ['.jpg', '.png', '.jpeg']
@@ -173,7 +151,8 @@ const handleGetTexture: RequestHandler = async (req) => {
   }
   const project = await loadProject(parsedParams.data.appKey)
   const targetPath = getTargetPath(project, parsedParams.data.name)
-  const imagePath = await resolveImagePath(targetPath, parsedParams.data.type)
+  const target = await readTarget(targetPath)
+  const imagePath = await resolveImagePath(targetPath, target, parsedParams.data.type)
   if (!imagePath) {
     throw makeCodedError('Not found', 404)
   }
@@ -200,6 +179,93 @@ const handleTargetDelete: RequestHandler = async (req) => {
   }
   await Promise.allSettled(filesToDelete.map(e => fs.unlink(e)))
   return makeJsonResponse({})
+}
+
+const renameResource = async (
+  targetPath: string,
+  target: TargetApi.ImageTargetData,
+  newName: string,
+  type: TargetApi.TargetTextureType
+) => {
+  const oldPath = await resolveImagePath(targetPath, target, type)
+  if (!oldPath) {
+    return undefined
+  }
+  const newBasePath = `${newName}_${type}${path.extname(oldPath)}`
+  const newPath = path.join(path.dirname(targetPath), newBasePath)
+  await fs.rename(oldPath, newPath)
+  return newBasePath
+}
+
+const renameResources = async (
+  targetPath: string,
+  target: TargetApi.ImageTargetData,
+  newName: string
+) => {
+  const resourceTypes = [
+    'luminance', 'geometry', 'original', 'cropped', 'thumbnail',
+  ] as const
+  const [
+    luminanceImage, geometryImage, originalImage, croppedImage, thumbnailImage,
+  ] = await Promise.all(resourceTypes.map(e => renameResource(targetPath, target, newName, e)))
+
+  return {
+    imagePath: `image-targets/${luminanceImage}`,
+    resources: {
+      originalImage,
+      croppedImage,
+      thumbnailImage,
+      luminanceImage,
+      geometryImage,
+    },
+  }
+}
+
+const handleTargetPatch: RequestHandler = async (req) => {
+  const params = new URL(req.url).searchParams
+  const project = await loadProject(params.get('appKey')!)
+  const sourcePath = getTargetPath(project, params.get('name')!)
+  const parsedBody = UpdateTargetRequest.safeParse(await req.json())
+  if (parsedBody.error) {
+    throw makeCodedError(`Invalid update data: ${parsedBody.error.toString()}`, 400)
+  }
+  const oldData = await readTarget(sourcePath)
+  const newData: TargetApi.ImageTargetData = {
+    ...oldData,
+    updated: Date.now(),
+    ...parsedBody.data,
+  }
+
+  // NOTE(christoph): At one point during the sunset period, exported image targets were including
+  // this parameter, but it is not required going forward since we're storing the (user) metadata
+  // field as the final object, not stringifying to fit into a database column.
+  // @ts-expect-error
+  delete newData.userMetadataIsJson
+
+  const targetPath = getTargetPath(project, newData.name)
+
+  if (sourcePath !== targetPath) {
+    let exists = false
+    try {
+      await fs.stat(targetPath)
+      exists = true
+    } catch (err: any) {
+      if (err.code !== 'ENOENT') {
+        throw err
+      }
+    }
+    if (exists) {
+      throw makeCodedError('A target with this name already exists, cannot rename', 409)
+    }
+  }
+
+  if (newData.name !== oldData.name) {
+    Object.assign(newData, await renameResources(sourcePath, oldData, newData.name))
+    await fs.rm(sourcePath)
+  }
+
+  await writeTarget(targetPath, newData)
+  return makeJsonResponse(newData)
 }
 
 const handleImageTargetRequest = withErrorHandlingResponse(branches({
