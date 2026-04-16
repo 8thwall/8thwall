@@ -79,16 +79,13 @@ const handleTargetPatch: RequestHandler = async (req) => {
   if (parsedBody.error) {
     throw makeCodedError(`Invalid update data: ${parsedBody.error.toString()}`, 400)
   }
-  const data = await readTarget(targetPath)
+  const oldData = await readTarget(targetPath)
   const newData: TargetApi.ImageTargetData = {
-    ...data,
+    ...oldData,
+    updated: Date.now(),
     ...parsedBody.data,
-    metadata: typeof parsedBody.data.metadata === 'undefined'
-      ? data.metadata
-      : parsedBody.data.metadata ?? undefined,
   }
-  // TODO(christoph): Rename files if necessary
-  // TODO(christoph): Recrop/reconify if necessary
+
   await writeTarget(targetPath, newData)
   return makeJsonResponse(newData)
 }
