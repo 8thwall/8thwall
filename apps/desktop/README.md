@@ -31,7 +31,7 @@ nvm use desktop
 2. Run the following in `reality/cloud/xrhome`:
 ```bash
 nvm use xrhome
-npm install
+npm install --legacy-peer-deps
 npm run dev:desktop:hot
 ```
 3. In a separate terminal,  run the following in `apps/desktop`:
