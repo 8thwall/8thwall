@@ -27,6 +27,7 @@ js_library(
         "//apps/desktop:requests",
         "//apps/desktop:stream-file-response",
         "//apps/desktop/app/image-targets:image-target-types",
+        "//apps/image-target-cli/src:apply",
         "//reality/shared:run-queue",
         "//reality/shared/desktop:image-target-api",
         "//reality/shared/desktop:local-sync-types",

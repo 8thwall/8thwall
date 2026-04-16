@@ -2,7 +2,7 @@
 // @package(npm-desktop)
 // @attr(esnext = 1)
 // @attr(target = "node")
-// @attr(externals = "electron")
+// @attr(externals = "electron, sharp")
 
 import path from 'path'
 import {app, BrowserWindow, protocol, dialog, ipcMain} from 'electron'

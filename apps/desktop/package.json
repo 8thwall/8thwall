@@ -29,6 +29,7 @@
     "jszip": "^3.10.1",
     "mime-types": "^3.0.1",
     "npm": "^11.5.2",
+    "sharp": "^0.34.5",
     "undici": "^6.21.2",
     "update-electron-app": "^3.1.1",
     "ws": "^8.18.1",
