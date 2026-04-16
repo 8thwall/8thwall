@@ -1,8 +1,6 @@
 import {
-  ImageTargetData, LIST_PATH, ListTargetsResponse, TARGET_PATH, UpdateTargetParams,
-  UpdateTargetRequest, DeleteTargetParams,
-  UPLOAD_PATH,
-  UploadTargetParams,
+  ImageTargetData, LIST_PATH, ListTargetsResponse, UPLOAD_PATH, UploadTargetParams,
+  DeleteTargetParams, TARGET_PATH, UpdateTargetParams, UpdateTargetRequest,
 } from '@repo/reality/shared/desktop/image-target-api'
 import type {CropResult} from '@repo/reality/shared/desktop/image-target-api'
 

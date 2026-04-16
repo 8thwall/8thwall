@@ -42,7 +42,7 @@
   "asset_configurator.image_target_configurator.roll_angle": "Roll Angle",
   "asset_configurator.image_target_configurator.pitch_angle": "Pitch Angle",
   "asset_configurator.image_target_configurator.description": "Selecting this as a static image will lock the object's rotation on the X and Z axes.",
-  "asset_configurator.image_target_configurator.error.json_parse_error": "Input is not valid JSON",
+  "asset_configurator.image_target_configurator.error.invalid_json": "Error: Not valid input",
   "asset_configurator.image_target_configurator.error.invalid_target_circumference": "These measurements are not valid. Please ensure the label arc length is less than or equal to the top cylinder circumference.",
   "asset_configurator.image_target_configurator.geometry.circumference": "Circumference",
   "asset_configurator.image_target_configurator.geometry.top_circumference": "Top Circumference",

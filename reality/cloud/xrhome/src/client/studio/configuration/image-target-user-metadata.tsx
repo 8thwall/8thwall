@@ -21,7 +21,7 @@ const validateMetadata = (input: string, isJson: boolean, t: TFunction) => {
     JSON.parse(input)
     return null
   } catch (err) {
-    return t('asset_configurator.image_target_configurator.error.json_parse_error')
+    return t('asset_configurator.image_target_configurator.error.invalid_json')
   }
 }
 

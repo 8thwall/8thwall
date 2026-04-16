@@ -2,16 +2,15 @@ import React from 'react'
 import {useQuery, useQueryClient, useSuspenseQuery} from '@tanstack/react-query'
 
 import {
-  CropResult, GetTargetTextureParams, ImageTargetData, TargetTextureType, UpdateTargetRequest,
-  TEXTURE_PATH,
+  CropResult, GetTargetTextureParams, ImageTargetData, TargetTextureType,
+  TEXTURE_PATH, UpdateTargetRequest,
 } from '@repo/reality/shared/desktop/image-target-api'
 
 import type {DeepReadonly} from 'ts-essentials'
 
 import {useEnclosedAppKey} from '../apps/enclosed-app-context'
 import {
-  listImageTargets, updateImageTarget, deleteImageTarget,
-  uploadImageTarget,
+  listImageTargets, uploadImageTarget, deleteImageTarget, updateImageTarget,
 } from './image-target-api'
 import {selectTargetsGalleryFilterOptions} from './state-selectors'
 import {useSelector} from '../hooks'
@@ -126,16 +125,9 @@ const useImageTargetActions = () => {
   }, [appKey, client])
 }
 
-const useImageTarget = (name?: string | null) => {
-  const targets = useImageTargetsOrLoading()
-  const target = targets.data?.find(e => e.name === name)
-  return [target, targets.isLoading] as const
-}
-
 export {
   useImageTargets,
   useGalleryTargets,
   useImageTargetsOrLoading,
   useImageTargetActions,
-  useImageTarget,
 }
