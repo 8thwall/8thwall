@@ -30,9 +30,6 @@ fi
 # build electron app
 ./app-build.sh
 
-mkdir -p build_package
-cp new-project.zip build_package/
-
 case "$BUILDER_COMMAND" in
 "start")
   npx electron-builder install-app-deps

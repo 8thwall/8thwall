@@ -1,0 +1,31 @@
+{
+  "name": "@8thwall/studio-build",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "node ./node_modules/webpack/bin/webpack.js --config config/webpack.config.js",
+    "serve": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --mode=development --config config/webpack.config.js"
+  },
+  "devDependencies": {
+    "@babel/parser": "^7.23.9",
+    "@babel/preset-env": "^7.23.9",
+    "@babel/runtime": "^7.28.4",
+    "@types/node": "^16.18.36",
+    "babel-loader": "^9.1.3",
+    "chokidar": "^5.0.0",
+    "copy-webpack-plugin": "^13.0.1",
+    "html-webpack-plugin": "^5.6.5",
+    "ts-essentials": "^9.3.2",
+    "ts-loader": "^9.5.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5",
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1",
+    "webpack-virtual-modules": "^0.6.2"
+  },
+  "dependencies": {
+    "@8thwall/ecs": "^3.0.1",
+    "@8thwall/engine-binary": "^1.0.0"
+  }
+}
