@@ -115,15 +115,12 @@ const getLocalProjectLocation = withErrorHandlingResponse(async (req: Request) =
 })
 
 const checkProjectMigrated = async (projectPath: string): Promise<boolean> => {
-  log.info('Checking project migrated: ', projectPath)
   try {
     const inlineRuntimeFolder = await fs.stat(path.join(projectPath, 'external/runtime'))
     if (inlineRuntimeFolder.isDirectory()) {
-      log.info('Project has external/runtime folder: ', projectPath)
       return true
     }
   } catch (err) {
-    log.info('Project has no external/runtime folder: ', err)
     // No inline folder
   }
 
@@ -132,13 +129,9 @@ const checkProjectMigrated = async (projectPath: string): Promise<boolean> => {
     const packageJsonData = JSON.parse(packageJsonString)
     const packages = {...packageJsonData.dependencies, ...packageJsonData.devDependencies}
     if (packages['@8thwall/ecs']) {
-      log.info('Project has @8thwall/ecs installed')
       return true
     }
-
-    log.info('Not installed', packages)
   } catch (err) {
-    log.info('Project has no package.json: ', err)
     // No package/invalid package
   }
 
@@ -759,8 +752,8 @@ const getRuntimeMetadata = withErrorHandlingResponse(async (req: Request) => {
 
   for (const possiblePath of metadataPaths) {
     const runtimePath = path.join(project.location, possiblePath)
-    log.info('Checking for metadata at:', runtimePath)
     try {
+      // eslint-disable-next-line no-await-in-loop
       const metadataContent = await fs.readFile(runtimePath, 'utf-8')
       const metadata: RuntimeMetadata = JSON.parse(metadataContent)
       return makeJsonResponse(metadata)
