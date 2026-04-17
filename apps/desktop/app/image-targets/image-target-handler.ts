@@ -291,7 +291,7 @@ const handleTargetPatch: RequestHandler = async (req) => {
 
   const coneRadiusChanged = oldData.type === 'CONICAL' && newData.type === 'CONICAL' && (
     oldData.properties.topRadius !== newData.properties.topRadius ||
-    oldData.properties.bottomRadius === newData.properties.bottomRadius
+    oldData.properties.bottomRadius !== newData.properties.bottomRadius
   )
 
   const cropChanged = (
@@ -299,9 +299,9 @@ const handleTargetPatch: RequestHandler = async (req) => {
     coneRadiusChanged ||
     Boolean(oldData.properties.isRotated) !== Boolean(newData.properties.isRotated) ||
     oldData.properties.top !== newData.properties.top ||
-    oldData.properties.height === newData.properties.height ||
-    oldData.properties.left === newData.properties.left ||
-    oldData.properties.width === newData.properties.width
+    oldData.properties.height !== newData.properties.height ||
+    oldData.properties.left !== newData.properties.left ||
+    oldData.properties.width !== newData.properties.width
   )
 
   if (cropChanged) {
