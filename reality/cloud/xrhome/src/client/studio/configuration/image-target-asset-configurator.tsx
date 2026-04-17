@@ -151,7 +151,7 @@ const LoadedImageTargetAssetConfigurator: React.FC<ILoadedImageTargetAssetConfig
       originalHeight,
       width: jsonMetadata.width ?? originalWidth,
       height: jsonMetadata.height ?? originalHeight,
-      isRotated: jsonMetadata.isRotated ?? originalWidth > originalHeight,
+      isRotated: jsonMetadata.isRotated,
       topRadius,
       bottomRadius,
       staticOrientation: jsonMetadata.staticOrientation ?? undefined,
@@ -294,6 +294,9 @@ const LoadedImageTargetAssetConfigurator: React.FC<ILoadedImageTargetAssetConfig
       await updateImageTarget(imageTarget.name, {
         name,
         metadata: finalMetadata,
+        // NOTE(christoph): We're passing all parameters regardless of the type,
+        // depending on the electron side to use zod to pull out only the expected properties
+        // based on type.
         // @ts-expect-error
         type: imageTarget.type,
         properties: {

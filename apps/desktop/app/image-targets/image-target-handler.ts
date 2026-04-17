@@ -234,13 +234,23 @@ const loadOriginalImageForRecrop = async (
     throw new Error('Unable to locate original image')
   }
   let image = sharp(imagePath)
+  const diskMetadata = await image.metadata()
+  log.info('disk metadata:', diskMetadata)
   // NOTE(christoph): Conical images are flattened first, then rotated if needed by the crop
   if (target.type !== 'CONICAL' && target.properties.isRotated) {
     image = image.rotate(-90)
+    log.info('Need to rotate backwards')
+  } else {
+    log.info('No need to rotate')
   }
   // NOTE(christoph): Sharp doesn't allow the input path and output path to be the same, so we need
   // to go through a buffer regardless, no need to attempt any optimization.
-  return sharp(await image.toBuffer())
+
+  const bufferImage = sharp(await image.toBuffer())
+
+  const bufferMetadata = await bufferImage.metadata()
+  log.info('buffer metadata:', bufferMetadata)
+  return bufferImage
 }
 
 const handleTargetPatch: RequestHandler = async (req) => {
@@ -257,17 +267,22 @@ const handleTargetPatch: RequestHandler = async (req) => {
 
   log.info(parsedBody.data)
   const oldData = await readTarget(sourcePath)
-  const newData: TargetApi.ImageTargetData = Object.assign(
-    oldData,
-    {updated: Date.now()},
-    parsedBody.data
-  )
+
+  // NOTE(christoph): I wasn't able to get the zod type to play well here.
+  // @ts-ignore
+  const newData: TargetApi.ImageTargetData = {
+    ...oldData,
+    updated: Date.now(),
+    ...parsedBody.data,
+  }
 
   // NOTE(christoph): At one point during the sunset period, exported image targets were including
   // this parameter, but it is not required going forward since we're storing the (user) metadata
   // field as the final object, not stringifying to fit into a database column.
-  // @ts-expect-error
-  delete newData.userMetadataIsJson
+  if ('metadata' in parsedBody.data) {
+    // @ts-expect-error
+    delete newData.userMetadataIsJson
+  }
 
   const targetPath = getTargetPath(project, newData.name)
 

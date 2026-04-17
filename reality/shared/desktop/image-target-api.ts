@@ -8,7 +8,7 @@ type ReferencedResources = {
 
 type ImageTargetData = {
   imagePath: string
-  metadata: unknown  // User metadata
+  metadata?: unknown  // User metadata
   name: string
   // NOTE(christoph): The "resources" key was added partway during the export window, so not
   // all projects will contain them
@@ -106,7 +106,7 @@ type DeleteTargetParams = {
   name: string
 }
 
-type UpdateTargetRequest = Partial<Pick<ImageTargetData, 'metadata' | 'name'>> & ({} | CropResult)
+type UpdateTargetRequest = Partial<Pick<ImageTargetData, 'metadata' | 'name'>> & (CropResult | {})
 
 export {
   LIST_PATH,

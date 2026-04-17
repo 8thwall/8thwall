@@ -16,8 +16,9 @@ const CONSTANTS = require('./constants.json')
  * @param {string} folder
  * @param {string} name
  * @param {boolean} overwriteFiles
+ * @param {Omit<Partial<import("./types").ImageTargetData>, 'type' | 'properties'>} [extraData]
  */
-const applyCrop = async (rawImage, crop, folder, name, overwriteFiles) => {
+const applyCrop = async (rawImage, crop, folder, name, overwriteFiles, extraData) => {
   const baseMetadata = await rawImage.metadata()
 
   /** @type {import("./types").ImageMetadata} */
@@ -98,6 +99,7 @@ const applyCrop = async (rawImage, crop, folder, name, overwriteFiles) => {
     resources,
     created: Date.now(),
     updated: Date.now(),
+    ...extraData,
   }
 
   const dataPath = path.join(folder, `${name}.json`)
