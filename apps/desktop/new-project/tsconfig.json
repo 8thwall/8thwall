@@ -12,10 +12,7 @@
     "module": "Preserve",
     "moduleResolution": "Bundler",
     "resolveJsonModule": true,
-    "outDir": "dist",
-    "paths": {
-      "@8thwall/ecs": ["external/runtime/runtime.d.ts"]
-    },
+    "outDir": "dist"
   },
   "include": [
     "src",
