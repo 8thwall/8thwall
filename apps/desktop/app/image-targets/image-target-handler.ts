@@ -5,7 +5,6 @@ import {makeRunQueue} from '@repo/reality/shared/run-queue'
 import type {Project} from '@repo/reality/shared/desktop/local-sync-types'
 import {applyCrop} from '@repo/apps/image-target-cli/src/apply'
 import sharp, {Sharp} from 'sharp'
-import log from 'electron-log'
 
 import {makeCodedError, withErrorHandlingResponse} from '../../errors'
 import {branches, methods, RequestHandler} from '../../requests'
@@ -234,23 +233,13 @@ const loadOriginalImageForRecrop = async (
     throw new Error('Unable to locate original image')
   }
   let image = sharp(imagePath)
-  const diskMetadata = await image.metadata()
-  log.info('disk metadata:', diskMetadata)
   // NOTE(christoph): Conical images are flattened first, then rotated if needed by the crop
   if (target.type !== 'CONICAL' && target.properties.isRotated) {
     image = image.rotate(-90)
-    log.info('Need to rotate backwards')
-  } else {
-    log.info('No need to rotate')
   }
   // NOTE(christoph): Sharp doesn't allow the input path and output path to be the same, so we need
   // to go through a buffer regardless, no need to attempt any optimization.
-
-  const bufferImage = sharp(await image.toBuffer())
-
-  const bufferMetadata = await bufferImage.metadata()
-  log.info('buffer metadata:', bufferMetadata)
-  return bufferImage
+  return sharp(await image.toBuffer())
 }
 
 const handleTargetPatch: RequestHandler = async (req) => {
@@ -265,7 +254,6 @@ const handleTargetPatch: RequestHandler = async (req) => {
     }, 400)
   }
 
-  log.info(parsedBody.data)
   const oldData = await readTarget(sourcePath)
 
   // NOTE(christoph): I wasn't able to get the zod type to play well here.
@@ -317,7 +305,6 @@ const handleTargetPatch: RequestHandler = async (req) => {
   )
 
   if (cropChanged) {
-    log.info('Crop changed', oldData, newData)
     await applyCrop(
       await loadOriginalImageForRecrop(targetPath, oldData),
       newData,
