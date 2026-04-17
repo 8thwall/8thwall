@@ -234,7 +234,6 @@ const loadOriginalImageForRecrop = async (
     throw new Error('Unable to locate original image')
   }
   let image = sharp(imagePath)
-
   // NOTE(christoph): Conical images are flattened first, then rotated if needed by the crop
   if (target.type !== 'CONICAL' && target.properties.isRotated) {
     image = image.rotate(-90)
@@ -303,13 +302,14 @@ const handleTargetPatch: RequestHandler = async (req) => {
   )
 
   if (cropChanged) {
-    // TODO(christoph): Preserve metadata
-    applyCrop(
+    log.info('Crop changed', oldData, newData)
+    await applyCrop(
       await loadOriginalImageForRecrop(targetPath, oldData),
       newData,
       path.dirname(targetPath),
       newData.name,
-      true /* overwriteFiles */
+      true /* overwriteFiles */,
+      {metadata: newData.metadata, created: newData.created}
     )
 
     if (sourcePath !== targetPath) {

@@ -13,7 +13,7 @@ type ReferencedResources = {
 
 type ImageTargetData = CropResult & {
   imagePath: string
-  metadata: null
+  metadata: unknown
   name: string
   resources: ReferencedResources
   created: number
