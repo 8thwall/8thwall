@@ -5,8 +5,8 @@ mkdir -p app/dist
 
 bazel build //apps/desktop/app:start
 cp ../../bazel-bin/apps/desktop/app/start.js app/dist/start.js
-bazel build //apps/desktop/new-project
 
+bazel build //apps/desktop/new-project
 mkdir -p build_package
 cp ../../bazel-bin/apps/desktop/new-project/new-project.zip build_package
 
