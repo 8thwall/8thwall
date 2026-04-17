@@ -114,6 +114,30 @@ const getLocalProjectLocation = withErrorHandlingResponse(async (req: Request) =
   return recordLocalProject(savePath, 'v2')
 })
 
+const checkProjectMigrated = async (projectPath: string): Promise<boolean> => {
+  try {
+    const inlineRuntimeFolder = await fs.stat(path.join(projectPath, 'external/runtime'))
+    if (inlineRuntimeFolder.isDirectory()) {
+      return true
+    }
+  } catch (err) {
+    // No inline folder
+  }
+
+  try {
+    const packageJsonString = await fs.readFile(path.join(projectPath, 'package.json'), 'utf8')
+    const packageJsonData = JSON.parse(packageJsonString)
+    const packages = {...packageJsonData.dependencies, ...packageJsonData.devDependencies}
+    if (packages['@8thwall/ecs']) {
+      return true
+    }
+  } catch (err) {
+    // No package/invalid package
+  }
+
+  return false
+}
+
 const openDiskLocation = withErrorHandlingResponse(async () => {
   const projectPath = await locationPrompt()
 
@@ -146,12 +170,7 @@ const openDiskLocation = withErrorHandlingResponse(async () => {
     throw makeCodedError(`The provided path does not contain a valid project: ${projectPath}`, 409)
   }
 
-  let isMigrated = false
-  try {
-    isMigrated = (await fs.stat(path.join(projectPath, 'external/runtime'))).isDirectory()
-  } catch (error: any) {
-    // Not migrated
-  }
+  const isMigrated = await checkProjectMigrated(projectPath)
 
   return recordLocalProject(projectPath, isMigrated ? 'v2' : 'done')
 })
@@ -725,17 +744,26 @@ const getRuntimeMetadata = withErrorHandlingResponse(async (req: Request) => {
   if (!project) {
     throw makeCodedError('Project for appKey not found', 404)
   }
-  const runtimePath = path.join(project.location, 'external/runtime/metadata.json')
-  try {
-    const metadataContent = await fs.readFile(runtimePath, 'utf-8')
-    const metadata: RuntimeMetadata = JSON.parse(metadataContent)
-    return makeJsonResponse(metadata)
-  } catch (error: any) {
-    if (error.code === 'ENOENT') {
-      throw makeCodedError('Runtime metadata not found', 404)
+
+  const metadataPaths = [
+    'node_modules/@8thwall/ecs/metadata.json',
+    'external/runtime/metadata.json',
+  ]
+
+  for (const possiblePath of metadataPaths) {
+    const runtimePath = path.join(project.location, possiblePath)
+    try {
+      // eslint-disable-next-line no-await-in-loop
+      const metadataContent = await fs.readFile(runtimePath, 'utf-8')
+      const metadata: RuntimeMetadata = JSON.parse(metadataContent)
+      return makeJsonResponse(metadata)
+    } catch (error: any) {
+      if (error.code !== 'ENOENT') {
+        throw error
+      }
     }
-    throw error
   }
+  throw makeCodedError('Runtime metadata not found', 404)
 })
 
 const handleProjectRuntimeMetadataRequest = (request: Request) => {
