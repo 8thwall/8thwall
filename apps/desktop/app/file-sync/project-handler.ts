@@ -451,25 +451,6 @@ const deleteLocalProject = withErrorHandlingResponse(async (req: Request) => {
     throw makeCodedError('Missing appKey', 400)
   }
 
-  const project = getLocalProject(params.data.appKey)
-
-  if (project) {
-    try {
-    // Delete the project folder and all its contents
-      await fs.rm(project.location, {recursive: true, force: true})
-    } catch (error) {
-      if (error instanceof Error) {
-        if ('code' in error && error.code === 'ENOENT') {
-        // Folder doesn't exist, that's fine
-        } else {
-          throw makeCodedError(`Failed to delete project folder: ${error.message}`, 500)
-        }
-      } else {
-        throw error
-      }
-    }
-  }
-
   deleteLocalProjectEntry(params.data.appKey)
 
   return makeJsonResponse({})

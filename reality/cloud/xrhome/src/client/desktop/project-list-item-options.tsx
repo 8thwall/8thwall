@@ -166,7 +166,7 @@ const ProjectListItemOptions: React.FC<IProjectListItemOptions> = ({
             }
             {project?.location &&
               <MenuOption
-                label={t('project_list_item.menu.option.remove_from_disk')}
+                label={t('project_list_item.menu.option.remove_from_list')}
                 onClick={() => { onDelete() }}
               />
             }

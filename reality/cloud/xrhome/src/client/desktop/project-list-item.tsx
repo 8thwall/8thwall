@@ -110,14 +110,12 @@ const ProjectListItem: React.FC<IProjectListItem> = ({project}) => {
   const classes = useStyles()
   const {t} = useTranslation(['studio-desktop-pages'])
   const queryClient = useQueryClient()
-  const [isDeleteProjectModalOpen, setIsDeleteProjectModalOpen] = React.useState(false)
   const [isMovingAppModalOpen, setIsMovingAppModalOpen] = React.useState(false)
   const [targetLocation, setTargetLocation] = React.useState<string>('')
   const [isMigrateModalOpen, setIsMigrateModalOpen] = React.useState(false)
   const history = useHistory()
 
   const onClose = () => {
-    setIsDeleteProjectModalOpen(false)
     setIsMovingAppModalOpen(false)
     setIsMigrateModalOpen(false)
   }
@@ -183,7 +181,8 @@ const ProjectListItem: React.FC<IProjectListItem> = ({project}) => {
             <ProjectListItemOptions
               project={project}
               onDelete={() => {
-                setIsDeleteProjectModalOpen(true)
+                deleteProject(project.appKey)
+                queryClient.invalidateQueries({queryKey: ['listProjects']})
               }}
               onMove={async () => {
                 const {projectPath} = await pickNewProjectLocation(project.appKey)
@@ -194,28 +193,6 @@ const ProjectListItem: React.FC<IProjectListItem> = ({project}) => {
           </div>
         </SpaceBetween>
       </div>
-      {isDeleteProjectModalOpen && (
-        <ProjectListModal
-          onClose={onClose}
-          onSubmit={async () => {
-            await deleteProject(project.appKey)
-            queryClient.invalidateQueries({queryKey: ['listProjects']})
-            onClose()
-          }}
-          header={t('project_list_item.modal.title.remove_project')}
-          content={(
-            <SpaceBetween direction='vertical' centered extraNarrow>
-              <span>
-                {t('project_list_item.modal.text.delete_warning')}
-              </span>
-              <b>
-                {project?.location}
-              </b>
-            </SpaceBetween>
-          )}
-          submitContent={t('project_list_item.modal.button.delete')}
-        />
-      )}
       {isMovingAppModalOpen && (
         <ProjectListModal
           onClose={onClose}
