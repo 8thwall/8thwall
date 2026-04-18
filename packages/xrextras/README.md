@@ -77,7 +77,7 @@ index.html:
          See https://github.com/8thwall/web/tree/master/xrextras/ -->
     <script src="./external/xrextras/xrextras.js"></script>
 
-    <!-- Landing Pages - see https://www.8thwall.com/docs/web/#landing-pages -->
+    <!-- Landing Pages - see https://8thwall.org/docs/web/#landing-pages -->
     <script src='./external/landing-page/landing-page.js'></script>
 
     <!-- 8th Wall Engine -->
@@ -126,7 +126,7 @@ index.html:
          See https://github.com/8thwall/web/tree/master/xrextras/ -->
     <script src="./external/xrextras/xrextras.js"></script>
 
-    <!-- Landing Pages - see https://www.8thwall.com/docs/web/#landing-pages -->
+    <!-- Landing Pages - see https://8thwall.org/docs/web/#landing-pages -->
     <script src='./external/landing-page/landing-page.js'></script>
 
     <!-- 8th Wall Engine -->

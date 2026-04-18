@@ -13,7 +13,7 @@
 
 ## Additional Examples
 
-Additional projects are available [here](https://github.com/8thwall/web/tree/master/examples). Note that they will need to be migrated to the latest project format using [this guide](https://www.8thwall.com/docs/migration/self-hosted/).
+Additional projects are available [here](https://github.com/8thwall/web/tree/master/examples). Note that they will need to be migrated to the latest project format using [this guide](https://8thwall.org/docs/migration/self-hosted/).
 
 ## Project Library Archive
 

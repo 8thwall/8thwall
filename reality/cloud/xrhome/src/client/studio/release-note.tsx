@@ -10,10 +10,9 @@ import {StandardLink} from '../ui/components/standard-link'
 import {combine} from '../common/styles'
 import AutoHeadingScope from '../widgets/auto-heading-scope'
 import AutoHeading from '../widgets/auto-heading'
+import {DOCS_BASE_URL} from '../../shared/link-constants'
 
-const BASE_URL = BuildIf.MATURE
-  ? 'https://www-rc.8thwall.com/docs'
-  : 'https://www.8thwall.com/docs'
+const BASE_URL = DOCS_BASE_URL
 
 const MAX_HEIGHT = 300
 

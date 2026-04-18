@@ -10,6 +10,10 @@ import {useBooleanUrlState} from '../hooks/url-state'
 import {PreferencesModal} from './preferences-modal'
 import {createThemedStyles} from '../ui/theme'
 
+const DOCS_BASE_URL = 'https://8thwall.org/docs'
+const FORUM_URL = 'https://github.com/orgs/8thwall/discussions'
+const TUTORIALS_URL = 'https://8th.io/tutorials'
+
 const useStyles = createThemedStyles(theme => ({
   sidebarButton: {
     'padding': '0.5rem',
@@ -80,17 +84,17 @@ const SideNavBar: React.FC = () => {
     <>
       <SpaceBetween direction='vertical' extraNarrow>
         <SideBarLinkOut
-          url='https://www.8thwall.com/tutorials'
+          url={TUTORIALS_URL}
           stroke='tutorials'
           text={t('sidebar.tooltip.tutorials')}
         />
         <SideBarLinkOut
-          url='https://www.8thwall.com/docs'
+          url={DOCS_BASE_URL}
           stroke='documentation'
           text={t('sidebar.tooltip.docs')}
         />
         <SideBarLinkOut
-          url='https://forum.8thwall.com'
+          url={FORUM_URL}
           stroke='forum'
           text={t('sidebar.tooltip.forum')}
         />

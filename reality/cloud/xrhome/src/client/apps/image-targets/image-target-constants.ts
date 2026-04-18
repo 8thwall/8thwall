@@ -1,8 +1,10 @@
 import {v4 as uuid} from 'uuid'
 
+import {DOCS_BASE_URL} from '../../../shared/link-constants'
+
 const IMAGE_TARGET_MAX_WIDTH = 2000
 const IMAGE_TARGET_MAX_HEIGHT = 2000
-const IMAGE_TARGET_PAGE_LINK = 'https://www.8thwall.com/docs/guides/image-targets/'
+const IMAGE_TARGET_PAGE_LINK = `${DOCS_BASE_URL}/guides/image-targets/`
 const OFFLINE_IMAGE_TARGET_PAGE_LINK = 'https://8th.io/image-targets-update'
 
 const IMAGE_TARGET_EDITOR_GALLERY_ID = uuid()

@@ -34,7 +34,7 @@
   "tooltip.camera.mirrored_display.text": "trueの場合、レンダリングを左右反転する。",
   "tooltip.camera.near_clip.text": "ニアクリッププレーンのカメラからの距離、つまりシーンオブジェクトが見えるカメラからの最も近い距離。",
   "tooltip.camera.right.text": "カメラの右平面。xrCameraType` が `'3dOnly'` に設定され、`type` が `'orthogonal'` に設定されている場合にのみ関連する。",
-  "tooltip.camera.scale.text": "許容される値：responsive'`, `'absolute'`.responsive'`はフレーム1のカメラが[XR8.XrController.updateCameraProjectionMatrix()](https://www.8thwall.com/docs/api/xrcontroller/updatecameraprojectionmatrix/)で定義された原点に来るように値を返します。absolute'`はカメラ、イメージターゲットなどをメートル単位で返します。absolute'`を使用する場合、開始ポーズのx-position、z-position、rotationは[XR8.XrController.updateCameraProjectionMatrix()](https://www.8thwall.com/docs/api/xrcontroller/updatecameraprojectionmatrix/)で設定したパラメータに従います。y-positionは接地面からのカメラの物理的な高さに依存します。VPSを有効にするには、`'responsive'`に設定する必要があります。",
+  "tooltip.camera.scale.text": "許容される値：responsive'`, `'absolute'`.responsive'`はフレーム1のカメラが[XR8.XrController.updateCameraProjectionMatrix()](https://8thwall.org/docs/api/xrcontroller/updatecameraprojectionmatrix/)で定義された原点に来るように値を返します。absolute'`はカメラ、イメージターゲットなどをメートル単位で返します。absolute'`を使用する場合、開始ポーズのx-position、z-position、rotationは[XR8.XrController.updateCameraProjectionMatrix()](https://8thwall.org/docs/api/xrcontroller/updatecameraprojectionmatrix/)で設定したパラメータに従います。y-positionは接地面からのカメラの物理的な高さに依存します。VPSを有効にするには、`'responsive'`に設定する必要があります。",
   "tooltip.camera.top.text": "カメラの頂点面。xrCameraType` が `'3dOnly'` に設定され、`type` が `'orthogonal'` に設定されている場合のみ関連する。",
   "tooltip.camera.type.text": "レンダリングに使用する投影の種類。許容される値：perspective'`, `'orthogonal'`.xrCameraType`が `'3dOnly'` に設定されている場合のみ有効。",
   "tooltip.camera.uv_type.text": "facescanningとfaceloadingイベントで返されるuvを指定する。指定できる値：standard'`, `'projected'`.xrCameraType`が`'face'`に設定されている場合のみ有効。",
