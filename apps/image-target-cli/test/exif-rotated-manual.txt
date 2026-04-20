@@ -1,0 +1,9 @@
+test/exif/rotate-90-cw.jpg
+flat
+n
+portrait
+0
+0
+480
+tmp
+exif-rotated-manual
