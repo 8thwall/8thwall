@@ -252,7 +252,7 @@ const selectProcessorOptions = async (rl) => {
   ).trim()
   const imagePath = normalizePath(rawPath)
   const image = sharp(imagePath)
-  const imageMetadata = (await image.metadata()).autoOrient
+  const {autoOrient: imageMetadata} = await image.metadata()
 
   const geometry = await selectGeometry(rl, imageMetadata)
 
