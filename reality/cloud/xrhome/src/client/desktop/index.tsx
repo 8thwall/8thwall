@@ -26,6 +26,7 @@ const queryClient = new QueryClient()
 queryClient.setDefaultOptions({
   queries: {
     refetchOnWindowFocus: false,
+    networkMode: 'always',
   },
 })
 

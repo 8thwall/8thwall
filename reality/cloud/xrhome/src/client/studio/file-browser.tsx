@@ -334,7 +334,9 @@ const FileBrowser: React.FC<IFileBrowser> = ({
             {currentSection === 'files' && filesList}
             {currentSection === 'prefabs' && <PrefabsList />}
             {BuildIf.STUDIO_IMAGE_TARGETS_20260210 && currentSection === 'imageTargets' &&
-              <StudioImageTargetBrowser />
+              <React.Suspense fallback={<div><Loader /></div>}>
+                <StudioImageTargetBrowser />
+              </React.Suspense>
             }
             {BuildIf.STUDIO_ASSET_LAB_20260209 && currentSection === 'assetLab' &&
               <React.Suspense fallback={<div><Loader animateSpinnerColor /></div>}>

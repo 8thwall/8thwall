@@ -1,5 +1,5 @@
 import React from 'react'
-import {useQuery, useQueryClient, useSuspenseQuery} from '@tanstack/react-query'
+import {queryOptions, useQuery, useQueryClient, useSuspenseQuery} from '@tanstack/react-query'
 
 import {
   CropResult, GetTargetTextureParams, ImageTargetData, TargetTextureType,
@@ -17,6 +17,7 @@ import {useSelector} from '../hooks'
 import {DEFAULT_FILTER_OPTIONS} from './reducer'
 import type {IImageTarget} from '../common/types/models'
 import {targetMatchesFilter} from './gallery-filters'
+import {MILLISECONDS_PER_SECOND} from '../../shared/time-utils'
 
 const makeImageTargetTextureUrl = (
   appKey: string, target: ImageTargetData, type: TargetTextureType
@@ -59,21 +60,22 @@ const fetchImageTargets = async (appKey: string): Promise<DeepReadonly<IImageTar
     .sort((a, b) => b.created - a.created)
 }
 
+const getTargetsQuery = (appKey: string) => queryOptions({
+  queryKey: ['image-targets', appKey],
+  queryFn: () => fetchImageTargets(appKey),
+  staleTime: MILLISECONDS_PER_SECOND * 10,
+  refetchInterval: MILLISECONDS_PER_SECOND * 60,
+  refetchOnWindowFocus: true,
+})
+
 const useImageTargets = () => {
   const appKey = useEnclosedAppKey()
-
-  return useSuspenseQuery({
-    queryKey: ['image-targets', appKey],
-    queryFn: () => fetchImageTargets(appKey),
-  }).data
+  return useSuspenseQuery(getTargetsQuery(appKey)).data
 }
 
 const useImageTargetsOrLoading = () => {
   const appKey = useEnclosedAppKey()
-  return useQuery({
-    queryKey: ['image-targets', appKey],
-    queryFn: () => fetchImageTargets(appKey),
-  })
+  return useQuery(getTargetsQuery(appKey))
 }
 
 const useGalleryTargets = (galleryUuid: string | undefined) => {
@@ -95,7 +97,7 @@ const useImageTargetActions = () => {
   const client = useQueryClient()
   return React.useMemo(() => {
     const refresh = () => {
-      client.invalidateQueries({queryKey: ['image-targets', appKey]})
+      client.invalidateQueries(getTargetsQuery(appKey))
     }
 
     const deleteTarget = async (name: string) => {
