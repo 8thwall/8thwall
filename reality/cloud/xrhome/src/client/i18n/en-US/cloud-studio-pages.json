@@ -149,7 +149,6 @@
   "camera_configurator.scale_mode.option.absolute": "Absolute",
   "camera_configurator.scale_mode.option.responsive": "Responsive",
   "camera_configurator.slam_disable.label": "Disable SLAM",
-  "camera_configurator.vps.label": "Enable VPS",
   "camera_configurator.width.label": "Width",
   "camera_configurator.xr_type.label": "Type",
   "camera_configurator.xr_type.option.world": "World AR",

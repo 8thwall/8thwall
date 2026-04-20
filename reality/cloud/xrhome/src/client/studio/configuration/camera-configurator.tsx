@@ -424,16 +424,6 @@ const CameraConfigurator: React.FC<ICameraConfigurator> = (
               })
             }}
           />
-          <RowBooleanField
-            id='enable-vps'
-            label={t('camera_configurator.vps.label')}
-            checked={camera.xr?.world?.enableVps ?? false}
-            onChange={(e) => {
-              handleXrWorldConfigChange({
-                enableVps: e.target.checked,
-              })
-            }}
-          />
           <p>{t('camera_configurator.heading.image_targets')}</p>
           <div className={classes.info}>
             {t('camera_configurator.image_targets.in_memory.label')}
