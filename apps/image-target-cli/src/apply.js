@@ -19,7 +19,8 @@ const CONSTANTS = require('./constants.json')
  * @param {Omit<Partial<import("./types").ImageTargetData>, 'type' | 'properties'>} [extraData]
  */
 const applyCrop = async (rawImage, crop, folder, name, overwriteFiles, extraData) => {
-  const baseMetadata = await rawImage.metadata()
+  rawImage.autoOrient()
+  const {autoOrient: baseMetadata, format} = (await rawImage.metadata())
 
   /** @type {import("./types").ImageMetadata} */
   let metadata
@@ -73,8 +74,7 @@ const applyCrop = async (rawImage, crop, folder, name, overwriteFiles, extraData
     throw new Error(`Invalid crop geometry:\n${issues.join('\n')}`)
   }
 
-  const extension =
-    baseMetadata.format === 'jpeg' ? 'jpg' : baseMetadata.format
+  const extension = format === 'jpeg' ? 'jpg' : format
 
   /** @type {import("./types").ReferencedResources} */
   const resources = {

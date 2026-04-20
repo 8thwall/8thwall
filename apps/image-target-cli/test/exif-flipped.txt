@@ -1,0 +1,5 @@
+test/exif/flip-horizontal.jpg
+flat
+y
+tmp
+exif-flipped

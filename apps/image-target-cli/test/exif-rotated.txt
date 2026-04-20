@@ -1,0 +1,5 @@
+test/exif/rotate-90-cw.jpg
+flat
+y
+tmp
+exif-rotated
