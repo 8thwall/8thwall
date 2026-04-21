@@ -123,7 +123,6 @@
     "domain-browser": "^4.22.0",
     "esm": "^3.2.25",
     "events": "^3.3.0",
-    "exif-js": "^2.3.0",
     "file-loader": "^5.0.2",
     "gulp": "^4.0.2",
     "gulp-cli": "^2.2.0",
