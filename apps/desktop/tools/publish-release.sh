@@ -8,8 +8,11 @@ npm ci --legacy-peer-deps
 BUILDIF_FLAG_LEVEL=launch npm run dist:desktop
 
 cd $ROOT/apps/desktop
-npm ci
 TS=$(date +%Y%m%d%H%M)
 npm version 1.0.$TS --no-git-tag-version
-RELEASE=true npm run publish:prod:mac
+
+npm ci --os=win32 --cpu=x64
 RELEASE=true npm run publish:prod:win
+
+npm ci
+RELEASE=true npm run publish:prod:mac
