@@ -46,9 +46,9 @@ const CaughtErrorPage: React.FC<ICaughtErrorPage> = ({error, onReset}) => {
         <p>
           <Trans
             ns='caught-error-page'
-            i18nKey='caught_error_page.description'
+            i18nKey='caught_error_page.open_github_issue'
             components={{
-              supportLink: <StandardLink href='mailto:support@8thwall.com'>1</StandardLink>,
+              1: <StandardLink href='https://8th.io/report-desktop-error' newTab>1</StandardLink>,
             }}
           />
         </p>

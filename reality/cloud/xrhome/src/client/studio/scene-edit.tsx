@@ -19,7 +19,6 @@ import {quat} from '@ecs/runtime/math/quat'
 import {useSceneContext} from './scene-context'
 import {SceneObjects} from './scene-objects'
 import {isAssetPath} from '../common/editor-files'
-import ErrorBoundary from './error-boundary'
 import {GroundIndicator} from './ground-indicator'
 import {TransformGizmo} from './transform-gizmo'
 import {FloatingLeftPanel} from './floating-left-panel'
@@ -71,6 +70,8 @@ import {SceneFog} from './scene-fog'
 import {CameraPreview} from './configuration/camera-preview'
 import {isAgentBetaEnabled} from '../../shared/account-utils'
 import useCurrentAccount from '../common/use-current-account'
+import {ErrorBoundary} from '../common/error-boundary'
+import {CaughtViewportError} from './caught-viewport-error'
 
 const AssetLabModal = React.lazy(() => import('../asset-lab/asset-lab-modal'))
 
@@ -506,7 +507,7 @@ const SceneEdit: React.FC<ISceneEdit> = ({
                   </div>
                 }
                 {!hideViewport &&
-                  <ErrorBoundary>
+                  <ErrorBoundary fallback={CaughtViewportError}>
                     <Canvas
                       frameloop='demand'
                       ref={menuState.refs.setReference}
