@@ -577,7 +577,7 @@ const makeBaseApi = (
     return {updatedExpanse}
   },
   // NOTE(chloe): Naming actionMaps instead of inputMaps because "action map" is used in our
-  // docs: https://8thwall.org/docs/api/studio/world/input/
+  // docs: https://8thwall.org/docs/api/studio/world/input
   upsertActionMaps: ({actionMaps}: {actionMaps: InputMap}) => {
     const updatedInputs = {...getInputMap(sceneCtx.scene.inputs)}
     const errorsByMap: Record<string, string[]> = {}

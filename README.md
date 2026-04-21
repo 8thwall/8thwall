@@ -8,9 +8,7 @@ Build immersive AR and interactive 3D. Free and open.
 
 For 3D development using 8th Wall Studio, install the [desktop app](https://8thwall.org/downloads).
 
-For native Windows desktop development in this repository, see [README.windows.md](./README.windows.md).
-
-For integrating the engine into your project, see https://8thwall.org/docs/migration/self-hosted/
+For integrating the engine into your project, see https://8thwall.org/docs/migration/self-hosted
 
 Otherwise, you can browse our [examples](./examples/README.md) to find a jumping off point.
 

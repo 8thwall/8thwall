@@ -9,10 +9,7 @@ import {Icon, IIcon} from '../ui/components/icon'
 import {useBooleanUrlState} from '../hooks/url-state'
 import {PreferencesModal} from './preferences-modal'
 import {createThemedStyles} from '../ui/theme'
-
-const DOCS_BASE_URL = 'https://8thwall.org/docs'
-const FORUM_URL = 'https://github.com/orgs/8thwall/discussions'
-const TUTORIALS_URL = 'https://8th.io/tutorials'
+import {TUTORIALS_URL, DOCS_BASE_URL, FORUM_URL} from '../../shared/link-constants'
 
 const useStyles = createThemedStyles(theme => ({
   sidebarButton: {

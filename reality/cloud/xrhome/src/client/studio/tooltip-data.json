@@ -1,55 +1,55 @@
 {
   "components": {
     "Audio": {
-      "link": "https://8thwall.org/docs/api/studio/ecs/audio/",
+      "link": "https://8thwall.org/docs/api/studio/ecs/audio",
       "textKey": "tooltip.audio.text"
     },
     "BoxGeometry": {
-      "link": "https://8thwall.org/docs/api/studio/ecs/geometry/box-geometry/",
+      "link": "https://8thwall.org/docs/api/studio/ecs/geometry/box-geometry",
       "textKey": "tooltip.box_geometry.text"
     },
     "Camera": {
-      "link": "https://8thwall.org/docs/api/studio/ecs/camera/",
+      "link": "https://8thwall.org/docs/api/studio/ecs/camera",
       "textKey": "tooltip.camera.text"
     },
     "CapsuleGeometry": {
-      "link": "https://8thwall.org/docs/api/studio/ecs/geometry/capsule-geometry/",
+      "link": "https://8thwall.org/docs/api/studio/ecs/geometry/capsule-geometry",
       "textKey": "tooltip.capsule_geometry.text"
     },
     "CircleGeometry": {
-      "link": "https://8thwall.org/docs/api/studio/ecs/geometry/circle-geometry/",
+      "link": "https://8thwall.org/docs/api/studio/ecs/geometry/circle-geometry",
       "textKey": "tooltip.circle_geometry.text"
     },
     "Collider": {
-      "link": "https://8thwall.org/docs/api/studio/ecs/collider/",
+      "link": "https://8thwall.org/docs/api/studio/ecs/collider",
       "textKey": "tooltip.collider.text"
     },
     "ConeGeometry": {
-      "link": "https://8thwall.org/docs/api/studio/ecs/geometry/cone-geometry/",
+      "link": "https://8thwall.org/docs/api/studio/ecs/geometry/cone-geometry",
       "textKey": "tooltip.cone_geometry.text"
     },
     "CustomPropertyAnimation": {
-      "link": "https://8thwall.org/docs/api/studio/ecs/animation/custom-property-animation/",
+      "link": "https://8thwall.org/docs/api/studio/ecs/animation/custom-property-animation",
       "textKey": "tooltip.custom_property_animation.text"
     },
     "CustomVec3Animation": {
-      "link": "https://8thwall.org/docs/api/studio/ecs/animation/custom-vec3-animation/",
+      "link": "https://8thwall.org/docs/api/studio/ecs/animation/custom-vec3-animation",
       "textKey": "tooltip.custom_vec3_animation.text"
     },
     "CylinderGeometry": {
-      "link": "https://8thwall.org/docs/api/studio/ecs/geometry/cylinder-geometry/",
+      "link": "https://8thwall.org/docs/api/studio/ecs/geometry/cylinder-geometry",
       "textKey": "tooltip.cylinder_geometry.text"
     },
     "Disabled": {
-      "link": "https://8thwall.org/docs/api/studio/ecs/disabled/",
+      "link": "https://8thwall.org/docs/api/studio/ecs/disabled",
       "textKey": "tooltip.disabled.text"
     },
     "Face": {
-      "link": "https://8thwall.org/docs/api/studio/ecs/face/",
+      "link": "https://8thwall.org/docs/api/studio/ecs/face",
       "textKey": "tooltip.face.text"
     },
     "FaceAttachment": {
-      "link": "https://8thwall.org/docs/api/studio/ecs/face-attachment/",
+      "link": "https://8thwall.org/docs/api/studio/ecs/face-attachment",
       "textKey": "tooltip.face_attachment.text"
     },
     "FaceGeometry": {
@@ -59,79 +59,79 @@
       "textKey": "tooltip.face_mesh_anchor.text"
     },
     "FlyController": {
-      "link": "https://8thwall.org/docs/api/studio/ecs/fly-controller/",
+      "link": "https://8thwall.org/docs/api/studio/ecs/fly-controller",
       "textKey": "tooltip.fly_controller.text"
     },
     "FollowAnimation": {
-      "link": "https://8thwall.org/docs/api/studio/ecs/animation/follow-animation/",
+      "link": "https://8thwall.org/docs/api/studio/ecs/animation/follow-animation",
       "textKey": "tooltip.follow_animation.text"
     },
     "GltfModel": {
-      "link": "https://8thwall.org/docs/api/studio/ecs/gltf-model/",
+      "link": "https://8thwall.org/docs/api/studio/ecs/gltf-model",
       "textKey": "tooltip.gltf_model.text"
     },
     "Hidden": {
-      "link": "https://8thwall.org/docs/api/studio/ecs/hidden/",
+      "link": "https://8thwall.org/docs/api/studio/ecs/hidden",
       "textKey": "tooltip.hidden.text"
     },
     "HiderMaterial": {
-      "link": "https://8thwall.org/docs/api/studio/ecs/material/hider-material/",
+      "link": "https://8thwall.org/docs/api/studio/ecs/material/hider-material",
       "textKey": "tooltip.hider_material.text"
     },
     "ImageTarget": {
-      "link": "https://8thwall.org/docs/api/studio/ecs/image-target/",
+      "link": "https://8thwall.org/docs/api/studio/ecs/image-target",
       "textKey": "tooltip.image_target.text"
     },
     "Light": {
-      "link": "https://8thwall.org/docs/api/studio/ecs/light/",
+      "link": "https://8thwall.org/docs/api/studio/ecs/light",
       "textKey": "tooltip.light.text"
     },
     "LookAtAnimation": {
-      "link": "https://8thwall.org/docs/api/studio/ecs/animation/look-at-animation/",
+      "link": "https://8thwall.org/docs/api/studio/ecs/animation/look-at-animation",
       "textKey": "tooltip.look_at_animation.text"
     },
     "Material": {
-      "link": "https://8thwall.org/docs/api/studio/ecs/material/",
+      "link": "https://8thwall.org/docs/api/studio/ecs/material",
       "textKey": "tooltip.material.text"
     },
     "OrbitControls": {
-      "link": "https://8thwall.org/docs/api/studio/ecs/orbit-controls/",
+      "link": "https://8thwall.org/docs/api/studio/ecs/orbit-controls",
       "textKey": "tooltip.orbit_controls.text"
     },
     "ParticleEmitter": {
-      "link": "https://8thwall.org/docs/api/studio/ecs/particle-emitter/",
+      "link": "https://8thwall.org/docs/api/studio/ecs/particle-emitter",
       "textKey": "tooltip.particle_emitter.text"
     },
     "Persistent": {
-      "link": "https://8thwall.org/docs/api/studio/ecs/persistent/",
+      "link": "https://8thwall.org/docs/api/studio/ecs/persistent",
       "textKey": "tooltip.persistent.text"
     },
     "PlaneGeometry": {
-      "link": "https://8thwall.org/docs/api/studio/ecs/geometry/plane-geometry/",
+      "link": "https://8thwall.org/docs/api/studio/ecs/geometry/plane-geometry",
       "textKey": "tooltip.plane_geometry.text"
     },
     "PolyhedronGeometry": {
-      "link": "https://8thwall.org/docs/api/studio/ecs/geometry/polyhedron-geometry/",
+      "link": "https://8thwall.org/docs/api/studio/ecs/geometry/polyhedron-geometry",
       "textKey": "tooltip.polyhedron_geometry.text"
     },
     "Position": {
-      "link": "https://8thwall.org/docs/api/studio/ecs/position/",
+      "link": "https://8thwall.org/docs/api/studio/ecs/position",
       "textKey": "tooltip.position.text"
     },
     "PositionAnimation": {
-      "link": "https://8thwall.org/docs/api/studio/ecs/animation/position-animation/",
+      "link": "https://8thwall.org/docs/api/studio/ecs/animation/position-animation",
       "textKey": "tooltip.position_animation.text"
     },
     "Quaternion": {
-      "link": "https://8thwall.org/docs/api/studio/ecs/quaternion/",
+      "link": "https://8thwall.org/docs/api/studio/ecs/quaternion",
       "textKey": "tooltip.quaternion.text"
     },
     "RingGeometry": {
-      "link": "https://8thwall.org/docs/api/studio/ecs/geometry/ring-geometry/",
+      "link": "https://8thwall.org/docs/api/studio/ecs/geometry/ring-geometry",
       "textKey": "tooltip.ring_geometry.text"
     },
     "RotateAnimation": {
-      "link": "https://8thwall.org/docs/api/studio/ecs/animation/rotate-animation/",
+      "link": "https://8thwall.org/docs/api/studio/ecs/animation/rotate-animation",
       "textKey": "tooltip.rotate_animation.text"
     },
     "Scale": {
@@ -139,43 +139,43 @@
       "textKey": "tooltip.scale.text"
     },
     "ScaleAnimation": {
-      "link": "https://8thwall.org/docs/api/studio/ecs/animation/scale-animation/",
+      "link": "https://8thwall.org/docs/api/studio/ecs/animation/scale-animation",
       "textKey": "tooltip.scale_animation.text"
     },
     "Shadow": {
-      "link": "https://8thwall.org/docs/api/studio/ecs/shadow/",
+      "link": "https://8thwall.org/docs/api/studio/ecs/shadow",
       "textKey": "tooltip.shadow.text"
     },
     "ShadowMaterial": {
-      "link": "https://8thwall.org/docs/api/studio/ecs/shadow-material/",
+      "link": "https://8thwall.org/docs/api/studio/ecs/shadow-material",
       "textKey": "tooltip.shadow_material.text"
     },
     "SphereGeometry": {
-      "link": "https://8thwall.org/docs/api/studio/ecs/geometry/sphere-geometry/",
+      "link": "https://8thwall.org/docs/api/studio/ecs/geometry/sphere-geometry",
       "textKey": "tooltip.sphere_geometry.text"
     },
     "Splat": {
-      "link": "https://8thwall.org/docs/api/studio/ecs/splat/",
+      "link": "https://8thwall.org/docs/api/studio/ecs/splat",
       "textKey": "tooltip.splat.text"
     },
     "TorusGeometry": {
-      "link": "https://8thwall.org/docs/api/studio/ecs/geometry/torus-geometry/",
+      "link": "https://8thwall.org/docs/api/studio/ecs/geometry/torus-geometry",
       "textKey": "tooltip.torus_geometry.text"
     },
     "Ui": {
-      "link": "https://8thwall.org/docs/api/studio/ecs/ui/",
+      "link": "https://8thwall.org/docs/api/studio/ecs/ui",
       "textKey": "tooltip.ui.text"
     },
     "UnlitMaterial": {
-      "link": "https://8thwall.org/docs/api/studio/ecs/material/unlit-material/",
+      "link": "https://8thwall.org/docs/api/studio/ecs/material/unlit-material",
       "textKey": "tooltip.unlit_material.text"
     },
     "VideoControls": {
-      "link": "https://8thwall.org/docs/api/studio/ecs/videocontrols/",
+      "link": "https://8thwall.org/docs/api/studio/ecs/videocontrols",
       "textKey": "tooltip.video_controls.text"
     },
     "VideoMaterial": {
-      "link": "https://8thwall.org/docs/api/studio/ecs/material/video-material/",
+      "link": "https://8thwall.org/docs/api/studio/ecs/material/video-material",
       "textKey": "tooltip.video_material.text"
     }
   },
