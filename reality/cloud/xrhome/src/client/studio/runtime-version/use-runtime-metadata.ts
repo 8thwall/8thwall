@@ -8,7 +8,7 @@ const useRuntimeMetadata = () => {
   const {appKey} = useCurrentApp()
   const local = useMaybeLocalSyncContext()
   return useSuspenseQuery({
-    queryKey: ['runtimeMetadata', local?.localBuildUrl],
+    queryKey: ['runtimeMetadata', appKey, local?.localBuildUrl],
     queryFn: () => getRuntimeMetadata(appKey),
   }).data
 }
