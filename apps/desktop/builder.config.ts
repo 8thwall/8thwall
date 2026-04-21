@@ -74,6 +74,8 @@ export default {
   asar: true,
   asarUnpack: [
     '**/node_modules/better-sqlite3/**/*',
+    '**/node_modules/sharp/**/*',
+    '**/node_modules/@img/**/*',
   ],
   generateUpdatesFilesForAllChannels: true,
   mac: {
