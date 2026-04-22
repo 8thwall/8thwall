@@ -321,14 +321,13 @@ const checkConfigStatus = (appKey: string) => {
 
   })
 
-  return fetchJson<{needsInjectFix: boolean}>(
+  return fetchJson<{needsInjectFix: boolean, needsCopyPluginFix: boolean}>(
     `${API}/project/config?${params}`, {method: 'GET'}
   )
 }
 
-const applyProjectConfigFix = (appKey: string, fix: 'inject') => {
+const applyProjectConfigFix = (appKey: string, fix: 'inject' | 'copy-plugin') => {
   const params = new URLSearchParams({
-
     appKey,
     fix,
   })

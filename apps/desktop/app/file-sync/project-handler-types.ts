@@ -22,7 +22,7 @@ type IMoveProjectParams = z.infer<typeof MoveProjectParams>
 
 const FixConfigParams = z.object({
   appKey: z.string(),
-  fix: z.enum(['inject']),
+  fix: z.enum(['inject', 'copy-plugin']),
 })
 
 type IFixConfigParams = z.infer<typeof FixConfigParams>

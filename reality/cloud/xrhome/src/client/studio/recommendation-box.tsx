@@ -2,6 +2,8 @@ import React from 'react'
 import {createUseStyles} from 'react-jss'
 import {useTranslation} from 'react-i18next'
 
+import {queryOptions, useQueryClient, useSuspenseQuery} from '@tanstack/react-query'
+
 import {useSceneContext} from './scene-context'
 import {useCurrentGit} from '../git/hooks/use-current-git'
 import {isAssetPath} from '../common/editor-files'
@@ -21,6 +23,7 @@ import {
 import {useAbandonableEffect} from '../hooks/abandonable-effect'
 import useCurrentApp from '../common/use-current-app'
 import {useLocalSyncContext} from './local-sync-context'
+import {useEnclosedAppKey} from '../apps/enclosed-app-context'
 
 const useStyles = createUseStyles({
   recommendationBox: {
@@ -116,15 +119,24 @@ const AssetBundleRecommendation = () => {
   )
 }
 
+const getProjectConfigStatusQuery = (appKey: string) => queryOptions({
+  queryKey: ['project-config', appKey],
+  queryFn: () => checkConfigStatus(appKey),
+})
+
+const useProjectConfigStatus = () => {
+  const appKey = useEnclosedAppKey()
+  return useSuspenseQuery(getProjectConfigStatusQuery(appKey)).data
+}
+
 const WebpackInjectFixRecommendation = () => {
   const {t} = useTranslation(['cloud-studio-pages', 'common'])
-  const [visible, setVisible] = React.useState(false)
   const {appKey} = useCurrentApp()
   const localSyncContext = useLocalSyncContext()
-  useAbandonableEffect(async (abandon) => {
-    const {needsInjectFix} = await abandon(checkConfigStatus(appKey))
-    setVisible(needsInjectFix)
-  }, [appKey])
+  const {needsInjectFix} = useProjectConfigStatus()
+  const queryClient = useQueryClient()
+  const [dismissed, setDismissed] = React.useState(false)
+  const visible = needsInjectFix && !dismissed
 
   if (!visible) {
     return null
@@ -138,12 +150,47 @@ const WebpackInjectFixRecommendation = () => {
           <BoldButton onClick={async () => {
             await applyProjectConfigFix(appKey, 'inject')
             await localSyncContext.restartServer()
-            setVisible(false)
+            queryClient.invalidateQueries(getProjectConfigStatusQuery(appKey))
           }}
           >
             {t('recommendation_box.fix')}
           </BoldButton>
-          <BoldButton onClick={() => setVisible(false)}>
+          <BoldButton onClick={() => setDismissed(true)}>
+            {t('recommendation_box.dismiss')}
+          </BoldButton>
+        </SpaceBetween>
+      </SpaceBetween>
+    </StaticBanner>
+  )
+}
+
+const CopyPluginFixRecommendation = () => {
+  const {t} = useTranslation(['cloud-studio-pages', 'common'])
+  const {appKey} = useCurrentApp()
+  const localSyncContext = useLocalSyncContext()
+  const {needsCopyPluginFix} = useProjectConfigStatus()
+  const queryClient = useQueryClient()
+  const [dismissed, setDismissed] = React.useState(false)
+  const visible = needsCopyPluginFix && !dismissed
+
+  if (!visible) {
+    return null
+  }
+
+  return (
+    <StaticBanner type='warning'>
+      <SpaceBetween direction='vertical'>
+        {t('recommendation_box.copy_plugin_message')}
+        <SpaceBetween>
+          <BoldButton onClick={async () => {
+            await applyProjectConfigFix(appKey, 'copy-plugin')
+            await localSyncContext.restartServer()
+            queryClient.invalidateQueries(getProjectConfigStatusQuery(appKey))
+          }}
+          >
+            {t('recommendation_box.fix')}
+          </BoldButton>
+          <BoldButton onClick={() => setDismissed(true)}>
             {t('recommendation_box.dismiss')}
           </BoldButton>
         </SpaceBetween>
@@ -153,10 +200,11 @@ const WebpackInjectFixRecommendation = () => {
 }
 
 const RecommendationBox = () => (
-  <>
+  <React.Suspense fallback={null}>
     <AssetBundleRecommendation />
     <WebpackInjectFixRecommendation />
-  </>
+    <CopyPluginFixRecommendation />
+  </React.Suspense>
 )
 
 export {RecommendationBox}

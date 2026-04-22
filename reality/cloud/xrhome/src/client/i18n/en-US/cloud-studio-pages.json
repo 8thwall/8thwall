@@ -731,6 +731,7 @@
   "recommendation_box.modal_title": "Review Suggested Replacements",
   "recommendation_box.update_references": "Update references",
   "recommendation_box.inject_message": "This project is missing a required configuration change in config/webpack.config.js.",
+  "recommendation_box.copy_plugin_message": "Asset configuration was mistakenly left out of the project template in config/webpack.config.js.",
   "recommendation_box.fix": "Apply Fix",
   "recommendation_box.dismiss": "Dismiss",
   "reflection.menu.label.url": "URL",

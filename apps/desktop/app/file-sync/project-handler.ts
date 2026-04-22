@@ -786,6 +786,45 @@ const GOOD_INJECT_CONFIG = `new HtmlWebpackPlugin({
       inject: false,
     })`
 
+const BAD_COPY_PLUGIN_CONFIG = `\
+      patterns: [
+        {
+          from: path.join(rootPath, 'node_modules/@8thwall/ecs/dist'),
+          to: path.join(distPath, 'external/runtime'),
+        },
+        {
+          from: path.join(rootPath, 'node_modules/@8thwall/engine-binary/dist'),
+          to: path.join(distPath, 'external/xr'),
+        },
+        {
+          from: path.join(rootPath, 'image-targets'),
+          to: path.join(distPath, 'image-targets'),
+          noErrorOnMissing: true,
+        },
+      ],`
+
+const GOOD_COPY_PLUGIN_CONFIG = `\
+      patterns: [
+        {
+          from: path.join(rootPath, 'node_modules/@8thwall/ecs/dist'),
+          to: path.join(distPath, 'external/runtime'),
+        },
+        {
+          from: path.join(rootPath, 'node_modules/@8thwall/engine-binary/dist'),
+          to: path.join(distPath, 'external/xr'),
+        },
+        {
+          from: path.join(srcPath, 'assets'),
+          to: path.join(distPath, 'assets'),
+          noErrorOnMissing: true,
+        },
+        {
+          from: path.join(rootPath, 'image-targets'),
+          to: path.join(distPath, 'image-targets'),
+          noErrorOnMissing: true,
+        },
+      ],`
+
 const WEBPACK_CONFIG_PATH = 'config/webpack.config.js'
 
 const getProjectConfig = withErrorHandlingResponse(async (req: Request) => {
@@ -805,15 +844,17 @@ const getProjectConfig = withErrorHandlingResponse(async (req: Request) => {
   }
 
   let needsInjectFix = false
+  let needsCopyPluginFix = false
   try {
     const configPath = path.join(project.location, WEBPACK_CONFIG_PATH)
     const configContent = await fs.readFile(configPath, 'utf-8')
     needsInjectFix = configContent.includes(BAD_INJECT_CONFIG)
+    needsCopyPluginFix = configContent.includes(BAD_COPY_PLUGIN_CONFIG)
   } catch (error) {
     // Ignore
   }
 
-  return makeJsonResponse({needsInjectFix})
+  return makeJsonResponse({needsInjectFix, needsCopyPluginFix})
 })
 
 const modifyProjectConfig = withErrorHandlingResponse(async (req: Request) => {
@@ -834,6 +875,13 @@ const modifyProjectConfig = withErrorHandlingResponse(async (req: Request) => {
       const configPath = path.join(project.location, WEBPACK_CONFIG_PATH)
       const configContent = await fs.readFile(configPath, 'utf-8')
       const fixedContent = configContent.replace(BAD_INJECT_CONFIG, GOOD_INJECT_CONFIG)
+      await fs.writeFile(configPath, fixedContent, 'utf-8')
+      break
+    }
+    case 'copy-plugin': {
+      const configPath = path.join(project.location, WEBPACK_CONFIG_PATH)
+      const configContent = await fs.readFile(configPath, 'utf-8')
+      const fixedContent = configContent.replace(BAD_COPY_PLUGIN_CONFIG, GOOD_COPY_PLUGIN_CONFIG)
       await fs.writeFile(configPath, fixedContent, 'utf-8')
       break
     }
