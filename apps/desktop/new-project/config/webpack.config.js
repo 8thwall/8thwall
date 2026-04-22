@@ -45,6 +45,11 @@ const config = {
           to: path.join(distPath, 'external/xr'),
         },
         {
+          from: path.join(srcPath, 'assets'),
+          to: path.join(distPath, 'assets'),
+          noErrorOnMissing: true,
+        },
+        {
           from: path.join(rootPath, 'image-targets'),
           to: path.join(distPath, 'image-targets'),
           noErrorOnMissing: true,
