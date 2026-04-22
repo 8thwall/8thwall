@@ -1,8 +1,7 @@
 import React from 'react'
 import {createUseStyles} from 'react-jss'
 import {useTranslation} from 'react-i18next'
-
-import {queryOptions, useQueryClient, useSuspenseQuery} from '@tanstack/react-query'
+import {queryOptions, useQuery, useQueryClient} from '@tanstack/react-query'
 
 import {useSceneContext} from './scene-context'
 import {useCurrentGit} from '../git/hooks/use-current-git'
@@ -20,10 +19,9 @@ import {StandardModalHeader} from '../ui/components/standard-modal-header'
 import {
   applyProjectConfigFix, checkConfigStatus,
 } from './local-sync-api'
-import {useAbandonableEffect} from '../hooks/abandonable-effect'
 import useCurrentApp from '../common/use-current-app'
 import {useLocalSyncContext} from './local-sync-context'
-import {useEnclosedAppKey} from '../apps/enclosed-app-context'
+import {MILLISECONDS_PER_HOUR} from '../../shared/time-utils'
 
 const useStyles = createUseStyles({
   recommendationBox: {
@@ -122,18 +120,14 @@ const AssetBundleRecommendation = () => {
 const getProjectConfigStatusQuery = (appKey: string) => queryOptions({
   queryKey: ['project-config', appKey],
   queryFn: () => checkConfigStatus(appKey),
+  staleTime: MILLISECONDS_PER_HOUR,
 })
-
-const useProjectConfigStatus = () => {
-  const appKey = useEnclosedAppKey()
-  return useSuspenseQuery(getProjectConfigStatusQuery(appKey)).data
-}
 
 const WebpackInjectFixRecommendation = () => {
   const {t} = useTranslation(['cloud-studio-pages', 'common'])
   const {appKey} = useCurrentApp()
   const localSyncContext = useLocalSyncContext()
-  const {needsInjectFix} = useProjectConfigStatus()
+  const needsInjectFix = useQuery(getProjectConfigStatusQuery(appKey)).data?.needsInjectFix
   const queryClient = useQueryClient()
   const [dismissed, setDismissed] = React.useState(false)
   const visible = needsInjectFix && !dismissed
@@ -168,7 +162,7 @@ const CopyPluginFixRecommendation = () => {
   const {t} = useTranslation(['cloud-studio-pages', 'common'])
   const {appKey} = useCurrentApp()
   const localSyncContext = useLocalSyncContext()
-  const {needsCopyPluginFix} = useProjectConfigStatus()
+  const needsCopyPluginFix = useQuery(getProjectConfigStatusQuery(appKey)).data?.needsCopyPluginFix
   const queryClient = useQueryClient()
   const [dismissed, setDismissed] = React.useState(false)
   const visible = needsCopyPluginFix && !dismissed
@@ -200,11 +194,11 @@ const CopyPluginFixRecommendation = () => {
 }
 
 const RecommendationBox = () => (
-  <React.Suspense fallback={null}>
+  <>
     <AssetBundleRecommendation />
     <WebpackInjectFixRecommendation />
     <CopyPluginFixRecommendation />
-  </React.Suspense>
+  </>
 )
 
 export {RecommendationBox}
