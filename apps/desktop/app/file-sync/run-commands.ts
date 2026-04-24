@@ -61,11 +61,11 @@ const runScript = (options: ScriptRunOptions): ChildProcess => {
 }
 
 const runInstallCommand = async (
-  savePath: string
+  savePath: string, extraArguments?: string[]
 ): Promise<void> => new Promise((resolve, reject) => {
   const child = fork(
     NPM_CLI_PATH,
-    ['install'],
+    ['install', ...(extraArguments || [])],
     {cwd: savePath, stdio: 'pipe', env: {ELECTRON_RUN_AS_NODE: '1'}, detached: true}
   )
 
