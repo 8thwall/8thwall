@@ -63,7 +63,10 @@ const handleGetInstalledPrograms: RequestHandler = async () => {
 }
 
 const handlePreferencesRequest = withErrorHandlingResponse(branches({
-  '/current': methods({GET: handleGetPreferences, PATCH: handlePatchPreferences}),
+  '/current': methods({
+    GET: handleGetPreferences,
+    PATCH: handlePatchPreferences,
+  }),
   '/installed-programs': methods({GET: handleGetInstalledPrograms}),
   '/choose-editor': methods({POST: handleChooseEditor}),
 }))
