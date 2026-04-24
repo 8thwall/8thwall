@@ -27,8 +27,9 @@ import {makeJsonResponse} from '../../json-response'
 import {getQueryParams} from '../../query-params'
 import {openInCodeEditor} from '../preferences/code-editor'
 import {createReadStreamPromise, makeStreamFileResponse} from '../../stream-file-response'
+import {branches, methods, RequestHandler} from '../../requests'
 
-const getLocalFile = withErrorHandlingResponse(async (req: Request) => {
+const getLocalFile: RequestHandler = async (req) => {
   const requestUrl = new URL(req.url)
   const params = FilePullParams.safeParse(getQueryParams(requestUrl))
   if (!params.success) {
@@ -68,9 +69,9 @@ const getLocalFile = withErrorHandlingResponse(async (req: Request) => {
   }
 
   return makeStreamFileResponse(fullPath)
-})
+}
 
-const headLocalFile = withErrorHandlingResponse(async (req: Request) => {
+const headLocalFile: RequestHandler = async (req) => {
   const requestUrl = new URL(req.url)
   const params = FilePullParams.safeParse(getQueryParams(requestUrl))
   if (!params.success) {
@@ -109,9 +110,9 @@ const headLocalFile = withErrorHandlingResponse(async (req: Request) => {
       'Content-Length': stats.size.toString(),
     },
   })
-})
+}
 
-const saveFile = withErrorHandlingResponse(async (req: Request) => {
+const saveFile: RequestHandler = async (req) => {
   const requestUrl = new URL(req.url)
   const params = FilePushParams.safeParse(getQueryParams(requestUrl))
 
@@ -155,9 +156,9 @@ const saveFile = withErrorHandlingResponse(async (req: Request) => {
   })
 
   return makeJsonResponse(res)
-})
+}
 
-const deleteFile = withErrorHandlingResponse(async (req: Request) => {
+const deleteFile: RequestHandler = async (req) => {
   const requestUrl = new URL(req.url)
   const params = FileDeleteParams.safeParse(getQueryParams(requestUrl))
 
@@ -180,9 +181,9 @@ const deleteFile = withErrorHandlingResponse(async (req: Request) => {
   const fullPath = path.join(projectPath, filePath)
   await rm(fullPath, {recursive: true, force: true})
   return makeJsonResponse({})
-})
+}
 
-const getFileStateSnapshot = withErrorHandlingResponse(async (req: Request) => {
+const getFileStateSnapshot: RequestHandler = async (req) => {
   const requestUrl = new URL(req.url)
   const params = FileStateParams.safeParse(getQueryParams(requestUrl))
 
@@ -217,9 +218,9 @@ const getFileStateSnapshot = withErrorHandlingResponse(async (req: Request) => {
   }))
 
   return makeJsonResponse(response)
-})
+}
 
-const getFileHashSha256 = withErrorHandlingResponse(async (req: Request) => {
+const getFileHashSha256: RequestHandler = async (req) => {
   const requestUrl = new URL(req.url)
   const params = FilePullParams.safeParse(getQueryParams(requestUrl))
   if (!params.success) {
@@ -249,28 +250,19 @@ const getFileHashSha256 = withErrorHandlingResponse(async (req: Request) => {
     })
   })
   return makeJsonResponse({hash})
-})
-
-// TODO
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const getFileMetadata = withErrorHandlingResponse(async (req: Request) => makeJsonResponse({}))
-
-const handleFileOperationRequest = (request: Request) => {
-  switch (request.method) {
-    case 'HEAD':
-      return headLocalFile(request)
-    case 'GET':
-      return getLocalFile(request)
-    case 'POST':
-      return saveFile(request)
-    case 'DELETE':
-      return deleteFile(request)
-    default:
-      return new Response('Method Not Allowed', {status: 405})
-  }
 }
 
-const postShowFile = withErrorHandlingResponse(async (req) => {
+// TODO
+const getFileMetadata = withErrorHandlingResponse(async () => makeJsonResponse({}))
+
+const fileMethods = methods({
+  HEAD: headLocalFile,
+  GET: getLocalFile,
+  POST: saveFile,
+  DELETE: deleteFile,
+})
+
+const postShowFile: RequestHandler = async (req) => {
   const requestUrl = new URL(req.url)
   const params = FilePullParams.safeParse(getQueryParams(requestUrl))
   if (!params.success) {
@@ -306,18 +298,9 @@ const postShowFile = withErrorHandlingResponse(async (req) => {
     }
     throw error
   }
-})
-
-const handleFileShowRequest = (request: Request) => {
-  switch (request.method) {
-    case 'POST':
-      return postShowFile(request)
-    default:
-      return new Response('Method Not Allowed', {status: 405})
-  }
 }
 
-const postOpenFile = withErrorHandlingResponse(async (req: Request) => {
+const postOpenFile: RequestHandler = async (req) => {
   const requestUrl = new URL(req.url)
   const params = FilePullParams.safeParse(getQueryParams(requestUrl))
   if (!params.success) {
@@ -344,43 +327,11 @@ const postOpenFile = withErrorHandlingResponse(async (req: Request) => {
   }
 
   return makeJsonResponse({})
-})
-
-const handleFileOpenRequest = (request: Request) => {
-  switch (request.method) {
-    case 'POST':
-      return postOpenFile(request)
-    default:
-      return new Response('Method Not Allowed', {status: 405})
-  }
-}
-
-const handleFileSnapshotRequest = (request: Request) => {
-  if (request.method === 'GET') {
-    return getFileStateSnapshot(request)
-  }
-
-  return new Response('Method Not Allowed', {status: 405})
-}
-
-const handleFileMetadataRequest = (request: Request) => {
-  if (request.method === 'GET') {
-    return getFileMetadata(request)
-  }
-
-  return new Response('Method Not Allowed', {status: 405})
-}
-
-const handleFileHashSha256Request = (request: Request) => {
-  if (request.method === 'GET') {
-    return getFileHashSha256(request)
-  }
-  return new Response('Method Not Allowed', {status: 405})
 }
 
 // NOTE(christoph): Asset bundles use relative routing so we need a way to directly address files
 // without query params.
-const handleDirectFileOperationRequest = (request: Request) => {
+const handleDirectFileOperationRequest: RequestHandler = (request) => {
   const requestUrl = new URL(request.url)
   const [
     encodedAppKey, /* cache bust */, ...pathParts
@@ -388,14 +339,14 @@ const handleDirectFileOperationRequest = (request: Request) => {
   requestUrl.searchParams.set('appKey', decodeURIComponent(encodedAppKey))
   requestUrl.searchParams.set('path', pathParts.map(e => decodeURIComponent(e)).join('/'))
   requestUrl.pathname = FILE_PATH
-  return handleFileOperationRequest(new Request(requestUrl.toString(), {
+  return fileMethods(new Request(requestUrl.toString(), {
     method: request.method,
     body: request.body,
     headers: request.headers,
   }))
 }
 
-const getFileDirectory = withErrorHandlingResponse(async (request) => {
+const getFileDirectory: RequestHandler = async (request) => {
   const requestUrl = new URL(request.url)
   const params = FilePullParams.safeParse(getQueryParams(requestUrl))
   if (!params.success) {
@@ -415,17 +366,9 @@ const getFileDirectory = withErrorHandlingResponse(async (request) => {
   return makeJsonResponse({
     contents: contents.filter(f => !isIgnoredFile(f)).map(toUnixPath),
   })
-})
-
-const handleFileDirectoryRequest = (request: Request) => {
-  if (request.method === 'GET') {
-    return getFileDirectory(request)
-  }
-
-  return new Response('Method Not Allowed', {status: 405})
 }
 
-const renameFile = withErrorHandlingResponse(async (request) => {
+const renameFile: RequestHandler = async (request) => {
   const requestUrl = new URL(request.url)
   const params = FileRenameParams.safeParse(getQueryParams(requestUrl))
   if (!params.success) {
@@ -454,16 +397,20 @@ const renameFile = withErrorHandlingResponse(async (request) => {
     throw error
   }
   return makeJsonResponse({})
-})
-
-const handleFileRenameRequest = (request: Request) => {
-  if (request.method === 'POST') {
-    return renameFile(request)
-  }
-  return new Response('Method Not Allowed', {status: 405})
 }
 
-const handleFileRequest = (request: Request) => {
+const routes = branches({
+  [FILE_PATH]: fileMethods,
+  [FILE_STATE_SNAPSHOT_PATH]: methods({GET: getFileStateSnapshot}),
+  [FILE_DIRECTORY_PATH]: methods({GET: getFileDirectory}),
+  [FILE_METADATA_PATH]: methods({GET: getFileMetadata}),
+  [FILE_HASH_SHA256_PATH]: methods({GET: getFileHashSha256}),
+  [FILE_OPEN_PATH]: methods({POST: postOpenFile}),
+  [FILE_SHOW_PATH]: methods({POST: postShowFile}),
+  [FILE_RENAME_PATH]: methods({POST: renameFile}),
+})
+
+const handleFileRequest = withErrorHandlingResponse((request) => {
   const requestUrl = new URL(request.url)
   const {pathname} = requestUrl
 
@@ -471,30 +418,8 @@ const handleFileRequest = (request: Request) => {
     return handleDirectFileOperationRequest(request)
   }
 
-  switch (pathname) {
-    case FILE_PATH:
-      return handleFileOperationRequest(request)
-    case FILE_STATE_SNAPSHOT_PATH:
-      return handleFileSnapshotRequest(request)
-    case FILE_DIRECTORY_PATH:
-      return handleFileDirectoryRequest(request)
-    case FILE_METADATA_PATH:
-      return handleFileMetadataRequest(request)
-    case FILE_HASH_SHA256_PATH:
-      return handleFileHashSha256Request(request)
-    case FILE_OPEN_PATH:
-      return handleFileOpenRequest(request)
-    case FILE_SHOW_PATH:
-      return handleFileShowRequest(request)
-    case FILE_RENAME_PATH:
-      return handleFileRenameRequest(request)
-    default: {
-      // eslint-disable-next-line no-console
-      console.error('Unknown file sync request:', pathname)
-      return new Response('Not Found', {status: 404})
-    }
-  }
-}
+  return routes(request)
+})
 
 export {
   handleFileRequest,
