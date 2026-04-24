@@ -13,6 +13,7 @@ js_library(
         "//apps/desktop:errors",
         "//apps/desktop:json-response",
         "//apps/desktop:local-preferences",
+        "//apps/desktop:requests",
         "//apps/desktop/app/preferences:code-editor",
         "//reality/shared/desktop:preferences-types",
     ],
