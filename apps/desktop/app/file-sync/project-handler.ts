@@ -43,6 +43,7 @@ import {getProjectSrcPath} from '../../project-helpers'
 import {createLocalServer, LocalServer} from '../../local-server'
 import {openInCodeEditor} from '../preferences/code-editor'
 import {runBuildCommand, runInstallCommand} from './run-commands'
+import {branches, methods} from '../../requests'
 
 // eslint-disable-next-line max-len
 const RUNTIME_1_BUNDLE_URL = 'https://cdn.8thwall.com/web/offline-code-export/studio/runtime-1.1.0-standalone-mkhjh3i4.zip'
@@ -263,24 +264,6 @@ const getProjectStatus = withErrorHandlingResponse(async (req: Request) => {
   return makeJsonResponse({buildUrl, buildRemoteUrl})
 })
 
-const handleProjectInitRequest = (request: Request) => {
-  if (request.method === 'POST') {
-    return getLocalProjectLocation(request)
-  }
-
-  return new Response('Method Not Allowed', {status: 405})
-}
-
-const handleProjectWatchRequest = (request: Request) => {
-  if (request.method === 'POST') {
-    return startWatch(request)
-  } else if (request.method === 'DELETE') {
-    return stopWatch(request)
-  }
-
-  return new Response('Method Not Allowed', {status: 405})
-}
-
 const buildZip = withErrorHandlingResponse(async (req: Request) => {
   const requestUrl = new URL(req.url)
   const params = ProjectRequestParams.safeParse(getQueryParams(requestUrl))
@@ -329,21 +312,6 @@ const buildZip = withErrorHandlingResponse(async (req: Request) => {
   return response
 })
 
-const handleProjectBuildRequest = (request: Request) => {
-  if (request.method === 'POST') {
-    return buildZip(request)
-  }
-  return new Response('Method Not Allowed', {status: 405})
-}
-
-const handleProjectStatusRequest = (request: Request) => {
-  if (request.method === 'GET') {
-    return getProjectStatus(request)
-  }
-
-  return new Response('Method Not Allowed', {status: 405})
-}
-
 const isValidProject = async (location: string) => {
   try {
     const srcPath = path.join(location, 'src')
@@ -364,14 +332,6 @@ const getAllProjects = withErrorHandlingResponse(async () => {
 
   return makeJsonResponse({projectByAppKey})
 })
-
-const handleProjectListRequest = (request: Request) => {
-  if (request.method === 'GET') {
-    return getAllProjects(request)
-  }
-
-  return new Response('Method Not Allowed', {status: 405})
-}
 
 const postRevealProject = withErrorHandlingResponse(async (req: Request) => {
   const requestUrl = new URL(req.url)
@@ -409,14 +369,6 @@ const postRevealProject = withErrorHandlingResponse(async (req: Request) => {
   }
 })
 
-const handleProjectRevealRequest = (request: Request) => {
-  if (request.method === 'POST') {
-    return postRevealProject(request)
-  }
-
-  return new Response('Method Not Allowed', {status: 405})
-}
-
 const postOpenProject = withErrorHandlingResponse(async (req: Request) => {
   const requestUrl = new URL(req.url)
   const params = ProjectRequestParams.safeParse(getQueryParams(requestUrl))
@@ -451,14 +403,6 @@ const postOpenProject = withErrorHandlingResponse(async (req: Request) => {
   }
 })
 
-const handleProjectOpenRequest = (request: Request) => {
-  if (request.method === 'POST') {
-    return postOpenProject(request)
-  }
-
-  return new Response('Method Not Allowed', {status: 405})
-}
-
 const deleteLocalProject = withErrorHandlingResponse(async (req: Request) => {
   const requestUrl = new URL(req.url)
   const params = ProjectRequestParams.safeParse(getQueryParams(requestUrl))
@@ -474,14 +418,6 @@ const deleteLocalProject = withErrorHandlingResponse(async (req: Request) => {
 
   return makeJsonResponse({})
 })
-
-const handleProjectDeleteRequest = (request: Request) => {
-  if (request.method === 'DELETE') {
-    return deleteLocalProject(request)
-  }
-
-  return new Response('Method Not Allowed', {status: 405})
-}
 
 const pickNewProjectLocation = withErrorHandlingResponse(async (req: Request) => {
   const requestUrl = new URL(req.url)
@@ -519,14 +455,6 @@ const pickNewProjectLocation = withErrorHandlingResponse(async (req: Request) =>
 
   return makeJsonResponse({projectPath: newProjectLocationPath})
 })
-
-const handleProjectPickNewLocationRequest = (request: Request) => {
-  if (request.method === 'PATCH') {
-    return pickNewProjectLocation(request)
-  }
-
-  return new Response('Method Not Allowed', {status: 405})
-}
 
 const isValidNewLocation = async (newLocation: string) => {
   try {
@@ -604,21 +532,6 @@ const changeProjectLocation = withErrorHandlingResponse(async (req: Request) => 
   return makeJsonResponse({})
 })
 
-const handleProjectMoveRequest = (request: Request) => {
-  if (request.method === 'PATCH') {
-    return changeProjectLocation(request)
-  }
-
-  return new Response('Method Not Allowed', {status: 405})
-}
-
-const handleOpenDiskRequest = (request: Request) => {
-  if (request.method === 'POST') {
-    return openDiskLocation(request)
-  }
-  return new Response('Method Not Allowed', {status: 405})
-}
-
 const handleRecentProjectPost = withErrorHandlingResponse(async (req: Request) => {
   const requestUrl = new URL(req.url)
   const params = ProjectRequestParams.safeParse(getQueryParams(requestUrl))
@@ -640,15 +553,6 @@ const handleRecentProjectPost = withErrorHandlingResponse(async (req: Request) =
 
   return makeJsonResponse({})
 })
-
-const handleRecentProjectRequest = async (request: Request) => {
-  switch (request.method) {
-    case 'POST':
-      return handleRecentProjectPost(request)
-    default:
-      return new Response('Method Not Allowed', {status: 405})
-  }
-}
 
 const handleProjectMigratePost = withErrorHandlingResponse(async (req: Request) => {
   const requestUrl = new URL(req.url)
@@ -719,15 +623,6 @@ const handleProjectMigratePost = withErrorHandlingResponse(async (req: Request) 
   return makeJsonResponse({})
 })
 
-const handleProjectMigrateRequest = async (request: Request) => {
-  switch (request.method) {
-    case 'POST':
-      return handleProjectMigratePost(request)
-    default:
-      return new Response('Method Not Allowed', {status: 405})
-  }
-}
-
 const getRuntimeMetadata = withErrorHandlingResponse(async (req: Request) => {
   const requestUrl = new URL(req.url)
   const params = ProjectRequestParams.safeParse(getQueryParams(requestUrl))
@@ -765,13 +660,6 @@ const getRuntimeMetadata = withErrorHandlingResponse(async (req: Request) => {
   }
   throw makeCodedError('Runtime metadata not found', 404)
 })
-
-const handleProjectRuntimeMetadataRequest = (request: Request) => {
-  if (request.method === 'GET') {
-    return getRuntimeMetadata(request)
-  }
-  return new Response('Method Not Allowed', {status: 405})
-}
 
 const BAD_INJECT_CONFIG = `new HtmlWebpackPlugin({
       template: path.join(srcPath, 'index.html'),
@@ -891,57 +779,29 @@ const modifyProjectConfig = withErrorHandlingResponse(async (req: Request) => {
   return makeJsonResponse({})
 })
 
-const handleProjectConfigRequest = (request: Request) => {
-  if (request.method === 'GET') {
-    return getProjectConfig(request)
-  } else if (request.method === 'POST') {
-    return modifyProjectConfig(request)
-  }
-  return new Response('Method Not Allowed', {status: 405})
-}
-
-const handleProjectRequest = (request: Request) => {
-  const requestUrl = new URL(request.url)
-  const {pathname} = requestUrl
-
-  switch (pathname) {
-    case PROJECT_INIT_PATH:
-      return handleProjectInitRequest(request)
-    case PROJECT_WATCH_PATH:
-      return handleProjectWatchRequest(request)
-    case PROJECT_BUILD_PATH:
-      return handleProjectBuildRequest(request)
-    case PROJECT_STATUS_PATH:
-      return handleProjectStatusRequest(request)
-    case PROJECT_LIST_PATH:
-      return handleProjectListRequest(request)
-    case PROJECT_REVEAL_IN_FINDER_PATH:
-      return handleProjectRevealRequest(request)
-    case PROJECT_OPEN_PATH:
-      return handleProjectOpenRequest(request)
-    case PROJECT_DELETE_PATH:
-      return handleProjectDeleteRequest(request)
-    case PROJECT_PICK_NEW_LOCATION_PATH:
-      return handleProjectPickNewLocationRequest(request)
-    case PROJECT_MOVE_PATH:
-      return handleProjectMoveRequest(request)
-    case PROJECT_OPEN_DISK_PATH:
-      return handleOpenDiskRequest(request)
-    case PROJECT_RECENT_PATH:
-      return handleRecentProjectRequest(request)
-    case PROJECT_MIGRATE_PATH:
-      return handleProjectMigrateRequest(request)
-    case PROJECT_RUNTIME_METADATA_PATH:
-      return handleProjectRuntimeMetadataRequest(request)
-    case PROJECT_CONFIG_PATH:
-      return handleProjectConfigRequest(request)
-    default: {
-      // eslint-disable-next-line no-console
-      console.error('Unknown project request:', pathname)
-      return new Response('Not Found', {status: 404})
-    }
-  }
-}
+const handleProjectRequest = withErrorHandlingResponse(branches({
+  [PROJECT_INIT_PATH]: methods({POST: getLocalProjectLocation}),
+  [PROJECT_WATCH_PATH]: methods({
+    POST: startWatch,
+    DELETE: stopWatch,
+  }),
+  [PROJECT_BUILD_PATH]: methods({POST: buildZip}),
+  [PROJECT_STATUS_PATH]: methods({GET: getProjectStatus}),
+  [PROJECT_LIST_PATH]: methods({GET: getAllProjects}),
+  [PROJECT_REVEAL_IN_FINDER_PATH]: methods({POST: postRevealProject}),
+  [PROJECT_OPEN_PATH]: methods({POST: postOpenProject}),
+  [PROJECT_DELETE_PATH]: methods({DELETE: deleteLocalProject}),
+  [PROJECT_PICK_NEW_LOCATION_PATH]: methods({PATCH: pickNewProjectLocation}),
+  [PROJECT_MOVE_PATH]: methods({PATCH: changeProjectLocation}),
+  [PROJECT_OPEN_DISK_PATH]: methods({POST: openDiskLocation}),
+  [PROJECT_RECENT_PATH]: methods({POST: handleRecentProjectPost}),
+  [PROJECT_MIGRATE_PATH]: methods({POST: handleProjectMigratePost}),
+  [PROJECT_RUNTIME_METADATA_PATH]: methods({GET: getRuntimeMetadata}),
+  [PROJECT_CONFIG_PATH]: methods({
+    GET: getProjectConfig,
+    POST: modifyProjectConfig,
+  }),
+}))
 
 app.on('before-quit', async (event) => {
   if (appKeyToLocalServerManager.size > 0) {

@@ -38,6 +38,7 @@ js_library(
         "//apps/desktop:local-server",
         "//apps/desktop:project-helpers",
         "//apps/desktop:query-params",
+        "//apps/desktop:requests",
         "//apps/desktop/app/file-sync:create-project-files",
         "//apps/desktop/app/file-sync:paths",
         "//apps/desktop/app/file-sync:project-handler-types",
