@@ -18,6 +18,7 @@ import {useImageTarget} from '../hooks/use-image-target'
 import {FloatingPanelButton} from '../../ui/components/floating-panel-button'
 import {RowMultiSelect, RowTextField} from './row-fields'
 import {IMAGE_TARGET_COMPONENT} from './direct-property-components'
+import {MissingTargetRegisterWarning} from '../missing-target-register-warning'
 
 const useStyles = createUseStyles({
   container: {
@@ -128,6 +129,7 @@ const ImageTargetConfiguratorFull: React.FC<IImageTargetConfigurator> = (
         label={t('image_target_configurator.views.label')}
         formIdLabel='image-target-views'
       />
+      {targetData && <MissingTargetRegisterWarning target={targetData} />}
     </ComponentConfiguratorTray>
   )
 }

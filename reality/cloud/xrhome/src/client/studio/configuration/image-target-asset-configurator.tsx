@@ -41,6 +41,7 @@ import type {CropAreaPixels} from '../../common/image-cropper'
 import {Tooltip} from '../../ui/components/tooltip'
 import {useImageTarget} from '../hooks/use-image-target'
 import {useImageTargetActions} from '../../image-targets/use-image-targets'
+import {MissingTargetRegisterWarning} from '../missing-target-register-warning'
 
 type VisualizerFocus = 'main' | 'trackingRegion' | 'arcCurves'
 interface VisualizerState {
@@ -75,7 +76,7 @@ const useStyles = createThemedStyles(theme => ({
     display: 'flex',
     flexDirection: 'column',
     gap: '0.5em',
-    padding: '1em',
+    padding: BuildIf.MIGRATE_PADDING_20250610 ? '1em 0' : '1em',
     flexGrow: 1,
     overflowY: 'scroll',
   },
@@ -525,6 +526,7 @@ const LoadedImageTargetAssetConfigurator: React.FC<ILoadedImageTargetAssetConfig
               )}
             </>
           )}
+          <MissingTargetRegisterWarning target={imageTarget} />
         </div>
       }
       {section === 'test' && <ImageTargetTestSection imageTarget={imageTarget} />}
