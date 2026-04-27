@@ -27,6 +27,10 @@ if [ "$RELEASE" == "true" ] && [ "$PLATFORM" == "mac" ]; then
   ARCH="--x64 --arm64"
 fi
 
+if [ "$PLATFORM" == "mac" ]; then
+  ARCH="--x64 --arm64"
+fi
+
 # build electron app
 ./app-build.sh
 
