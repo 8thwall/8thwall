@@ -25,7 +25,7 @@ import {
 import {makeCodedError, withErrorHandlingResponse} from '../../errors'
 import {
   PROJECT_INIT_PATH, PROJECT_LIST_PATH, PROJECT_DELETE_PATH, PROJECT_REVEAL_IN_FINDER_PATH,
-  PROJECT_STATUS_PATH, PROJECT_WATCH_PATH,
+  PROJECT_STATUS_PATH, PROJECT_WATCH_PATH, PROJECT_INSTALL_PATH,
   PROJECT_PICK_NEW_LOCATION_PATH,
   PROJECT_MOVE_PATH,
   PROJECT_OPEN_PATH,
@@ -43,7 +43,7 @@ import {getProjectSrcPath} from '../../project-helpers'
 import {createLocalServer, LocalServer} from '../../local-server'
 import {openInCodeEditor} from '../preferences/code-editor'
 import {runBuildCommand, runInstallCommand} from './run-commands'
-import {branches, methods} from '../../requests'
+import {branches, methods, RequestHandler} from '../../requests'
 
 // eslint-disable-next-line max-len
 const RUNTIME_1_BUNDLE_URL = 'https://cdn.8thwall.com/web/offline-code-export/studio/runtime-1.1.0-standalone-mkhjh3i4.zip'
@@ -779,6 +779,28 @@ const modifyProjectConfig = withErrorHandlingResponse(async (req: Request) => {
   return makeJsonResponse({})
 })
 
+const installPackage: RequestHandler = async (req) => {
+  const requestUrl = new URL(req.url)
+  const params = ProjectRequestParams.safeParse(getQueryParams(requestUrl))
+  if (!params.success) {
+    throw makeCodedError('Invalid query params', 400)
+  }
+  if (!params.data.appKey) {
+    throw makeCodedError('Missing appKey', 400)
+  }
+  const project = getLocalProject(params.data.appKey)
+  if (!project) {
+    throw makeCodedError('Project for appKey not found', 404)
+  }
+
+  // TODO(validate version)
+  const body: any = await req.json()
+  await stopWatch(req)
+  await runInstallCommand(project.location, [`@8thwall/ecs@${body.version}`])
+  await startWatch(req)
+  return makeJsonResponse({})
+}
+
 const handleProjectRequest = withErrorHandlingResponse(branches({
   [PROJECT_INIT_PATH]: methods({POST: getLocalProjectLocation}),
   [PROJECT_WATCH_PATH]: methods({
@@ -801,6 +823,7 @@ const handleProjectRequest = withErrorHandlingResponse(branches({
     GET: getProjectConfig,
     POST: modifyProjectConfig,
   }),
+  [PROJECT_INSTALL_PATH]: methods({POST: installPackage}),
 }))
 
 app.on('before-quit', async (event) => {
