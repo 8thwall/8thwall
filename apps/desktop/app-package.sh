@@ -24,7 +24,11 @@ fi
 # latest-mac.yml can be used for both architectures. For non-release builds, we just build for
 # the default.
 if [ "$RELEASE" == "true" ] && [ "$PLATFORM" == "mac" ]; then
-  ARCH="--x64 --arm64"
+  ARCH="--arm64 --x64"
+fi
+
+if [ "$PLATFORM" == "mac" ]; then
+  ARCH="--arm64 --x64"
 fi
 
 # build electron app

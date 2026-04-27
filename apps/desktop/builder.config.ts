@@ -6,6 +6,10 @@
 // @attr(esnext = 1)
 // @attr(commonjs = 1)
 
+import {promisify} from 'util'
+import child_process from 'child_process'
+import {promises as fs} from 'fs'
+
 import {STUDIO_HUB_PROTOCOL} from './app/desktop-protocol'
 
 const {RELEASE} = process.env
@@ -24,6 +28,18 @@ export default {
   },
   directories: {
     output: 'out',
+  },
+  beforeBuild: async (context: {arch: string, platform: {nodeName: string}}) => {
+    const execFileAsync = promisify(child_process.execFile)
+    console.log('installing with', context.platform.nodeName, context.arch)
+    console.log(process.cwd())
+    await execFileAsync('npm', [
+      'install',
+      'sharp',
+      '--os', context.platform.nodeName,
+      '--cpu', context.arch])
+    console.log(await fs.readdir('node_modules/@img'))
+    console.log(await fs.readdir('node_modules/sharp'))
   },
   electronFuses: {
     runAsNode: true,
@@ -79,6 +95,7 @@ export default {
   ],
   generateUpdatesFilesForAllChannels: true,
   mac: {
+    // identity: null,
     category: 'public.app-category.developer-tools',
     target: ['dmg', 'zip'],
     icon: 'assets/icon.icns',
