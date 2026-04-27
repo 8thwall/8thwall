@@ -5,6 +5,7 @@ import type {
   ListProjectsResponse,
   NewProjectLocationResponse,
   CanceledInitializeResponse,
+  InstallRequest,
 } from '../../shared/desktop/local-sync-types'
 import type {RequestInit} from '../common/public-api-fetch'
 import {isAssetPath} from '../common/editor-files'
@@ -137,6 +138,19 @@ const getFileStateSnapshot = (appKey: string) => {
 
   })
   return fetchJson<FileSnapshotResponse>(`${API}/file/snapshot?${params}`)
+}
+
+const installPackages = (appKey: string, packages: InstallRequest['packages']) => {
+  const params = new URLSearchParams({
+    appKey,
+  })
+  const body: InstallRequest = {
+    packages,
+  }
+  return fetchJson<{}>(`${API}/project/install?${params}`, {
+    method: 'POST',
+    body: JSON.stringify(body),
+  })
 }
 
 const getFileMetadata = () => {
@@ -365,6 +379,7 @@ export {
   renameFile,
   checkConfigStatus,
   applyProjectConfigFix,
+  installPackages,
 }
 
 export type {

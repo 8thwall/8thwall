@@ -27,11 +27,16 @@ const FixConfigParams = z.object({
 
 type IFixConfigParams = z.infer<typeof FixConfigParams>
 
+const InstallRequest = z.object({
+  packages: z.array(z.object({name: z.enum(['@8thwall/ecs']), version: z.string()})),
+})
+
 export {
   ProjectRequestParams,
   InitializeProjectParams,
   MoveProjectParams,
   FixConfigParams,
+  InstallRequest,
 }
 
 export type {

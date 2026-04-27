@@ -1,26 +1,39 @@
 import {useSuspenseQuery} from '@tanstack/react-query'
+import * as Semver from 'semver'
 
-import type {RuntimeVersionList} from '@ecs/shared/runtime-version'
+import {MILLISECONDS_PER_HOUR, MILLISECONDS_PER_MINUTE} from '../../../shared/time-utils'
 
-import {
-  CDN_BASE_URL, S3_VERSION_HISTORY_KEY,
-} from '@repo/reality/shared/studio/runtime-version-constants'
+type NpmPackageInfo = {
+  versions: Record<string, unknown>
+  time: Record<string, string>
+}
 
-import {compareVersionInfo} from './compare-runtime-target'
+const HIDDEN_VERSIONS = new Set([
+  // NOTE(christoph): This version did not include the metadata.json file which is required
+  '3.0.0',
+])
 
 const useRuntimeVersions = () => useSuspenseQuery({
   queryKey: ['runtimeVersions'],
-  queryFn: async (): Promise<RuntimeVersionList> => {
-    const url = `${CDN_BASE_URL}/${S3_VERSION_HISTORY_KEY}`
-    const response = await fetch(url)
+  queryFn: async () => {
+    const response = await fetch('https://registry.npmjs.org/@8thwall/ecs', {mode: 'cors'})
 
     if (!response.ok) {
       throw new Error(`Failed to fetch runtime versions: ${response.status} ${response.statusText}`)
     }
 
-    const versions = (await response.json()).versions as RuntimeVersionList ?? []
-    return versions.sort(compareVersionInfo)
+    const body: NpmPackageInfo = await response.json()
+
+    return Object.keys(body.versions)
+      .filter(e => !HIDDEN_VERSIONS.has(e))
+      .sort(Semver.rcompare)
+      .map(e => ({
+        publishTime: new Date(body.time[e]).valueOf(),
+        version: e,
+      }))
   },
+  staleTime: 15 * MILLISECONDS_PER_MINUTE,
+  refetchInterval: MILLISECONDS_PER_HOUR,
 }).data
 
 const useLatestRuntimeVersion = () => (
