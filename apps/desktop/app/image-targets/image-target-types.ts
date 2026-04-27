@@ -72,10 +72,7 @@ const UpdateTargetRequest = z.object({
   name: z.string().nonempty(),
   metadata: z.unknown(),
 }).partial()
-  .and(CropResult.or(z.object({
-    type: z.never(),
-    properties: z.never(),
-  })))
+  .and(CropResult.or(z.object({})))
 
 export {
   ListTargetsParams,
