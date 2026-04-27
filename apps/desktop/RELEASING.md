@@ -15,8 +15,18 @@ We use an Apple Developer account to notarize apps for Mac and a Digicert certif
 
 ### Windows
 
-1. Download SMCTL from https://docs.digicert.com/es/software-trust-manager/client-tools/command-line-interface/smctl.html and follow the setup steps
+https://www.electron.build/tutorials/code-signing-windows-apps-on-unix#signing-windows-app-on-maclinux-using-jsign
+
+1. Set up tools
+   1. `java --version`, otherwise `brew install openjdk` and add the PATH to your env
+   2. `smctl --version`, otherwise download and set up [SMCTL](https://docs.digicert.com/en/software-trust-manager/client-tools/command-line-interface/smctl.html#download-smctl-487706)
+   3. `jsign --version`, otherwise `brew install jsign`
 2. Create or obtain an EV Signing Certificate
+   - Instructions for managing the Signer can be found [here](https://docs.digicert.com/en/digicert-keylocker/certificates/update-signer.html) in case you are not currently the registered signer.
+3. Set up `~/digicert` folder with the following contents:
+   - `cert_xxx.pem` (matching the keypair alias)
+   - `Certificate_pkcs12.p12`
+   - `pkcs11properties.cfg` (set up according to [this guide](https://docs.digicert.com/en/digicert-keylocker/ci-cd-integrations-and-deployment-pipelines/scripts/gradle/scripts-for-signing-using-pkcs11-library-on-gradle.html))
 3. Set the following variables:
 ```
 DIGICERT_CERTIFICATE_PATH: /path/to/digicert/cert_xxx.pem
@@ -40,6 +50,10 @@ SM_HOST: https://clientauth.one.digicert.com
 ./tools/publish-release.sh
 ```
 
+### Troubleshooting
+
+- If there is a "bad CPU" error, install Rosetta with `softwareupdate --install-rosetta`
+
 ### 3. Finalize the release
 
 1. Go to https://github.com/8thwall/desktop/releases
@@ -58,4 +72,6 @@ https://8th.io/mac-arm64-latest
 https://8th.io/mac-intel-latest
 https://8th.io/win-x64-latest
  
-Update these shortlinks to point to the latest release URLs: the .dmg files for each Mac link, and .exe for windows.
+Update these shortlinks to point to the latest release URLs, which is managed at https://github.com/8thwall/go-links/blob/main/public/_redirects
+
+Merge to `main` and the links will update within 5 minutes.
