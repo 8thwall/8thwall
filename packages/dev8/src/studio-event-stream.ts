@@ -83,14 +83,9 @@ const createStudioEventStreamManager = (
   /**
    * Abstracts the transport for sending data to XRHome.
    */
-  const send = (
-    payload: DebugMessage,
-    attemptPostMessage = true
-  ) => {
+  const send = (payload: DebugMessage) => {
     const postMessageTarget = getPostMessageTarget()
-    const canPostMessage = Boolean(postMessageTarget)
-
-    if (attemptPostMessage && canPostMessage) {
+    if (postMessageTarget) {
       sendViaPostMessage(payload)
     } else {
       sendViaSockets(payload)
