@@ -3,30 +3,6 @@ import type {DeepReadonly} from 'ts-essentials'
 import type {GraphObject} from './scene-graph'
 import type {TransformMap} from './transform-map'
 
-// Taken from studio-event-stream.ts
-type CallbackConfig = {
-  callback: (msg: any) => void
-  postMessage: boolean
-  webrtc: boolean
-  sockets: boolean
-}
-
-// Taken from studio-event-stream.ts
-type EventStreamManager = {
-  handleSocketMessage: (msg: DebugMessage) => void
-  send: (message: DebugMessage, attemptPostMessage?: boolean, attemptWebrtc?: boolean) => void
-  sendViaSockets: (message: DebugMessage) => void
-  sendViaPostMessage: (message: DebugMessage) => void
-  sendViaWebrtc: (message: DebugMessage) => void
-  // Listen to an event message via some transport as desired
-  // By default, callbacks will be registered to fire on postMessage and socket events
-  listen: (
-    callback: (message: DebugMessage) => void,
-    config?: Partial<Pick<CallbackConfig, 'webrtc' | 'sockets' | 'postMessage'>>,
-  ) => void
-  cancelListen: (callback: (message: DebugMessage) => void) => void
-}
-
 type ConnectionStatus = 'connected' | 'disconnected' | 'unknown'
 
 type ResetLevel = 'none' | 'hard'
@@ -126,7 +102,13 @@ type DebugMessage = AttachMessage | DetachMessage | DebugEditMessage | ReadyMess
   CloseMessage | WorldUpdateMessage | StateUpdateMessage | RollcallMessage | DocRefreshMessage |
   TransformUpdateMessage | BaseEditMessage | ResetSceneMessage | AttachConfirmMessage
 
-type DebugStream = EventStreamManager
+type DebugCallback = (message: DebugMessage) => void
+
+type DebugStream = {
+  send: (message: DebugMessage) => void
+  listen: (callback: DebugCallback) => void
+  cancelListen: (callback: DebugCallback) => void
+}
 
 export type {
   DebugMessage,
@@ -144,4 +126,5 @@ export type {
   ConnectionStatus,
   ResetLevel,
   AttachConfirmMessage,
+  DebugCallback,
 }
