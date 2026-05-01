@@ -3,16 +3,16 @@
 let isDispatching = false
 
 type Pointer = {
-  identifier: number,
-  target: Element,
-  clientX: number,
-  clientY: number,
-  didMove: boolean,
-  isMultiTouch: boolean,
+  identifier: number
+  target: Element
+  clientX: number
+  clientY: number
+  didMove: boolean
+  isMultiTouch: boolean
 }
 
 type EndPointerOptions = {
-  preventClick?: boolean,
+  preventClick?: boolean
 }
 
 const dispatch = (el: Element, event: Event) => {
