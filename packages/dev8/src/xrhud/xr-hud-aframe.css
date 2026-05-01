@@ -1,0 +1,97 @@
+/* A-Frame Inspector */
+
+#aframeInspector {
+  font-family: 'Source Code Pro';
+}
+
+#aframeInspector .propertyRow .text {
+  width: unset !important;
+}
+
+#aframeInspector #addComponentContainer {
+  align-items: start !important;
+}
+
+#aframeInspector .select__dropdown-indicator {
+    padding-left: 40px !important;
+    padding-top: 3px !important;
+}
+
+#aframeInspector .select-widget {
+    display: inline-block;
+    width: unset !important;
+}
+
+#aframeInspector .scenegraph-toolbar {
+    padding-top: 10px !important;
+}
+
+#aframeInspector #scenegraph .search input {
+  width: 100% !important;
+}
+
+.a-inspector-loader {
+  font-family: "Source Code Pro", monospace !important;
+  font-size: 10px !important;
+  top: unset !important;
+  left: 10px !important;
+  bottom: 65px !important;
+  padding: 5px !important;
+  border: 1px solid #464766 !important;
+  background-color: rgba(28, 29, 42, 0.8) !important;
+  border-radius: 5px !important;
+  width: unset !important;
+}
+
+#aframeInspector .toggle-edit {
+  font-family: "Source Code Pro", monospace !important;
+  font-size: 10px !important;
+  width: 90px !important;
+  left: 50px !important;
+  top: 6px !important;
+  padding: 5px 3px !important;
+  border: 1px solid #464766 !important;
+  background-color: rgba(28, 29, 42, 0.8) !important;
+  border-radius: 5px !important;
+}
+
+#aframeInspector .components {
+  border-left: 2px solid #AD50FF !important;
+  width: 100% !important;
+}
+
+#aframeInspector #scenegraph .entity {
+  justify-content: flex-start !important;
+}
+
+#aframeInspector #scenegraph .entityActions {
+  margin: 0px !important;
+}
+
+#aframeInspector #scenegraph .outliner {
+  width: 100% !important;
+}
+
+#scenegraph {
+  position: absolute !important;
+  left: 0px !important;
+  height: 100% !important;
+  overflow: scroll !important;
+  padding-top: 0px !important;
+}
+
+#aframeInspector .entityChildPadding {
+  display: none !important;
+}
+
+#aframeInspector label {
+  width: auto !important;
+}
+
+.gltfIcon {
+  display: none !important;
+}
+
+#toolbar > div > a.button.fa.fa-save {
+  display: none !important;
+}

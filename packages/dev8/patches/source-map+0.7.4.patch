@@ -1,0 +1,26 @@
+diff --git a/node_modules/source-map/source-map.d.ts b/node_modules/source-map/source-map.d.ts
+index 2459391..6596485 100644
+--- a/node_modules/source-map/source-map.d.ts
++++ b/node_modules/source-map/source-map.d.ts
+@@ -78,7 +78,12 @@ export interface CodeWithSourceMap {
+     map: SourceMapGenerator;
+ }
+ 
++export interface SourceMappings {
++    'lib/mappings.wasm': SourceMapUrl | ArrayBuffer;
++}
++
+ export interface SourceMapConsumer {
++
+     /**
+      * Compute the last column for each generated mapping. The last column is
+      * inclusive.
+@@ -198,6 +203,8 @@ export interface SourceMapConsumerConstructor {
+     new (rawSourceMap: RawIndexMap, sourceMapUrl?: SourceMapUrl): Promise<IndexedSourceMapConsumer>;
+     new (rawSourceMap: RawSourceMap | RawIndexMap | string, sourceMapUrl?: SourceMapUrl): Promise<BasicSourceMapConsumer | IndexedSourceMapConsumer>;
+ 
++    initialize(mappings: SourceMappings): void;
++
+     /**
+      * Create a BasicSourceMapConsumer from a SourceMapGenerator.
+      *

@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "noImplicitAny": true,
+    "target": "es6",
+    "lib": ["es2019", "dom"],
+    "moduleResolution": "node",
+    "isolatedModules": false,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "noImplicitUseStrict": false,
+    "removeComments": true,
+    "noLib": false,
+    "sourceMap": false,
+    "noEmitHelpers": true,
+    "importHelpers": true,
+    "preserveConstEnums": true,
+    "preserveSymlinks": true,
+    "baseUrl": "."
+  },
+  "paths": {
+    "@repo/reality/app/xr/js/src/*": ["./src/shared/xr/*"],
+    "@repo/c8/ecs/src/*": ["./src/shared/ecs/*"]
+  },
+}

@@ -1,0 +1,213 @@
+.hidden {
+  display: none !important;
+}
+
+/* Hide the Aframe inspector loading indicator */
+.a-inspector-loader {
+  bottom: 97px !important;
+  left: 5px !important;
+}
+/* Stats Container */
+
+.stats-container {
+  font: 10px "Source Code Pro", monospace;
+  line-height: 1;
+  color: rgb(27,246,246);
+  opacity: unset;
+  background-color: rgba(28, 29, 42, 0.8);
+  border-radius: 0px 0px 10px 0px;
+  padding: 2px 5px 5px 5px;
+  font-weight: bold;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
+.stats-counter:first-child:nth-last-child(1) {
+  font: 12px "Source Code Pro", monospace;
+  padding: 4px 5px 8px 5px;
+}
+
+.stats-base {
+  left: 0px;
+  top: 0px;
+  overflow: hidden;
+  position: fixed;
+  z-index: 10000;
+}
+
+.stats-counter {
+  display: grid;
+  grid-template-columns: max-content auto;
+  height: 10px;
+  justify-content: space-between;
+  margin-top: 2px;
+  column-gap: 10px;
+}
+
+.stats-counter-id {
+  order: 0;
+  font-weight: unset;
+}
+
+.stats-counter-value {
+  -moz-box-ordinal-group: 1;
+  -ms-box-ordinal-group: 1;
+  -webkit-box-ordinal-group: 1;
+  order: 1;
+  text-align: right;
+  font-weight: unset;
+}
+
+/*.rs-base {*/
+/*  visibility: hidden;*/
+/*}*/
+
+.alarm {
+  color: #FF3B30 !important;
+  text-shadow: none !important;
+}
+
+/* Console Section */
+.tab-button-container {
+  display: flex;
+  flex-direction: row;
+  position: fixed;
+  height: 33px;
+  width: 100%;
+  left: 0;
+  z-index: 999;
+  bottom: 60px;
+}
+
+.min-button {
+  margin-left: auto;
+  margin-bottom: 2px;
+  margin-right: 2px;
+  align-self: flex-end;
+  flex: 0 0 20px;
+}
+
+.tab-button {
+  font-family: "Source Code Pro", monospace;
+  font-size: 10px;
+  padding: 1px 10px;
+  -webkit-tap-highlight-color: rgba(0,0,0,0) !important;
+  border: none;
+  font-weight: bold !important;
+  z-index: 999;
+  border-radius: 10px 10px 0px 0px
+}
+
+.selected-tab-button {
+  color: #FFF;
+  background-color: rgba(28, 29, 42, 0.8);
+}
+
+.unselected-tab-button {
+  color: #9D9D9D;
+  background-color: rgba(45, 46, 67, 0.8);
+}
+
+.console-dup {
+  padding: 0px 4px;
+  border-radius: 6px;
+  color: #FFF;
+  background-color: rgb(119, 120, 139, 0.65);
+}
+
+.console-warn {
+ color: #FFC828;
+}
+
+.console-error {
+ color: #FF3B30;
+}
+
+.log-div {
+  font-family: "Source Code Pro", monospace;
+  font-size: 10px;
+  font-weight: bold;
+  z-index: 999;
+  position: fixed;
+  bottom: 0px;
+  left: 0px;
+  width: 100%;
+  height: 60px;
+  overflow-y: scroll;
+  overflow-wrap: break-word;
+  color: rgb(27, 246, 246);
+  background-color: rgba(28, 29, 42, 0.8);
+}
+
+.log-tab {
+  display: flex;
+  flex-direction: column;
+  padding-top: 5px;
+  padding-left: 5px;
+}
+
+.size-toggle-button {
+  font: 12px "Source Code Pro", monospace !important;
+  font-weight: bold;
+  padding: 0;
+  text-align: center;
+  width: 20px;
+}
+
+.camera-tab {
+  display: flex;
+  height: 100%;
+  align-items: center;
+}
+
+.actions-tab {
+  padding-left: 5px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  height: 100%;
+  gap: 10px;
+}
+
+.actions-button {
+  font-size: 10px;
+  text-decoration: none;
+  border: 1px solid rgb(27, 246, 246);
+  background: none;
+  color: rgb(27, 246, 246);
+  height: 20px;
+}
+
+.camera-stats {
+  flex: auto;
+  text-align: center;
+  font-size: 12px;
+}
+
+#cameradiv {
+  margin: 0px !important;
+  padding: 0px !important;
+}
+
+/* Version Section */
+
+.version-display-text {
+  font-family: "Source Code Pro", monospace;
+  font-size: 12px;
+  color: rgb(27, 246, 246);
+  margin: 0 auto;
+  text-align: right;
+}
+
+.version-display {
+  font-family: "Source Code Pro", monospace;
+  font-size: 12px;
+  color: rgb(27, 246, 246);
+  position: fixed;
+  top: 0px;
+  right: 0px;
+  background-color: rgba(28, 29, 42, 0.8);
+  border-bottom-left-radius: 10px;
+  padding: 2px 5px 5px 5px;
+  z-index: 999;
+  font-size: 12px;
+}
