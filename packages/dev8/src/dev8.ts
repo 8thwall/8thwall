@@ -8,7 +8,6 @@ import {
 import {maybeWarnCrossOriginError} from './cross-origin'
 import {XrHudManager} from './xrhud/xr-hud-manager'
 import {XrSimulatorManager} from './xrsimulator/xr-simulator'
-import {XrRemoteManager} from './xrremote/xr-remote-manager'
 import {
   broadcastSequenceProgress, broadcastReloadConfirmation,
 } from './xrsimulator/broadcast-messages'
@@ -23,7 +22,6 @@ declare global {
     Modules8: any
     XR8: any
     THREE: any
-    XrRemote8: any
     AFRAME: any
     DEV_8W_NO_BUILD_RELOAD: boolean
   }
@@ -125,7 +123,6 @@ if (!window.DEV_8W_DISABLE) {
 
   let xrHud: ReturnType<typeof XrHudManager>
   let xrSimulator: ReturnType<typeof XrSimulatorManager>
-  let xrRemote: ReturnType<typeof XrRemoteManager>
   let ws: WebSocket | null = null
   let logClearingTimer: ReturnType<typeof setTimeout> | null = null
   let sentStartEvent = false
@@ -478,7 +475,6 @@ if (!window.DEV_8W_DISABLE) {
   const initialSetup = () => {
     xrHud = XrHudManager()
     xrSimulator = XrSimulatorManager()
-    xrRemote = XrRemoteManager()
     if (ws) {
       broadcastInitialDebugStatus()
     }
@@ -490,7 +486,6 @@ if (!window.DEV_8W_DISABLE) {
     }
     xrHud.onDisable(() => broadcastSetDebugStatus(false))
     xrHud.onEnable(() => broadcastSetDebugStatus(true))
-    xrRemote.enable()
   }
   const state = document.readyState
   if (state === 'interactive' || state === 'complete') {
