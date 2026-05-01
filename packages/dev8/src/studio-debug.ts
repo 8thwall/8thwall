@@ -1,6 +1,4 @@
-import {
-  createWorldDebugger, WorldDebugger, DEBUG_ACTOR_ID,
-} from './shared/ecs/shared/sync-session'
+import {DEBUG_ACTOR_ID} from './shared/ecs/shared/sync-session'
 import type {
   AttachMessage, DebugMessage, DebugStream, DetachMessage, ConnectionStatus,
 } from './shared/ecs/shared/debug-messaging'
@@ -39,7 +37,7 @@ const createStudioDebugManager = (
   const screenHeight = window.screen.height * window.devicePixelRatio
   const screenWidth = window.screen.width * window.devicePixelRatio
 
-  let session: WorldDebugger | undefined
+  let session: ReturnType<typeof createBaseSyncSession> | undefined
 
   let started = false
 
@@ -63,17 +61,7 @@ const createStudioDebugManager = (
         doc
       )
     } else {
-      session = createWorldDebugger(
-        msg.debugId,
-        (window as any).ecs,
-        application,
-        eventStream,
-        msg.state,
-        doc,
-        crdtModule.loadSceneDoc,
-        msg.version === TRANSFORM_MAP_VERSION,
-        msg.resetLevel ?? 'hard'
-      )
+      throw new Error('Unexpected mode in attach')
     }
 
     session.attach()

@@ -43,7 +43,7 @@ type AttachMessage = {
   state: DebugState
   doc: string
   version?: number
-  mode?: 'base'
+  mode: 'base'
   resetLevel?: ResetLevel
 }
 
