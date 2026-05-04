@@ -6,7 +6,6 @@ import {SpaceConfigurator} from './space-configurator'
 import {SubMenuHeading} from '../ui/submenu-heading'
 import {ProjectSettingsConfigurator} from './project-settings-configurator'
 import {RuntimeVersionConfigurator} from './runtime-version-configurator'
-import {ProjectManifestConfigurator} from './project-manifest-configurator'
 import {useCurrentRepoId} from '../../git/repo-id-context'
 import {FloatingPanelButton} from '../../ui/components/floating-panel-button'
 import {StudioHotkeysModal} from '../ui/studio-hotkeys-modal'
@@ -34,7 +33,6 @@ const DefaultConfigurator: React.FC<IDefaultConfigurator> = (
           {BuildIf.STUDIO_RUNTIME_CONFIG_20260209 && hasRepo &&
             <RuntimeVersionConfigurator />
           }
-          {hasRepo && BuildIf.MANIFEST_EDIT_20250618 && <ProjectManifestConfigurator />}
           <br />
           <SpaceBetween justifyCenter>
             <StudioHotkeysModal
