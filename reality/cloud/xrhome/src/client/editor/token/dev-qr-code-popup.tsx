@@ -21,7 +21,6 @@ import {BasicQrCode} from '../../widgets/basic-qr-code'
 import {useSelector} from '../../hooks'
 import {UiThemeProvider} from '../../ui/theme'
 import {hexColorWithAlpha} from '../../../shared/colors'
-import {useAppPreviewWindow} from '../../common/app-preview-window-context'
 import {combine} from '../../common/styles'
 import {useProjectPreviewUrl} from '../app-preview/use-project-preview-url'
 import {Loader} from '../../ui/components/loader'
@@ -206,8 +205,6 @@ const DevQRCodePopup: React.FunctionComponent<IProps> = React.memo(({
   const remoteDeviceUrl = useProjectPreviewUrl(app, 'remote-device')
   const sameDeviceUrl = useProjectPreviewUrl(app, 'same-device')
 
-  const {setPreviewWindow} = useAppPreviewWindow()
-
   useEffect(() => {
     loadPreviewLinkDebugModeSelected()
     ensureSimulatorStateReady(app.appKey)
@@ -240,8 +237,7 @@ const DevQRCodePopup: React.FunctionComponent<IProps> = React.memo(({
         // @ts-ignore
       a8='click;cloud-editor;preview-link'
       onClick={() => {
-        const newTab = window.open(sameDeviceUrl)
-        setPreviewWindow(newTab)
+        window.open(sameDeviceUrl)
       }}
     >
       <span>

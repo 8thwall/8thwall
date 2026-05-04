@@ -545,7 +545,7 @@ const InlineAppPreviewPane: React.FC<IInlineAppPreviewPane> = ({
               </div>
             )}
           </Measure>
-          {(!collapsed && !hidePreviewBottom && BuildIf.STUDIO_DEV8_INTEGRATION_20260205) && (
+          {(!collapsed && !hidePreviewBottom) && (
             renderPreviewBottom(previewPaneMeasure.contentRect.bounds)
           )}
         </div>

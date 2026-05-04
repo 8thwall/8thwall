@@ -9,7 +9,6 @@ import {useAppPreviewStyles} from '../editor/app-preview/app-preview-utils'
 import {createThemedStyles} from '../ui/theme'
 import {useProjectPreviewUrl} from '../editor/app-preview/use-project-preview-url'
 import useCurrentApp from '../common/use-current-app'
-import {useAppPreviewWindow} from '../common/app-preview-window-context'
 import {useStudioDebug} from '../editor/app-preview/use-studio-debug-state'
 import {useSimulator} from '../editor/app-preview/use-simulator-state'
 
@@ -44,13 +43,11 @@ const SimulatorViewActions: React.FC<ISimulatorView> = ({simulatorId}) => {
   const {t} = useTranslation('cloud-studio-pages')
   const appPreviewStyles = useAppPreviewStyles()
   const sameDeviceUrl = useProjectPreviewUrl(app, 'same-device')
-  const {setPreviewWindow} = useAppPreviewWindow()
   const {closeDebugSimulatorSession} = useStudioDebug()
   const {updateSimulatorState} = useSimulator()
 
   const handleOpenInBrowser = () => {
-    const newTab = window.open(sameDeviceUrl)
-    setPreviewWindow(newTab)
+    window.open(sameDeviceUrl)
     updateSimulatorState({inlinePreviewVisible: false})
     closeDebugSimulatorSession(simulatorId)
   }
