@@ -11,7 +11,6 @@ import editorActions from '../../editor/editor-actions'
 import {useStudioDebug} from '../../editor/app-preview/use-studio-debug-state'
 import type {StudioDebugSession} from '../../editor/editor-reducer'
 import {useChangeEffect} from '../../hooks/use-change-effect'
-import {useSimulator} from '../../editor/app-preview/use-simulator-state'
 import {useStudioStateContext} from '../studio-state-context'
 import {deriveActiveSpace} from './active-space'
 import {useAppPreviewWindow} from '../../common/app-preview-window-context'
@@ -36,7 +35,6 @@ type RemoteDebugStatus = 'waiting' | 'attach-sent' | 'attach-confirmed'
 
 const useRemoteScene = ({inlineSimulatorId, baseScene}: DebugSceneOptions) => {
   const debugSessionRef = React.useRef<DebugSession | null>(null)
-  const inlineSessionActiveRef = React.useRef<boolean>()
 
   const [status, setStatus] = React.useState<RemoteDebugStatus>('waiting')
 
@@ -54,15 +52,9 @@ const useRemoteScene = ({inlineSimulatorId, baseScene}: DebugSceneOptions) => {
     ensureSimulatorStateReady,
   } = useActions(editorActions)
 
-  const {simulatorState} = useSimulator()
-
   React.useEffect(() => {
     ensureSimulatorStateReady(app.appKey)
   }, [app.appKey])
-
-  React.useEffect(() => {
-    inlineSessionActiveRef.current = simulatorState.inlinePreviewDebugActive
-  }, [simulatorState.inlinePreviewDebugActive])
 
   const {getInlinePreviewWindow} = useAppPreviewWindow()
 
@@ -86,7 +78,6 @@ const useRemoteScene = ({inlineSimulatorId, baseScene}: DebugSceneOptions) => {
     debugSessionRef.current = {
       debugId,
       pageId,
-      // url: specifier,
       baseDoc: doc,
       simulatorId,
       activeSpaceId,
@@ -127,7 +118,7 @@ const useRemoteScene = ({inlineSimulatorId, baseScene}: DebugSceneOptions) => {
     switch (msg.action) {
       case 'ECS_READY': {
         const {pageId, simulatorId} = msg
-        const connectSimulator = inlineSessionActiveRef.current && simulatorId === inlineSimulatorId
+        const connectSimulator = simulatorId === inlineSimulatorId
         if (connectSimulator) {
           sendAttach({
             pageId,
