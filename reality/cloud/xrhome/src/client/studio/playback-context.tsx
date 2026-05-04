@@ -1,21 +1,14 @@
 import React from 'react'
 
 type PlaybackContext = {
-  supportsSequences: boolean
-  supportsStudioSync: boolean
+  simulatorEnabled: boolean
 }
 
 const playbackContext = React.createContext<PlaybackContext | null>(null)
 
-const CURRENT_VALUE: PlaybackContext = BuildIf.STUDIO_DEV8_INTEGRATION_20260205
-  ? {
-    supportsSequences: true,
-    supportsStudioSync: true,
-  }
-  : {
-    supportsSequences: false,
-    supportsStudioSync: false,
-  }
+const CURRENT_VALUE: PlaybackContext = {
+  simulatorEnabled: BuildIf.STUDIO_DEV8_INTEGRATION_20260205,
+}
 
 const usePlaybackContext = (): PlaybackContext | null => {
   const ctx = React.useContext(playbackContext)

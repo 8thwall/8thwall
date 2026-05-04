@@ -41,7 +41,7 @@ const StudioDebugControlsTray: React.FC<IDebugControlsTray> = ({onPlay, simulato
 
   return (
     <FloatingTray shrink nonInteractive={ctx.isDraggingGizmo}>
-      {playbackContext.supportsStudioSync && (
+      {playbackContext.simulatorEnabled && (
         <>
           <FloatingIconButton
             text={t('studio_play_button_tray.button.restart')}

@@ -289,7 +289,7 @@ const simulatorIdMatches = simulatorId => (
   simulatorId && simulatorId === simulatorConfig?.simulatorId
 )
 
-const studioEventStream = createStudioEventStreamManager(simulatorConfig?.simulatorId, () => ws)
+const studioEventStream = createStudioEventStreamManager(() => ws)
 const studioDebug = createStudioDebugManager(
   sessionId, ua, simulatorConfig?.simulatorId, studioEventStream
 )
@@ -326,7 +326,6 @@ const startWebSocket = () => {
     if (xrHud) {
       broadcastInitialDebugStatus()
     }
-    studioDebug.ready()
     if (!sentStartEvent) {
       sentStartEvent = true
       ws.send(JSON.stringify({
@@ -469,6 +468,7 @@ const initialSetup = () => {
   }
   xrHud.onDisable(() => broadcastSetDebugStatus(false))
   xrHud.onEnable(() => broadcastSetDebugStatus(true))
+  studioDebug.ready()
 }
 const state = document.readyState
 if (state === 'interactive' || state === 'complete') {

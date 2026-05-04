@@ -15,7 +15,6 @@ const DEFAULT_SCENE_CTX: SceneContext = {
   undo: () => {},
   canRedo: false,
   redo: () => {},
-  playsUsingRuntime: false,
   scene: {objects: {}},
 }
 
