@@ -26,8 +26,8 @@ import {useDebounced} from './use-debounced'
 import {useActiveSpace} from './hooks/active-space'
 import {useProjectPreviewUrl} from '../editor/app-preview/use-project-preview-url'
 import {StandardLink} from '../ui/components/standard-link'
-import {useRemoteScene} from './hooks/remote-scene'
 import {usePlaybackContext} from './playback-context'
+import {useRemoteScene} from './hooks/remote-scene'
 
 const LOADING_SCREEN_DISAPPEAR_DELAY = 200
 
@@ -98,11 +98,10 @@ const DebugSimulatorPanel: React.FC<IDebugSimulatorPanel> = ({simulatorId}) => {
   const activeSpace = useActiveSpace()
   const activeCamera = derivedScene.getActiveCamera(activeSpace?.id)
   const projectUrl = useProjectPreviewUrl(app)
-  const warningBannerMsg = (
-    activeCamera?.camera.xr?.xrCameraType === 'world' &&
-    !playbackContext.supportsSequences &&
-    projectUrl &&
-    (
+  const warningBannerMsg = activeCamera?.camera.xr?.xrCameraType === 'world' &&
+    !playbackContext.simulatorEnabled &&
+    projectUrl
+    ? (
       <span>
         <Trans
           i18nKey='debug_simulator_panel.warning_banner.world_camera'
@@ -119,12 +118,7 @@ const DebugSimulatorPanel: React.FC<IDebugSimulatorPanel> = ({simulatorId}) => {
         />
       </span>
     )
-  )
-
-  const {status: debugStatus} = useRemoteScene({
-    inlineSimulatorId: simulatorId,
-    baseScene: ctx.scene,
-  })
+    : null
 
   const [resizing, setResizing] = React.useState(false)
 
@@ -137,6 +131,10 @@ const DebugSimulatorPanel: React.FC<IDebugSimulatorPanel> = ({simulatorId}) => {
     [derivedScene, simulatorState.imageTargetName]
   )
 
+  const {status: debugStatus} = useRemoteScene({
+    inlineSimulatorId: simulatorId,
+    baseScene: ctx.scene,
+  })
   // NOTE(christoph): The 'attached-confirmed' state is entered after ECS_ATTACH_CONFIRM is
   // received, which is only sent by a newer version dev8. As a fallback, either in the case of a
   // crash, or an old version of dev8, we hide the loading screen after a delay.
@@ -200,12 +198,12 @@ const DebugSimulatorPanel: React.FC<IDebugSimulatorPanel> = ({simulatorId}) => {
           simulatorId={simulatorId}
           sessionId={simulatorId.replace(/-/g, '')}
           isDragging={ctx.isDraggingGizmo || resizing}
-          hidePreviewBottom={!anyWorld || !playbackContext.supportsSequences}
+          hidePreviewBottom={!anyWorld || !playbackContext.simulatorEnabled}
           targetsGalleryUuid={SIMULATOR_PANEL_GALLERY_ID}
           imageTargetQuaternion={imageTargetQuaternion}
           renderActions={() => <SimulatorViewActions simulatorId={simulatorId} />}
-          liveSyncMode={playbackContext.supportsStudioSync ? 'inline' : undefined}
-          showLoadingOverlay={playbackContext.supportsStudioSync ? !debugReady : false}
+          liveSyncMode={playbackContext.simulatorEnabled ? 'inline' : undefined}
+          showLoadingOverlay={playbackContext.simulatorEnabled ? !debugReady : false}
           warningBannerMsg={warningBannerMsg}
         />
       </ResizablePanel>

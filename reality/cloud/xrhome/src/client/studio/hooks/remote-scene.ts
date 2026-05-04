@@ -20,7 +20,6 @@ import {useWindowMessageHandler} from '../../hooks/use-window-message-handler'
 type DebugSession = {
   debugId: string
   pageId: string
-  // url: SocketSpecifier
   baseDoc: SceneDoc
   simulatorId?: string
   activeSpaceId?: string
