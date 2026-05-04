@@ -22,6 +22,7 @@ const useSimulatorConfigUrl = (
   liveSyncMode?: LiveSyncMode
 ): EncodedUrlInfo => {
   const previewLinkDebugMode = useSelector(state => !!state.editor.previewLinkDebugMode)
+
   const projectUrl = useProjectPreviewUrl(app)
 
   if (!projectUrl) {

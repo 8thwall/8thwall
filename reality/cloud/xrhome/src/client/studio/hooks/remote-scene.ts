@@ -52,7 +52,6 @@ const useRemoteScene = ({inlineSimulatorId, baseScene}: DebugSceneOptions) => {
   const app = useCurrentApp()
 
   const {
-    // setStudioSessionId, cancelDebugSession,
     ensureSimulatorStateReady,
   } = useActions(editorActions)
 
@@ -195,15 +194,10 @@ const useRemoteScene = ({inlineSimulatorId, baseScene}: DebugSceneOptions) => {
       return
     }
     if (prevRestartKey && prevRestartKey !== restartKey) {
-      try {
-        sendData({
-          action: 'ECS_RESET_SCENE',
-          debugId: debugSessionRef.current.debugId,
-        })
-      } catch (err) {
-        // eslint-disable-next-line no-console
-        console.error('Failed to reset scene', err)
-      }
+      sendData({
+        action: 'ECS_RESET_SCENE',
+        debugId: debugSessionRef.current.debugId,
+      })
     }
   }, [restartKey])
 
