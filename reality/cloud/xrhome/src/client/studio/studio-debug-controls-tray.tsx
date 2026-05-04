@@ -9,6 +9,7 @@ import {useSimulator, useSimulatorVisible} from '../editor/app-preview/use-simul
 import {useSceneContext} from './scene-context'
 import {ProductTourId} from './product-tour-constants'
 import useCurrentApp from '../common/use-current-app'
+import {usePlaybackContext} from './playback-context'
 
 interface IDebugControlsTray {
   onPlay: () => void
@@ -20,6 +21,7 @@ const StudioDebugControlsTray: React.FC<IDebugControlsTray> = ({onPlay, simulato
   const {state: {isPreviewPaused}} = stateCtx
   const ctx = useSceneContext()
   const {t} = useTranslation('cloud-studio-pages')
+  const playbackContext = usePlaybackContext()
 
   const {closeDebugSimulatorSession} = useStudioDebug()
   const {updateSimulatorState} = useSimulator()
@@ -39,7 +41,7 @@ const StudioDebugControlsTray: React.FC<IDebugControlsTray> = ({onPlay, simulato
 
   return (
     <FloatingTray shrink nonInteractive={ctx.isDraggingGizmo}>
-      {BuildIf.STUDIO_DEV8_INTEGRATION_20260205 && (
+      {playbackContext.simulatorEnabled && (
         <>
           <FloatingIconButton
             text={t('studio_play_button_tray.button.restart')}

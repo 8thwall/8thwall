@@ -26,13 +26,12 @@ import {useDebounced} from './use-debounced'
 import {useActiveSpace} from './hooks/active-space'
 import {useProjectPreviewUrl} from '../editor/app-preview/use-project-preview-url'
 import {StandardLink} from '../ui/components/standard-link'
+import {usePlaybackContext} from './playback-context'
 
 const LOADING_SCREEN_DISAPPEAR_DELAY = 200
 
 const MAX_HEIGHT = `100% - ${MARGIN_SIZE} - ${MARGIN_SIZE}`
 const MAX_WIDTH = `max(40%, ${MIN_PREVIEW_WIDTH}px)`
-
-const PENDING_DEBUG_WORK = true
 
 const useStyles = createThemedStyles(theme => ({
   debugSimulatorContainer: {
@@ -87,6 +86,7 @@ const DebugSimulatorPanel: React.FC<IDebugSimulatorPanel> = ({simulatorId}) => {
   const {ensureSimulatorStateReady} = useActions(editorActions)
   const {simulatorState, updateSimulatorState} = useSimulator()
   const {panelHeight, panelWidth} = simulatorState
+  const playbackContext = usePlaybackContext()
 
   const ctx = useSceneContext()
   const allCameras = derivedScene.getAllCameras()
@@ -97,7 +97,9 @@ const DebugSimulatorPanel: React.FC<IDebugSimulatorPanel> = ({simulatorId}) => {
   const activeSpace = useActiveSpace()
   const activeCamera = derivedScene.getActiveCamera(activeSpace?.id)
   const projectUrl = useProjectPreviewUrl(app)
-  const warningBannerMsg = activeCamera?.camera.xr?.xrCameraType === 'world' && projectUrl
+  const warningBannerMsg = activeCamera?.camera.xr?.xrCameraType === 'world' &&
+    !playbackContext.simulatorEnabled &&
+    projectUrl
     ? (
       <span>
         <Trans
@@ -128,15 +130,16 @@ const DebugSimulatorPanel: React.FC<IDebugSimulatorPanel> = ({simulatorId}) => {
     [derivedScene, simulatorState.imageTargetName]
   )
 
+  const debugStatus: string = 'todo'
   // NOTE(christoph): The 'attached-confirmed' state is entered after ECS_ATTACH_CONFIRM is
   // received, which is only sent by a newer version dev8. As a fallback, either in the case of a
   // crash, or an old version of dev8, we hide the loading screen after a delay.
   // If we're attached-confirmed, we don't show the loading screen.
-  const oldDebugStatus = useDebounced(ctx.debugStatus, LOADING_SCREEN_DISAPPEAR_DELAY)
+  const oldDebugStatus = useDebounced(debugStatus, LOADING_SCREEN_DISAPPEAR_DELAY)
   const debugReady = (
-    ctx.debugStatus === 'attach-confirmed' ||
+    debugStatus === 'attach-confirmed' ||
     // Attach has been sent for a while, so hide the loading screen.
-    (ctx.debugStatus === 'attach-sent' && oldDebugStatus === 'attach-sent')
+    (debugStatus === 'attach-sent' && oldDebugStatus === 'attach-sent')
   )
 
   if (!simulatorVisible) {
@@ -191,12 +194,12 @@ const DebugSimulatorPanel: React.FC<IDebugSimulatorPanel> = ({simulatorId}) => {
           simulatorId={simulatorId}
           sessionId={simulatorId.replace(/-/g, '')}
           isDragging={ctx.isDraggingGizmo || resizing}
-          hidePreviewBottom={!anyWorld}
+          hidePreviewBottom={!anyWorld || !playbackContext.simulatorEnabled}
           targetsGalleryUuid={SIMULATOR_PANEL_GALLERY_ID}
           imageTargetQuaternion={imageTargetQuaternion}
           renderActions={() => <SimulatorViewActions simulatorId={simulatorId} />}
-          liveSyncMode='inline'
-          showLoadingOverlay={PENDING_DEBUG_WORK ? false : !debugReady}
+          liveSyncMode={playbackContext.simulatorEnabled ? 'inline' : undefined}
+          showLoadingOverlay={playbackContext.simulatorEnabled ? !debugReady : false}
           warningBannerMsg={warningBannerMsg}
         />
       </ResizablePanel>

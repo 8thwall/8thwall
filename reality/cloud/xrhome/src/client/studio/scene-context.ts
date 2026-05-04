@@ -18,8 +18,6 @@ interface RawSceneContext {
   undo: () => void
   canRedo: boolean
   redo: () => void
-  playsUsingRuntime: boolean  // True if play mode should use the runtime with ScenePlay
-  debugStatus?: 'waiting' | 'attach-sent' | 'attach-confirmed'
 }
 
 type SceneContext = DeepReadonly<RawSceneContext>

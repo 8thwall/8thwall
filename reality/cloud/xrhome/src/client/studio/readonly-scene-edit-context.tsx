@@ -46,7 +46,6 @@ const ReadonlySceneEditContext: React.FC<IReadonlySceneEditContext> = ({
       undo: noop,
       canRedo: false,
       redo: noop,
-      playsUsingRuntime: true,
     } as const
   }, [
     scene,

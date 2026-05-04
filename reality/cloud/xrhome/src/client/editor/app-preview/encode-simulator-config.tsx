@@ -42,7 +42,7 @@ const useSimulatorConfigUrl = (
     currentConfigUrl.searchParams.set('sessionId', sessionId)
   }
 
-  if (BuildIf.STUDIO_DEV8_INTEGRATION_20260205 && liveSyncMode) {
+  if (liveSyncMode) {
     currentConfigUrl.searchParams.set('liveSyncMode', liveSyncMode)
   }
 
