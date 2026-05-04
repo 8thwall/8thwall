@@ -1,4 +1,3 @@
-import {studioPostMessage} from './shared/utils/post-message'
 import type {DebugMessage, DebugCallback} from './shared/ecs/shared/debug-messaging'
 
 const createStudioEventStreamManager = (
@@ -46,7 +45,7 @@ const createStudioEventStreamManager = (
   /**
    * Discerns the correct window to postMessage to based on where dev8 is loading.
    */
-  const getPostMessageTarget = () => {
+  const getPostMessageTarget = (): Window => {
     const isInIframe = window.parent && window.parent !== window
     const hasOpener = window.parent && window.parent.opener
 
@@ -74,22 +73,23 @@ const createStudioEventStreamManager = (
     return null
   }
 
-  const sendViaPostMessage = ({action, ...data}: DebugMessage) => {
+  const sendViaPostMessage = (data: DebugMessage) => {
     const postMessageTarget = getPostMessageTarget()
-
-    studioPostMessage(postMessageTarget, action, data)
+    if (!postMessageTarget) {
+      return false
+    }
+    postMessageTarget.postMessage(data, '*')
+    return true
   }
 
   /**
    * Abstracts the transport for sending data to XRHome.
    */
   const send = (payload: DebugMessage) => {
-    const postMessageTarget = getPostMessageTarget()
-    if (postMessageTarget) {
-      sendViaPostMessage(payload)
-    } else {
-      sendViaSockets(payload)
+    if (sendViaPostMessage(payload)) {
+      return
     }
+    sendViaSockets(payload)
   }
 
   const listen = (callback: DebugCallback) => {
@@ -104,8 +104,6 @@ const createStudioEventStreamManager = (
     handleSocketMessage,
     handlePostMessage,
     send,
-    sendViaSockets,
-    sendViaPostMessage,
     listen,
     cancelListen,
   }

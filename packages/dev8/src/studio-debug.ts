@@ -80,7 +80,7 @@ const createStudioDebugManager = (
   }
 
   const sendReady = (connectionStatus: ConnectionStatus) => {
-    eventStream.sendViaSockets({
+    eventStream.send({
       action: 'ECS_READY',
       sessionId,
       pageId,
@@ -149,7 +149,7 @@ const createStudioDebugManager = (
       eventStream.listen(handleMessage)
     },
     close: () => {
-      eventStream.sendViaSockets({action: 'ECS_CLOSE', sessionId})
+      eventStream.send({action: 'ECS_CLOSE', sessionId})
     },
   }
 }
