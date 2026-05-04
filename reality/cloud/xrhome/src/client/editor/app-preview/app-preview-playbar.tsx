@@ -297,8 +297,8 @@ const AppPreviewPlaybar: React.FC<IAppPreviewPlaybar> = ({
             e.stopPropagation()
           }}
           text={t(isPaused
-            ? t('editor_page.inline_app_preview.iframe.playbar.pause_button.text')
-            : t('editor_page.inline_app_preview.iframe.playbar.play_button.text'))}
+            ? 'editor_page.inline_app_preview.iframe.playbar.pause_button.text'
+            : 'editor_page.inline_app_preview.iframe.playbar.play_button.text')}
         />
       </div>
       <SequenceProgressBar
