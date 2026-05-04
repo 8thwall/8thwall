@@ -326,7 +326,6 @@ const startWebSocket = () => {
     if (xrHud) {
       broadcastInitialDebugStatus()
     }
-    studioDebug.ready()
     if (!sentStartEvent) {
       sentStartEvent = true
       ws.send(JSON.stringify({
