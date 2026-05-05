@@ -10,6 +10,8 @@ import type {DeepReadonly} from 'ts-essentials'
 
 import {FULL_STACK_REDUCERS} from './full-stack-reducers'
 
+const VERBOSE_LOGGING = false
+
 const history = createMemoryHistory()
 
 // Scroll to the top on every history change
@@ -96,7 +98,7 @@ const getExtendedStore = (preloadedState?: RootState): ExtendedStoreResult => {
     thunk,
   ]
 
-  if (BuildIf.LOCAL_DEV && !BuildIf.UI_TEST && !window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) {
+  if (VERBOSE_LOGGING && BuildIf.LOCAL_DEV) {
     middleware.push(createLogger())
   }
 
