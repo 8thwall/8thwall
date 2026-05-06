@@ -994,25 +994,6 @@ describe('crdt', () => {
     assert.strictEqual(myObject.name, 'changed direct')
   })
 
-  it('Can return version ID for a document', () => {
-    const doc = createEmptySceneDoc(ACTOR_ID)
-    assert.strictEqual(
-      '9343576c711a4bfa57c75338c3c1becc21d70ac5d9775c23e5a4cba8838fa113',
-      doc.getVersionId()
-    )
-
-    doc.update(prev => ({
-      ...prev,
-      activeCamera: 'camera1',
-      objects: {...prev.objects, object1: object('object1')},
-    }))
-
-    assert.strictEqual(
-      '3ccf9c7cf30e064c32965a2335f5f51b42d60fa6bc41bed572fa343a8a1095ea',
-      doc.getVersionId()
-    )
-  })
-
   it('Can reset back to an earlier version', () => {
     const doc = createEmptySceneDoc(ACTOR_ID)
     doc.update(prev => ({

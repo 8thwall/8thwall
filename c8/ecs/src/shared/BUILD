@@ -563,18 +563,10 @@ js_test(
     ],
 )
 
-genrule(
-    name = "automerge-gen",
-    outs = [
-        "automerge.js",
-    ],
-    cmd = "echo \"module.exports = require('@automerge/automerge/next')\" > $@",
-)
-
 js_library(
     name = "automerge",
     srcs = [
-        ":automerge-gen",
+        "automerge.ts",
     ],
 )
 
