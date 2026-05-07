@@ -1,1 +1,0 @@
-The White Label subscription is a per-project subscription that enables you to launch a project without 8th Wall branding. Projects without a White Label subscription are required to include (1) the default 8th Wall splash screen and (2) a "Powered by 8th Wall" logo on the loading screen. Please view more [in our docs](http://8th.io/branding-requirements).

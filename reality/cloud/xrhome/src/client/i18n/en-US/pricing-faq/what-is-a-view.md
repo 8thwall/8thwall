@@ -1,1 +1,0 @@
-For 8th Wall-hosted projects, a “view” is a request from a web browser to the 8th Wall platform when a user visits your WebAR experience. For App Key projects, a ”view” is a request from a web browser to the 8th Wall platform when a user visits your WebAR experience and approves permissions to initiate an AR session.

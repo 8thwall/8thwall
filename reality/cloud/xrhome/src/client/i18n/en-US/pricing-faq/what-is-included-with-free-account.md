@@ -1,1 +1,0 @@
-All free 8th Wall accounts include access to 8th Wall Studio for 3D and XR creation, including World Effects, Image Targets, Human AR, VPS and 3D development. All accounts also include access to the Project Library and legacy tools, such as Cloud Editor. Free accounts get 50 credits that refresh monthly.
