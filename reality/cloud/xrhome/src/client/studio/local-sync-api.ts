@@ -1,7 +1,7 @@
 import type {RuntimeMetadata} from '@ecs/shared/runtime-version'
 
 import type {
-  InitializeResponse, FileSnapshotResponse,
+  InitializeResponse, FileSnapshotResponse, InstallRequest, ProjectConfigResponse,
   ListProjectsResponse,
   NewProjectLocationResponse,
   CanceledInitializeResponse,
@@ -137,6 +137,19 @@ const getFileStateSnapshot = (appKey: string) => {
 
   })
   return fetchJson<FileSnapshotResponse>(`${API}/file/snapshot?${params}`)
+}
+
+const installPackages = (appKey: string, packages: InstallRequest['packages']) => {
+  const params = new URLSearchParams({
+    appKey,
+  })
+  const body: InstallRequest = {
+    packages,
+  }
+  return fetchJson<{}>(`${API}/project/install?${params}`, {
+    method: 'POST',
+    body: JSON.stringify(body),
+  })
 }
 
 const getFileMetadata = () => {
@@ -321,7 +334,7 @@ const checkConfigStatus = (appKey: string) => {
 
   })
 
-  return fetchJson<{needsInjectFix: boolean, needsCopyPluginFix: boolean}>(
+  return fetchJson<ProjectConfigResponse>(
     `${API}/project/config?${params}`, {method: 'GET'}
   )
 }
@@ -365,6 +378,7 @@ export {
   renameFile,
   checkConfigStatus,
   applyProjectConfigFix,
+  installPackages,
 }
 
 export type {

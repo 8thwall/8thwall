@@ -145,6 +145,7 @@
     "react-refresh": "^0.14.0",
     "sass": "^1.52.2",
     "sass-loader": "^8.0.2",
+    "semver": "^7.7.4",
     "sinon": "^7.3.2",
     "storybook": "^7.4.6",
     "stream-browserify": "^3.0.0",

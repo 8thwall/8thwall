@@ -3,6 +3,7 @@ import React from 'react'
 import {INLINE_SIMULATOR_FEATURE} from '@ecs/shared/features/inline-simulator'
 
 import {useFeatureEnabled} from './runtime-version/use-feature-enabled'
+import {useProjectConfigStatus} from '../hooks/use-project-config'
 
 type PlaybackContext = {
   simulatorEnabled: boolean
@@ -12,7 +13,8 @@ type PlaybackContext = {
 // needed later.
 
 const usePlaybackContext = (): PlaybackContext | null => {
-  const simulatorEnabled = useFeatureEnabled(INLINE_SIMULATOR_FEATURE)
+  const {missingDev8} = useProjectConfigStatus()
+  const simulatorEnabled = useFeatureEnabled(INLINE_SIMULATOR_FEATURE) && !missingDev8
   return {simulatorEnabled}
 }
 

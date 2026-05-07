@@ -39,7 +39,7 @@ const definitions = {
   STUDIO_MESH_MATERIAL_CONFIGURATOR_20240828: 'isLocal',
   STUDIO_MULTI_ADD_COMPONENTS_20241202: 'isExperimental',
   STUDIO_OFFLINE_LOG_CONTAINER_20260205: false,
-  STUDIO_RUNTIME_CONFIG_20260209: 'isLocal',
+  STUDIO_RUNTIME_CONFIG_20260209: true,
   // NOTE(christoph): These keys are alphabetically sorted
 } as const
 
