@@ -106,7 +106,7 @@ const MissingSpaceSection: React.FC<{}> = () => {
 }
 
 const TreeHierarchy: React.FC = () => {
-  const {t} = useTranslation('cloud-studio-pages')
+  const {t} = useTranslation(['cloud-studio-pages', 'common'])
   const classes = useTreeHierarchyStyles()
   const [searchText, setSearchText] = React.useState('')
   const [filters, setFilters] = React.useState([])
