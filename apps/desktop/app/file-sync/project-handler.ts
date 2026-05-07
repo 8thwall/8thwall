@@ -349,14 +349,12 @@ const postRevealProject = withErrorHandlingResponse(async (req: Request) => {
     throw makeCodedError('Project for appKey not found', 404)
   }
 
-  const projectSrcPath = getProjectSrcPath(project.location)
-
   try {
-    const info = await fs.stat(projectSrcPath)
+    const info = await fs.stat(project.location)
     if (!info.isDirectory()) {
       throw makeCodedError('Project is not a directory', 400)
     } else {
-      shell.openPath(projectSrcPath)
+      shell.openPath(project.location)
     }
     return makeJsonResponse({})
   } catch (error) {
