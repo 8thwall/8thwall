@@ -39,7 +39,6 @@ import {
 import {makeJsonResponse} from '../../json-response'
 import {getQueryParams} from '../../query-params'
 import {projectSetup, unzipIntoFolder} from './create-project-files'
-import {getProjectSrcPath} from '../../project-helpers'
 import {createLocalServer, LocalServer} from '../../local-server'
 import {openInCodeEditor} from '../preferences/code-editor'
 import {runBuildCommand, runInstallCommand} from './run-commands'

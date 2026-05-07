@@ -37,7 +37,6 @@ js_library(
         "//apps/desktop:json-response",
         "//apps/desktop:local-project-db",
         "//apps/desktop:local-server",
-        "//apps/desktop:project-helpers",
         "//apps/desktop:query-params",
         "//apps/desktop:requests",
         "//apps/desktop/app/file-sync:create-project-files",
