@@ -29,6 +29,7 @@
     "index.js",
     "index.d.ts",
     "metadata.json",
+    "dev8",
     "dist"
   ]
 }
