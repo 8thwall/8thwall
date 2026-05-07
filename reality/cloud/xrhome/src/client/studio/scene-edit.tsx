@@ -468,10 +468,14 @@ const SceneEdit: React.FC<ISceneEdit> = ({
                           }}
                         />}
                       <div className={classes.centerUiContainer}>
-                        <FloatingCenterTopBar
-                          playbackControls={playbackControls}
-                        />
-                        {simulatorPanel}
+                        <React.Suspense fallback={null}>
+                          <FloatingCenterTopBar
+                            playbackControls={playbackControls}
+                          />
+                        </React.Suspense>
+                        <React.Suspense fallback={null}>
+                          {simulatorPanel}
+                        </React.Suspense>
                         <React.Suspense fallback={null}>
                           {assetLabCtx.state?.open && <AssetLabModal />}
                         </React.Suspense>

@@ -1,6 +1,7 @@
 import React from 'react'
 import type {DeepReadonly} from 'ts-essentials'
 import {useTranslation} from 'react-i18next'
+import {useQueryClient} from '@tanstack/react-query'
 
 import type {
   LocalSyncMessage, LocalSyncFileChanged, LocalSyncDirChanged, LocalSyncAssetChanged,
@@ -19,6 +20,7 @@ import {useAbandonableEffect} from '../hooks/abandonable-effect'
 import type {IGit} from '../git/g8-dto'
 import {useStudioStateContext} from './studio-state-context'
 import {useEnclosedAppKey} from '../apps/enclosed-app-context'
+import {getRuntimeMetadataQuery} from './runtime-version/use-runtime-metadata'
 
 type FileSyncStatus =
 | 'checking'  // Checking what the local state is
@@ -115,6 +117,7 @@ const LocalSyncContextProvider: React.FC<{children: React.ReactNode}> = ({childr
   // const socketChannel = getWebsocketChannelName({git, app}, 'current-client')
   const deferredAssetsRef = React.useRef<Set<string>>()
   const [assetVersions, setAssetVersions] = React.useState<Record<string, string> | undefined>({})
+  const queryClient = useQueryClient()
 
   const getDeferredAssets = () => {
     if (!deferredAssetsRef.current) {
@@ -321,8 +324,6 @@ const LocalSyncContextProvider: React.FC<{children: React.ReactNode}> = ({childr
     }
   }
 
-  const canWatchServer = fileSyncStatus === 'active'
-
   const refreshServerUrls = async () => {
     const {buildUrl, buildRemoteUrl} = await getProjectStatus(appKey)
     if (buildUrl) {
@@ -340,20 +341,16 @@ const LocalSyncContextProvider: React.FC<{children: React.ReactNode}> = ({childr
     } else {
       setLocalBuildRemoteUrl('')
     }
+
+    queryClient.invalidateQueries(getRuntimeMetadataQuery(appKey))
   }
 
   useAbandonableEffect(async (abandon) => {
-    if (!canWatchServer) {
-      return
-    }
     await abandon(watchLocal(appKey))
     await refreshServerUrls()
-  }, [appKey, canWatchServer])
+  }, [appKey])
 
   const restartServer = async () => {
-    if (!canWatchServer) {
-      return
-    }
     await stopWatchLocal(appKey)
     await watchLocal(appKey)
     await refreshServerUrls()

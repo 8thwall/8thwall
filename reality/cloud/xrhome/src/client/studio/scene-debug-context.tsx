@@ -12,7 +12,6 @@ import {useExpanse} from './hooks/expanse'
 import {useSimulator} from '../editor/app-preview/use-simulator-state'
 import {updateObject} from './update-object'
 import {DerivedSceneProvider} from './derived-scene-context'
-import {PlaybackContextProvider} from './playback-context'
 
 type MutateCallback<T> = (old: DeepReadonly<T>) => DeepReadonly<T>
 
@@ -119,9 +118,7 @@ const SceneDebugContext: React.FC<ISceneDebugContext> = ({
   return (
     <SceneContextProvider value={sceneContextValue}>
       <DerivedSceneProvider>
-        <PlaybackContextProvider>
-          {children}
-        </PlaybackContextProvider>
+        {children}
       </DerivedSceneProvider>
     </SceneContextProvider>
   )
