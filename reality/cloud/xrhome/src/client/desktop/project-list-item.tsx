@@ -105,6 +105,14 @@ interface IProjectListItem {
   project: ProjectClientSide & {appKey: string}
 }
 
+const HUE_ROTATE_VALUES = [
+  0,
+  75,
+  110,
+  160,
+  260,
+]
+
 const ProjectListItem: React.FC<IProjectListItem> = ({project}) => {
   const classes = useStyles()
   const {t} = useTranslation(['studio-desktop-pages'])
@@ -115,11 +123,11 @@ const ProjectListItem: React.FC<IProjectListItem> = ({project}) => {
   const history = useHistory()
 
   const coverStyle = React.useMemo(() => {
-    let i = 0
-    Array.from(project.location).forEach((e) => {
-      i += e.charCodeAt(0)
-    })
-    const degrees = 360 * (Math.floor(i % 6) / 6)
+    let roughHash = 0
+    for (let i = 0; i < project.location.length; i++) {
+      roughHash += project.location.charCodeAt(i)
+    }
+    const degrees = HUE_ROTATE_VALUES[Math.floor(roughHash % HUE_ROTATE_VALUES.length)]
     return {filter: `hue-rotate(${degrees}deg)`}
   }, [project.location])
 
