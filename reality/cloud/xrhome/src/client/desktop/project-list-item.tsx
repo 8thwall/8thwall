@@ -7,8 +7,6 @@ import {Trans, useTranslation} from 'react-i18next'
 
 import type {ProjectClientSide} from '../../shared/desktop/local-sync-types'
 import {getLocalStudioPath} from './desktop-paths'
-import {deriveAppCoverImageUrl} from '../../shared/app-utils'
-import {COVER_IMAGE_PREVIEW_SIZES} from '../../shared/app-constants'
 import {SpaceBetween} from '../ui/layout/space-between'
 import {combine} from '../common/styles'
 import {ProjectListItemOptions} from './project-list-item-options'
@@ -21,6 +19,7 @@ import {basename} from '../editor/editor-common'
 import {createThemedStyles} from '../ui/theme'
 import {StandardLink} from '../ui/components/standard-link'
 import {Icon} from '../ui/components/icon'
+import coverImg from '../static/cover-image.png'
 
 const useStyles = createThemedStyles(theme => ({
   projectListItem: {
@@ -115,6 +114,15 @@ const ProjectListItem: React.FC<IProjectListItem> = ({project}) => {
   const [isMigrateModalOpen, setIsMigrateModalOpen] = React.useState(false)
   const history = useHistory()
 
+  const coverStyle = React.useMemo(() => {
+    let i = 0
+    Array.from(project.location).forEach((e) => {
+      i += e.charCodeAt(0)
+    })
+    const degrees = 360 * (Math.floor(i % 6) / 6)
+    return {filter: `hue-rotate(${degrees}deg)`}
+  }, [project.location])
+
   const onClose = () => {
     setIsMovingAppModalOpen(false)
     setIsMigrateModalOpen(false)
@@ -141,7 +149,8 @@ const ProjectListItem: React.FC<IProjectListItem> = ({project}) => {
             <img
               className={classes.coverImage}
               draggable={false}
-              src={deriveAppCoverImageUrl(null, COVER_IMAGE_PREVIEW_SIZES[600])}
+              src={coverImg}
+              style={coverStyle}
               alt=''
             />
             <div className={classes.textContainer}>
