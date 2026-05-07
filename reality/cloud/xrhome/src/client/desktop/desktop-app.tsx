@@ -37,7 +37,9 @@ const getInitialPath = () => {
 const HistoryResumer = ({children}: {children: React.ReactElement}) => {
   const {pathname: currentPath} = useLocation()
   React.useEffect(() => {
-    localStorage.setItem('saved-path', currentPath)
+    if (BuildIf.LOCAL) {
+      localStorage.setItem('saved-path', currentPath)
+    }
   }, [currentPath])
 
   if (currentPath !== ROOT_PATH) {
