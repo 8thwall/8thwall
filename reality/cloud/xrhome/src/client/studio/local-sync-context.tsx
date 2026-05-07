@@ -21,6 +21,7 @@ import type {IGit} from '../git/g8-dto'
 import {useStudioStateContext} from './studio-state-context'
 import {useEnclosedAppKey} from '../apps/enclosed-app-context'
 import {getRuntimeMetadataQuery} from './runtime-version/use-runtime-metadata'
+import {getProjectConfigStatusQuery} from '../hooks/use-project-config'
 
 type FileSyncStatus =
 | 'checking'  // Checking what the local state is
@@ -343,6 +344,7 @@ const LocalSyncContextProvider: React.FC<{children: React.ReactNode}> = ({childr
     }
 
     queryClient.invalidateQueries(getRuntimeMetadataQuery(appKey))
+    queryClient.invalidateQueries(getProjectConfigStatusQuery(appKey))
   }
 
   useAbandonableEffect(async (abandon) => {

@@ -1,7 +1,7 @@
 import React from 'react'
 import {createUseStyles} from 'react-jss'
 import {useTranslation} from 'react-i18next'
-import {queryOptions, useQuery, useQueryClient} from '@tanstack/react-query'
+import {useQuery} from '@tanstack/react-query'
 
 import {useSceneContext} from './scene-context'
 import {useCurrentGit} from '../git/hooks/use-current-git'
@@ -16,12 +16,12 @@ import {StandardModalContent} from '../ui/components/standard-modal-content'
 import {StandardModalActions} from '../ui/components/standard-modal-actions'
 import {TertiaryButton} from '../ui/components/tertiary-button'
 import {StandardModalHeader} from '../ui/components/standard-modal-header'
-import {
-  applyProjectConfigFix, checkConfigStatus,
-} from './local-sync-api'
+import {applyProjectConfigFix} from './local-sync-api'
 import useCurrentApp from '../common/use-current-app'
 import {useLocalSyncContext} from './local-sync-context'
-import {MILLISECONDS_PER_HOUR} from '../../shared/time-utils'
+import {
+  getProjectConfigStatusQuery, useProjectConfigStatusOrLoading,
+} from '../hooks/use-project-config'
 
 const useStyles = createUseStyles({
   recommendationBox: {
@@ -117,18 +117,11 @@ const AssetBundleRecommendation = () => {
   )
 }
 
-const getProjectConfigStatusQuery = (appKey: string) => queryOptions({
-  queryKey: ['project-config', appKey],
-  queryFn: () => checkConfigStatus(appKey),
-  staleTime: MILLISECONDS_PER_HOUR,
-})
-
 const WebpackInjectFixRecommendation = () => {
   const {t} = useTranslation(['cloud-studio-pages', 'common'])
   const {appKey} = useCurrentApp()
   const localSyncContext = useLocalSyncContext()
-  const needsInjectFix = useQuery(getProjectConfigStatusQuery(appKey)).data?.needsInjectFix
-  const queryClient = useQueryClient()
+  const needsInjectFix = useProjectConfigStatusOrLoading().data?.needsInjectFix
   const [dismissed, setDismissed] = React.useState(false)
   const visible = needsInjectFix && !dismissed
 
@@ -144,7 +137,6 @@ const WebpackInjectFixRecommendation = () => {
           <BoldButton onClick={async () => {
             await applyProjectConfigFix(appKey, 'inject')
             await localSyncContext.restartServer()
-            queryClient.invalidateQueries(getProjectConfigStatusQuery(appKey))
           }}
           >
             {t('recommendation_box.fix')}
@@ -163,7 +155,6 @@ const CopyPluginFixRecommendation = () => {
   const {appKey} = useCurrentApp()
   const localSyncContext = useLocalSyncContext()
   const needsCopyPluginFix = useQuery(getProjectConfigStatusQuery(appKey)).data?.needsCopyPluginFix
-  const queryClient = useQueryClient()
   const [dismissed, setDismissed] = React.useState(false)
   const visible = needsCopyPluginFix && !dismissed
 
@@ -179,7 +170,6 @@ const CopyPluginFixRecommendation = () => {
           <BoldButton onClick={async () => {
             await applyProjectConfigFix(appKey, 'copy-plugin')
             await localSyncContext.restartServer()
-            queryClient.invalidateQueries(getProjectConfigStatusQuery(appKey))
           }}
           >
             {t('recommendation_box.fix')}
