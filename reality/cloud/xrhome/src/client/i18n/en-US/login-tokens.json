@@ -1,5 +1,0 @@
-{
-  "create_login_token.error.exceeded_token_limit": "You have exceeded the maximum number of login links. Please try again later.",
-  "create_login_token.error.invalid_user_session": "An error occured. Please login again to create a new login link.",
-  "create_login_token.error.unexpected": "An unexpected error occurred. Please try again later."
-}

@@ -1,5 +1,0 @@
-{
-  "create_login_token.error.exceeded_token_limit": "Ha superado el número máximo de enlaces de inicio de sesión. Vuelva a intentarlo más tarde.",
-  "create_login_token.error.invalid_user_session": "Se ha producido un error. Vuelva a iniciar sesión para crear un nuevo enlace de inicio de sesión.",
-  "create_login_token.error.unexpected": "Se ha producido un error inesperado. Vuelva a intentarlo más tarde."
-}
