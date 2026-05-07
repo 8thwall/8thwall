@@ -86,6 +86,16 @@ type NewProjectLocationResponse = {
   projectPath: string
 }
 
+type InstallRequest = {
+  packages: Array<{name: '@8thwall/ecs', version: string}>
+}
+
+type ProjectConfigResponse = {
+  needsInjectFix: boolean
+  needsCopyPluginFix: boolean
+  missingDev8: boolean
+}
+
 export type {
   Project,
   ProjectClientSide,
@@ -101,4 +111,6 @@ export type {
   NewProjectLocationResponse,
   UnixPath,
   CanceledInitializeResponse,
+  InstallRequest,
+  ProjectConfigResponse,
 }
