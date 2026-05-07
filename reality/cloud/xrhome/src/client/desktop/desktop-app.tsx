@@ -26,14 +26,25 @@ interface IApp {
   history: History
 }
 
+const getInitialPath = () => {
+  if (BuildIf.LOCAL) {
+    return localStorage.getItem('saved-path') || HOME_PATH
+  }
+
+  return HOME_PATH
+}
+
 const HistoryResumer = ({children}: {children: React.ReactElement}) => {
   const {pathname: currentPath} = useLocation()
+  React.useEffect(() => {
+    localStorage.setItem('saved-path', currentPath)
+  }, [currentPath])
 
   if (currentPath !== ROOT_PATH) {
     return children
   }
 
-  return <Redirect to={HOME_PATH} />
+  return <Redirect to={getInitialPath()} />
 }
 
 const InnerApp: React.FC = () => {
