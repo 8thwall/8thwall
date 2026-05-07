@@ -5,8 +5,8 @@ const webpack = require('webpack')
 const banner = `
 8th Wall Developer Tools
 
-This script connects development (unpublished) versions of your app to the editor interface on your
-8thwall.com account. It enables rapid development, debugging, and iteration of immersive content.
+This script connects development versions of your app to the editor interface of the desktop app. 
+It enables rapid development, debugging, and iteration of immersive content.
 It is for development purposes only and it is not included in published versions of your app.
 `
 
