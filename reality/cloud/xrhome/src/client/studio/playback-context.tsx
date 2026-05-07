@@ -1,3 +1,5 @@
+import React from 'react'
+
 import {INLINE_SIMULATOR_FEATURE} from '@ecs/shared/features/inline-simulator'
 
 import {useFeatureEnabled} from './runtime-version/use-feature-enabled'
@@ -14,7 +16,9 @@ const usePlaybackContext = (): PlaybackContext | null => {
   return {simulatorEnabled}
 }
 
+const PlaybackContextProvider = React.Fragment
 export {
+  PlaybackContextProvider,
   usePlaybackContext,
 }
 

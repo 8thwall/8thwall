@@ -8,7 +8,9 @@ import {getRuntimeMetadata} from '../local-sync-api'
 const getRuntimeMetadataQuery = (appKey: string) => ({
   queryKey: ['runtimeMetadata', appKey],
   queryFn: async () => {
-    // await new Promise(r => setTimeout(r, 2500))
+    // NOTE(christoph): During first time setup, this may mount before the config is fully
+    // initialized. After the server starts, it will trigger a refetch regardless, but to avoid
+    // error screens on start, absorb failures.
     let iterations = 0
     while (iterations++ < 10) {
       try {
