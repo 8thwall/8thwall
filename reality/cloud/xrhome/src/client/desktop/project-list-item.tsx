@@ -107,10 +107,10 @@ interface IProjectListItem {
 
 const HUE_ROTATE_VALUES = [
   0,
-  75,
-  110,
-  160,
-  260,
+  85,
+  120,
+  200,
+  280,
 ]
 
 const ProjectListItem: React.FC<IProjectListItem> = ({project}) => {
