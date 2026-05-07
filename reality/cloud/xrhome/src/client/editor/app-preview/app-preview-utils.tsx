@@ -5,10 +5,6 @@ import {Icon, IconStroke} from '../../ui/components/icon'
 import {createThemedStyles} from '../../ui/theme'
 import type {AspectOptionId} from '../editor-reducer'
 
-const APP_PREVIEW_METADATA_SRC = 'https://cdn.8thwall.com/web/app-preview/sequence_metadata.json'
-// NOTE(Dale): Dev version used while testing
-// 'https://cdn-dev.8thwall.com/pr/756/5uofxfxg/web/app-preview/sequence_metadata.json'
-
 const MIN_PREVIEW_WIDTH = 250
 const MIN_PREVIEW_HEIGHT = 500
 const DEFAULT_PREVIEW_WIDTH = '25rem'
@@ -348,7 +344,6 @@ const getCurrentRecording = (
 
 export {
   ACTION_BUTTON_TEXT_MIN_WIDTH,
-  APP_PREVIEW_METADATA_SRC,
   DEFAULT_PREVIEW_WIDTH,
   MIN_PREVIEW_HEIGHT,
   MIN_PREVIEW_WIDTH,

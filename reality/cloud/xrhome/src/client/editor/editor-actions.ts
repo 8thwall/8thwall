@@ -4,7 +4,6 @@ import localForage from 'localforage'
 import {dispatchify} from '../common'
 import type {AsyncThunk, DispatchifiedActions} from '../common/types/actions'
 import type {SimulatorState, StudioDebugSession} from './editor-reducer'
-import unauthenticatedFetch from '../common/unauthenticated-fetch'
 
 const getStudioFileBrowserHeightPercentKey = (repoId: string) => (
   `studio-file-browser-height-percent-${repoId}`
@@ -84,15 +83,6 @@ const ensureSimulatorStateReady = (
   }
 }
 
-const fetchSequenceMetadata = (url: string) => async (dispatch) => {
-  try {
-    return await dispatch(unauthenticatedFetch(url))
-  } catch (err) {
-    dispatch({type: 'ERROR', msg: `Failed to fetch metadata for simulator sequences at ${url}`})
-    throw err
-  }
-}
-
 const selectDebugSession = (
   appKey: string, session: StudioDebugSession, inlinePreviewSession: boolean
 ): AsyncThunk<void> => async (dispatch, getState) => {
@@ -127,7 +117,6 @@ const rawActions = {
   deleteEditorLogStream,
   disconnectDebugSession,
   ensureSimulatorStateReady,
-  fetchSequenceMetadata,
   loadConsoleInputHistory,
   loadPreviewLinkDebugModeSelected,
   removeSimulatorSession,

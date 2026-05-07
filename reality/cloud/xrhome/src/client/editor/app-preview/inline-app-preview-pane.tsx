@@ -7,21 +7,16 @@ import type {DeepReadonly} from 'ts-essentials'
 import type {IApp} from '../../common/types/models'
 import {combine} from '../../common/styles'
 import {IconButton} from '../../ui/components/icon-button'
-import editorActions from '../editor-actions'
-import useActions from '../../common/use-actions'
 import {createThemedStyles} from '../../ui/theme'
 import {AppPreviewBottomBar} from './app-preview-bottom-bar'
 import {
-  APP_PREVIEW_METADATA_SRC,
   MIN_PREVIEW_WIDTH,
   MIN_PREVIEW_HEIGHT,
   getCurrentRecording,
   SectionData,
-  SequenceMetadata,
   SimulatorConfig,
   useAppPreviewStyles,
 } from './app-preview-utils'
-import {useAbandonableEffect} from '../../hooks/abandonable-effect'
 import {useChangeEffect} from '../../hooks/use-change-effect'
 import {InitializingScreen} from './initializing-screen'
 import {Loader} from '../../ui/components/loader'
@@ -42,6 +37,7 @@ import {Keys} from '../../studio/common/keys'
 import {AppPreviewMockLocation} from './app-preview-mock-location'
 import {AppPreviewAspectRatio} from './app-preview-aspect-ratio'
 import {StaticBanner} from '../../ui/components/banner'
+import {SEQUENCE_METADATA} from './sequence-metadata'
 
 const useStyles = createThemedStyles(theme => ({
   appPreviewPane: {
@@ -150,10 +146,7 @@ const InlineAppPreviewPane: React.FC<IInlineAppPreviewPane> = ({
   const appPreviewStyles = useAppPreviewStyles()
   const {t} = useTranslation(['cloud-editor-pages'])
 
-  const {fetchSequenceMetadata} = useActions(editorActions)
-
   const [loadingSequence, setLoadingSequence] = React.useState<boolean>(false)
-  const [sequenceMetadata, setSequenceMetadata] = React.useState<SequenceMetadata>(null)
 
   const {simulatorState, updateSimulatorState} = useSimulator()
   const {setInlinePreviewWindow} = useAppPreviewWindow()
@@ -168,15 +161,10 @@ const InlineAppPreviewPane: React.FC<IInlineAppPreviewPane> = ({
   const wantsLandscapeRecording = responsive ? responsiveWidth > responsiveHeight : isLandscape
 
   const sequenceSelection = resolveSequenceSelection(
-    sequenceMetadata,
+    SEQUENCE_METADATA,
     simulatorState,
     null
   )
-
-  // TODO(Dale): Clean up double fetch with app-preview-bottom-bar.tsx
-  useAbandonableEffect(async (abandonable) => {
-    setSequenceMetadata(await abandonable(fetchSequenceMetadata(APP_PREVIEW_METADATA_SRC)))
-  }, [])
 
   useWindowMessageHandler((event) => {
     if (event.data.action === 'SIMULATOR_SEQUENCE_LOADING') {
@@ -208,7 +196,7 @@ const InlineAppPreviewPane: React.FC<IInlineAppPreviewPane> = ({
       cameraUrl: currentRecording.cameraUrl,
       sequenceUrl: currentRecording.sequenceUrl,
       isPaused,
-      userAgent: sequenceMetadata?.defaultUserAgent,
+      userAgent: SEQUENCE_METADATA.defaultUserAgent,
       start,
       end,
       imageTargetName,
@@ -221,7 +209,7 @@ const InlineAppPreviewPane: React.FC<IInlineAppPreviewPane> = ({
       mockCoordinateValue,
     }
   }, [
-    sequenceMetadata?.defaultUserAgent, isPaused, isLiveView, start, end,
+    SEQUENCE_METADATA.defaultUserAgent, isPaused, isLiveView, start, end,
     isLandscape, sequenceSelection?.variation, simulatorId, wantsLandscapeRecording,
     hidePreviewBottom, imageTargetName,
     imageTargetQuaternion, mockLat, mockLng, mockCoordinateValue,
@@ -399,7 +387,7 @@ const InlineAppPreviewPane: React.FC<IInlineAppPreviewPane> = ({
     <AppPreviewBottomBar
       selectedSequence={sequenceSelection?.sequence}
       selectedVariation={sequenceSelection?.variationName}
-      sequences={sequenceMetadata?.sequences}
+      sequences={SEQUENCE_METADATA.sequences}
       simulatorId={simulatorId}
       broadcastSimulatorMessage={broadcastSimulatorMessage}
       maxDropdownHeight={responsiveHeight * 0.8}
