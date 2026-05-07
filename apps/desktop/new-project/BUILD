@@ -16,6 +16,7 @@ pkg_files(
     name = "config",
     srcs = [
         "config/asset-loader.js",
+        "config/dev8-plugin.js",
         "config/entry-plugin.js",
         "config/webpack.config.js",
     ],
