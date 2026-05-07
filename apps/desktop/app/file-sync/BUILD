@@ -45,7 +45,6 @@ js_library(
         "//apps/desktop/app/file-sync:run-commands",
         "//apps/desktop/app/preferences:code-editor",
         "//c8/ecs/src/shared:runtime-version",
-        "//c8/ecs/src/shared:scene-graph",
         "//reality/shared:run-queue",
         "//reality/shared/desktop:local-sync-types",
     ],

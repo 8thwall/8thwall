@@ -7,13 +7,14 @@ import archiver from 'archiver'
 import crypto from 'crypto'
 
 import {makeRunQueue} from '@repo/reality/shared/run-queue'
-import type {SceneGraph} from '@repo/c8/ecs/src/shared/scene-graph'
 import type {RuntimeMetadata} from '@repo/c8/ecs/src/shared/runtime-version'
 
-import type {InitializeResponse, Project} from '@repo/reality/shared/desktop/local-sync-types'
+import type {
+  InitializeResponse, Project, ProjectConfigResponse,
+} from '@repo/reality/shared/desktop/local-sync-types'
 
 import {
-  FixConfigParams,
+  FixConfigParams, InstallRequest,
   InitializeProjectParams, MoveProjectParams, ProjectRequestParams,
 } from './project-handler-types'
 import {
@@ -25,7 +26,7 @@ import {
 import {makeCodedError, withErrorHandlingResponse} from '../../errors'
 import {
   PROJECT_INIT_PATH, PROJECT_LIST_PATH, PROJECT_DELETE_PATH, PROJECT_REVEAL_IN_FINDER_PATH,
-  PROJECT_STATUS_PATH, PROJECT_WATCH_PATH,
+  PROJECT_STATUS_PATH, PROJECT_WATCH_PATH, PROJECT_INSTALL_PATH,
   PROJECT_PICK_NEW_LOCATION_PATH,
   PROJECT_MOVE_PATH,
   PROJECT_OPEN_PATH,
@@ -38,14 +39,11 @@ import {
 } from './paths'
 import {makeJsonResponse} from '../../json-response'
 import {getQueryParams} from '../../query-params'
-import {projectSetup, unzipIntoFolder} from './create-project-files'
+import {projectSetup} from './create-project-files'
 import {createLocalServer, LocalServer} from '../../local-server'
 import {openInCodeEditor} from '../preferences/code-editor'
 import {runBuildCommand, runInstallCommand} from './run-commands'
-import {branches, methods} from '../../requests'
-
-// eslint-disable-next-line max-len
-const RUNTIME_1_BUNDLE_URL = 'https://cdn.8thwall.com/web/offline-code-export/studio/runtime-1.1.0-standalone-mkhjh3i4.zip'
+import {branches, methods, RequestHandler} from '../../requests'
 
 const locationPrompt = async (): Promise<string | undefined> => {
   const res = await dialog.showOpenDialog({
@@ -568,48 +566,30 @@ const handleProjectMigratePost = withErrorHandlingResponse(async (req: Request) 
     throw makeCodedError('Project for appKey not found', 404)
   }
 
-  if (project.initialization !== 'done') {
-    throw makeCodedError('Only projects with "done" status can be migrated', 400)
-  }
+  let shouldUpdateIndexHtml = false
+  let foldersToDelete: string[] = []
 
-  // TODO(christoph): Pull in 1.x.x runtime if specified in .expanse.json
-  let useRuntimeVersion1 = false
-  try {
-    const expanseConfigPath = path.join(project.location, 'src', '.expanse.json')
-    const expanseConfigContent = await fs.readFile(expanseConfigPath, 'utf-8')
-    const expanseConfig: SceneGraph = JSON.parse(expanseConfigContent)
-    if (!expanseConfig.runtimeVersion || expanseConfig.runtimeVersion.major === 1) {
-      useRuntimeVersion1 = true
-    }
-  } catch (error) {
-    log.warn(`Failed to read .expanse.json for project ${project.appKey}: ${error}`)
+  switch (project.initialization) {
+    case 'done':
+      shouldUpdateIndexHtml = true
+      foldersToDelete = ['.gen']
+      break
+    case 'v2':
+      foldersToDelete = ['external']
+      break
+    default:
+      throw makeCodedError('Project has unexpected status for migrate', 400)
   }
 
   await projectSetup(project.location, (filePath) => {
     if (filePath === 'src/index.html') {
-      return true
+      return shouldUpdateIndexHtml
     }
     if (filePath.startsWith('src/')) {
       return false
     }
-    if (useRuntimeVersion1 && filePath.startsWith('external/runtime/')) {
-      return false  // Install separately
-    }
     return true
   })
-
-  if (useRuntimeVersion1) {
-    const zipFetch = await fetch(RUNTIME_1_BUNDLE_URL)
-    if (!zipFetch.ok) {
-      throw new Error(
-        `Failed to download runtime bundle: ${zipFetch.status} ${zipFetch.statusText}`
-      )
-    }
-    const zipBuffer = await zipFetch.arrayBuffer()
-    await unzipIntoFolder(path.join(project.location, 'external/runtime'), zipBuffer)
-  }
-
-  const foldersToDelete = ['.gen']
 
   await Promise.all(foldersToDelete.map(folder => (
     fs.rm(path.join(project.location, folder), {recursive: true, force: true})
@@ -730,16 +710,24 @@ const getProjectConfig = withErrorHandlingResponse(async (req: Request) => {
 
   let needsInjectFix = false
   let needsCopyPluginFix = false
+  let missingDev8 = false
   try {
     const configPath = path.join(project.location, WEBPACK_CONFIG_PATH)
     const configContent = await fs.readFile(configPath, 'utf-8')
     needsInjectFix = configContent.includes(BAD_INJECT_CONFIG)
     needsCopyPluginFix = configContent.includes(BAD_COPY_PLUGIN_CONFIG)
+    missingDev8 = !configContent.includes('dev8')
   } catch (error) {
     // Ignore
   }
 
-  return makeJsonResponse({needsInjectFix, needsCopyPluginFix})
+  const response: ProjectConfigResponse = {
+    needsInjectFix,
+    needsCopyPluginFix,
+    missingDev8,
+  }
+
+  return makeJsonResponse(response)
 })
 
 const modifyProjectConfig = withErrorHandlingResponse(async (req: Request) => {
@@ -776,6 +764,28 @@ const modifyProjectConfig = withErrorHandlingResponse(async (req: Request) => {
   return makeJsonResponse({})
 })
 
+const installPackages: RequestHandler = async (req) => {
+  const requestUrl = new URL(req.url)
+  const params = ProjectRequestParams.safeParse(getQueryParams(requestUrl))
+  if (!params.success) {
+    throw makeCodedError('Invalid query params', 400)
+  }
+  if (!params.data.appKey) {
+    throw makeCodedError('Missing appKey', 400)
+  }
+  const project = getLocalProject(params.data.appKey)
+  if (!project) {
+    throw makeCodedError('Project for appKey not found', 404)
+  }
+  const parsedBody = InstallRequest.safeParse(await req.json())
+  if (!parsedBody.success) {
+    throw makeCodedError('Invalid request body', 400)
+  }
+  const parts = parsedBody.data.packages.map(e => `${e.name}@${e.version}`)
+  await runInstallCommand(project.location, parts)
+  return makeJsonResponse({})
+}
+
 const handleProjectRequest = withErrorHandlingResponse(branches({
   [PROJECT_INIT_PATH]: methods({POST: getLocalProjectLocation}),
   [PROJECT_WATCH_PATH]: methods({
@@ -794,6 +804,7 @@ const handleProjectRequest = withErrorHandlingResponse(branches({
   [PROJECT_RECENT_PATH]: methods({POST: handleRecentProjectPost}),
   [PROJECT_MIGRATE_PATH]: methods({POST: handleProjectMigratePost}),
   [PROJECT_RUNTIME_METADATA_PATH]: methods({GET: getRuntimeMetadata}),
+  [PROJECT_INSTALL_PATH]: methods({POST: installPackages}),
   [PROJECT_CONFIG_PATH]: methods({
     GET: getProjectConfig,
     POST: modifyProjectConfig,
