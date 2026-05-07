@@ -1,14 +1,13 @@
+import {INLINE_SIMULATOR_FEATURE} from '@ecs/shared/features/inline-simulator'
 import React from 'react'
+
+import {useFeatureEnabled} from './runtime-version/use-feature-enabled'
 
 type PlaybackContext = {
   simulatorEnabled: boolean
 }
 
 const playbackContext = React.createContext<PlaybackContext | null>(null)
-
-const CURRENT_VALUE: PlaybackContext = {
-  simulatorEnabled: BuildIf.STUDIO_DEV8_INTEGRATION_20260205,
-}
 
 const usePlaybackContext = (): PlaybackContext | null => {
   const ctx = React.useContext(playbackContext)
@@ -18,11 +17,14 @@ const usePlaybackContext = (): PlaybackContext | null => {
   return ctx
 }
 
-const PlaybackContextProvider: React.FC<{children: React.ReactNode}> = ({children}) => (
-  <playbackContext.Provider value={CURRENT_VALUE}>
-    {children}
-  </playbackContext.Provider>
-)
+const PlaybackContextProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
+  const simulatorEnabled = useFeatureEnabled(INLINE_SIMULATOR_FEATURE)
+  return (
+    <playbackContext.Provider value={{simulatorEnabled}}>
+      {children}
+    </playbackContext.Provider>
+  )
+}
 
 export {
   PlaybackContextProvider,

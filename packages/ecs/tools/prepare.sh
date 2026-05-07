@@ -1,6 +1,10 @@
 #!/bin/bash
 set -e
 
+ROOT=$(git rev-parse --show-toplevel)
+
+cd $ROOT/packages/ecs
+
 rm -rf tmp
 mkdir -p tmp/dist
 
@@ -21,3 +25,8 @@ cd dist
 unzip ../../../../bazel-bin/c8/ecs/bundle-without-metadata.zip > /dev/null
 
 mv runtime.d.ts ../index.d.ts
+
+cd $ROOT/packages/dev8
+npm ci
+npm run build
+mv $ROOT/packages/dev8/dist $ROOT/packages/ecs/tmp/dev8
