@@ -46,4 +46,6 @@ export {
   wrapBazel,
   bazelBuild,
   bazelOutputFiles,
+  BAZEL_SILENT_OPTIONS,
+  BAZEL_STDOUT_ONLY_OPTIONS,
 }
