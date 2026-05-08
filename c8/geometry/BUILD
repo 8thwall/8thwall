@@ -592,9 +592,9 @@ cc_library(
         "//c8:map",
         "//c8:scope-exit",
         "//c8/geometry:splat",
-        "//c8/spz:load-spz",
         "//c8/stats:scope-timer",
         "@draco",
+        "@spz",
     ],
 )
 # cc_end(0xfba235ae)
@@ -824,7 +824,7 @@ cc_library(
     ],
     deps = [
         "//bzl/inliner:rules2",
-        "//c8/spz:load-spz",
+        "@spz",
     ],
 )
 # cc_end(0x5aee4fb3)
@@ -853,8 +853,8 @@ cc_library(
         "//c8/geometry:octree",
         "//c8/geometry:splat-io",
         "//c8/pixels:pixel-buffer",
-        "//c8/spz:load-spz",
         "//c8/stats:scope-timer",
+        "@spz",
     ],
 )
 # cc_end(0xab1c7343)

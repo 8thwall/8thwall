@@ -1068,6 +1068,22 @@ http_archive(
 )
 
 http_archive(
+    name = "spz",
+    build_file = "//bzl/thirdpartybuild:spz.BUILD",
+    sha256 = "266c144fddb87f428495bbe1e44748fc3f1e5bfaa9e354a5d0d0284c4f8946cc",
+    strip_prefix = "spz-3.0.0",
+    url = "https://github.com/nianticlabs/spz/archive/refs/tags/v3.0.0.tar.gz",
+)
+
+http_archive(
+    name = "zstd",
+    build_file = "//bzl/thirdpartybuild:zstd.BUILD",
+    sha256 = "30f35f71c1203369dc979ecde0400ffea93c27391bfd2ac5a9715d2173d92ff7",
+    strip_prefix = "zstd-1.5.6",
+    url = "https://github.com/facebook/zstd/archive/refs/tags/v1.5.6.tar.gz",
+)
+
+http_archive(
     name = "openssl",
     build_file = "//third_party/openssl:openssl.BUILD",
     patches = [
