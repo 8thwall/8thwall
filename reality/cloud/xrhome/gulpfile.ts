@@ -14,7 +14,7 @@ import desktopConfig from './webpack.desktop'
 import {BuildIfEnv, getBuildIfReplacements} from './src/shared/buildif'
 import type {Build8Replacements} from './src/shared/build8'
 import {CODE8, runChildProcess} from './tools/gulp/process'
-import {wrapBazel} from './tools/gulp/bazel'
+import {wrapBazel, BAZEL_SILENT_OPTIONS, BAZEL_STDOUT_ONLY_OPTIONS} from './tools/gulp/bazel'
 import {createLiveBuildIfReplacements} from './tools/gulp/buildif-watch'
 
 const DESKTOP_OUTPUT_DIR = 'desktop-dist'
@@ -269,11 +269,35 @@ const buildDesktopWorker = () => runBundle(desktopWorkerBundle)
 const hotReloadDesktop = () => hotReloadBundle(desktopBundle, 3602)
 const watchDesktop = () => watchBundle(desktopBundle)
 
-const copyEcsResources = () => (
-  // TODO(christoph): Add additional resources as needed.
-  src('../../../c8/ecs/resources/fonts/*/**')
-    .pipe(dest(`${DESKTOP_OUTPUT_DIR}/ecs-resources/fonts`))
-)
+const copyEcsResources = async () => {
+  const config = `--config=${isProduction ? 'wasmreleasesimd' : 'wasm'}`
+  const target = '//c8/ecs/resources'
+
+  await wrapBazel(async () => {
+    await runChildProcess(
+      `bazel build ${BAZEL_SILENT_OPTIONS} ${config} -- ${target}`,
+      {cwd: CODE8}
+    )
+    const out = await runChildProcess(
+      `bazel cquery --output=files ${BAZEL_STDOUT_ONLY_OPTIONS} ${config} -- ${target}`,
+      {cwd: CODE8, stdio: ['ignore', 'pipe', 'inherit']}
+    )
+    const files = out.split('\n').filter(Boolean)
+
+    const ecsResourceBase = path.join('c8', 'ecs', 'resources')
+    await new Promise<void>((resolve, reject) => {
+      src(files, {cwd: CODE8})
+        .pipe(dest((file) => {
+          const idx = file.path.indexOf(ecsResourceBase)
+          if (idx < 0) throw new Error(`Path outside ${ecsResourceBase}: ${file.path}`)
+          const sub = file.path.slice(idx + ecsResourceBase.length)
+          return path.join(DESKTOP_OUTPUT_DIR, 'ecs-resources', path.dirname(sub))
+        }))
+        .on('end', resolve)
+        .on('error', reject)
+    })
+  })
+}
 
 const desktop = series(
   clean,

@@ -16,7 +16,9 @@ type ChildProcessOptions = {cwd?: string, stdio?: StdioOptions}
 
 const JUST_STDERR: StdioOptions = ['ignore', 'ignore', 'inherit']
 
-const runChildProcess = (fullCommand: string, options: ChildProcessOptions = {}) => {
+const runChildProcess = (
+  fullCommand: string, options: ChildProcessOptions = {}
+): Promise<string> => {
   if (!options.stdio) {
     options.stdio = JUST_STDERR
   }
@@ -33,13 +35,15 @@ const runChildProcess = (fullCommand: string, options: ChildProcessOptions = {})
     args = parseArgsStringToArgv(fullCommand.substr(firstSpaceIndex + 1))
   }
 
-  return new Promise<void>((resolve, reject) => {
+  return new Promise<string>((resolve, reject) => {
     const childProcess = childDoNotUse.spawn(command, args, options)
+    let stdout = ''
+    childProcess.stdout?.on('data', (chunk) => { stdout += chunk })
     childProcess.on('exit', (code) => {
       if (code) {
         reject(new Error(`Failed to run: ${fullCommand}`))
       } else {
-        resolve()
+        resolve(stdout)
       }
     })
   })
