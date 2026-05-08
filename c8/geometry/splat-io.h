@@ -1,7 +1,7 @@
 // Copyright © 2023 Niantic, Inc. All rights reserved.
 #pragma once
 
-#include "c8/spz/load-spz.h"
+#include <spz/load-spz.h>
 
 namespace c8 {
 
