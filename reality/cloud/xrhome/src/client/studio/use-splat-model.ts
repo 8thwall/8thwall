@@ -1,9 +1,9 @@
 import React from 'react'
 
 import {loadScript} from '@ecs/shared/load-script'
+import {getResourceBase} from '@ecs/shared/resources'
 import type {IModel} from '@ecs/shared/splat-model'
 
-import {SPLAT_MODEL_URL, SPLAT_WORKER_URL} from '../../shared/studio/cdn-assets'
 import {useAbandonableEffect} from '../hooks/abandonable-effect'
 
 let loadScriptPromise: Promise<void> | null = null
@@ -19,10 +19,10 @@ const useSplatModelLoaded = () => {
     }
 
     if (!loadScriptPromise) {
-      loadScriptPromise = loadScript(SPLAT_MODEL_URL)
+      loadScriptPromise = loadScript(`${getResourceBase()}splat/splat-loader.js`)
       loadScriptPromise.then(() => {
         Model = (window as any).Model
-        Model.setInternalConfig({workerUrl: SPLAT_WORKER_URL})
+        Model.setInternalConfig({workerUrl: `${getResourceBase()}splat/splat-worker.js`})
         finishedLoading = true
       })
     }

@@ -6,11 +6,13 @@ import {suspend} from 'suspend-react'
 
 import {useGLTF} from '@react-three/drei'
 
-import {DRACO_DECODER_PATH} from '../../../shared/studio/cdn-assets'
+import {getResourceBase} from '@ecs/shared/resources'
 
 import type {ModelInfo} from '../../editor/asset-preview-types'
 import {clone as skeletonClone} from '../skeleton-utils'
 import {cloneMaterialAndGeometry, getObject3DInfo} from '../asset-previews/asset-utils'
+
+const DRACO_DECODER_PATH = `${getResourceBase()}draco/`
 
 const resolveInput = (input: string | null | undefined) => {
   if (!input) {
