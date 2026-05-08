@@ -31,21 +31,9 @@ const bazelBuild = async (targets: Target | Target[], extraFlags?: string[]) => 
   ))
 )
 
-const bazelOutputFiles = async (
-  targets: Target | Target[], extraFlags?: string[]
-): Promise<string[]> => wrapBazel(async () => {
-  const out = await runChildProcess(
-    `bazel cquery --output=files ${BAZEL_STDOUT_ONLY_OPTIONS} ${formatFlags(extraFlags)} ` +
-      `-- ${formatTargets(targets)}`,
-    {cwd: CODE8, stdio: ['ignore', 'pipe', 'inherit']}
-  )
-  return out.split('\n').filter(Boolean)
-})
-
 export {
   wrapBazel,
   bazelBuild,
-  bazelOutputFiles,
   BAZEL_SILENT_OPTIONS,
   BAZEL_STDOUT_ONLY_OPTIONS,
 }
