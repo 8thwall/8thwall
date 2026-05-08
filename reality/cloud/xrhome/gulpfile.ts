@@ -270,16 +270,16 @@ const hotReloadDesktop = () => hotReloadBundle(desktopBundle, 3602)
 const watchDesktop = () => watchBundle(desktopBundle)
 
 const copyEcsResources = async () => {
-  const config = `--config=${isProduction ? 'wasmreleasesimd' : 'wasm'}`
+  const flags = `--config=${isProduction ? 'wasmreleasesimd' : 'wasm'}`
   const target = '//c8/ecs/resources'
 
   await wrapBazel(async () => {
     await runChildProcess(
-      `bazel build ${BAZEL_SILENT_OPTIONS} ${config} -- ${target}`,
+      `bazel build ${BAZEL_SILENT_OPTIONS} ${flags} -- ${target}`,
       {cwd: CODE8}
     )
     const out = await runChildProcess(
-      `bazel cquery --output=files ${BAZEL_STDOUT_ONLY_OPTIONS} ${config} -- ${target}`,
+      `bazel cquery --output=files ${BAZEL_STDOUT_ONLY_OPTIONS} ${flags} -- ${target}`,
       {cwd: CODE8, stdio: ['ignore', 'pipe', 'inherit']}
     )
     const files = out.split('\n').filter(Boolean)
