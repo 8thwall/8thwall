@@ -145,7 +145,7 @@ IStateGroupDefiner<CallbackArgs>, IStateGroupDefinerInternal<CallbackArgs> {
    * @param listener the callback to run when the event is received
    * @returns this state group definer
    */
-  listen<E extends string>(target: EidGetter, name: E, listener: EventListenerForEvent<E>) {
+  listen<T extends string>(target: EidGetter, name: T, listener: EventListenerForEvent<T>) {
     this.eventListeners.push({target, name, listener})
     return this
   }

@@ -70,7 +70,7 @@ interface IStateGroupDefiner<CallbackArgument = void> {
   onEvent: (event: string, nextState: StateId, args?: Omit<EventTrigger, 'type' | 'event'>) => this
   wait: (timeout: number, nextState: StateId) => this
   onTrigger: (trigger: TriggerHandle, nextState: StateId) => this
-  listen: <E extends string>(target: EidGetter, name: E, listener: EventListenerForEvent<E>) => this
+  listen: <T extends string>(target: EidGetter, name: T, listener: EventListenerForEvent<T>) => this
 }
 
 interface IStateGroupDefinerInternal<CallbackArgument> {
