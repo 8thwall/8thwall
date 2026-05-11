@@ -147,7 +147,9 @@ const AssetMeshConfigurator: React.FC<IAssetMeshConfigurator> = ({
 
   const applyTranslation = (x: number, y: number, z: number) => {
     const matrix = new Matrix4().makeTranslation(x, y, z)
-    previewScene.applyMatrix4(matrix)
+    // NOTE(christoph): promoteRootScene causes the children of the scene to be reparented, so we
+    // want to apply these transforms to the individual objects instead.
+    previewScene.children.forEach(e => e.applyMatrix4(matrix))
   }
 
   const changeModelPivotPoint = (newPivotPoint: string) => {
