@@ -373,7 +373,13 @@ const AssetMeshConfigurator: React.FC<IAssetMeshConfigurator> = ({
     auxScene.removeChild(auxNode)
     auxScene.setName(auxNode.getName())
 
+    // NOTE(christoph): If we'd adjusted the model scale/pivot, auxNode will have a non-identity
+    // transform. Since we're throwing away that node, we need to apply the transform to its
+    // children instead.
+    const rootTransform = new Matrix4().fromArray(auxNode.getMatrix())
     for (const child of auxNode.listChildren()) {
+      const newMatrix = new Matrix4().fromArray(child.getMatrix()).premultiply(rootTransform)
+      child.setMatrix(newMatrix.toArray())
       auxScene.addChild(child)
     }
 
