@@ -1,7 +1,7 @@
 import type {Eid, Schema, WriteData} from '../shared/schema'
 import type {Entity} from './entity-types'
 import type {EventListener, QueuedEvent} from './events'
-import type {DataForEvent} from './events-types'
+import type {DataForEvent, EventListenerForEvent} from './events-types'
 import type {World} from './world'
 import type {WorldAttribute} from './world-attribute'
 
@@ -70,7 +70,7 @@ interface IStateGroupDefiner<CallbackArgument = void> {
   onEvent: (event: string, nextState: StateId, args?: Omit<EventTrigger, 'type' | 'event'>) => this
   wait: (timeout: number, nextState: StateId) => this
   onTrigger: (trigger: TriggerHandle, nextState: StateId) => this
-  listen: (target: EidGetter, name: string, listener: EventListener) => this
+  listen: <E extends string>(target: EidGetter, name: E, listener: EventListenerForEvent<E>) => this
 }
 
 interface IStateGroupDefinerInternal<CallbackArgument> {

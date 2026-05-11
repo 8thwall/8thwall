@@ -1,4 +1,4 @@
-import type {EventListener} from './events'
+import type {EventListenerForEvent} from './events-types'
 import {getStateId} from './state-definer'
 import {
   append, EidGetter, EventTrigger, IStateGroupDefinerInternal, StateGroup, Trigger, TriggerHandle,
@@ -145,7 +145,7 @@ IStateGroupDefiner<CallbackArgs>, IStateGroupDefinerInternal<CallbackArgs> {
    * @param listener the callback to run when the event is received
    * @returns this state group definer
    */
-  listen(target: EidGetter, name: string, listener: EventListener) {
+  listen<E extends string>(target: EidGetter, name: E, listener: EventListenerForEvent<E>) {
     this.eventListeners.push({target, name, listener})
     return this
   }
