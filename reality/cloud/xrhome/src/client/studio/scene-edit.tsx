@@ -353,6 +353,12 @@ const SceneEdit: React.FC<ISceneEdit> = ({
 
   const selectedCamera = selectedObjects.find(obj => obj.camera)
 
+  const fogVisible = (
+    !isIsolated &&
+    stateCtx.state.cameraView === 'perspective' &&
+    stateCtx.state.shadingMode === 'shaded'
+  )
+
   const sceneInterfaceCtx: SceneInterface = {
     focusObject: handleFocusObject,
     cameraLookAt: (position) => {
@@ -555,7 +561,7 @@ const SceneEdit: React.FC<ISceneEdit> = ({
                         sky={sky}
                         isIsolated={isIsolated}
                       />
-                      {!isIsolated &&
+                      {fogVisible &&
                         <>
                           <SceneEnvironment reflectionsUrl={reflectionsUrl} />
                           <SceneFog fog={fog} />
