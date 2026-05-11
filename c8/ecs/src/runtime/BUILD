@@ -735,7 +735,7 @@ js_library(
         "stategroup-definer.ts",
     ],
     deps = [
-        "//c8/ecs/src/runtime:events",
+        "//c8/ecs/src/runtime:events-types",
         "//c8/ecs/src/runtime:state-definer",
         "//c8/ecs/src/runtime:state-machine-types",
     ],

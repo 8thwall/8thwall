@@ -2442,6 +2442,7 @@ declare global {
 }
 type EcsEventTypes$1 = globalThis.EcsEventTypes;
 type DataForEvent<EVENT> = EVENT extends keyof EcsEventTypes$1 ? EcsEventTypes$1[EVENT] : unknown;
+type EventListenerForEvent<EVENT> = EventListener$1<DataForEvent<EVENT>>;
 interface Events {
 	globalId: Eid;
 	addListener: <T extends string>(target: Eid, name: T, listener: EventListener$1<DataForEvent<T>>) => void;
@@ -2649,10 +2650,10 @@ interface IStateGroupDefiner<CallbackArgument = void> {
 	onEnter: (cb: StateGroup<CallbackArgument>["onEnter"]) => this;
 	onTick: (cb: StateGroup<CallbackArgument>["onTick"]) => this;
 	onExit: (cb: StateGroup<CallbackArgument>["onExit"]) => this;
-	onEvent: (event: string, nextState: StateId, args?: Omit<EventTrigger, "type" | "event">) => this;
+	onEvent: <T extends string>(event: T, nextState: StateId, args?: Omit<EventTrigger<T>, "type" | "event">) => this;
 	wait: (timeout: number, nextState: StateId) => this;
 	onTrigger: (trigger: TriggerHandle, nextState: StateId) => this;
-	listen: (target: EidGetter, name: string, listener: EventListener$1) => this;
+	listen: <T extends string>(target: EidGetter, name: T, listener: EventListenerForEvent<T>) => this;
 }
 export type MachineId = number;
 export interface StateMachineDefinition<CallbackArgument = void> {

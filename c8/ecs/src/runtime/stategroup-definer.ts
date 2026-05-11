@@ -1,4 +1,4 @@
-import type {EventListener} from './events'
+import type {EventListenerForEvent} from './events-types'
 import {getStateId} from './state-definer'
 import {
   append, EidGetter, EventTrigger, IStateGroupDefinerInternal, StateGroup, Trigger, TriggerHandle,
@@ -103,10 +103,10 @@ IStateGroupDefiner<CallbackArgs>, IStateGroupDefinerInternal<CallbackArgs> {
    * @param args optional arguments
    * @returns this state group definer
    */
-  onEvent(
-    event: string,
+  onEvent<T extends string>(
+    event: T,
     nextState: StateId,
-    args: Omit<EventTrigger, 'type' | 'event'> = {}
+    args: Omit<EventTrigger<T>, 'type' | 'event'> = {}
   ) {
     return this.addTrigger(nextState, {
       type: 'event',
@@ -145,7 +145,7 @@ IStateGroupDefiner<CallbackArgs>, IStateGroupDefinerInternal<CallbackArgs> {
    * @param listener the callback to run when the event is received
    * @returns this state group definer
    */
-  listen(target: EidGetter, name: string, listener: EventListener) {
+  listen<T extends string>(target: EidGetter, name: T, listener: EventListenerForEvent<T>) {
     this.eventListeners.push({target, name, listener})
     return this
   }
