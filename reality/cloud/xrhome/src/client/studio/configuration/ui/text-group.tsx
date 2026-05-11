@@ -37,7 +37,7 @@ const FontOption: React.FC<IFontOption> = ({option}) => {
   // Font name cannot have special chars used in our asset path (for font8 files). We use option
   // value so there is no collision if the font has the same name but a different path in assets/.
   // e.g. assets_PixelifySans-VariableFont_wght_font8 is ok but the original version is not.
-  const fontName = option.value.replace(/[/.]/g, '_')
+  const quotedName = `'${option.value.replace(/[/.]/g, '_')}'`
 
   // Even though style is removed and added when unmounted, network tab showed that the ttf file is
   // redownloaded.
@@ -45,12 +45,12 @@ const FontOption: React.FC<IFontOption> = ({option}) => {
     <div>
       <style>{`
         @font-face {
-          font-family: '${fontName}';
-          src: local('${fontName}'), url('${uiFont.ttf}');
-      `}
+          font-family: ${quotedName};
+          src: url('${uiFont.ttf}');
+      }`}
       </style>
 
-      <span style={{fontFamily: fontName}}>{option.content}</span>
+      <span style={{fontFamily: quotedName}}>{option.content}</span>
     </div>
   )
 }
