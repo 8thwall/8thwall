@@ -1,9 +1,8 @@
 import type {BrowserWindow} from 'electron'
 
 const registerPermissionHandler = (win: BrowserWindow) => {
+  const allowedPermissions = ['media', 'geolocation', 'pointerLock']
   win.webContents.session.setPermissionRequestHandler((_, permission, callback) => {
-    const allowedPermissions = ['media', 'geolocation']
-
     // NOTE(lreyna): We can add more logic here to allow/block based on different factors.
     // In the future we may want to check the requesting URL origin.
     // For now, we can just auto grant permissions. OSX will still prompt users on the app level.
