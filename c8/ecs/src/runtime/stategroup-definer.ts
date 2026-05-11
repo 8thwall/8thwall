@@ -103,10 +103,10 @@ IStateGroupDefiner<CallbackArgs>, IStateGroupDefinerInternal<CallbackArgs> {
    * @param args optional arguments
    * @returns this state group definer
    */
-  onEvent(
-    event: string,
+  onEvent<T extends string>(
+    event: T,
     nextState: StateId,
-    args: Omit<EventTrigger, 'type' | 'event'> = {}
+    args: Omit<EventTrigger<T>, 'type' | 'event'> = {}
   ) {
     return this.addTrigger(nextState, {
       type: 'event',

@@ -67,7 +67,11 @@ interface IStateGroupDefiner<CallbackArgument = void> {
   onEnter: (cb: StateGroup<CallbackArgument>['onEnter']) => this
   onTick: (cb: StateGroup<CallbackArgument>['onTick']) => this
   onExit: (cb: StateGroup<CallbackArgument>['onExit']) => this
-  onEvent: (event: string, nextState: StateId, args?: Omit<EventTrigger, 'type' | 'event'>) => this
+  onEvent: <T extends string>(
+    event: T,
+    nextState: StateId,
+    args?: Omit<EventTrigger<T>, 'type' | 'event'>
+  ) => this
   wait: (timeout: number, nextState: StateId) => this
   onTrigger: (trigger: TriggerHandle, nextState: StateId) => this
   listen: <T extends string>(target: EidGetter, name: T, listener: EventListenerForEvent<T>) => this
