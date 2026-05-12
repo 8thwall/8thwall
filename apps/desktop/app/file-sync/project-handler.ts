@@ -277,7 +277,7 @@ const buildZip = withErrorHandlingResponse(async (req: Request) => {
     throw makeCodedError('Project for appKey not found', 404)
   }
 
-  await runInstallCommand(project.location)
+  await runInstallCommand(project.appKey, project.location)
   await runBuildCommand(project.appKey, project.location)
 
   const distPath = path.join(project.location, 'dist')
@@ -782,7 +782,7 @@ const installPackages: RequestHandler = async (req) => {
     throw makeCodedError('Invalid request body', 400)
   }
   const parts = parsedBody.data.packages.map(e => `${e.name}@${e.version}`)
-  await runInstallCommand(project.location, parts)
+  await runInstallCommand(project.appKey, project.location, parts)
   return makeJsonResponse({})
 }
 

@@ -62,13 +62,15 @@ const runScript = (options: ScriptRunOptions): ChildProcess => {
 }
 
 const runInstallCommand = async (
-  savePath: string, extraArguments?: string[]
+  appKey: string, savePath: string, extraArguments?: string[]
 ): Promise<void> => new Promise((resolve, reject) => {
   const child = fork(
     NPM_CLI_PATH,
     ['install', ...(extraArguments || [])],
     {cwd: savePath, stdio: 'pipe', env: {ELECTRON_RUN_AS_NODE: '1'}, detached: true}
   )
+
+  forwardProcessOutput(appKey, child)
 
   const timeout = setTimeout(() => {
     log.error('npm install timed out, killing process')

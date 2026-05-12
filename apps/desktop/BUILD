@@ -86,7 +86,6 @@ js_library(
     ],
     deps = [
         "//apps/desktop:constants",
-        "//apps/desktop/app/file-sync:install-build-package",
         "//apps/desktop/app/file-sync:run-commands",
         "//apps/desktop/app/system-log:listeners",
         "//c8/cli:ip",
