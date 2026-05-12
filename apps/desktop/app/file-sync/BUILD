@@ -119,5 +119,6 @@ js_library(
     ],
     deps = [
         "//apps/desktop/app:resources",
+        "//apps/desktop/app/system-log:listeners",
     ],
 )

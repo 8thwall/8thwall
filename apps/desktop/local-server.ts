@@ -9,6 +9,7 @@ import {
 } from './constants'
 import {installBuildPackage} from './app/file-sync/install-build-package'
 import {runServeCommand, runProxyCommand} from './app/file-sync/run-commands'
+import {forwardProcessOutput} from './app/system-log/listeners'
 
 interface LocalServer {
   stop: () => Promise<void>
@@ -46,11 +47,14 @@ const killProcess = async (process: ChildProcess | undefined): Promise<void> => 
 
 const LOCAL_SERVER_PORT_RANGE = portNumbers(9001, 9100)
 const createLocalServer = async (
-  savePath: string, localSslProxyEnabled: boolean = false
+  appKey: string,
+  savePath: string,
+  localSslProxyEnabled: boolean = false
 ): Promise<LocalServer> => {
   await installBuildPackage(savePath)
   const webpackPort = await getPort({port: LOCAL_SERVER_PORT_RANGE})
   const webpackDevServer = runServeCommand(savePath, webpackPort)
+  forwardProcessOutput(appKey, webpackDevServer)
 
   let proxyPort: number | undefined
   let proxyProcess: ChildProcess | undefined

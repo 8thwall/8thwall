@@ -204,7 +204,7 @@ const startWatch = withErrorHandlingResponse(async (req: Request) => {
     }
 
     try {
-      const newManager = await createLocalServer(projectEntry.location)
+      const newManager = await createLocalServer(appKey, projectEntry.location)
       appKeyToLocalServerManager.set(appKey, newManager)
       const running = await newManager.checkRunning()
       if (!running) {
@@ -278,7 +278,7 @@ const buildZip = withErrorHandlingResponse(async (req: Request) => {
   }
 
   await runInstallCommand(project.location)
-  await runBuildCommand(project.location)
+  await runBuildCommand(project.appKey, project.location)
 
   const distPath = path.join(project.location, 'dist')
   try {

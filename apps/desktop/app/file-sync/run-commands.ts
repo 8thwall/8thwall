@@ -4,6 +4,7 @@ import fs from 'fs'
 import log from 'electron-log'
 
 import {NODE_MODULES_PATH} from '../resources'
+import {forwardProcessOutput} from '../system-log/listeners'
 
 const LOCAL_SSL_PROXY_CLI = 'local-ssl-proxy/build/main.js'
 const NPM_CLI_PATH = path.join(NODE_MODULES_PATH, 'npm/bin/npm-cli.js')
@@ -104,12 +105,15 @@ const runInstallCommand = async (
 })
 
 const runBuildCommand = (
+  appKey: string,
   savePath: string
 ): Promise<void> => new Promise((resolve, reject) => {
   const child = runScript({
     cwd: savePath,
     name: 'build',
   })
+
+  forwardProcessOutput(appKey, child)
 
   child.on('exit', (code, signal) => {
     if (signal === 'SIGTERM' || signal === 'SIGKILL') {

@@ -25,6 +25,7 @@ import {navigateToDeepLink} from './desktop-app/deep-link'
 import {setupMenu} from './menu'
 import {createDev8WebSocketServer} from './dev8-socket/dev8-socket-server'
 import {IMAGE_TARGETS_SCHEME, registerImageTargetsHandler} from './image-targets/protocol'
+import {setUpSystemLogPort} from './system-log/ports'
 
 const CONSOLE_WEBSOCKET_PORT = 62009
 
@@ -177,6 +178,7 @@ app.whenReady()
 
     win.webContents.on('did-finish-load', () => {
       setUpMainFileWatchPort(win)
+      setUpSystemLogPort(win)
       navigateToDeepLink(win, process.argv.pop() || '')
     })
 
