@@ -13,6 +13,10 @@ import {PrimaryButton} from '../../../ui/components/primary-button'
 import {SupportedPlatforms} from './supported-platforms'
 import {buildZip} from '../../../studio/local-sync-api'
 import {downloadBlob} from '../../../common/download-utils'
+import {useLogStreams} from '../../logs/use-log-streams'
+import {SYSTEM_STREAM_NAME} from '../../logs/log-constants'
+import CopyableBlock from '../../../widgets/copyable-block'
+import {StaticBanner} from '../../../ui/components/banner'
 
 interface IExportFlowHtml {
   onClose: () => void
@@ -25,17 +29,33 @@ const ExportFlowHtml: React.FC<IExportFlowHtml> = () => {
   const dispatch = useDispatch()
   const [isBuilding, setIsBuilding] = React.useState(false)
   const [currentStep, setCurrentStep] = React.useState<Steps>('start')
+  const [buildStartTime, setBuildStartTime] = React.useState(0)
+  const [buildCompleteTime, setBuildCompleteTime] = React.useState(0)
+  const [buildFailed, setBuildFailed] = React.useState(false)
+
+  const systemLogs = useLogStreams(appKey).find(e => buildFailed && e.name === SYSTEM_STREAM_NAME)
+
+  const buildLogs = systemLogs
+    ? systemLogs.logs
+      .filter(({timestamp}) => timestamp > buildStartTime &&
+      (!buildCompleteTime || timestamp < buildCompleteTime))
+      .map(e => e.text).join('\n')
+    : ''
 
   const handleExport = async () => {
     dispatch({type: 'ERROR', msg: null})
     setIsBuilding(true)
     try {
+      setBuildStartTime(Date.now())
+      setBuildCompleteTime(0)
+      setBuildFailed(false)
       const blob = await buildZip(appKey)
       const time = new Date().toISOString().replace(/[:.-]/g, '')
       downloadBlob(blob, `html-export-${time}.zip`)
     } catch (err) {
-      dispatch({type: 'ERROR', msg: t('editor_page.export_modal.html_export.build_error')})
+      setBuildFailed(true)
     } finally {
+      setBuildCompleteTime(Date.now())
       setIsBuilding(false)
     }
   }
@@ -104,6 +124,15 @@ const ExportFlowHtml: React.FC<IExportFlowHtml> = () => {
             {name: 'Viverse', url: 'https://8th.io/offline-html-export-viverse'},
           ]}
         />
+
+        {buildFailed &&
+          <>
+            <StaticBanner type='danger'>
+              {t('editor_page.export_modal.html_export.build_error')}
+            </StaticBanner>
+            {buildLogs && <CopyableBlock text={buildLogs} description='' />}
+          </>
+        }
       </div>
     </PublishPageWrapper>
   )
