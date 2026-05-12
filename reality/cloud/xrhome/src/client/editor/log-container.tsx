@@ -7,7 +7,6 @@ import editorActions from './editor-actions'
 import RecencyIndicator from './recency-indicator'
 import {SYSTEM_STREAM_NAME} from './logs/log-constants'
 import LogFilterMenu from './logs/log-filter-menu'
-import SystemFilterMenu from './logs/system-filter-menu'
 import type {ILogStream} from './logs/types'
 import LogSearchBox from './logs/log-search-box'
 import {LogStreamView} from './logs/log-stream-view'
@@ -171,14 +170,7 @@ const LogContainer: React.FC<ILogContainer> = ({
           {(currentStreamIsSystem || currentIsDeviceStream) &&
             <Menu className='filter-menu'>
               {currentStreamIsSystem
-                ? <SystemFilterMenu
-                    filterBuild={filterOptions.filterBuild}
-                    filterRepo={filterOptions.filterRepo}
-                    onToggleBuild={
-                        () => updateFilterOptions({filterBuild: !filterOptions.filterBuild})}
-                    onToggleRepo={
-                        () => updateFilterOptions({filterRepo: !filterOptions.filterRepo})}
-                />
+                ? null
                 : <LogFilterMenu
                     filterError={filterOptions.filterError}
                     filterWarn={filterOptions.filterWarn}

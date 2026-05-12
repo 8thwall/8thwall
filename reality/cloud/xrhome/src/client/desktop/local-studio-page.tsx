@@ -44,6 +44,7 @@ import {useAbandonableEffect} from '../hooks/abandonable-effect'
 import {useTheme} from '../user/use-theme'
 import {DismissibleModalContextProvider} from '../editor/dismissible-modal-context'
 import {Loader} from '../ui/components/loader'
+import {useSystemLog} from '../editor/hooks/use-system-log'
 
 const LocalStudioPageInner: React.FC<{appKey: string}> = () => {
   const simulatorId = 'local'
@@ -52,6 +53,7 @@ const LocalStudioPageInner: React.FC<{appKey: string}> = () => {
   const {listFiles} = useActions(coreGitActions)
   const ctx = useSceneContext()
   const stateCtx = useStudioStateContext()
+  useSystemLog()
 
   const handleBeforeFileSelect = (
     location: EditorFileLocation
@@ -122,7 +124,11 @@ const LocalStudioPageInner: React.FC<{appKey: string}> = () => {
   )
 
   if (BuildIf.STUDIO_OFFLINE_LOG_CONTAINER_20260205) {
-    res = <LogContainerSplit extraTabContent={<DebugSessionsMenu />}>{res}</LogContainerSplit>
+    const extraTabContent = BuildIf.REMOTE_DEVICE_CONNECT_20260512
+      ? <DebugSessionsMenu />
+      : null
+
+    res = <LogContainerSplit extraTabContent={extraTabContent}>{res}</LogContainerSplit>
   }
 
   res = (
