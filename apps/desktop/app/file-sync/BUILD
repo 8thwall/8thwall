@@ -102,22 +102,12 @@ js_stringloader(
 )
 
 js_library(
-    name = "install-build-package",
-    srcs = [
-        "install-build-package.ts",
-    ],
-    deps = [
-        "//apps/desktop:errors",
-        "//apps/desktop/app/file-sync:run-commands",
-    ],
-)
-
-js_library(
     name = "run-commands",
     srcs = [
         "run-commands.ts",
     ],
     deps = [
         "//apps/desktop/app:resources",
+        "//apps/desktop/app/system-log:listeners",
     ],
 )

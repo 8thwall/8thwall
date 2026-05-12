@@ -20,6 +20,7 @@ js_library(
     deps = [
         "//reality/shared/desktop:desktop-protocol-types",
         "//reality/shared/desktop:local-sync-types",
+        "//reality/shared/desktop:system-log-types",
     ],
 )
 
@@ -55,5 +56,12 @@ js_library(
     name = "image-target-api",
     srcs = [
         "image-target-api.ts",
+    ],
+)
+
+js_library(
+    name = "system-log-types",
+    srcs = [
+        "system-log-types.ts",
     ],
 )

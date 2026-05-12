@@ -7,8 +7,8 @@ import {guessIp} from '@repo/c8/cli/ip'
 import {
   DEV_SERVER_POLLING_INTERVAL, DEV_SERVER_POLLING_TIMEOUT,
 } from './constants'
-import {installBuildPackage} from './app/file-sync/install-build-package'
-import {runServeCommand, runProxyCommand} from './app/file-sync/run-commands'
+import {runServeCommand, runProxyCommand, runInstallCommand} from './app/file-sync/run-commands'
+import {forwardProcessOutput} from './app/system-log/listeners'
 
 interface LocalServer {
   stop: () => Promise<void>
@@ -46,11 +46,14 @@ const killProcess = async (process: ChildProcess | undefined): Promise<void> => 
 
 const LOCAL_SERVER_PORT_RANGE = portNumbers(9001, 9100)
 const createLocalServer = async (
-  savePath: string, localSslProxyEnabled: boolean = false
+  appKey: string,
+  savePath: string,
+  localSslProxyEnabled: boolean = false
 ): Promise<LocalServer> => {
-  await installBuildPackage(savePath)
+  await runInstallCommand(appKey, savePath)
   const webpackPort = await getPort({port: LOCAL_SERVER_PORT_RANGE})
   const webpackDevServer = runServeCommand(savePath, webpackPort)
+  forwardProcessOutput(appKey, webpackDevServer)
 
   let proxyPort: number | undefined
   let proxyProcess: ChildProcess | undefined

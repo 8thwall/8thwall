@@ -27,6 +27,7 @@ js_binary(
         "//apps/desktop/app/file-watch:ports",
         "//apps/desktop/app/image-targets:protocol",
         "//apps/desktop/app/preferences:protocol",
+        "//apps/desktop/app/system-log:ports",
     ],
 )
 
@@ -41,6 +42,7 @@ js_binary(
     deps = [
         "//apps/desktop/app:desktop-protocol",
         "//apps/desktop/app/file-watch:api",
+        "//apps/desktop/app/system-log:api",
         "//reality/shared/desktop:electron-api",
     ],
 )

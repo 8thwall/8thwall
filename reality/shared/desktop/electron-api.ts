@@ -1,5 +1,6 @@
 import type {LocalSyncMessage} from './local-sync-types'
 import type {StudiohubProtocol} from './desktop-protocol-types'
+import type {SystemLogHandler} from './system-log-types'
 
 const ELECTRON_API_KEY = 'electron'
 
@@ -11,10 +12,16 @@ type FileWatchApi = {
   removeHandler: (appKey: string) => void
 }
 
+type SystemLogApi = {
+  setHandler: (appKey: string, handler: SystemLogHandler) => void
+  clearHandler: (appKey: string) => void
+}
+
 type ElectronApi = {
   os: OsType
   onExternalNavigate: (callback: (pathAndQuery: string) => void) => () => void
   fileWatch: FileWatchApi
+  systemLog: SystemLogApi
   studiohubProtocol: StudiohubProtocol
   // For custom title bar
   minimizeWindow: () => void
@@ -24,4 +31,10 @@ type ElectronApi = {
 
 export {ELECTRON_API_KEY}
 
-export type {ElectronApi, LocalSyncHandler, FileWatchApi}
+export type {
+  ElectronApi,
+  LocalSyncHandler,
+  FileWatchApi,
+  SystemLogApi,
+  SystemLogHandler,
+}
