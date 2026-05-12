@@ -360,7 +360,7 @@ const NaeRowUploadDrop: React.FC<INaeRowUploadDrop> = ({
             {file.name}
           </div>
           <IconButton
-            text={t('button.close')}
+            text={t('button.close', {ns: 'common'})}
             stroke='close'
             size={0.625}
             onClick={(event) => {

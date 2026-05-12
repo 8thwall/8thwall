@@ -65,20 +65,18 @@ const useStyles = createThemedStyles(theme => ({
   },
   mainContent: {
     display: 'flex',
-    padding: '1rem 1.5rem 1.5rem 0rem',
+    minWidth: 0,
+    padding: '1rem 1rem 1rem 0rem',
     flexDirection: 'column',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
     flex: '1 0 0',
+    overflow: 'hidden',
     alignSelf: 'stretch',
-    [mobileViewOverride]: {
-      overflow: 'hidden',
-      flex: '1 1 100%',
-    },
   },
   sidebar: {
-    flex: '1 1 20%',
-    maxWidth: '200px',
+    flex: '0 0 auto',
+    width: '200px',
     display: 'flex',
     padding: '1rem 0.75rem',
     flexDirection: 'column',
@@ -203,7 +201,7 @@ const UniversalPublishModal: React.FC<IPublishModal> = ({
         <div className={classes.universalPublishModal}>
           <div className={classes.closeButton}>
             <IconButton
-              text={t('button.close')}
+              text={t('button.close', {ns: 'common'})}
               stroke='close'
               size={0.625}
               onClick={collapse}
