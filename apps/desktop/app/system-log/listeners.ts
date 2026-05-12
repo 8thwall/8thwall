@@ -41,4 +41,9 @@ const forwardProcessOutput = (appKey: string, process: ChildProcess) => {
   })
 }
 
-export {addSystemLogListener, removeSystemLogListener, dispatchSystemLog, forwardProcessOutput}
+export {
+  addSystemLogListener,
+  removeSystemLogListener,
+  dispatchSystemLog,
+  forwardProcessOutput,
+}
