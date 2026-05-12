@@ -323,4 +323,5 @@ export default ConsoleLogStreams
 
 export type {
   IncomingMessage,
+  InsertLogRequest,
 }

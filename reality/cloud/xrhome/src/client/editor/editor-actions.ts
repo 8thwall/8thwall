@@ -3,11 +3,16 @@ import localForage from 'localforage'
 
 import {dispatchify} from '../common'
 import type {AsyncThunk, DispatchifiedActions} from '../common/types/actions'
+import type {InsertLogRequest} from './console-log-streams'
 import type {SimulatorState, StudioDebugSession} from './editor-reducer'
 
 const getStudioFileBrowserHeightPercentKey = (repoId: string) => (
   `studio-file-browser-height-percent-${repoId}`
 )
+
+const addEditorLogs = (key: string, logs: InsertLogRequest[]) => (dispatch) => {
+  dispatch({type: 'EDITOR_LOGS_ADD', key, logs})
+}
 
 const addConsoleInput = (command: string) => (dispatch) => {
   dispatch({type: 'CONSOLE_INPUT_ADD', command})
@@ -112,6 +117,7 @@ const removeSimulatorSession = (
 }
 
 const rawActions = {
+  addEditorLogs,
   addConsoleInput,
   clearEditorLogStream,
   deleteEditorLogStream,

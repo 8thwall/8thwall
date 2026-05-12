@@ -69,7 +69,7 @@ const SimulatorViewActions: React.FC<ISimulatorView> = ({simulatorId}) => {
 
   return (
     <>
-      {!BuildIf.STUDIO_OFFLINE_LOG_CONTAINER_20260205 && (
+      {!BuildIf.REMOTE_DEVICE_CONNECT_20260512 && (
         <div className={appPreviewStyles.actionButton}>
           <IconButton
             onClick={handleOpenInBrowser}
