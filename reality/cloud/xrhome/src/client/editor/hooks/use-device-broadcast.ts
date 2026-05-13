@@ -11,10 +11,10 @@ const useDeviceBroadcast = () => {
     data: DebugMessage
   ) => {
     if (sessionId === INLINE_SIMULATOR_SESSION_ID) {
-    // TODO(christoph): Handle other device IDs, not just simulator
       const targetWindow = getInlinePreviewWindow()
       targetWindow?.postMessage(data, '*')
     }
+    // TODO(christoph): Handle other device IDs, not just simulator
     // eslint-disable-next-line no-console
     console.warn('Not implemented: Remote broadcast')
   }
