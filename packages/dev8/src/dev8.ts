@@ -126,7 +126,6 @@ let sentStartEvent = false
 let socketRestartCount = 0
 let socketFailureCount = 0
 let messageQueue: LogData[] = []
-let waitingOnFinalBuild = false
 const INITIAL_TIMER_TIMEOUT = 250
 const NORMAL_TIMER_TIMEOUT = 1000
 const MAX_QUEUE_SIZE = 100
@@ -355,36 +354,8 @@ const startWebSocket = () => {
     // Handle the message for studio debug events
     studioEventStream.handleSocketMessage(msg)
 
-    if (msg.action === 'BUILD_REQUEST') {
-      console.log(`Started new build ${msg.commitId}`)
-    } else if (msg.action === 'NEW_BUILD') {
-      const newBuildMsg = `Finished build ${msg.commitId}, ${msg.buildStatus} in ${msg.time} ms`
-      if (waitingOnFinalBuild) {
-        console.log(`${newBuildMsg}. Waiting for final build`)
-      } else {
-        console.log(newBuildMsg)
-      }
-      localStorage.setItem('8w-build-id', msg.commitId)
-      JSON.parse(msg.errors).forEach((e) => {
-        console.log(`[ERROR] ${e}`)
-      })
-      JSON.parse(msg.warnings).forEach((w) => {
-        console.log(`[WARNING] ${w}`)
-      })
-      if (!waitingOnFinalBuild) {
-        if (window.DEV_8W_NO_BUILD_RELOAD) {
-          return
-        }
-        if (simulatorConfig) {
-          reloadSimulator()
-        } else {
-          window.location.reload()
-        }
-      }
-    } else if (msg.action === 'EVAL') {
+    if (msg.action === 'EVAL') {
       console.log(eval(msg.cmd))
-    } else if (msg.action === 'SET_ATTRIBUTE') {
-      document.querySelector(`#${msg.id}`)?.setAttribute(msg.attr, msg.val)
     } else if (msg.action === 'DEBUG_HUD') {
       if (xrHud) {
         if (msg.enable) {
@@ -393,21 +364,6 @@ const startWebSocket = () => {
           xrHud.disable()
         }
       }
-    } else if (msg.action === 'RELOAD') {
-      waitingOnFinalBuild = false
-      if (window.DEV_8W_NO_BUILD_RELOAD) {
-        return
-      }
-      // NOTE(johnny): This message sometimes does not get sent to the editor logs because
-      // the reload happens before the message can get sent over.
-      console.log('Project reloading')
-      if (simulatorConfig) {
-        reloadSimulator()
-      } else {
-        window.location.reload()
-      }
-    } else if (msg.action === 'WAIT_AFTER_BUILD') {
-      waitingOnFinalBuild = true
     }
   }
 
