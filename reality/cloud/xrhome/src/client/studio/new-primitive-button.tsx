@@ -8,7 +8,7 @@ import type {SceneContext} from './scene-context'
 import {SelectMenu} from './ui/select-menu'
 import {
   PrimaryGeometryTypes, SecondaryGeometryTypes, LightTypes, makeEmptyObject, makePrimitive,
-  makeCamera, makeFace, makeMap, makeImageTarget,
+  makeCamera, makeFace, makeImageTarget,
 } from './make-object'
 import {Icon, IconStroke} from '../ui/components/icon'
 import {SpaceBetween} from '../ui/layout/space-between'
@@ -184,14 +184,6 @@ const createNewPrimitiveOptions = (
     )),
   }
 
-  const mapOption: MenuOption = createPrimitiveOption(
-    t('new_primitive_button.option.map'),
-    () => createAndSelectObject(
-      makeMap(newObjectParentId, t('new_primitive_button.option.map')),
-      ctx, stateCtx, makePrefab
-    ), 'mapOutline'
-  )
-
   const imageTargetOption: MenuOption = createPrimitiveOption(
     t('new_primitive_button.option.image_target'),
     () => handleNewPrimitive('imageTarget'), 'imageTarget'
@@ -214,8 +206,6 @@ const createNewPrimitiveOptions = (
     imageTargetOption,
     divider,
     uiMenuOptions,
-    divider,
-    mapOption,
   ]
 }
 
