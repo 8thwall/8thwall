@@ -7,10 +7,10 @@ const useDeviceBroadcast = () => {
   const {getInlinePreviewWindow} = useAppPreviewWindow()
 
   const sendData = (
-    sessionId: string,
+    deviceId: string,
     data: DebugMessage
   ) => {
-    if (sessionId === INLINE_SIMULATOR_SESSION_ID) {
+    if (deviceId === INLINE_SIMULATOR_SESSION_ID) {
       const targetWindow = getInlinePreviewWindow()
       targetWindow?.postMessage(data, '*')
     }

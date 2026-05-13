@@ -50,7 +50,6 @@ const LogStreamView: React.FC<ILogStreamView> = ({logStream, logFilter}) => {
     // Add submitted command to list of previously submitted commands.
     addConsoleInput(command)
 
-    // TODO(christoph): Switch to sessionId
     broadcast(logStream.deviceId, {
       action: 'EVAL',
       cmd: command,

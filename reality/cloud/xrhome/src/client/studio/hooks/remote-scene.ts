@@ -104,7 +104,7 @@ const useRemoteScene = ({inlineSimulatorId, baseScene}: DebugSceneOptions) => {
       return
     }
 
-    broadcast(inlineSimulatorId, {
+    sendData({
       action: 'ECS_DETACH',
       debugId: debugSessionRef.current.debugId,
     })
