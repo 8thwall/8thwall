@@ -4,6 +4,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 const createVirtualEntryPlugin = require('./entry-plugin')
 const createDev8Plugin = require('./dev8-plugin')
+const createAutoImportImageTargetsPlugin = require('./auto-import-image-targets-plugin')
 
 const rootPath = process.cwd()
 const distPath = path.join(rootPath, 'dist')
@@ -59,6 +60,10 @@ const config = {
     }),
     createVirtualEntryPlugin({
       srcDir: srcPath,
+    }),
+    createAutoImportImageTargetsPlugin({
+      imageTargetsPath: path.join(rootPath, 'image-targets'),
+      bundleName: 'bundle.js',
     }),
   ],
   resolve: {extensions: ['.ts', '.js']},
