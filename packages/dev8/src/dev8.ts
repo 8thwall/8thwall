@@ -14,6 +14,7 @@ import {
 import {createStudioDebugManager} from './studio-debug'
 import {createStudioEventStreamManager} from './studio-event-stream'
 import type {SimulatorConfig} from './xrsimulator/simulator-types'
+import {loadParameters} from './parameters'
 
 declare global {
   interface Window {
@@ -40,6 +41,11 @@ type LogData = {
 
 /* eslint-disable no-console, no-eval */
 
+const {
+  ua, debugFlag, debugHudKey, deviceId, sessionId, simulatorConfig,
+  simulatorRendererConfig, simulatorId, originalUrl, channel,
+} = loadParameters()
+
 const injectGoogleNoTranslateRule = () => {
   const meta = document.createElement('meta')
   meta.setAttribute('name', 'google')
@@ -51,69 +57,6 @@ const needsUpdate = (config: SimulatorConfig): boolean => (
   !!config?.cameraUrl || !!config?.poiId || !!config?.mockLat ||
   !!config?.mockLng || !!config?.mockCoordinateValue
 )
-
-/* Get a random persistent nonce to identify this browser */
-const KEY = 'hot-reload-deviceid'
-let deviceId = localStorage.getItem(KEY)
-if (deviceId === null) {
-  deviceId = Math.random().toString(36).substring(2, 15)
-  localStorage.setItem(KEY, deviceId)
-}
-
-const DEBUG_PARAM = 'd'
-const SIMULATOR_PARAM = 'simulatorConfig'
-const SESSION_PARAM = 'sessionId'
-const DEBUG_KEY_PREFIX = '8w.debug-mode/'
-const CHANNEL_PARAM = 'channel'
-
-const ORIGINAL_URL = window.location.href
-
-// Scope local storage keys by appkey
-const debugHudKey = DEBUG_KEY_PREFIX + deviceId
-const params = new URLSearchParams(window.location.search)
-
-const simulatorConfigParam = params.get(SIMULATOR_PARAM)
-const simulatorConfig = simulatorConfigParam
-  ? {
-    ...JSON.parse(simulatorConfigParam),
-    // NOTE(juliesoohoo) The simulatorConfig version after a first load or reload is always 0 to
-    // ensure any updates requested afterwards are applied, since the renderer config cannot
-    // be passed in the URL params
-    version: 0,
-  }
-  : null
-
-const simulatorRendererConfig = {version: 0}
-
-const ua = simulatorConfig ? 'Simulator' : window.navigator.userAgent
-
-// For simulator sessions, this will always be provided in the params.
-let sessionId = params.get(SESSION_PARAM)
-if (!sessionId) {
-  sessionId = Array.from({length: 8})
-    .map(() => Math.floor(Math.random() * 36).toString(36))
-    .join('')
-  params.set(SESSION_PARAM, sessionId)
-  window.history.replaceState(null, '', `${window.location.pathname}?${params}`)
-}
-
-let debugFlag
-if (params.has(DEBUG_PARAM)) {
-  // This is present as ?d=true if the HUD is enabled.
-  debugFlag = params.get(DEBUG_PARAM)
-  localStorage.setItem(debugHudKey, debugFlag)
-} else {
-  debugFlag = localStorage.getItem(debugHudKey)
-}
-debugFlag = debugFlag === 'true'
-
-// Clear the parameters so that users don't see it in their url
-const paramsToClear = [DEBUG_PARAM, SIMULATOR_PARAM, CHANNEL_PARAM]
-if (paramsToClear.some(p => params.has(p))) {
-  const replacedUrl = new URL(ORIGINAL_URL)
-  paramsToClear.forEach(p => replacedUrl.searchParams.delete(p))
-  window.history.replaceState(null, '', replacedUrl.toString())
-}
 
 let xrHud: ReturnType<typeof XrHudManager>
 let xrSimulator: ReturnType<typeof XrSimulatorManager>
@@ -163,7 +106,7 @@ const broadcastInitialDebugStatus = () => {
         screenHeight,
         screenWidth,
         ua,
-        simulatorId: simulatorConfig?.simulatorId,
+        simulatorId,
       },
       // Do not broadcast console to connections with deviceId
       FilterExpression: 'attribute_not_exists(deviceId)',
@@ -182,7 +125,7 @@ const broadcastSetDebugStatus = (status: boolean) => {
         deviceId,
         sessionId,
         status,
-        simulatorId: simulatorConfig?.simulatorId,
+        simulatorId,
       },
       // Do not broadcast console to connections with deviceId
       FilterExpression: 'attribute_not_exists(deviceId)',
@@ -222,7 +165,7 @@ const clearLog = async () => {
         ua,
         screenHeight,
         screenWidth,
-        simulatorId: simulatorConfig?.simulatorId,
+        simulatorId,
       },
       // Do not broadcast console to connections with deviceId
       FilterExpression: 'attribute_not_exists(deviceId)',
@@ -275,33 +218,22 @@ const maybeLogConsoleActivity = (
 }
 
 const reloadSimulator = (currentSimulatorConfig = simulatorConfig) => {
-  const url = new URL(ORIGINAL_URL)
+  const url = new URL(originalUrl)
   url.searchParams.set('simulatorConfig', JSON.stringify(currentSimulatorConfig))
   window.location.href = url.toString()
-  broadcastReloadConfirmation(simulatorConfig?.simulatorId)
+  broadcastReloadConfirmation(simulatorId)
 }
 
-const simulatorIdMatches = simulatorId => (
-  simulatorId && simulatorId === simulatorConfig?.simulatorId
+const simulatorIdMatches = (incomingSimulatorId: string) => (
+  incomingSimulatorId && incomingSimulatorId === simulatorId
 )
 
 const studioEventStream = createStudioEventStreamManager(() => ws)
 const studioDebug = createStudioDebugManager(
-  sessionId, ua, simulatorConfig?.simulatorId, studioEventStream
+  sessionId, ua, simulatorId, studioEventStream
 )
 
 const startWebSocket = () => {
-  console.log('startWebSocket')
-  let channel = params.get(CHANNEL_PARAM)
-  const match = document.location.href.match(/^https:\/\/(.*)\.dev\.8thwall\.app\/(.*)$/)
-  if (match) {
-    const workspace = match[1].split('-').slice(-1)[0]
-    const branchName = match[1].split('-').slice(0, -1).join('-')
-    const appName = match[2].split('/')[0]
-    if (workspace && branchName && appName) {
-      channel = `${workspace}.${appName}.${branchName}`
-    }
-  }
   if (!channel) {
     return
   }
