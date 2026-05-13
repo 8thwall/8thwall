@@ -74,7 +74,6 @@ const LogContainerSplit: React.FC<IFileEditorMainContent> = ({
         logKey={app.appKey}
         showLogs={showLogs}
         toggleShowLogs={toggleShowLogs}
-        clientSpecifier={null}
         autoExpand={!isCloudStudioApp(app)}
         extraTabContent={extraTabContent}
       />

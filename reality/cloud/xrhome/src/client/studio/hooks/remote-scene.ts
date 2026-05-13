@@ -13,8 +13,8 @@ import type {StudioDebugSession} from '../../editor/editor-reducer'
 import {useChangeEffect} from '../../hooks/use-change-effect'
 import {useStudioStateContext} from '../studio-state-context'
 import {deriveActiveSpace} from './active-space'
-import {useAppPreviewWindow} from '../../common/app-preview-window-context'
 import {useWindowMessageHandler} from '../../hooks/use-window-message-handler'
+import {useDeviceBroadcast} from '../../editor/hooks/use-device-broadcast'
 
 type DebugSession = {
   debugId: string
@@ -56,13 +56,12 @@ const useRemoteScene = ({inlineSimulatorId, baseScene}: DebugSceneOptions) => {
     ensureSimulatorStateReady(app.appKey)
   }, [app.appKey])
 
-  const {getInlinePreviewWindow} = useAppPreviewWindow()
+  const broadcast = useDeviceBroadcast()
 
   const sendData = (
     data: DebugMessage
   ) => {
-    const targetWindow = getInlinePreviewWindow()
-    targetWindow?.postMessage(data, '*')
+    broadcast(inlineSimulatorId, data)
   }
 
   const sendAttach = (session: Pick<StudioDebugSession, 'pageId' | 'simulatorId'>) => {

@@ -98,9 +98,20 @@ type AttachConfirmMessage = {
   debugId: string
 }
 
+type EvalMessage = {
+  action: 'EVAL'
+  cmd: string
+}
+
+type DebugHudMessage = {
+  action: 'DEBUG_HUD'
+  enable: boolean
+}
+
 type DebugMessage = AttachMessage | DetachMessage | DebugEditMessage | ReadyMessage |
   CloseMessage | WorldUpdateMessage | StateUpdateMessage | RollcallMessage | DocRefreshMessage |
   TransformUpdateMessage | BaseEditMessage | ResetSceneMessage | AttachConfirmMessage
+  | EvalMessage | DebugHudMessage
 
 type DebugCallback = (message: DebugMessage) => void
 
@@ -127,4 +138,6 @@ export type {
   ResetLevel,
   AttachConfirmMessage,
   DebugCallback,
+  EvalMessage,
+  DebugHudMessage,
 }
