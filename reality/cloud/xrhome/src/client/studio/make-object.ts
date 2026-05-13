@@ -14,7 +14,6 @@ import type {
   StaticImageTargetOrientation,
   PolyhedronGeometry,
   TorusGeometry,
-  MapPoint,
 } from '@ecs/shared/scene-graph'
 import type {DeepReadonly} from 'ts-essentials'
 
@@ -22,8 +21,6 @@ import {DEFAULT_MATERIAL_COLOR} from '@ecs/shared/material-constants'
 
 import {inferResourceObject} from '@ecs/shared/resource'
 import type {ParticlesSchema} from '@ecs/runtime'
-import {THEME_PRESETS, MAP_DEFAULTS} from '@ecs/shared/map-constants'
-import type {MapPointOverrides} from '@ecs/shared/map-controller'
 
 import {CIRCLE_05_URL} from '../../shared/studio/cdn-assets'
 
@@ -308,25 +305,6 @@ const makeLocation = (
   })
 }
 
-const makeMap = (parentId: string, objectName: string): GraphObject => ({
-  ...makeEmptyObject(parentId),
-  name: objectName,
-  map: {...MAP_DEFAULTS},
-  mapTheme: {...THEME_PRESETS.natural},
-})
-
-const makeMapPoint = (
-  parentId: string,
-  objectName: string,
-  mapPoint: MapPoint,
-  overrides: MapPointOverrides
-): GraphObject => ({
-  ...makeEmptyObject(parentId),
-  name: objectName,
-  mapPoint,
-  ...overrides,
-})
-
 const makeParticles = (): Partial<ParticlesSchema> => ({
   emitterLife: 0,
   particlesPerShot: 20,
@@ -379,8 +357,6 @@ export {
   makeFaceMeshObject,
   makeImageTarget,
   makeLocation,
-  makeMap,
-  makeMapPoint,
   makeParticles,
   PrimaryGeometryTypes,
   SecondaryGeometryTypes,
