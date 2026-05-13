@@ -1,6 +1,5 @@
 import React from 'react'
 
-import WebsocketPool from '../../websockets/websocket-pool'
 import editorActions from '../editor-actions'
 import type {ILog, ILogStream} from './types'
 import LogItem from './log-item'
@@ -11,6 +10,7 @@ import useActions from '../../common/use-actions'
 import {GetSnapshotBeforeUpdate} from '../../widgets/snapshot-before-update'
 import {useEnclosedApp} from '../../apps/enclosed-app-context'
 import {Keys} from '../../studio/common/keys'
+import {useDeviceBroadcast} from '../hooks/use-device-broadcast'
 
 interface ILogStreamView {
   logStream: ILogStream
@@ -42,24 +42,19 @@ const LogStreamView: React.FC<ILogStreamView> = ({logStream, logFilter}) => {
     scrollToBottom()
   }, [])
 
+  const broadcast = useDeviceBroadcast()
+
   const handleCommandSubmit = (e) => {
     e.preventDefault()
-
-    // TODO(christoph): Fix this up
-    const specifier = null
 
     // Add submitted command to list of previously submitted commands.
     addConsoleInput(command)
 
-    WebsocketPool.broadcastMessage(specifier, {
+    // TODO(christoph): Switch to sessionId
+    broadcast(logStream.deviceId, {
       action: 'EVAL',
-      data: {
-        cmd: command,
-      },
-      FilterExpression: 'deviceId=:deviceIdVal',
-      FilterValues: {
-        ':deviceIdVal': logStream.deviceId,
-      },
+      cmd: command,
+
     })
 
     setCommand('')

@@ -2,7 +2,6 @@ import * as React from 'react'
 import {Button, Menu, Checkbox} from 'semantic-ui-react'
 import {useTranslation} from 'react-i18next'
 
-import WebsocketPool, {SocketSpecifier} from '../websockets/websocket-pool'
 import editorActions from './editor-actions'
 import RecencyIndicator from './recency-indicator'
 import {SYSTEM_STREAM_NAME} from './logs/log-constants'
@@ -20,11 +19,11 @@ import {countType} from './logs/count-reducer'
 import {useChangeEffect} from '../hooks/use-change-effect'
 import {getSessionDisplayTitle} from './debug-session-info'
 import {combine} from '../common/styles'
+import {useDeviceBroadcast} from './hooks/use-device-broadcast'
 
 interface ILogContainer {
   logKey: string
   expanded: boolean
-  clientSpecifier: SocketSpecifier
   toggleExpanded: () => void
   autoExpand?: boolean  // allows the console to auto-expand when a new log stream is added
   extraTabContent?: React.ReactNode
@@ -44,7 +43,6 @@ const LogContainer: React.FC<ILogContainer> = ({
   logKey: key,
   expanded,
   toggleExpanded,
-  clientSpecifier,
   autoExpand = true,
   extraTabContent,
 }) => {
@@ -87,19 +85,15 @@ const LogContainer: React.FC<ILogContainer> = ({
     }
   }, [logStreams])
 
+  const broadcast = useDeviceBroadcast()
+
   const handleToggleDebug = (stream: ILogStream, e: React.MouseEvent) => {
     e.preventDefault()
 
     setLogStreamDebugHudStatus(key, stream.name, !stream.isDebugHudActive)
-    WebsocketPool.broadcastMessage(clientSpecifier, {
+    broadcast(stream.deviceId, {
       action: 'DEBUG_HUD',
-      data: {
-        enable: !stream.isDebugHudActive,
-      },
-      FilterExpression: 'deviceId=:deviceIdVal',
-      FilterValues: {
-        ':deviceIdVal': stream.deviceId,
-      },
+      enable: !stream.isDebugHudActive,
     })
   }
 
