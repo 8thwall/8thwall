@@ -14,7 +14,6 @@ import {
 import {createStudioDebugManager} from './studio-debug'
 import {createStudioEventStreamManager} from './studio-event-stream'
 import type {SimulatorConfig} from './xrsimulator/simulator-types'
-import {createGeolocationIntercept} from './xrsimulator/geolocation-methods'
 
 declare global {
   interface Window {
@@ -52,8 +51,6 @@ const needsUpdate = (config: SimulatorConfig): boolean => (
   !!config?.cameraUrl || !!config?.poiId || !!config?.mockLat ||
   !!config?.mockLng || !!config?.mockCoordinateValue
 )
-
-let geolocationIntercept: undefined | ReturnType<typeof createGeolocationIntercept>
 
 /* Get a random persistent nonce to identify this browser */
 const KEY = 'hot-reload-deviceid'
@@ -500,10 +497,6 @@ window.addEventListener('message', (event) => {
             Object.assign(simulatorConfig, config)
             Object.assign(simulatorRendererConfig, event.data.data.simulatorRendererConfig)
             xrSimulator.updateSimulator(simulatorConfig, simulatorRendererConfig)
-
-            if (geolocationIntercept) {
-              geolocationIntercept.update(simulatorConfig)
-            }
           } else {
             xrSimulator.disable()
           }
@@ -558,9 +551,6 @@ window.addEventListener('beforeunload', () => {
 })
 
 wrapConsoleMethods()
-if (!geolocationIntercept) {
-  geolocationIntercept = createGeolocationIntercept(simulatorConfig)
-}
 
 startWebSocket()
 injectGoogleNoTranslateRule()
