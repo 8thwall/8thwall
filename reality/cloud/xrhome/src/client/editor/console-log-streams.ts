@@ -1,31 +1,13 @@
 import type {DeepReadonly} from 'ts-essentials'
 
+import type {ConsoleActivityMessage} from '@ecs/shared/debug-messaging'
+
 import {getDeviceTitle} from './device-models'
-import {BUILD_TAG, REPO_TAG, SYSTEM_STREAM_NAME} from './logs/log-constants'
-import {getTruncatedHash} from '../git/g8-commit'
+import {SYSTEM_STREAM_NAME} from './logs/log-constants'
 import type {ILog, ILogStream} from './logs/types'
 import type {ScopedEditorState} from './editor-reducer'
 
 const LOG_ITEMS_LIMIT = 2000
-
-const tryParse = (s: string) => {
-  try {
-    return JSON.parse(s)
-  } catch (err) {
-    return null
-  }
-}
-
-// NOTE(christoph): The input is expected to be a JSON-encoded array of strings
-const getLineStrings = (s: string) => {
-  const lines = tryParse(s)
-
-  if (!lines) {
-    return ''
-  }
-
-  return lines.join('\n')
-}
 
 const createStream = (
   streamName: string,
@@ -138,181 +120,23 @@ const updateLogStates = (
   state
 )
 
-type Dev8Log = Pick<ILog, 'timestamp' | 'sourceLocation' | 'stack'> & {
-  fn: string      // This gets translated to `type`
-  args: string[]  // This gets translated to `text`
-}
-
-type ConsoleActivityMessage = {
-  action: 'CONSOLE_ACTIVITY'
-  deviceId: string
-  screenHeight: number
-  screenWidth: number
-  ua: string
-  sessionId: string
-  simulatorId?: string
-  logs?: Dev8Log[]
-} & Partial<Dev8Log>  // NOTE(christoph): We used to have one log per message, the added "logs"
-
-type NewBuildMessage = {
-  action: 'NEW_BUILD'
-  branch: string
-  commitId: string
-  errors: string  // JSON encoded array
-  warnings: string  // JSON encoded array
-  buildStatus: 'ERROR' | 'WARNING' | 'OK'
-}
-
-type BuildRequestMessage = {
-  action: 'BUILD_REQUEST'
-  branch: string
-  commitId: string
-}
-
-type IncomingMessage = ConsoleActivityMessage | NewBuildMessage | BuildRequestMessage
-
-const devOnlyRawMessageLog = (msg) => {
-  if (BuildIf.LOCAL_DEV) {
-    return {streamName: '[DEV ONLY] Raw', log: {text: JSON.stringify(msg, null, 2)}}
-  }
-  return null
-}
-
-const messageLog = (msg: IncomingMessage, title = ''): InsertLogRequest[] | InsertLogRequest => {
-  if (msg.action === 'CONSOLE_ACTIVITY') {
-    if (msg.logs) {
-      return msg.logs.map(l => (
-        {
-          streamName: msg.sessionId || msg.deviceId,
-          screenHeight: msg.screenHeight,
-          screenWidth: msg.screenWidth,
-          log: {
-            timestamp: l.timestamp,
-            type: l.fn,
-            text: l.args.join(' '),
-            ua: msg.ua,
-            deviceId: msg.deviceId,
-            numRedundant: 1,
-            sourceLocation: l.sourceLocation,
-            stack: l.stack,
-          },
-        }
-      ))
-    } else {
-      return [{
-        streamName: msg.sessionId || msg.deviceId,
-        screenHeight: msg.screenHeight,
-        screenWidth: msg.screenWidth,
-        log: {
-          timestamp: msg.timestamp,
-          type: msg.fn,
-          text: msg.args.join(' '),
-          ua: msg.ua,
-          deviceId: msg.deviceId,
-          numRedundant: 1,
-          sourceLocation: msg.sourceLocation,
-        },
-      }]
-    }
-  }
-
-  const isRepoBranch = msg.branch && ['master', 'staging', 'production'].includes(msg.branch)
-  const shortid = getTruncatedHash(msg.commitId)
-
-  if (msg.action === 'BUILD_REQUEST') {
-    if (isRepoBranch) {
-      return {
-        streamName: SYSTEM_STREAM_NAME,
-        log: {
-          text: `${title}New commit on ${msg.branch}. [${shortid}]`,
-          tags: [REPO_TAG],
-        },
-      }
-    }
-    return {
-      streamName: SYSTEM_STREAM_NAME,
-      log: {
-        text: `${title}Build started. [${shortid}]`,
-        tags: [BUILD_TAG],
-      },
-    }
-  }
-
-  if (msg.action === 'NEW_BUILD') {
-    if (isRepoBranch) {
-      if (msg.buildStatus === 'ERROR') {
-        const errs = getLineStrings(msg.errors)
-        return {
-          streamName: SYSTEM_STREAM_NAME,
-          log: {
-            type: 'error',
-            text: `${title}Build failed on ${msg.branch} [${shortid}] with errors:\n${errs}`,
-            tags: [REPO_TAG],
-          },
-        }
-      }
-
-      if (msg.buildStatus === 'WARNING') {
-        const warns = getLineStrings(msg.warnings)
-        return {
-          streamName: SYSTEM_STREAM_NAME,
-          log: {
-            type: 'warn',
-            text: `${title}Build completed on ${msg.branch} [${shortid}] with warnings:\n${warns}`,
-            tags: [REPO_TAG],
-          },
-        }
-      }
-
-      return {
-        streamName: SYSTEM_STREAM_NAME,
-        log: {
-          type: 'success',
-          text: `${title}Build completed on ${msg.branch}. [${shortid}]`,
-          tags: [REPO_TAG],
-        },
-      }
-    }
-
-    if (msg.buildStatus === 'ERROR') {
-      const errs = getLineStrings(msg.errors)
-      return {
-        streamName: SYSTEM_STREAM_NAME,
-        log: {
-          type: 'error',
-          text: `${title}Build failed for [${shortid}] with errors:\n${errs}`,
-          tags: [BUILD_TAG],
-        },
-      }
-    }
-
-    if (msg.buildStatus === 'WARNING') {
-      const warns = getLineStrings(msg.warnings)
-      return {
-        streamName: SYSTEM_STREAM_NAME,
-        log: {
-          type: 'warn',
-          text: `${title}Build completed for [${shortid}] with warnings:\n${warns}`,
-          tags: [BUILD_TAG],
-        },
-      }
-    }
-
-    return {
-      streamName: SYSTEM_STREAM_NAME,
-      log: {
-        type: 'success',
-        text: `${title}Build completed. [${shortid}]`,
-        tags: [BUILD_TAG],
-      },
-    }
-  }
-
-  return null
-}
+const messageLog = (msg: ConsoleActivityMessage): InsertLogRequest[] => msg.logs.map(l => ({
+  streamName: msg.sessionId || msg.deviceId,
+  screenHeight: msg.screenHeight,
+  screenWidth: msg.screenWidth,
+  log: {
+    timestamp: l.timestamp,
+    type: l.fn,
+    text: l.args.join(' '),
+    ua: msg.ua,
+    deviceId: msg.deviceId,
+    numRedundant: 1,
+    sourceLocation: l.sourceLocation,
+    stack: l.stack,
+  },
+}))
 
 const ConsoleLogStreams = {
-  devOnlyRawMessageLog,
   messageLog,
   updateLogStates,
   createStream,
@@ -322,6 +146,5 @@ const ConsoleLogStreams = {
 export default ConsoleLogStreams
 
 export type {
-  IncomingMessage,
   InsertLogRequest,
 }

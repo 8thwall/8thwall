@@ -9,7 +9,7 @@ type SourceLocation = {
 }
 
 type BaseInfo = SourceLocation & {
-  function?: string
+  function: string | undefined
 }
 
 type SourceLocationPromise = Promise<SourceLocation | null>
