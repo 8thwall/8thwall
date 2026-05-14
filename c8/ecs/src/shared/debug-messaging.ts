@@ -137,7 +137,7 @@ type SourceLocation = {
 }
 
 type StackTraceEntry = SourceLocation & {
-  function?: string
+  function: string | undefined
 }
 
 type StackTrace = (StackTraceEntry | null)[]
