@@ -13,6 +13,7 @@ const useDeviceBroadcast = () => {
     if (deviceId === INLINE_SIMULATOR_SESSION_ID) {
       const targetWindow = getInlinePreviewWindow()
       targetWindow?.postMessage(data, '*')
+      return
     }
     // TODO(christoph): Handle other device IDs, not just simulator
     // eslint-disable-next-line no-console

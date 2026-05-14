@@ -129,7 +129,7 @@ const messageLog = (msg: ConsoleActivityMessage): InsertLogRequest[] => msg.logs
     type: l.fn,
     text: l.args.join(' '),
     ua: msg.ua,
-    deviceId: msg.deviceId,
+    deviceId: msg.sessionId || msg.deviceId,
     numRedundant: 1,
     sourceLocation: l.sourceLocation,
     stack: l.stack,

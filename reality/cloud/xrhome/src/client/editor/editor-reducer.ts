@@ -254,7 +254,7 @@ const handlers: Record<string, Handler> = {
     } else {
       const {deviceId, ua, screenHeight, screenWidth} = action
       const newLogStream = ConsoleLogStreams.createStream(
-        sessionId, deviceId, [], ua, screenHeight, screenWidth, status, true
+        sessionId, sessionId || deviceId, [], ua, screenHeight, screenWidth, status, true
       )
       newLogStreams = ConsoleLogStreams.addStreamToStreams(newLogStream, logStreams)
     }
