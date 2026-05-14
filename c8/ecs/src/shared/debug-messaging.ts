@@ -120,7 +120,7 @@ type DeviceInfo = {
   ua: string
 }
 
-type InitialDebugHudStatusMessage = MessageWithIds & DeviceInfo &{
+type InitialDebugHudStatusMessage = MessageWithIds & DeviceInfo & {
   action: 'INITIAL_DEBUG_HUD_STATUS'
   status: boolean
 }
@@ -136,21 +136,21 @@ type SourceLocation = {
   column?: number | null
 }
 
-type BaseInfo = SourceLocation & {
+type StackTraceEntry = SourceLocation & {
   function?: string
 }
 
-type BaseInfoStack = (BaseInfo | null)[]
+type StackTrace = (StackTraceEntry | null)[]
 
 type ConsoleLog = {
   fn: string
   args: unknown[]
   timestamp: number
   sourceLocation?: SourceLocation
-  stack?: BaseInfoStack
+  stack?: StackTrace
 }
 
-type ConsoleActivityMessage = MessageWithIds & DeviceInfo &{
+type ConsoleActivityMessage = MessageWithIds & DeviceInfo & {
   action: 'CONSOLE_ACTIVITY'
   logs: ConsoleLog[]
 }
