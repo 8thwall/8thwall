@@ -116,6 +116,35 @@ const removeSimulatorSession = (
   await localForage.setItem(simulatorStateKey(appKey), updatedState)
 }
 
+const setLogStreamDebugInitialHudStatus = (
+  key: string,
+  deviceId: string,
+  sessionId: string,
+  status: boolean,
+  screenWidth: any,
+  screenHeight: any,
+  ua: string
+) => (dispatch) => {
+  dispatch({
+    type: 'SET_LOG_STREAM_DEBUG_HUD_STATUS',
+    key,
+    deviceId,
+    sessionId,
+    status,
+    screenWidth,
+    screenHeight,
+    ua,
+  })
+}
+
+const clearEditorLogStreamOnRun = (
+  key: string,
+  logStreamName: string,
+  timestamp: number
+) => (dispatch) => {
+  dispatch({type: 'EDITOR_LOG_STREAM_CLEAR_ON_RUN', key, logStreamName, timestamp})
+}
+
 const rawActions = {
   addEditorLogs,
   addConsoleInput,
@@ -134,6 +163,8 @@ const rawActions = {
   setPreviewLinkDebugModeSelected,
   toggleIsClearOnRunActive,
   updateSimulatorState,
+  setLogStreamDebugInitialHudStatus,
+  clearEditorLogStreamOnRun,
 }
 
 export type EditorActions = DispatchifiedActions<typeof rawActions>

@@ -45,15 +45,16 @@ import {useTheme} from '../user/use-theme'
 import {DismissibleModalContextProvider} from '../editor/dismissible-modal-context'
 import {Loader} from '../ui/components/loader'
 import {useSystemLog} from '../editor/hooks/use-system-log'
+import {useConsoleActivity} from '../editor/hooks/use-console-activity'
+import {INLINE_SIMULATOR_SESSION_ID} from '../editor/app-preview/app-preview-constants'
 
 const LocalStudioPageInner: React.FC<{appKey: string}> = () => {
-  const simulatorId = 'local'
-
   const repo = useGitRepo()
   const {listFiles} = useActions(coreGitActions)
   const ctx = useSceneContext()
   const stateCtx = useStudioStateContext()
   useSystemLog()
+  useConsoleActivity()
 
   const handleBeforeFileSelect = (
     location: EditorFileLocation
@@ -115,7 +116,7 @@ const LocalStudioPageInner: React.FC<{appKey: string}> = () => {
 
   let res = (
     <SceneFileEdit
-      simulatorId={simulatorId}
+      simulatorId={INLINE_SIMULATOR_SESSION_ID}
       errorMessage={<StudioErrorMessage />}
       navigationMenu={<FloatingNavigation />}
       buildControlTray={<BuildControlTray />}
