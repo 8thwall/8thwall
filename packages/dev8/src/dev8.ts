@@ -1,11 +1,3 @@
-import ErrorStackParser from 'error-stack-parser'
-
-import {getPrintableArgs} from './printable'
-import {
-  getSourceLocationForStackFrame, getSourceLocationForErrorEvent, processStack,
-  SourceLocationPromise, StackPromise, SourceLocation, BaseInfoStack,
-} from './source-location'
-import {maybeWarnCrossOriginError} from './cross-origin'
 import {XrHudManager} from './xrhud/xr-hud-manager'
 import {XrSimulatorManager} from './xrsimulator/xr-simulator'
 import {
@@ -16,6 +8,7 @@ import {createStudioEventStreamManager} from './studio-event-stream'
 import type {SimulatorConfig} from './xrsimulator/simulator-types'
 import {loadParameters} from './parameters'
 import {getUniqueTimestamp} from './unique-timestamp'
+import {captureLogs} from './capture-logs'
 
 declare global {
   interface Window {
@@ -29,18 +22,6 @@ declare global {
     data: any
   }
 }
-
-type LogData = {
-  fn: string
-  args: any[]
-  timestamp: number
-  sourceLocationPromise: SourceLocationPromise | null
-  stackPromise: StackPromise | null
-  sourceLocation?: SourceLocation
-  stack?: BaseInfoStack
-}
-
-/* eslint-disable no-console, no-eval */
 
 const {
   ua, debugFlag, debugHudKey, deviceId, sessionId, simulatorConfig,
@@ -79,28 +60,6 @@ const needsUpdate = (config: SimulatorConfig): boolean => (
 
 let xrHud: ReturnType<typeof XrHudManager>
 let xrSimulator: ReturnType<typeof XrSimulatorManager>
-let logClearingTimer: ReturnType<typeof setTimeout> | null = null
-let messageQueue: LogData[] = []
-const INITIAL_TIMER_TIMEOUT = 250
-const NORMAL_TIMER_TIMEOUT = 1000
-const MAX_QUEUE_SIZE = 100
-const MAX_MSG_LENGTH = 1000
-
-// Make sure any pending promises for logs are complete before sending
-const resolveLog = async ({sourceLocationPromise, stackPromise, ...log}: LogData) => {
-  try {
-    const [sourceLocation, stack] = await Promise.all([sourceLocationPromise, stackPromise])
-    if (sourceLocation) {
-      log.sourceLocation = sourceLocation
-    }
-    if (stack && stack.length) {
-      log.stack = stack
-    }
-  } catch (err) {
-    // Ignore
-  }
-  return log
-}
 
 const broadcastInitialDebugStatus = () => {
   const screenHeight = window.screen.height * window.devicePixelRatio
@@ -129,66 +88,6 @@ const broadcastSetDebugStatus = (status: boolean) => {
     simulatorId,
   })
 }
-
-const clearLog = async () => {
-  if (messageQueue.length === 0) {
-    logClearingTimer = null
-    return
-  }
-
-  const screenHeight = window.screen.height * window.devicePixelRatio
-  const screenWidth = window.screen.width * window.devicePixelRatio
-
-  const messagesToSend = messageQueue
-  messageQueue = []
-  logClearingTimer = setTimeout(clearLog, NORMAL_TIMER_TIMEOUT)
-
-  // clear out the queue
-  const logs = await Promise.all(messagesToSend.map(resolveLog))
-
-  studioEventStream.send({
-    action: 'CONSOLE_ACTIVITY',
-    logs,
-    deviceId,
-    sessionId,
-    ua,
-    screenHeight,
-    screenWidth,
-    simulatorId,
-  })
-}
-
-const logConsoleActivity = (logData: LogData) => {
-  if (messageQueue.length < MAX_QUEUE_SIZE) {
-    messageQueue.push(logData)
-  }
-  if (logClearingTimer == null) {
-    logClearingTimer = setTimeout(clearLog, INITIAL_TIMER_TIMEOUT)
-  }
-}
-
-const maybeLogConsoleActivity = (
-  fn: string,
-  args: any[],
-  sourceLocationPromise: SourceLocationPromise | null,
-  stackPromise: StackPromise | null
-) => {
-  let logString = getPrintableArgs(args)
-  if (logString.length > MAX_MSG_LENGTH) {
-    logString = `${logString.slice(0, MAX_MSG_LENGTH - 3)}...`
-  }
-
-  const logOpts = {
-    fn,
-    args: [logString],
-    timestamp: getUniqueTimestamp(),
-    sourceLocationPromise,
-    stackPromise,
-  }
-  logConsoleActivity(logOpts)
-  return true
-}
-
 const reloadSimulator = (currentSimulatorConfig = simulatorConfig) => {
   const url = new URL(originalUrl)
   url.searchParams.set('simulatorConfig', JSON.stringify(currentSimulatorConfig))
@@ -202,6 +101,7 @@ const simulatorIdMatches = (incomingSimulatorId: string) => (
 
 studioEventStream.listen((msg) => {
   if (msg.action === 'EVAL') {
+    // eslint-disable-next-line no-eval, no-console
     console.log(eval(msg.cmd))
   } else if (msg.action === 'DEBUG_HUD') {
     if (xrHud) {
@@ -213,39 +113,6 @@ studioEventStream.listen((msg) => {
     }
   }
 })
-
-const wrapConsoleMethods = () => {
-  if (!window.console) {
-    return
-  }
-  Object.keys(window.console).forEach((fn) => {
-    if (typeof window.console[fn] !== 'function') {
-      return
-    }
-    const oldFn = window.console[fn].bind(window.console)
-    window.console[fn] = (...args) => {
-      let sourceLocationPromise: SourceLocationPromise | null = null
-      let stackPromise: StackPromise | null = null
-      try {
-        const parsedStack = ErrorStackParser.parse(new Error())
-        if (parsedStack && parsedStack.length > 1) {
-          // Have to start from the second frame in the stack to get the caller's frame
-          const stack = parsedStack.slice(1)
-          const sourceFrame = stack[0]
-          sourceLocationPromise = getSourceLocationForStackFrame(sourceFrame)
-          if (fn === 'warn' || fn === 'error') {
-            stackPromise = processStack(stack)
-          }
-        }
-      } catch (err) {
-        // Ignore
-      }
-      xrHud?.notifyLog(fn, args)
-      maybeLogConsoleActivity(fn, args, sourceLocationPromise, stackPromise)
-      Function.prototype.apply.call(oldFn, window.console, args)
-    }
-  })
-}
 
 const initialSetup = () => {
   xrHud = XrHudManager()
@@ -267,53 +134,6 @@ if (state === 'interactive' || state === 'complete') {
 } else {
   document.addEventListener('DOMContentLoaded', initialSetup)
 }
-
-window.addEventListener('error', (event) => {
-  maybeWarnCrossOriginError(event)
-  let stackPromise: StackPromise | null = null
-  try {
-    const parsedStack = ErrorStackParser.parse(event.error)
-    stackPromise = processStack(parsedStack)
-  } catch (err) {
-    // Ignore
-  }
-
-  xrHud?.notifyLog('error', [event.message])
-  maybeLogConsoleActivity(
-    'error',
-    [event.message],
-    getSourceLocationForErrorEvent(event),
-    stackPromise
-  )
-})
-
-window.addEventListener('unhandledrejection', ({reason}) => {
-  let message
-  let sourceLocationPromise: SourceLocationPromise | null = null
-  let stackPromise: StackPromise | null = null
-  if (reason instanceof Error) {
-    message = reason.toString()
-    try {
-      const parsedStack = ErrorStackParser.parse(reason)
-      const [topFrame] = parsedStack
-      stackPromise = processStack(parsedStack)
-      sourceLocationPromise = getSourceLocationForStackFrame(topFrame)
-    } catch (err) {
-      // Ignore
-    }
-  } else {
-    message = reason
-  }
-
-  const logArgs = ['Unhandled promise rejection:', message]
-  xrHud?.notifyLog('error', logArgs)
-  maybeLogConsoleActivity(
-    'error',
-    logArgs,
-    sourceLocationPromise,
-    stackPromise
-  )
-})
 
 window.addEventListener('message', (event) => {
   if (xrSimulator) {
@@ -384,6 +204,11 @@ window.addEventListener('beforeunload', () => {
   studioDebug.close()
 })
 
-wrapConsoleMethods()
+captureLogs(studioEventStream, xrHud, {
+  simulatorId,
+  sessionId,
+  deviceId,
+  ua,
+})
 
 injectGoogleNoTranslateRule()
