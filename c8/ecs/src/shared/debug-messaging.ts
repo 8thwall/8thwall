@@ -108,10 +108,65 @@ type DebugHudMessage = {
   enable: boolean
 }
 
+type MessageWithIds = {
+  deviceId: string
+  sessionId: string
+  simulatorId: string | undefined
+}
+
+type DeviceInfo = {
+  screenHeight: number
+  screenWidth: number
+  ua: string
+}
+
+type InitialDebugHudStatusMessage = MessageWithIds & DeviceInfo &{
+  action: 'INITIAL_DEBUG_HUD_STATUS'
+  status: boolean
+}
+
+type SetDebugHudStatus = MessageWithIds & {
+  action: 'SET_DEBUG_HUD_STATUS'
+  status: boolean
+}
+
+type SourceLocation = {
+  file?: string
+  line?: number | null
+  column?: number | null
+}
+
+type BaseInfo = SourceLocation & {
+  function?: string
+}
+
+type BaseInfoStack = (BaseInfo | null)[]
+
+type ConsoleLog = {
+  fn: string
+  args: unknown[]
+  timestamp: number
+  sourceLocation?: SourceLocation
+  stack?: BaseInfoStack
+}
+
+type ConsoleActivityMessage = MessageWithIds & DeviceInfo &{
+  action: 'CONSOLE_ACTIVITY'
+  logs: ConsoleLog[]
+}
+
+type SessionStartMessage = {
+  action: 'SESSION_START'
+  deviceId: string
+  sessionId: string
+  timestamp: number
+}
+
 type DebugMessage = AttachMessage | DetachMessage | DebugEditMessage | ReadyMessage |
   CloseMessage | WorldUpdateMessage | StateUpdateMessage | RollcallMessage | DocRefreshMessage |
   TransformUpdateMessage | BaseEditMessage | ResetSceneMessage | AttachConfirmMessage
   | EvalMessage | DebugHudMessage
+  | InitialDebugHudStatusMessage | SetDebugHudStatus | ConsoleActivityMessage | SessionStartMessage
 
 type DebugCallback = (message: DebugMessage) => void
 
@@ -140,4 +195,8 @@ export type {
   DebugCallback,
   EvalMessage,
   DebugHudMessage,
+  InitialDebugHudStatusMessage,
+  SetDebugHudStatus,
+  ConsoleActivityMessage,
+  SessionStartMessage,
 }
