@@ -12,7 +12,7 @@ import {getUniqueTimestamp} from './unique-timestamp'
 
 type LogData = {
   fn: string
-  args: any[]
+  args: string[]
   timestamp: number
   sourceLocationPromise: SourceLocationPromise | null
   stackPromise: StackPromise | null
