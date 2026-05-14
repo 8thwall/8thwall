@@ -15,6 +15,7 @@ import {createStudioDebugManager} from './studio-debug'
 import {createStudioEventStreamManager} from './studio-event-stream'
 import type {SimulatorConfig} from './xrsimulator/simulator-types'
 import {loadParameters} from './parameters'
+import {getUniqueTimestamp} from './unique-timestamp'
 
 declare global {
   interface Window {
@@ -46,6 +47,24 @@ const {
   simulatorRendererConfig, simulatorId, originalUrl, channel,
 } = loadParameters()
 
+const webSocketUrl = channel && `${channel}?${new URLSearchParams({
+  sessionId,
+  deviceId,
+  ua,
+})}`
+
+const studioEventStream = createStudioEventStreamManager(webSocketUrl)
+const studioDebug = createStudioDebugManager(
+  sessionId, ua, simulatorId, studioEventStream
+)
+
+studioEventStream.send({
+  action: 'SESSION_START',
+  deviceId,
+  sessionId,
+  timestamp: getUniqueTimestamp(),
+})
+
 const injectGoogleNoTranslateRule = () => {
   const meta = document.createElement('meta')
   meta.setAttribute('name', 'google')
@@ -60,19 +79,12 @@ const needsUpdate = (config: SimulatorConfig): boolean => (
 
 let xrHud: ReturnType<typeof XrHudManager>
 let xrSimulator: ReturnType<typeof XrSimulatorManager>
-let ws: WebSocket | null = null
 let logClearingTimer: ReturnType<typeof setTimeout> | null = null
-let sentStartEvent = false
-let socketRestartCount = 0
-let socketFailureCount = 0
 let messageQueue: LogData[] = []
 const INITIAL_TIMER_TIMEOUT = 250
 const NORMAL_TIMER_TIMEOUT = 1000
 const MAX_QUEUE_SIZE = 100
 const MAX_MSG_LENGTH = 1000
-const MAX_SOCKET_RESTARTS = 50
-const BACKOFF_SCALE_MS = 250
-const MAX_WAIT_MS = 10000
 
 // Make sure any pending promises for logs are complete before sending
 const resolveLog = async ({sourceLocationPromise, stackPromise, ...log}: LogData) => {
@@ -95,50 +107,30 @@ const broadcastInitialDebugStatus = () => {
   const screenWidth = window.screen.width * window.devicePixelRatio
   const status = debugFlag
 
-  const msg = JSON.stringify({
-    action: 'BROADCAST',
-    broadcast_data: {
-      action: 'INITIAL_DEBUG_HUD_STATUS',
-      data: {
-        deviceId,
-        sessionId,
-        status,
-        screenHeight,
-        screenWidth,
-        ua,
-        simulatorId,
-      },
-      // Do not broadcast console to connections with deviceId
-      FilterExpression: 'attribute_not_exists(deviceId)',
-    },
+  studioEventStream.send({
+    action: 'INITIAL_DEBUG_HUD_STATUS',
+    deviceId,
+    sessionId,
+    status,
+    screenHeight,
+    screenWidth,
+    ua,
+    simulatorId,
   })
-  ws?.send(msg)
 }
 
 const broadcastSetDebugStatus = (status: boolean) => {
   localStorage.setItem(debugHudKey, status.toString())
-  const msg = JSON.stringify({
-    action: 'BROADCAST',
-    broadcast_data: {
-      action: 'SET_DEBUG_HUD_STATUS',
-      data: {
-        deviceId,
-        sessionId,
-        status,
-        simulatorId,
-      },
-      // Do not broadcast console to connections with deviceId
-      FilterExpression: 'attribute_not_exists(deviceId)',
-    },
+  studioEventStream.send({
+    action: 'SET_DEBUG_HUD_STATUS',
+    deviceId,
+    sessionId,
+    status,
+    simulatorId,
   })
-  ws?.send(msg)
 }
 
 const clearLog = async () => {
-  if (!ws) {
-    return
-  }
-
   if (messageQueue.length === 0) {
     logClearingTimer = null
     return
@@ -154,23 +146,16 @@ const clearLog = async () => {
   // clear out the queue
   const logs = await Promise.all(messagesToSend.map(resolveLog))
 
-  ws.send(JSON.stringify({
-    action: 'BROADCAST',
-    broadcast_data: {
-      action: 'CONSOLE_ACTIVITY',
-      data: {
-        logs,
-        deviceId,
-        sessionId,
-        ua,
-        screenHeight,
-        screenWidth,
-        simulatorId,
-      },
-      // Do not broadcast console to connections with deviceId
-      FilterExpression: 'attribute_not_exists(deviceId)',
-    },
-  }))
+  studioEventStream.send({
+    action: 'CONSOLE_ACTIVITY',
+    logs,
+    deviceId,
+    sessionId,
+    ua,
+    screenHeight,
+    screenWidth,
+    simulatorId,
+  })
 }
 
 const logConsoleActivity = (logData: LogData) => {
@@ -181,19 +166,6 @@ const logConsoleActivity = (logData: LogData) => {
     logClearingTimer = setTimeout(clearLog, INITIAL_TIMER_TIMEOUT)
   }
 }
-
-let previousTimestamp = 0
-const getUniqueTimestamp = () => {
-  let timestamp = Date.now()
-  if (timestamp <= previousTimestamp) {
-    timestamp = previousTimestamp + 1
-  }
-
-  previousTimestamp = timestamp
-  return timestamp
-}
-
-const startupTimestamp = getUniqueTimestamp()
 
 const maybeLogConsoleActivity = (
   fn: string,
@@ -228,83 +200,19 @@ const simulatorIdMatches = (incomingSimulatorId: string) => (
   incomingSimulatorId && incomingSimulatorId === simulatorId
 )
 
-const studioEventStream = createStudioEventStreamManager(() => ws)
-const studioDebug = createStudioDebugManager(
-  sessionId, ua, simulatorId, studioEventStream
-)
-
-const startWebSocket = () => {
-  if (!channel) {
-    return
-  }
-  const queryParams = new URLSearchParams()
-  queryParams.set('channel', channel)
-  queryParams.set('deviceId', deviceId)
-  queryParams.set('ua', ua)
-  const queryString = queryParams.toString()
-
-  // eslint-disable-next-line max-len
-  const webSocketUrl = `wss://<REMOVED_BEFORE_OPEN_SOURCING>.execute-api.us-west-2.amazonaws.com/prod?${queryString}`
-  const _ws = new WebSocket(webSocketUrl)
-
-  _ws.onopen = () => {
-    ws = _ws
-    socketFailureCount = 0
-    clearLog()
+studioEventStream.listen((msg) => {
+  if (msg.action === 'EVAL') {
+    console.log(eval(msg.cmd))
+  } else if (msg.action === 'DEBUG_HUD') {
     if (xrHud) {
-      broadcastInitialDebugStatus()
-    }
-    if (!sentStartEvent) {
-      sentStartEvent = true
-      ws.send(JSON.stringify({
-        action: 'BROADCAST',
-        broadcast_data: {
-          action: 'SESSION_START',
-          data: {
-            deviceId,
-            sessionId,
-            timestamp: startupTimestamp,
-          },
-          // Do not broadcast console to connections with deviceId
-          FilterExpression: 'attribute_not_exists(deviceId)',
-        },
-      }))
-    }
-  }
-
-  _ws.onmessage = (event) => {
-    let msg
-    try {
-      msg = JSON.parse(event.data)
-    } catch (err) {
-      return
-    }
-
-    // Handle the message for studio debug events
-    studioEventStream.handleSocketMessage(msg)
-
-    if (msg.action === 'EVAL') {
-      console.log(eval(msg.cmd))
-    } else if (msg.action === 'DEBUG_HUD') {
-      if (xrHud) {
-        if (msg.enable) {
-          xrHud.enable({console: true, version: true, verbose: true})
-        } else {
-          xrHud.disable()
-        }
+      if (msg.enable) {
+        xrHud.enable({console: true, version: true, verbose: true})
+      } else {
+        xrHud.disable()
       }
     }
   }
-
-  _ws.onclose = () => {
-    ws = null
-    socketFailureCount++
-    if (socketRestartCount++ < MAX_SOCKET_RESTARTS) {
-      const backoff = BACKOFF_SCALE_MS * ((2 ** socketFailureCount) + Math.random())
-      setTimeout(startWebSocket, Math.min(backoff, MAX_WAIT_MS))
-    }
-  }
-}
+})
 
 const wrapConsoleMethods = () => {
   if (!window.console) {
@@ -342,9 +250,7 @@ const wrapConsoleMethods = () => {
 const initialSetup = () => {
   xrHud = XrHudManager()
   xrSimulator = XrSimulatorManager()
-  if (ws) {
-    broadcastInitialDebugStatus()
-  }
+  broadcastInitialDebugStatus()
   if (debugFlag) {
     xrHud.enable({console: true, version: true, verbose: true})
   }
@@ -407,10 +313,6 @@ window.addEventListener('unhandledrejection', ({reason}) => {
     sourceLocationPromise,
     stackPromise
   )
-})
-
-window.addEventListener('message', (event) => {
-  studioEventStream.handlePostMessage(event.data)
 })
 
 window.addEventListener('message', (event) => {
@@ -484,5 +386,4 @@ window.addEventListener('beforeunload', () => {
 
 wrapConsoleMethods()
 
-startWebSocket()
 injectGoogleNoTranslateRule()

@@ -1,9 +1,11 @@
 import type {DebugMessage, DebugCallback} from './shared/ecs/shared/debug-messaging'
+import {createWebsocket} from './websocket'
 
 const createStudioEventStreamManager = (
-  getActiveWebsocket: () => WebSocket | null
+  websocketUrl: string | undefined
 ) => {
   const messageListenerCallbacks = new Set<DebugCallback>()
+  const websocket = websocketUrl && createWebsocket(websocketUrl)
 
   const handleMessage = (msg: DebugMessage) => {
     const callbacks = [...messageListenerCallbacks]
@@ -28,18 +30,8 @@ const createStudioEventStreamManager = (
     handleMessage(msg)
   }
 
-  const sendViaSockets = ({action, ...data}: DebugMessage) => {
-    const ws = getActiveWebsocket()
-
-    ws?.send(JSON.stringify({
-      action: 'BROADCAST',
-      broadcast_data: {
-        action,
-        data,
-        // Do not broadcast console to connections with deviceId
-        FilterExpression: 'attribute_not_exists(deviceId)',
-      },
-    }))
+  const sendViaSockets = (data: DebugMessage) => {
+    websocket?.broadcast(data)
   }
 
   /**
@@ -100,9 +92,13 @@ const createStudioEventStreamManager = (
     messageListenerCallbacks.delete(callback)
   }
 
+  websocket?.listen(handleSocketMessage)
+
+  window.addEventListener('message', (event) => {
+    handlePostMessage(event.data)
+  })
+
   return {
-    handleSocketMessage,
-    handlePostMessage,
     send,
     listen,
     cancelListen,
