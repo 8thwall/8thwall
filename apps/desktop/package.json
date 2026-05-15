@@ -26,6 +26,7 @@
     "electron-updater": "^6.6.2",
     "get-port": "^7.1.0",
     "handlebars": "^4.7.8",
+    "httpxy": "^0.5.1",
     "jszip": "^3.10.1",
     "mime-types": "^3.0.1",
     "npm": "^11.5.2",

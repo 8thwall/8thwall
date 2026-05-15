@@ -7,8 +7,9 @@ import {guessIp} from '@repo/c8/cli/ip'
 import {
   DEV_SERVER_POLLING_INTERVAL, DEV_SERVER_POLLING_TIMEOUT,
 } from './constants'
-import {runServeCommand, runProxyCommand, runInstallCommand} from './app/file-sync/run-commands'
+import {runServeCommand, runInstallCommand} from './app/file-sync/run-commands'
 import {forwardProcessOutput} from './app/system-log/listeners'
+import {startLocalProxy} from './app/file-sync/local-proxy'
 
 interface LocalServer {
   stop: () => Promise<void>
@@ -44,30 +45,26 @@ const killProcess = async (process: ChildProcess | undefined): Promise<void> => 
   })
 }
 
-const LOCAL_SERVER_PORT_RANGE = portNumbers(9001, 9100)
 const createLocalServer = async (
   appKey: string,
-  savePath: string,
-  localSslProxyEnabled: boolean = false
+  savePath: string
 ): Promise<LocalServer> => {
   await runInstallCommand(appKey, savePath)
-  const webpackPort = await getPort({port: LOCAL_SERVER_PORT_RANGE})
+  const [proxyPort, webpackPort] = await Promise.all([
+    getPort({port: portNumbers(58000, 58100)}),
+    getPort({port: portNumbers(58100, 58200)}),
+  ])
+
   const webpackDevServer = runServeCommand(savePath, webpackPort)
   forwardProcessOutput(appKey, webpackDevServer)
-
-  let proxyPort: number | undefined
-  let proxyProcess: ChildProcess | undefined
-  if (localSslProxyEnabled) {
-    proxyPort = await getPort({port: LOCAL_SERVER_PORT_RANGE})
-    proxyProcess = runProxyCommand(savePath, proxyPort, webpackPort)
-  }
+  const proxy = startLocalProxy(proxyPort, webpackPort)
 
   // Note(juliesoohoo): This is a temporary solution to check if the local server is running.
   // 'rejectUnauthorized: false' is needed to bypass the issue with having a
   // self-signed certificate.
   const localServerCheck = async () => {
     try {
-      const res = await fetch(`${LOCAL_BUILD_URL_BASE}${webpackPort}`, {
+      const res = await fetch(`${LOCAL_BUILD_URL_BASE}${proxyPort}`, {
         dispatcher: new Agent({
           connect: {rejectUnauthorized: false},
           bodyTimeout: 1000,
@@ -95,11 +92,9 @@ const createLocalServer = async (
   }
 
   const handleStop = async () => {
+    proxy.stop()
     if (webpackDevServer) {
       await killProcess(webpackDevServer)
-    }
-    if (proxyProcess) {
-      await killProcess(proxyProcess)
     }
   }
 
