@@ -1,14 +1,16 @@
 import {fetch, Agent} from 'undici'
 import type {ChildProcess} from 'child_process'
-import getPort, {portNumbers} from 'get-port'
+import getPort, {portNumbers, clearLockedPorts} from 'get-port'
 
 import {guessIp} from '@repo/c8/cli/ip'
 
 import {
   DEV_SERVER_POLLING_INTERVAL, DEV_SERVER_POLLING_TIMEOUT,
 } from './constants'
-import {runServeCommand, runProxyCommand, runInstallCommand} from './app/file-sync/run-commands'
+import {runServeCommand, runInstallCommand} from './app/file-sync/run-commands'
 import {forwardProcessOutput} from './app/system-log/listeners'
+import {startLocalProxy} from './app/file-sync/local-proxy'
+import {createDev8WebSocketServer} from './app/dev8-socket/dev8-socket-server'
 
 interface LocalServer {
   stop: () => Promise<void>
@@ -44,32 +46,26 @@ const killProcess = async (process: ChildProcess | undefined): Promise<void> => 
   })
 }
 
-const LOCAL_SERVER_PORT_RANGE = portNumbers(9001, 9100)
 const createLocalServer = async (
   appKey: string,
-  savePath: string,
-  localSslProxyEnabled: boolean = false
+  savePath: string
 ): Promise<LocalServer> => {
   await runInstallCommand(appKey, savePath)
-  const webpackPort = await getPort({port: LOCAL_SERVER_PORT_RANGE})
-  const webpackDevServer = runServeCommand(savePath, webpackPort)
+  const [primaryPort, buildPort, dev8SocketPort] = await Promise.all([
+    getPort({port: portNumbers(58000, 58100)}),
+    getPort({port: portNumbers(58100, 58200)}),
+    getPort({port: portNumbers(58200, 58300)}),
+  ])
+
+  const webpackDevServer = runServeCommand(savePath, buildPort)
+  const dev8Socket = createDev8WebSocketServer(appKey, dev8SocketPort)
   forwardProcessOutput(appKey, webpackDevServer)
+  const proxy = startLocalProxy({primaryPort, buildPort, dev8SocketPort})
 
-  let proxyPort: number | undefined
-  let proxyProcess: ChildProcess | undefined
-  if (localSslProxyEnabled) {
-    proxyPort = await getPort({port: LOCAL_SERVER_PORT_RANGE})
-    proxyProcess = runProxyCommand(savePath, proxyPort, webpackPort)
-  }
-
-  // Note(juliesoohoo): This is a temporary solution to check if the local server is running.
-  // 'rejectUnauthorized: false' is needed to bypass the issue with having a
-  // self-signed certificate.
   const localServerCheck = async () => {
     try {
-      const res = await fetch(`${LOCAL_BUILD_URL_BASE}${webpackPort}`, {
+      const res = await fetch(`${LOCAL_BUILD_URL_BASE}${primaryPort}`, {
         dispatcher: new Agent({
-          connect: {rejectUnauthorized: false},
           bodyTimeout: 1000,
         }),
       })
@@ -95,22 +91,18 @@ const createLocalServer = async (
   }
 
   const handleStop = async () => {
+    proxy.stop()
+    dev8Socket.close()
     if (webpackDevServer) {
       await killProcess(webpackDevServer)
     }
-    if (proxyProcess) {
-      await killProcess(proxyProcess)
-    }
+    clearLockedPorts()
   }
 
   const handleGetLocalBuildUrl = async (): Promise<string> => {
-    if (!webpackPort) {
-      return ''
-    }
-
     try {
       const isRunning = await localServerCheck()
-      return isRunning ? `${LOCAL_BUILD_URL_BASE}${webpackPort}` : ''
+      return isRunning ? `${LOCAL_BUILD_URL_BASE}${primaryPort}` : ''
     } catch (error) {
       return ''
     }
@@ -119,11 +111,11 @@ const createLocalServer = async (
   // We don't check that webpack is running. User should call checkRunning() if needed.
   // This should return a URL string (includes the schema)
   const handleGetLocalBuildRemoteUrl = async (): Promise<string> => {
-    if (!proxyPort) {
+    if (!primaryPort) {
       return ''
     }
 
-    return `https://${guessIp()}:${proxyPort}`
+    return `http://${guessIp()}:${primaryPort}`
   }
 
   return {

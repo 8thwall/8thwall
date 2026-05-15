@@ -23,11 +23,8 @@ import {registerSecondInstanceHandler} from './desktop-app/register-second-insta
 import {registerPermissionHandler} from './desktop-app/permissions'
 import {navigateToDeepLink} from './desktop-app/deep-link'
 import {setupMenu} from './menu'
-import {createDev8WebSocketServer} from './dev8-socket/dev8-socket-server'
 import {IMAGE_TARGETS_SCHEME, registerImageTargetsHandler} from './image-targets/protocol'
 import {setUpSystemLogPort} from './system-log/ports'
-
-const CONSOLE_WEBSOCKET_PORT = 62009
 
 const UPDATE_CHECK_INTERVAL = 60 * 60 * 1000
 
@@ -135,12 +132,6 @@ const createWindow = () => {
   })
   return win
 }
-
-const ws = createDev8WebSocketServer(CONSOLE_WEBSOCKET_PORT)
-
-app.on('before-quit', () => {
-  ws.close()
-})
 
 app.on('window-all-closed', () => {
   app.quit()
