@@ -22,7 +22,6 @@ js_binary(
         "//apps/desktop/app/desktop-app:protocol",
         "//apps/desktop/app/desktop-app:register-on-open-url-handler",
         "//apps/desktop/app/desktop-app:register-second-instance-handler",
-        "//apps/desktop/app/dev8-socket:dev8-socket-server",
         "//apps/desktop/app/file-sync:protocol",
         "//apps/desktop/app/file-watch:ports",
         "//apps/desktop/app/image-targets:protocol",

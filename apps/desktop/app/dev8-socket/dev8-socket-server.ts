@@ -12,7 +12,7 @@ interface WebSocketMessage {
   broadcast_data?: BroadcastData
 }
 
-const createDev8WebSocketServer = (portNumber: number) => {
+const createDev8WebSocketServer = (appKey: string, portNumber: number) => {
   const wss = new WebSocket.WebSocketServer({port: portNumber})
 
   const broadcastToOthers = (sender: WebSocket.WebSocket, data: string | Buffer) => {

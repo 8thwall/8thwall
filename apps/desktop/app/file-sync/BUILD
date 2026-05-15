@@ -111,3 +111,10 @@ js_library(
         "//apps/desktop/app/system-log:listeners",
     ],
 )
+
+js_library(
+    name = "local-proxy",
+    srcs = [
+        "local-proxy.ts",
+    ],
+)

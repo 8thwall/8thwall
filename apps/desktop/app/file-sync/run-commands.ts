@@ -6,7 +6,6 @@ import log from 'electron-log'
 import {NODE_MODULES_PATH} from '../resources'
 import {forwardProcessOutput} from '../system-log/listeners'
 
-const LOCAL_SSL_PROXY_CLI = 'local-ssl-proxy/build/main.js'
 const NPM_CLI_PATH = path.join(NODE_MODULES_PATH, 'npm/bin/npm-cli.js')
 const EXEC_PATH = process.platform === 'darwin'
 // @ts-expect-error It exists according to
@@ -136,53 +135,6 @@ const runBuildCommand = (
   })
 })
 
-// Run a https proxy that proxy all traffic to https://localhost:{proxySrcPort} to
-// http://localhost:{proxyDestPort}
-// This uses https://www.npmjs.com/package/http-proxy under the hood.
-// TODO(dat): Switch to calling http-proxy directly instead of spawning a child process?
-//            Perhaps the best option is to provide reverse proxy, ala ngrok, so our users can
-//            connect remotely from anywhere.
-const runProxyCommand = (
-  projectPath: string,
-  proxySrcPort: number = 9001,
-  proxyDestPort: number = 9002
-): ChildProcess => {
-  const localSslProxyCliPath = path.resolve(projectPath, 'node_modules', LOCAL_SSL_PROXY_CLI)
-
-  const child = fork(
-    localSslProxyCliPath,
-    ['--source', proxySrcPort.toString(), '--target', proxyDestPort.toString()],
-    {stdio: 'pipe', env: {ELECTRON_RUN_AS_NODE: '1'}, detached: false}
-  )
-
-  let stderr = ''
-
-  child.stderr?.on('data', (d) => {
-    const out = d.toString()
-    stderr += out
-  })
-
-  child.on('exit', (code, signal) => {
-    if (signal === 'SIGTERM' || signal === 'SIGKILL') {
-      return
-    }
-    if (code !== 0) {
-      const msg = `ssl proxy failed (exit ${code}, signal ${signal})\nstderr:\n${stderr}`
-      log.error(msg)
-    }
-  })
-
-  child.on('error', (err) => {
-    log.error('ssl proxy process error:', err)
-    if (stderr) {
-      log.error('ssl proxy stderr:', stderr)
-    }
-    throw err
-  })
-
-  return child
-}
-
 const runServeCommand = (savePath: string, port: number): ChildProcess => {
   const child = runScript({
     cwd: savePath,
@@ -221,7 +173,6 @@ const runServeCommand = (savePath: string, port: number): ChildProcess => {
 
 export {
   runServeCommand,
-  runProxyCommand,
   runInstallCommand,
   runBuildCommand,
 }
