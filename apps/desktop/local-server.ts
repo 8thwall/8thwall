@@ -52,9 +52,9 @@ const createLocalServer = async (
 ): Promise<LocalServer> => {
   await runInstallCommand(appKey, savePath)
   const [primaryPort, buildPort, dev8SocketPort] = await Promise.all([
-    getPort({port: portNumbers(58000, 58100)}),
-    getPort({port: portNumbers(58100, 58200)}),
-    getPort({port: portNumbers(58200, 58300)}),
+    getPort({port: portNumbers(58000, 58999)}),
+    getPort({port: portNumbers(59000, 59999)}),
+    getPort({port: portNumbers(60000, 60999)}),
   ])
 
   const webpackDevServer = runServeCommand(savePath, buildPort)
