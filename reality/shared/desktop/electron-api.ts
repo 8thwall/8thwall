@@ -1,6 +1,8 @@
 import type {LocalSyncMessage} from './local-sync-types'
 import type {StudiohubProtocol} from './desktop-protocol-types'
 import type {SystemLogHandler} from './system-log-types'
+import type {ScopedDebugMessage} from '@repo/c8/ecs/src/shared/debug-messaging'
+import type {ListenerPool} from '@repo/reality/shared/listener-pool'
 
 const ELECTRON_API_KEY = 'electron'
 
@@ -17,11 +19,17 @@ type SystemLogApi = {
   clearHandler: (appKey: string) => void
 }
 
+type Dev8SocketApi = {
+  fromDevice: ListenerPool<ScopedDebugMessage>
+  toDevice: ListenerPool<ScopedDebugMessage>
+}
+
 type ElectronApi = {
   os: OsType
   onExternalNavigate: (callback: (pathAndQuery: string) => void) => () => void
   fileWatch: FileWatchApi
   systemLog: SystemLogApi
+  dev8Socket: Dev8SocketApi
   studiohubProtocol: StudiohubProtocol
   // For custom title bar
   minimizeWindow: () => void
@@ -36,5 +44,6 @@ export type {
   LocalSyncHandler,
   FileWatchApi,
   SystemLogApi,
+  Dev8SocketApi,
   SystemLogHandler,
 }

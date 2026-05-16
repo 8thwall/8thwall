@@ -8,6 +8,7 @@ import {ELECTRON_API_KEY, type ElectronApi} from '@repo/reality/shared/desktop/e
 import {createFileWatchApi} from './file-watch/api'
 import {STUDIO_HUB_PROTOCOL} from './desktop-protocol'
 import {createSystemLogApi} from './system-log/api'
+import {createDev8SocketApi} from './dev8-socket/api'
 
 const electronApi: ElectronApi = {
   os: process.platform === 'darwin' ? 'mac' : 'other',
@@ -23,6 +24,7 @@ const electronApi: ElectronApi = {
   },
   fileWatch: createFileWatchApi(),
   systemLog: createSystemLogApi(),
+  dev8Socket: createDev8SocketApi(),
   studiohubProtocol: STUDIO_HUB_PROTOCOL,
   minimizeWindow: () => { ipcRenderer.send('minimize-window') },
   maximizeWindow: () => { ipcRenderer.send('maximize-window') },

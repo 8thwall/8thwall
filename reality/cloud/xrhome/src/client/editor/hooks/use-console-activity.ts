@@ -1,10 +1,12 @@
-import type {DebugMessage} from '@ecs/shared/debug-messaging'
+import React from 'react'
+import type {DebugMessage, ScopedDebugMessage} from '@ecs/shared/debug-messaging'
 
 import {useEnclosedAppKey} from '../../apps/enclosed-app-context'
 import useActions from '../../common/use-actions'
 import editorActions from '../editor-actions'
 import {useWindowMessageHandler} from '../../hooks/use-window-message-handler'
 import ConsoleLogStreams from '../console-log-streams'
+import {useEvent} from '../../hooks/use-event'
 
 const useConsoleActivity = BuildIf.STUDIO_OFFLINE_LOG_CONTAINER_20260205
   ? () => {
@@ -16,8 +18,7 @@ const useConsoleActivity = BuildIf.STUDIO_OFFLINE_LOG_CONTAINER_20260205
       clearEditorLogStreamOnRun,
     } = useActions(editorActions)
 
-    useWindowMessageHandler((event: MessageEvent<DebugMessage>) => {
-      const msg = event.data
+    const handleMessage = useEvent((msg: DebugMessage) => {
       switch (msg.action) {
         case 'CONSOLE_ACTIVITY':
           addEditorLogs(appKey, [ConsoleLogStreams.messageLog(msg)].flat())
@@ -44,6 +45,20 @@ const useConsoleActivity = BuildIf.STUDIO_OFFLINE_LOG_CONTAINER_20260205
         default:
       }
     })
+
+    useWindowMessageHandler(e => handleMessage(e.data))
+
+    React.useEffect(() => {
+      const handleDevice = (e: ScopedDebugMessage) => {
+        if (appKey === e.appKey) {
+          handleMessage(e.data)
+        }
+      }
+      window.electron.dev8Socket.fromDevice.addListener(handleDevice)
+      return () => {
+        window.electron.dev8Socket.fromDevice.removeListener(handleDevice)
+      }
+    }, [appKey])
   }
   : () => {}
 

@@ -176,6 +176,12 @@ type DebugStream = {
   cancelListen: (callback: DebugCallback) => void
 }
 
+type ScopedDebugMessage = {
+  appKey: string
+  sessionId: string
+  data: DebugMessage
+}
+
 export type {
   DebugMessage,
   DebugStream,
@@ -199,4 +205,5 @@ export type {
   SetDebugHudStatus,
   ConsoleActivityMessage,
   SessionStartMessage,
+  ScopedDebugMessage,
 }

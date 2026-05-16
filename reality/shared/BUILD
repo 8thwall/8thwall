@@ -38,3 +38,11 @@ js_library(
     ],
     visibility = ["//visibility:public"],
 )
+
+js_library(
+    name = "listener-pool",
+    srcs = [
+        "listener-pool.ts",
+    ],
+    visibility = ["//visibility:public"],
+)
