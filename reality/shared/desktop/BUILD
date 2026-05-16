@@ -18,6 +18,8 @@ js_library(
         "electron-api.ts",
     ],
     deps = [
+        "//c8/ecs/src/shared:debug-messaging",
+        "//reality/shared:listener-pool",
         "//reality/shared/desktop:desktop-protocol-types",
         "//reality/shared/desktop:local-sync-types",
         "//reality/shared/desktop:system-log-types",

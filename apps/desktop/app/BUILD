@@ -22,6 +22,7 @@ js_binary(
         "//apps/desktop/app/desktop-app:protocol",
         "//apps/desktop/app/desktop-app:register-on-open-url-handler",
         "//apps/desktop/app/desktop-app:register-second-instance-handler",
+        "//apps/desktop/app/dev8-socket:ports",
         "//apps/desktop/app/file-sync:protocol",
         "//apps/desktop/app/file-watch:ports",
         "//apps/desktop/app/image-targets:protocol",
@@ -40,6 +41,7 @@ js_binary(
     npm_rule = "@npm-desktop//:npm-desktop",
     deps = [
         "//apps/desktop/app:desktop-protocol",
+        "//apps/desktop/app/dev8-socket:api",
         "//apps/desktop/app/file-watch:api",
         "//apps/desktop/app/system-log:api",
         "//reality/shared/desktop:electron-api",

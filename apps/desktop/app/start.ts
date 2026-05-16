@@ -25,6 +25,7 @@ import {navigateToDeepLink} from './desktop-app/deep-link'
 import {setupMenu} from './menu'
 import {IMAGE_TARGETS_SCHEME, registerImageTargetsHandler} from './image-targets/protocol'
 import {setUpSystemLogPort} from './system-log/ports'
+import {setupDev8SocketPort} from './dev8-socket/ports'
 
 const UPDATE_CHECK_INTERVAL = 60 * 60 * 1000
 
@@ -170,6 +171,7 @@ app.whenReady()
     win.webContents.on('did-finish-load', () => {
       setUpMainFileWatchPort(win)
       setUpSystemLogPort(win)
+      setupDev8SocketPort(win)
       navigateToDeepLink(win, process.argv.pop() || '')
     })
 
