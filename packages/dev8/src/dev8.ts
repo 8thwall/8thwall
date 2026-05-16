@@ -23,14 +23,8 @@ declare global {
 
 const {
   ua, debugFlag, debugHudKey, deviceId, sessionId, simulatorConfig,
-  simulatorRendererConfig, simulatorId, originalUrl, channel,
+  simulatorRendererConfig, simulatorId, originalUrl, webSocketUrl,
 } = loadParameters()
-
-const webSocketUrl = channel && `${channel}?${new URLSearchParams({
-  sessionId,
-  deviceId,
-  ua,
-})}`
 
 const studioEventStream = createStudioEventStreamManager(webSocketUrl)
 const studioDebug = createStudioDebugManager(
