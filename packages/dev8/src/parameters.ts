@@ -4,7 +4,6 @@ const DEBUG_PARAM = 'd'
 const SIMULATOR_PARAM = 'simulatorConfig'
 const SESSION_PARAM = 'sessionId'
 const DEBUG_KEY_PREFIX = '8w.debug-mode/'
-const CHANNEL_PARAM = 'channel'
 const KEY = 'hot-reload-deviceid'
 
 const loadParameters = () => {
@@ -20,7 +19,6 @@ const loadParameters = () => {
   // Scope local storage keys by appkey
   const debugHudKey = DEBUG_KEY_PREFIX + deviceId
   const params = new URLSearchParams(window.location.search)
-  const channel = params.get(CHANNEL_PARAM)
 
   const simulatorConfigParam = params.get(SIMULATOR_PARAM)
   const simulatorConfig: SimulatorConfig | null = simulatorConfigParam
@@ -47,6 +45,12 @@ const loadParameters = () => {
     window.history.replaceState(null, '', `${window.location.pathname}?${params}`)
   }
 
+  const webSocketUrl = params.get('liveSyncMode') === 'inline'
+    ? null
+    : `/dev8?${new URLSearchParams({
+      sessionId,
+    })}`
+
   let debugFlagParam
   if (params.has(DEBUG_PARAM)) {
   // This is present as ?d=true if the HUD is enabled.
@@ -58,7 +62,7 @@ const loadParameters = () => {
   const debugFlag = debugFlagParam === 'true'
 
   // Clear the parameters so that users don't see it in their url
-  const paramsToClear = [DEBUG_PARAM, SIMULATOR_PARAM, CHANNEL_PARAM]
+  const paramsToClear = [DEBUG_PARAM, SIMULATOR_PARAM]
   if (paramsToClear.some(p => params.has(p))) {
     const replacedUrl = new URL(originalUrl)
     paramsToClear.forEach(p => replacedUrl.searchParams.delete(p))
@@ -66,7 +70,7 @@ const loadParameters = () => {
   }
 
   return {
-    channel,
+    webSocketUrl,
     ua,
     deviceId,
     sessionId,
