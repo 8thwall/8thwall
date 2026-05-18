@@ -183,11 +183,46 @@ const CopyPluginFixRecommendation = () => {
   )
 }
 
+const DevSocketFixRecommendation = () => {
+  const {t} = useTranslation(['cloud-studio-pages', 'common'])
+  const {appKey} = useCurrentApp()
+  const localSyncContext = useLocalSyncContext()
+  const status = useQuery(getProjectConfigStatusQuery(appKey)).data
+  const needsDevSocketFix = status?.needsDevSocketFix && !status.missingDev8
+  const [dismissed, setDismissed] = React.useState(false)
+  const visible = needsDevSocketFix && !dismissed
+
+  if (!visible) {
+    return null
+  }
+
+  return (
+    <StaticBanner type='warning'>
+      <SpaceBetween direction='vertical'>
+        {t('recommendation_box.dev_socket_message')}
+        <SpaceBetween>
+          <BoldButton onClick={async () => {
+            await applyProjectConfigFix(appKey, 'dev-socket')
+            await localSyncContext.restartServer()
+          }}
+          >
+            {t('recommendation_box.fix')}
+          </BoldButton>
+          <BoldButton onClick={() => setDismissed(true)}>
+            {t('recommendation_box.dismiss')}
+          </BoldButton>
+        </SpaceBetween>
+      </SpaceBetween>
+    </StaticBanner>
+  )
+}
+
 const RecommendationBox = () => (
   <>
     <AssetBundleRecommendation />
     <WebpackInjectFixRecommendation />
     <CopyPluginFixRecommendation />
+    <DevSocketFixRecommendation />
   </>
 )
 

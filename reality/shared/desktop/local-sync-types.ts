@@ -93,6 +93,7 @@ type InstallRequest = {
 type ProjectConfigResponse = {
   needsInjectFix: boolean
   needsCopyPluginFix: boolean
+  needsDevSocketFix: boolean
   missingDev8: boolean
 }
 
