@@ -339,7 +339,7 @@ const checkConfigStatus = (appKey: string) => {
   )
 }
 
-const applyProjectConfigFix = (appKey: string, fix: 'inject' | 'copy-plugin') => {
+const applyProjectConfigFix = (appKey: string, fix: 'inject' | 'copy-plugin' | 'dev-socket') => {
   const params = new URLSearchParams({
     appKey,
     fix,

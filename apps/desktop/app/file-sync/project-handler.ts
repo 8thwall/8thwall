@@ -690,6 +690,23 @@ const GOOD_COPY_PLUGIN_CONFIG = `\
         },
       ],`
 
+const BAD_DEV_SOCKET_CONFIG = `\
+    client: {
+      overlay: {
+        warnings: false,
+        errors: true,
+      },
+    },`
+
+const GOOD_DEV_SOCKET_CONFIG = `\
+    client: {
+      webSocketURL: 'ws://0.0.0.0/ws',
+      overlay: {
+        warnings: false,
+        errors: true,
+      },
+    },`
+
 const WEBPACK_CONFIG_PATH = 'config/webpack.config.js'
 
 const getProjectConfig = withErrorHandlingResponse(async (req: Request) => {
@@ -710,12 +727,14 @@ const getProjectConfig = withErrorHandlingResponse(async (req: Request) => {
 
   let needsInjectFix = false
   let needsCopyPluginFix = false
+  let needsDevSocketFix = false
   let missingDev8 = false
   try {
     const configPath = path.join(project.location, WEBPACK_CONFIG_PATH)
     const configContent = await fs.readFile(configPath, 'utf-8')
     needsInjectFix = configContent.includes(BAD_INJECT_CONFIG)
     needsCopyPluginFix = configContent.includes(BAD_COPY_PLUGIN_CONFIG)
+    needsDevSocketFix = configContent.includes(BAD_DEV_SOCKET_CONFIG)
     missingDev8 = !configContent.includes('dev8')
   } catch (error) {
     // Ignore
@@ -725,6 +744,7 @@ const getProjectConfig = withErrorHandlingResponse(async (req: Request) => {
     needsInjectFix,
     needsCopyPluginFix,
     missingDev8,
+    needsDevSocketFix,
   }
 
   return makeJsonResponse(response)
@@ -755,6 +775,13 @@ const modifyProjectConfig = withErrorHandlingResponse(async (req: Request) => {
       const configPath = path.join(project.location, WEBPACK_CONFIG_PATH)
       const configContent = await fs.readFile(configPath, 'utf-8')
       const fixedContent = configContent.replace(BAD_COPY_PLUGIN_CONFIG, GOOD_COPY_PLUGIN_CONFIG)
+      await fs.writeFile(configPath, fixedContent, 'utf-8')
+      break
+    }
+    case 'dev-socket': {
+      const configPath = path.join(project.location, WEBPACK_CONFIG_PATH)
+      const configContent = await fs.readFile(configPath, 'utf-8')
+      const fixedContent = configContent.replace(BAD_DEV_SOCKET_CONFIG, GOOD_DEV_SOCKET_CONFIG)
       await fs.writeFile(configPath, fixedContent, 'utf-8')
       break
     }
