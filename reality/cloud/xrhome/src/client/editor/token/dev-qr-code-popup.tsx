@@ -2,9 +2,9 @@ import React from 'react'
 import {createUseStyles} from 'react-jss'
 import {useEffect} from 'react'
 import {
-  FloatingPortal, useFloating, offset, shift,
+  FloatingPortal, useFloating, offset, shift, flip, autoUpdate,
   useClick, useDismiss, useRole, useInteractions,
-  flip, autoUpdate,
+  Placement,
 } from '@floating-ui/react'
 
 import type {IApp} from '../../common/types/models'
@@ -20,6 +20,7 @@ import {RemoteSetupView} from './remote-setup-view'
 interface IProps {
   app: IApp
   trigger: React.ReactNode | ((isOpen: boolean) => React.ReactNode)
+  placement?: Placement
   shrink?: boolean
 }
 
@@ -39,10 +40,11 @@ const useStyles = createUseStyles({
   },
 })
 
-const DevQrCodePopup: React.FunctionComponent<IProps> = React.memo(({
+const DevQRCodePopup: React.FunctionComponent<IProps> = React.memo(({
   app,
   trigger,
   shrink = false,
+  placement,
 }) => {
   const [popupOpen, setPopupOpen] = React.useState(false)
   const {
@@ -59,13 +61,13 @@ const DevQrCodePopup: React.FunctionComponent<IProps> = React.memo(({
   const {refs, floatingStyles, context} = useFloating({
     open: popupOpen,
     onOpenChange: setPopupOpen,
-    whileElementsMounted: (ref, floating, update) => autoUpdate(ref, floating, update),
-    placement: 'top',
+    placement,
     middleware: [
       offset(14),
       shift(),
       flip(),
     ],
+    whileElementsMounted: (ref, floating, update) => autoUpdate(ref, floating, update),
   })
 
   const click = useClick(context)
@@ -106,5 +108,5 @@ const DevQrCodePopup: React.FunctionComponent<IProps> = React.memo(({
 })
 
 export {
-  DevQrCodePopup,
+  DevQRCodePopup,
 }
