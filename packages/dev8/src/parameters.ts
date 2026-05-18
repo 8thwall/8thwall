@@ -6,6 +6,14 @@ const SESSION_PARAM = 'sessionId'
 const DEBUG_KEY_PREFIX = '8w.debug-mode/'
 const KEY = 'hot-reload-deviceid'
 
+// When we're unloading, store the session ID so it can be reused when the page is reloaded.
+// If two tabs are loaded in the same browser, they will not get the same session ID because
+// it gets removed from the list while the page is open. Only between refreshes, or after closing
+// the tab does it get added to the pool. Technically this could cause two tabs in the same browser
+// to swap session IDs if they refresh at the exact same time, but not the worst thing ever,
+// if it does happen.
+const SESSION_POOL_KEY = 'session-id-pool'
+
 const loadParameters = () => {
   /* Get a random persistent nonce to identify this browser */
   let deviceId = localStorage.getItem(KEY)
@@ -37,12 +45,18 @@ const loadParameters = () => {
 
   // For simulator sessions, this will always be provided in the params.
   let sessionId = params.get(SESSION_PARAM)
+  const sessionDerivedFromUrl = !!sessionId
   if (!sessionId) {
-    sessionId = Array.from({length: 8})
-      .map(() => Math.floor(Math.random() * 36).toString(36))
-      .join('')
-    params.set(SESSION_PARAM, sessionId)
-    window.history.replaceState(null, '', `${window.location.pathname}?${params}`)
+    const availableSessionIds = localStorage.getItem(SESSION_POOL_KEY)
+    if (availableSessionIds) {
+      const [firstSessionId, ...otherSessionIds] = availableSessionIds.split(',')
+      sessionId = firstSessionId
+      localStorage.setItem(SESSION_POOL_KEY, otherSessionIds.join(','))
+    } else {
+      sessionId = Array.from({length: 8})
+        .map(() => Math.floor(Math.random() * 36).toString(36))
+        .join('')
+    }
   }
 
   const webSocketUrl = params.get('liveSyncMode') === 'inline'
@@ -68,6 +82,16 @@ const loadParameters = () => {
     paramsToClear.forEach(p => replacedUrl.searchParams.delete(p))
     window.history.replaceState(null, '', replacedUrl.toString())
   }
+
+  window.addEventListener('beforeunload', () => {
+    if (sessionDerivedFromUrl) {
+      return
+    }
+    localStorage.setItem(SESSION_POOL_KEY, [
+      sessionId,
+      localStorage.getItem(SESSION_POOL_KEY),
+    ].filter(Boolean).join(','))
+  })
 
   return {
     webSocketUrl,
