@@ -125,7 +125,7 @@ const LocalStudioPageInner: React.FC<{appKey: string}> = () => {
   )
 
   if (BuildIf.STUDIO_OFFLINE_LOG_CONTAINER_20260205) {
-    const extraTabContent = (BuildIf.REMOTE_DEVICE_CONNECT_20260512)
+    const extraTabContent = BuildIf.REMOTE_DEVICE_CONNECT_20260512
       ? <DebugSessionsMenu />
       : null
 
