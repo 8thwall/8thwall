@@ -1,46 +1,36 @@
 import React from 'react'
-
-const BASE_URL = BuildIf.ALL_QA ? 'https://s.8th.io' : 'https://8th.io'
+import * as QRCode from 'qrcode'
+import {useQuery} from '@tanstack/react-query'
 
 type QrCodeOptions = {
-  code?: string
-  url?: string
+  url: string
   ecl?: 'l' | 'm' | 'h'
   margin?: number
 }
 
-const getQrCodeUrl = ({code, url, margin, ecl}: QrCodeOptions) => {
-  const params: Record<string, string> = {
-    v: '2',
-  }
-
-  if (margin !== undefined) {
-    params.margin = `${margin}`
-  }
-
-  if (ecl !== undefined) {
-    params.ecl = ecl
-  }
-
-  let pathPart = ''
-  if (url) {
-    params.url = url
-  } else {
-    pathPart = `/${code}`
-  }
-
-  return `${BASE_URL}/qr${pathPart}?${new URLSearchParams(params)}`
-}
-
 interface IBasicQrCode extends React.ImgHTMLAttributes<HTMLImageElement>, QrCodeOptions {}
 
-const BasicQrCode: React.FC<IBasicQrCode> = ({url, code, ecl, margin, alt, ...rest}) => (
-  <img
-    {...rest}
-    alt={alt !== undefined ? alt : 'QR Code'}
-    src={getQrCodeUrl({url, code, ecl, margin})}
-  />
-)
+const BasicQrCode: React.FC<IBasicQrCode> = ({url, ecl, margin, alt, ...rest}) => {
+  const src = useQuery({
+    queryKey: ['qr', url, ecl, margin, 2],
+    queryFn: async () => `data:image/svg+xml,${encodeURIComponent(await QRCode.toString(url, {
+      type: 'svg',
+      width: 250,
+      margin,
+      errorCorrectionLevel: ecl,
+    }))}`,
+  })?.data || ''
+
+  return (
+    <img
+      {...rest}
+      // eslint-disable-next-line local-rules/hardcoded-copy
+      alt={alt !== undefined ? alt : 'QR Code'}
+      src={src}
+    />
+  )
+}
+
 export {
   BasicQrCode,
 }

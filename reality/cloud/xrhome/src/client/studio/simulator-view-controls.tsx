@@ -69,16 +69,14 @@ const SimulatorViewActions: React.FC<ISimulatorView> = ({simulatorId}) => {
 
   return (
     <>
-      {!BuildIf.REMOTE_DEVICE_CONNECT_20260512 && (
-        <div className={appPreviewStyles.actionButton}>
-          <IconButton
-            onClick={handleOpenInBrowser}
-            stroke='popOut'
-            text={t('simulator_view_controls.button.open_in_browser')}
-            disabled={!sameDeviceUrl}
-          />
-        </div>
-      )}
+      <div className={appPreviewStyles.actionButton}>
+        <IconButton
+          onClick={handleOpenInBrowser}
+          stroke='popOut'
+          text={t('simulator_view_controls.button.open_in_browser')}
+          disabled={!sameDeviceUrl}
+        />
+      </div>
       <div className={appPreviewStyles.actionButton}>
         <IconButton
           onClick={handleToggleCollapsed}

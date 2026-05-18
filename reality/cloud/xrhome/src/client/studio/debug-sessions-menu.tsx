@@ -5,7 +5,7 @@ import {Menu} from 'semantic-ui-react'
 
 import {Icon} from '../ui/components/icon'
 import useCurrentApp from '../common/use-current-app'
-import {DevQRCodePopup} from '../editor/token/dev-qr-code-popup'
+import {DevQrCodePopup} from '../editor/token/dev-qr-code-popup'
 import {createThemedStyles} from '../ui/theme'
 import {combine} from '../common/styles'
 
@@ -23,9 +23,8 @@ const DebugSessionsMenu: React.FC = () => {
 
   return (
     <Menu.Item>
-      <DevQRCodePopup
+      <DevQrCodePopup
         app={app}
-        placement='top'
         shrink
         trigger={() => (
           <button
