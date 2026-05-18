@@ -21,6 +21,7 @@ const useConsoleActivity = BuildIf.STUDIO_OFFLINE_LOG_CONTAINER_20260205
     const handleMessage = useEvent((msg: DebugMessage) => {
       switch (msg.action) {
         case 'CONSOLE_ACTIVITY':
+          console.log(msg)
           addEditorLogs(appKey, [ConsoleLogStreams.messageLog(msg)].flat())
           break
         case 'SESSION_START':
@@ -54,9 +55,9 @@ const useConsoleActivity = BuildIf.STUDIO_OFFLINE_LOG_CONTAINER_20260205
           handleMessage(e.data)
         }
       }
-      window.electron.dev8Socket.fromDevice.addListener(handleDevice)
+      window.electron.dev8Socket.setListener(handleDevice)
       return () => {
-        window.electron.dev8Socket.fromDevice.removeListener(handleDevice)
+        window.electron.dev8Socket.setListener(null)
       }
     }, [appKey])
   }
