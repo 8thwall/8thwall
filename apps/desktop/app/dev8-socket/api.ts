@@ -25,8 +25,14 @@ const createDev8SocketApi = (): Dev8SocketApi => {
     rendererPort?.postMessage(d)
   })
 
+  let listener: null | undefined | ((d: ScopedDebugMessage) => void)
+
+  fromDevice.addListener(d => listener?.(d))
+
   return {
-    fromDevice,
+    setListener: (l) => {
+      listener = l
+    },
     toDevice,
   }
 }
