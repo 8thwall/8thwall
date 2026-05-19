@@ -1,5 +1,5 @@
 import {fetch, Agent} from 'undici'
-import type {ChildProcess} from 'child_process'
+import {exec, ChildProcess} from 'child_process'
 import getPort, {portNumbers, clearLockedPorts} from 'get-port'
 
 import {guessIp} from '@repo/c8/cli/ip'
@@ -15,9 +15,12 @@ import {createDev8WebSocketServer} from './app/dev8-socket/dev8-socket-server'
 interface LocalServer {
   stop: () => Promise<void>
   checkRunning: () => Promise<boolean>
+  waitForServerReady: () => Promise<boolean>
   getLocalBuildUrl: () => Promise<string>
   getLocalBuildRemoteUrl: () => Promise<string>
 }
+
+const IS_WINDOWS = process.platform === 'win32'
 
 const LOCAL_BUILD_URL_BASE = 'http://localhost:'
 
@@ -30,7 +33,11 @@ const killProcess = async (process: ChildProcess | undefined): Promise<void> => 
     return
   }
 
-  await new Promise<void>((resolve) => {
+  await new Promise<void>((resolve, reject) => {
+    if (IS_WINDOWS) {
+      exec(`taskkill /pid ${process.pid} /T /F`, err => (err ? reject(err) : resolve()))
+      return
+    }
     process.on('exit', () => {
       resolve()
     })
@@ -65,6 +72,7 @@ const createLocalServer = async (
   const localServerCheck = async () => {
     try {
       const res = await fetch(`${LOCAL_BUILD_URL_BASE}${primaryPort}`, {
+        signal: AbortSignal.timeout(1000),
         dispatcher: new Agent({
           bodyTimeout: 1000,
         }),
@@ -82,10 +90,10 @@ const createLocalServer = async (
       if (!isProcessRunning(webpackDevServer)) {
         return false
       }
-      await new Promise(r => setTimeout(r, DEV_SERVER_POLLING_INTERVAL))
       if (await localServerCheck()) {
         return true
       }
+      await new Promise(r => setTimeout(r, DEV_SERVER_POLLING_INTERVAL))
     }
     return false
   }
@@ -120,7 +128,8 @@ const createLocalServer = async (
 
   return {
     stop: handleStop,
-    checkRunning: waitForServerReady,
+    checkRunning: localServerCheck,
+    waitForServerReady,
     getLocalBuildUrl: handleGetLocalBuildUrl,
     getLocalBuildRemoteUrl: handleGetLocalBuildRemoteUrl,
   }
