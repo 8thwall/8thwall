@@ -199,14 +199,14 @@ const startWatch = withErrorHandlingResponse(async (req: Request) => {
       if (isRunning) {
         return makeJsonResponse({})
       } else {
-        serverManager.stop()
+        await serverManager.stop()
       }
     }
 
     try {
       const newManager = await createLocalServer(appKey, projectEntry.location)
       appKeyToLocalServerManager.set(appKey, newManager)
-      const running = await newManager.checkRunning()
+      const running = await newManager.waitForServerReady()
       if (!running) {
         throw new Error('Failed to start local server')
       }
@@ -842,7 +842,7 @@ app.on('before-quit', async (event) => {
   if (appKeyToLocalServerManager.size > 0) {
     event.preventDefault()
 
-    await Promise.all(
+    await Promise.allSettled(
       Array.from(appKeyToLocalServerManager.values()).map(manager => manager.stop())
     )
     appKeyToLocalServerManager.clear()
