@@ -38,7 +38,7 @@ const LogContainerSplit: React.FC<IFileEditorMainContent> = ({
   const toggleShowLogs = () => {
     setSplitSize(
       splitSize < MIN_EXPANDED_SIZE
-        ? limitSize(preferredExpandedSize)
+        ? Math.max(EXPANDED_SIZE, limitSize(preferredExpandedSize))
         : COLLAPSED_SIZE
     )
   }
