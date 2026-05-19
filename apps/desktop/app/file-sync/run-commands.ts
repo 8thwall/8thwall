@@ -13,6 +13,10 @@ const EXEC_PATH = process.platform === 'darwin'
   ? process.helperExecPath
   : process.execPath.replace(/\\+$/, '')
 
+const COMMON_ENV = {
+  NO_COLOR: '1',
+}
+
 type ScriptRunOptions = {
   cwd: string
   name: 'build' | 'serve'
@@ -66,7 +70,7 @@ const runInstallCommand = async (
   const child = fork(
     NPM_CLI_PATH,
     ['install', ...(extraArguments || [])],
-    {cwd: savePath, stdio: 'pipe', env: {ELECTRON_RUN_AS_NODE: '1'}, detached: true}
+    {cwd: savePath, stdio: 'pipe', env: {...COMMON_ENV, ELECTRON_RUN_AS_NODE: '1'}, detached: true}
   )
 
   forwardProcessOutput(appKey, child)
@@ -112,6 +116,7 @@ const runBuildCommand = (
   const child = runScript({
     cwd: savePath,
     name: 'build',
+    env: COMMON_ENV,
   })
 
   forwardProcessOutput(appKey, child)
@@ -139,7 +144,7 @@ const runServeCommand = (savePath: string, port: number): ChildProcess => {
   const child = runScript({
     cwd: savePath,
     name: 'serve',
-    env: {PORT: port.toString()},
+    env: {...COMMON_ENV, PORT: port.toString()},
     arguments: ['--port', `${port}`],
   })
 
