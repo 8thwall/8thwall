@@ -696,7 +696,7 @@
   "project_history_page.no_repo_modal.blurb": "Once you begin developing your project in the Editor, this page will display your project\u0027s commit history.",
   "remote_setup_view.initializing_server": "Initializing server",
   "remote_setup_view.recommend_ngrok": "<ngrokLink>ngrok</ngrokLink> is is the recommended way to connect your development server to a remote device:",
-  "remote_setup_view.enter_url": "ngrok, or any simular proxy, will output a remote URL which you can enter here:",
+  "remote_setup_view.enter_url": "ngrok, or any similar proxy, will output a remote URL which you can enter here:",
   "remote_setup_view.label.proxy_url": "Proxy URL",
   "remote_setup_view.option.direct_ip": "Direct IP",
   "remote_setup_view.option.proxy_server": "Proxy Server, e.g. ngrok",
