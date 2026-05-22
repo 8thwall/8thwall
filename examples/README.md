@@ -4,6 +4,8 @@
 
 - [Physics Playground](https://github.com/8thwall/studio-physics-playground-example)
 - [Image Targets](https://github.com/8thwall/studio-image-targets-example)
+- [Face Effects](https://github.com/8thwall/studio-face-effects-example)
+- [World Effects](https://github.com/8thwall/studio-world-effects-example)
 
 ## A-Frame
 
