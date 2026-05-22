@@ -6,11 +6,11 @@ Build immersive AR and interactive 3D. Free and open.
 
 ## Getting Started
 
-For 3D development using 8th Wall Studio, get started [here](https://8thwall.org/docs/getting-started/installation).
+8th Wall Studio is our all-in-one 3D editor and game engine. You can get install the desktop app and get started with your first project using [this guide](https://8thwall.org/docs/getting-started/installation).
 
-For integrating the engine into your project using a different framework, such as A-Frame or three.js, get started [here](https://8thwall.org/docs/engine/overview). 
+8th Wall Engine provides integrations with a number of 3D frameworks, such as A-Frame and three.js. You can get started adding immersive features to your project using [this guide](https://8thwall.org/docs/engine/overview).
 
-You can also browse [examples](./examples/README.md) to find a starting point.
+Please see [examples](./examples/README.md) to find a good starting point for your next project.
 
 If any questions come up, please refer to our [documentation](https://8th.io/docs). You can also find our community on [Discord](https://8th.io/discord) or in [Github Discussions](https://github.com/orgs/8thwall/discussions).
 
