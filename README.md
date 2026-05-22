@@ -6,11 +6,11 @@ Build immersive AR and interactive 3D. Free and open.
 
 ## Getting Started
 
-For 3D development using 8th Wall Studio, install the [desktop app](https://8thwall.org/downloads).
+8th Wall Studio is our all-in-one 3D editor and game engine. You can install the desktop app and get started with your first project using [this guide](https://8thwall.org/docs/getting-started/installation).
 
-For integrating the engine into your project, see https://8thwall.org/docs/migration/self-hosted
+8th Wall Engine provides integrations with a number of 3D frameworks, such as A-Frame and three.js. You can get started adding immersive features to your project using [this guide](https://8thwall.org/docs/engine/overview).
 
-Otherwise, you can browse our [examples](./examples/README.md) to find a jumping off point.
+Please see [examples](./examples/README.md) to find a good starting point for your next project.
 
 If any questions come up, please refer to our [documentation](https://8th.io/docs). You can also find our community on [Discord](https://8th.io/discord) or in [Github Discussions](https://github.com/orgs/8thwall/discussions).
 
@@ -27,6 +27,7 @@ If any questions come up, please refer to our [documentation](https://8th.io/doc
   - SLAM functionality is available via the [distributed engine binary](https://8th.io/xrjs).
 - [ecs](./packages/ecs/README.md) - The game engine behind 8th Wall Studio
 - [xrextras](./packages/xrextras/README.md) - Helper code for XR and 3D needs
+- [landing-page](./packages/landing-page/README.md) - Fallback experience for unsupported devices
 
 ### More coming soon!
 
