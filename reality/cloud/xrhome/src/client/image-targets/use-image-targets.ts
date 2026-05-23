@@ -1,4 +1,5 @@
 import React from 'react'
+import {useDispatch} from 'react-redux'
 import {queryOptions, useQuery, useQueryClient, useSuspenseQuery} from '@tanstack/react-query'
 
 import {
@@ -9,6 +10,7 @@ import {
 import type {DeepReadonly} from 'ts-essentials'
 
 import {useEnclosedAppKey} from '../apps/enclosed-app-context'
+import {errorAction} from '../common/error-action'
 import {
   listImageTargets, uploadImageTarget, deleteImageTarget, updateImageTarget,
 } from './image-target-api'
@@ -53,29 +55,38 @@ const expandTargetData = (appKey: string, target: ImageTargetData): IImageTarget
   isRotated: !!target.properties.isRotated,
 })
 
-const fetchImageTargets = async (appKey: string): Promise<DeepReadonly<IImageTarget[]>> => {
-  const {targets} = await listImageTargets(appKey)
+const fetchImageTargets = async (
+  appKey: string,
+  dispatch: ReturnType<typeof useDispatch>
+): Promise<DeepReadonly<IImageTarget[]>> => {
+  const {targets, invalidPaths} = await listImageTargets(appKey)
+  if (invalidPaths && invalidPaths.length > 0) {
+    dispatch(errorAction(`Invalid image target file${invalidPaths.length === 1 ? '' : 's'} detected: ${invalidPaths.join(', ')}`))
+  }
+
   return targets
     .map(target => expandTargetData(appKey, target))
     .sort((a, b) => b.created - a.created)
 }
 
-const getTargetsQuery = (appKey: string) => queryOptions({
+const getTargetsQuery = (appKey: string, dispatch: ReturnType<typeof useDispatch>) => queryOptions({
   queryKey: ['image-targets', appKey],
-  queryFn: () => fetchImageTargets(appKey),
+  queryFn: () => fetchImageTargets(appKey, dispatch),
   staleTime: MILLISECONDS_PER_SECOND * 10,
   refetchInterval: MILLISECONDS_PER_SECOND * 60,
   refetchOnWindowFocus: true,
 })
 
 const useImageTargets = () => {
+  const dispatch = useDispatch()
   const appKey = useEnclosedAppKey()
-  return useSuspenseQuery(getTargetsQuery(appKey)).data
+  return useSuspenseQuery(getTargetsQuery(appKey, dispatch)).data
 }
 
 const useImageTargetsOrLoading = () => {
+  const dispatch = useDispatch()
   const appKey = useEnclosedAppKey()
-  return useQuery(getTargetsQuery(appKey))
+  return useQuery(getTargetsQuery(appKey, dispatch))
 }
 
 const useGalleryTargets = (galleryUuid: string | undefined) => {
