@@ -62,7 +62,7 @@ const handleListTargets: RequestHandler = async (req) => {
             invalidPaths.push(filename)
             return
           }
-          targets.push(parsed.data)
+          targets.push(parsed.data as unknown as TargetApi.ImageTargetData)
         } catch (err) {
           invalidPaths.push(filename)
         }

@@ -53,14 +53,14 @@ const CropResult = z.discriminatedUnion('type', [
   }),
 ])
 
-const ImageTargetDataSchema = z.object({
+const ImageTargetDataSchema = z.intersection(z.object({
   imagePath: z.string().nonempty(),
   name: z.string().nonempty(),
   metadata: z.unknown().optional(),
   resources: TargetResourceSchema.optional(),
-  created: z.number(),
-  updated: z.number(),
-}).merge(CropResult)
+  created: z.number().optional(),
+  updated: z.number().optional(),
+}), CropResult)
 
 const UploadTargetParams = z.object({
   appKey: z.string().nonempty(),
