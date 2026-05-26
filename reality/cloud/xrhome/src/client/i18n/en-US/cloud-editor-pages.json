@@ -689,6 +689,7 @@
   "progress_indicator.message.loading_project_ellipses_1": "Loading my project.",
   "progress_indicator.message.loading_project_ellipses_2": "Loading my project..",
   "progress_indicator.message.loading_project_ellipses_3": "Loading my project...",
+  "system_logs_menu.button.restart_server": "Restart Server",
   "project_history_page.heading": "Project History",
   "project_history_page.default_summary": "new app",
   "project_history_page.default_signature": "8th Wall",
