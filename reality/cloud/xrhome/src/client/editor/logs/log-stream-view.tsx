@@ -137,7 +137,7 @@ const LogStreamView: React.FC<ILogStreamView> = ({logStream, logFilter}) => {
             return true
           }
           const currentScrollBottom = box.scrollHeight - box.scrollTop - box.clientHeight
-          return currentScrollBottom === 0
+          return currentScrollBottom < 5
         }}
         componentDidUpdateCb={(prevProps, prevState, shouldScroll) => {
           if (shouldScroll) {
