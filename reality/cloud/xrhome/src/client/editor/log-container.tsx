@@ -20,6 +20,7 @@ import {useChangeEffect} from '../hooks/use-change-effect'
 import {getSessionDisplayTitle} from './debug-session-info'
 import {combine} from '../common/styles'
 import {useDeviceBroadcast} from './hooks/use-device-broadcast'
+import {SystemLogsMenu} from './logs/system-logs-menu'
 
 interface ILogContainer {
   logKey: string
@@ -164,7 +165,7 @@ const LogContainer: React.FC<ILogContainer> = ({
           {(currentStreamIsSystem || currentIsDeviceStream) &&
             <Menu className='filter-menu'>
               {currentStreamIsSystem
-                ? null
+                ? <SystemLogsMenu />
                 : <LogFilterMenu
                     filterError={filterOptions.filterError}
                     filterWarn={filterOptions.filterWarn}

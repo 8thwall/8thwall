@@ -712,5 +712,6 @@
   "switch_active_browser_modal.cta": "Make Active",
   "sync_modal.slot_value.unset": "Unset",
   "sync_modal.slot_value.unknown": "Unknown",
-  "sync_modal.slot_value.unknown_label": "Unknown"
+  "sync_modal.slot_value.unknown_label": "Unknown",
+  "system_logs_menu.button.restart_server": "Restart Server"
 }
