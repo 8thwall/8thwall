@@ -394,6 +394,7 @@ const RotateAnimation = registerComponent({
     if (component.schema.autoFrom) {
       setupVector3Component(world, component, getRotationCursorAsEuler)
     } else {
+      component.data.start = world.time.elapsed
       component.data.startX = degreesToRadians(component.schema.fromX)
       component.data.startY = degreesToRadians(component.schema.fromY)
       component.data.startZ = degreesToRadians(component.schema.fromZ)
