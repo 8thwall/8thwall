@@ -12,7 +12,7 @@ import {getLocalProject} from '../../local-project-db'
 import {makeJsonResponse} from '../../json-response'
 import {
   GetTextureParams, ListTargetsParams, UploadTargetParams, CropResult, DeleteTargetParams,
-  UpdateTargetRequest,
+  UpdateTargetRequest, ImageTargetDataSchema,
 } from './image-target-types'
 import {makeStreamFileResponse} from '../../stream-file-response'
 import {getQueryParams} from '../../query-params'
@@ -55,7 +55,14 @@ const handleListTargets: RequestHandler = async (req) => {
     await Promise.all(
       contents.filter(e => e.endsWith('.json')).map(async filename => runQueue.next(async () => {
         try {
-          targets.push(await readTarget(path.join(folder, filename)))
+          const filePath = path.join(folder, filename)
+          const target = await readTarget(filePath)
+          const parsed = ImageTargetDataSchema.safeParse(target)
+          if (!parsed.success) {
+            invalidPaths.push(filename)
+            return
+          }
+          targets.push(parsed.data as unknown as TargetApi.ImageTargetData)
         } catch (err) {
           invalidPaths.push(filename)
         }

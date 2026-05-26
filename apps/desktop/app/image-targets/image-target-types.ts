@@ -14,6 +14,14 @@ const CropGeometry = z.object({
   originalHeight: z.number(),
 })
 
+const TargetResourceSchema = z.object({
+  originalImage: z.string().nonempty(),
+  croppedImage: z.string().nonempty(),
+  thumbnailImage: z.string().nonempty(),
+  luminanceImage: z.string().nonempty(),
+  geometryImage: z.string().nonempty().optional(),
+})
+
 const CylinderCropGeometry = z.object({
   targetCircumferenceTop: z.number(),
   cylinderSideLength: z.number(),
@@ -21,7 +29,7 @@ const CylinderCropGeometry = z.object({
   cylinderCircumferenceBottom: z.number(),
   arcAngle: z.number(),
   coniness: z.number(),
-  inputMode: z.enum(['ADVANCED']),
+  inputMode: z.enum(['ADVANCED', 'BASIC']),
   unit: z.enum(['mm', 'in']),
 }).and(CropGeometry)
 
@@ -44,6 +52,15 @@ const CropResult = z.discriminatedUnion('type', [
     properties: ConicalCropGeometry,
   }),
 ])
+
+const ImageTargetDataSchema = z.intersection(z.object({
+  imagePath: z.string().nonempty(),
+  name: z.string().nonempty(),
+  metadata: z.unknown().optional(),
+  resources: TargetResourceSchema.optional(),
+  created: z.number().optional(),
+  updated: z.number().optional(),
+}), CropResult)
 
 const UploadTargetParams = z.object({
   appKey: z.string().nonempty(),
@@ -78,6 +95,7 @@ export {
   ListTargetsParams,
   GetTextureParams,
   CropResult,
+  ImageTargetDataSchema,
   UploadTargetParams,
   DeleteTargetParams,
   UpdateTargetRequest,
