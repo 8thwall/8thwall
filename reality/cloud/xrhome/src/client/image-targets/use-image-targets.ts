@@ -61,7 +61,9 @@ const fetchImageTargets = async (
 ): Promise<DeepReadonly<IImageTarget[]>> => {
   const {targets, invalidPaths} = await listImageTargets(appKey)
   if (invalidPaths && invalidPaths.length > 0) {
-    dispatch(errorAction(`Invalid image target file${invalidPaths.length === 1 ? '' : 's'} detected: ${invalidPaths.join(', ')}`))
+    // eslint-disable-next-line local-rules/hardcoded-copy
+    const message = `Invalid image target file${invalidPaths.length === 1 ? '' : 's'} detected: `
+    dispatch(errorAction(message + invalidPaths.join(', ')))
   }
 
   return targets
@@ -108,7 +110,7 @@ const useImageTargetActions = () => {
   const client = useQueryClient()
   return React.useMemo(() => {
     const refresh = () => {
-      client.invalidateQueries(getTargetsQuery(appKey))
+      client.invalidateQueries(getTargetsQuery(appKey, null))
     }
 
     const deleteTarget = async (name: string) => {
