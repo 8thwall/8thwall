@@ -1,4 +1,5 @@
 import type {BaseGraphObject} from '@ecs/shared/scene-graph'
+import type {DeepReadonly} from 'ts-essentials'
 
 import {useStudioComponentsContext} from '../studio-components-context'
 import {BUILTIN_COMPONENT_SCHEMA} from '../generated-schema'
@@ -89,8 +90,10 @@ const DIRECT_PROPERTY_COMPONENTS: Array<keyof BaseGraphObject> = [
 
 type BuiltInDirectProperty = typeof DIRECT_PROPERTY_COMPONENTS extends Array<infer T> ? T : never
 
+const DIRECT_PROPERTY_SET: Set<string> = new Set(DIRECT_PROPERTY_COMPONENTS)
+
 type Component = {
-  value: BuiltInComponentName | BuiltInDirectProperty
+  value: BuiltInComponentName | BuiltInDirectProperty | string
   content: string
   isDirectProperty?: boolean
 }
@@ -99,11 +102,10 @@ type NewComponentValue = Exclude<
   BuiltInComponentName | BuiltInDirectProperty | 'mesh', 'image-target' | 'video-controls'
 >
 
-// TODO(christoph): This isn't how it's really going to work, but it works in the prototype.
-// We're still thinking about how to load user-defined schema, either parse by parsing the source
-// code, manifest, or by communicating from a runtime session, if there's one running potentially.
-
-const useAvailableComponents = (objectId: string): SubMenuCategory[] => {
+const useAvailableComponents = (
+  objectId: string,
+  renderAdditionalCustomComponentContent?: SubMenuCategory['renderAdditionalContent']
+) => {
   const derivedScene = useDerivedScene()
   const components = useStudioComponentsContext().listComponents()
   const object = derivedScene.getObject(objectId)
@@ -111,12 +113,11 @@ const useAvailableComponents = (objectId: string): SubMenuCategory[] => {
 
   if (!object) { return [] }
 
-  const currentComponents = Object.values(object.components)
+  const currentComponents = Object.values(object.components).map(e => e.name)
 
   const customComponents = components
     .filter(name => !(
       BUILT_IN_COMPONENTS.has(name) ||
-      currentComponents.some(e => e.name === name) ||
       name.startsWith('debug-')
     ))
     .map(name => ({
@@ -124,31 +125,28 @@ const useAvailableComponents = (objectId: string): SubMenuCategory[] => {
       content: name,
     }))
 
-  const getFilteredComponents = (componentList) => {
+  const getFilteredComponents = (componentList: DeepReadonly<Component[]>): Component[] => {
     if (componentList.length === 0) {
       return []
     }
     return componentList.filter((component) => {
-      if (DIRECT_PROPERTY_COMPONENTS.includes(component.value)) {
+      if (DIRECT_PROPERTY_SET.has(component.value)) {
         return !object[component.value]
       }
-      return !currentComponents.some(e => e.name === component.value)
+      return !currentComponents.includes(component.value)
     }).map(component => ({
-      value: component.value,
-      content: component.content,
-      ...component.ns && {ns: component.ns},
-      isDirectProperty: !!DIRECT_PROPERTY_COMPONENTS.includes(component.value),
+      ...component,
+      isDirectProperty: !!DIRECT_PROPERTY_SET.has(component.value),
     }))
   }
 
   const categories = [
-    ...customComponents.length === 0
-      ? []
-      : [{
-        value: ComponentCategoryType.CUSTOM,
-        parent: null,
-        options: getFilteredComponents(customComponents),
-      }],
+    {
+      value: ComponentCategoryType.CUSTOM,
+      parent: null,
+      options: getFilteredComponents(customComponents),
+      renderAdditionalContent: renderAdditionalCustomComponentContent,
+    },
     {
       value: ComponentCategoryType.ANIMATION,
       parent: null,
@@ -172,9 +170,12 @@ const useAvailableComponents = (objectId: string): SubMenuCategory[] => {
       parent: null,
       options: getFilteredComponents(CONTROLLER_OPTIONS),
     },
-  ] as SubMenuCategory[]
+  ]
 
-  return categories.filter(section => section.options.length > 0)
+  return categories.filter(section => (
+    section.value === ComponentCategoryType.CUSTOM ||
+    section.options.length > 0
+  ))
 }
 
 export {

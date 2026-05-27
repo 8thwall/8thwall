@@ -1,7 +1,8 @@
 import React from 'react'
-import {v4 as uuid} from 'uuid'
 import {useTranslation} from 'react-i18next'
 import {createUseStyles} from 'react-jss'
+
+import type {GraphObject} from '@ecs/shared/scene-graph'
 
 import {
   useAvailableComponents, Component, MESH_COMPONENT, LIGHT_COMPONENT, COLLIDER_COMPONENT,
@@ -13,9 +14,11 @@ import {makeMaterial, makeParticles} from '../make-object'
 import {FloatingPanelButton} from '../../ui/components/floating-panel-button'
 import {setSectionCollapsed} from '../hooks/collapsed-section'
 import {useStudioStateContext} from '../studio-state-context'
-import {useSceneContext} from '../scene-context'
+import {MutateCallback, useSceneContext} from '../scene-context'
 import {useSelectedObjects} from '../hooks/selected-objects'
 import {useDerivedScene} from '../derived-scene-context'
+import {createIdSeed} from '../id-generation'
+import {CreateComponentOption} from './create-component-option'
 
 const useStyles = createUseStyles({
   addComponent: {
@@ -44,20 +47,14 @@ const NewComponentButton: React.FC<INewComponentButton> = () => {
   const derivedScene = useDerivedScene()
 
   const objects = useSelectedObjects()
-  // need to make this use the available components across all objects, using first one for now
-  const sortedComponents = useAvailableComponents(
-    derivedScene.getObject(objects[0].id)?.id
-  )
-  const flatComponents = sortedComponents.reduce((acc, section) => acc.concat(section.options), [])
 
-  const handleAddComponent = (component: Component) => {
-    const {value} = component
-    const stringValue = value as string
-    let sectionId = stringValue
+  const handleAddComponent = (value: string, isDirectProperty: boolean) => {
+    let sectionId = value
+    const idSeed = createIdSeed()
 
     objects.forEach((object) => {
-      const onChange = u => ctx.updateObject(object.id, u)
-      switch (stringValue) {
+      const onChange = (u: MutateCallback<GraphObject>) => ctx.updateObject(object.id, u)
+      switch (value) {
         case MESH_COMPONENT:
           onChange(o => ({
             ...o,
@@ -76,10 +73,10 @@ const NewComponentButton: React.FC<INewComponentButton> = () => {
           onChange(o => ({...o, ui: {type: '3d'}}))
           break
         default:
-          if (component.isDirectProperty) {
+          if (isDirectProperty) {
             onChange(o => ({...o, [value]: {}}))
           } else {
-            const id = uuid()
+            const id = idSeed.fromId(object.id)
             sectionId = id
 
             let parameters = {}
@@ -108,9 +105,21 @@ const NewComponentButton: React.FC<INewComponentButton> = () => {
       setSectionCollapsed(stateCtx, object.id, sectionId, false)
     })
   }
+
+  // need to make this use the available components across all objects, using first one for now
+  const sortedComponents = useAvailableComponents(
+    derivedScene.getObject(objects[0].id)?.id,
+    o => <CreateComponentOption {...o} onCreate={name => handleAddComponent(name, false)} />
+  )
+
   const handleSelectOption = (option: string) => {
-    const component = flatComponents.find(c => c.value === option)
-    handleAddComponent(component)
+    const component = sortedComponents.flatMap(e => e.options).find(c => c.value === option)
+    if (component) {
+      handleAddComponent(
+        component.value,
+        (component as Component).isDirectProperty
+      )
+    }
   }
 
   return (
