@@ -354,6 +354,21 @@ const applyProjectConfigFix = (appKey: string, fix: 'inject' | 'copy-plugin' | '
   return fetchJson<{}>(`${API}/project/config?${params}`, {method: 'POST'})
 }
 
+const extractApiError = async (err: Error & {res?: Response}): Promise<string> => {
+  try {
+    if (err.res) {
+      const json = await err.res.json()
+      if (json.message) {
+        return json.message
+      }
+    }
+  } catch {
+    // Ignore
+  }
+
+  return String(err)
+}
+
 export {
   initializeLocal,
   watchLocal,
@@ -386,6 +401,7 @@ export {
   checkConfigStatus,
   applyProjectConfigFix,
   installPackages,
+  extractApiError,
 }
 
 export type {
