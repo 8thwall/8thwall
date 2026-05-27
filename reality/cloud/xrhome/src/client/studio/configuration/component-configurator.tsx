@@ -14,6 +14,9 @@ import {useStudioStateContext} from '../studio-state-context'
 import {copyComponent} from './copy-component'
 import {ComponentConfiguratorTray} from './component-configurator-tray'
 import {ALL_NEW_COMPONENT_OPTIONS} from './new-component-strings'
+import {openFile} from '../local-sync-api'
+import {useEnclosedApp} from '../../apps/enclosed-app-context'
+import {extractFilePath} from '../../editor/editor-file-location'
 
 type Components = DeepReadonly<GraphObject['components']>
 type Parameters = Components[string]['parameters']
@@ -128,6 +131,7 @@ const ComponentConfigurators: React.FC<IComponentConfigurators> = ({
   const {getComponentLocation, getComponentSchema} = useStudioComponentsContext()
   const stateCtx = useStudioStateContext()
   const {t} = useTranslation('cloud-studio-pages')
+  const app = useEnclosedApp()
 
   return (
     <>
@@ -157,7 +161,13 @@ const ComponentConfigurators: React.FC<IComponentConfigurators> = ({
               title={getComponentTitle()}
               description={COMPONENT_DESCRIPTION[name] && t(COMPONENT_DESCRIPTION[name])}
               onEdit={fileLocation &&
-                (() => actionsContext.onSelect(fileLocation, scrollTo))}
+                (() => {
+                  if (app && Build8.PLATFORM_TARGET === 'desktop') {
+                    openFile(app.appKey, extractFilePath(fileLocation))
+                  } else {
+                    actionsContext.onSelect(fileLocation, scrollTo)
+                  }
+                })}
               onRemove={!(NO_REMOVE_COMPONENTS.has(name)) && (
                 () => onChange((current) => {
                   const newComponents = {...current}
