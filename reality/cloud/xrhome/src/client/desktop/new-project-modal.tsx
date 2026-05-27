@@ -9,22 +9,25 @@ import {SecondaryButton} from '../ui/components/secondary-button'
 import {SpaceBetween} from '../ui/layout/space-between'
 import AutoHeading from '../widgets/auto-heading'
 import AutoHeadingScope from '../widgets/auto-heading-scope'
-import {FloatingTrayModal} from '../ui/components/floating-tray-modal'
 import {initializeLocal} from '../studio/local-sync-api'
 import {getLocalStudioPath} from './desktop-paths'
-import {useBooleanUrlState} from '../hooks/url-state'
 import {Icon} from '../ui/components/icon'
 import {JointToggleButton} from '../ui/components/joint-toggle-button'
 import {StandardFieldLabel} from '../ui/components/standard-field-label'
 import {StandardTextField} from '../ui/components/standard-text-field'
+import {GITHUB_TEMPLATES} from './github-templates'
+import {TemplateCard} from '../browse/template-card'
+import {StandardModal} from '../ui/components/standard-modal'
+import coverImg from '../static/cover-image.png'
 
 const useStyles = createUseStyles({
-  modalContainer: {
+  newProjectModal: {
     display: 'flex',
     width: '56.25rem',
     padding: '5rem 3rem',
     minHeight: '60vh',
     justifyContent: 'center',
+    flexDirection: 'column',
   },
   header: {
     fontFamily: 'Geist Mono !important',
@@ -35,6 +38,13 @@ const useStyles = createUseStyles({
     aspectRatio: '98 / 55',
     borderRadius: '0.5rem',
     objectFit: 'cover',
+  },
+  templateCarousel: {
+    minWidth: 0,
+    width: '100%',
+    overflowX: 'scroll',
+    display: 'flex',
+    gap: '1rem',
   },
 })
 
@@ -52,18 +62,19 @@ const NewProjectContent: React.FC<INewProjectContent> = ({
   const queryClient = useQueryClient()
   const history = useHistory()
   const [loading, setLoading] = React.useState(false)
+  const [selectedTemplate, setSelectedTemplate] = React.useState<string | null>(null)
 
   const projectTitle = rawProjectTitle.trim()
 
   return (
     <AutoHeadingScope>
       <form
-        className={classes.modalContainer}
+        className={classes.newProjectModal}
         onSubmit={async (e) => {
           setLoading(true)
           try {
             e.preventDefault()
-            const res = await initializeLocal(projectTitle, location)
+            const res = await initializeLocal(projectTitle, location, selectedTemplate)
             await queryClient.invalidateQueries({queryKey: ['listProjects']})
             history.push(getLocalStudioPath(res.appKey))
           } finally {
@@ -72,12 +83,9 @@ const NewProjectContent: React.FC<INewProjectContent> = ({
         }}
       >
         <SpaceBetween direction='vertical'>
-          <SpaceBetween direction='vertical' extraNarrow>
-            <AutoHeading className={classes.header}>
-              {t('new_project_modal.title.new')}
-            </AutoHeading>
-            <span> {t('new_project_modal.text.tagline')}</span>
-          </SpaceBetween>
+          <AutoHeading className={classes.header}>
+            {t('new_project_modal.title.new')}
+          </AutoHeading>
           <SpaceBetween direction='vertical'>
             <SpaceBetween direction='vertical' narrow>
               <StandardTextField
@@ -106,6 +114,34 @@ const NewProjectContent: React.FC<INewProjectContent> = ({
                 />
               </div>
             </SpaceBetween>
+
+            <label htmlFor='new-project-template'>
+              {t('new_project_modal.input.label.choose_template')}
+            </label>
+            <div className={classes.templateCarousel}>
+              <TemplateCard
+                name='new-project-template'
+                checked={selectedTemplate === null}
+                onChange={() => {
+                  setSelectedTemplate(null)
+                }}
+                title={t('new_project_modal.input.title.empty_project')}
+                imageUrl={coverImg}
+              />
+              {GITHUB_TEMPLATES.map(template => (
+                <TemplateCard
+                  key={template.zipUrl}
+                  name='new-project-template'
+                  checked={selectedTemplate === template.zipUrl}
+                  onChange={() => {
+                    setSelectedTemplate(template.zipUrl)
+                  }}
+                  title={template.title}
+                  imageUrl={template.imageUrl}
+                />
+              ))}
+            </div>
+
             <PrimaryButton
               type='submit'
               disabled={!projectTitle}
@@ -123,55 +159,26 @@ const NewProjectContent: React.FC<INewProjectContent> = ({
   )
 }
 
-interface INewProjectModalWithContext {
-  onClose: () => void
-}
-
-const NewProjectModal: React.FC<INewProjectModalWithContext> = ({
-  onClose,
-}) => {
-  useTranslation(['common'])
-
+const NewProjectButton: React.FC = () => {
+  const {t} = useTranslation(['studio-desktop-pages'])
   return (
-    <FloatingTrayModal
-      startOpen
-      onOpenChange={(open) => {
-        if (!open) {
-          onClose()
-        }
-      }}
-      trigger={undefined}
+    <StandardModal
+      trigger={(
+        <PrimaryButton>
+          <Icon inline stroke='plus' />
+          <span>{t('home_page.button.new_project')}</span>
+        </PrimaryButton>
+      )}
     >
-      {() => (
+      {onClose => (
         <NewProjectContent
           onClose={onClose}
         />
       )}
-    </FloatingTrayModal>
-  )
-}
-
-const NewProjectButton: React.FC = () => {
-  const {t} = useTranslation(['studio-desktop-pages'])
-  const [isNewProjectModalOpen, setIsNewProjectModalOpen] = useBooleanUrlState('newProject', false)
-  return (
-    <>
-      <PrimaryButton onClick={() => setIsNewProjectModalOpen(true)}>
-        <Icon inline stroke='plus' />
-        <span>{t('home_page.button.new_project')}</span>
-      </PrimaryButton>
-      {isNewProjectModalOpen &&
-        <NewProjectModal
-          onClose={() => {
-            setIsNewProjectModalOpen(false)
-          }}
-        />
-              }
-    </>
+    </StandardModal>
   )
 }
 
 export {
-  NewProjectModal,
   NewProjectButton,
 }
