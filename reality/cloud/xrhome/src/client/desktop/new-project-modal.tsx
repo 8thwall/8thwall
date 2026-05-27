@@ -5,7 +5,6 @@ import {useQueryClient} from '@tanstack/react-query'
 import {useHistory} from 'react-router-dom'
 
 import {PrimaryButton} from '../ui/components/primary-button'
-import {SecondaryButton} from '../ui/components/secondary-button'
 import {SpaceBetween} from '../ui/layout/space-between'
 import AutoHeading from '../widgets/auto-heading'
 import AutoHeadingScope from '../widgets/auto-heading-scope'
@@ -19,19 +18,18 @@ import {GITHUB_TEMPLATES} from './github-templates'
 import {TemplateCard} from '../browse/template-card'
 import {StandardModal} from '../ui/components/standard-modal'
 import coverImg from '../static/cover-image.png'
+import {BoldButton} from '../ui/components/bold-button'
+import {useTypography} from '../ui/typography'
+import {StandardModalActions} from '../ui/components/standard-modal-actions'
+import {StandardModalHeader} from '../editor/standard-modal-header'
+import {StandardModalContent} from '../ui/components/standard-modal-content'
 
 const useStyles = createUseStyles({
   newProjectModal: {
     display: 'flex',
     width: '56.25rem',
-    padding: '5rem 3rem',
-    minHeight: '60vh',
     justifyContent: 'center',
     flexDirection: 'column',
-  },
-  header: {
-    fontFamily: 'Geist Mono !important',
-    margin: 0,
   },
   appImage: {
     width: '12.25rem',
@@ -55,6 +53,7 @@ interface INewProjectContent {
 const NewProjectContent: React.FC<INewProjectContent> = ({
   onClose,
 }) => {
+  const typography = useTypography()
   const {t} = useTranslation(['studio-desktop-pages', 'common'])
   const classes = useStyles()
   const [rawProjectTitle, setProjectTitle] = React.useState('')
@@ -82,41 +81,24 @@ const NewProjectContent: React.FC<INewProjectContent> = ({
           }
         }}
       >
-        <SpaceBetween direction='vertical'>
-          <AutoHeading className={classes.header}>
+        <StandardModalHeader>
+          <AutoHeading className={typography.heading4}>
             {t('new_project_modal.title.new')}
           </AutoHeading>
+        </StandardModalHeader>
+        <StandardModalContent>
           <SpaceBetween direction='vertical'>
-            <SpaceBetween direction='vertical' narrow>
-              <StandardTextField
-                label={t('new_project_modal.input.prompt.title')}
-                value={projectTitle}
-                onChange={(e) => {
-                  const {value} = e.target
-                  setProjectTitle(value)
-                }}
-              />
-              <div>
-                <StandardFieldLabel label={t('new_project_modal.input.label.folder_location')} />
-                <JointToggleButton
-                  options={[
-                    {
-                      value: 'default',
-                      content: t('new_project_modal.input.label.default_location'),
-                    },
-                    {
-                      value: 'prompt',
-                      content: t('new_project_modal.input.label.custom_location'),
-                    },
-                  ] as const}
-                  value={location}
-                  onChange={e => setLocation(e)}
-                />
-              </div>
-            </SpaceBetween>
-
+            <StandardTextField
+              label={t('new_project_modal.input.prompt.title')}
+              value={projectTitle}
+              autoFocus
+              onChange={(e) => {
+                const {value} = e.target
+                setProjectTitle(value)
+              }}
+            />
             <label htmlFor='new-project-template'>
-              {t('new_project_modal.input.label.choose_template')}
+              {t('new_project_modal.input.label.template')}
             </label>
             <div className={classes.templateCarousel}>
               <TemplateCard
@@ -141,19 +123,38 @@ const NewProjectContent: React.FC<INewProjectContent> = ({
                 />
               ))}
             </div>
-
-            <PrimaryButton
-              type='submit'
-              disabled={!projectTitle}
-              loading={loading}
-            >
-              {t('button.create', {ns: 'common'})}
-            </PrimaryButton>
-            <SecondaryButton onClick={() => onClose()}>
-              {t('button.cancel', {ns: 'common'})}
-            </SecondaryButton>
+            <div>
+              <StandardFieldLabel label={t('new_project_modal.input.label.folder_location')} />
+              <JointToggleButton
+                options={[
+                  {
+                    value: 'default',
+                    content: t('new_project_modal.input.label.default_location'),
+                  },
+                  {
+                    value: 'prompt',
+                    content: t('new_project_modal.input.label.custom_location'),
+                  },
+                ] as const}
+                value={location}
+                onChange={e => setLocation(e)}
+              />
+            </div>
           </SpaceBetween>
-        </SpaceBetween>
+        </StandardModalContent>
+
+        <StandardModalActions>
+          <BoldButton onClick={() => onClose()}>
+            {t('button.cancel', {ns: 'common'})}
+          </BoldButton>
+          <PrimaryButton
+            type='submit'
+            disabled={!projectTitle}
+            loading={loading}
+          >
+            {t('button.create', {ns: 'common'})}
+          </PrimaryButton>
+        </StandardModalActions>
       </form>
     </AutoHeadingScope>
   )
