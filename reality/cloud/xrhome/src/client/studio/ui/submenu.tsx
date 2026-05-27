@@ -44,10 +44,16 @@ type SubMenuItem = {
   ns?: string
 }
 
+type SubmenuContentOptions = {
+  onCollapse: () => void
+  onOptionChange: (v: string, category: string) => void
+}
+
 type SubMenuCategory = {
   parent: string | null
   value: string
   options?: DeepReadonly<SubMenuItem[]>
+  renderAdditionalContent?: (options: SubmenuContentOptions) => React.ReactNode
 }
 
 type SubMenuOption = SubMenuItem & {
@@ -175,6 +181,7 @@ const SubMenuView: React.FC<ISubMenuView> = (
             onCollapse={onCollapse}
           />
         }
+        {currentCategory?.renderAdditionalContent?.({onCollapse, onOptionChange})}
       </div>
     </div>
   )

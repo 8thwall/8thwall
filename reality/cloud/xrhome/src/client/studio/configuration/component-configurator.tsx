@@ -14,6 +14,7 @@ import {useStudioStateContext} from '../studio-state-context'
 import {copyComponent} from './copy-component'
 import {ComponentConfiguratorTray} from './component-configurator-tray'
 import {ALL_NEW_COMPONENT_OPTIONS} from './new-component-strings'
+import {Loader} from '../../ui/components/loader'
 
 type Components = DeepReadonly<GraphObject['components']>
 type Parameters = Components[string]['parameters']
@@ -81,6 +82,15 @@ const ComponentParameterEditor: React.FC<IComponentParameterEditor> = ({
 }) => {
   const metadata = useComponentMetadata(name)
   const {t} = useTranslation('cloud-studio-pages')
+  const [delayed, setDelayed] = React.useState(false)
+
+  React.useEffect(() => {
+    setDelayed(false)
+    const timeout = setTimeout(() => setDelayed(true), 1000)
+    return () => clearTimeout(timeout)
+  }, [name])
+
+  // return <Loader size='tiny' inline centered />
 
   if (metadata) {
     return (
@@ -91,6 +101,9 @@ const ComponentParameterEditor: React.FC<IComponentParameterEditor> = ({
       />
     )
   } else {
+    if (!delayed) {
+      return <Loader size='tiny' inline centered />
+    }
     return (
       <>
         <b>{t('component_configurator.error.invalid_component')}</b> <br />

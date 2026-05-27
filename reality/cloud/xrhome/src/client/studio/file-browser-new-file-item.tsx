@@ -80,6 +80,9 @@ const NewFileItem: React.FC<INewFileItem> = ({itemType, onSubmit, onCancel, leve
   )
 }
 
-export {NewFileItem}
+export {
+  NewFileItem,
+  createNewComponentFileContent,
+}
 
 export type {INewFileItem}
