@@ -11,12 +11,15 @@ import coreGitActions from '../../git/core-git-actions'
 import {useGitRepo} from '../../git/hooks/use-current-git'
 
 import {FloatingMenuButton} from '../../ui/components/floating-menu-button'
+import {TextNotification} from '../../ui/components/text-notification'
+import {SpaceBetween} from '../../ui/layout/space-between'
 import {createNewComponentFileContent} from '../file-browser-new-file-item'
 import {useTreeElementStyles} from '../ui/tree-element-styles'
 
 const useStyles = createUseStyles({
   createComponentOption: {
     height: '23px',
+    flex: '1 0 0',
   },
   input: {
     width: '100%',
@@ -32,6 +35,7 @@ interface ICreateComponentOption {
 const CreateComponentOption: React.FC<ICreateComponentOption> = ({onCreate, onCollapse}) => {
   const [editing, setEditing] = React.useState(false)
   const [newName, setNewName] = React.useState('')
+  const [hasConflict, setHasConflict] = React.useState(false)
   const treeElementClasses = useTreeElementStyles()
   const {mutateFile} = useActions(coreGitActions)
   const repo = useGitRepo()
@@ -52,37 +56,48 @@ const CreateComponentOption: React.FC<ICreateComponentOption> = ({onCreate, onCo
   }
 
   return (
-
-    <IgnoreKeys className={classes.createComponentOption}>
-      <InlineTextInput
-        value={newName}
-        onChange={e => setNewName(e.target.value)}
-        onCancel={() => setEditing(false)}
-        onSubmit={async () => {
-          if (!newName) {
+    <IgnoreKeys>
+      <SpaceBetween narrow>
+        <InlineTextInput
+          value={newName}
+          onChange={(e) => {
+            setHasConflict(false)
+            setNewName(e.target.value)
+          }}
+          onCancel={() => setEditing(false)}
+          onSubmit={async () => {
+            if (!newName) {
+              setEditing(false)
+              return
+            }
+            const filePath = `${newName}.ts`
+            let collided = false
+            await mutateFile(repo, {
+              filePath,
+              transform: (c) => {
+                collided = true
+                return c.content
+              },
+              generate: () => createNewComponentFileContent(newName),
+            })
+            if (collided) {
+              setHasConflict(true)
+              return
+            }
             setEditing(false)
-            return
-          }
-          const filePath = `${newName}.ts`
-          let collided = false
-          await mutateFile(repo, {
-            filePath,
-            transform: (c) => {
-              collided = true
-              return c.content
-            },
-            generate: () => createNewComponentFileContent(newName),
-          })
-          if (collided) {
-            return
-          }
-          setEditing(false)
-          onCollapse()
-          onCreate(newName)
-        }}
-        inputClassName={combine('style-reset', treeElementClasses.renaming, classes.input)}
-        aria-label={t('create_component_option.label.component_name')}
-      />
+            onCollapse()
+            onCreate(newName)
+          }}
+          formClassName={classes.createComponentOption}
+          inputClassName={combine('style-reset', treeElementClasses.renaming, classes.input)}
+          aria-label={t('create_component_option.label.component_name')}
+        />
+        {hasConflict &&
+          <TextNotification type='danger'>
+            {t('create_component_option.error.file_conflict')}
+          </TextNotification>
+        }
+      </SpaceBetween>
     </IgnoreKeys>
   )
 }
