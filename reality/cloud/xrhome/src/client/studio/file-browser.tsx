@@ -266,7 +266,7 @@ const FileBrowser: React.FC<IFileBrowser> = ({
             {t('file_browser.asset_lab.label', {ns: 'cloud-studio-pages'})}
           </button>
         )}
-        <button
+        {/* <button
           type='button'
           onClick={() => {
             handleSectionClick('prefabs')
@@ -278,7 +278,7 @@ const FileBrowser: React.FC<IFileBrowser> = ({
           )}
         >
           {t('file_browser.prefabs.label', {ns: 'cloud-studio-pages'})}
-        </button>
+        </button> */}
         {BuildIf.STUDIO_IMAGE_TARGETS_20260210 && (
           <button
             type='button'

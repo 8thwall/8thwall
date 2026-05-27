@@ -362,8 +362,6 @@ const InlineAppPreviewPane: React.FC<IInlineAppPreviewPane> = ({
     }
   }
 
-  const showDisconnectedFromParentWindow = isStandalone && !window.opener
-
   const renderCollapseButton = (containerSize: ContainerSize) => {
     const {width, height} = containerSize
     if (width < MIN_PREVIEW_WIDTH * 1.1 && height < MIN_PREVIEW_HEIGHT * 1.1) {
@@ -432,28 +430,6 @@ const InlineAppPreviewPane: React.FC<IInlineAppPreviewPane> = ({
                 ? renderActions()
                 : (
                   <>
-                    {showDisconnectedFromParentWindow && (
-                      <Popup
-                        content={(
-                          <>
-                            {/* eslint-disable-next-line max-len */}
-                            {t('editor_page.inline_app_preview.iframe.connection_warning_button.popup.reload')}
-                          </>
-                        )}
-                        position='bottom'
-                        alignment='right'
-                        size='tiny'
-                        delay={750}
-                      >
-                        <div className={appPreviewStyles.actionButton}>
-                          <IconButton
-                            stroke='warning'
-                            onClick={() => {}}
-                            text=''
-                          />
-                        </div>
-                      </Popup>
-                    )}
                     <div className={appPreviewStyles.actionButton}>
                       <Popup
                         content={(
