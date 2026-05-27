@@ -8,7 +8,7 @@ import {PrimaryButton} from '../ui/components/primary-button'
 import {SpaceBetween} from '../ui/layout/space-between'
 import AutoHeading from '../widgets/auto-heading'
 import AutoHeadingScope from '../widgets/auto-heading-scope'
-import {initializeLocal} from '../studio/local-sync-api'
+import {extractApiError, initializeLocal} from '../studio/local-sync-api'
 import {getLocalStudioPath} from './desktop-paths'
 import {Icon} from '../ui/components/icon'
 import {JointToggleButton} from '../ui/components/joint-toggle-button'
@@ -23,6 +23,7 @@ import {useTypography} from '../ui/typography'
 import {StandardModalActions} from '../ui/components/standard-modal-actions'
 import {StandardModalHeader} from '../editor/standard-modal-header'
 import {StandardModalContent} from '../ui/components/standard-modal-content'
+import {StaticBanner} from '../ui/components/banner'
 
 const useStyles = createUseStyles({
   newProjectModal: {
@@ -56,6 +57,7 @@ const NewProjectContent: React.FC<INewProjectContent> = ({
   const history = useHistory()
   const [loading, setLoading] = React.useState(false)
   const [selectedTemplate, setSelectedTemplate] = React.useState<string | null>(null)
+  const [error, setError] = React.useState('')
 
   const projectTitle = rawProjectTitle.trim()
 
@@ -68,8 +70,10 @@ const NewProjectContent: React.FC<INewProjectContent> = ({
           try {
             e.preventDefault()
             const res = await initializeLocal(projectTitle, location, selectedTemplate)
-            await queryClient.invalidateQueries({queryKey: ['listProjects']})
             history.push(getLocalStudioPath(res.appKey))
+            queryClient.invalidateQueries({queryKey: ['listProjects']})
+          } catch (err) {
+            setError(await extractApiError(err))
           } finally {
             setLoading(false)
           }
@@ -134,6 +138,7 @@ const NewProjectContent: React.FC<INewProjectContent> = ({
                 onChange={e => setLocation(e)}
               />
             </div>
+            {error && <StaticBanner type='danger'>{error}</StaticBanner>}
           </SpaceBetween>
         </StandardModalContent>
 
