@@ -31,12 +31,6 @@ const useStyles = createUseStyles({
     justifyContent: 'center',
     flexDirection: 'column',
   },
-  appImage: {
-    width: '12.25rem',
-    aspectRatio: '98 / 55',
-    borderRadius: '0.5rem',
-    objectFit: 'cover',
-  },
   templateCarousel: {
     minWidth: 0,
     width: '100%',
