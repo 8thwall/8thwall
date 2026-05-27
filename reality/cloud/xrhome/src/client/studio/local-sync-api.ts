@@ -28,11 +28,18 @@ const fetchJson = async <T>(url: string, options?: RequestInit): Promise<T> => {
   return response.json()
 }
 
-const initializeLocal = (appName: string, location: 'default' | 'prompt') => {
+const initializeLocal = (
+  appName: string,
+  location: 'default' | 'prompt',
+  templateZipUrl: string | null
+) => {
   const params = new URLSearchParams({
     appName,
     location,
   })
+  if (templateZipUrl) {
+    params.set('templateZipUrl', templateZipUrl)
+  }
   return fetchJson<InitializeResponse>(`${API}/project/init-local?${params}`, {method: 'POST'})
 }
 

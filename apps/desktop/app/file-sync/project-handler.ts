@@ -39,7 +39,7 @@ import {
 } from './paths'
 import {makeJsonResponse} from '../../json-response'
 import {getQueryParams} from '../../query-params'
-import {projectSetup} from './create-project-files'
+import {projectSetup, unzipIntoFolder} from './create-project-files'
 import {createLocalServer, LocalServer} from '../../local-server'
 import {openInCodeEditor} from '../preferences/code-editor'
 import {runBuildCommand, runInstallCommand} from './run-commands'
@@ -107,7 +107,16 @@ const getLocalProjectLocation = withErrorHandlingResponse(async (req: Request) =
     }
   }
 
-  await projectSetup(savePath)
+  if (params.data.templateZipUrl) {
+    const zipRes = await fetch(params.data.templateZipUrl)
+    if (!zipRes.ok) {
+      throw new Error('Unable to load template zip')
+    }
+    const zip = Buffer.from(await zipRes.arrayBuffer())
+    await unzipIntoFolder(savePath, zip)
+  } else {
+    await projectSetup(savePath)
+  }
 
   return recordLocalProject(savePath, 'v2')
 })
