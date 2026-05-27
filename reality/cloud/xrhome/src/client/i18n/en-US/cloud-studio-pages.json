@@ -226,6 +226,8 @@
   "component_description.particle_emitter": "Emit particles from the current object.",
   "component_description.position_animation": "Animate the position of the current or target object.",
   "component_description.scale_animation": "Animate the scale vector of the current or target object.",
+  "create_component_option.button.create_new": "Create New...",
+  "create_component_option.label.component_name": "Component Name",
   "debug_sessions_menu.button.connect_device": "Connect Device",
   "debug_simulator_panel.warning_banner.world_camera": "World camera is not currently supported in the simulator. See <docLink>remote development instructions</docLink> to set up preview on mobile. Current build URL is: {{buildUrl}}",
   "default_configurator.inputs.title": "Inputs",
