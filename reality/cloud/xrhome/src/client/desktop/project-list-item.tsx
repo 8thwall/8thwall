@@ -163,7 +163,7 @@ const ProjectListItem: React.FC<IProjectListItem> = ({project}) => {
             />
             <div className={classes.textContainer}>
               <SpaceBetween direction='vertical' narrow>
-                <span className={classes.appName}>{basename(project.location)}</span>
+                <span className={classes.appName}>{basename(project.location.replace(/[\\/]+$/, '').split(/[\\/]/).pop())}</span>
                 <span className={classes.projectLocation}>
                   {project.location}
                 </span>
