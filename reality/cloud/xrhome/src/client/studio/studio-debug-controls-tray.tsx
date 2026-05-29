@@ -63,6 +63,7 @@ const StudioDebugControlsTray: React.FC<IDebugControlsTray> = ({onPlay, simulato
         ? (
           <FloatingIconButton
             id={ProductTourId.DEBUG_PLAY_PAUSE}
+            key='pause'
             isActive
             text={t('studio_play_button_tray.button.stop')}
             onClick={handleStop}
@@ -72,6 +73,7 @@ const StudioDebugControlsTray: React.FC<IDebugControlsTray> = ({onPlay, simulato
         : (
           <FloatingIconButton
             id={ProductTourId.DEBUG_PLAY_PAUSE}
+            key='play'
             text={t('studio_play_button_tray.button.play')}
             onClick={onPlay}
             stroke='play'
