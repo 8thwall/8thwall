@@ -49,7 +49,8 @@ const useStyles = createThemedStyles(theme => ({
     // NOTE(Julie): This is to prevent the simulator from overlapping the right panel.
     'right': 0,
     'marginTop': MARGIN_SIZE,
-    'borderRadius': '0.5em',
+    'borderTopLeftRadius': '0.5em',
+    'borderTopRightRadius': '0.5em',
     'zIndex': 1000,
     '--simulator-preview-actions-height': '32px',
   },
