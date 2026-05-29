@@ -63,6 +63,7 @@ const StudioDebugControlsTray: React.FC<IDebugControlsTray> = ({onPlay, simulato
         ? (
           <FloatingIconButton
             id={ProductTourId.DEBUG_PLAY_PAUSE}
+            // NOTE(christoph): Using unique keys to force a remount, resetting focus
             key='pause'
             isActive
             text={t('studio_play_button_tray.button.stop')}
