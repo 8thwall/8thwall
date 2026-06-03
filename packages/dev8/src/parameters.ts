@@ -76,7 +76,7 @@ const loadParameters = () => {
   const debugFlag = debugFlagParam === 'true'
 
   // Clear the parameters so that users don't see it in their url
-  const paramsToClear = [DEBUG_PARAM, SIMULATOR_PARAM]
+  const paramsToClear = [DEBUG_PARAM]
   if (paramsToClear.some(p => params.has(p))) {
     const replacedUrl = new URL(originalUrl)
     paramsToClear.forEach(p => replacedUrl.searchParams.delete(p))
