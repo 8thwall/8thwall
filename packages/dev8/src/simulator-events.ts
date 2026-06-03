@@ -1,6 +1,7 @@
 import type {XrSimulatorManager} from './xrsimulator/xr-simulator'
 import type {SimulatorConfig, SimulatorRendererConfig} from './xrsimulator/simulator-types'
 import {broadcastReloadConfirmation} from './xrsimulator/broadcast-messages'
+import {saveSimulatorConfig} from './parameters'
 
 const simulatorEnabledForConfig = (config: SimulatorConfig): boolean => (
   !!config?.cameraUrl || !!config?.poiId || !!config?.mockLat ||
@@ -30,6 +31,7 @@ const handleSimulatorEvents = (
         case 'SIMULATOR_CONFIG_UPDATE':
           config = event.data.data.simulatorConfig
           if (simulatorIdMatches(config?.simulatorId)) {
+            saveSimulatorConfig(config)
             if (simulatorEnabledForConfig(config)) {
             // Fire a Location Lost event when switching to a different location so that the
             // simulator stops rendering the objects of the previously selected location.
