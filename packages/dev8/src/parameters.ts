@@ -107,6 +107,13 @@ const loadParameters = () => {
   }
 }
 
+const saveSimulatorConfig = (config: SimulatorConfig) => {
+  const updatedUrl = new URL(window.location.href)
+  updatedUrl.searchParams.set(SIMULATOR_PARAM, JSON.stringify(config))
+  window.history.replaceState(null, '', updatedUrl.toString())
+}
+
 export {
   loadParameters,
+  saveSimulatorConfig,
 }
