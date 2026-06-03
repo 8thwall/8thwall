@@ -107,7 +107,7 @@ const FloatingRightPanel: React.FC<IFloatingRightPanel> = ({
           ),
         }
       }
-    } else if (BuildIf.STUDIO_IMAGE_TARGETS_20260210 && selectedImageTarget) {
+    } else if (selectedImageTarget) {
       return {
         containerClass: classes.neverScroll,
         content: (

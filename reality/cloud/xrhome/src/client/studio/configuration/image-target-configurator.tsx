@@ -8,7 +8,7 @@ import {createUseStyles} from 'react-jss'
 import {StandardLink} from '../../ui/components/standard-link'
 import {ComponentConfiguratorTray} from './component-configurator-tray'
 import {
-  IMAGE_TARGET_PAGE_LINK, OFFLINE_IMAGE_TARGET_PAGE_LINK,
+  IMAGE_TARGET_PAGE_LINK,
 } from '../../apps/image-targets/image-target-constants'
 import {ImageTargetConfiguratorMenu} from './image-target-configurator-menu'
 import {ImageTargetVisualizer, ImageTargetVisualizerFrame} from './image-target-visualizer'
@@ -16,7 +16,7 @@ import {copyDirectProperties} from './copy-component'
 import {useStudioStateContext, type ImageTargetShowOption} from '../studio-state-context'
 import {useImageTarget} from '../hooks/use-image-target'
 import {FloatingPanelButton} from '../../ui/components/floating-panel-button'
-import {RowMultiSelect, RowTextField} from './row-fields'
+import {RowMultiSelect} from './row-fields'
 import {IMAGE_TARGET_COMPONENT} from './direct-property-components'
 import {MissingTargetRegisterWarning} from '../missing-target-register-warning'
 
@@ -41,7 +41,7 @@ interface IImageTargetConfigurator {
   resetToPrefab: (componentIds: string[], nonDirect?: any) => void
 }
 
-const ImageTargetConfiguratorFull: React.FC<IImageTargetConfigurator> = (
+const ImageTargetConfigurator: React.FC<IImageTargetConfigurator> = (
   {imageTarget, onChange, objectId, resetToPrefab}
 ) => {
   const {t} = useTranslation(['cloud-studio-pages'])
@@ -133,52 +133,6 @@ const ImageTargetConfiguratorFull: React.FC<IImageTargetConfigurator> = (
     </ComponentConfiguratorTray>
   )
 }
-
-const ImageTargetConfiguratorMinimal: React.FC<Omit<IImageTargetConfigurator, 'objectId'>> = (
-  {imageTarget, onChange, resetToPrefab}
-) => {
-  const {t} = useTranslation(['cloud-studio-pages'])
-  const classes = useStyles()
-  const stateCtx = useStudioStateContext()
-
-  return (
-    <ComponentConfiguratorTray
-      title={t('image_target_configurator.title')}
-      description={(
-        <Trans
-          i18nKey='image_target_configurator.offline_description'
-          ns='cloud-studio-pages'
-          components={{
-            linkTo: <StandardLink newTab href={OFFLINE_IMAGE_TARGET_PAGE_LINK} />,
-          }}
-        />
-      )}
-      sectionId='image-target'
-      onRemove={() => onChange(() => undefined)}
-      onCopy={() => copyDirectProperties(stateCtx, {imageTarget})}
-      onResetToPrefab={resetToPrefab
-        ? () => resetToPrefab([IMAGE_TARGET_COMPONENT])
-        : undefined}
-      componentData={[IMAGE_TARGET_COMPONENT]}
-    >
-      <div className={classes.container}>
-        <RowTextField
-          label={t('image_target_configurator_menu.selector.label')}
-          value={imageTarget.name ?? ''}
-          onChange={e => onChange(o => ({
-            ...o,
-            name: e.target.value,
-          }))}
-        />
-      </div>
-    </ComponentConfiguratorTray>
-  )
-}
-
-const ImageTargetConfigurator: React.FC<IImageTargetConfigurator> =
-  BuildIf.STUDIO_IMAGE_TARGETS_20260210
-    ? ImageTargetConfiguratorFull
-    : ImageTargetConfiguratorMinimal
 
 export {
   ImageTargetConfigurator,
