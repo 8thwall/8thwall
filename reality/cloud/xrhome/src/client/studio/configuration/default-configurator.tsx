@@ -31,7 +31,7 @@ const DefaultConfigurator: React.FC<IDefaultConfigurator> = (
           <ProjectSettingsConfigurator
             setPage={setPage}
           />
-          {BuildIf.STUDIO_RUNTIME_CONFIG_20260209 && hasRepo &&
+          {hasRepo &&
             <RuntimeVersionConfigurator />
           }
           {hasRepo && BuildIf.MANIFEST_EDIT_20250618 && <ProjectManifestConfigurator />}

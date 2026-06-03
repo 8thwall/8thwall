@@ -279,23 +279,21 @@ const FileBrowser: React.FC<IFileBrowser> = ({
         >
           {t('file_browser.prefabs.label', {ns: 'cloud-studio-pages'})}
         </button>
-        {BuildIf.STUDIO_IMAGE_TARGETS_20260210 && (
-          <button
-            type='button'
-            onClick={() => {
-              handleSectionClick('imageTargets')
-              setSearchValue('')
-              setFilters([])
-            }}
-            className={combine(
-              'style-reset', classes.sectionTitle,
-              currentSection === 'imageTargets' && classes.sectionActive
-            )}
-            disabled={!isFileBrowserCollapsed && currentSection === 'imageTargets'}
-          >
-            {t('file_browser.image_targets.short_label', {ns: 'cloud-studio-pages'})}
-          </button>
-        )}
+        <button
+          type='button'
+          onClick={() => {
+            handleSectionClick('imageTargets')
+            setSearchValue('')
+            setFilters([])
+          }}
+          className={combine(
+            'style-reset', classes.sectionTitle,
+            currentSection === 'imageTargets' && classes.sectionActive
+          )}
+          disabled={!isFileBrowserCollapsed && currentSection === 'imageTargets'}
+        >
+          {t('file_browser.image_targets.short_label', {ns: 'cloud-studio-pages'})}
+        </button>
       </div>
       {currentSection === 'files' &&
         <div className={classes.searchBarContainer}>
@@ -333,7 +331,7 @@ const FileBrowser: React.FC<IFileBrowser> = ({
           <div className={classes.fileListContainer}>
             {currentSection === 'files' && filesList}
             {currentSection === 'prefabs' && <PrefabsList />}
-            {BuildIf.STUDIO_IMAGE_TARGETS_20260210 && currentSection === 'imageTargets' &&
+            {currentSection === 'imageTargets' &&
               <React.Suspense fallback={<div><Loader /></div>}>
                 <StudioImageTargetBrowser />
               </React.Suspense>

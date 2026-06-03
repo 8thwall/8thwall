@@ -318,7 +318,7 @@ const CurvedImageTargetMesh = React.forwardRef<Mesh, ISubTargetMesh>(({
   )
 })
 
-const ImageTargetMeshFull: React.FC<IImageTargetMesh> = ({
+const ImageTargetMesh: React.FC<IImageTargetMesh> = ({
   name, outlined = false, objectId,
 }) => {
   const [targetData] = useImageTarget(name)
@@ -381,38 +381,6 @@ const ImageTargetMeshFull: React.FC<IImageTargetMesh> = ({
       />
   )
 }
-
-const ImageTargetMeshMinimal: React.FC<{outlined?: boolean}> = ({outlined = false}) => {
-  const meshRef = React.useRef<Mesh>(null)
-
-  const meshRefHandler = React.useCallback((mesh: Mesh) => {
-    if (meshRef.current) {
-      removeOutline(meshRef.current)
-    }
-    meshRef.current = mesh
-
-    if (mesh && outlined) {
-      enableOutline(mesh)
-    }
-  }, [outlined])
-
-  return (
-    <mesh ref={meshRefHandler} scale={0.25}>
-      <planeGeometry args={[3, 4]} />
-      <meshBasicMaterial
-        color={0x7a7a7a}
-        opacity={WIREFRAME_OPACITY}
-        side={DoubleSide}
-        transparent
-      />
-      <Wireframe stroke={0x7a7a7a} />
-    </mesh>
-  )
-}
-
-const ImageTargetMesh: React.FC<IImageTargetMesh> = BuildIf.STUDIO_IMAGE_TARGETS_20260210
-  ? ImageTargetMeshFull
-  : ImageTargetMeshMinimal
 
 export {
   ImageTargetMesh,

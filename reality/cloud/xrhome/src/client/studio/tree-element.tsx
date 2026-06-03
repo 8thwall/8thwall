@@ -211,7 +211,7 @@ const TreeElement: React.FC<ITreeElement> = ({
               stroke={object.hidden ? 'eyeClosed' : 'eyeOpen'}
             />
           </div>
-          {BuildIf.STUDIO_IMAGE_TARGETS_20260210 && object.imageTarget &&
+          {object.imageTarget &&
             <InvalidImageTargetTooltip imageTarget={object.imageTarget}>
               <div className={combine(classes.treeElementIcon, classes.visibleIcon)}>
                 <Icon stroke='warning' color='warning' />
