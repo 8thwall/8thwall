@@ -12,7 +12,3 @@ export {
   getDisplayNameForApp,
   isActiveCommercialApp,
 }
-
-export type {
-  // CommercialProjectType,
-}
