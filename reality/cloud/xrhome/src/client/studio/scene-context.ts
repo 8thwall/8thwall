@@ -32,10 +32,13 @@ const useSceneContext = (): SceneContext => {
   return ctx
 }
 
+const useMaybeSceneContext = (): SceneContext | null => React.useContext(sceneContext)
+
 const SceneContextProvider = sceneContext.Provider
 export {
   SceneContextProvider,
   useSceneContext,
+  useMaybeSceneContext,
 }
 
 export type {

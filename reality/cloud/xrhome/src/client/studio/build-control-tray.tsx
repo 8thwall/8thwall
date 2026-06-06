@@ -5,7 +5,6 @@ import {createUseStyles} from 'react-jss'
 import {FloatingTray} from '../ui/components/floating-tray'
 import {FloatingTrayButton} from '../ui/components/floating-tray-button'
 import {PublishButton} from '../editor/publish-button'
-import {useSceneContext} from './scene-context'
 
 const useStyles = createUseStyles({
   trayContainer: {
@@ -14,16 +13,16 @@ const useStyles = createUseStyles({
 })
 
 interface IBuildControlTray {
+  nonInteractive?: boolean
 }
 
-const BuildControlTray: React.FC<IBuildControlTray> = () => {
+const BuildControlTray: React.FC<IBuildControlTray> = ({nonInteractive}) => {
   const {t} = useTranslation(['cloud-editor-pages', 'common'])
   const classes = useStyles()
-  const ctx = useSceneContext()
 
   return (
     <div className={classes.trayContainer}>
-      <FloatingTray fillContainer nonInteractive={ctx.isDraggingGizmo}>
+      <FloatingTray fillContainer nonInteractive={nonInteractive}>
         <PublishButton
           renderButton={({disabled}) => (
             <FloatingTrayButton

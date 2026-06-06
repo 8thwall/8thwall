@@ -1,5 +1,4 @@
 import React from 'react'
-import {createUseStyles} from 'react-jss'
 
 import SplitPane from 'react-split-pane'
 
@@ -19,12 +18,13 @@ import {DEFAULT_HEIGHT_PERCENT} from '../editor/editor-reducer'
 import {MARGIN_SIZE} from './interface-constants'
 import ErrorMessage from '../home/error-message'
 import {RecommendationBox} from './recommendation-box'
+import {createThemedStyles} from '../ui/theme'
 
 const LEFT_PANEL_WIDTH = '20rem'
 const MIN_FILE_BROWSER_HEIGHT = 35
 const MAX_FILE_BROWSER_HEIGHT = -75
 
-const useStyles = createUseStyles({
+const useStyles = createThemedStyles(theme => ({
   editPanelLeft: {
     padding: `0 0 ${MARGIN_SIZE} ${MARGIN_SIZE}`,
     display: 'flex',
@@ -46,8 +46,9 @@ const useStyles = createUseStyles({
   pane2: {
     overflow: 'hidden',
     flexGrow: 1,
+    borderTop: theme.studioSectionBorder,
   },
-})
+}))
 
 interface IFloatingLeftPanel {
   fileBrowser?: React.ReactNode

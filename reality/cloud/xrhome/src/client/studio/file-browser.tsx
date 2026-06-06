@@ -54,7 +54,6 @@ const useStyles = createThemedStyles(theme => ({
     'fontWeight': 700,
     'justifyContent': 'flex-start',
     'gap': '1em',
-    'borderTop': theme.studioSectionBorder,
     'color': theme.fgMuted,
   },
   sectionTitleHorizontal: {
@@ -266,19 +265,21 @@ const FileBrowser: React.FC<IFileBrowser> = ({
             {t('file_browser.asset_lab.label', {ns: 'cloud-studio-pages'})}
           </button>
         )}
-        <button
-          type='button'
-          onClick={() => {
-            handleSectionClick('prefabs')
-            setSearchValue('')
-          }}
-          className={combine(
-            'style-reset', classes.sectionTitle,
-            currentSection === 'prefabs' && classes.sectionActive
-          )}
-        >
-          {t('file_browser.prefabs.label', {ns: 'cloud-studio-pages'})}
-        </button>
+        {isStudio &&
+          <button
+            type='button'
+            onClick={() => {
+              handleSectionClick('prefabs')
+              setSearchValue('')
+            }}
+            className={combine(
+              'style-reset', classes.sectionTitle,
+              currentSection === 'prefabs' && classes.sectionActive
+            )}
+          >
+            {t('file_browser.prefabs.label', {ns: 'cloud-studio-pages'})}
+          </button>
+        }
         <button
           type='button'
           onClick={() => {
