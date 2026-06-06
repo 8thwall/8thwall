@@ -4,7 +4,6 @@ import localForage from 'localforage'
 
 import {useAbandonableEffect} from '../hooks/abandonable-effect'
 import useCurrentApp from '../common/use-current-app'
-import {isCloudStudioApp} from '../../shared/app-utils'
 import RepoInfoFooter from '../editor/repo-info-footer'
 
 const COLLAPSED_SIZE = 23
@@ -74,7 +73,7 @@ const LogContainerSplit: React.FC<IFileEditorMainContent> = ({
         logKey={app.appKey}
         showLogs={showLogs}
         toggleShowLogs={toggleShowLogs}
-        autoExpand={!isCloudStudioApp(app)}
+        autoExpand={false}
         extraTabContent={extraTabContent}
       />
     </SplitPane>

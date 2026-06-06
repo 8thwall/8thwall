@@ -131,39 +131,6 @@ const SEQUENCE_METADATA: SequenceMetadata = {
       },
     },
     {
-      'name': 'Jellyfish Flyer',
-      'tag': 'Flat',
-      'section': 'IMAGE_TARGETS',
-      'variations': {
-        'Flyer': {
-          'cameraUrl': `${RESOURCE_BASE}/lpt23s4c/video.1700608939169-iphone11-4-6.mp4`,
-          'sequenceUrl': `${RESOURCE_BASE}/lpt23s4c/log.1700608939169-iphone11-4-6`,
-        },
-      },
-    },
-    {
-      'name': 'Wine Bottle',
-      'tag': 'Cylindrical',
-      'section': 'IMAGE_TARGETS',
-      'variations': {
-        'Label': {
-          'cameraUrl': `${RESOURCE_BASE}/lpt23s4c/video.1700609244431-iphone11-4-8.mp4`,
-          'sequenceUrl': `${RESOURCE_BASE}/lpt23s4c/log.1700609244431-iphone11-4-8`,
-        },
-      },
-    },
-    {
-      'name': 'Coffee Cup',
-      'tag': 'Conical',
-      'section': 'IMAGE_TARGETS',
-      'variations': {
-        'Sleeve': {
-          'cameraUrl': `${RESOURCE_BASE}/lpt23s4c/video.1700609373447-iphone11-4-11.mp4`,
-          'sequenceUrl': `${RESOURCE_BASE}/lpt23s4c/log.1700609373447-iphone11-4-11`,
-        },
-      },
-    },
-    {
       'name': 'Expressions',
       'tag': 'Face',
       'section': 'PEOPLE',

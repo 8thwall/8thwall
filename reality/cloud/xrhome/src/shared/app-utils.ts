@@ -6,14 +6,11 @@ const getDisplayNameForApp = (app: PickApp<'appTitle' | 'appName'>) => app.appTi
 
 type AppCheck = (app: {}) => boolean
 
-// TODO(christoph): Clean up
-const isCloudStudioApp: AppCheck = () => true
 const isActiveCommercialApp: AppCheck = () => false
 
 export {
   getDisplayNameForApp,
   isActiveCommercialApp,
-  isCloudStudioApp,
 }
 
 export type {

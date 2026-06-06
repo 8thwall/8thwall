@@ -16,8 +16,6 @@ import {brandBlack, darkMango, mango} from '../../static/styles/settings'
 import {useSimulator} from './use-simulator-state'
 import {Tooltip} from '../../ui/components/tooltip'
 import {StandardFieldLabel} from '../../ui/components/standard-field-label'
-import {isCloudStudioApp} from '../../../shared/app-utils'
-import useCurrentApp from '../../common/use-current-app'
 import {ImageTargetLoader} from '../../image-targets/image-target-loader'
 import {useImageTarget} from '../../studio/hooks/use-image-target'
 import {useGalleryTargets} from '../../image-targets/use-image-targets'
@@ -141,11 +139,7 @@ const AppPreviewBottomBar: React.FC<IAppPreviewBottomBar> = ({
     {value: name, textContent: name}
   ))
 
-  const visibleSequences = isCloudStudioApp(useCurrentApp())
-    ? sequences?.filter(item => item.section !== 'IMAGE_TARGETS') ?? []
-    : sequences ?? []
-
-  const sequenceOptionData: SequenceOptionData[] = visibleSequences.map(item => ({
+  const sequenceOptionData: SequenceOptionData[] = sequences.map(item => ({
     name: item.name,
     section: item.section,
     rightContent: item.tag,
@@ -179,15 +173,7 @@ const AppPreviewBottomBar: React.FC<IAppPreviewBottomBar> = ({
     },
   ]
 
-  if (visibleSequences.some(item => item.section === 'IMAGE_TARGETS')) {
-    sequenceSectionData.push({
-      key: 'IMAGE_TARGETS',
-      textContent: t(
-        'editor_page.inline_app_preview.iframe.sequence_dropdown.section_name.targets'
-      ),
-      stroke: 'targets',
-    })
-  } else {
+  if (imageTargetOptions?.length) {
     sequenceSectionData.push({
       key: 'IMAGE_TARGETS',
       textContent: t(
