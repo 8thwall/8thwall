@@ -54,7 +54,6 @@ const useStyles = createThemedStyles(theme => ({
     'fontWeight': 700,
     'justifyContent': 'flex-start',
     'gap': '1em',
-    'borderTop': theme.studioSectionBorder,
     'color': theme.fgMuted,
   },
   sectionTitleHorizontal: {
