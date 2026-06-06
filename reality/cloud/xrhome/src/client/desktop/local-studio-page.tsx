@@ -12,14 +12,13 @@ import SceneFileEdit from '../studio/scene-file-edit'
 import {getLocalStudioPath, LocalStudioPathParams} from './desktop-paths'
 import {RepoIdProvider} from '../git/repo-id-context'
 import {EnclosedAppProvider} from '../apps/enclosed-app-context'
-import {SceneDebugContext} from '../studio/scene-debug-context'
 import {StudioComponentsContextProvider} from '../studio/studio-components-context'
 import {gitRepoAction} from '../git/direct-git-actions'
 import {LocalSyncContextProvider, useLocalSyncContext} from '../studio/local-sync-context'
 import {FileActionsContext} from '../editor/files/file-actions-context'
 import {useStudioFileActionState} from '../studio/hooks/use-studio-file-action-state'
 import {AppPathsContext} from '../common/app-container-context'
-import {useGitRepo, useScopedGit} from '../git/hooks/use-current-git'
+import {useGitRepo} from '../git/hooks/use-current-git'
 import {UiThemeProvider} from '../ui/theme'
 import {FloatingNavigation} from '../studio/floating-navigation'
 import {BuildControlTray} from '../studio/build-control-tray'
@@ -119,7 +118,7 @@ const LocalStudioPageInner: React.FC<{appKey: string}> = () => {
       simulatorId={INLINE_SIMULATOR_SESSION_ID}
       errorMessage={<StudioErrorMessage />}
       navigationMenu={<FloatingNavigation />}
-      buildControlTray={<BuildControlTray />}
+      buildControlTray={<BuildControlTray nonInteractive={ctx.isDraggingGizmo} />}
       fileBrowser={fileBrowser}
     />
   )
@@ -136,10 +135,8 @@ const LocalStudioPageInner: React.FC<{appKey: string}> = () => {
 
   res = <FileActionsContext.Provider value={actionsContext}>{res}</FileActionsContext.Provider>
   res = <StudioComponentsContextProvider>{res}</StudioComponentsContextProvider>
-  res = <PublishingStateContextProvider>{res}</PublishingStateContextProvider>
   res = <StudioAgentStateContextProvider>{res}</StudioAgentStateContextProvider>
   res = <AssetLabStateContextProvider>{res}</AssetLabStateContextProvider>
-  res = <DismissibleModalContextProvider>{res}</DismissibleModalContextProvider>
   return res
 }
 
@@ -187,19 +184,14 @@ const LocalStudioPage: React.FC = () => {
     }))
   }, [appKey])
 
-  const repoReady = useScopedGit(appKey, g => !!g.repo?.repoId)
-
-  if (!repoReady) {
-    return null
-  }
-
   let res = (
     <div className={`studio-editor ${theme}`}>
       <LocalStudioPageInner appKey={appKey} />
     </div>
   )
 
-  res = <SceneDebugContext>{res}</SceneDebugContext>
+  res = <PublishingStateContextProvider>{res}</PublishingStateContextProvider>
+  res = <DismissibleModalContextProvider>{res}</DismissibleModalContextProvider>
   res = <FileSyncSuspense>{res}</FileSyncSuspense>
   res = <LocalSyncContextProvider>{res}</LocalSyncContextProvider>
   res = <SceneStateContext>{res}</SceneStateContext>

@@ -16,8 +16,8 @@ import {TertiaryButton} from '../../ui/components/tertiary-button'
 import {PrimaryButton} from '../../ui/components/primary-button'
 import {RowBooleanField, RowNumberField} from './row-fields'
 import {useStudioStateContext} from '../studio-state-context'
-import {useSceneContext} from '../scene-context'
-import {useDerivedScene} from '../derived-scene-context'
+import {useMaybeSceneContext} from '../scene-context'
+import {deriveScene} from '../derive-scene'
 import type {IImageTarget} from '../../common/types/models'
 import {ImageTargetMetadataInfo} from './image-target-metadata-info'
 import {ImageTargetUserMetadata, validateMetadata} from './image-target-user-metadata'
@@ -104,8 +104,7 @@ const LoadedImageTargetAssetConfigurator: React.FC<ILoadedImageTargetAssetConfig
   const classes = useStyles()
   const {updateImageTarget} = useImageTargetActions()
   const otherImageNames = useOtherImageNames(imageTarget.uuid)
-  const ctx = useSceneContext()
-  const derivedScene = useDerivedScene()
+  const maybeCtx = useMaybeSceneContext()
 
   const renameModalTriggerRef = React.useRef<HTMLButtonElement>(null)
   const assetNameConfiguratorRef = React.useRef<HTMLInputElement>(null)
@@ -325,7 +324,8 @@ const LoadedImageTargetAssetConfigurator: React.FC<ILoadedImageTargetAssetConfig
 
       updateVisualizerState({focus: 'main'})
 
-      if (staticImageEnabled) {
+      if (maybeCtx && staticImageEnabled) {
+        const derivedScene = deriveScene(maybeCtx.scene)
         derivedScene.getAllSceneObjects().forEach((obj) => {
           if (obj.imageTarget?.name === name) {
             let newRotation = obj.rotation
@@ -334,11 +334,11 @@ const LoadedImageTargetAssetConfigurator: React.FC<ILoadedImageTargetAssetConfig
               y: 0,
               z: metadata.staticOrientation.pitchAngle,
             }).data() as Vec4Tuple
-            ctx.updateObject(obj.id, oldObj => ({
+            maybeCtx.updateObject(obj.id, oldObj => ({
               ...oldObj,
               imageTarget: {
                 ...oldObj.imageTarget,
-                staticOrientation: staticImageEnabled
+                staticOrientation: newStaticOrientation
                   ? {
                     rollAngle: metadata.staticOrientation.rollAngle,
                     pitchAngle: metadata.staticOrientation.pitchAngle,

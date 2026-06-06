@@ -266,19 +266,20 @@ const FileBrowser: React.FC<IFileBrowser> = ({
             {t('file_browser.asset_lab.label', {ns: 'cloud-studio-pages'})}
           </button>
         )}
-        <button
-          type='button'
-          onClick={() => {
-            handleSectionClick('prefabs')
-            setSearchValue('')
-          }}
-          className={combine(
-            'style-reset', classes.sectionTitle,
-            currentSection === 'prefabs' && classes.sectionActive
-          )}
-        >
-          {t('file_browser.prefabs.label', {ns: 'cloud-studio-pages'})}
-        </button>
+        {isStudio &&
+          <button
+            type='button'
+            onClick={() => {
+              handleSectionClick('prefabs')
+              setSearchValue('')
+            }}
+            className={combine(
+              'style-reset', classes.sectionTitle,
+              currentSection === 'prefabs' && classes.sectionActive
+            )}
+          >
+            {t('file_browser.prefabs.label', {ns: 'cloud-studio-pages'})}
+          </button>}
         <button
           type='button'
           onClick={() => {

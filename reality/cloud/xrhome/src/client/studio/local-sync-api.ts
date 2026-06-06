@@ -279,9 +279,9 @@ const pickNewProjectLocation = (appKey: string) => {
   )
 }
 
-const openDiskLocation = () => {
+const openDiskLocation = (location?: string) => {
   const params = new URLSearchParams({
-
+    location: location || '',
   })
   return fetchJson<InitializeResponse | CanceledInitializeResponse>(
     `${API}/project/open-disk?${params}`, {method: 'POST'}

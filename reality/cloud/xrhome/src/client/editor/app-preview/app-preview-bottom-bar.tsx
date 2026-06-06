@@ -173,19 +173,17 @@ const AppPreviewBottomBar: React.FC<IAppPreviewBottomBar> = ({
     },
   ]
 
-  if (imageTargetOptions?.length) {
-    sequenceSectionData.push({
-      key: 'IMAGE_TARGETS',
-      textContent: t(
-        'editor_page.inline_app_preview.iframe.sequence_dropdown.section_name.targets'
-      ),
-      stroke: 'targets',
-      loadMoreNode: (
-        <ImageTargetLoader galleryUuid={targetsGalleryUuid} />
-      ),
-    })
-    sequenceOptions.push(...imageTargetOptions)
-  }
+  sequenceSectionData.push({
+    key: 'IMAGE_TARGETS',
+    textContent: t(
+      'editor_page.inline_app_preview.iframe.sequence_dropdown.section_name.targets'
+    ),
+    stroke: 'targets',
+    loadMoreNode: (
+      <ImageTargetLoader galleryUuid={targetsGalleryUuid} />
+    ),
+  })
+  sequenceOptions.push(...imageTargetOptions)
 
   const sequenceSections: DropdownSection[] = sequenceSectionData.map(makeSection)
 
