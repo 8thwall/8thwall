@@ -117,6 +117,7 @@ interface IInlineAppPreviewPane {
   showLoadingOverlay?: boolean
   locationDropdownVisible?: boolean
   warningBannerMsg?: React.ReactNode
+  hideCloseButton?: boolean
 }
 
 const HARD_RELOAD_TIMEOUT = MILLISECONDS_PER_SECOND
@@ -140,7 +141,7 @@ const InlineAppPreviewPane: React.FC<IInlineAppPreviewPane> = ({
   app, simulatorId, isDragging, isStandalone, sessionId, onBoundsChange, collapsed, setCollapsed,
   hidePreviewBottom, targetsGalleryUuid,
   imageTargetQuaternion, renderActions, liveSyncMode, showLoadingOverlay, locationDropdownVisible,
-  warningBannerMsg,
+  warningBannerMsg, hideCloseButton,
 }) => {
   const classes = useStyles()
   const appPreviewStyles = useAppPreviewStyles()
@@ -478,7 +479,7 @@ const InlineAppPreviewPane: React.FC<IInlineAppPreviewPane> = ({
                       </Popup>
                     </div>
                     {setCollapsed && renderCollapseButton(previewPaneMeasure.contentRect.bounds)}
-                    {!isStandalone &&
+                    {!isStandalone && !hideCloseButton &&
                       <div className={appPreviewStyles.actionButton}>
                         <IconButton
                           stroke='cancelLarge'
