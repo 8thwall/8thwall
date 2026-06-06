@@ -106,7 +106,7 @@ type UIThemeTokens =
   'appCardBorder' |'appCardDisabledBorder' | 'appCardShadowColor' | 'appCardBgColor' |
   'tableBorder' | 'tableHeadBg' | 'tableHeadFg' | 'recaptchaTheme' | 'navLogoColor' |
   'footerHeaderColor'| 'appCardCondensedWidth' | 'codeSearchResultBorderRadius' |
-  'codeSearchResultAppCardPadding'
+  'codeSearchResultAppCardPadding' | 'nonStudioViewBg'
 
 type UiTheme = Record<UIThemeTokens, any>
 
@@ -389,6 +389,7 @@ const LightTheme: UiTheme = {
   appCardCondensedWidth: '25em',
   codeSearchResultBorderRadius: '0',
   codeSearchResultAppCardPadding: 'auto',
+  nonStudioViewBg: gray2,
 }
 /* eslint-enable max-len, local-rules/hardcoded-copy */
 
@@ -661,7 +662,7 @@ const DarkTheme: UiTheme = {
   appCardCondensedWidth: '25em',
   codeSearchResultBorderRadius: '0',
   codeSearchResultAppCardPadding: 'auto',
-
+  nonStudioViewBg: gray6,
 }
 /* eslint-enable max-len, local-rules/hardcoded-copy */
 
