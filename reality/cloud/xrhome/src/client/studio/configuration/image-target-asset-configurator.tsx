@@ -338,7 +338,7 @@ const LoadedImageTargetAssetConfigurator: React.FC<ILoadedImageTargetAssetConfig
               ...oldObj,
               imageTarget: {
                 ...oldObj.imageTarget,
-                staticOrientation: newStaticOrientation
+                staticOrientation: staticImageEnabled
                   ? {
                     rollAngle: metadata.staticOrientation.rollAngle,
                     pitchAngle: metadata.staticOrientation.pitchAngle,

@@ -12,6 +12,7 @@ import SceneFileEdit from '../studio/scene-file-edit'
 import {getLocalStudioPath, LocalStudioPathParams} from './desktop-paths'
 import {RepoIdProvider} from '../git/repo-id-context'
 import {EnclosedAppProvider} from '../apps/enclosed-app-context'
+import {SceneDebugContext} from '../studio/scene-debug-context'
 import {StudioComponentsContextProvider} from '../studio/studio-components-context'
 import {gitRepoAction} from '../git/direct-git-actions'
 import {LocalSyncContextProvider, useLocalSyncContext} from '../studio/local-sync-context'
@@ -192,6 +193,7 @@ const LocalStudioPage: React.FC = () => {
 
   res = <PublishingStateContextProvider>{res}</PublishingStateContextProvider>
   res = <DismissibleModalContextProvider>{res}</DismissibleModalContextProvider>
+  res = <SceneDebugContext>{res}</SceneDebugContext>
   res = <FileSyncSuspense>{res}</FileSyncSuspense>
   res = <LocalSyncContextProvider>{res}</LocalSyncContextProvider>
   res = <SceneStateContext>{res}</SceneStateContext>

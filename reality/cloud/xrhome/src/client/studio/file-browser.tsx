@@ -279,7 +279,8 @@ const FileBrowser: React.FC<IFileBrowser> = ({
             )}
           >
             {t('file_browser.prefabs.label', {ns: 'cloud-studio-pages'})}
-          </button>}
+          </button>
+        }
         <button
           type='button'
           onClick={() => {
