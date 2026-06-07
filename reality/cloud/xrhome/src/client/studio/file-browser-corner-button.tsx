@@ -15,11 +15,13 @@ interface IFileBrowserCornerButton {
   disableNewFiles?: boolean
   setExternalAdding: (adding: boolean, isAssetPath?: boolean) => void
   setExternalItemType: (itemType: ItemType) => void
+  supportsNewComponentFile: boolean
 }
 
 const FileBrowserCornerButton: React.FC<IFileBrowserCornerButton> = ({
   onFileSelect, disableNewFiles, onCreateItem,
   setExternalAdding, setExternalItemType,
+  supportsNewComponentFile,
 }) => {
   const {t} = useTranslation(['cloud-editor-pages', 'cloud-studio-pages'])
 
@@ -33,9 +35,10 @@ const FileBrowserCornerButton: React.FC<IFileBrowserCornerButton> = ({
   const fileOptions = useNewFileOptions({
     startNewItem,
     supportsNewFile: !!onCreateItem && !disableNewFiles,
-    supportsNewComponentFile: !!onCreateItem && !disableNewFiles,
+    supportsNewComponentFile: supportsNewComponentFile && !!onCreateItem && !disableNewFiles,
     supportsNewFolder: false,
     supportsAssetBundle: false,
+
   })
 
   const options = [
