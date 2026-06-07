@@ -106,7 +106,7 @@ interface IFileBrowser {
   handleFileUpload: (event: React.ChangeEvent<HTMLInputElement>) => void
   fileUploadState: UploadState
   activeFileLocation: ScopedFileLocation
-  isStudio?: boolean
+  isStudio: boolean
 }
 
 const FileBrowser: React.FC<IFileBrowser> = ({
@@ -183,6 +183,7 @@ const FileBrowser: React.FC<IFileBrowser> = ({
       }
         <FileBrowserList
           onCreateItem={onCreate}
+          supportsNewComponentFile={isStudio}
           onFileSelect={onUploadStart}
           paths={files.text}
           currentEditorFileLocation={activeFileLocation}
@@ -320,6 +321,7 @@ const FileBrowser: React.FC<IFileBrowser> = ({
             />
           }
           <FileBrowserCornerButton
+            supportsNewComponentFile={isStudio}
             onFileSelect={onUploadStart}
             onCreateItem={onCreate}
             setExternalAdding={handleExternalAdding}

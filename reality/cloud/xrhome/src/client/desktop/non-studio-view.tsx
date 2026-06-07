@@ -120,6 +120,7 @@ const NonStudioView: React.FC = () => {
               handleFileUpload={handleFileUpload}
               fileUploadState={fileUploadState}
               activeFileLocation={null}
+              isStudio={false}
             />
           </FloatingTray>
         </div>

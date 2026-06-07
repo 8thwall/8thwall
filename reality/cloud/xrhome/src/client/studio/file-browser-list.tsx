@@ -71,12 +71,14 @@ interface IFileBrowserList {
   externalItemType?: ItemType
   setExternalItemType?: (itemType: ItemType) => void
   grow?: boolean
+  supportsNewComponentFile?: boolean
 }
 
 const FileBrowserList: React.FC<IFileBrowserList> = ({
   title, subtitle, onFileSelect, paths, currentEditorFileLocation,
   disableNewFiles, onCreateItem, additionalOptions = [], productTourId, onCreateBackendConfig,
   externalAdding, setExternalAdding, externalItemType, setExternalItemType, grow,
+  supportsNewComponentFile = false,
 }) => {
   const {t} = useTranslation(['cloud-editor-pages'])
   const classes = useStyles()
@@ -119,7 +121,7 @@ const FileBrowserList: React.FC<IFileBrowserList> = ({
   const fileOptions = useNewFileOptions({
     startNewItem,
     supportsNewFile: !!onCreateItem && !disableNewFiles,
-    supportsNewComponentFile: !!onCreateItem && !disableNewFiles,
+    supportsNewComponentFile: supportsNewComponentFile && !!onCreateItem && !disableNewFiles,
     supportsNewFolder: !!onCreateItem,
     supportsAssetBundle: false,
   })
