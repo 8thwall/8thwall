@@ -14,7 +14,7 @@ import type {
 } from '@repo/reality/shared/desktop/local-sync-types'
 
 import {
-  FixConfigParams, InstallRequest,
+  FixConfigParams, InstallRequest, OpenDiskParams,
   InitializeProjectParams, MoveProjectParams, ProjectRequestParams,
 } from './project-handler-types'
 import {
@@ -145,8 +145,15 @@ const checkProjectMigrated = async (projectPath: string): Promise<boolean> => {
   return false
 }
 
-const openDiskLocation = withErrorHandlingResponse(async () => {
-  const projectPath = await locationPrompt()
+const openDiskLocation = withErrorHandlingResponse(async (req) => {
+  const requestUrl = new URL(req.url)
+  const params = OpenDiskParams.safeParse(getQueryParams(requestUrl))
+
+  if (!params.success) {
+    throw makeCodedError('Invalid query params', 400)
+  }
+
+  const projectPath = params.data.location || await locationPrompt()
 
   if (!projectPath) {
     return makeJsonResponse({canceled: true})
@@ -157,17 +164,22 @@ const openDiskLocation = withErrorHandlingResponse(async () => {
     isValid = (await fs.stat(path.join(projectPath, 'src/.expanse.json'))).isFile()
   } catch (error: any) {
     if (error.code === 'ENOENT') {
-      let containsPackageJsonAndReadme = false
       try {
         await fs.stat(path.join(projectPath, 'package.json'))
-        await fs.stat(path.join(projectPath, 'README.md'))
-        containsPackageJsonAndReadme = true
-      } catch (err) {
-        // Ignore
+      } catch (packageJsonError: any) {
+        if (packageJsonError.code === 'ENOENT') {
+          throw makeCodedError(`Expected a package.json in: ${projectPath}`, 400)
+        } else {
+          throw makeCodedError(`Failed to access folder: ${projectPath}: ${packageJsonError}`, 500)
+        }
+      }
+      if (params.data.acceptNonStudio === 'true') {
+        return recordLocalProject(projectPath, 'v2')
       }
       return makeJsonResponse({
         message: `The provided path does not contain an expanse file: ${projectPath}`,
-        containsPackageJsonAndReadme,
+        containsPackageJson: true,
+        location: projectPath,
       }, 409)
     }
     throw makeCodedError(`Failed to access folder: ${projectPath}: ${error.message}`, 500)
