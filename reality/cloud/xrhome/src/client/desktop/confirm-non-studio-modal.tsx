@@ -1,7 +1,6 @@
 import {useQueryClient} from '@tanstack/react-query'
 import React from 'react'
 import {useHistory} from 'react-router-dom'
-
 import {Trans, useTranslation} from 'react-i18next'
 
 import {openDiskLocation} from '../studio/local-sync-api'
