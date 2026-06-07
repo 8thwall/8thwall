@@ -14,6 +14,11 @@ const InitializeProjectParams = z.object({
 
 type IInitializeProjectParams = z.infer<typeof InitializeProjectParams>
 
+const OpenDiskParams = z.object({
+  location: z.string().optional(),
+  acceptNonStudio: z.enum(['true', 'false']).optional(),
+})
+
 const MoveProjectParams = z.object({
   appKey: z.string(),
   newLocation: z.string().nonempty().optional(),
@@ -38,6 +43,7 @@ export {
   MoveProjectParams,
   FixConfigParams,
   InstallRequest,
+  OpenDiskParams,
 }
 
 export type {

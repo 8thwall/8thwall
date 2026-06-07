@@ -279,9 +279,15 @@ const pickNewProjectLocation = (appKey: string) => {
   )
 }
 
-const openDiskLocation = () => {
-  const params = new URLSearchParams({
+type OpenDiskLocationParams = {
+  location?: string
+  acceptNonStudio?: boolean
+}
 
+const openDiskLocation = (options?: OpenDiskLocationParams) => {
+  const params = new URLSearchParams({
+    location: options?.location || '',
+    acceptNonStudio: String(Boolean(options?.acceptNonStudio)),
   })
   return fetchJson<InitializeResponse | CanceledInitializeResponse>(
     `${API}/project/open-disk?${params}`, {method: 'POST'}
