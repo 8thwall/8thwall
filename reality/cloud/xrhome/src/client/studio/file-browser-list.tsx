@@ -15,9 +15,6 @@ import {ContextMenu, useContextMenuState} from './ui/context-menu'
 import {combine} from '../common/styles'
 import type {ScopedFileLocation} from '../editor/editor-file-location'
 import {useFileSelection} from './hooks/use-file-selection'
-import {openProject} from './local-sync-api'
-import {FloatingPanelButton} from '../ui/components/floating-panel-button'
-import {useEnclosedAppKey} from '../apps/enclosed-app-context'
 
 const useStyles = createThemedStyles(theme => ({
   fileListGrow: {
@@ -82,7 +79,6 @@ const FileBrowserList: React.FC<IFileBrowserList> = ({
 }) => {
   const {t} = useTranslation(['cloud-editor-pages'])
   const classes = useStyles()
-  const appKey = useEnclosedAppKey()
 
   const menuState = useContextMenuState()
 
@@ -93,8 +89,6 @@ const FileBrowserList: React.FC<IFileBrowserList> = ({
   const {onFileClick} = useFileSelection(paths)
 
   const isAdding = externalAdding || adding
-  const showOpenExternally = Build8.PLATFORM_TARGET === 'desktop' && !title && !isAdding &&
-  paths.filePaths.filter(f => !STUDIO_HIDDEN_FILE_PATHS.includes(f)).length === 0
 
   const startNewItem = (newItem: ItemType) => {
     setItemType(newItem)
@@ -159,16 +153,6 @@ const FileBrowserList: React.FC<IFileBrowserList> = ({
         </div>
       }
       <div className={elementClasses.treeElementGroup} id={productTourId}>
-        {showOpenExternally &&
-          <div className={classes.openButton}>
-            <FloatingPanelButton
-              onClick={() => openProject(appKey)}
-              spacing='full'
-            >
-              {t('file_configurator.button.open_externally', {ns: 'cloud-studio-pages'})}
-            </FloatingPanelButton>
-          </div>
-        }
         {isAdding &&
           <NewFileItem
             itemType={externalItemType || itemType}
