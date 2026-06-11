@@ -100,6 +100,11 @@ const initFileWatcher = (appKey: string, send: (msg: LocalSyncMessage) => void):
 
   const handleFolderAdd = (filePath: UnixPath) => {
     log.info('Directory added:', filePath)
+    if (!filePath) {
+      // NOTE(christoph): This can occur in a non-studio app that initially doesn't have a src
+      // folder, but then creates one.
+      return
+    }
     send({
       action: 'STUDIO_DIR_CHANGE',
       appKey,
@@ -110,6 +115,11 @@ const initFileWatcher = (appKey: string, send: (msg: LocalSyncMessage) => void):
 
   const handleFolderDelete = (filePath: UnixPath) => {
     log.info('Directory deleted:', filePath)
+    if (!filePath) {
+      // NOTE(christoph): This can occur if the src folder is deleted (not a hard error for
+      // non-studio apps)
+      return
+    }
     send({
       action: 'STUDIO_DIR_CHANGE',
       appKey,

@@ -330,10 +330,9 @@ const buildZip = withErrorHandlingResponse(async (req: Request) => {
   return response
 })
 
-const isValidProject = async (location: string) => {
+const isDirectory = async (location: string) => {
   try {
-    const srcPath = path.join(location, 'src')
-    const stats = await fs.stat(srcPath)
+    const stats = await fs.stat(location)
     return stats.isDirectory()
   } catch {
     return false
@@ -343,7 +342,7 @@ const isValidProject = async (location: string) => {
 const getAllProjects = withErrorHandlingResponse(async () => {
   const projects = getLocalProjects().filter(p => p.initialization !== 'needs-initialization')
   const projectEntries = await Promise.all(projects.map(async ({appKey, ...rest}) => {
-    const isValid = await isValidProject(rest.location)
+    const isValid = await isDirectory(rest.location)
     return [appKey, {...rest, validLocation: isValid}]
   }))
   const projectByAppKey = Object.fromEntries(projectEntries)
@@ -528,7 +527,7 @@ const changeProjectLocation = withErrorHandlingResponse(async (req: Request) => 
   }
 
   const isCurrentLocationValid = projectEntry.location &&
-  await isValidProject(projectEntry.location)
+    await isDirectory(projectEntry.location)
 
   // NOTE(johnny): If the project is invalid we are in the "locate" flow.
   if (!isCurrentLocationValid || projectEntry.initialization === 'needs-initialization') {

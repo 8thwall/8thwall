@@ -199,7 +199,14 @@ const getFileStateSnapshot: RequestHandler = async (req) => {
   }
 
   const projectPath = getProjectSrcPath(project.location)
-  const contents = await readdir(projectPath, {recursive: true})
+  let contents: string[] = []
+  try {
+    contents = await readdir(projectPath, {recursive: true})
+  } catch (err: any) {
+    if (err.code !== 'ENOENT') {
+      throw err
+    }
+  }
 
   const response: FileSnapshotResponse = {
     timestampsByPath: {},
