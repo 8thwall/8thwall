@@ -29,6 +29,8 @@ import {FloatingTray} from '../ui/components/floating-tray'
 import {SpaceBetween} from '../ui/layout/space-between'
 import {createThemedStyles} from '../ui/theme'
 import {HOME_PATH} from './desktop-paths'
+import ErrorMessage from '../home/error-message'
+import {StaticBanner} from '../ui/components/banner'
 
 const useStyles = createThemedStyles(theme => ({
   nonStudioView: {
@@ -91,6 +93,10 @@ const NonStudioView: React.FC = () => {
     return true
   }
 
+  React.useEffect(() => {
+    stateCtx.update({errorMsg: 'my error'})
+  }, [])
+
   const {
     actionsContext, fileActionModals, fileUploadState, uploadDropRef, handleFileUpload,
   } = useFileActionsState({
@@ -115,6 +121,15 @@ const NonStudioView: React.FC = () => {
             <BuildControlTray />
           </SpaceBetween>
           <FloatingTray fillContainer orientation='vertical'>
+            {stateCtx.state.errorMsg &&
+              <StaticBanner
+                type='danger'
+                onClose={() => stateCtx.update(p => ({...p, errorMsg: ''}))}
+              >
+                {stateCtx.state.errorMsg}
+              </StaticBanner>
+            }
+            <ErrorMessage />
             <FileBrowser
               uploadDropRef={uploadDropRef}
               handleFileUpload={handleFileUpload}
