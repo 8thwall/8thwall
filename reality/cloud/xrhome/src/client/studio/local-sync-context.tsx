@@ -263,6 +263,7 @@ const LocalSyncContextProvider: React.FC<{children: React.ReactNode}> = ({childr
     setFileSyncStatus('listening')
 
     return () => {
+      console.log('removing handler')
       window.electron.fileWatch?.removeHandler(appKey)
     }
   }, [appKey])

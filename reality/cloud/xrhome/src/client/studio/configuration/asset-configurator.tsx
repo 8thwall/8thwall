@@ -163,6 +163,7 @@ const AssetConfigurator: React.FC<IAssetConfigurator> = ({
     setLoadedFor(fullUrl)
     setShowLoading(false)
   }
+  throw new Error('test')
 
   if (!selectedAsset) {
     return null
