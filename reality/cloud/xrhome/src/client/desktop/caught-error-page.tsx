@@ -1,6 +1,7 @@
 import React from 'react'
 import {Trans, useTranslation} from 'react-i18next'
 import {createUseStyles} from 'react-jss'
+import {useQueryClient} from '@tanstack/react-query'
 
 import {PrimaryButton} from '../ui/components/primary-button'
 import CopyableBlock from '../widgets/copyable-block'
@@ -36,6 +37,11 @@ const CaughtErrorPage: React.FC<ICaughtErrorPage> = ({error, onReset}) => {
   const {t} = useTranslation(['caught-error-page', 'common'])
 
   const classes = useStyles()
+  const queryClient = useQueryClient()
+
+  React.useEffect(() => {
+    queryClient.clear()
+  }, [])
 
   return (
     <div className={classes.caughtErrorPage}>
