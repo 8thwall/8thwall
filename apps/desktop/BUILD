@@ -129,3 +129,10 @@ js_library(
         "//apps/desktop:errors",
     ],
 )
+
+js_library(
+    name = "process",
+    srcs = [
+        "process.ts",
+    ],
+)

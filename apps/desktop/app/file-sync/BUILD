@@ -107,8 +107,10 @@ js_library(
         "run-commands.ts",
     ],
     deps = [
+        "//apps/desktop:process",
         "//apps/desktop/app:resources",
         "//apps/desktop/app/system-log:listeners",
+        "//reality/cloud/xrhome/src/shared:time-utils",
     ],
 )
 
