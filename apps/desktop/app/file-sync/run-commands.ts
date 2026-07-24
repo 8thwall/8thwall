@@ -74,16 +74,13 @@ const runScript = (options: ScriptRunOptions): Process => {
 const runInstallCommand = async (
   appKey: string, savePath: string, extraArguments?: string[]
 ): Promise<void> => {
-  log.info('Running install command')
-
+  log.info('Running install command', savePath, extraArguments)
   const child = startProcess({
     command: [EXEC_PATH, NPM_CLI_PATH, 'install', ...(extraArguments || [])],
     cwd: savePath,
     env: {...COMMON_ENV, ELECTRON_RUN_AS_NODE: '1'},
   })
   log.info('Install started')
-  dispatchSystemLog({appKey, 'type': 'log', 'text': 'Installing packages'})
-
   forwardProcessOutput(appKey, child.nodeChildProcess)
 
   let timeout: ReturnType<typeof setTimeout> | undefined
@@ -94,7 +91,7 @@ const runInstallCommand = async (
       return
     }
     timeout = setTimeout(() => {
-      log.info('Timeout reached')
+      log.info('Npm install timeout reached, killing')
       killed = true
       child.kill()
     }, 2 * MILLISECONDS_PER_MINUTE)
@@ -106,11 +103,10 @@ const runInstallCommand = async (
   try {
     await child.exitSuccess()
   } catch (err) {
-    log.error('Install failed', err)
+    log.error('Install failed:', err)
     throw err
   }
   log.info('Install complete!')
-
   clearTimeout(timeout)
 }
 

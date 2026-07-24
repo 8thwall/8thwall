@@ -25,14 +25,14 @@ const createLocalServer = async (
   appKey: string,
   savePath: string
 ): Promise<LocalServer> => {
-  dispatchSystemLog({appKey, 'type': 'log', 'text': 'Installing packages'})
+  dispatchSystemLog({appKey, type: 'log', text: 'Installing packages'})
   await runInstallCommand(appKey, savePath)
   const [primaryPort, buildPort, dev8SocketPort] = await Promise.all([
     getPort({port: portNumbers(58000, 58999)}),
     getPort({port: portNumbers(59000, 59999)}),
     getPort({port: portNumbers(60000, 60999)}),
   ])
-
+  dispatchSystemLog({appKey, type: 'log', text: 'Starting build server'})
   const webpackDevServer = runServeCommand(savePath, buildPort)
   const dev8Socket = createDev8WebSocketServer(appKey, dev8SocketPort)
   forwardProcessOutput(appKey, webpackDevServer.nodeChildProcess)
