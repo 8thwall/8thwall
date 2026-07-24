@@ -3,13 +3,6 @@ load("//bzl/js:js.bzl", "js_library")
 package(default_visibility = ["//reality/cloud:shared"])
 
 js_library(
-    name = "time-utils",
-    srcs = [
-        "time-utils.ts",
-    ],
-)
-
-js_library(
     name = "registry",
     srcs = [
         "registry.ts",

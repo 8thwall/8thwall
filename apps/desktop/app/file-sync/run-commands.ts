@@ -1,7 +1,9 @@
-import {ChildProcess, exec, fork} from 'child_process'
+import {ChildProcess, exec, spawn} from 'child_process'
 import path from 'path'
 import fs from 'fs'
 import log from 'electron-log'
+
+import {MILLISECONDS_PER_MINUTE} from '@repo/reality/shared/time-utils'
 
 import {NODE_MODULES_PATH} from '../resources'
 import {forwardProcessOutput} from '../system-log/listeners'
@@ -67,10 +69,11 @@ const runScript = (options: ScriptRunOptions): ChildProcess => {
 const runInstallCommand = async (
   appKey: string, savePath: string, extraArguments?: string[]
 ): Promise<void> => new Promise((resolve, reject) => {
-  const child = fork(
-    NPM_CLI_PATH,
-    ['install', ...(extraArguments || [])],
-    {cwd: savePath, stdio: 'pipe', env: {...COMMON_ENV, ELECTRON_RUN_AS_NODE: '1'}, detached: true}
+  log.info('runInstallCommand start')
+  const child = spawn(
+    EXEC_PATH,
+    [NPM_CLI_PATH, 'install', ...(extraArguments || [])],
+    {cwd: savePath, env: {...COMMON_ENV, ELECTRON_RUN_AS_NODE: '1'}}
   )
 
   forwardProcessOutput(appKey, child)
@@ -79,7 +82,7 @@ const runInstallCommand = async (
     log.error('npm install timed out, killing process')
     child.kill('SIGTERM')
     reject(new Error('npm install timed out'))
-  }, 60000)
+  }, 2 * MILLISECONDS_PER_MINUTE)
 
   let stderr = ''
 
@@ -89,6 +92,7 @@ const runInstallCommand = async (
   })
 
   child.on('exit', (code, signal) => {
+    log.info('runInstallCommand child exit')
     clearTimeout(timeout)
     if (code === 0) {
       resolve()

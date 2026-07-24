@@ -46,3 +46,10 @@ js_library(
     ],
     visibility = ["//visibility:public"],
 )
+
+js_library(
+    name = "time-utils",
+    srcs = [
+        "time-utils.ts",
+    ],
+)
