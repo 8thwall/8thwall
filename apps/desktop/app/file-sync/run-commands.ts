@@ -1,13 +1,15 @@
-import {ChildProcess, exec, fork} from 'child_process'
 import path from 'path'
 import fs from 'fs'
 import log from 'electron-log'
 
+import {MILLISECONDS_PER_MINUTE} from '@repo/reality/cloud/xrhome/src/shared/time-utils'
+
 import {NODE_MODULES_PATH} from '../resources'
 import {forwardProcessOutput} from '../system-log/listeners'
+import {parseCommandString, Process, startProcess} from '../../process'
 
 const NPM_CLI_PATH = path.join(NODE_MODULES_PATH, 'npm/bin/npm-cli.js')
-const EXEC_PATH = process.platform === 'darwin'
+const EXEC_PATH: string = process.platform === 'darwin'
 // @ts-expect-error It exists according to
 // https://github.com/electron/electron/blob/v39.5.1/lib/node/init.ts#L35
   ? process.helperExecPath
@@ -24,7 +26,7 @@ type ScriptRunOptions = {
   arguments?: ('--port' | `${number}`)[]
 }
 
-const runScript = (options: ScriptRunOptions): ChildProcess => {
+const runScript = (options: ScriptRunOptions): Process => {
   const {cwd, name, env} = options
 
   const packageJsonPath = path.resolve(cwd, 'package.json')
@@ -43,138 +45,94 @@ const runScript = (options: ScriptRunOptions): ChildProcess => {
     throw new Error(`npm run ${name} command not found in package.json`)
   }
 
-  // TODO(christoph): Escape these args, currently only allows port and port number
-  const additionalArgs = (options.arguments || []).join(' ')
+  const additionalArgs = (options.arguments || [])
 
   // If command starts with 'node ', fork the electron process so that we can run scripts
   // even if node isn't installed.
   if (scriptCommand.startsWith('node ')) {
-    const command = `"${EXEC_PATH}"${scriptCommand.slice('node'.length)} ${additionalArgs}`
-    log.info(`Running command: ${name} - ${command}`)
-    return exec(
+    const command = [
+      EXEC_PATH,
+      ...parseCommandString(scriptCommand.slice('node'.length)),
+      ...additionalArgs,
+    ]
+    log.info(`Running command: ${name} - ${command.join(' ')}`)
+    return startProcess({
       command,
-      {cwd, env: {...env, ELECTRON_RUN_AS_NODE: '1'}}
-    )
+      cwd,
+      env: {...env, ELECTRON_RUN_AS_NODE: '1'},
+    })
   }
 
-  // Otherwise invoke the command through the shell, assuming npm is installed on the PATH.
-  return exec(
-    `npm run ${name} -- ${additionalArgs}`,
-    {cwd, env, shell: process.env.SHELL}
-  )
+  // Otherwise invoke the command through npm. Any dependencies will need to be installed
+  // on the system.
+  return startProcess({
+    command: [EXEC_PATH, NPM_CLI_PATH, 'run', name, '--', ...additionalArgs],
+    cwd,
+    env: {...env, ELECTRON_RUN_AS_NODE: '1'},
+  })
 }
 
 const runInstallCommand = async (
   appKey: string, savePath: string, extraArguments?: string[]
-): Promise<void> => new Promise((resolve, reject) => {
-  const child = fork(
-    NPM_CLI_PATH,
-    ['install', ...(extraArguments || [])],
-    {cwd: savePath, stdio: 'pipe', env: {...COMMON_ENV, ELECTRON_RUN_AS_NODE: '1'}, detached: true}
-  )
-
-  forwardProcessOutput(appKey, child)
-
-  const timeout = setTimeout(() => {
-    log.error('npm install timed out, killing process')
-    child.kill('SIGTERM')
-    reject(new Error('npm install timed out'))
-  }, 60000)
-
-  let stderr = ''
-
-  child.stderr?.on('data', (d) => {
-    const out = d.toString()
-    stderr += out
+): Promise<void> => {
+  log.info('Running install command', savePath, extraArguments)
+  const child = startProcess({
+    command: [EXEC_PATH, NPM_CLI_PATH, 'install', ...(extraArguments || [])],
+    cwd: savePath,
+    env: {...COMMON_ENV, ELECTRON_RUN_AS_NODE: '1'},
   })
+  log.info('Install started')
+  forwardProcessOutput(appKey, child.nodeChildProcess)
 
-  child.on('exit', (code, signal) => {
+  let timeout: ReturnType<typeof setTimeout> | undefined
+  let killed = false
+  const restartTimeout = () => {
     clearTimeout(timeout)
-    if (code === 0) {
-      resolve()
-    } else {
-      const msg = `npm install failed (exit ${code}, signal ${signal})\nstderr:\n${stderr}`
-      log.error(msg)
-      reject(new Error(msg))
+    if (killed) {
+      return
     }
-  })
+    timeout = setTimeout(() => {
+      log.info('NPM install timeout reached, killing process')
+      killed = true
+      child.kill()
+    }, 2 * MILLISECONDS_PER_MINUTE)
+  }
+  restartTimeout()
+  child.nodeChildProcess.stdout?.on('data', () => restartTimeout())
+  child.nodeChildProcess.stderr?.on('data', () => restartTimeout())
 
-  child.on('error', (err) => {
+  try {
+    await child.exitSuccess()
+    log.info('Install complete!')
+  } catch (err) {
+    log.error('Install failed:', err)
+    throw err
+  } finally {
     clearTimeout(timeout)
-    log.error('npm install process error:', err)
-    if (stderr) {
-      log.error('npm install stderr:', stderr)
-    }
-    reject(err)
-  })
-})
+  }
+}
 
-const runBuildCommand = (
+const runBuildCommand = async (
   appKey: string,
   savePath: string
-): Promise<void> => new Promise((resolve, reject) => {
+): Promise<void> => {
   const child = runScript({
     cwd: savePath,
     name: 'build',
     env: COMMON_ENV,
   })
 
-  forwardProcessOutput(appKey, child)
+  forwardProcessOutput(appKey, child.nodeChildProcess)
 
-  child.on('exit', (code, signal) => {
-    if (signal === 'SIGTERM' || signal === 'SIGKILL') {
-      return
-    }
-    if (code === 0) {
-      resolve()
-    } else {
-      const msg = 'webpack build failed'
-      log.error(msg)
-      reject(new Error(msg))
-    }
-  })
-
-  child.on('error', (err) => {
-    log.error('webpack build process error:', err)
-    reject(err)
-  })
-})
-
-const runServeCommand = (savePath: string, port: number): ChildProcess => {
-  const child = runScript({
-    cwd: savePath,
-    name: 'serve',
-    env: {...COMMON_ENV, PORT: port.toString()},
-    arguments: ['--port', `${port}`],
-  })
-
-  let stderr = ''
-
-  child.stderr?.on('data', (d) => {
-    const out = d.toString()
-    stderr += out
-  })
-
-  child.on('exit', (code, signal) => {
-    if (signal === 'SIGTERM' || signal === 'SIGKILL') {
-      return
-    }
-    if (code !== 0) {
-      const msg = `webpack failed (exit ${code}, signal ${signal})\nstderr:\n${stderr}`
-      log.error(msg)
-    }
-  })
-
-  child.on('error', (err) => {
-    log.error('webpack process error:', err)
-    if (stderr) {
-      log.error('webpack stderr:', stderr)
-    }
-    throw err
-  })
-
-  return child
+  await child.exitSuccess()
 }
+
+const runServeCommand = (savePath: string, port: number): Process => runScript({
+  cwd: savePath,
+  name: 'serve',
+  env: {...COMMON_ENV, PORT: port.toString()},
+  arguments: ['--port', `${port}`],
+})
 
 export {
   runServeCommand,
