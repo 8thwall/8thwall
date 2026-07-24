@@ -5,7 +5,7 @@ import log from 'electron-log'
 import {MILLISECONDS_PER_MINUTE} from '@repo/reality/cloud/xrhome/src/shared/time-utils'
 
 import {NODE_MODULES_PATH} from '../resources'
-import {dispatchSystemLog, forwardProcessOutput} from '../system-log/listeners'
+import {forwardProcessOutput} from '../system-log/listeners'
 import {parseCommandString, Process, startProcess} from '../../process'
 
 const NPM_CLI_PATH = path.join(NODE_MODULES_PATH, 'npm/bin/npm-cli.js')
@@ -63,11 +63,12 @@ const runScript = (options: ScriptRunOptions): Process => {
     })
   }
 
-  // Otherwise invoke the command through the shell, assuming npm is installed on the PATH.
+  // Otherwise invoke the command through npm. Any dependencies will need to be installed
+  // on the system.
   return startProcess({
-    command: ['npm', 'run', name, '--', ...additionalArgs],
+    command: [EXEC_PATH, NPM_CLI_PATH, 'run', name, '--', ...additionalArgs],
     cwd,
-    env,
+    env: {...env, ELECTRON_RUN_AS_NODE: '1'},
   })
 }
 
@@ -91,7 +92,7 @@ const runInstallCommand = async (
       return
     }
     timeout = setTimeout(() => {
-      log.info('Npm install timeout reached, killing')
+      log.info('NPM install timeout reached, killing process')
       killed = true
       child.kill()
     }, 2 * MILLISECONDS_PER_MINUTE)
@@ -102,12 +103,13 @@ const runInstallCommand = async (
 
   try {
     await child.exitSuccess()
+    log.info('Install complete!')
   } catch (err) {
     log.error('Install failed:', err)
     throw err
+  } finally {
+    clearTimeout(timeout)
   }
-  log.info('Install complete!')
-  clearTimeout(timeout)
 }
 
 const runBuildCommand = async (
