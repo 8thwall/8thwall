@@ -1,4 +1,4 @@
-import type {ChunkName, ChunkSpecifier} from './src/types/api'
+import type {ChunkName, ChunkSpecifier} from './types/api'
 
 const parsePreloadChunks = (attribute: string): ChunkSpecifier[] => {
   if (!attribute) {

@@ -1,7 +1,7 @@
 load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
 load("//bzl/crosstool:wasm-pthread.bzl", "emoptsAllowMemoryGrowth")
 load("//bzl/httpfileserver:http-file-server.bzl", "http_file_server")
-load("//bzl/js:js.bzl", "js_binary", "js_library", "js_test")
+load("//bzl/js:js.bzl", "js_binary")
 load("//bzl/npmpackage:typecheck.bzl", "npm_typecheck")
 load("//bzl/wasm:wasm.bzl", "wasm_binary")
 load(":xr-js.bzl", "xr_js_config")
@@ -94,6 +94,7 @@ js_binary(
         "//c8/protolog/api:log-request.capnp-ts",
         "//reality/app/xr/js/src:globals",
         "//reality/app/xr/js/src:jsxr",
+        "//reality/app/xr/js/src:preload-chunks-format",
         "//reality/engine/api:semantics.capnp-ts",
         "//reality/engine/api/base:camera-environments.capnp-ts",
     ],
@@ -366,30 +367,6 @@ cc_binary(
         "//reality/engine/features:gl-reality-frame",
         "//reality/engine/imagedetection:detection-image",
         "//reality/engine/imagedetection:detection-image-loader",
-    ],
-)
-
-js_test(
-    name = "preload-chunks-format-test",
-    size = "small",
-    externalize_npm = 1,
-    main = [
-        "preload-chunks-format-test.ts",
-    ],
-    npm_rule = "@npm-ecs//:npm-ecs",
-    deps = [
-        "//bzl/js:chai-js",
-        "//reality/app/xr/js:preload-chunks-format",
-    ],
-)
-
-js_library(
-    name = "preload-chunks-format",
-    srcs = [
-        "preload-chunks-format.ts",
-    ],
-    deps = [
-        "//reality/app/xr/js/src/types:api",
     ],
 )
 

@@ -665,3 +665,27 @@ js_library(
         "resources.ts",
     ],
 )
+
+js_test(
+    name = "preload-chunks-format-test",
+    size = "small",
+    externalize_npm = 1,
+    main = [
+        "preload-chunks-format-test.ts",
+    ],
+    npm_rule = "@npm-ecs//:npm-ecs",
+    deps = [
+        "//bzl/js:chai-js",
+        "//reality/app/xr/js/src:preload-chunks-format",
+    ],
+)
+
+js_library(
+    name = "preload-chunks-format",
+    srcs = [
+        "preload-chunks-format.ts",
+    ],
+    deps = [
+        "//reality/app/xr/js/src/types:api",
+    ],
+)

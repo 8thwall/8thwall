@@ -7,7 +7,7 @@ import {IS_SIMD, VERSION} from 'reality/app/xr/js/build-constants'
 import {loadJsxr} from './src/jsxr'
 import {setDeprecatedProperty} from './src/deprecate'
 import {ResourceUrls} from './src/resources'
-import {parsePreloadChunks} from './preload-chunks-format'
+import {parsePreloadChunks} from './src/preload-chunks-format'
 
 const script = document.currentScript as HTMLScriptElement
 

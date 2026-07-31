@@ -14,13 +14,17 @@ const loadSpecificChunk = async (
   const chunkName = typeof chunk === 'string' ? chunk : chunk.name
   const urlOverride = typeof chunk === 'string' ? null : chunk.url
 
-  const baseUrl = ResourceUrls.getBaseUrl()
+  const defaultBaseUrl = ResourceUrls.getBaseUrl()
+  const baseUrl = urlOverride
+    ? new URL('./', new URL(urlOverride)).toString()
+    : defaultBaseUrl
+  console.log({chunk, urlOverride, baseUrl, defaultBaseUrl})
   if (chunkName === 'face') {
     if (jsxr.FaceController) {
       return
     }
 
-    const url = urlOverride || `${baseUrl}xr-face.js`
+    const url = urlOverride || `${defaultBaseUrl}xr-face.js`
 
     // @ts-ignore
     // eslint-disable-next-line
@@ -38,7 +42,7 @@ const loadSpecificChunk = async (
       return
     }
 
-    const url = urlOverride || `${baseUrl}xr-tracking.js`
+    const url = urlOverride || `${defaultBaseUrl}xr-tracking.js`
 
     // @ts-ignore
     // eslint-disable-next-line
