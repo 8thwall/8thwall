@@ -28,8 +28,10 @@ Object.assign(
   window,
   {CoachingOverlay, SkyCoachingOverlay}
 )
-
+/* @ts-ignore */
 if (window.AFRAME) {
+  /* @ts-ignore */
   window.AFRAME.registerComponent('coaching-overlay', absoluteAframeComponent())
+  /* @ts-ignore */
   window.AFRAME.registerComponent('sky-coaching-overlay', skyAframeComponent())
 }
