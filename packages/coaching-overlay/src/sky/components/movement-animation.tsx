@@ -3,13 +3,13 @@
 // NOTE(dat): Preact doesn't mess with svg property. The above rule is so eslint doesn't change this
 // file's svg code.
 import * as React from 'preact'
-import type { FunctionComponent as FC } from 'preact'
+import type {FunctionComponent as FC} from 'preact'
 
 interface IMovementAnimation {
   animationColor: string
 }
 
-const MovementAnimation: FC<IMovementAnimation> = ({ animationColor }) => (
+const MovementAnimation: FC<IMovementAnimation> = ({animationColor}) => (
   <svg
     className='sky-coaching-overlay-animation'
     xmlns='http://www.w3.org/2000/svg'
@@ -34,22 +34,24 @@ const MovementAnimation: FC<IMovementAnimation> = ({ animationColor }) => (
     />
     <g className='sky-coaching-phone-animation'>
       <rect
-        x="227"
-        width="159"
-        height="283"
-        rx="23.6986"
+        x='227'
+        width='159'
+        height='283'
+        rx='23.6986'
         fill='#6F6C74'
-        fill-opacity="0.75"
-        shape-rendering="crispEdges" />
+        fill-opacity='0.75'
+        shape-rendering='crispEdges'
+      />
       <rect
-        x="235.887"
-        y="8.88699"
-        width="141.226"
-        height="265.226"
-        rx="14.8116"
+        x='235.887'
+        y='8.88699'
+        width='141.226'
+        height='265.226'
+        rx='14.8116'
         stroke={animationColor}
-        stroke-width="17.774"
-        shape-rendering="crispEdges" />
+        stroke-width='17.774'
+        shape-rendering='crispEdges'
+      />
     </g>
   </svg>
 )

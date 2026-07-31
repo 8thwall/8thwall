@@ -63,7 +63,6 @@ const pipelineModule = () => ({
   ],
 })
 
-
 export {
   configure,
   pipelineModule,

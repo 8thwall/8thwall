@@ -8,7 +8,8 @@ const devBuildMode = DEVELOPMENT
   ? ({
     mode: 'development',
     devtool: 'eval-source-map',
-  }) : ({
+  })
+  : ({
     mode: 'production',
   })
 
