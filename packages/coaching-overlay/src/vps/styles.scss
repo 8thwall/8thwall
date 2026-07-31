@@ -1,0 +1,220 @@
+.vps-coaching-overlay-fade-in {
+  animation: vps-coaching-overlay-fade-in 0.5s linear forwards;
+}
+
+.vps-coaching-overlay-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 412;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+// This brings the entire content away from the l/r edges of the screen, while allowing the
+// container class to still blur out the background.
+.vps-coaching-overlay-padding {
+  position: relative;
+  margin: 0 5vh;
+  height: 100%;
+}
+
+.vps-coaching-overlay-remove-blur {
+  // Blur out the background.
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  animation: vps-coaching-overlay-remove-blur 0.5s linear forwards;
+}
+
+@keyframes vps-coaching-overlay-remove-blur {
+  to {
+    backdrop-filter: blur(0);
+    -webkit-backdrop-filter: blur(0);
+  }
+}
+
+.vps-coaching-overlay-fade-out {
+  opacity: 1;
+  animation: vps-coaching-overlay-fade-away 0.5s linear forwards;
+  animation-delay: 0;
+}
+
+.vps-coaching-overlay-container * {
+  box-sizing: inherit;
+}
+
+.vps-coaching-overlay-prompt-container {
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.vps-coaching-animation {
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  animation: vps-coaching-overlay-fade-away 0.5s linear forwards;
+  // This is necessary for Safari or it'll clip on the hint image.
+  transform: translateZ(90px);
+  transform-style: preserve-3d;
+  perspective: 200px;
+  // Needed to always be in front of image.
+  z-index: 413;
+}
+
+.vps-coaching-phone-animation {
+  position: absolute;
+  width: 70px;
+  height: 120px;
+  background: #556b;
+  border: 7px solid white;
+  border-radius: 13px;
+  top: 50%;
+  left: 50%;
+  animation: vps-coaching-overlay-phone-sway 4s infinite both;
+  animation-timing-function: ease-in-out;
+}
+
+@keyframes vps-coaching-overlay-phone-sway {
+  0% {
+    transform: translate(calc(-50% - 100px), -50%) rotateY(-15deg);
+  }
+
+  50% {
+    transform: translate(calc(-50% + 100px), -50%) rotateY(15deg);
+  }
+
+  100% {
+    transform: translate(calc(-50% - 100px), -50%) rotateY(-15deg);
+  }
+}
+
+.vps-coaching-hint-image {
+  position: absolute;
+  bottom: 20%;
+  // We are always going to make the image portrait mode.
+  width: 100%;
+  height: 58%;
+  border-radius: 15px;
+  object-fit: cover;
+  transform-origin: center bottom;
+  animation: vps-coaching-overlay-hint-image-shrinks 0.5s ease-in-out forwards;
+}
+
+@keyframes vps-coaching-overlay-hint-image-shrinks {
+  from {
+    border-radius: 15px;
+    transform: translateY(0);
+    scale: 1;
+    opacity: 1;
+  }
+
+  to {
+    // We need to decrease the rounding of the borders or else it will look too rounded when
+    // minimized.
+    border-radius: 1em;
+    bottom: 7vh;
+    scale: 0.5;
+    // We want the minimized image to be slightly transparent.
+    opacity: 0.8;
+  }
+}
+
+.vps-coaching-overlay-prompt-text {
+  color: white;
+  position: absolute;
+  font-family: "Nunito", sans-serif;
+  font-weight: bold;
+  text-align: center;
+  font-size: 1.1em;
+  line-height: 1.2em;
+  text-shadow: 0px 0px 5px rgba(0, 1, 4, 0.25);
+  width: 100%;
+  top: 82%;
+
+  // We don't want any extra distance between the p tags.
+  p {
+    margin: 0;
+    // Make sure really long wayspot names (typically private scan ids), are cutoff with a nice
+    // ellipsis.
+    max-width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  animation: vps-coaching-overlay-fade-away 0.5s linear forwards;
+}
+
+// Small div at the bottom of the screen that holds the text, used to vertically align the text.
+.vps-coaching-overlay-status-text-container {
+  position: absolute;
+  // This works for one or two lines.
+  height: 7vh;
+  width: 100%;
+  text-shadow: 0px 0px 5px rgba(0, 1, 4, 0.25);
+  font-weight: bold;
+  font-size: 1.1em;
+  bottom: 0;
+  padding: 0 0;
+}
+
+.vps-coaching-overlay-status-text {
+  position: absolute;
+  width: 100%;
+  font-family: "Nunito", sans-serif;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 50%;
+  opacity: 0;
+  // We are shifting over the margin to the left and using left 50% so that it's centered. This
+  // way, the animated ellipsis won't shift the text over like it would with text-align: centered.
+  margin: 0 0 0 -2em;
+  animation: vps-coaching-overlay-fade-in 0.5s linear forwards;
+}
+
+// After n seconds, we will fade in the status text.
+@keyframes vps-coaching-overlay-fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+// The movement animation and the prompt text fade away right before the image transforms to the
+// bottom of the screen.
+@keyframes vps-coaching-overlay-fade-away {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.vps-coaching-overlay-ellipsis-animated:after {
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: bottom;
+  -webkit-animation: vps-coaching-overlay-ellipsis-animation steps(4,end) 900ms infinite;
+  animation: vps-coaching-overlay-ellipsis-animation steps(4,end) 900ms infinite;
+  content: "\2026"; /* ascii code for the ellipsis character */
+  width: 0px;
+}
+
+@keyframes vps-coaching-overlay-ellipsis-animation {
+  to {
+    width: 1.0em;
+  }
+}
+
+@-webkit-keyframes vps-coaching-overlay-ellipsis-animation {
+  to {
+    width: 1.0em;
+  }
+}

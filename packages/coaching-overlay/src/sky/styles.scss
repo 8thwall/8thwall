@@ -1,0 +1,69 @@
+.sky-coaching-overlay-container {
+  position: fixed;
+  top: 0; left: 0; bottom: 0; right: 0;
+  z-index: 412;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+.sky-coaching-overlay-container * {
+  box-sizing: inherit;
+}
+
+.sky-coaching-overlay-prompt-container {
+  position: absolute;
+  display: block;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.sky-coaching-overlay-animation {
+  width: 50vw;
+}
+
+.sky-coaching-overlay-prompt-status {
+  color: white;
+  font-family: 'Nunito-Semibold', 'Nunito', sans-serif;
+  font-weight: bold;
+  text-align: center;
+  font-size: 1.3em;
+  text-shadow: 0px 0px 5px rgba(0,0,0,0.5);
+  max-width: 13rem;
+  margin: 0 auto;
+}
+
+/* Animations */
+
+.sky-coaching-overlay-fade-in { animation: sky-coaching-overlay-fade-in 0.5s linear forwards; }
+@keyframes sky-coaching-overlay-fade-in {
+  0% {opacity: 0;}
+  100% {opacity: 1;}
+}
+
+.sky-coaching-overlay-fade-out { animation: sky-coaching-overlay-fade-out 0.5s linear forwards; }
+@keyframes sky-coaching-overlay-fade-out {
+  0% {opacity: 1;}
+  100% {opacity: 0;}
+}
+
+.sky-coaching-phone-animation {
+  position: absolute;
+  // transform-style: preserve-3d;
+  animation: sky-coaching-overlay-phone-sway 4s infinite both;
+  animation-timing-function: ease-in-out;
+}
+
+@keyframes sky-coaching-overlay-phone-sway {
+  0% {
+    transform: translate(-150px, 0) rotateX(30deg);
+  }
+
+  50% {
+    transform: translate(150px, 0) rotateX(30deg);
+  }
+
+  100% {
+    transform: translate(-150px, 0) rotateX(30deg);
+  }
+}
