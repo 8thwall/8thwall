@@ -1,20 +1,12 @@
 const path = require('path')
 const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer')
+const CopyPlugin = require('copy-webpack-plugin')
 
 const ANALYZE_BUNDLE = false
-const DEVELOPMENT = false
-
-const devBuildMode = DEVELOPMENT
-  ? ({
-    mode: 'development',
-    devtool: 'eval-source-map',
-  })
-  : ({
-    mode: 'production',
-  })
 
 module.exports = {
   entry: {
+    'test': './test/index.tsx',
     'coaching-overlay': './src/index.ts',
   },
   output: {
@@ -26,6 +18,28 @@ module.exports = {
   },
   module: {
     rules: [
+      {
+        test: /\.(png|svg|jpg|jpeg|gif|ico|woff|ttf|min\.js)$/,
+        exclude: /node_modules/,
+        type: 'asset/resource',
+        generator: {
+          filename: 'resources/[name]-[hash][ext]',
+        },
+      },
+      {
+        test: /\.s?css$/,
+        use: [
+          'style-loader',
+          'css-loader',
+          'sass-loader',
+        ],
+      },
+      {
+        test: /\.html$/,
+        use: {
+          loader: 'html-loader',
+        },
+      },
       {
         test: /\.(j|t)sx?$/,
         exclude: [/node_modules/],
@@ -54,39 +68,29 @@ module.exports = {
           },
         ],
       },
-      {
-        test: /\.s?css$/,
-        use: [
-          'style-loader',
-          'css-loader',
-          'sass-loader',
-        ],
-      },
-      {
-        test: /\.html$/,
-        use: 'html-loader',
-      },
-      // Needed for loading the webm/mp4 file of the coaching animation.  This may be switched
-      // out for an SVG later.
-      {
-        test: /\.(png|webm|mp4)$/i,
-        use: [
-          {
-            loader: 'url-loader',
-            options: {
-              limit: 100000,
-            },
-          },
-        ],
-      },
     ],
   },
-  plugins: ANALYZE_BUNDLE ? [new BundleAnalyzerPlugin()] : [],
+  performance: {
+    hints: false,
+    maxEntrypointSize: 512000,
+    maxAssetSize: 512000,
+  },
+  plugins: ANALYZE_BUNDLE
+    ? [new BundleAnalyzerPlugin()]
+    : [
+      new CopyPlugin({
+        patterns: [
+          {from: 'test/index.html', to: 'test/index.html'},
+          {from: 'LICENSE', to: '.'},
+        ],
+      }),
+    ],
+  mode: 'production',
   devServer: {
     port: 9003,
+    server: 'https',
     // Add your own IP here for local development.
-    host: '192.168.1.211',
-    https: true,
+    // host: 'x.x.x.x',
     hot: true,
     headers: {
       'Access-Control-Allow-Origin': '*',
@@ -95,5 +99,4 @@ module.exports = {
     },
     allowedHosts: ['.8thwall.app'],
   },
-  ...devBuildMode,
 }
