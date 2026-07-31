@@ -1,0 +1,48 @@
+.coaching-overlay-container {
+  position: fixed;
+  top: 0; left: 0; bottom: 0; right: 0;
+  z-index: 412;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+.coaching-overlay-container * {
+  box-sizing: inherit;
+}
+
+.coaching-overlay-prompt-container {
+  position: absolute;
+  display: block;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -33%);
+}
+
+.coaching-overlay-animation {
+  width: 90vmin;
+}
+
+.coaching-overlay-prompt-status {
+  color: white;
+  font-family: 'Nunito-Semibold', 'Nunito', sans-serif;
+  font-weight: bold;
+  text-align: center;
+  font-size: 1.3em;
+  text-shadow: 0px 0px 5px rgba(0,0,0,0.5);
+  max-width: 13rem;
+  margin: 0 auto;
+}
+
+/* Animations */
+
+.coaching-overlay-fade-in { animation: coaching-overlay-fade-in 0.5s linear forwards; }
+@keyframes coaching-overlay-fade-in {
+  0% {opacity: 0;}
+  100% {opacity: 1;}
+}
+
+.coaching-overlay-fade-out { animation: coaching-overlay-fade-out 0.5s linear forwards; }
+@keyframes coaching-overlay-fade-out {
+  0% {opacity: 1;}
+  100% {opacity: 0;}
+}

@@ -1,0 +1,206 @@
+.hand-coaching-overlay-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 412;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+.hand-coaching-overlay-container * {
+  box-sizing: inherit;
+}
+
+.hand-coaching-overlay-prompt-container {
+  position: absolute;
+  display: block;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -70%);
+}
+
+.hand-coaching-overlay-animation {
+  width: 50vw;
+}
+
+.hand-coaching-overlay-prompt-status {
+  color: white;
+  font-family: 'Nunito-Semibold', 'Nunito', sans-serif;
+  font-weight: bold;
+  text-align: center;
+  font-size: 1.3em;
+  text-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+  width: 13rem;
+  margin: 0 auto;
+}
+
+/* Animations */
+
+.hand-coaching-overlay-fade-in {
+  animation: hand-coaching-overlay-fade-in 0.5s linear forwards;
+}
+
+@keyframes hand-coaching-overlay-fade-in {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.hand-coaching-overlay-fade-out {
+  animation: hand-coaching-overlay-fade-out 0.5s linear forwards;
+}
+
+@keyframes hand-coaching-overlay-fade-out {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+.hand-coaching-phone-animation {
+  position: absolute;
+  // transform-style: preserve-3d;
+  animation: hand-coaching-overlay-phone-sway 4s infinite both;
+  animation-timing-function: ease-in-out;
+}
+
+@keyframes hand-coaching-overlay-phone-sway {
+  0% {
+    transform: translate(-150px, 0) rotateX(30deg);
+  }
+
+  50% {
+    transform: translate(150px, 0) rotateX(30deg);
+  }
+
+  100% {
+    transform: translate(-150px, 0) rotateX(30deg);
+  }
+}
+
+.hand-coaching-phone-translation {
+  animation: hand-coaching-phone-translation-keyframes 2800ms linear infinite normal forwards
+}
+
+@keyframes hand-coaching-phone-translation-keyframes {
+  0% {
+    transform: translate(161.309954px, 111.110578px)
+  }
+
+  35.714286% {
+    transform: translate(106.722223px, 101.000198px)
+  }
+
+  100% {
+    transform: translate(106.722223px, 101.000198px)
+  }
+}
+
+.hand-coaching-phone-rotation {
+  animation: hand-coaching-phone-rotation-keyframes 2800ms linear infinite normal forwards
+}
+
+@keyframes hand-coaching-phone-rotation-keyframes {
+  0% {
+    transform: rotate(13.451351deg)
+  }
+
+  35.714286% {
+    transform: rotate(-0.636109deg)
+  }
+
+  100% {
+    transform: rotate(-0.636109deg)
+  }
+}
+
+.hand-coaching-phone-offset {
+  animation: hand-coaching-phone-offset-keyframes 2800ms linear infinite normal forwards
+}
+
+@keyframes hand-coaching-phone-offset-keyframes {
+  0% {
+    opacity: 0
+  }
+
+  10% {
+    opacity: 0
+  }
+
+  40% {
+    opacity: 1
+  }
+
+  50% {
+    opacity: 1
+  }
+
+  82.142857% {
+    opacity: 0
+  }
+
+  100% {
+    opacity: 0
+  }
+}
+
+.hand-coaching-hand-transform {
+  animation: hand-coaching-hand-transform-keyframes 2800ms linear infinite normal forwards
+}
+
+@keyframes hand-coaching-hand-transform-keyframes {
+  0% {
+    transform: translate(61.456458px, 116.340589px) rotate(-6.055366deg)
+  }
+
+  3.571429% {
+    transform: translate(61.456458px, 116.340589px) rotate(-6.055366deg)
+  }
+
+  32.142857% {
+    transform: translate(61.456458px, 116.340589px) rotate(6.399022deg)
+  }
+
+  100% {
+    transform: translate(61.456458px, 116.340589px) rotate(6.399022deg)
+  }
+}
+
+.hand-coaching-hand-offset {
+  animation: hand-coaching-hand-offset-keyframes 2800ms linear infinite normal forwards
+}
+
+@keyframes hand-coaching-hand-offset-keyframes {
+  0% {
+    opacity: 0
+  }
+
+  10% {
+    opacity: 0
+  }
+
+  40% {
+    opacity: 1
+  }
+
+  50% {
+    opacity: 1
+  }
+
+  82.142857% {
+    opacity: 0
+  }
+
+  100% {
+    opacity: 0
+  }
+}
