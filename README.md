@@ -28,6 +28,7 @@ If any questions come up, please refer to our [documentation](https://8th.io/doc
 - [ecs](./packages/ecs/README.md) - The game engine behind 8th Wall Studio
 - [xrextras](./packages/xrextras/README.md) - Helper code for XR and 3D needs
 - [landing-page](./packages/landing-page/README.md) - Fallback experience for unsupported devices
+- [coaching-overlay](./packages/coaching-overlay/README.md) - User guides for Absolute Scale and Sky Effects projects
 
 ### More coming soon!
 
