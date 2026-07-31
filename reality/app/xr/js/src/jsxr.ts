@@ -37,7 +37,7 @@ import {
 import {getRendererAsync} from './devices/override'
 
 import {loadSpecificChunk} from './chunk-loader'
-import type {ChunkName} from './types/api'
+import type {ChunkName, ChunkSpecifier} from './types/api'
 
 const loadJsxr = async () => {
 // Early initialization for emscripten module.
@@ -210,7 +210,7 @@ const loadJsxr = async () => {
 
   const jsxr = {
     run,
-    async loadChunk(chunkName: ChunkName) {
+    async loadChunk(chunkName: ChunkName | ChunkSpecifier) {
       await loadSpecificChunk(this, runConfig,
         loop.xrccWithContextPromise, chunkName, log, onError)
     },

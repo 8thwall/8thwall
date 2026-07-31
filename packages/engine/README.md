@@ -31,23 +31,12 @@ bazel build --config=wasmrelease //reality/app/xr/js:bundle
 
 This open source version of the engine doesn't include SLAM. But the [distributed engine binary](https://github.com/8thwall/engine) does. To use the open source engine for the camera pipeline and the distributed engine binary for SLAM, you can do the following:
 
-1. In `8thwall/reality/app/xr/js/src/chunk-loader.ts`, update from:
-```cpp
-const slamChunk = await import(/* webpackIgnore: true */ chunkBaseUrl + 'xr-tracking.js')
-```
-to:
-```cpp
-// @ts-ignore
-// eslint-disable-next-line
-const slamChunk = await import(/* webpackIgnore: true */ slamUrl)
-```
-This will update the engine to load the SLAM chunk not from the open source engine, but from the distributed engine binary which we will serve alongside your app.
-
-2. Host the open source engine. Right now, we have only tested with a locally served open source engine. But you can host it anywhere you want. To serve the open source engine, run:
+1. Host the open source engine with:
 ```bash
-~/repo/8thwall bazel run --config=wasmreleasesimd //reality/app/xr/js:serve-xr
+cd ~/repo/8thwall
+bazel run --config=wasmreleasesimd //reality/app/xr/js:serve-xr
 ```
-
+2. Take note of the IP address in the logs
 3. In your app, serve the distributed engine binary alongside the app. If you downloaded your app from 8thWall.com, it will already do this. An example file structure for your app is:
 ```
 my-app/
@@ -64,12 +53,12 @@ my-app/
   └── package.json
 ```
 
-4. In your app, update to load the open source engine. Update `my-app/src/index.html` from:
+4. In your app, switch to the open source engine by updating `my-app/src/index.html` from:
 ```html
 <script crossorigin="anonymous" src="./external/xr/xr.js" data-preload-chunks="slam">
 ```
 to:
 ```html
-<script crossorigin="anonymous" src="https://192.168.68.55:8888/reality/app/xr/js/xr.js" data-preload-chunks="slam" data-chunk-base-url="/external/xr/"></script>
+<script crossorigin="anonymous" src="https://192.168.68.55:8888/reality/app/xr/js/xr.js" async data-preload-chunks="slam: ./external/xr/xr-slam.js"></script>
 ```
-Note that if you host the open source engine elsewhere, you should update from `https://192.168.68.55:8888` to your host.
+Use the IP address from step 2., or if you have the engine uploaded elsewhere, you can use that domain.
