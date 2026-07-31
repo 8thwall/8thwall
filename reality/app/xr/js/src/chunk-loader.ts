@@ -18,7 +18,6 @@ const loadSpecificChunk = async (
   const baseUrl = urlOverride
     ? new URL('./', new URL(urlOverride)).toString()
     : defaultBaseUrl
-  console.log({chunk, urlOverride, baseUrl, defaultBaseUrl})
   if (chunkName === 'face') {
     if (jsxr.FaceController) {
       return
