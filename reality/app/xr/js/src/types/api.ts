@@ -136,9 +136,14 @@ type Xr8Device = {
 
 type ChunkName = 'face' | 'slam'
 
+type ChunkSpecifier = {
+  name: ChunkName
+  url?: string
+}
+
 type Jsxr = {
   run(config: RunConfig): void
-  loadChunk(chunkName: ChunkName): Promise<void>
+  loadChunk(chunkName: ChunkName | ChunkSpecifier): Promise<void>
   version(): string
   featureFlags(): Array<string>
 
@@ -198,4 +203,5 @@ export type {
   Xr8CameraPixelArray,
   ChunkName,
   LocalizationTarget,
+  ChunkSpecifier,
 }
