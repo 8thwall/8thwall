@@ -9,22 +9,31 @@ import {makeRunQueue} from '@repo/reality/shared/run-queue'
 
 import {getPreference} from '../../local-preferences'
 
-type PathsByArch = Partial<Record<typeof process.platform, string>>
+type PathsByArch = Partial<Record<typeof process.platform, string | string[]>>
 
 const pathForArch = (paths: PathsByArch) => paths[process.platform] || ''
 
 const HOME_DIR = app.getPath('home')
 
-const VSCODE: CodeEditor = {
+type CodeEditorOption = {
+  identifier?: 'vscode'
+  name: string
+  path: string | string[]
+}
+
+const VSCODE: CodeEditorOption = {
   identifier: 'vscode',
   name: 'Visual Studio Code',
   path: pathForArch({
     darwin: '/Applications/Visual Studio Code.app',
-    win32: 'C:\\Program Files\\Microsoft VS Code\\Code.exe',
+    win32: [
+      'C:\\Program Files\\Microsoft VS Code\\Code.exe',
+      `${HOME_DIR}\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe`,
+    ],
   }),
 }
 
-const POSSIBLE_EDITORS: CodeEditor[] = [
+const POSSIBLE_EDITORS: CodeEditorOption[] = [
   VSCODE,
   {
     name: 'Cursor',
@@ -41,6 +50,13 @@ const POSSIBLE_EDITORS: CodeEditor[] = [
     }),
   },
 ]
+
+const unpackOptions = (options: CodeEditorOption[]): CodeEditor[] => (
+  options.map((option): CodeEditor | CodeEditor[] => {
+    const paths = typeof option.path === 'string' ? [option.path] : option.path
+    return paths.map((path): CodeEditor => ({...option, path}))
+  }).flat()
+)
 
 const openQueue = makeRunQueue()
 
@@ -62,7 +78,7 @@ const editorSupported = async (editor: CodeEditor): Promise<boolean> => {
 const getAvailableEditors = async (): Promise<CodeEditor[]> => {
   const availableEditors: CodeEditor[] = []
 
-  for (const editor of POSSIBLE_EDITORS) {
+  for (const editor of unpackOptions(POSSIBLE_EDITORS)) {
     // eslint-disable-next-line no-await-in-loop
     if (await editorSupported(editor)) {
       availableEditors.push(editor)
@@ -75,15 +91,20 @@ const getAvailableEditors = async (): Promise<CodeEditor[]> => {
 const getCodeEditor = async (): Promise<CodeEditor | undefined> => {
   const preference = getPreference('codeEditorProgram')
   if (!preference) {
-    if (await editorSupported(VSCODE)) {
-      return VSCODE
-    }
-    return undefined
+    const validVscode = (await Promise.all(unpackOptions([VSCODE]).map(async (e) => {
+      if (await editorSupported(e)) {
+        return e
+      }
+      return undefined
+    }))).find(Boolean)
+
+    return validVscode
   }
 
-  const preferenceMatch = POSSIBLE_EDITORS.find(editor => editor.path === preference)
-  if (preferenceMatch) {
-    return preferenceMatch
+  for (const editor of unpackOptions(POSSIBLE_EDITORS)) {
+    if (editor.path === preference) {
+      return editor
+    }
   }
 
   return {path: preference, name: 'Custom'}
