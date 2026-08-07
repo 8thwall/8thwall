@@ -337,32 +337,32 @@ const LightConfigurator: React.FC<ILightConfigurator> = ({light, onChange, reset
                   }))
                 }}
               />
+              <RowNumberField
+                label={t('light_configurator.shadow_bias.label')}
+                id='shadowBias'
+                step={0.0001}
+                value={light?.shadowBias ?? LIGHT_DEFAULTS.shadowBias}
+                onChange={(e) => {
+                  onChange(currentLight => ({
+                    ...currentLight,
+                    shadowBias: e,
+                  }))
+                }}
+              />
+              <RowNumberField
+                label={t('light_configurator.shadow_normal_bias.label')}
+                id='normalShadowBias'
+                step={0.0001}
+                value={light?.shadowNormalBias ?? LIGHT_DEFAULTS.shadowNormalBias}
+                onChange={(e) => {
+                  onChange(currentLight => ({
+                    ...currentLight,
+                    shadowNormalBias: e,
+                  }))
+                }}
+              />
             </div>
           )}
-          <RowNumberField
-            label={t('light_configurator.shadow_bias.label')}
-            id='shadowBias'
-            step={0.0001}
-            value={light?.shadowBias ?? LIGHT_DEFAULTS.shadowBias}
-            onChange={(e) => {
-              onChange(currentLight => ({
-                ...currentLight,
-                shadowBias: e,
-              }))
-            }}
-          />
-          <RowNumberField
-            label={t('light_configurator.shadow_normal_bias.label')}
-            id='normalShadowBias'
-            step={0.0001}
-            value={light?.shadowNormalBias ?? LIGHT_DEFAULTS.shadowNormalBias}
-            onChange={(e) => {
-              onChange(currentLight => ({
-                ...currentLight,
-                shadowNormalBias: e,
-              }))
-            }}
-          />
         </>
       }
       {(light.type === 'point' || light.type === 'spot') &&
