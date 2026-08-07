@@ -419,7 +419,10 @@ const SceneEdit: React.FC<ISceneEdit> = ({
                   options={collapse => (
                     <>
                       {selectedIds.length > 0 && (
-                        <TreeElementMenuOptions id={selectedIds.at(-1)!} collapse={collapse} />
+                        <TreeElementMenuOptions
+                          id={selectedIds.at(-1)!}
+                          collapse={collapse}
+                        />
                       )}
                       <CanvasMenuOptions collapse={collapse} />
                     </>
