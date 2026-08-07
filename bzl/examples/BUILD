@@ -111,6 +111,7 @@ js_test(
 
 js_test(
     name = "hello-ts-test",
+    size = "small",
     main = [
         "hello-ts-test.ts",
     ],

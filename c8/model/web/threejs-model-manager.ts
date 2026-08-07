@@ -1,4 +1,5 @@
 // We are copying this from c8/pixels/render/shaders
+// @dep(:splat-shaders)
 import {
   splatInstanceAttributesVert, splatTextureVert, splatMultiTextureVert,
   splatFrag,

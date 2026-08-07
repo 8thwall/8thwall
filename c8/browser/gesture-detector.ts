@@ -1,3 +1,5 @@
+// @visibility(//visibility:public)
+// @dep(:browser-wasm)
 import BROWSERWASM from '@repo/c8/browser/browser-wasm'
 
 import {writeStringToEmscriptenHeap} from '@repo/c8/ems/ems'

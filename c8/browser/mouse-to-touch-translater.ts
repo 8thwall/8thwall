@@ -1,3 +1,4 @@
+// @visibility(//visibility:public)
 import {createInteractionProvider} from './interaction-provider'
 
 const createMouseToTouchTranslator = () => {

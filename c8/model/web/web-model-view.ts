@@ -1,3 +1,4 @@
+// @dep(:web-model-view-wasm)
 import WEBMODELVIEW from '@repo/c8/model/web/web-model-view-wasm'
 
 import {writeStringToEmscriptenHeap, writeArrayToEmscriptenHeap} from '@repo/c8/ems/ems'
