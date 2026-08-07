@@ -1,6 +1,6 @@
-licenses(["permissive"])
-
 load("@the8thwall//bzl/windows:select.bzl", "onWindows")
+
+licenses(["permissive"])
 
 cc_library(
     name = "zlib",

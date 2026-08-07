@@ -1,6 +1,6 @@
 load(":llvm.bzl", "llvm_tool_wrapper")
 load(":toolchains.bzl", "llvm_toolchain")
-load("//bzl/js:js.bzl", "js_cli", "js_test")
+load("//bzl/js:js.bzl", "js_cli")
 
 package(default_visibility = ["//visibility:public"])
 

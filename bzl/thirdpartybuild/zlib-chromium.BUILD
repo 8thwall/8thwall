@@ -1,7 +1,5 @@
 licenses(["permissive"])
 
-load("@the8thwall//bzl/windows:select.bzl", "onWindows")
-
 cc_library(
     name = "zlib",
     srcs = [

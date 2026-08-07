@@ -1,6 +1,6 @@
-package(default_visibility = ["//visibility:public"])
-
 load("@build_bazel_rules_android//android:rules.bzl", "android_binary")
+
+package(default_visibility = ["//visibility:public"])
 
 android_binary(
     name = "hello-android",

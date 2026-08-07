@@ -1,6 +1,6 @@
-licenses(["permissive"])  # Apache 2.0
-
 load("@the8thwall//bzl/windows:select.bzl", "onWindows")
+
+licenses(["permissive"])  # Apache 2.0
 
 package(default_visibility = ["//visibility:public"])
 

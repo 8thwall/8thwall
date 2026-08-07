@@ -43,12 +43,12 @@ cc_library(
 cc_library(
     name = "vulkan_layer_settings",
     srcs = [
-        "src/layer/vk_layer_settings.cpp",
-        "src/layer/vk_layer_settings_helper.cpp",
         "src/layer/layer_settings_manager.cpp",
         "src/layer/layer_settings_manager.hpp",
         "src/layer/layer_settings_util.cpp",
         "src/layer/layer_settings_util.hpp",
+        "src/layer/vk_layer_settings.cpp",
+        "src/layer/vk_layer_settings_helper.cpp",
     ],
     hdrs = [
         "include/vulkan/layer/vk_layer_settings.h",
@@ -58,8 +58,8 @@ cc_library(
     includes = ["include"],
     visibility = ["//visibility:public"],
     deps = [
-        "@vulkan_headers//:vulkan_headers",
         ":vulkan_utility_headers",
+        "@vulkan_headers",
     ],
 )
 
@@ -82,7 +82,7 @@ cc_library(
     includes = ["include"],
     visibility = ["//visibility:public"],
     deps = [
-        "@vulkan_headers//:vulkan_headers",
         ":vulkan_utility_headers",
+        "@vulkan_headers",
     ],
 )

@@ -137,8 +137,8 @@ cc_library(
         ":impls",
         ":extras",
     ] + select({
-      "@the8thwall//bzl/conditions:windows": [":windows-srcs"],
-      "//conditions:default": [],
+        "@the8thwall//bzl/conditions:windows": [":windows-srcs"],
+        "//conditions:default": [],
     }),
     hdrs = [
         # Included headers.
@@ -162,12 +162,12 @@ cc_library(
     ],
     includes = ["include"],
     linkopts = select({
-      "@the8thwall//bzl/conditions:windows": [
-          "-lws2_32",
-          "-lshell32",
-          "-ladvapi32",
-      ],
-      "//conditions:default": [],
+        "@the8thwall//bzl/conditions:windows": [
+            "-lws2_32",
+            "-lshell32",
+            "-ladvapi32",
+        ],
+        "//conditions:default": [],
     }),
     deps = [
         "@the8thwall//third_party/libevent:platform-specific-headers",
