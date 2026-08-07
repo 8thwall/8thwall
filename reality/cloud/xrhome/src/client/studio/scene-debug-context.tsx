@@ -28,13 +28,8 @@ const SceneDebugContext: React.FC<ISceneDebugContext> = ({
   const isDraggingGizmoRef = React.useRef(false)
   const [isDraggingGizmo, setIsDraggingGizmoState] = React.useState(false)
   const undoStack = useUndoStack<DeepReadonly<SceneGraph>>()
-  const [isRenamingById, setIsRenamingById] = React.useState<Record<string, boolean>>({})
 
   const {updateSimulatorState} = useSimulator()
-
-  const setIsRenaming = (id: string, isRenaming: boolean) => {
-    setIsRenamingById(old => ({...old, [id]: isRenaming}))
-  }
 
   const activeCamera = expanseState.scene?.objects?.[expanseState.scene?.activeCamera]
   const activeCameraConfig = activeCamera?.camera?.xr
@@ -78,8 +73,6 @@ const SceneDebugContext: React.FC<ISceneDebugContext> = ({
       isDraggingGizmoRef,
       isDraggingGizmo,
       setIsDraggingGizmo,
-      isRenamingById,
-      setIsRenaming,
       canUndo: undoStack.canUndo,
       undo: () => {
         const oldScene = undoStack.undo(expanseState.scene)
@@ -97,7 +90,7 @@ const SceneDebugContext: React.FC<ISceneDebugContext> = ({
     } as const
   }, [
     expanseState.scene, isDraggingGizmo,
-    undoStack.canRedo, undoStack.canUndo, isRenamingById,
+    undoStack.canRedo, undoStack.canUndo,
   ])
 
   if (!expanseState.ready) {

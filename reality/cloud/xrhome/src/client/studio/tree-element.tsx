@@ -54,6 +54,7 @@ const TreeElement: React.FC<ITreeElement> = ({
   const selectedRef = React.useRef<HTMLDivElement>(null)
 
   const [newName, setNewName] = React.useState('')
+  const [renaming, setRenaming] = React.useState(false)
 
   const ctx = useSceneContext()
   const stateCtx = useStudioStateContext()
@@ -75,11 +76,11 @@ const TreeElement: React.FC<ITreeElement> = ({
   }, [selection.isSelected])
 
   const cancelRename = () => {
-    ctx.setIsRenaming(id, false)
+    setRenaming(false)
   }
 
   const handleRenameSubmit = () => {
-    ctx.setIsRenaming(id, false)
+    setRenaming(false)
     if (isPrefab(object) && prefabNameExists(derivedScene, newName)) {
       return
     }
@@ -167,7 +168,7 @@ const TreeElement: React.FC<ITreeElement> = ({
                 </div>
               }
             </div>
-            {ctx.isRenamingById[id]
+            {renaming
               ? (
                 <IgnoreKeys>
                   <InlineTextInput
@@ -222,7 +223,13 @@ const TreeElement: React.FC<ITreeElement> = ({
       </div>
       <ContextMenu
         menuState={menuState}
-        options={collapse => <TreeElementMenuOptions id={id} collapse={collapse} />}
+        options={collapse => (
+          <TreeElementMenuOptions
+            id={id}
+            collapse={collapse}
+            onRename={() => setRenaming(true)}
+          />
+        )}
       />
     </div>
   )

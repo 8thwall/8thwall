@@ -9,7 +9,6 @@ interface RawSceneContext {
   scene: SceneGraph
   updateScene: (cb: MutateCallback<SceneGraph>) => void
   updateObject: (id: string, cb: MutateCallback<GraphObject>) => void
-  isRenamingById: Record<string, boolean>
   setIsRenaming: (id: string, isRenaming: boolean) => void
   isDraggingGizmoRef: DeepReadonly<{current: boolean}>
   isDraggingGizmo: boolean
