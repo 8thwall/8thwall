@@ -91,7 +91,7 @@ const TreeElementMenuOptions: React.FC<ITreeElementMenuOptions> = ({
     },
     !excludeRename && {
       content: t('tree_element_context_menu.button.rename'),
-      onClick: () => ctx.setIsRenaming(id, true),
+      onClick: () => stateCtx.update({renamingId: id}),
     },
     canDuplicate && {
       content: t('tree_element_context_menu.button.duplicate'),

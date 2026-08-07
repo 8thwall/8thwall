@@ -51,6 +51,7 @@ type StudioState = DeepReadonly<{
   restartKey: number
   fileBrowserScroller: RefScroller<string>
   sceneDiffOpen: boolean
+  renamingId: string | null
 }>
 
 type StudioStateUpdater = Partial<StudioState> | ((current: StudioState) => StudioState)

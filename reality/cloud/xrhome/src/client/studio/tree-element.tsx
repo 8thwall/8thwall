@@ -75,11 +75,11 @@ const TreeElement: React.FC<ITreeElement> = ({
   }, [selection.isSelected])
 
   const cancelRename = () => {
-    ctx.setIsRenaming(id, false)
+    stateCtx.update({renamingId: null})
   }
 
   const handleRenameSubmit = () => {
-    ctx.setIsRenaming(id, false)
+    cancelRename()
     if (isPrefab(object) && prefabNameExists(derivedScene, newName)) {
       return
     }
@@ -167,7 +167,7 @@ const TreeElement: React.FC<ITreeElement> = ({
                 </div>
               }
             </div>
-            {ctx.isRenamingById[id]
+            {stateCtx.state.renamingId === id
               ? (
                 <IgnoreKeys>
                   <InlineTextInput
@@ -180,7 +180,7 @@ const TreeElement: React.FC<ITreeElement> = ({
                   />
                 </IgnoreKeys>
               )
-              : (displayNameForObject(object))
+              : <>{(displayNameForObject(object))} ({id})</>
             }
 
           </span>

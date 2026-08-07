@@ -40,8 +40,6 @@ const ReadonlySceneEditContext: React.FC<IReadonlySceneEditContext> = ({
       isDraggingGizmoRef: {current: false},
       isDraggingGizmo: false,
       setIsDraggingGizmo: noop,
-      isRenamingById: {},
-      setIsRenaming: noop,
       canUndo: false,
       undo: noop,
       canRedo: false,

@@ -7,8 +7,6 @@ const DEFAULT_SCENE_CTX: SceneContext = {
   updateScene: () => {},
   updateObject: () => {},
   isDraggingGizmo: false,
-  isRenamingById: {},
-  setIsRenaming: () => {},
   isDraggingGizmoRef: {current: false},
   setIsDraggingGizmo: () => {},
   canUndo: false,
