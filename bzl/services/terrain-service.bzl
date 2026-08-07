@@ -27,22 +27,21 @@ def monitor_tools_in_path(repository_ctx, list_of_tools_to_monitor):
             repository_ctx.watch(system_path + path_separator + tool)
 
 def _terrain_service_support_impl(repository_ctx):
-    
     # Monitoring if any of this tools shows up between builds
     monitor_tools_in_path(repository_ctx, ["pdal", "projinfo", "laszip", "laszip64"])
-    
+
     # Check if 'pdal' exists in the system PATH
     pdal_path = repository_ctx.which("pdal")
     projinfo_path = repository_ctx.which("projinfo")
     laszip_path = repository_ctx.which("laszip")
-    
+
     # Acconding to the documentation on 64 bit architecture the laszip executable is named laszip64
     # Which was confirmed trying to compile locally, so in that case we also check if laszip64 is in path
     if laszip_path == None:
         platform_cpu = repository_ctx.os.arch.lower()
         if "64" in platform_cpu:
             laszip_path = repository_ctx.which("laszip64")
-    
+
     pdal_build_default_constraint_value = ":has_pdal" if pdal_path != None else ":has_not_pdal"
     projinfo_build_default_constraint_value = ":has_projinfo" if projinfo_path != None else ":has_not_projinfo"
     laszip_build_default_constraint_value = ":has_laszip" if laszip_path != None else ":has_not_laszip"
@@ -51,9 +50,8 @@ def _terrain_service_support_impl(repository_ctx):
     projinfo_bin_paths_str = "PROJINFO_BIN_HOST_PATH=\"%s\"" % (projinfo_path if projinfo_path != None else "")
     laszip_bin_paths_str = "LASZIP_BIN_HOST_PATH=\"%s\"" % (laszip_path if laszip_path != None else "")
 
-
     # Generate BUILD file with constraints
-    repository_ctx.file(        
+    repository_ctx.file(
         "BUILD.bazel",
         """
 load("@bazel_skylib//lib:selects.bzl", "selects")
@@ -162,7 +160,6 @@ selects.config_setting_group(
 
     # Generate a .bzl file with the paths of the tools found - path will be empty if not found
     repository_ctx.file(
-        
         "tools_paths_found.bzl",
         """
 {pdal_bin_paths}
@@ -175,7 +172,7 @@ selects.config_setting_group(
         ),
         executable = False,
     )
-        
+
     pdal_path = pdal_path if pdal_path != None else "/dummy/for_watch/pdal_not_found"
     projinfo_path = projinfo_path if projinfo_path != None else "/dummy/for_watch/projinfo_not_found"
     laszip_path = laszip_path if laszip_path != None else "/dummy/for_watch/laszip_not_found"
@@ -184,9 +181,8 @@ selects.config_setting_group(
     repository_ctx.watch(projinfo_path)
     repository_ctx.watch(laszip_path)
 
-
 terrain_service_support = repository_rule(
     implementation = _terrain_service_support_impl,
     attrs = {},
-    doc = "A repository rule that checks for the some tool and sets a constraint if available", 
+    doc = "A repository rule that checks for the some tool and sets a constraint if available",
 )

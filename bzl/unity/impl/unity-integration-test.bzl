@@ -1,4 +1,3 @@
-load("@rules_python//python:defs.bzl", "current_py_toolchain")
 load("//bzl/unity/impl:transitions.bzl", "unity_platform_transition")
 load("//bzl/unity/impl:unity-app.bzl", "copy_action")
 
@@ -41,8 +40,10 @@ def _unity_integration_tests_impl(ctx):
         "-batchmode",
         "-nographics",
         "-upmNoDefaultPackages",
-        "-projectPath", full_project_path,
-        "-logFile", unity_preparation_log_path,
+        "-projectPath",
+        full_project_path,
+        "-logFile",
+        unity_preparation_log_path,
         "--quit",
     ]
     ctx.actions.run(
@@ -147,7 +148,7 @@ unity_integration_test = rule(
             default = Label("//bzl/unity:unity-build"),
             allow_single_file = True,
             executable = True,
-            cfg = "host",
+            cfg = "exec",
         ),
         "_workspace_env": attr.label(
             default = "@workspace-env//:workspace-env",

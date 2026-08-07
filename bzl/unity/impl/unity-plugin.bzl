@@ -424,7 +424,7 @@ def _plugin_impl(ctx):
         plugin_basename = plugin_info[1]
         os_constraint_value = plugin_info[2]
         arch_constraint_value = plugin_info[3]
-        
+
         is_framework_plugin = plugin_name.find(".framework") > 0
         is_bundle_plugin = plugin_name.find(".bundle") > 0
         platform_name = plugin_name.split("/", 1)[0]
@@ -766,7 +766,7 @@ _unity_plugin = rule(
             default = "//bzl/llvm:llvm-install-name-tool",
             allow_single_file = True,
             executable = True,
-            cfg = "host",
+            cfg = "exec",
         ),
         "_cpu_arm": attr.label(
             default = "@platforms//cpu:arm",
@@ -818,11 +818,11 @@ _unity_plugin = rule(
         # We use the value of one of these, depending on whether we're building for iOS or OSX.
         "_ios_min_version": attr.label(
             default = Label("//bzl/xcode:ios-min-version"),
-            providers = [BuildSettingInfo]
+            providers = [BuildSettingInfo],
         ),
         "_osx_min_version": attr.label(
             default = Label("//bzl/xcode:osx-min-version"),
-            providers = [BuildSettingInfo]
+            providers = [BuildSettingInfo],
         ),
     },
     fragments = ["apple"],

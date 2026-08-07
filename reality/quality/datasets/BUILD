@@ -1,5 +1,3 @@
-load("//bzl/js:js.bzl", "js_cli")
-
 cc_library(
     name = "benchmark-dataset",
     testonly = 1,
@@ -26,4 +24,3 @@ cc_library(
         "//c8/pixels:pixel-buffer",
     ],
 )
-

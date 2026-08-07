@@ -28,19 +28,19 @@ def _execution_platform_configure_impl(repository_ctx):
 
         if platform_cpu == "aarch64":
             # Use "v3" for arm64 Linux.
-            constraints_contents += [
+            constraints_contents.append(
                 "    \"@the8thwall//bzl/crosstool:v3-linux\",",
-            ]
+            )
         elif codename == "kali-rolling" or (codename == "focal" and major_version >= 22):
             # Use "v2" for Kali linux or Ubuntu 22+.
-            constraints_contents += [
+            constraints_contents.append(
                 "    \"@the8thwall//bzl/crosstool:v2-linux\",",
-            ]
+            )
         else:
             # Fallback to "v1" linux.
-            constraints_contents += [
+            constraints_contents.append(
                 "    \"@the8thwall//bzl/crosstool:v1-linux\",",
-            ]
+            )
 
     constraints_contents += [
         "]",

@@ -68,20 +68,20 @@ _capnp_src_gen = rule(
         "includes": attr.string_list(),
         "_node": attr.label(
             executable = True,
-            cfg = "host",
+            cfg = "exec",
             allow_single_file = True,
             default = Label("//bzl/node:node"),
         ),
         "capnpc_exe": attr.label(
             executable = True,
-            cfg = "host",
+            cfg = "exec",
             allow_single_file = True,
             mandatory = True,
             default = Label("@capnproto//:capnp"),
         ),
         "capnpc_plugin": attr.label(
             executable = True,
-            cfg = "host",
+            cfg = "exec",
             allow_single_file = True,
             mandatory = True,
             default = None,

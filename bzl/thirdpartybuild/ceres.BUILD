@@ -1,6 +1,6 @@
-licenses(["permissive"])  # BSD
-
 load("@the8thwall//bzl/crosstool:simd.bzl", "SIMD")
+
+licenses(["permissive"])  # BSD
 
 package(default_visibility = ["//visibility:public"])
 

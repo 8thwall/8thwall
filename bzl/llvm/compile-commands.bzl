@@ -1,4 +1,4 @@
-"""Clang tools skylark rules
+"""Clang tools starlark rules
 
 This file contains Starlark rules for generating a compile_commands.json file for build targets. 
 """

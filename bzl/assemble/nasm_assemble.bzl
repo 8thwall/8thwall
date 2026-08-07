@@ -1,8 +1,4 @@
 load("@bazel_tools//tools/cpp:toolchain_utils.bzl", "find_cpp_toolchain")
-load(
-    "@bazel_tools//tools/build_defs/cc:action_names.bzl",
-    "ASSEMBLE_ACTION_NAME",
-)
 
 def _nasm_assemble_impl(ctx):
     toolchain = find_cpp_toolchain(ctx)

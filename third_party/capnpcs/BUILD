@@ -1,7 +1,7 @@
-licenses(["permissive"])  # MIT
-
 load("@the8thwall//bzl/capnproto:capnproto.bzl", "cc_capnp_library")
 load("//bzl/unity:unity.bzl", "csharp_library")
+
+licenses(["permissive"])  # MIT
 
 package(default_visibility = ["//visibility:public"])
 

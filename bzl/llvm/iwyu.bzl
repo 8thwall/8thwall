@@ -1,4 +1,4 @@
-"""Include-what-you-use skylark rules
+"""Include-what-you-use starlark rules
 
 This file contains Starlark rules for running include-what-you-use (iwyu)
 within our bazel compilation. Currently requires a brew-installed iwyu and can
