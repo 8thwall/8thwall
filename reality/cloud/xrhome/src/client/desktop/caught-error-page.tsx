@@ -43,6 +43,14 @@ const CaughtErrorPage: React.FC<ICaughtErrorPage> = ({error, onReset}) => {
     queryClient.clear()
   }, [])
 
+  const handleBack = () => {
+    if (BuildIf.LOCAL) {
+      onReset()
+    } else {
+      window.location.reload()
+    }
+  }
+
   return (
     <div className={classes.caughtErrorPage}>
       <SpaceBetween direction='vertical' wide>
@@ -59,7 +67,7 @@ const CaughtErrorPage: React.FC<ICaughtErrorPage> = ({error, onReset}) => {
           />
         </p>
         <div>
-          <PrimaryButton onClick={onReset}>{t('button.back', {ns: 'common'})}</PrimaryButton>
+          <PrimaryButton onClick={handleBack}>{t('button.back', {ns: 'common'})}</PrimaryButton>
         </div>
         <details>
           <summary>{t('caught_error_page.button.show_details')}</summary>
