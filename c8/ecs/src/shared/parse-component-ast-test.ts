@@ -260,6 +260,36 @@ describe('Cloud Studio - Parse Component Ast', () => {
           },
         }])
     })
+    it('Should support multiline', () => {
+      const content = `ecs.registerComponent({
+        name: 'example',
+        schema: {
+          // @multiline
+          longText: ecs.string,
+        },
+      })\n`
+      assert.deepEqual(parseComponentAst(content).componentData,
+        [{
+          name: 'example',
+          schema: {longText: 'string'},
+          schemaDefaults: undefined,
+          schemaPresentation: {
+            fields: {
+              longText: {
+                mode: 'multiline',
+              },
+            },
+            groups: {},
+            sections: {},
+          },
+          location: {
+            startLine: 1,
+            startColumn: 4,
+            endLine: 1,
+            endColumn: 21,
+          },
+        }])
+    })
     it('Should return enum values and labels', () => {
       const content = `ecs.registerComponent({
         name: 'example',

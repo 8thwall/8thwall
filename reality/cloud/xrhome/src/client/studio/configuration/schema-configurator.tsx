@@ -29,6 +29,8 @@ import {SubMenuSelectWithSearch} from '../ui/submenu-select-with-search'
 import {useSelectedObjects} from '../hooks/selected-objects'
 import {TextNotification} from '../../ui/components/text-notification'
 import {useDerivedScene} from '../derived-scene-context'
+import {StandardTextAreaField} from '../../ui/components/standard-text-area-field'
+import {RowFieldLabel} from './row-field-label'
 
 const useStyles = createUseStyles({
   selectContainer: {
@@ -120,6 +122,23 @@ const StringColorField: React.FC<FieldProps<string>> = ({label, value, onChange}
       value={String(value)}
       label={label}
     />
+  )
+}
+
+const MultilineStringField: React.FC<FieldProps<string>> = ({label, value, onChange}) => {
+  const rowClasses = useRowStyles()
+
+  return (
+    <div className={rowClasses.row}>
+      <StandardTextAreaField
+        label={<RowFieldLabel label={label} expanseField={undefined} />}
+        value={String(value)}
+        onChange={(e) => {
+          onChange(e.target.value)
+        }}
+        rows={3}
+      />
+    </div>
   )
 }
 
@@ -325,6 +344,14 @@ const Field: React.FC<IField> = ({label, type, value, defaultValue, presentation
       } else if (presentation?.mode === 'color') {
         return (
           <StringColorField
+            label={label}
+            value={value ?? defaultValue ?? ''}
+            onChange={onChange}
+          />
+        )
+      } else if (presentation?.mode === 'multiline') {
+        return (
+          <MultilineStringField
             label={label}
             value={value ?? defaultValue ?? ''}
             onChange={onChange}

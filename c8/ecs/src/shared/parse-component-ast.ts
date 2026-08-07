@@ -541,6 +541,24 @@ const extractPresentationElement = (identifier: string, comment: Comment, ctx: P
       }
       break
     }
+    case '@multiline': {
+      const presentation = makeOrGetFieldPresentation(identifier, ctx)
+      if (ctx.schema[identifier] !== 'string') {
+        ctx.warnings.push(createComponentError(
+          `@multiline is only valid for string fields, cannot apply to ${ctx.schema[identifier]}`,
+          'warning', comment
+        ))
+      } else if (presentation.mode) {
+        warnModeAlreadySet(identifier, comment, directiveType, 'multiline', ctx)
+      } else if (directiveContent) {
+        ctx.warnings.push(createComponentError(
+          'There should be no content after @multiline', 'warning', comment
+        ))
+      } else {
+        presentation.mode = 'multiline'
+      }
+      break
+    }
     case '@required': {
       if (ctx.schema[identifier] === 'eid') {
         const presentation = makeOrGetFieldPresentation(identifier, ctx)

@@ -31,7 +31,7 @@ interface SchemaDefaults {
 
 type AssetKind = typeof ASSET_KINDS[number]
 
-type FieldPresentationMode = 'enum' | 'attribute' | 'property' | 'asset' | 'color'
+type FieldPresentationMode = 'enum' | 'attribute' | 'property' | 'asset' | 'color' | 'multiline'
 type AttributeTypeName = typeof ALL_ATTRIBUTE_TYPES[number]
 type GroupType = typeof GROUP_TYPES[number]
 
