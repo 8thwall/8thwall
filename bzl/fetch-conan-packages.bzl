@@ -16,10 +16,10 @@ def _conan_fetch_impl(repository_ctx):
     repository_ctx.file("BUILD", content = "", executable = False)
     requires_content = ["[requires]"]
     requires_content.extend(repository_ctx.attr.requires)
-    requires_content += [""]
-    requires_content += ["[generators]"]
-    requires_content += ["BazelDeps"]
-    requires_content += [""]
+    requires_content.append("")
+    requires_content.append("[generators]")
+    requires_content.append("BazelDeps")
+    requires_content.append("")
     repository_ctx.file("conanfile.txt", content = "\n".join(requires_content), executable = False)
     failure = 0
     conan_env = {}
@@ -84,10 +84,10 @@ def _conan_fetch_impl(repository_ctx):
                 'print unless m/.*?\"@.*?\",.*/',
                 f,
             ], quiet = True)
-        alldeps_loads += ["load('@conan-packages//conanfiles_{suffix}:dependencies.bzl', 'load_conan_dependencies_{suffix}')".format(suffix = suffix)]
-        alldeps_functions += ["  load_conan_dependencies_{}()".format(suffix)]
+        alldeps_loads.append("load('@conan-packages//conanfiles_{suffix}:dependencies.bzl', 'load_conan_dependencies_{suffix}')".format(suffix = suffix))
+        alldeps_functions.append("  load_conan_dependencies_{}()".format(suffix))
     alldeps_content += alldeps_loads
-    alldeps_content += ["def load_all_conan_deps():"]
+    alldeps_content.append("def load_all_conan_deps():")
     alldeps_content += alldeps_functions
     repository_ctx.file("load_all_conan_deps.bzl", content = "\n".join(alldeps_content), executable = False)
 

@@ -82,12 +82,12 @@ _unity_csharp_dll = rule(
             default = Label("//bzl/unity/impl:unity-csharp-dll"),
             allow_single_file = True,
             executable = True,
-            cfg = "host",
+            cfg = "exec",
         ),
         "_workspace_env": attr.label(
             default = "@workspace-env//:workspace-env",
             allow_single_file = True,
-            cfg = "host",
+            cfg = "exec",
         ),
     },
     toolchains = [

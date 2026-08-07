@@ -1,4 +1,3 @@
-load("//bzl/android:android.bzl", "android_java_library")
 load("//bzl/capnproto:capnproto.bzl", "capnp_library")
 
 capnp_library(

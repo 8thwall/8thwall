@@ -10063,8 +10063,14 @@ xnnpack_cc_library(
 
 xnnpack_cc_library(
     name = "xop_prod_microkernels",
-    gcc_copts = XNNPACK_GCC_STD_OPTS + ["-mxop", "-mssse3"],
-    gcc_x86_copts = ["-mxop", "-mssse3"],
+    gcc_copts = XNNPACK_GCC_STD_OPTS + [
+        "-mxop",
+        "-mssse3",
+    ],
+    gcc_x86_copts = [
+        "-mxop",
+        "-mssse3",
+    ],
     msvc_copts = xnnpack_msvc_std_copts(),
     x86_srcs = PROD_XOP_MICROKERNEL_SRCS,
     deps = [

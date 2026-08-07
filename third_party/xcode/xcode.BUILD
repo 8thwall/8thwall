@@ -5,11 +5,11 @@ package(default_visibility = ["//visibility:public"])
 
 # NOTE(paris): Take care not to add many files to this stub or else caching will take a long time.
 filegroup(
-  name = "stub",
-  srcs = [],
+    name = "stub",
+    srcs = [],
 )
 
 filegroup(
-  name = "all-files",
-  srcs = glob(["**/*"]),
+    name = "all-files",
+    srcs = glob(["**/*"]),
 )

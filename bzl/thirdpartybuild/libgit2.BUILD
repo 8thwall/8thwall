@@ -1,7 +1,5 @@
 licenses(["permissive"])  # GPL 2.0 with Linking Exception.
 
-load("@the8thwall//bzl/wasm:wasm.bzl", "wasm_binary")
-
 genrule(
     name = "features-js-h",
     outs = ["include/git2_features.h"],

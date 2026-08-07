@@ -7,7 +7,7 @@ reset_js_target_transition = transition(
     implementation = _reset_js_target_transition,
     inputs = [],
     outputs = [
-       "//bzl/js:target"
+        "//bzl/js:target",
     ],
 )
 

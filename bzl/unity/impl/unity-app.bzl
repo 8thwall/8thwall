@@ -3,8 +3,7 @@ load("//bzl/unity/impl:transitions.bzl", "unity_platform_transition", "unity_tar
 load("//bzl/xcode:xcode.bzl", "XcodeProjectInfo")
 load("//bzl/xcode:exportOptionsPList.bzl", "ExportOptionsPlistInfo", "get_bundle_id")
 load("//bzl/xcode/impl:xcode_app.bzl", "xcode_app_impl")
-load("//bzl/gradle:gradle.bzl", "GRADLE_DIR")
-load("//bzl/gradle:gradle.bzl", "GRADLE_8_DIR")
+load("//bzl/gradle:gradle.bzl", "GRADLE_8_DIR", "GRADLE_DIR")
 load("//bzl/unity/impl:unity-project.bzl", "clean_up_old_assets")
 
 _UnityStage1Info = provider(
@@ -245,7 +244,7 @@ def _unity_app_stage1_impl(ctx):
     if ctx.attr.use_unity_provided_gradle:
         gradle_path = ""
 
-    print("Using Gradle version:[" + gradle_path  +  "] for platform: " + str(ctx.attr.project[0].unity_toolchain.unityinfo.unity_path))
+    print("Using Gradle version:[" + gradle_path + "] for platform: " + str(ctx.attr.project[0].unity_toolchain.unityinfo.unity_path))
 
     project_files = []
 
@@ -447,7 +446,7 @@ _unity_app_stage1 = rule(
             default = Label("//bzl/unity:unity-build"),
             allow_single_file = True,
             executable = True,
-            cfg = "host",
+            cfg = "exec",
         ),
         "platform": attr.string(
             mandatory = True,
@@ -565,25 +564,25 @@ _unity_app_stage2 = rule(
             default = Label("//bzl/xcode:xcodebuild"),
             allow_single_file = True,
             executable = True,
-            cfg = "host",
+            cfg = "exec",
         ),
         "_xcodearchive": attr.label(
             default = Label("//bzl/xcode:xcodearchive"),
             allow_single_file = True,
             executable = True,
-            cfg = "host",
+            cfg = "exec",
         ),
         "_xcodeexport": attr.label(
             default = Label("//bzl/xcode:xcodeexport"),
             allow_single_file = True,
             executable = True,
-            cfg = "host",
+            cfg = "exec",
         ),
         "_xcodebuildsettings": attr.label(
             default = Label("//bzl/xcode:xcodebuildsettings"),
             allow_single_file = True,
             executable = True,
-            cfg = "host",
+            cfg = "exec",
         ),
         "_xcode_app_developer_dir": attr.label(
             default = "//bzl/xcode:xcode-app-developer-dir",
@@ -592,7 +591,7 @@ _unity_app_stage2 = rule(
         ),
         "_xcpretty": attr.label(
             default = Label("@xcpretty//:xcpretty"),
-            cfg = "host",
+            cfg = "exec",
         ),
     },
     fragments = ["apple"],

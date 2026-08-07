@@ -1,6 +1,6 @@
-package(default_visibility = ["//visibility:private"])
-
 load("@rules_kotlin//kotlin:jvm.bzl", "kt_jvm_library", "kt_jvm_test")
+
+package(default_visibility = ["//visibility:private"])
 
 kt_jvm_library(
     name = "hellobuild",

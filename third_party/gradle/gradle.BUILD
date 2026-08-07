@@ -4,6 +4,6 @@
 package(default_visibility = ["//visibility:public"])
 
 filegroup(
-  name = "stub",
-  srcs = [],
+    name = "stub",
+    srcs = [],
 )

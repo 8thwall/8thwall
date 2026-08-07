@@ -147,7 +147,7 @@ _xcode_project = rule(
             default = "//bzl/llvm:llvm-install-name-tool",
             allow_single_file = True,
             executable = True,
-            cfg = "host",
+            cfg = "exec",
         ),
         "xcodeproj": attr.label(
             mandatory = True,

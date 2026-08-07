@@ -320,11 +320,11 @@ _unity_project = rule(
         # We use the value of one of these, depending on whether we're building for iOS or OSX.
         "_ios_min_version": attr.label(
             default = Label("//bzl/xcode:ios-min-version"),
-            providers = [BuildSettingInfo]
+            providers = [BuildSettingInfo],
         ),
         "_osx_min_version": attr.label(
             default = Label("//bzl/xcode:osx-min-version"),
-            providers = [BuildSettingInfo]
+            providers = [BuildSettingInfo],
         ),
         "meta_verification_srcs": attr.label_list(
             allow_files = True,

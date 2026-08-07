@@ -1,4 +1,4 @@
-"""Clang tools skylark rules
+"""Clang tools starlark rules
 
 This file contains Starlark rules for running clang tools within our bazel
 compilation. Currently supports clang-tidy and will generate a file of fixes

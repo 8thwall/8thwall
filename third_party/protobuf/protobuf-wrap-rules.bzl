@@ -1,12 +1,16 @@
-load("@com_google_protobuf_3.0.0//:protobuf.bzl", cc_proto_library_old = "cc_proto_library",
-                                                  csharp_proto_library_gen_old = "csharp_proto_library_gen")
+load(
+    "@com_google_protobuf_3.0.0//:protobuf.bzl",
+    cc_proto_library_old = "cc_proto_library",
+    csharp_proto_library_gen_old = "csharp_proto_library_gen",
+)
 load("@rules_proto//proto:defs.bzl", "proto_library")
 
 # @rules_proto_grpc project - https://rules-proto-grpc.com/en/latest/index.html
 load("@rules_proto_grpc//cpp:defs.bzl", "cc_proto_library")
 load("@rules_proto_grpc//csharp:defs.bzl", "csharp_proto_compile")
 
-PROTOBUF_VERSION = "default" # the version defined as com_protobuf_version in MODULE.bazel file (currently version 25.3-nia-v0.3)
+PROTOBUF_VERSION = "default"  # the version defined as com_protobuf_version in MODULE.bazel file (currently version 25.3-nia-v0.3)
+
 # PROTOBUF_VERSION = '3.0.0'
 PROTOBUF_LITE = False
 
@@ -114,7 +118,7 @@ def csharp_proto_library_gen_versionable(
         visibility (list, optional): A list of labels that represent the visibility of the library. None means the library is public. Defaults to None.
     """
     # For normal non-lite protobuf we prefer dynlib by default
-    
+
     if PROTOBUF_VERSION != "default":
         protoc = "@com_google_protobuf_" + PROTOBUF_VERSION + "//:protoc"
         csharp_proto_library_gen_old(
