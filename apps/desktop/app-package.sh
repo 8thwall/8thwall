@@ -33,7 +33,7 @@ fi
 case "$BUILDER_COMMAND" in
 "start")
   npx electron-builder install-app-deps
-  electron .
+  electron . --trace-warnings
   ;;
 "build")
   echo "Building Electron app with electron-builder..."
