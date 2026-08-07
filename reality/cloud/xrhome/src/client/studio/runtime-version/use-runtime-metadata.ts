@@ -12,8 +12,9 @@ const getRuntimeMetadataQuery = (appKey: string) => ({
     // initialized. After the server starts, it will trigger a refetch regardless, but to avoid
     // error screens on start, absorb failures.
     let iterations = 0
-    while (iterations++ < 10) {
+    while (iterations++ < 2) {
       try {
+        throw new Error('test')
         return await getRuntimeMetadata(appKey)
       } catch (err) {
         await new Promise(r => setTimeout(r, 1500))
