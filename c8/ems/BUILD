@@ -7,6 +7,4 @@ js_library(
     srcs = [
         "ems.ts",
     ],
-    deps = [
-    ],
 )

@@ -11,12 +11,13 @@ js_library(
 
 js_test(
     name = "args-test",
+    size = "small",
     main = [
         "args-test.ts",
     ],
     deps = [
-        ":args",
         "//bzl/js:chai-js",
+        "//c8/cli:args",
     ],
 )
 
@@ -33,7 +34,7 @@ js_library(
         "s3.ts",
     ],
     deps = [
-        ":proc",
+        "//c8/cli:proc",
     ],
 )
 
@@ -57,7 +58,7 @@ js_library(
         "hugging-face.ts",
     ],
     deps = [
-        ":proc",
+        "//c8/cli:proc",
     ],
 )
 

@@ -1,17 +1,17 @@
-const {describe, it} = globalThis as any
+// @package(npm-bzl-examples)
+// @attr[](data = "//bzl/examples/proto/data:hello")
 
-// import * as fs from 'fs'
 import fs from 'fs'
-import {chai, chaiBytes} from 'bzl/js/chai-js'
-import {Details} from 'bzl/examples/proto/api/details'
+import {describe, it, chai, chaiBytes} from 'bzl/js/chai-js'
+// @dep(//bzl/examples/proto/api:hello-ts)
 import {Hello} from 'bzl/examples/proto/api/hello'
 
-const expect = chai.expect;
+const {expect} = chai
 chai.use(chaiBytes)
 
 describe('deserialize', () => {
   const hello = Hello.deserialize(fs.readFileSync('bzl/examples/proto/data/hello.pb'))
-  it('= hello', () => expect(hello.greeting).to.equal("hello"))
+  it('= hello', () => expect(hello.greeting).to.equal('hello'))
   it('= the answer', () => expect(hello.details.answer).to.equal(42))
   it('= fib', () => expect(hello.details.fib).to.equalBytes([1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89]))
   // These tests are problematic. Here int64 and uint64 are being deserialized to Number, which has
@@ -43,5 +43,5 @@ describe('serialize', () => {
   // test than you might expect. Because proto uses varint encoding, if we set min and max to 0,
   // this test will fail. It only passes because the values we encoded are of the same order of
   // magnitude as the actual serialized ones.
-  it ('= saved length', () => expect(serialized.length).to.equals(expected.length))
+  it('= saved length', () => expect(serialized.length).to.equals(expected.length))
 })

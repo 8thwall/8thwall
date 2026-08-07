@@ -57,7 +57,7 @@ js_library(
         "redux-store.ts",
     ],
     deps = [
-        "time-reducer",
+        "//bzl/examples/web/app:time-reducer",
     ],
 )
 

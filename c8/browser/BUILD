@@ -11,7 +11,7 @@ js_library(
     ],
     deps = [
         ":browser-wasm",
-        ":mouse-to-touch-translater",
+        "//c8/browser:mouse-to-touch-translater",
         "//c8/ems",
     ],
 )
@@ -32,7 +32,7 @@ js_library(
         "//visibility:public",
     ],
     deps = [
-        ":interaction-provider",
+        "//c8/browser:interaction-provider",
     ],
 )
 
