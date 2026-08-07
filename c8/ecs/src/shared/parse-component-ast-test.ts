@@ -260,7 +260,7 @@ describe('Cloud Studio - Parse Component Ast', () => {
           },
         }])
     })
-    it('Should support multinline', () => {
+    it('Should support multiline', () => {
       const content = `ecs.registerComponent({
         name: 'example',
         schema: {
