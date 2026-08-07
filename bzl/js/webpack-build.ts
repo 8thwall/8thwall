@@ -152,9 +152,10 @@ const createRootResolverPlugin = (roots: string[]) => {
 }
 
 type PostBuildAction = () => Promise<void>
+type WrapperPluginOptions = {headerPath: string, footerPath: string}
 
-const createWrapperPlugin = ({headerPath, footerPath}) => {
-  const apply = (compiler) => {
+const createWrapperPlugin = ({headerPath, footerPath}: WrapperPluginOptions) => {
+  const apply = (compiler: Webpack.Compiler) => {
     compiler.hooks.compilation.tap('WrapperPlugin', (compilation) => {
       compilation.hooks.afterOptimizeChunkAssets.tap('WrapperPlugin', (chunks) => {
         const headerContents = headerPath ? fs.readFileSync(headerPath, 'utf-8') : ''
@@ -185,7 +186,7 @@ const NATIVE_NODE_MODULES = [
   'tls', 'tty', 'url', 'util', 'vm', 'worker_threads', 'zlib',
 ]
 
-const getFallback = (target, polyfill) => {
+const getFallback = (target: string, polyfill: string): any => {
   if (target === 'node') {
     return undefined
   }
@@ -203,7 +204,7 @@ const getFallback = (target, polyfill) => {
     return {path: resolveLib('path-browserify'), fs: false}
   }
 
-  const fallback = {}
+  const fallback: Record<string, boolean | string> = {}
 
   // NOTE(christoph): By setting false on all native modules, we're ignoring any imports of those
   // modules, assuming that they are enclosed in something like:
@@ -229,7 +230,7 @@ const getFallback = (target, polyfill) => {
   return fallback
 }
 
-const resolveBuildPaths = async (npmRule, includes) => {
+const resolveBuildPaths = async (npmRule: string, includes: string[]) => {
   // NOTE(cbartschat): To resolve transitive imports correctly, we first need to attempt to resolve
   // from any node_modules folder relative to the requester.
   // See bzl/examples/js/resolve/transitive.js to see this in practice.
@@ -341,7 +342,7 @@ const genConfig = async ({
   esnext,
   tsDeclaration,
   fullDts,
-}) => {
+}: any) => {
   // Get the directory location and filename of the output file.
   const outFileDir = path.dirname(outFile)
   const outFileName = path.basename(outFile)
@@ -386,12 +387,11 @@ const genConfig = async ({
       ].concat(includeWebTypes ? ['dom'] : []),
       jsx: 'react',
       module: esnext ? 'esnext' : undefined,
-      moduleResolution: 'node',
-      isolatedModules: false,
+      isolatedModules: true,
       experimentalDecorators: true,
       emitDecoratorMetadata: true,
       declaration: true,
-      noImplicitUseStrict: false,
+      strict: true,
       // NOTE(christoph): We need to preserve comments like /* webpackIgnore: true */.
       removeComments: false,
       noLib: false,

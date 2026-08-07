@@ -18,13 +18,14 @@ absolute_node_modules=$(dirname $(realpath external/npm-webpack-build/fingerprin
 echo '
 {{
   "compilerOptions": {{
-    "target": "esnext",
     "lib": ["esnext", "dom"],
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "types": ["node"],
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
     "noEmitOnError": true,
+    "noImplicitAny": false,
+    "useUnknownInCatchVariables": false,
     "typeRoots": ["<absolute_node_modules>/@types"],
-    "baseUrl": ".",
     "paths": {{
       "dts-bundle-generator": ["<absolute_node_modules>/dts-bundle-generator"],
       "webpack": ["<absolute_node_modules>/webpack"]
