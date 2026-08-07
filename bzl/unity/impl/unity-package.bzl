@@ -1,5 +1,4 @@
 load("//bzl/unity/impl:transitions.bzl", "unity_platform_transition")
-load("@bazel_skylib//rules:common_settings.bzl", "BuildSettingInfo")
 
 def _copy_action(ctx, src, dst):
     """Action to copy a file from src to dst."""
