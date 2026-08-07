@@ -227,7 +227,10 @@ const TreeElement: React.FC<ITreeElement> = ({
           <TreeElementMenuOptions
             id={id}
             collapse={collapse}
-            onRename={() => setRenaming(true)}
+            onRename={() => {
+              setNewName(object.name || '')
+              setRenaming(true)
+            }}
           />
         )}
       />
