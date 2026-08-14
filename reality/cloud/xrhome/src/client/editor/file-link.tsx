@@ -4,7 +4,7 @@ import {basename} from 'path'
 import type {IAccount, IApp} from '../common/types/models'
 import {useCurrentGit} from '../git/hooks/use-current-git'
 import {useFileActionsContext} from './files/file-actions-context'
-import {LinkButton} from '../ui/components/link-button'
+import {BoldButton} from '../ui/components/bold-button'
 
 interface IFileLink {
   account: IAccount
@@ -39,9 +39,9 @@ const FileLink: React.FC<IFileLink> = ({account, app, file, line, column}) => {
 
   if (fileExists) {
     return (
-      <LinkButton onClick={() => actionsContext.onSelect(file)}>
+      <BoldButton onClick={() => actionsContext.onSelect(file)}>
         {linkText}
-      </LinkButton>
+      </BoldButton>
     )
   } else {
     // eslint-disable-next-line react/jsx-no-useless-fragment

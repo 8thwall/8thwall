@@ -7,8 +7,8 @@ import {
 } from '../editor/editor-file-location'
 import {useStudioComponentsContext} from './studio-components-context'
 import {StaticBanner} from '../ui/components/banner'
-import {LinkButton} from '../ui/components/link-button'
 import {useFileActionsContext} from '../editor/files/file-actions-context'
+import {BoldButton} from '../ui/components/bold-button'
 
 // TODO: Finish translating
 /* eslint-disable local-rules/hardcoded-copy */
@@ -35,11 +35,11 @@ const ErrorMessageLink: React.FC<IErrorMessageLink> = ({firstErrorLocation, firs
   }
 
   return (
-    <LinkButton color='danger' onClick={() => actionsContext.onSelect(firstErrorLocation)}>
+    <BoldButton onClick={() => actionsContext.onSelect(firstErrorLocation)}>
       <span className={classes.errorText}>
         {`[Ln ${firstError.location.startColumn}, Col ${firstError.location.startLine}]`}
       </span>
-    </LinkButton>
+    </BoldButton>
   )
 }
 
