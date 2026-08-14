@@ -29,11 +29,10 @@ const useStyles = createUseStyles({
 })
 
 interface ICaughtErrorPage {
-  onReset: () => void
   error: Error
 }
 
-const CaughtErrorPage: React.FC<ICaughtErrorPage> = ({error, onReset}) => {
+const CaughtErrorPage: React.FC<ICaughtErrorPage> = ({error}) => {
   const {t} = useTranslation(['caught-error-page', 'common'])
 
   const classes = useStyles()
@@ -42,6 +41,10 @@ const CaughtErrorPage: React.FC<ICaughtErrorPage> = ({error, onReset}) => {
   React.useEffect(() => {
     queryClient.clear()
   }, [])
+
+  const handleBack = () => {
+    window.location.reload()
+  }
 
   return (
     <div className={classes.caughtErrorPage}>
@@ -59,7 +62,7 @@ const CaughtErrorPage: React.FC<ICaughtErrorPage> = ({error, onReset}) => {
           />
         </p>
         <div>
-          <PrimaryButton onClick={onReset}>{t('button.back', {ns: 'common'})}</PrimaryButton>
+          <PrimaryButton onClick={handleBack}>{t('button.back', {ns: 'common'})}</PrimaryButton>
         </div>
         <details>
           <summary>{t('caught_error_page.button.show_details')}</summary>
