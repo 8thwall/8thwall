@@ -172,7 +172,6 @@ const LocalStudioPage: React.FC = () => {
 
   const appPathsContext = React.useMemo(() => ({
     getPathForApp: () => getLocalStudioPath(appKey),
-    getFileRoute: () => getLocalStudioPath(appKey),
     getStudioRoute: () => getLocalStudioPath(appKey),
   }), [appKey])
 
