@@ -1,27 +1,20 @@
 import React from 'react'
 import type {StudioComponentError} from '@ecs/shared/studio-component'
 import {createUseStyles} from 'react-jss'
-import {Link} from 'react-router-dom'
 
 import {
-  deriveEditorRouteParams, deriveLocationFromKey, extractFilePath, type EditorFileLocation,
+  deriveLocationFromKey, extractFilePath, type EditorFileLocation,
 } from '../editor/editor-file-location'
 import {useStudioComponentsContext} from './studio-components-context'
 import {StaticBanner} from '../ui/components/banner'
-import {blueberry} from '../static/styles/settings'
-import {useAppPathsContext} from '../common/app-container-context'
-import {getHashForFile} from '../common/paths'
+import {useFileActionsContext} from '../editor/files/file-actions-context'
+import {BoldButton} from '../ui/components/bold-button'
 
 // TODO: Finish translating
 /* eslint-disable local-rules/hardcoded-copy */
 
 const useStyles = createUseStyles({
-  errorButton: {
-    border: 'none',
-    background: 'none',
-    cursor: 'pointer',
-    color: blueberry,
-  },
+
   errorText: {
     textWrap: 'nowrap',
   },
@@ -35,26 +28,18 @@ interface IErrorMessageLink {
 const ErrorMessageLink: React.FC<IErrorMessageLink> = ({firstErrorLocation, firstError}) => {
   const classes = useStyles()
 
-  const {getFileRoute} = useAppPathsContext()
+  const actionsContext = useFileActionsContext()
 
   if (!firstError.location) {
     return null
   }
 
-  const getFileRouteWithHash = (
-    location: EditorFileLocation, line: number, column: number
-  ) => getFileRoute(deriveEditorRouteParams(location)) +
-  getHashForFile(line, column)
-
   return (
-    <Link to={getFileRouteWithHash(firstErrorLocation,
-      firstError.location.startLine,
-      firstError.location.startColumn + 1)}
-    >
+    <BoldButton onClick={() => actionsContext.onSelect(firstErrorLocation)}>
       <span className={classes.errorText}>
         {`[Ln ${firstError.location.startColumn}, Col ${firstError.location.startLine}]`}
       </span>
-    </Link>
+    </BoldButton>
   )
 }
 
@@ -77,8 +62,12 @@ const ErrorMessage: React.FC = () => {
 
   return (
     <StaticBanner type='danger'>
-      {`A total of ${numErrors} error${numErrors > 1 ? 's' : ''}`}
-      <br />
+      {numErrors > 1 &&
+        <>
+          A total of ${numErrors} errors
+          <br />
+        </>
+      }
       {`(${extractFilePath(firstErrorLocation)}): `}
       <br />
       {firstError.message}
