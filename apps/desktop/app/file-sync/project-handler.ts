@@ -52,6 +52,34 @@ const locationPrompt = async (): Promise<string | undefined> => {
   return res.canceled ? undefined : res.filePaths[0]
 }
 
+const projectOpenPrompt = async (): Promise<string | undefined> => {
+  const choice = await dialog.showMessageBox({
+    type: 'question',
+    buttons: ['Open Project Folder', 'Open Project ZIP', 'Cancel'],
+    defaultId: 0,
+    cancelId: 2,
+    message: 'Open an 8th Wall project',
+    detail: 'Choose whether to open an existing project folder or import a project ZIP.',
+  })
+
+  if (choice.response === 2) {
+    return undefined
+  }
+
+  const res = choice.response === 1
+    ? await dialog.showOpenDialog({
+      properties: ['openFile'],
+      filters: [
+        {name: '8th Wall Project', extensions: ['zip']},
+      ],
+    })
+    : await dialog.showOpenDialog({
+      properties: ['openDirectory'],
+    })
+
+  return res.canceled ? undefined : res.filePaths[0]
+}
+
 const localServerRunQueue = makeRunQueue()
 const appKeyToLocalServerManager: Map<string, LocalServer> = new Map()
 
@@ -153,10 +181,60 @@ const openDiskLocation = withErrorHandlingResponse(async (req) => {
     throw makeCodedError('Invalid query params', 400)
   }
 
-  const projectPath = params.data.location || await locationPrompt()
+  let projectPath = params.data.location || await projectOpenPrompt()
 
   if (!projectPath) {
     return makeJsonResponse({canceled: true})
+  }
+
+  let selectedPathStat
+  try {
+    selectedPathStat = await fs.stat(projectPath)
+  } catch (error: any) {
+    throw makeCodedError(`Failed to access path: ${projectPath}: ${error.message}`, 500)
+  }
+
+  if (selectedPathStat.isFile()) {
+    if (path.extname(projectPath).toLowerCase() !== '.zip') {
+      throw makeCodedError(
+        `The provided path is not a project directory or zip file: ${projectPath}`,
+        400
+      )
+    }
+
+    const zipPath = projectPath
+    const projectName = path.basename(zipPath, path.extname(zipPath))
+    const projectsFolder = path.join(os.homedir(), 'Documents', app.getName())
+    const extractedPath = path.join(projectsFolder, projectName)
+
+    try {
+      const existingContents = await fs.readdir(extractedPath)
+      if (existingContents.length > 0) {
+        throw makeCodedError(
+          `The provided path already exists and is not empty: ${extractedPath}`,
+          409
+        )
+      }
+    } catch (error: any) {
+      if (error.code !== 'ENOENT') {
+        throw error
+      }
+    }
+
+    const zip = await fs.readFile(zipPath)
+    try {
+      await unzipIntoFolder(extractedPath, zip)
+    } catch (error: any) {
+      await fs.rm(extractedPath, {recursive: true, force: true})
+      throw makeCodedError(`Failed to unzip project: ${error.message}`, 400)
+    }
+
+    projectPath = extractedPath
+  } else if (!selectedPathStat.isDirectory()) {
+    throw makeCodedError(
+      `The provided path is not a project directory or zip file: ${projectPath}`,
+      400
+    )
   }
 
   let isValid = false
