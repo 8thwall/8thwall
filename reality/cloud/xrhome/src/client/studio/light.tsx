@@ -184,6 +184,12 @@ const SpotLightComponent: React.FC<ILightComponent> = (
   useHelper(showHelpers ? lightRef : null, SpotLightHelper)
   useHelper(showHelpers ? shadowCameraRef : null, CameraHelper)
 
+  const target = React.useMemo(() => {
+    const object = new Object3D()
+    object.position.z = 1
+    return object
+  }, [])
+
   useLayoutEffect(() => {
     if (lightRef.current) {
       lightRef.current.castShadow = lightConfig.castShadow
@@ -203,14 +209,11 @@ const SpotLightComponent: React.FC<ILightComponent> = (
         lightRef.current.shadow.map?.dispose()
         lightRef.current.shadow.map = null
       }
+      lightRef.current.updateMatrixWorld(true)
+      target.updateMatrixWorld(true)
     }
-  }, [lightConfig, texture])
+  }, [lightConfig, texture, target])
 
-  const target = React.useMemo(() => {
-    const object = new Object3D()
-    object.position.z = 1
-    return object
-  }, [])
 
   return (
     <spotLight
