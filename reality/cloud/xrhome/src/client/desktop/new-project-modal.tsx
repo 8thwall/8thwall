@@ -8,7 +8,11 @@ import {PrimaryButton} from '../ui/components/primary-button'
 import {SpaceBetween} from '../ui/layout/space-between'
 import AutoHeading from '../widgets/auto-heading'
 import AutoHeadingScope from '../widgets/auto-heading-scope'
-import {extractApiError, initializeLocal} from '../studio/local-sync-api'
+import {
+  extractApiError,
+  initializeLocal,
+  pickProjectZip,
+} from '../studio/local-sync-api'
 import {getLocalStudioPath} from './desktop-paths'
 import {Icon} from '../ui/components/icon'
 import {JointToggleButton} from '../ui/components/joint-toggle-button'
@@ -39,6 +43,17 @@ const useStyles = createUseStyles({
     display: 'flex',
     gap: '1rem',
   },
+  zipSelection: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '0.75rem',
+  },
+  zipPath: {
+    minWidth: 0,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
 })
 
 interface INewProjectContent {
@@ -57,6 +72,7 @@ const NewProjectContent: React.FC<INewProjectContent> = ({
   const history = useHistory()
   const [loading, setLoading] = React.useState(false)
   const [selectedTemplate, setSelectedTemplate] = React.useState<string | null>(null)
+  const [selectedZipPath, setSelectedZipPath] = React.useState<string | null>(null)
   const [error, setError] = React.useState('')
 
   const projectTitle = rawProjectTitle.trim()
@@ -66,10 +82,18 @@ const NewProjectContent: React.FC<INewProjectContent> = ({
       <form
         className={classes.newProjectModal}
         onSubmit={async (e) => {
+          e.preventDefault()
           setLoading(true)
+          setError('')
+
           try {
-            e.preventDefault()
-            const res = await initializeLocal(projectTitle, location, selectedTemplate)
+            const res = await initializeLocal(
+              projectTitle,
+              location,
+              selectedTemplate,
+              selectedZipPath
+            )
+
             history.push(getLocalStudioPath(res.appKey))
             queryClient.invalidateQueries({queryKey: ['listProjects']})
           } catch (err) {
@@ -84,6 +108,7 @@ const NewProjectContent: React.FC<INewProjectContent> = ({
             {t('new_project_modal.title.new')}
           </AutoHeading>
         </StandardModalHeader>
+
         <StandardModalContent>
           <SpaceBetween direction='vertical'>
             <StandardTextField
@@ -95,34 +120,78 @@ const NewProjectContent: React.FC<INewProjectContent> = ({
                 setProjectTitle(value)
               }}
             />
+
             <label htmlFor='new-project-template'>
               {t('new_project_modal.input.label.template')}
             </label>
+
             <div className={classes.templateCarousel}>
               <TemplateCard
                 name='new-project-template'
-                checked={selectedTemplate === null}
+                checked={selectedTemplate === null && selectedZipPath === null}
                 onChange={() => {
                   setSelectedTemplate(null)
+                  setSelectedZipPath(null)
+                  setError('')
                 }}
                 title={t('new_project_modal.input.title.empty_project')}
                 imageUrl={coverImg}
               />
+
               {GITHUB_TEMPLATES.map(template => (
                 <TemplateCard
                   key={template.zipUrl}
                   name='new-project-template'
-                  checked={selectedTemplate === template.zipUrl}
+                  checked={selectedTemplate === template.zipUrl && selectedZipPath === null}
                   onChange={() => {
                     setSelectedTemplate(template.zipUrl)
+                    setSelectedZipPath(null)
+                    setError('')
                   }}
                   title={template.title}
                   imageUrl={template.imageUrl}
                 />
               ))}
             </div>
+
+            <div className={classes.zipSelection}>
+              <BoldButton
+                type='button'
+                onClick={async () => {
+                  try {
+                    setError('')
+
+                    const result = await pickProjectZip()
+
+                    if (result.canceled || !result.filePath) {
+                      return
+                    }
+
+                    setSelectedZipPath(result.filePath)
+                    setSelectedTemplate(null)
+                  } catch (err) {
+                    setError(await extractApiError(err))
+                  }
+                }}
+              >
+                Choose Project ZIP
+              </BoldButton>
+
+              {selectedZipPath && (
+                <div
+                  className={classes.zipPath}
+                  title={selectedZipPath}
+                >
+                  {selectedZipPath}
+                </div>
+              )}
+            </div>
+
             <div>
-              <StandardFieldLabel label={t('new_project_modal.input.label.folder_location')} />
+              <StandardFieldLabel
+                label={t('new_project_modal.input.label.folder_location')}
+              />
+
               <JointToggleButton
                 options={[
                   {
@@ -138,14 +207,23 @@ const NewProjectContent: React.FC<INewProjectContent> = ({
                 onChange={e => setLocation(e)}
               />
             </div>
-            {error && <StaticBanner type='danger'>{error}</StaticBanner>}
+
+            {error && (
+              <StaticBanner type='danger'>
+                {error}
+              </StaticBanner>
+            )}
           </SpaceBetween>
         </StandardModalContent>
 
         <StandardModalActions>
-          <BoldButton onClick={() => onClose()}>
+          <BoldButton
+            type='button'
+            onClick={() => onClose()}
+          >
             {t('button.cancel', {ns: 'common'})}
           </BoldButton>
+
           <PrimaryButton
             type='submit'
             disabled={!projectTitle}
@@ -161,6 +239,7 @@ const NewProjectContent: React.FC<INewProjectContent> = ({
 
 const NewProjectButton: React.FC = () => {
   const {t} = useTranslation(['studio-desktop-pages'])
+
   return (
     <StandardModal
       trigger={(

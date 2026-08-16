@@ -12,6 +12,18 @@ import {basename} from '../editor/editor-common'
 
 const API = Build8.PLATFORM_TARGET === 'desktop' ? 'file-sync://' : 'https://0.0.0.0:9033'
 
+type PickProjectZipResponse = {
+  canceled: boolean
+  filePath?: string
+}
+
+const pickProjectZip = () => (
+  fetchJson<PickProjectZipResponse>(
+    `${API}/project/pick-zip`,
+    {method: 'POST'}
+  )
+)
+
 type ApiFetchError = Error & {
   res?: Response
 }
@@ -31,16 +43,26 @@ const fetchJson = async <T>(url: string, options?: RequestInit): Promise<T> => {
 const initializeLocal = (
   appName: string,
   location: 'default' | 'prompt',
-  templateZipUrl: string | null
+  templateZipUrl: string | null,
+  templateZipPath: string | null
 ) => {
   const params = new URLSearchParams({
     appName,
     location,
   })
+
   if (templateZipUrl) {
     params.set('templateZipUrl', templateZipUrl)
   }
-  return fetchJson<InitializeResponse>(`${API}/project/init-local?${params}`, {method: 'POST'})
+
+  if (templateZipPath) {
+    params.set('templateZipPath', templateZipPath)
+  }
+
+  return fetchJson<InitializeResponse>(
+    `${API}/project/init-local?${params}`,
+    {method: 'POST'}
+  )
 }
 
 const notifyProjectAccess = (appKey: string) => {
@@ -377,6 +399,7 @@ const extractApiError = async (err: Error & {res?: Response}): Promise<string> =
 
 export {
   initializeLocal,
+  pickProjectZip,
   watchLocal,
   stopWatchLocal,
   getFileStateSnapshot,
