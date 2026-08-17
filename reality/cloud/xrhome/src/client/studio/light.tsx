@@ -209,32 +209,31 @@ const SpotLightComponent: React.FC<ILightComponent> = (
         lightRef.current.shadow.map?.dispose()
         lightRef.current.shadow.map = null
       }
-      lightRef.current.updateMatrixWorld(true)
-      target.updateMatrixWorld(true)
     }
-  }, [lightConfig, texture, target])
-
+  }, [lightConfig, texture])
 
   return (
-    <spotLight
-      ref={lightRef}
-      color={lightConfig.color}
-      castShadow={lightConfig.castShadow}
-      intensity={intensity}
-      decay={lightConfig.decay}
-      distance={lightConfig.distance}
-      angle={lightConfig.angle}
-      penumbra={lightConfig.penumbra}
-      target={target}
-    >
-      <perspectiveCamera
-        ref={shadowCameraRef}
-        attach='shadow-camera'
-        near={lightConfig.shadowCamera[4]}
-        far={lightConfig.shadowCamera[5]}
-      />
+    <>
+      <spotLight
+        ref={lightRef}
+        color={lightConfig.color}
+        castShadow={lightConfig.castShadow}
+        intensity={intensity}
+        decay={lightConfig.decay}
+        distance={lightConfig.distance}
+        angle={lightConfig.angle}
+        penumbra={lightConfig.penumbra}
+        target={target}
+      >
+        <perspectiveCamera
+          ref={shadowCameraRef}
+          attach='shadow-camera'
+          near={lightConfig.shadowCamera[4]}
+          far={lightConfig.shadowCamera[5]}
+        />
+      </spotLight>
       <primitive object={target} />
-    </spotLight>
+    </>
   )
 }
 
