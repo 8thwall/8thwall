@@ -6,6 +6,7 @@
   "license": "MIT",
   "scripts": {
     "build": "webpack && cp src/entry.js index.js",
+    "test": "node test/css-namespace.test.js",
     "prepack": "npm run clean && npm run build",
     "dev": "webpack server --devtool eval --mode development",
     "clean": "rm -rf dist"
