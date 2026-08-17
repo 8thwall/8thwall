@@ -3,17 +3,18 @@
   font-family: 'Nunito-SemiBold', sans-serif;
 }
 
-#loadBackground {
+#loadingContainer #loadBackground {
   z-index: 10;
   background-color: #101118;
   pointer-events: auto;
 }
 
-.xrextras-old-style #loadBackground {
+.xrextras-old-style #loadingContainer #loadBackground {
   background-color: white;
 }
 
-#requestingCameraPermissions {
+
+#loadingContainer #requestingCameraPermissions {
   z-index: 11;
   position: absolute;
   top: 0;
@@ -27,14 +28,14 @@
   padding-bottom: 1.75vh;
 }
 
-#requestingCameraIcon {
+#loadingContainer #requestingCameraIcon {
   display: block;
   margin: 0 auto;
   margin-bottom: 2vh;
   height: 5.5vh;
 }
 
-#loadImage {
+#loadingContainer #loadImage {
   position: absolute;
   margin-top: -2.5em;
   margin-left: -2.5em;
@@ -46,15 +47,15 @@
 }
 
 /* camera and micrphone permission related styles */
-#cameraPermissionsErrorApple, #microphonePermissionsErrorApple {
+#loadingContainer #cameraPermissionsErrorApple, #loadingContainer #microphonePermissionsErrorApple {
   background-color: #101118;
 }
 
-.xrextras-old-style #cameraPermissionsErrorApple, .xrextras-old-style #microphonePermissionsErrorApple {
+.xrextras-old-style #loadingContainer #cameraPermissionsErrorApple, .xrextras-old-style #microphonePermissionsErrorApple {
   background-color: white;
 }
 
-#cameraPermissionsErrorAppleMessage, #microphonePermissionsErrorAppleMessage {
+#loadingContainer #cameraPermissionsErrorAppleMessage, #loadingContainer #microphonePermissionsErrorAppleMessage {
   font-size: 1.75em;
   text-align: center;
   max-width: 90vw;
@@ -64,24 +65,24 @@
   color: white;
 }
 
-.xrextras-old-style #cameraPermissionsErrorAppleMessage, .xrextras-old-style #microphonePermissionsErrorAppleMessage {
+.xrextras-old-style #loadingContainer #cameraPermissionsErrorAppleMessage, .xrextras-old-style #microphonePermissionsErrorAppleMessage {
   color: #323232;
 }
 
-.permissionIconIos {
+#loadingContainer .permissionIconIos {
   display: block;
   margin: 0 auto;
   margin-top: 17vh;
   text-align: center;
 }
-.permissionIconIos img {
+#loadingContainer .permissionIconIos img {
   height: 20vw;
 }
-.permissionIconIos img + img {
+#loadingContainer .permissionIconIos img + img {
   margin-left: 10vw;
 }
 
-.bottom-message {
+#loadingContainer .bottom-message {
   color: white;
   padding: 0 5vw;
   position: absolute;
@@ -90,7 +91,7 @@
   font-size: 1.25em;
 }
 
-#cameraPermissionsErrorAndroid, #microphonePermissionsErrorAndroid {
+#loadingContainer #cameraPermissionsErrorAndroid, #loadingContainer #microphonePermissionsErrorAndroid {
   padding: 2vh 0;
   display: flex;
   flex-direction: column;
@@ -100,13 +101,13 @@
   background-color: #101118;
 }
 
-.xrextras-old-style #cameraPermissionsErrorAndroid, .xrextras-old-style #microphonePermissionsErrorAndroid {
+.xrextras-old-style #loadingContainer #cameraPermissionsErrorAndroid, .xrextras-old-style #microphonePermissionsErrorAndroid {
   background-color: white;
 }
 
 /* device motion permission related styles */
 
-#deviceMotionErrorApple {
+#loadingContainer #deviceMotionErrorApple {
   padding: 3vh 2vh;
   display: flex;
   flex-direction: column;
@@ -117,36 +118,36 @@
   color: white;
 }
 
-.xrextras-old-style #deviceMotionErrorApple {
+.xrextras-old-style #loadingContainer #deviceMotionErrorApple {
   color: #2D2E43;
   background-color: white;
 }
 
-#linkOutViewAndroid, #copyLinkViewAndroid {
+#loadingContainer #linkOutViewAndroid, #loadingContainer #copyLinkViewAndroid {
   background-color: #101118;
 }
 
-.xrextras-old-style #linkOutViewAndroid, .xrextras-old-style #copyLinkViewAndroid {
+.xrextras-old-style #loadingContainer #linkOutViewAndroid, .xrextras-old-style #copyLinkViewAndroid {
   background-color: #fff;
 }
 
-.permission-error {
+#loadingContainer .permission-error {
   padding: 3vh 5vh;
   font-size: 3.5vh;
   color: #fff;
   background-color: #101118;
 }
 
-.xrextras-old-style .permission-error {
+.xrextras-old-style #loadingContainer .permission-error {
   color: #323232;
   background-color: white;
 }
 
-.permission-error>h1 {
+#loadingContainer .permission-error>h1 {
   font-size: 1.3em;
 }
 
-.main-button {
+#loadingContainer .main-button {
   border: none;
   outline: none;
   background-color: #AD50FF;
@@ -158,11 +159,11 @@
   border-radius: 0.5em;
 }
 
-.xrextras-old-style .main-button {
+.xrextras-old-style #loadingContainer .main-button {
   background-color: #7611B7;
 }
 
-.start-ar-button {
+#loadingContainer .start-ar-button {
   position: fixed;
   bottom: 25%;
   left: 50%;
@@ -179,23 +180,23 @@
   border-radius: 10px;
 }
 
-.xrextras-old-style .start-ar-button {
+.xrextras-old-style #loadingContainer .start-ar-button {
   background-color: #7611b7;
 }
 
-.permissionIcon {
+#loadingContainer .permissionIcon {
   overflow: hidden;
   flex: 0 0 auto;
   margin-bottom: 2vh;
 }
 
-.permissionIcon img {
+#loadingContainer .permissionIcon img {
   display: block;
   margin: 0 auto;
   height: 5vh;
 }
 
-#cameraSelectionWorldTrackingError {
+#loadingContainer #cameraSelectionWorldTrackingError {
   z-index: 999;
   position: absolute;
   top: 0;
@@ -207,17 +208,17 @@
   padding: 3vh 0;
 }
 
-.loading-error-header {
+#loadingContainer .loading-error-header {
   font-size: 3.5vh;
   flex: 0 0 auto;
   color: white;
 }
 
-.xrextras-old-style .loading-error-header {
+.xrextras-old-style #loadingContainer .loading-error-header {
   color: #323232;
 }
 
-.loading-error-footer {
+#loadingContainer .loading-error-footer {
   font-size: 3vh;
   line-height: 5.5vh;
   flex: 0 0 auto;
@@ -226,18 +227,18 @@
   color: white;
 }
 
-.xrextras-old-style .loading-error-footer {
+.xrextras-old-style #loadingContainer .loading-error-footer {
   color: #323232;
 }
 
-.loading-error-footer img {
+#loadingContainer .loading-error-footer img {
   display: block;
   height: 5vh;
   margin: 0 auto;
   margin-bottom: 2vh;
 }
 
-.loading-error-instructions {
+#loadingContainer .loading-error-instructions {
   font-family: 'Nunito', sans-serif;
   color: #fff;
   font-size: 2.5vh;
@@ -247,22 +248,22 @@
   flex: 0 0 auto;
 }
 
-.xrextras-old-style .loading-error-instructions {
+.xrextras-old-style #loadingContainer .loading-error-instructions {
   color: #2D2E43;
 }
 
-.loading-error-instructions>li {
+#loadingContainer .loading-error-instructions>li {
   position: relative;
   margin-bottom: 4.5vh;
 }
 
-.loading-error-instructions>li>img {
+#loadingContainer .loading-error-instructions>li>img {
   max-height: 3vh;
   vertical-align: middle;
   margin: 0 .5vh;
 }
 
-.loading-error-instructions>li:before {
+#loadingContainer .loading-error-instructions>li:before {
   font-family: 'Nunito', sans-serif;
   position: absolute;
   width: 40px;
@@ -279,31 +280,31 @@
   content: counter(line);
 }
 
-.xrextras-old-style .loading-error-instructions>li:before {
+.xrextras-old-style #loadingContainer .loading-error-instructions>li:before {
   background-color: rgba(218, 209, 228, 128);
 }
 
-.highlight {
+#loadingContainer .highlight {
   color: white;
   font-family: 'Nunito-SemiBold', sans-serif;
   font-weight: 800;
 }
 
-.xrextras-old-style .highlight {
+.xrextras-old-style #loadingContainer .highlight {
   color: #7611B7;
 }
 
-.camera-instruction-block {
+#loadingContainer .camera-instruction-block {
   display: inline-block;
   background-color: #8083A2;
   padding: 1vh;
 }
 
-.xrextras-old-style .camera-instruction-block {
+.xrextras-old-style #loadingContainer .camera-instruction-block {
   background-color: #EBEBEB;
 }
 
-.camera-instruction-button {
+#loadingContainer .camera-instruction-button {
   display: inline-block;
   padding: 1vh;
   background-color: #359AFF;
@@ -312,26 +313,26 @@
   box-shadow: 0 .125vh .25vh rgba(0, 0, 0, 0.5);
 }
 
-body:not(.xrextras-old-style) .prompt-box-8w {
+body:not(.xrextras-old-style) #loadingContainer .prompt-box-8w {
   background-color: #3A3B55;
   color: #fff;
   text-align: center;
 }
 
-body:not(.xrextras-old-style) .prompt-button-8w {
+body:not(.xrextras-old-style) #loadingContainer .prompt-button-8w {
   background-color: #8083A2;
   border-radius: 10px;
 }
 
-body:not(.xrextras-old-style) .button-primary-8w {
+body:not(.xrextras-old-style) #loadingContainer .button-primary-8w {
   background-color: #AD50FF;
 }
 
-.fade-out {
-  animation: fade-out 0.3s linear forwards;
+#loadingContainer .fade-out {
+  animation: xrextras-loading-fade-out 0.3s linear forwards;
 }
 
-@keyframes fade-out {
+@keyframes xrextras-loading-fade-out {
   0% {
     opacity: 1;
   }
@@ -340,11 +341,11 @@ body:not(.xrextras-old-style) .button-primary-8w {
   }
 }
 
-.spin {
-  animation: spin 1.1s cubic-bezier(0.785, 0.135, 0.150, 0.860) infinite both;
+#loadingContainer .spin {
+  animation: xrextras-loading-spin 1.1s cubic-bezier(0.785, 0.135, 0.150, 0.860) infinite both;
 }
 
-@keyframes spin {
+@keyframes xrextras-loading-spin {
   0% {
     transform: rotate(0);
   }
@@ -353,12 +354,12 @@ body:not(.xrextras-old-style) .button-primary-8w {
   }
 }
 
-.scale {
-  -webkit-animation: scale 1s cubic-bezier(0.455, 0.030, 0.515, 0.955) infinite alternate-reverse both;
-  animation: scale 1s cubic-bezier(0.455, 0.030, 0.515, 0.955) infinite alternate-reverse both;
+#loadingContainer .scale {
+  -webkit-animation: xrextras-loading-scale 1s cubic-bezier(0.455, 0.030, 0.515, 0.955) infinite alternate-reverse both;
+  animation: xrextras-loading-scale 1s cubic-bezier(0.455, 0.030, 0.515, 0.955) infinite alternate-reverse both;
 }
 
-@keyframes scale {
+@keyframes xrextras-loading-scale {
   0% {
     -webkit-transform: scale(0.5);
     transform: scale(0.5);
@@ -369,12 +370,12 @@ body:not(.xrextras-old-style) .button-primary-8w {
   }
 }
 
-.pulse {
-  -webkit-animation: pulse 1s ease-in-out infinite both;
-  animation: pulse 1s ease-in-out infinite both;
+#loadingContainer .pulse {
+  -webkit-animation: xrextras-loading-pulse 1s ease-in-out infinite both;
+  animation: xrextras-loading-pulse 1s ease-in-out infinite both;
 }
 
-@keyframes pulse {
+@keyframes xrextras-loading-pulse {
   0% {
     -webkit-transform: scale(1);
     transform: scale(1);
