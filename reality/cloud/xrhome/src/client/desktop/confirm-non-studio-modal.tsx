@@ -40,18 +40,21 @@ const ConfirmNonStudioModal: React.FC<IConfirmNonStudioModal> = ({location, onCl
       if (neverShowAgain) {
         confirmNonStudio()
       }
-      const {appKey, initialization, canceled} = await openDiskLocation({
+      const result = await openDiskLocation({
         location,
         acceptNonStudio: true,
       })
-      if (canceled) {
+
+      if (result.canceled || 'templateZipUrl' in result) {
         return
-      } else {
-        queryClient.invalidateQueries({queryKey: ['listProjects']})
-        if (initialization === 'v2') {
-          history.push(getLocalStudioPath(appKey))
-        }
       }
+
+      queryClient.invalidateQueries({queryKey: ['listProjects']})
+
+      if (result.initialization === 'v2') {
+        history.push(getLocalStudioPath(result.appKey))
+      }
+
       onClose()
     } finally {
       setLoading(false)
@@ -69,7 +72,6 @@ const ConfirmNonStudioModal: React.FC<IConfirmNonStudioModal> = ({location, onCl
           <AutoHeading className={typography.heading4}>
             {t('confirm_non_studio_modal.heading')}
           </AutoHeading>
-
         </StandardModalHeader>
         <StandardModalContent>
           <p>
@@ -80,7 +82,6 @@ const ConfirmNonStudioModal: React.FC<IConfirmNonStudioModal> = ({location, onCl
                 1: <StandardLink newTab href='https://8th.io/non-studio-in-desktop' />,
               }}
             />
-
           </p>
 
           <StandardCheckboxField
@@ -88,7 +89,6 @@ const ConfirmNonStudioModal: React.FC<IConfirmNonStudioModal> = ({location, onCl
             checked={neverShowAgain}
             onChange={e => setNeverShowAgain(e.target.checked)}
           />
-
         </StandardModalContent>
         <StandardModalActions>
           <BoldButton onClick={onClose}>

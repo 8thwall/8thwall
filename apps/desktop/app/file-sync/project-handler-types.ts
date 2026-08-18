@@ -10,7 +10,6 @@ const InitializeProjectParams = z.object({
   appName: z.string().nonempty(),
   location: z.enum(['default', 'prompt']),
   templateZipUrl: z.string().optional(),
-  templateZipPath: z.string().optional(),
 })
 
 type IInitializeProjectParams = z.infer<typeof InitializeProjectParams>
@@ -31,6 +30,7 @@ const FixConfigParams = z.object({
   appKey: z.string(),
   fix: z.enum(['inject', 'copy-plugin', 'dev-socket']),
 })
+
 
 type IFixConfigParams = z.infer<typeof FixConfigParams>
 

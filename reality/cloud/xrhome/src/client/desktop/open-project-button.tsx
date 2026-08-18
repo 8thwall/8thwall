@@ -9,6 +9,8 @@ import {getLocalStudioPath} from './desktop-paths'
 import useActions from '../common/use-actions'
 import appsActions from '../apps/apps-actions'
 import {ConfirmNonStudioModal, getAlreadyConfirmedNonStudio} from './confirm-non-studio-modal'
+import {StandardModal} from '../ui/components/standard-modal'
+import {NewProjectContent} from './new-project-modal'
 
 const OpenProjectButton = () => {
   const {t} = useTranslation(['studio-desktop-pages', 'common'])
@@ -17,23 +19,33 @@ const OpenProjectButton = () => {
   const [loading, setLoading] = React.useState(false)
   const {error} = useActions(appsActions)
   const [nonStudioLocation, setNonStudioLocation] = React.useState('')
+  const [templateZipUrl, setTemplateZipUrl] = React.useState<string | null>(null)
 
   const handleOpen = async () => {
     setLoading(true)
+
     try {
-      const {appKey, initialization, canceled} = await openDiskLocation({
+      const result = await openDiskLocation({
         acceptNonStudio: getAlreadyConfirmedNonStudio(),
       })
-      if (canceled) {
+
+      if (result.canceled) {
         return
-      } else {
-        queryClient.invalidateQueries({queryKey: ['listProjects']})
-        if (initialization === 'v2') {
-          history.push(getLocalStudioPath(appKey))
-        }
+      }
+
+      if ('templateZipUrl' in result) {
+        setTemplateZipUrl(result.templateZipUrl)
+        return
+      }
+
+      queryClient.invalidateQueries({queryKey: ['listProjects']})
+
+      if (result.initialization === 'v2') {
+        history.push(getLocalStudioPath(result.appKey))
       }
     } catch (err: any) {
       const {containsPackageJson, location} = (await (err as ApiFetchError)?.res?.json())
+
       if (location && containsPackageJson) {
         setNonStudioLocation(location)
       } else {
@@ -49,6 +61,28 @@ const OpenProjectButton = () => {
       <SecondaryButton onClick={handleOpen} disabled={loading}>
         {t('button.open', {ns: 'common'})}
       </SecondaryButton>
+
+      {templateZipUrl &&
+        <StandardModal
+          trigger='render'
+          onOpenChange={(open) => {
+            if (!open) {
+              setTemplateZipUrl(null)
+            }
+          }}
+        >
+          {onClose => (
+            <NewProjectContent
+              onClose={() => {
+                setTemplateZipUrl(null)
+                onClose()
+              }}
+              templateZipUrl={templateZipUrl}
+            />
+          )}
+        </StandardModal>
+      }
+
       {nonStudioLocation &&
         <ConfirmNonStudioModal
           location={nonStudioLocation}
