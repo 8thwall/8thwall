@@ -31,7 +31,6 @@ const FixConfigParams = z.object({
   fix: z.enum(['inject', 'copy-plugin', 'dev-socket']),
 })
 
-
 type IFixConfigParams = z.infer<typeof FixConfigParams>
 
 const InstallRequest = z.object({
