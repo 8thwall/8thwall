@@ -67,19 +67,30 @@ function create() {
 
   const setRoot = (rootNode) => {
     rootNode_ = rootNode
-    loadBackground_ = rootNode_.querySelector('#loadBackground')
-    loadImageContainer_ = rootNode_.querySelector('#loadImageContainer')
-    camPermissionsRequest_ = document.getElementById('requestingCameraPermissions')
-    camPermissionsFailedAndroid_ = document.getElementById('cameraPermissionsErrorAndroid')
-    camPermissionsFailedApple_ = document.getElementById('cameraPermissionsErrorApple')
-    micPermissionsFailedAndroid_ = document.getElementById('microphonePermissionsErrorAndroid')
-    micPermissionsFailedApple_ = document.getElementById('microphonePermissionsErrorApple')
-    linkOutViewAndroid_ = document.getElementById('linkOutViewAndroid')
-    copyLinkViewAndroid_ = document.getElementById('copyLinkViewAndroid')
-    deviceMotionErrorApple_ = document.getElementById('deviceMotionErrorApple')
-    userPromptError_ = document.getElementById('userPromptError')
-    cameraSelectionError_ = document.getElementById('cameraSelectionWorldTrackingError')
-    motionPermissionsErrorApple_ = document.getElementById('motionPermissionsErrorApple')
+    loadBackground_ = rootNode_.querySelector('#xrextras-load-background')
+    loadImageContainer_ = rootNode_.querySelector('#xrextras-load-image-container')
+    camPermissionsRequest_ =
+      rootNode_.querySelector('#xrextras-requesting-camera-permissions')
+    camPermissionsFailedAndroid_ =
+      rootNode_.querySelector('#xrextras-camera-permissions-error-android')
+    camPermissionsFailedApple_ =
+      rootNode_.querySelector('#xrextras-camera-permissions-error-apple')
+    micPermissionsFailedAndroid_ =
+      rootNode_.querySelector('#xrextras-microphone-permissions-error-android')
+    micPermissionsFailedApple_ =
+      rootNode_.querySelector('#xrextras-microphone-permissions-error-apple')
+    linkOutViewAndroid_ =
+      rootNode_.querySelector('#xrextras-link-out-view-android')
+    copyLinkViewAndroid_ =
+      rootNode_.querySelector('#xrextras-copy-link-view-android')
+    deviceMotionErrorApple_ =
+      rootNode_.querySelector('#xrextras-device-motion-error-apple')
+    userPromptError_ =
+      rootNode_.querySelector('#xrextras-user-prompt-error')
+    cameraSelectionError_ =
+      rootNode_.querySelector('#xrextras-camera-selection-world-tracking-error')
+    motionPermissionsErrorApple_ =
+      rootNode_.querySelector('#xrextras-motion-permissions-error-apple')
   }
 
   const clearRoot = () => {
@@ -115,11 +126,11 @@ function create() {
   // Fade out the loading screen and then hide it.
   const hideLoadingScreen = (removeRoot = true) => {
     if (loadImageContainer_) {
-      loadImageContainer_.classList.add('fade-out')
+      loadImageContainer_.classList.add('xrextras-loading-fade-out')
     }
     setTimeout(() => {
       if (loadBackground_) {
-        loadBackground_.classList.add('fade-out')
+        loadBackground_.classList.add('xrextras-loading-fade-out')
         loadBackground_.style.pointerEvents = 'none'
       }
       setTimeout(() => hideLoadingScreenNow(removeRoot), 400)
@@ -131,7 +142,7 @@ function create() {
   }
 
   const dismissCameraPermissionsPrompt = () => {
-    camPermissionsRequest_.classList.add('fade-out')
+    camPermissionsRequest_.classList.add('xrextras-loading-fade-out')
   }
 
   const promptUserToChangeBrowserSettingsMicrophone = () => {
@@ -139,15 +150,18 @@ function create() {
     if (ua.includes('Linux')) {
       let instructionsToShow
 
-      const domainViews = rootNode_.querySelectorAll('.domain-view')
+      const domainViews =
+        rootNode_.querySelectorAll('.xrextras-loading-domain-view')
       for (let i = 0; i < domainViews.length; i++) {
         domainViews[i].textContent = window.location.hostname
       }
 
       if (navigator.userAgent.includes('SamsungBrowser')) {
-        instructionsToShow = rootNode_.querySelectorAll('.samsung-instruction')
+        instructionsToShow =
+          rootNode_.querySelectorAll('.xrextras-loading-samsung-instruction')
       } else {
-        instructionsToShow = rootNode_.querySelectorAll('.chrome-instruction')
+        instructionsToShow =
+          rootNode_.querySelectorAll('.xrextras-loading-chrome-instruction')
       }
       micPermissionsFailedAndroid_.classList.remove('hidden')
       instructionsToShow.forEach((instruction) => {
@@ -166,15 +180,18 @@ function create() {
     if (ua.includes('Linux')) {
       let instructionsToShow
 
-      const domainViews = rootNode_.querySelectorAll('.domain-view')
+      const domainViews =
+        rootNode_.querySelectorAll('.xrextras-loading-domain-view')
       for (let i = 0; i < domainViews.length; i++) {
         domainViews[i].textContent = window.location.hostname
       }
 
       if (navigator.userAgent.includes('SamsungBrowser')) {
-        instructionsToShow = rootNode_.querySelectorAll('.samsung-instruction')
+        instructionsToShow =
+          rootNode_.querySelectorAll('.xrextras-loading-samsung-instruction')
       } else {
-        instructionsToShow = rootNode_.querySelectorAll('.chrome-instruction')
+        instructionsToShow =
+          rootNode_.querySelectorAll('.xrextras-loading-chrome-instruction')
       }
       camPermissionsFailedAndroid_.classList.remove('hidden')
       instructionsToShow.forEach((instruction) => {
@@ -215,7 +232,7 @@ function create() {
       }
     })
 
-    const cBtn = document.getElementById('open_browser_android')
+    const cBtn = rootNode_.querySelector('#xrextras-open-browser-android')
     const link = window.location.href.replace(/^https:\/\//, '')
     cBtn.href = `intent://${link}#Intent;scheme=https;action=android.intent.action.VIEW;end;`
 
@@ -246,7 +263,7 @@ function create() {
       redirectLinks[i].textContent = link
     }
 
-    const cBtn = document.getElementById('copy_link_android')
+    const cBtn = rootNode_.querySelector('#xrextras-copy-link-android')
     cBtn.addEventListener('click', () => {
       const dummy = document.createElement('input')
       document.body.appendChild(dummy)
@@ -381,7 +398,8 @@ function create() {
       }
       if (status === 'requesting') {
         if (config.verbose) {
-          const debugElement = document.getElementById('camera_mode_world_tracking_error')
+          const debugElement =
+            rootNode_.querySelector('#xrextras-camera-mode-world-tracking-error')
           if (debugElement) {
             debugElement.innerText = JSON.stringify({
               ua,
@@ -477,7 +495,8 @@ function create() {
           if (error.source === 'reality' && error.err === 'slam-front-camera-unsupported') {
             // User is attemping to use Front camera without disabling world tracking
             hideLoadingScreen(false)
-            const errorElement = document.getElementById('camera_mode_world_tracking_error')
+            const errorElement =
+              rootNode_.querySelector('#xrextras-camera-mode-world-tracking-error')
             if (errorElement) {
               errorElement.innerHTML = error.message
               cameraSelectionError_.classList.remove('hidden')

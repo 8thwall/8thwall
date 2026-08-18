@@ -1,21 +1,45 @@
 const fs = require('fs')
 const path = require('path')
 
+const failures = []
+
+const htmlPath = path.join(__dirname, '../src/loadingmodule/loading-module.html')
+const html = fs.readFileSync(htmlPath, 'utf8')
+
+const forbiddenDomIds = [
+  'id="loadImage"',
+  'id="loadBackground"',
+]
+
+for (const id of forbiddenDomIds) {
+  if (html.includes(id)) {
+    failures.push(`Unnamespaced loading DOM id remains: ${id}`)
+  }
+}
+
+const requiredDomIds = [
+  'id="xrextras-load-image"',
+  'id="xrextras-load-background"',
+]
+
+for (const id of requiredDomIds) {
+  if (!html.includes(id)) {
+    failures.push(`Missing namespaced loading DOM id: ${id}`)
+  }
+}
+
 const cssPath = path.join(__dirname, '../src/loadingmodule/loading-module.css')
 const css = fs.readFileSync(cssPath, 'utf8')
 
-const failures = []
-
 const requiredScopedSelectors = [
-  '#loadingContainer .spin',
-  '#loadingContainer .scale',
-  '#loadingContainer .pulse',
-  '#loadingContainer .fade-out',
-  '#loadingContainer .highlight',
-  '#loadingContainer #loadImage',
-  '#loadingContainer #loadBackground',
+  '#loadingContainer .xrextras-loading-spin',
+  '#loadingContainer .xrextras-loading-scale',
+  '#loadingContainer .xrextras-loading-pulse',
+  '#loadingContainer .xrextras-loading-fade-out',
+  '#loadingContainer .xrextras-loading-highlight',
+  '#loadingContainer #xrextras-load-image',
+  '#loadingContainer #xrextras-load-background',
 ]
-
 for (const selector of requiredScopedSelectors) {
   if (!css.includes(selector)) {
     failures.push(`Missing scoped selector: ${selector}`)

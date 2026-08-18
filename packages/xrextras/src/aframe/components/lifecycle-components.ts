@@ -263,7 +263,7 @@ const loadingComponent: ComponentDefinition = {
     }
     window.XRExtras ? load() : window.addEventListener('xrextrasloaded', load, {once: true})
 
-    const loadImg = document.querySelector('#loadImage') as any
+    const loadImg = document.querySelector('#xrextras-load-image') as any
 
     if (loadImg) {
       if (this.data.loadImage !== '') {
@@ -273,15 +273,25 @@ const loadingComponent: ComponentDefinition = {
         }
       }
 
-      if (this.data.loadAnimation !== '') {
-        loadImg.classList.remove('spin')
-        if (this.data.loadAnimation !== 'none') {
-          loadImg.classList.add(this.data.loadAnimation)
+    if (this.data.loadAnimation !== '') {
+      loadImg.classList.remove('xrextras-loading-spin')
+
+      const animations: Record<string, string> = {
+        spin: 'xrextras-loading-spin',
+        pulse: 'xrextras-loading-pulse',
+        scale: 'xrextras-loading-scale',
+      }
+
+      if (this.data.loadAnimation !== 'none') {
+        const animation = animations[this.data.loadAnimation]
+        if (animation) {
+          loadImg.classList.add(animation)
+        }
         }
       }
     }
 
-    const loadBackground = document.querySelector('#loadBackground')
+    const loadBackground = document.querySelector('#xrextras-load-background')
 
     if (loadBackground) {
       loadBackground.style.backgroundColor = this.data.loadBackgroundColor

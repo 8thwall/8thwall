@@ -1,71 +1,71 @@
 <div id="loadingContainer" class="absolute-fill">
   <!--Loading screen-->
-  <div id="loadBackground" class="absolute-fill">
-    <div id="loadImageContainer" class="absolute-fill">
-      <img src="./load-grad.png" id="loadImage" class="spin" />
+  <div id="xrextras-load-background" class="absolute-fill">
+    <div id="xrextras-load-image-container" class="absolute-fill">
+      <img src="./load-grad.png" id="xrextras-load-image" class="xrextras-loading-spin" />
       <img class='foreground-image poweredby-img'
         src="../almosttheremodule/poweredby-horiz-white.svg" />
     </div>
   </div>
 
   <!--Camera Permissions-->
-  <div id="requestingCameraPermissions" class="hidden">
-    <img id="requestingCameraIcon" src="./camera.svg" />
+  <div id="xrextras-requesting-camera-permissions" class="hidden">
+    <img id="xrextras-requesting-camera-icon" src="./camera.svg" />
     Tap 'Allow' to access AR
   </div>
 
   <!--Permission error, camera, iOS-->
-  <div id="cameraPermissionsErrorApple" class="absolute-fill hidden">
-    <div class="permissionIconIos">
+  <div id="xrextras-camera-permissions-error-apple" class="absolute-fill hidden">
+    <div class="xrextras-loading-permission-icon-ios">
       <img class='foreground-image' src="./camera.svg" />
     </div>
-    <p id="cameraPermissionsErrorAppleMessage">
+    <p id="xrextras-camera-permissions-error-apple-message">
       Reload the page and enable camera access
     </p>
-    <div class='bottom-message'>
+    <div class='xrextras-loading-bottom-message'>
       Ensure camera access is allowed in <span class='wk-app-name'></span> app settings
     </div>
   </div>
 
   <!--Permission error, camera, Android-->
-  <div id="cameraPermissionsErrorAndroid" class="absolute-fill hidden">
-    <div class="permissionIcon">
+  <div id="xrextras-camera-permissions-error-android" class="absolute-fill hidden">
+    <div class="xrextras-loading-permission-icon">
       <img class='foreground-image' src="./camera.svg" />
     </div>
-    <div class="loading-error-header">Let's enable your camera</div>
-    <ol class="loading-error-instructions">
+    <div class="xrextras-loading-error-header">Let's enable your camera</div>
+    <ol class="xrextras-loading-error-instructions">
       <li>Tap the <img class='foreground-image' src="./dots.svg"> in the top right
       </li>
       <li>Tap Settings</li>
-      <li class="chrome-instruction hidden">
-        <span class="highlight">Site settings</span>
+      <li class="xrextras-loading-chrome-instruction hidden">
+        <span class="xrextras-loading-highlight">Site settings</span>
       </li>
-      <li class="chrome-instruction hidden">
-        <span class="highlight">Camera</span>
+      <li class="xrextras-loading-chrome-instruction hidden">
+        <span class="xrextras-loading-highlight">Camera</span>
       </li>
-      <li class="chrome-instruction hidden">
-        <span class="highlight">Blocked</span>
+      <li class="xrextras-loading-chrome-instruction hidden">
+        <span class="xrextras-loading-highlight">Blocked</span>
         <br>
-        <span class="camera-instruction-block domain-view">apps.8thwall.com</span>
+        <span class="xrextras-loading-camera-instruction-block xrextras-loading-domain-view">apps.8thwall.com</span>
       </li>
-      <li class="chrome-instruction hidden">
-        <span class="camera-instruction-button">CLEAR & RESET</span>
+      <li class="xrextras-loading-chrome-instruction hidden">
+        <span class="xrextras-loading-camera-instruction-button">CLEAR & RESET</span>
       </li>
-      <li class="samsung-instruction hidden">
-        <span class="highlight">Advanced</span>
+      <li class="xrextras-loading-samsung-instruction hidden">
+        <span class="xrextras-loading-highlight">Advanced</span>
       </li>
-      <li class="samsung-instruction hidden">
-        <span class="highlight">Manage website data</span>
+      <li class="xrextras-loading-samsung-instruction hidden">
+        <span class="xrextras-loading-highlight">Manage website data</span>
       </li>
-      <li class="samsung-instruction hidden">
+      <li class="xrextras-loading-samsung-instruction hidden">
         Press and hold<br>
-        <span class="camera-instruction-block domain-view">apps.8thwall.com</span>
+        <span class="xrextras-loading-camera-instruction-block xrextras-loading-domain-view">apps.8thwall.com</span>
       </li>
-      <li class="samsung-instruction hidden">
-        <span class="highlight" style="color: #1500ba">DELETE</span>
+      <li class="xrextras-loading-samsung-instruction hidden">
+        <span class="xrextras-loading-highlight" style="color: #1500ba">DELETE</span>
       </li>
     </ol>
-    <div class="loading-error-footer">
+    <div class="xrextras-loading-error-footer">
       <img class='foreground-image' style="transform: rotate(130deg);"
         src="./reload.svg" />
       Then, reload the page for AR!
@@ -73,79 +73,79 @@
   </div>
 
   <!--Permission error, microphone + camera, iOS-->
-  <div id="microphonePermissionsErrorApple" class="absolute-fill hidden">
-    <div class='permissionIconIos'>
+  <div id="xrextras-microphone-permissions-error-apple" class="absolute-fill hidden">
+    <div class='xrextras-loading-permission-icon-ios'>
       <img class='foreground-image' src="./camera.svg" />
       <img class='foreground-image' src="./microphone.svg" />
     </div>
-    <p id="microphonePermissionsErrorAppleMessage">
+    <p id="xrextras-microphone-permissions-error-apple-message">
       Reload the page and enable camera + microphone access
     </p>
-    <div class='bottom-message'>
+    <div class='xrextras-loading-bottom-message'>
       Ensure camera + microphone access is allowed in <span class='wk-app-name'></span> app settings
     </div>
   </div>
 
   <!--Permission error, microphone + camera, Android-->
-  <div id="microphonePermissionsErrorAndroid" class="absolute-fill hidden">
-    <div class="permissionIcon">
+  <div id="xrextras-microphone-permissions-error-android" class="absolute-fill hidden">
+    <div class="xrextras-loading-permission-icon">
       <img class='foreground-image' src="./microphone.svg" />
     </div>
-    <div class="loading-error-header">Let's enable your microphone</div>
-    <ol class="loading-error-instructions">
+    <div class="xrextras-loading-error-header">Let's enable your microphone</div>
+    <ol class="xrextras-loading-error-instructions">
       <li>Tap the <img class='foreground-image' src="./dots.svg"> in the top right
       </li>
       <li>Tap Settings</li>
-      <li class="chrome-instruction hidden">
-        <span class="highlight">Site settings</span>
+      <li class="xrextras-loading-chrome-instruction hidden">
+        <span class="xrextras-loading-highlight">Site settings</span>
       </li>
-      <li class="chrome-instruction hidden">
-        <span class="highlight">Microphone</span>
+      <li class="xrextras-loading-chrome-instruction hidden">
+        <span class="xrextras-loading-highlight">Microphone</span>
       </li>
-      <li class="chrome-instruction hidden">
-        <span class="highlight">Blocked</span>
+      <li class="xrextras-loading-chrome-instruction hidden">
+        <span class="xrextras-loading-highlight">Blocked</span>
         <br>
-        <span class="microphone-instruction-block domain-view">apps.8thwall.com</span>
+        <span class="xrextras-loading-microphone-instruction-block xrextras-loading-domain-view">apps.8thwall.com</span>
       </li>
-      <li class="chrome-instruction hidden">
-        <span class="microphone-instruction-button">CLEAR & RESET</span>
+      <li class="xrextras-loading-chrome-instruction hidden">
+        <span class="xrextras-loading-microphone-instruction-button">CLEAR & RESET</span>
       </li>
-      <li class="chrome-instruction hidden">
-        <span class="highlight">Do the same for Camera</span>
+      <li class="xrextras-loading-chrome-instruction hidden">
+        <span class="xrextras-loading-highlight">Do the same for Camera</span>
       </li>
-      <li class="samsung-instruction hidden">
-        <span class="highlight">Advanced</span>
+      <li class="xrextras-loading-samsung-instruction hidden">
+        <span class="xrextras-loading-highlight">Advanced</span>
       </li>
-      <li class="samsung-instruction hidden">
-        <span class="highlight">Manage website data</span>
+      <li class="xrextras-loading-samsung-instruction hidden">
+        <span class="xrextras-loading-highlight">Manage website data</span>
       </li>
-      <li class="samsung-instruction hidden">
+      <li class="xrextras-loading-samsung-instruction hidden">
         Press and hold<br>
-        <span class="microphone-instruction-block domain-view">apps.8thwall.com</span>
+        <span class="xrextras-loading-microphone-instruction-block xrextras-loading-domain-view">apps.8thwall.com</span>
       </li>
-      <li class="samsung-instruction hidden">
-        <span class="highlight" style="color: #1500ba">DELETE</span>
+      <li class="xrextras-loading-samsung-instruction hidden">
+        <span class="xrextras-loading-highlight" style="color: #1500ba">DELETE</span>
       </li>
     </ol>
-    <div class="loading-error-footer">
+    <div class="xrextras-loading-error-footer">
       <img class='foreground-image' style="transform: rotate(130deg);"
         src="./reload.svg" />
       Then, reload the page for AR!
     </div>
   </div>
 
-  <div id="linkOutViewAndroid" class="absolute-fill hidden">
+  <div id="xrextras-link-out-view-android" class="absolute-fill hidden">
     <div class="error-text-outer-container">
       <div class="error-text-container error-margin-top-5">
         <img id="app_img" class="app-header-img unknown">
         <br />
-        <a id="open_browser_android" class="start-ar-button">Start AR</a>
+        <a id="xrextras-open-browser-android" class="xrextras-loading-start-ar-button">Start AR</a>
         <img class="foreground-image poweredby-img" src="../almosttheremodule/poweredby-horiz-white.svg">
       </div>
     </div>
   </div>
 
-  <div id="copyLinkViewAndroid" class="absolute-fill hidden">
+  <div id="xrextras-copy-link-view-android" class="absolute-fill hidden">
     <div class="error-text-outer-container">
       <div class="error-text-container error-margin-top-5">
         <span id="error_text_header_unknown" class="open-header-unknown">
@@ -154,43 +154,43 @@
         <img id="app_img" class="app-header-img unknown">
         <br />
         <span id="app_link" class="desktop-home-link mobile"></span>
-        <button id="copy_link_android" class="copy-link-btn">Copy Link</button>
+        <button id="xrextras-copy-link-android" class="copy-link-btn">Copy Link</button>
         <img class="foreground-image poweredby-img" src="../almosttheremodule/poweredby-horiz-white.svg">
       </div>
     </div>
   </div>
 
   <!--iOS devicemotion sensor is disabled -->
-  <div id="deviceMotionErrorApple" class="absolute-fill hidden">
-    <div class="loading-error-header">Let's enable your motion sensors</div>
-    <ol class="loading-error-instructions">
+  <div id="xrextras-device-motion-error-apple" class="absolute-fill hidden">
+    <div class="xrextras-loading-error-header">Let's enable your motion sensors</div>
+    <ol class="xrextras-loading-error-instructions">
       <li>Open <img src="./settings-icon-ios.png"
           style="max-height: 4vh"><b>Settings</b></li>
       <li>Select <img src="./safari-icon.png"
           style="max-height: 4vh"><b>Safari</b></li>
-      <li>Enable <span class="highlight">Motion&nbsp;&amp;&nbsp;Orientation Access</span></li>
+      <li>Enable <span class="xrextras-loading-highlight">Motion&nbsp;&amp;&nbsp;Orientation Access</span></li>
       <li>Reload the page <img class="foreground-image" style="transform: rotate(130deg);" src="./reload.svg"></li>
     </ol>
     <!-- Empty footer to take up space -->
-    <div class="loading-error-footer"></div>
+    <div class="xrextras-loading-error-footer"></div>
   </div>
 
-  <div id="userPromptError" class="permission-error absolute-fill hidden">
+  <div id="xrextras-user-prompt-error" class="xrextras-loading-permission-error absolute-fill hidden">
     <h1>Permissions were denied.</h1>
     <p>You need to accept motion permissions to continue.</p>
-    <button id="reloadButton" class="main-button" onClick="window.location.reload()">Refresh</button>
+    <button id="xrextras-reload-button" class="xrextras-loading-main-button" onClick="window.location.reload()">Refresh</button>
   </div>
 
-  <div id="motionPermissionsErrorApple" class="permission-error absolute-fill hidden">
+  <div id="xrextras-motion-permissions-error-apple" class="xrextras-loading-permission-error absolute-fill hidden">
     <h1>Permissions were denied.</h1>
     <p>You've prevented the page from accessing your motion sensors.</p>
     <p>Please close <span class='wk-app-name'></span> app to reenable your motion sensors.</p>
   </div>
 
-  <div id="cameraSelectionWorldTrackingError" class="permission-error absolute-fill hidden">
+  <div id="xrextras-camera-selection-world-tracking-error" class="xrextras-loading-permission-error absolute-fill hidden">
     <p><img height="75px" src="../runtimeerrormodule/computer-voxel.png" class="floater"></p>
     <div class="error-text-header">Oops, something went wrong!</div>
-    <p id="camera_mode_world_tracking_error"></p>
+    <p id="xrextras-camera-mode-world-tracking-error"></p>
   </div>
   <div id='debug-message' style='color:#eee; word-break: break-all; position:absolute; top:0'></div>
 </div>
