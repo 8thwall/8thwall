@@ -42,14 +42,10 @@ const initializeLocal = (
     appName,
     location,
   })
-
   if (templateZipUrl) {
     params.set('templateZipUrl', templateZipUrl)
   }
-
-  return fetchJson<InitializeResponse>(
-    `${API}/project/init-local?${params}`, {method: 'POST'}
-  )
+  return fetchJson<InitializeResponse>(`${API}/project/init-local?${params}`, {method: 'POST'})
 }
 
 const notifyProjectAccess = (appKey: string) => {
@@ -62,6 +58,7 @@ const notifyProjectAccess = (appKey: string) => {
 const watchLocal = (appKey: string) => {
   const params = new URLSearchParams({
     appKey,
+
   })
   return fetchJson<{}>(`${API}/project/watch-local?${params}`, {
     method: 'POST',
@@ -101,8 +98,8 @@ const makeLocalFileUrl = (appKey: string, path: string, version: string | undefi
   const params = new URLSearchParams({
     appKey,
     path,
-  })
 
+  })
   if (version) {
     params.append('v', version)
   }
@@ -141,16 +138,16 @@ const deleteLocalFile = (appKey: string, path: string) => {
   const params = new URLSearchParams({
     appKey,
     path,
-  })
 
+  })
   return fetchJson<{}>(`${API}/file?${params}`, {method: 'DELETE'})
 }
 
 const getFileStateSnapshot = (appKey: string) => {
   const params = new URLSearchParams({
     appKey,
-  })
 
+  })
   return fetchJson<FileSnapshotResponse>(`${API}/file/snapshot?${params}`)
 }
 
@@ -179,8 +176,8 @@ interface ProjectStatusResponse {
 const getProjectStatus = (appKey: string) => {
   const params = new URLSearchParams({
     appKey,
-  })
 
+  })
   return fetchJson<ProjectStatusResponse>(`${API}/project/project-status?${params}`)
 }
 
@@ -188,6 +185,7 @@ const getFileHash = async (appKey: string, path: string): Promise<string> => {
   const params = new URLSearchParams({
     appKey,
     path,
+
   })
 
   const res = await fetch(`${API}/file/hash/sha256?${params}`)
@@ -205,8 +203,8 @@ const showFile = (appKey: string, path: string) => {
   const params = new URLSearchParams({
     appKey,
     path,
-  })
 
+  })
   return fetchJson<{}>(`${API}/file/show?${params}`, {method: 'POST'})
 }
 
@@ -214,8 +212,8 @@ const openFile = (appKey: string, path: string) => {
   const params = new URLSearchParams({
     appKey,
     path,
-  })
 
+  })
   return fetchJson<{}>(`${API}/file/open?${params}`, {method: 'POST'})
 }
 
@@ -226,6 +224,7 @@ const listProjects = () => fetchJson<ListProjectsResponse>(
 const showProject = (appKey: string) => {
   const params = new URLSearchParams({
     appKey,
+
   })
 
   return fetchJson<{}>(`${API}/project/reveal-in-finder?${params}`, {method: 'POST'})
@@ -234,6 +233,7 @@ const showProject = (appKey: string) => {
 const openProject = (appKey: string) => {
   const params = new URLSearchParams({
     appKey,
+
   })
 
   return fetchJson<{}>(`${API}/project/open?${params}`, {method: 'POST'})
@@ -242,25 +242,26 @@ const openProject = (appKey: string) => {
 const deleteProject = (appKey: string) => {
   const params = new URLSearchParams({
     appKey,
+
   })
 
   return fetchJson<{}>(
     `${API}/project/delete?${params}`, {method: 'DELETE'}
   )
 }
-
 const listFileDirectory = (appKey: string, path: string) => {
   const params = new URLSearchParams({
     appKey,
     path,
-  })
 
+  })
   return fetchJson<{contents: string[]}>(`${API}/file/directory?${params}`)
 }
 
 const moveProject = (appKey: string, newLocation?: string) => {
   const params = new URLSearchParams({
     appKey,
+
   })
 
   if (newLocation) {
@@ -275,6 +276,7 @@ const moveProject = (appKey: string, newLocation?: string) => {
 const pickNewProjectLocation = (appKey: string) => {
   const params = new URLSearchParams({
     appKey,
+
   })
 
   return fetchJson<NewProjectLocationResponse>(
@@ -293,7 +295,7 @@ const openDiskLocation = (options?: OpenDiskLocationParams) => {
     acceptNonStudio: String(Boolean(options?.acceptNonStudio)),
   })
   return fetchJson<
-  InitializeResponse | CanceledInitializeResponse | OpenDiskZipResponse
+    InitializeResponse | CanceledInitializeResponse | OpenDiskZipResponse
   >(
     `${API}/project/open-disk?${params}`, {method: 'POST'}
   )
@@ -302,6 +304,7 @@ const openDiskLocation = (options?: OpenDiskLocationParams) => {
 const buildZip = async (appKey: string) => {
   const params = new URLSearchParams({
     appKey,
+
   })
 
   const response = await fetch(`${API}/project/build?${params}`, {method: 'POST'})
@@ -315,6 +318,7 @@ const buildZip = async (appKey: string) => {
 const migrateProject = (appKey: string) => {
   const params = new URLSearchParams({
     appKey,
+
   })
 
   return fetchJson<{}>(
@@ -325,6 +329,7 @@ const migrateProject = (appKey: string) => {
 const getRuntimeMetadata = (appKey: string) => {
   const params = new URLSearchParams({
     appKey,
+
   })
 
   return fetchJson<RuntimeMetadata>(
@@ -337,6 +342,7 @@ const renameFile = (appKey: string, oldPath: string, newPath: string) => {
     appKey,
     oldPath,
     newPath,
+
   })
 
   return fetchJson<{}>(`${API}/file/rename?${params}`, {method: 'POST'})
@@ -345,6 +351,7 @@ const renameFile = (appKey: string, oldPath: string, newPath: string) => {
 const checkConfigStatus = (appKey: string) => {
   const params = new URLSearchParams({
     appKey,
+
   })
 
   return fetchJson<ProjectConfigResponse>(
@@ -412,5 +419,4 @@ export {
 
 export type {
   ApiFetchError,
-  OpenDiskZipResponse,
 }

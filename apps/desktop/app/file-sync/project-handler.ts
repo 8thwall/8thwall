@@ -482,7 +482,6 @@ const deleteLocalProject = withErrorHandlingResponse(async (req: Request) => {
   return makeJsonResponse({})
 })
 
-
 const pickNewProjectLocation = withErrorHandlingResponse(async (req: Request) => {
   const requestUrl = new URL(req.url)
   const params = ProjectRequestParams.safeParse(getQueryParams(requestUrl))

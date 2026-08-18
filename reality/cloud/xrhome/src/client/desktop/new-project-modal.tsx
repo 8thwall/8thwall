@@ -70,11 +70,9 @@ const NewProjectContent: React.FC<INewProjectContent> = ({
       <form
         className={classes.newProjectModal}
         onSubmit={async (e) => {
-          e.preventDefault()
           setLoading(true)
-          setError('')
-
           try {
+            e.preventDefault()
             const res = await initializeLocal(projectTitle, location, selectedTemplate)
             history.push(getLocalStudioPath(res.appKey))
             queryClient.invalidateQueries({queryKey: ['listProjects']})
@@ -90,7 +88,6 @@ const NewProjectContent: React.FC<INewProjectContent> = ({
             {t('new_project_modal.title.new')}
           </AutoHeading>
         </StandardModalHeader>
-
         <StandardModalContent>
           <SpaceBetween direction='vertical'>
             <StandardTextField
@@ -102,25 +99,21 @@ const NewProjectContent: React.FC<INewProjectContent> = ({
                 setProjectTitle(value)
               }}
             />
-
             {!templateZipUrl && (
               <>
                 <label htmlFor='new-project-template'>
                   {t('new_project_modal.input.label.template')}
                 </label>
-
                 <div className={classes.templateCarousel}>
                   <TemplateCard
                     name='new-project-template'
                     checked={selectedTemplate === null}
                     onChange={() => {
                       setSelectedTemplate(null)
-                      setError('')
                     }}
                     title={t('new_project_modal.input.title.empty_project')}
                     imageUrl={coverImg}
                   />
-
                   {GITHUB_TEMPLATES.map(template => (
                     <TemplateCard
                       key={template.zipUrl}
@@ -128,7 +121,6 @@ const NewProjectContent: React.FC<INewProjectContent> = ({
                       checked={selectedTemplate === template.zipUrl}
                       onChange={() => {
                         setSelectedTemplate(template.zipUrl)
-                        setError('')
                       }}
                       title={template.title}
                       imageUrl={template.imageUrl}
@@ -137,12 +129,8 @@ const NewProjectContent: React.FC<INewProjectContent> = ({
                 </div>
               </>
             )}
-
             <div>
-              <StandardFieldLabel
-                label={t('new_project_modal.input.label.folder_location')}
-              />
-
+              <StandardFieldLabel label={t('new_project_modal.input.label.folder_location')} />
               <JointToggleButton
                 options={[
                   {
@@ -158,23 +146,14 @@ const NewProjectContent: React.FC<INewProjectContent> = ({
                 onChange={e => setLocation(e)}
               />
             </div>
-
-            {error && (
-              <StaticBanner type='danger'>
-                {error}
-              </StaticBanner>
-            )}
+            {error && <StaticBanner type='danger'>{error}</StaticBanner>}
           </SpaceBetween>
         </StandardModalContent>
 
         <StandardModalActions>
-          <BoldButton
-            type='button'
-            onClick={() => onClose()}
-          >
+          <BoldButton onClick={() => onClose()}>
             {t('button.cancel', {ns: 'common'})}
           </BoldButton>
-
           <PrimaryButton
             type='submit'
             disabled={!projectTitle}
@@ -190,7 +169,6 @@ const NewProjectContent: React.FC<INewProjectContent> = ({
 
 const NewProjectButton: React.FC = () => {
   const {t} = useTranslation(['studio-desktop-pages'])
-
   return (
     <StandardModal
       trigger={(

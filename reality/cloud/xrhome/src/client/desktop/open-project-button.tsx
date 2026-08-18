@@ -23,29 +23,23 @@ const OpenProjectButton = () => {
 
   const handleOpen = async () => {
     setLoading(true)
-
     try {
       const result = await openDiskLocation({
         acceptNonStudio: getAlreadyConfirmedNonStudio(),
       })
-
       if (result.canceled) {
         return
       }
-
       if ('templateZipUrl' in result) {
         setTemplateZipUrl(result.templateZipUrl)
         return
       }
-
       queryClient.invalidateQueries({queryKey: ['listProjects']})
-
       if (result.initialization === 'v2') {
         history.push(getLocalStudioPath(result.appKey))
       }
     } catch (err: any) {
       const {containsPackageJson, location} = (await (err as ApiFetchError)?.res?.json())
-
       if (location && containsPackageJson) {
         setNonStudioLocation(location)
       } else {
@@ -61,7 +55,6 @@ const OpenProjectButton = () => {
       <SecondaryButton onClick={handleOpen} disabled={loading}>
         {t('button.open', {ns: 'common'})}
       </SecondaryButton>
-
       {templateZipUrl &&
         <StandardModal
           trigger='render'
@@ -82,7 +75,6 @@ const OpenProjectButton = () => {
           )}
         </StandardModal>
       }
-
       {nonStudioLocation &&
         <ConfirmNonStudioModal
           location={nonStudioLocation}
