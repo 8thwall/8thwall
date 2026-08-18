@@ -184,6 +184,12 @@ const SpotLightComponent: React.FC<ILightComponent> = (
   useHelper(showHelpers ? lightRef : null, SpotLightHelper)
   useHelper(showHelpers ? shadowCameraRef : null, CameraHelper)
 
+  const target = React.useMemo(() => {
+    const object = new Object3D()
+    object.position.z = 1
+    return object
+  }, [])
+
   useLayoutEffect(() => {
     if (lightRef.current) {
       lightRef.current.castShadow = lightConfig.castShadow
@@ -206,32 +212,28 @@ const SpotLightComponent: React.FC<ILightComponent> = (
     }
   }, [lightConfig, texture])
 
-  const target = React.useMemo(() => {
-    const object = new Object3D()
-    object.position.z = 1
-    return object
-  }, [])
-
   return (
-    <spotLight
-      ref={lightRef}
-      color={lightConfig.color}
-      castShadow={lightConfig.castShadow}
-      intensity={intensity}
-      decay={lightConfig.decay}
-      distance={lightConfig.distance}
-      angle={lightConfig.angle}
-      penumbra={lightConfig.penumbra}
-      target={target}
-    >
-      <perspectiveCamera
-        ref={shadowCameraRef}
-        attach='shadow-camera'
-        near={lightConfig.shadowCamera[4]}
-        far={lightConfig.shadowCamera[5]}
-      />
+    <>
+      <spotLight
+        ref={lightRef}
+        color={lightConfig.color}
+        castShadow={lightConfig.castShadow}
+        intensity={intensity}
+        decay={lightConfig.decay}
+        distance={lightConfig.distance}
+        angle={lightConfig.angle}
+        penumbra={lightConfig.penumbra}
+        target={target}
+      >
+        <perspectiveCamera
+          ref={shadowCameraRef}
+          attach='shadow-camera'
+          near={lightConfig.shadowCamera[4]}
+          far={lightConfig.shadowCamera[5]}
+        />
+      </spotLight>
       <primitive object={target} />
-    </spotLight>
+    </>
   )
 }
 
