@@ -6,7 +6,7 @@ import {getRuntimeMetadata} from '../local-sync-api'
 /* eslint-disable no-await-in-loop */
 
 const RUNTIME_METADATA_RETRY_INTERVAL_MS = 1500
-const RUNTIME_METADATA_RETRY_TIMEOUT_MS = 2 * 60 * 1000
+const RUNTIME_METADATA_RETRY_ATTEMPTS = 10
 
 const getRuntimeMetadataQuery = (appKey: string) => ({
   queryKey: ['runtimeMetadata', appKey],
@@ -14,9 +14,9 @@ const getRuntimeMetadataQuery = (appKey: string) => ({
     // NOTE(christoph): During first time setup, this may mount before the config is fully
     // initialized. After the server starts, it will trigger a refetch regardless, but to avoid
     // error screens on start, absorb failures.
-    const timeoutAt = Date.now() + RUNTIME_METADATA_RETRY_TIMEOUT_MS
+    let iterations = 0
 
-    while (Date.now() < timeoutAt) {
+    while (iterations++ < RUNTIME_METADATA_RETRY_ATTEMPTS) {
       try {
         return await getRuntimeMetadata(appKey)
       } catch (err) {
@@ -26,6 +26,7 @@ const getRuntimeMetadataQuery = (appKey: string) => ({
 
     throw new Error('Could not load metadata')
   },
+  retry: false,
 })
 
 const useRuntimeMetadata = () => {
