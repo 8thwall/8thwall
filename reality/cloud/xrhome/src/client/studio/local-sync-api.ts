@@ -16,6 +16,11 @@ type ApiFetchError = Error & {
   res?: Response
 }
 
+type OpenDiskZipResponse = {
+  canceled: false
+  templateZipUrl: string
+}
+
 // eslint-disable-next-line arrow-parens
 const fetchJson = async <T>(url: string, options?: RequestInit): Promise<T> => {
   const response = await fetch(url, options)
@@ -289,7 +294,9 @@ const openDiskLocation = (options?: OpenDiskLocationParams) => {
     location: options?.location || '',
     acceptNonStudio: String(Boolean(options?.acceptNonStudio)),
   })
-  return fetchJson<InitializeResponse | CanceledInitializeResponse>(
+  return fetchJson<
+    InitializeResponse | CanceledInitializeResponse | OpenDiskZipResponse
+  >(
     `${API}/project/open-disk?${params}`, {method: 'POST'}
   )
 }

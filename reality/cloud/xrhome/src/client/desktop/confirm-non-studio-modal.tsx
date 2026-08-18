@@ -40,16 +40,16 @@ const ConfirmNonStudioModal: React.FC<IConfirmNonStudioModal> = ({location, onCl
       if (neverShowAgain) {
         confirmNonStudio()
       }
-      const {appKey, initialization, canceled} = await openDiskLocation({
+      const result = await openDiskLocation({
         location,
         acceptNonStudio: true,
       })
-      if (canceled) {
+      if (result.canceled || 'templateZipUrl' in result) {
         return
       } else {
         queryClient.invalidateQueries({queryKey: ['listProjects']})
-        if (initialization === 'v2') {
-          history.push(getLocalStudioPath(appKey))
+        if (result.initialization === 'v2') {
+          history.push(getLocalStudioPath(result.appKey))
         }
       }
       onClose()

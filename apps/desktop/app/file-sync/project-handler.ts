@@ -5,6 +5,7 @@ import fs from 'fs/promises'
 import log from 'electron-log'
 import archiver from 'archiver'
 import crypto from 'crypto'
+import {fileURLToPath, pathToFileURL} from 'url'
 
 import {makeRunQueue} from '@repo/reality/shared/run-queue'
 import type {RuntimeMetadata} from '@repo/c8/ecs/src/shared/runtime-version'
@@ -107,15 +108,35 @@ const getLocalProjectLocation = withErrorHandlingResponse(async (req: Request) =
     }
   }
 
-  if (params.data.templateZipUrl) {
-    const zipRes = await fetch(params.data.templateZipUrl)
-    if (!zipRes.ok) {
-      throw new Error('Unable to load template zip')
+  try {
+    if (params.data.templateZipUrl) {
+      let zip: Buffer
+
+      if (params.data.templateZipUrl.startsWith('file://')) {
+        const zipPath = fileURLToPath(params.data.templateZipUrl)
+
+        if (path.extname(zipPath).toLowerCase() !== '.zip') {
+          throw makeCodedError('Selected project source must be a ZIP file', 400)
+        }
+
+        zip = await fs.readFile(zipPath)
+      } else {
+        const zipRes = await fetch(params.data.templateZipUrl)
+
+        if (!zipRes.ok) {
+          throw new Error('Unable to load template zip')
+        }
+
+        zip = Buffer.from(await zipRes.arrayBuffer())
+      }
+
+      await unzipIntoFolder(savePath, zip)
+    } else {
+      await projectSetup(savePath)
     }
-    const zip = Buffer.from(await zipRes.arrayBuffer())
-    await unzipIntoFolder(savePath, zip)
-  } else {
-    await projectSetup(savePath)
+  } catch (error) {
+    await fs.rm(savePath, {recursive: true, force: true})
+    throw error
   }
 
   return recordLocalProject(savePath, 'v2')
@@ -145,6 +166,20 @@ const checkProjectMigrated = async (projectPath: string): Promise<boolean> => {
   return false
 }
 
+const openProjectPrompt = async (): Promise<string | undefined> => {
+  const res = await dialog.showOpenDialog({
+    properties: ['openFile', 'openDirectory'],
+    filters: [
+      {
+        name: '8th Wall Project',
+        extensions: ['zip'],
+      },
+    ],
+  })
+
+  return res.canceled ? undefined : res.filePaths[0]
+}
+
 const openDiskLocation = withErrorHandlingResponse(async (req) => {
   const requestUrl = new URL(req.url)
   const params = OpenDiskParams.safeParse(getQueryParams(requestUrl))
@@ -153,10 +188,23 @@ const openDiskLocation = withErrorHandlingResponse(async (req) => {
     throw makeCodedError('Invalid query params', 400)
   }
 
-  const projectPath = params.data.location || await locationPrompt()
+  const projectPath = params.data.location || await openProjectPrompt()
 
   if (!projectPath) {
     return makeJsonResponse({canceled: true})
+  }
+
+  const projectStat = await fs.stat(projectPath)
+
+  if (projectStat.isFile()) {
+    if (path.extname(projectPath).toLowerCase() !== '.zip') {
+      throw makeCodedError('Selected file must be a ZIP', 400)
+    }
+
+    return makeJsonResponse({
+      canceled: false,
+      templateZipUrl: pathToFileURL(projectPath).toString(),
+    })
   }
 
   let isValid = false

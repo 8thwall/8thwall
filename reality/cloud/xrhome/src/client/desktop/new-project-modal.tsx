@@ -43,10 +43,12 @@ const useStyles = createUseStyles({
 
 interface INewProjectContent {
   onClose: () => void
+  templateZipUrl?: string
 }
 
 const NewProjectContent: React.FC<INewProjectContent> = ({
   onClose,
+  templateZipUrl,
 }) => {
   const typography = useTypography()
   const {t} = useTranslation(['studio-desktop-pages', 'common'])
@@ -56,7 +58,9 @@ const NewProjectContent: React.FC<INewProjectContent> = ({
   const queryClient = useQueryClient()
   const history = useHistory()
   const [loading, setLoading] = React.useState(false)
-  const [selectedTemplate, setSelectedTemplate] = React.useState<string | null>(null)
+  const [selectedTemplate, setSelectedTemplate] = React.useState<string | null>(
+    templateZipUrl || null
+  )
   const [error, setError] = React.useState('')
 
   const projectTitle = rawProjectTitle.trim()
@@ -95,32 +99,36 @@ const NewProjectContent: React.FC<INewProjectContent> = ({
                 setProjectTitle(value)
               }}
             />
-            <label htmlFor='new-project-template'>
-              {t('new_project_modal.input.label.template')}
-            </label>
-            <div className={classes.templateCarousel}>
-              <TemplateCard
-                name='new-project-template'
-                checked={selectedTemplate === null}
-                onChange={() => {
-                  setSelectedTemplate(null)
-                }}
-                title={t('new_project_modal.input.title.empty_project')}
-                imageUrl={coverImg}
-              />
-              {GITHUB_TEMPLATES.map(template => (
-                <TemplateCard
-                  key={template.zipUrl}
-                  name='new-project-template'
-                  checked={selectedTemplate === template.zipUrl}
-                  onChange={() => {
-                    setSelectedTemplate(template.zipUrl)
-                  }}
-                  title={template.title}
-                  imageUrl={template.imageUrl}
-                />
-              ))}
-            </div>
+            {!templateZipUrl && (
+              <>
+                <label htmlFor='new-project-template'>
+                  {t('new_project_modal.input.label.template')}
+                </label>
+                <div className={classes.templateCarousel}>
+                  <TemplateCard
+                    name='new-project-template'
+                    checked={selectedTemplate === null}
+                    onChange={() => {
+                      setSelectedTemplate(null)
+                    }}
+                    title={t('new_project_modal.input.title.empty_project')}
+                    imageUrl={coverImg}
+                  />
+                  {GITHUB_TEMPLATES.map(template => (
+                    <TemplateCard
+                      key={template.zipUrl}
+                      name='new-project-template'
+                      checked={selectedTemplate === template.zipUrl}
+                      onChange={() => {
+                        setSelectedTemplate(template.zipUrl)
+                      }}
+                      title={template.title}
+                      imageUrl={template.imageUrl}
+                    />
+                  ))}
+                </div>
+              </>
+            )}
             <div>
               <StandardFieldLabel label={t('new_project_modal.input.label.folder_location')} />
               <JointToggleButton
@@ -181,4 +189,5 @@ const NewProjectButton: React.FC = () => {
 
 export {
   NewProjectButton,
+  NewProjectContent,
 }
