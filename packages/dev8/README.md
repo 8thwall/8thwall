@@ -18,6 +18,12 @@ npm install
 npm run build
 ```
 
+## Tests
+
+```bash
+npm test
+```
+
 ## Using a locally build version on a project
 
 Next, find your local ip by running something like

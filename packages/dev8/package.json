@@ -4,6 +4,7 @@
   "scripts": {
     "build": "./node_modules/.bin/webpack",
     "clean": "rm -rf dist",
+    "test": "node --test test/*-test.js",
     "serve": "./node_modules/.bin/webpack-dev-server --devtool eval --mode development --host=0.0.0.0",
     "postinstall": "npm run capnp:prepare; patch-package",
     "capnp:prepare": "./build-capnp-ts.sh"
