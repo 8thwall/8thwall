@@ -1,19 +1,19 @@
-#loadingContainer {
+#xrextras-loading-container {
   z-index: 800;
   font-family: 'Nunito-SemiBold', sans-serif;
 }
 
-#loadingContainer #xrextras-load-background {
+#xrextras-load-background {
   z-index: 10;
   background-color: #101118;
   pointer-events: auto;
 }
 
-.xrextras-old-style #loadingContainer #xrextras-load-background {
+.xrextras-old-style #xrextras-load-background {
   background-color: white;
 }
 
-#loadingContainer #xrextras-requesting-camera-permissions {
+#xrextras-requesting-camera-permissions {
   z-index: 11;
   position: absolute;
   top: 0;
@@ -27,14 +27,14 @@
   padding-bottom: 1.75vh;
 }
 
-#loadingContainer #xrextras-requesting-camera-icon {
+#xrextras-requesting-camera-icon {
   display: block;
   margin: 0 auto;
   margin-bottom: 2vh;
   height: 5.5vh;
 }
 
-#loadingContainer #xrextras-load-image {
+#xrextras-load-image {
   position: absolute;
   margin-top: -2.5em;
   margin-left: -2.5em;
@@ -46,15 +46,15 @@
 }
 
 /* camera and micrphone permission related styles */
-#loadingContainer #xrextras-camera-permissions-error-apple, #loadingContainer #xrextras-microphone-permissions-error-apple {
+#xrextras-camera-permissions-error-apple, #xrextras-microphone-permissions-error-apple {
   background-color: #101118;
 }
 
-.xrextras-old-style #loadingContainer #xrextras-camera-permissions-error-apple, .xrextras-old-style #xrextras-microphone-permissions-error-apple {
+.xrextras-old-style #xrextras-camera-permissions-error-apple, .xrextras-old-style #xrextras-microphone-permissions-error-apple {
   background-color: white;
 }
 
-#loadingContainer #xrextras-camera-permissions-error-apple-message, #loadingContainer #xrextras-microphone-permissions-error-apple-message {
+#xrextras-camera-permissions-error-apple-message, #xrextras-microphone-permissions-error-apple-message {
   font-size: 1.75em;
   text-align: center;
   max-width: 90vw;
@@ -64,24 +64,24 @@
   color: white;
 }
 
-.xrextras-old-style #loadingContainer #xrextras-camera-permissions-error-apple-message, .xrextras-old-style #xrextras-microphone-permissions-error-apple-message {
+.xrextras-old-style #xrextras-camera-permissions-error-apple-message, .xrextras-old-style #xrextras-microphone-permissions-error-apple-message {
   color: #323232;
 }
 
-#loadingContainer .xrextras-loading-permission-icon-ios {
+.xrextras-loading-permission-icon-ios {
   display: block;
   margin: 0 auto;
   margin-top: 17vh;
   text-align: center;
 }
-#loadingContainer .xrextras-loading-permission-icon-ios img {
+.xrextras-loading-permission-icon-ios img {
   height: 20vw;
 }
-#loadingContainer .xrextras-loading-permission-icon-ios img + img {
+.xrextras-loading-permission-icon-ios img + img {
   margin-left: 10vw;
 }
 
-#loadingContainer .xrextras-loading-bottom-message {
+.xrextras-loading-bottom-message {
   color: white;
   padding: 0 5vw;
   position: absolute;
@@ -90,7 +90,7 @@
   font-size: 1.25em;
 }
 
-#loadingContainer #xrextras-camera-permissions-error-android, #loadingContainer #xrextras-microphone-permissions-error-android {
+#xrextras-camera-permissions-error-android, #xrextras-microphone-permissions-error-android {
   padding: 2vh 0;
   display: flex;
   flex-direction: column;
@@ -100,13 +100,13 @@
   background-color: #101118;
 }
 
-.xrextras-old-style #loadingContainer #xrextras-camera-permissions-error-android, .xrextras-old-style #xrextras-microphone-permissions-error-android {
+.xrextras-old-style #xrextras-camera-permissions-error-android, .xrextras-old-style #xrextras-microphone-permissions-error-android {
   background-color: white;
 }
 
 /* device motion permission related styles */
 
-#loadingContainer #xrextras-device-motion-error-apple {
+#xrextras-device-motion-error-apple {
   padding: 3vh 2vh;
   display: flex;
   flex-direction: column;
@@ -117,38 +117,38 @@
   color: white;
 }
 
-.xrextras-old-style #loadingContainer #xrextras-device-motion-error-apple {
+.xrextras-old-style #xrextras-device-motion-error-apple {
   color: #2D2E43;
   background-color: white;
 }
 
-#loadingContainer #xrextras-link-out-view-android,
-#loadingContainer #xrextras-copy-link-view-android {
+#xrextras-link-out-view-android,
+#xrextras-copy-link-view-android {
   background-color: #101118;
 }
 
-.xrextras-old-style #loadingContainer #xrextras-link-out-view-android,
-.xrextras-old-style #loadingContainer #xrextras-copy-link-view-android {
+.xrextras-old-style #xrextras-link-out-view-android,
+.xrextras-old-style #xrextras-copy-link-view-android {
   background-color: #fff;
 }
 
-#loadingContainer .xrextras-loading-permission-error {
+.xrextras-loading-permission-error {
   padding: 3vh 5vh;
   font-size: 3.5vh;
   color: #fff;
   background-color: #101118;
 }
 
-.xrextras-old-style #loadingContainer .xrextras-loading-permission-error {
+.xrextras-old-style .xrextras-loading-permission-error {
   color: #323232;
   background-color: white;
 }
 
-#loadingContainer .xrextras-loading-permission-error>h1 {
+.xrextras-loading-permission-error>h1 {
   font-size: 1.3em;
 }
 
-#loadingContainer .xrextras-loading-main-button {
+.xrextras-loading-main-button {
   border: none;
   outline: none;
   background-color: #AD50FF;
@@ -160,11 +160,11 @@
   border-radius: 0.5em;
 }
 
-.xrextras-old-style #loadingContainer .xrextras-loading-main-button {
+.xrextras-old-style .xrextras-loading-main-button {
   background-color: #7611B7;
 }
 
-#loadingContainer .xrextras-loading-start-ar-button {
+.xrextras-loading-start-ar-button {
   position: fixed;
   bottom: 25%;
   left: 50%;
@@ -181,23 +181,23 @@
   border-radius: 10px;
 }
 
-.xrextras-old-style #loadingContainer .xrextras-loading-start-ar-button {
+.xrextras-old-style .xrextras-loading-start-ar-button {
   background-color: #7611b7;
 }
 
-#loadingContainer .xrextras-loading-permission-icon {
+.xrextras-loading-permission-icon {
   overflow: hidden;
   flex: 0 0 auto;
   margin-bottom: 2vh;
 }
 
-#loadingContainer .xrextras-loading-permission-icon img {
+.xrextras-loading-permission-icon img {
   display: block;
   margin: 0 auto;
   height: 5vh;
 }
 
-#loadingContainer #xrextras-camera-selection-world-tracking-error {
+#xrextras-camera-selection-world-tracking-error {
   z-index: 999;
   position: absolute;
   top: 0;
@@ -209,17 +209,17 @@
   padding: 3vh 0;
 }
 
-#loadingContainer .xrextras-loading-error-header {
+.xrextras-loading-error-header {
   font-size: 3.5vh;
   flex: 0 0 auto;
   color: white;
 }
 
-.xrextras-old-style #loadingContainer .xrextras-loading-error-header {
+.xrextras-old-style .xrextras-loading-error-header {
   color: #323232;
 }
 
-#loadingContainer .xrextras-loading-error-footer {
+.xrextras-loading-error-footer {
   font-size: 3vh;
   line-height: 5.5vh;
   flex: 0 0 auto;
@@ -228,18 +228,18 @@
   color: white;
 }
 
-.xrextras-old-style #loadingContainer .xrextras-loading-error-footer {
+.xrextras-old-style .xrextras-loading-error-footer {
   color: #323232;
 }
 
-#loadingContainer .xrextras-loading-error-footer img {
+.xrextras-loading-error-footer img {
   display: block;
   height: 5vh;
   margin: 0 auto;
   margin-bottom: 2vh;
 }
 
-#loadingContainer .xrextras-loading-error-instructions {
+.xrextras-loading-error-instructions {
   font-family: 'Nunito', sans-serif;
   color: #fff;
   font-size: 2.5vh;
@@ -249,22 +249,22 @@
   flex: 0 0 auto;
 }
 
-.xrextras-old-style #loadingContainer .xrextras-loading-error-instructions {
+.xrextras-old-style .xrextras-loading-error-instructions {
   color: #2D2E43;
 }
 
-#loadingContainer .xrextras-loading-error-instructions>li {
+.xrextras-loading-error-instructions>li {
   position: relative;
   margin-bottom: 4.5vh;
 }
 
-#loadingContainer .xrextras-loading-error-instructions>li>img {
+.xrextras-loading-error-instructions>li>img {
   max-height: 3vh;
   vertical-align: middle;
   margin: 0 .5vh;
 }
 
-#loadingContainer .xrextras-loading-error-instructions>li:before {
+.xrextras-loading-error-instructions>li:before {
   font-family: 'Nunito', sans-serif;
   position: absolute;
   width: 40px;
@@ -281,31 +281,31 @@
   content: counter(line);
 }
 
-.xrextras-old-style #loadingContainer .xrextras-loading-error-instructions>li:before {
+.xrextras-old-style .xrextras-loading-error-instructions>li:before {
   background-color: rgba(218, 209, 228, 128);
 }
 
-#loadingContainer .xrextras-loading-highlight {
+.xrextras-loading-highlight {
   color: white;
   font-family: 'Nunito-SemiBold', sans-serif;
   font-weight: 800;
 }
 
-.xrextras-old-style #loadingContainer .xrextras-loading-highlight {
+.xrextras-old-style .xrextras-loading-highlight {
   color: #7611B7;
 }
 
-#loadingContainer .xrextras-loading-camera-instruction-block {
+.xrextras-loading-camera-instruction-block {
   display: inline-block;
   background-color: #8083A2;
   padding: 1vh;
 }
 
-.xrextras-old-style #loadingContainer .xrextras-loading-camera-instruction-block {
+.xrextras-old-style .xrextras-loading-camera-instruction-block {
   background-color: #EBEBEB;
 }
 
-#loadingContainer .xrextras-loading-camera-instruction-button {
+.xrextras-loading-camera-instruction-button {
   display: inline-block;
   padding: 1vh;
   background-color: #359AFF;
@@ -314,22 +314,7 @@
   box-shadow: 0 .125vh .25vh rgba(0, 0, 0, 0.5);
 }
 
-body:not(.xrextras-old-style) #loadingContainer .prompt-box-8w {
-  background-color: #3A3B55;
-  color: #fff;
-  text-align: center;
-}
-
-body:not(.xrextras-old-style) #loadingContainer .prompt-button-8w {
-  background-color: #8083A2;
-  border-radius: 10px;
-}
-
-body:not(.xrextras-old-style) #loadingContainer .button-primary-8w {
-  background-color: #AD50FF;
-}
-
-#loadingContainer .xrextras-loading-fade-out {
+.xrextras-loading-fade-out {
   animation: xrextras-loading-fade-out 0.3s linear forwards;
 }
 
@@ -342,7 +327,7 @@ body:not(.xrextras-old-style) #loadingContainer .button-primary-8w {
   }
 }
 
-#loadingContainer .xrextras-loading-spin {
+.xrextras-loading-spin {
   animation: xrextras-loading-spin 1.1s cubic-bezier(0.785, 0.135, 0.150, 0.860) infinite both;
 }
 
@@ -355,7 +340,7 @@ body:not(.xrextras-old-style) #loadingContainer .button-primary-8w {
   }
 }
 
-#loadingContainer .xrextras-loading-scale {
+.xrextras-loading-scale {
   -webkit-animation: xrextras-loading-scale 1s cubic-bezier(0.455, 0.030, 0.515, 0.955) infinite alternate-reverse both;
   animation: xrextras-loading-scale 1s cubic-bezier(0.455, 0.030, 0.515, 0.955) infinite alternate-reverse both;
 }
@@ -371,7 +356,7 @@ body:not(.xrextras-old-style) #loadingContainer .button-primary-8w {
   }
 }
 
-#loadingContainer .xrextras-loading-pulse {
+.xrextras-loading-pulse {
   -webkit-animation: xrextras-loading-pulse 1s ease-in-out infinite both;
   animation: xrextras-loading-pulse 1s ease-in-out infinite both;
 }

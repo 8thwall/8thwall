@@ -43,6 +43,8 @@
     "copy-webpack-plugin": "^13.0.1",
     "css-loader": "^6.8.1",
     "html-loader": "^4.2.0",
+    "postcss": "^8.4.24",
+    "postcss-selector-parser": "^6.0.13",
     "style-loader": "^3.3.3",
     "text-loader": "^0.0.1",
     "ts-loader": "^9.4.4",

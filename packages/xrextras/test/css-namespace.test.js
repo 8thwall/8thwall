@@ -1,81 +1,85 @@
 const fs = require('fs')
 const path = require('path')
+const postcss = require('postcss')
+const selectorParser = require('postcss-selector-parser')
 
+const srcDir = path.join(__dirname, '../src')
 const failures = []
 
-const htmlPath = path.join(__dirname, '../src/loadingmodule/loading-module.html')
-const html = fs.readFileSync(htmlPath, 'utf8')
+// CSS files that have not been migrated to the xrextras- namespace yet.
+// Remove a file from this set in the PR that migrates it.
+const skippedCssFiles = new Set([
+  'almosttheremodule/almost-there-module.css',
+  'common.css',
+  'mediarecorder/media-preview.css',
+  'mediarecorder/record-button.css',
+  'pwainstallermodule/pwa-installer-module.css',
+  'runtimeerrormodule/runtime-error-module.css',
+])
 
-const forbiddenDomIds = [
-  'id="loadImage"',
-  'id="loadBackground"',
-]
+const cssFiles = []
 
-for (const id of forbiddenDomIds) {
-  if (html.includes(id)) {
-    failures.push(`Unnamespaced loading DOM id remains: ${id}`)
+const collectCssFiles = (dir) => {
+  for (const entry of fs.readdirSync(dir, {withFileTypes: true})) {
+    const fullPath = path.join(dir, entry.name)
+
+    if (entry.isDirectory()) {
+      collectCssFiles(fullPath)
+    } else if (entry.isFile() && entry.name.endsWith('.css')) {
+      cssFiles.push(fullPath)
+    }
   }
 }
 
-const requiredDomIds = [
-  'id="xrextras-load-image"',
-  'id="xrextras-load-background"',
-]
+collectCssFiles(srcDir)
 
-for (const id of requiredDomIds) {
-  if (!html.includes(id)) {
-    failures.push(`Missing namespaced loading DOM id: ${id}`)
+for (const cssPath of cssFiles) {
+  const relativePath = path.relative(srcDir, cssPath).split(path.sep).join('/')
+
+  if (skippedCssFiles.has(relativePath)) {
+    continue
   }
-}
 
-const cssPath = path.join(__dirname, '../src/loadingmodule/loading-module.css')
-const css = fs.readFileSync(cssPath, 'utf8')
+  const css = fs.readFileSync(cssPath, 'utf8')
+  const root = postcss.parse(css, {from: cssPath})
 
-const requiredScopedSelectors = [
-  '#loadingContainer .xrextras-loading-spin',
-  '#loadingContainer .xrextras-loading-scale',
-  '#loadingContainer .xrextras-loading-pulse',
-  '#loadingContainer .xrextras-loading-fade-out',
-  '#loadingContainer .xrextras-loading-highlight',
-  '#loadingContainer #xrextras-load-image',
-  '#loadingContainer #xrextras-load-background',
-]
-for (const selector of requiredScopedSelectors) {
-  if (!css.includes(selector)) {
-    failures.push(`Missing scoped selector: ${selector}`)
-  }
-}
+  root.walkRules((rule) => {
+    selectorParser((selectors) => {
+      selectors.walkIds((node) => {
+        if (!node.value.startsWith('xrextras-')) {
+          failures.push(`${relativePath}: unnamespaced id "#${node.value}"`)
+        }
+      })
 
-const forbiddenKeyframes = [
-  '@keyframes spin',
-  '@keyframes scale',
-  '@keyframes pulse',
-  '@keyframes fade-out',
-]
+      selectors.walkClasses((node) => {
+        if (!node.value.startsWith('xrextras-')) {
+          failures.push(`${relativePath}: unnamespaced class ".${node.value}"`)
+        }
+      })
+    }).processSync(rule.selector)
+  })
 
-for (const keyframe of forbiddenKeyframes) {
-  if (css.includes(keyframe)) {
-    failures.push(`Unscoped keyframe remains: ${keyframe}`)
-  }
-}
+  root.walkAtRules('keyframes', (rule) => {
+    const name = rule.params.trim()
 
-const requiredKeyframes = [
-  '@keyframes xrextras-loading-spin',
-  '@keyframes xrextras-loading-scale',
-  '@keyframes xrextras-loading-pulse',
-  '@keyframes xrextras-loading-fade-out',
-]
+    if (!name.startsWith('xrextras-')) {
+      failures.push(`${relativePath}: unnamespaced keyframes "${name}"`)
+    }
+  })
 
-for (const keyframe of requiredKeyframes) {
-  if (!css.includes(keyframe)) {
-    failures.push(`Missing namespaced keyframe: ${keyframe}`)
-  }
+  root.walkAtRules('-webkit-keyframes', (rule) => {
+    const name = rule.params.trim()
+
+    if (!name.startsWith('xrextras-')) {
+      failures.push(`${relativePath}: unnamespaced keyframes "${name}"`)
+    }
+  })
 }
 
 if (failures.length) {
-  process.stderr.write('XRExtras loading CSS namespace regression check failed:\n')
-  failures.forEach(failure => process.stderr.write(`- ${failure}\n`))
+  process.stderr.write('XRExtras CSS namespace check failed:\n')
+  failures.forEach((failure) => process.stderr.write(`- ${failure}\n`))
   process.exit(1)
 }
 
-process.stdout.write('XRExtras loading CSS namespace regression check passed\n')
+process.stdout.write('XRExtras CSS namespace check passed\n')
