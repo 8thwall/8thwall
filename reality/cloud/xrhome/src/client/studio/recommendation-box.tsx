@@ -18,7 +18,7 @@ import {TertiaryButton} from '../ui/components/tertiary-button'
 import {StandardModalHeader} from '../ui/components/standard-modal-header'
 import {applyProjectConfigFix} from './local-sync-api'
 import useCurrentApp from '../common/use-current-app'
-import {useLocalSyncContext, useMaybeLocalSyncContext} from './local-sync-context'
+import {useLocalSyncContext} from './local-sync-context'
 import {
   getProjectConfigStatusQuery, useProjectConfigStatusOrLoading,
 } from '../hooks/use-project-config'
