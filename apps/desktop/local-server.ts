@@ -26,7 +26,11 @@ const createLocalServer = async (
   savePath: string
 ): Promise<LocalServer> => {
   dispatchSystemLog({appKey, type: 'log', text: 'Installing packages'})
-  await runInstallCommand(appKey, savePath)
+  try {
+    await runInstallCommand(appKey, savePath)
+  } catch (err: any) {
+    throw Object.assign(err, {reason: 'npm-install'})
+  }
   const [primaryPort, buildPort, dev8SocketPort] = await Promise.all([
     getPort({port: portNumbers(58000, 58999)}),
     getPort({port: portNumbers(59000, 59999)}),

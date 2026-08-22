@@ -29,12 +29,19 @@ type FileSyncStatus =
 | 'listening'  // Listening for local changes
 | 'active'  // Actively syncing files, changes are being processed
 
+type BuildStatus =
+| 'starting'
+| 'npm-install-failed'
+| 'failed'
+| 'running'
+
 type ILocalSyncContext = {
   appKey: string
   localBuildUrl?: string
   localBuildRemoteUrl?: string
   assetVersions: Record<string, string>
   fileSyncStatus: FileSyncStatus
+  buildStatus: BuildStatus
   restartServer: () => Promise<void>
 }
 
@@ -110,6 +117,7 @@ const LocalSyncContextProvider: React.FC<{children: React.ReactNode}> = ({childr
   const git = useCurrentGit()
   const {filesByPath, repo} = git
   const [fileSyncStatus, setFileSyncStatus] = React.useState<FileSyncStatus>('checking')
+  const [buildStatus, setBuildStatus] = React.useState<BuildStatus>('starting')
   const {saveFiles, deleteFile, deleteFiles, createFolder} = useActions(coreGitActions)
   const [localBuildUrl, setLocalBuildUrl] = React.useState<string>('')
   const [localBuildRemoteUrl, setLocalBuildRemoteUrl] = React.useState<string>('')
@@ -347,14 +355,34 @@ const LocalSyncContextProvider: React.FC<{children: React.ReactNode}> = ({childr
     queryClient.invalidateQueries(getProjectConfigStatusQuery(appKey))
   }
 
+  const startBuild = async () => {
+    setBuildStatus('starting')
+    try {
+      await watchLocal(appKey)
+      setBuildStatus('running')
+    } catch (err) {
+      let status: BuildStatus = 'failed'
+      try {
+        const {reason} = await err.res.json()
+        if (reason === 'npm-install') {
+          status = 'npm-install-failed'
+        }
+      } catch (e) {
+        // Unable to extract reason, continue with default reason
+      }
+      setBuildStatus(status)
+      throw err
+    }
+  }
+
   useAbandonableEffect(async (abandon) => {
-    await abandon(watchLocal(appKey))
+    await abandon(startBuild())
     await refreshServerUrls()
   }, [appKey])
 
   const restartServer = async () => {
     await stopWatchLocal(appKey)
-    await watchLocal(appKey)
+    await startBuild()
     await refreshServerUrls()
   }
 
@@ -414,6 +442,7 @@ const LocalSyncContextProvider: React.FC<{children: React.ReactNode}> = ({childr
     localBuildRemoteUrl,
     assetVersions,
     fileSyncStatus,
+    buildStatus,
     restartServer,
   }
 

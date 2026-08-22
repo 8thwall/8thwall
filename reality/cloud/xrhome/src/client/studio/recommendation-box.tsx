@@ -18,7 +18,7 @@ import {TertiaryButton} from '../ui/components/tertiary-button'
 import {StandardModalHeader} from '../ui/components/standard-modal-header'
 import {applyProjectConfigFix} from './local-sync-api'
 import useCurrentApp from '../common/use-current-app'
-import {useLocalSyncContext} from './local-sync-context'
+import {useLocalSyncContext, useMaybeLocalSyncContext} from './local-sync-context'
 import {
   getProjectConfigStatusQuery, useProjectConfigStatusOrLoading,
 } from '../hooks/use-project-config'
@@ -217,12 +217,39 @@ const DevSocketFixRecommendation = () => {
   )
 }
 
+const RetryInstallRecommendation = () => {
+  const {t} = useTranslation(['cloud-studio-pages', 'common'])
+  const localSyncContext = useLocalSyncContext()
+  const visible = localSyncContext.buildStatus === 'npm-install-failed'
+
+  if (!visible) {
+    return null
+  }
+
+  return (
+    <StaticBanner type='danger'>
+      <SpaceBetween direction='vertical'>
+        {t('recommendation_box.npm_install_failed_message')}
+        <SpaceBetween>
+          <BoldButton onClick={async () => localSyncContext.restartServer()}>
+            {t('button.try_again', {ns: 'common'})}
+          </BoldButton>
+          {/* <BoldButton onClick={() => setDismissed(true)}>
+            {t('recommendation_box.dismiss')}
+          </BoldButton> */}
+        </SpaceBetween>
+      </SpaceBetween>
+    </StaticBanner>
+  )
+}
+
 const RecommendationBox = () => (
   <>
     <AssetBundleRecommendation />
     <WebpackInjectFixRecommendation />
     <CopyPluginFixRecommendation />
     <DevSocketFixRecommendation />
+    <RetryInstallRecommendation />
   </>
 )
 
