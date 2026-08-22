@@ -217,12 +217,36 @@ const DevSocketFixRecommendation = () => {
   )
 }
 
+const RetryInstallRecommendation = () => {
+  const {t} = useTranslation(['cloud-studio-pages', 'common'])
+  const localSyncContext = useLocalSyncContext()
+  const visible = localSyncContext.buildStatus === 'npm-install-failed'
+
+  if (!visible) {
+    return null
+  }
+
+  return (
+    <StaticBanner type='danger'>
+      <SpaceBetween direction='vertical'>
+        {t('recommendation_box.npm_install_failed_message')}
+        <SpaceBetween>
+          <BoldButton onClick={async () => localSyncContext.restartServer()}>
+            {t('button.try_again', {ns: 'common'})}
+          </BoldButton>
+        </SpaceBetween>
+      </SpaceBetween>
+    </StaticBanner>
+  )
+}
+
 const RecommendationBox = () => (
   <>
     <AssetBundleRecommendation />
     <WebpackInjectFixRecommendation />
     <CopyPluginFixRecommendation />
     <DevSocketFixRecommendation />
+    <RetryInstallRecommendation />
   </>
 )
 

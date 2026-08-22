@@ -281,6 +281,9 @@ const startWatch = withErrorHandlingResponse(async (req: Request) => {
       }
       return makeJsonResponse({})
     } catch (error: any) {
+      if (error.reason === 'npm-install') {
+        return makeJsonResponse({message: 'NPM installation failed', reason: 'npm-install'}, 500)
+      }
       log.info(`Error starting local server: ${error}`)
       throw makeCodedError(`Failed to start watch server: ${error.message}`, 500)
     }

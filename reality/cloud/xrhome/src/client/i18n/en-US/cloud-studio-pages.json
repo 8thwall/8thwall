@@ -738,6 +738,7 @@
   "recommendation_box.inject_message": "This project is missing a required configuration change in config/webpack.config.js.",
   "recommendation_box.copy_plugin_message": "Asset configuration was mistakenly left out of the project template in config/webpack.config.js.",
   "recommendation_box.dev_socket_message": "To improve device preview, a tweak is recommended to your webpack configuration.",
+  "recommendation_box.npm_install_failed_message": "An error occurred during npm install. Please check network connection. Detailed logs are available in the bottom bar.",
   "recommendation_box.fix": "Apply Fix",
   "recommendation_box.dismiss": "Dismiss",
   "reflection.menu.label.url": "URL",
