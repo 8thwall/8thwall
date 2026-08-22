@@ -234,9 +234,6 @@ const RetryInstallRecommendation = () => {
           <BoldButton onClick={async () => localSyncContext.restartServer()}>
             {t('button.try_again', {ns: 'common'})}
           </BoldButton>
-          {/* <BoldButton onClick={() => setDismissed(true)}>
-            {t('recommendation_box.dismiss')}
-          </BoldButton> */}
         </SpaceBetween>
       </SpaceBetween>
     </StaticBanner>
