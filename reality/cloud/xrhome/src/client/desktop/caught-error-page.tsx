@@ -51,7 +51,6 @@ const generateReportLink = (error: Error) => {
   } catch (err) {
     // No stack trace
   }
-
   params.set('diagnostics', `<details><summary>Show</summary>
 
 \`\`\`
