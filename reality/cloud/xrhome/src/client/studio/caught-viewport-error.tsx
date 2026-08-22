@@ -1,6 +1,7 @@
 import React from 'react'
 import {Trans, useTranslation} from 'react-i18next'
 
+import {generateReportLink} from '../desktop/caught-error-page'
 import {ErrorDisplay} from '../ui/components/error-display'
 import {PrimaryButton} from '../ui/components/primary-button'
 import {StandardLink} from '../ui/components/standard-link'
@@ -23,7 +24,7 @@ const CaughtViewportError: React.FC<ICaughtViewportError> = ({onReset, error}) =
           ns='caught-error-page'
           i18nKey='caught_error_page.open_github_issue'
           components={{
-            1: <StandardLink href='https://8th.io/report-desktop-error' newTab>1</StandardLink>,
+            1: <StandardLink href={generateReportLink(error)} newTab>1</StandardLink>,
           }}
         />
       </p>
