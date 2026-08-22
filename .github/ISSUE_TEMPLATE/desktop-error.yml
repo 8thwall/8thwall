@@ -1,0 +1,57 @@
+name: "Desktop Error Report"
+description: "Something not working in the desktop app?"
+title: "Desktop Error:"
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting! Please fill out the following information to the best of your ability. The better the information provided, the quicker we can solve the problem.
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: "Check for Duplicates"
+      description: "Please check [open issues](https://github.com/8thwall/8thwall/issues?q=is%3Aissue%20state%3Aopen%20label%3Abug) to see if your issue has already been raised."
+      options:
+        - label: "I didn't find anything."
+          required: true
+    validations:
+      required: true
+  - type: textarea
+    id: describe_the_bug
+    attributes:
+      label: "Describe the Bug"
+      description: "Include as much detail as you like."
+    validations:
+      required: true
+  - type: textarea
+    id: steps_to_reproduce
+    attributes:
+      label: "Steps to Reproduce"
+      description: "This helps us recreate the issue on our side so we can confirm the fix."
+      placeholder: "1. Go to '...' 2. Click on '...' 3. Scroll down to '...' 4. See error"
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: "Environment"
+      description: "Device Type, OS version, desktop app version, or any other details that may be relevant"
+      placeholder: "e.g., M3 Mac, macOS 14.0, Chrome 120, ECS v3.2.1"
+    validations:
+      required: false
+  - type: textarea
+    id: screenshots_logs
+    attributes:
+      label: "Screenshots / Logs"
+      description: "If applicable, add screenshots or log output to help explain the problem."
+      placeholder: "Paste screenshots or logs here..."
+    validations:
+      required: false
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: "Diagnostics"
+      description: "This is pre-filled when reporting issues from the app, feel free to leave it blank."
+    validations:
+      required: false

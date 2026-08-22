@@ -33,6 +33,37 @@ interface ICaughtErrorPage {
   error: Error
 }
 
+/* eslint-disable local-rules/hardcoded-copy */
+const generateReportLink = (error: Error) => {
+  const params = new URLSearchParams({template: 'desktop-error.yml'})
+
+  let message: string
+  try {
+    message = error.message
+  } catch (err) {
+    // No message
+  }
+  params.set('title', `Desktop Error: ${message || ''}`)
+
+  let stackTrace: string
+  try {
+    stackTrace = error.stack && String(error.stack)
+  } catch (err) {
+    // No stack trace
+  }
+
+  params.set('diagnostics', `<details><summary>Show</summary>
+
+\`\`\`
+Build ID: ${Build8.VERSION_ID}
+${stackTrace || 'Stack Trace Unavailable'}
+\`\`\`
+</details>`)
+
+  return `https://github.com/8thwall/8thwall/issues/new?${params.toString()}`
+}
+/* eslint-enable local-rules/hardcoded-copy */
+
 const CaughtErrorPage: React.FC<ICaughtErrorPage> = ({error, onReset}) => {
   const {t} = useTranslation(['caught-error-page', 'common'])
 
@@ -54,7 +85,7 @@ const CaughtErrorPage: React.FC<ICaughtErrorPage> = ({error, onReset}) => {
             ns='caught-error-page'
             i18nKey='caught_error_page.open_github_issue'
             components={{
-              1: <StandardLink href='https://8th.io/report-desktop-error' newTab>1</StandardLink>,
+              1: <StandardLink href={generateReportLink(error)} newTab>1</StandardLink>,
             }}
           />
         </p>
