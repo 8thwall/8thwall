@@ -106,4 +106,5 @@ const CaughtErrorPage: React.FC<ICaughtErrorPage> = ({error, onReset}) => {
 
 export {
   CaughtErrorPage,
+  generateReportLink,
 }
