@@ -351,7 +351,10 @@ const LocalSyncContextProvider: React.FC<{children: React.ReactNode}> = ({childr
       setLocalBuildRemoteUrl('')
     }
 
-    queryClient.invalidateQueries(getRuntimeMetadataQuery(appKey))
+    const runtimeQuery = getRuntimeMetadataQuery(appKey)
+    queryClient.cancelQueries(runtimeQuery)
+    queryClient.invalidateQueries(runtimeQuery)
+
     queryClient.invalidateQueries(getProjectConfigStatusQuery(appKey))
   }
 
