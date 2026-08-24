@@ -33,7 +33,7 @@ const checkDeclaration = (context, node) => {
 
   const unneededSeparatorLocations = []
 
-  const sourceCode = context.getSourceCode().getText()
+  const sourceCode = context.sourceCode.getText()
 
   // Handle TSTypeLiteral or TSInterfaceDeclaration
   const parts = node.members || node.body.body
@@ -60,7 +60,7 @@ const checkDeclaration = (context, node) => {
     reportInconsistency(
       context,
       node,
-      fixer => unneededSeparatorLocations.map(loc => fixer.replaceTextRange([loc, loc + 1], ''))
+      fixer => unneededSeparatorLocations.map(loc => fixer.replaceTextRange([loc, loc + 1], '')),
     )
   }
 }

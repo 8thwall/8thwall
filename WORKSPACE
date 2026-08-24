@@ -414,16 +414,16 @@ register_toolchains(
     "//bzl/mono:mono-macosx",
 )
 
-# Load rules_nodejs to provide nodejs toolchains.
 http_archive(
     name = "build_bazel_rules_nodejs",
-    sha256 = "709cc0dcb51cf9028dd57c268066e5bc8f03a119ded410a13b5c3925d6e43c48",
-    urls = [
-        "https://github.com/bazelbuild/rules_nodejs/releases/download/5.8.4/rules_nodejs-5.8.4.tar.gz",
-    ],
+    sha256 = "a1295b168f183218bc88117cf00674bcd102498f294086ff58318f830dd9d9d1",
+    urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/5.8.5/rules_nodejs-5.8.5.tar.gz"],
 )
 
 # Rules for downloading Node.js toolchains.
+# load("@rules_nodejs//nodejs:repositories.bzl", "nodejs_repositories", "nodejs_register_toolchains")
+
+
 load(
     "@build_bazel_rules_nodejs//:repositories.bzl",
     "build_bazel_rules_nodejs_dependencies",
@@ -433,24 +433,53 @@ build_bazel_rules_nodejs_dependencies()
 
 load("@build_bazel_rules_nodejs//:index.bzl", "node_repositories")
 
-# Node toolchain to install.
 node_repositories(
     # https://github.com/bazel-contrib/rules_nodejs/blob/5.8.4/nodejs/private/node_versions.bzl
-    node_version = "18.17.0",
+    node_version = "20.14.0",
     yarn_version = "1.22.18",
 )
+
+# Node toolchain to install.
+# nodejs_repositories(
+#     name = "nodejs_darwin_arm64",
+#     # https://github.com/bazel-contrib/rules_nodejs/blob/v6.7.5/nodejs/private/node_versions.bzl
+#     node_version = "22.22.2",
+#     # yarn_version = "22.22.2",
+# )
+
+# nodejs_repositories(
+#     name = "nodejs_darwin_arm64",
+#     # https://github.com/bazel-contrib/rules_nodejs/blob/v6.7.5/nodejs/private/node_versions.bzl
+#     node_version = "22.22.2",
+#     # yarn_version = "22.22.2",
+# )
+
+# nodejs_repositories(
+#     name = "nodejs_linux_arm64",
+#     # https://github.com/bazel-contrib/rules_nodejs/blob/v6.7.5/nodejs/private/node_versions.bzl
+#     # yarn_version = "22.22.2",
+# )
+
+# nodejs_register_toolchains(name = "nodejs",    
+
+# #  node_version = "22.22.2",
+# )
+
+# node_runtime_alias(name = "nodejs_host")
 
 load("//bzl/crosstool:node-toolchain.bzl", "node_toolchain")
 
 node_toolchain(name = "node-toolchain")
 
-EMCC_NODE = "@nodejs_host//:bin/node"
 
-emscripten_config(
-    name = "emscripten-config",
-    node = EMCC_NODE,
-    python = EMCC_PYTHON,
-)
+
+# EMCC_NODE = "@nodejs_host//:bin/node"
+
+# emscripten_config(
+#     name = "emscripten-config",
+#     node = ,
+#     python = EMCC_PYTHON,
+# )
 
 # Emscripten pre-compiled libraries and platform sdks.
 http_toolchain(

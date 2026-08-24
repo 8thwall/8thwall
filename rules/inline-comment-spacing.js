@@ -85,7 +85,9 @@ const fixInlineCommentSpacing = (context, sourceCode) => {
     const lastGroup = alignableGroups.length && alignableGroups[alignableGroups.length - 1]
     if (lastGroup && isGrouped(lastGroup[lastGroup.length - 1], c, sourceCode)) {
       lastGroup.push(c)
-    } else {
+    }
+
+    else {
       alignableGroups.push([c])
     }
   })
@@ -101,7 +103,8 @@ const fixInlineCommentSpacing = (context, sourceCode) => {
       group.forEach((c) => {
         c.finalCommentStart = maxCodeEnd + MINIMUM_SPACE_COUNT
       })
-    } else {
+    }
+    else {
       group.forEach((c) => {
         c.finalCommentStart = c.codeEnd + MINIMUM_SPACE_COUNT
       })
@@ -134,7 +137,7 @@ module.exports = {
     },
   },
   create(context) {
-    const sourceCode = context.getSourceCode()
+    const {sourceCode} = context
     return {
       Program() {
         fixInlineCommentSpacing(context, sourceCode)

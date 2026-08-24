@@ -41,7 +41,7 @@ const checkImport = (node, context) => {
     const pathWithinShared = source.substring(DISALLOWED_PREFIX.length)
     const subpath = pathWithinShared.split('/')[0]
     if (!ALLOWED_SUBPATHS.includes(subpath)) {
-      const fixedPath = fixImportPath(context.getFilename(), pathWithinShared)
+      const fixedPath = fixImportPath(context.filename, pathWithinShared)
       context.report({
         node: node.source,
         messageId: 'invalidMessage',

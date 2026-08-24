@@ -18,7 +18,7 @@ module.exports = {
           return
         }
 
-        const resolvedPath = path.resolve(path.dirname(context.getFilename()), importPath)
+        const resolvedPath = path.resolve(path.dirname(context.filename), importPath)
         if (resolvedPath.includes('/xrhome/src/client/ui/')) {
           node.specifiers.forEach((specifier) => {
             uiComponentNames.add(specifier.local.name)
