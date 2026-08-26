@@ -200,6 +200,7 @@ const createAuthTokenSubscription = (sccPromise_: Promise<XrTrackingccModule>) =
 }
 
 interface TrackingControllerConfig {
+  disableWorldTracking?: boolean
   enableLighting?: boolean
   imageTargets?: string[]
   imageTargetData?: ImageTargetData[]
@@ -1297,6 +1298,9 @@ const XrControllerFactory = singleton((
   const configure = (args: TrackingControllerConfig) => {
     if (!args) {
       return
+    }
+    if (args.disableWorldTracking !== undefined) {
+      disableWorldTracking_ = !!args.disableWorldTracking
     }
     if (args.enableLighting !== undefined) {
       enableLighting_ = !!args.enableLighting
