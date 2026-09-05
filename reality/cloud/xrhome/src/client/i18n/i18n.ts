@@ -10,6 +10,24 @@ import {
 } from '../../shared/i18n/i18n-locales'
 import {chooseDefaultLanguage} from './choose-default-language'
 
+// react-i18next v11 owns the resource types. Type-only imports preserve lazy loading.
+declare module 'react-i18next' {
+  interface CustomTypeOptions {
+    resources: {
+      'account-pages': typeof import('./en-US/account-pages.json')
+      'app-pages': typeof import('./en-US/app-pages.json')
+      'asset-lab': typeof import('./en-US/asset-lab.json')
+      'caught-error-page': typeof import('./en-US/caught-error-page.json')
+      'cloud-editor-pages': typeof import('./en-US/cloud-editor-pages.json')
+      'cloud-studio-pages': typeof import('./en-US/cloud-studio-pages.json')
+      common: typeof import('./en-US/common.json')
+      'public-featured-pages': typeof import('./en-US/public-featured-pages.json')
+      'studio-desktop-pages': typeof import('./en-US/studio-desktop-pages.json')
+      'studio-tooltips': typeof import('./en-US/studio-tooltips.json')
+    }
+  }
+}
+
 const I18N_DEBUG = false
 
 if (BuildIf.LOCAL) {

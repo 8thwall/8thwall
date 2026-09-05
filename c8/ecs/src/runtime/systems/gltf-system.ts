@@ -61,7 +61,10 @@ const maybeLoadVideoTextures = async (
       const {accessor: accessorIndex, mimeType} = videoData
       if (typeof accessorIndex === 'number' && mimeType) {
         const accessor = await gltf.parser.loadAccessor(accessorIndex)
-        videoTexture = createBlobVideoTexture(new Blob([accessor.array], {type: mimeType}))
+        const bytes = new Uint8Array(
+          accessor.array.buffer, accessor.array.byteOffset, accessor.array.byteLength
+        )
+        videoTexture = createBlobVideoTexture(new Blob([new Uint8Array(bytes)], {type: mimeType}))
       } else {
         // Backwards compatibility using legacy localUrl data
         videoTexture = createVideoTexture(videoData.localUrl)
