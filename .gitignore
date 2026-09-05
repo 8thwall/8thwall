@@ -146,6 +146,7 @@ apps/desktop/out/
 apps/desktop/build_package/
 
 c8/ecs/src/runtime/ecs-asm.js
+
 reality/cloud/xrhome/desktop-dist/
 reality/cloud/xrhome/ui-dist/
 reality/cloud/xrhome/src/client/static/semantic/
@@ -156,6 +157,9 @@ playwright/.auth
 playwright-report/
 
 packages/xrextras/index.js
+
 packages/coaching-overlay/index.js
+
 packages/landing-page/index.js
+
 packages/dev8/src/capnp/
