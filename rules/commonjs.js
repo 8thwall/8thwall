@@ -9,7 +9,7 @@ module.exports = {
     },
   },
   create(context) {
-    if (!context.getFilename().match(/\.tsx?/)) {
+    if (!context.filename.match(/\.tsx?/)) {
       return {}
     }
     return {
@@ -23,7 +23,7 @@ module.exports = {
       },
       MemberExpression(node) {
         const isCommonJsExport = isIdentifierNamed(node.object, 'module') &&
-                                 isIdentifierNamed(node.property, 'exports')
+          isIdentifierNamed(node.property, 'exports')
         if (isCommonJsExport) {
           context.report({
             node,

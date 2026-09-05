@@ -1,6 +1,0 @@
----
-rules:
-  import/group-exports: off
-  no-void: off
-  camelcase: off
-  no-multi-assign: off

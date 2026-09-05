@@ -416,28 +416,23 @@ register_toolchains(
 
 # Load rules_nodejs to provide nodejs toolchains.
 http_archive(
-    name = "build_bazel_rules_nodejs",
-    sha256 = "709cc0dcb51cf9028dd57c268066e5bc8f03a119ded410a13b5c3925d6e43c48",
+    name = "rules_nodejs",
+    sha256 = "b6016a89a12a3d339ece93f2b3988f5e812f452ad497bc963634646ff4aa100b",
+    strip_prefix = "rules_nodejs-6.1.2",
     urls = [
-        "https://github.com/bazelbuild/rules_nodejs/releases/download/5.8.4/rules_nodejs-5.8.4.tar.gz",
+        "https://github.com/bazelbuild/rules_nodejs/releases/download/v6.1.2/rules_nodejs-v6.1.2.tar.gz",
     ],
 )
 
 # Rules for downloading Node.js toolchains.
-load(
-    "@build_bazel_rules_nodejs//:repositories.bzl",
-    "build_bazel_rules_nodejs_dependencies",
-)
+load("@rules_nodejs//nodejs:repositories.bzl", "nodejs_register_toolchains", "rules_nodejs_dependencies")
 
-build_bazel_rules_nodejs_dependencies()
+rules_nodejs_dependencies()
 
-load("@build_bazel_rules_nodejs//:index.bzl", "node_repositories")
-
-# Node toolchain to install.
-node_repositories(
-    # https://github.com/bazel-contrib/rules_nodejs/blob/5.8.4/nodejs/private/node_versions.bzl
-    node_version = "18.17.0",
-    yarn_version = "1.22.18",
+nodejs_register_toolchains(
+    # https://github.com/bazel-contrib/rules_nodejs/blob/v6.1.2/nodejs/private/node_versions.bzl
+    name = "nodejs",
+    node_version = "20.14.0",
 )
 
 load("//bzl/crosstool:node-toolchain.bzl", "node_toolchain")
@@ -501,14 +496,14 @@ npm_package(
 # Node modules for eslint.
 npm_package(
     name = "npm-eslint",
+    env = {
+        "NPM_CONFIG_LEGACY_PEER_DEPS": "1",
+    },
     exports_files = [
         "node_modules/eslint/bin/eslint.js",
     ],
     package = "//bzl/npmpackage/eslint:package.json",
     package_lock = "//bzl/npmpackage/eslint:package-lock.json",
-    patches = [
-        "//bzl/npmpackage/eslint/patches:eslint-plugin-local-rules+0.1.1.patch",
-    ],
 )
 
 # Node modules for capnp-ts.

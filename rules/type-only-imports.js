@@ -1,4 +1,4 @@
-/* eslint-disable no-continue, prefer-destructuring, @typescript-eslint/no-use-before-define, func-names, no-restricted-syntax, max-len */
+/* eslint-disable no-continue, prefer-destructuring, @typescript-eslint/no-use-before-define, func-names, no-restricted-syntax, @stylistic/max-len, @stylistic/indent-binary-ops, @stylistic/no-extra-parens */
 
 // Adapted from https://github.com/typescript-eslint/typescript-eslint/blob/main/packages/eslint-plugin/src/rules/consistent-type-imports.ts
 
@@ -31,7 +31,7 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 const {AST_TOKEN_TYPES, AST_NODE_TYPES} = require('@typescript-eslint/types')
-const util = require('@typescript-eslint/eslint-plugin/dist/util')
+const util = require('@typescript-eslint/utils/eslint-utils')
 
 const ENABLE_AUTOFIX = true
 
@@ -51,7 +51,7 @@ module.exports = {
     fixable: 'code',
   },
   create(context) {
-    const sourceCode = context.getSourceCode()
+    const sourceCode = context.sourceCode
     const sourceImportsMap = {}
     return {
       // prefer type imports
@@ -76,7 +76,7 @@ module.exports = {
         const valueSpecifiers = []
         const unusedSpecifiers = []
         for (const specifier of node.specifiers) {
-          const [variable] = context.getDeclaredVariables(specifier)
+          const [variable] = context.sourceCode.getDeclaredVariables(specifier)
           if (variable.references.length === 0) {
             unusedSpecifiers.push(specifier)
           } else {

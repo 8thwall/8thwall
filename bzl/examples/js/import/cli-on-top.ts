@@ -1,5 +1,5 @@
 // @rule(js_cli)
-// @package(npm-eslint)
+// @package(npm-ecs)
 
 import {doThing} from 'bzl/examples/js/import/pre-built-binary'
 

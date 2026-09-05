@@ -1,7 +1,0 @@
-{
-  "rules": {
-    "local-rules/hardcoded-copy": "off",
-    "import/group-exports": "off",
-    "import/exports-last": "off"
-  }
-}
