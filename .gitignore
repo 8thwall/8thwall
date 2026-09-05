@@ -74,6 +74,14 @@ ci-support/ci_gen.bazel-artifactory-mirrors-config
 **/.ijwb/*
 
 yarn-error.log
+npm-debug.log*
+yarn-debug.log*
+
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
 **/.eslintcache
 
@@ -133,3 +141,21 @@ rust-project.json
 
 # Scratch files
 tmp
+
+apps/desktop/out/
+apps/desktop/build_package/
+
+c8/ecs/src/runtime/ecs-asm.js
+reality/cloud/xrhome/desktop-dist/
+reality/cloud/xrhome/ui-dist/
+reality/cloud/xrhome/src/client/static/semantic/
+reality/cloud/xrhome/semantic/dist/
+reality/cloud/xrhome/storybook-static/
+
+playwright/.auth
+playwright-report/
+
+packages/xrextras/index.js
+packages/coaching-overlay/index.js
+packages/landing-page/index.js
+packages/dev8/src/capnp/
