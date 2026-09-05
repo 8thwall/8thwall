@@ -116,14 +116,14 @@ const renderValueDefault = (value: DeepReadonly<string>) => (
   <span>{value}</span>
 )
 
-type GroupFieldsDiffProps<VALUETYPE extends unknown[]> = {
+type GroupFieldsDiffProps<VALUETYPE extends DeepReadonly<unknown[]>> = {
   value: DeepReadonly<VALUETYPE>
   labels: { [K in keyof VALUETYPE]: string | React.ReactNode }
   renderMethods: { [K in keyof VALUETYPE]: (v: VALUETYPE[K]) => React.ReactNode }
 }
 
 // eslint-disable-next-line arrow-parens
-const GroupFieldsDiff = <VALUETYPE extends unknown[]>({
+const GroupFieldsDiff = <VALUETYPE extends DeepReadonly<unknown[]>>({
   value, labels, renderMethods,
 }: GroupFieldsDiffProps<VALUETYPE>): React.ReactElement => {
   const classes = useStyles()
