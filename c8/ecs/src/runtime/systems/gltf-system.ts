@@ -174,7 +174,7 @@ const makeGltfSystem = (world: World) => {
 
   const animationFinishedEvent = (
     event: {action: THREE_TYPES.AnimationAction, direction: number} &
-    THREE_TYPES.Event<'finished', THREE_TYPES.AnimationMixer>
+      THREE_TYPES.Event<'finished', THREE_TYPES.AnimationMixer>
   ) => {
     const {eid} = event.action.getRoot().userData
     world.events.dispatch(eid, events.GLTF_ANIMATION_FINISHED, {name: event.action.getClip().name})
@@ -182,7 +182,7 @@ const makeGltfSystem = (world: World) => {
 
   const animationLoopEvent = (
     event: {action: THREE_TYPES.AnimationAction, loopDelta: number} &
-    THREE_TYPES.Event<'loop', THREE_TYPES.AnimationMixer>
+      THREE_TYPES.Event<'loop', THREE_TYPES.AnimationMixer>
   ) => {
     const {eid} = event.action.getRoot().userData
     world.events.dispatch(eid, events.GLTF_ANIMATION_LOOP, {name: event.action.getClip().name})

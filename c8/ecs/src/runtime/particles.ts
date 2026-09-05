@@ -120,7 +120,7 @@ const resetParticleSystem = (system: ParticleSystem) => {
 }
 
 const createSprite = async (url: string, blendingMode: string) => {
-  if (!url) return null
+  if (!url) { return null }
   const asset = await assets.load({url})
   const spriteMap = new three.TextureLoader().load(asset.localUrl)
   const spriteMaterial = new three.SpriteMaterial({
@@ -131,7 +131,7 @@ const createSprite = async (url: string, blendingMode: string) => {
 }
 
 const loadModel = async (componentId: Eid, world: World, url: string) => {
-  if (!url) return null
+  if (!url) { return null }
   const asset = await assets.load({url})
   const data = await asset.data.arrayBuffer()
   const gltf = await getGltfLoader().parseAsync(data, url)
@@ -377,13 +377,13 @@ const ParticleEmitter = registerComponent({
   },
   tick: (world, component) => {
     const system = systems(world).get(component.eid)
-    if (!system || !component.data.assetReady) return
+    if (!system || !component.data.assetReady) { return }
     updateEmitter(world, component, system)
     system.update(world.time.delta / 1000)
   },
   remove: (world, component) => {
     const system = systems(world).get(component.eid)
-    if (!system) return
+    if (!system) { return }
     resetParticleSystem(system)
     systems(world).delete(component.eid)
   },

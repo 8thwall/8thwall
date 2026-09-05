@@ -26,7 +26,7 @@ const ThreeMeshUI = {
   ContentDirection,
 }
 
-if (typeof global !== 'undefined') global.ThreeMeshUI = ThreeMeshUI
+if (typeof global !== 'undefined') { global.ThreeMeshUI = ThreeMeshUI }
 
 export {
   Block,

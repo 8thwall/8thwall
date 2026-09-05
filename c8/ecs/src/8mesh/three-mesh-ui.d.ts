@@ -19,7 +19,7 @@ type BlockOptions = {
 }
 
 declare class Block extends Object3D {
-  constructor(options: BlockOptions)
+  constructor(options: BlockOptions);
 
   // @todo add typed properties and functions from mixin classes
   [property: string]: any // eslint-disable-line

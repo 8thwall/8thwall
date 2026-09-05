@@ -13,11 +13,11 @@
  * parseNineSliceValue(50, 200) // returns 50
  */
 const parseNineSliceValue = (value: string, textureSize: number): number => {
-  if (value === undefined) return 0
+  if (value === undefined) { return 0 }
 
-  if (typeof value === 'number') return value
+  if (typeof value === 'number') { return value }
 
-  if (value.endsWith('%')) return (parseFloat(value) / 100.0) * textureSize
+  if (value.endsWith('%')) { return (parseFloat(value) / 100.0) * textureSize }
 
   return parseFloat(value)
 }

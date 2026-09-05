@@ -25,11 +25,11 @@ export default class Keyboard extends mix.withBase(Object3D)(BoxComponent, MeshU
     // DEFAULTS
 
     // eslint-disable-next-line no-param-reassign
-    if (!options) options = {}
-    if (!options.width) options.width = 1
-    if (!options.height) options.height = 0.4
-    if (!options.margin) options.margin = 0.003
-    if (!options.padding) options.padding = 0.01
+    if (!options) { options = {} }
+    if (!options.width) { options.width = 1 }
+    if (!options.height) { options.height = 0.4 }
+    if (!options.margin) { options.margin = 0.003 }
+    if (!options.padding) { options.padding = 0.01 }
 
     //
 
@@ -240,14 +240,14 @@ export default class Keyboard extends mix.withBase(Object3D)(BoxComponent, MeshU
       // Here we sort the keys, we only keep the ones that are part of the current panel.
 
       const isInCurrentPanel = this.panels[this.currentPanel].getObjectById(key.id)
-      if (!isInCurrentPanel) return
+      if (!isInCurrentPanel) { return }
 
       //
 
       const char = key.info.chars[key.panel.charset] || key.info.chars[0]
       const newContent = this.isLowerCase || !char.upperCase ? char.lowerCase : char.upperCase
 
-      if (!key.childrenTexts.length) return
+      if (!key.childrenTexts.length) { return }
 
       const textComponent = key.childrenTexts[0]
 
@@ -268,7 +268,7 @@ export default class Keyboard extends mix.withBase(Object3D)(BoxComponent, MeshU
       const char = key.info.chars[key.panel.charset] || key.info.chars[0]
       const newContent = this.isLowerCase || !char.upperCase ? char.lowerCase : char.upperCase
 
-      if (!key.childrenTexts.length) return
+      if (!key.childrenTexts.length) { return }
 
       const textComponent = key.childrenTexts[0]
 

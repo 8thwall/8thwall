@@ -15,23 +15,23 @@ enum Align {
   Baseline = 5,
   SpaceBetween = 6,
   SpaceAround = 7,
-  SpaceEvenly = 8
+  SpaceEvenly = 8,
 }
 
 enum Dimension {
   Width = 0,
-  Height = 1
+  Height = 1,
 }
 
 enum Direction {
   Inherit = 0,
   LTR = 1,
-  RTL = 2
+  RTL = 2,
 }
 
 enum Display {
   Flex = 0,
-  None = 1
+  None = 1,
 }
 
 enum Edge {
@@ -43,7 +43,7 @@ enum Edge {
   End = 5,
   Horizontal = 6,
   Vertical = 7,
-  All = 8
+  All = 8,
 }
 
 enum Errata {
@@ -52,24 +52,24 @@ enum Errata {
   AbsolutePositioningIncorrect = 2,
   AbsolutePercentAgainstInnerSize = 4,
   All = 2147483647,
-  Classic = 2147483646
+  Classic = 2147483646,
 }
 
 enum ExperimentalFeature {
-  WebFlexBasis = 0
+  WebFlexBasis = 0,
 }
 
 enum FlexDirection {
   Column = 0,
   ColumnReverse = 1,
   Row = 2,
-  RowReverse = 3
+  RowReverse = 3,
 }
 
 enum Gutter {
   Column = 0,
   Row = 1,
-  All = 2
+  All = 2,
 }
 
 enum Justify {
@@ -78,7 +78,7 @@ enum Justify {
   FlexEnd = 2,
   SpaceBetween = 3,
   SpaceAround = 4,
-  SpaceEvenly = 5
+  SpaceEvenly = 5,
 }
 
 enum LogLevel {
@@ -87,43 +87,43 @@ enum LogLevel {
   Info = 2,
   Debug = 3,
   Verbose = 4,
-  Fatal = 5
+  Fatal = 5,
 }
 
 enum MeasureMode {
   Undefined = 0,
   Exactly = 1,
-  AtMost = 2
+  AtMost = 2,
 }
 
 enum NodeType {
   Default = 0,
-  Text = 1
+  Text = 1,
 }
 
 enum Overflow {
   Visible = 0,
   Hidden = 1,
-  Scroll = 2
+  Scroll = 2,
 }
 
 enum PositionType {
   Static = 0,
   Relative = 1,
-  Absolute = 2
+  Absolute = 2,
 }
 
 enum Unit {
   Undefined = 0,
   Point = 1,
   Percent = 2,
-  Auto = 3
+  Auto = 3,
 }
 
 enum Wrap {
   NoWrap = 0,
   Wrap = 1,
-  WrapReverse = 2
+  WrapReverse = 2,
 }
 
 export {

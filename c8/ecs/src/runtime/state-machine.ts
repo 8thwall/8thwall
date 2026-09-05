@@ -25,10 +25,10 @@ const machineMap = createInstanced<World, Map<MachineId, StateMachine<unknown>>>
 const getGroups = <CallbackArgument>(
   machine: StateMachine<CallbackArgument>, state: StateId
 ) => machine.groups
-    .map((group, index): [StateGroup<CallbackArgument>, number] => [group, index])
-    .filter(([group]) => !group.substates?.length ||
-  group.substates.some(substate => getStateId(substate) === getStateId(state)))
-    .map(([, index]) => index)
+  .map((group, index): [StateGroup<CallbackArgument>, number] => [group, index])
+  .filter(([group]) => !group.substates?.length ||
+    group.substates.some(substate => getStateId(substate) === getStateId(state)))
+  .map(([, index]) => index)
 
 /**
  * get all groups that contain the current state

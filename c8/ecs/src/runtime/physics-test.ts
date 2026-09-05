@@ -25,12 +25,24 @@ describe('ecs.physics.registerConvexShape', () => {
 
   it('does not have overlap between custom shape IDs and built-in shapes', async () => {
     const customShape = ecs.physics.registerConvexShape(world, new Float32Array([
-      -1, -1, -1,
-      1, -1, -1,
-      1, 1, -1,
-      -1, 1, -1,
-      -1, -1, 1,
-      1, -1, 1,
+      -1,
+      -1,
+      -1,
+      1,
+      -1,
+      -1,
+      1,
+      1,
+      -1,
+      -1,
+      1,
+      -1,
+      -1,
+      -1,
+      1,
+      1,
+      -1,
+      1,
     ]))
 
     const maxBuiltInShapeId = Math.max(...Object.values(ecs.physics.ColliderShape))
@@ -109,7 +121,7 @@ describe('Physics collision events', () => {
     // Run simulation until collision occurs
     for (let i = 0; i < 100; i++) {
       world.tick(time += 16)
-      if (collisionStartCount > 0) break
+      if (collisionStartCount > 0) { break }
     }
 
     assert.equal(collisionStartCount, 1, 'Collision start event should fire once')
@@ -117,7 +129,7 @@ describe('Physics collision events', () => {
     // Run more simulation to trigger collision end
     for (let i = 0; i < 60; i++) {
       world.tick(time += 16)
-      if (collisionEndCount > 0) break
+      if (collisionEndCount > 0) { break }
     }
 
     assert.equal(collisionEndCount, 1, 'Collision end event should fire once')
@@ -179,7 +191,7 @@ describe('Physics collision events', () => {
     // Run simulation until collision occurs
     for (let i = 0; i < 60; i++) {
       world.tick(time += 16)
-      if (collisionStartCount > 0) break
+      if (collisionStartCount > 0) { break }
     }
 
     assert.equal(collisionStartCount, 1, 'Collision start event should fire on locked ball')
@@ -190,7 +202,7 @@ describe('Physics collision events', () => {
     // Run more simulation to trigger collision end
     for (let i = 0; i < 60; i++) {
       world.tick(time += 16)
-      if (collisionEndCount > 0) break
+      if (collisionEndCount > 0) { break }
     }
 
     assert.equal(collisionEndCount, 1, 'Collision end event should fire on locked ball')
@@ -542,7 +554,7 @@ describe('Physics collision events', () => {
 
     for (let i = 0; i < 300; i++) {
       world.tick(time += 16)
-      if (collisionStartCount > 0) break
+      if (collisionStartCount > 0) { break }
     }
 
     assert.equal(collisionStartCount, 1, 'Flipped cone should collide with floor')
@@ -562,8 +574,7 @@ describe('Physics collision events', () => {
     const expectedY = Math.sin(coneAngle)
 
     const angleDegrees = (coneAngle * 180) / Math.PI
-    assert.isBelow(Math.abs(yAxis.y - expectedY), 0.02,
-      `${yAxis.y} should be near ${expectedY} (expected angle: ${angleDegrees.toFixed(1)}°)`)
+    assert.isBelow(Math.abs(yAxis.y - expectedY), 0.02, `${yAxis.y} should be near ${expectedY} (expected angle: ${angleDegrees.toFixed(1)}°)`)
 
     // Also verify the cone has moved from its original position due to tipping
     assert.notEqual(finalPosition.x, 0.1, 'Cone should have moved horizontally when tipping')
@@ -626,7 +637,7 @@ describe('Physics collision events', () => {
 
     for (let i = 0; i < 60; i++) {
       world.tick(time += 16)
-      if (collisionStartCount > 0) break
+      if (collisionStartCount > 0) { break }
     }
 
     assert.equal(collisionStartCount, 1, 'Horizontally rotated cylinders should touch')
@@ -648,7 +659,7 @@ describe('Physics collision events', () => {
 
     for (let i = 0; i < 60; i++) {
       world.tick(time += 16)
-      if (collisionEndCount > 0) break
+      if (collisionEndCount > 0) { break }
     }
 
     assert.equal(collisionEndCount, 1, 'Cylinders should generate collision end when made parallel')
@@ -710,7 +721,7 @@ describe('Physics collision events', () => {
 
     for (let i = 0; i < 60; i++) {
       world.tick(time += 16)
-      if (collisionStartCount > 0) break
+      if (collisionStartCount > 0) { break }
     }
 
     assert.equal(collisionStartCount, 1, 'Planes should intersect with offsets')
@@ -726,7 +737,7 @@ describe('Physics collision events', () => {
 
     for (let i = 0; i < 60; i++) {
       world.tick(time += 16)
-      if (collisionEndCount > 0) break
+      if (collisionEndCount > 0) { break }
     }
 
     assert.equal(collisionEndCount, 1, 'Planes should generate collision end when separated')

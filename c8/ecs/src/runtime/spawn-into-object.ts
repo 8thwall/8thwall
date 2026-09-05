@@ -163,7 +163,7 @@ const updateInstanceProperties = (
 
   const shouldUpdateGeometry = (e.geometry !== undefined || prevObject?.geometry !== undefined) &&
     (!prevObject || !isEqual(e.geometry, prevObject.geometry) ||
-    (!deletions?.geometry && prevDeletions?.geometry))
+      (!deletions?.geometry && prevDeletions?.geometry))
   const shouldRemoveGeometry = deletions?.geometry
   if (shouldUpdateGeometry || shouldRemoveGeometry) {
     applyGeometryComponent(
@@ -173,7 +173,7 @@ const updateInstanceProperties = (
 
   const shouldUpdateMaterial = (e.material !== undefined || prevObject?.material !== undefined) &&
     (!prevObject || !isEqual(e.material, prevObject.material) ||
-    (!deletions?.material && prevDeletions?.material))
+      (!deletions?.material && prevDeletions?.material))
   const shouldRemoveMaterial = deletions?.material
   if (shouldUpdateMaterial || shouldRemoveMaterial) {
     applyMaterialComponent(
@@ -183,7 +183,7 @@ const updateInstanceProperties = (
 
   const shouldUpdateShadow = (e.shadow !== undefined || prevObject?.shadow !== undefined) &&
     (!prevObject || !isEqual(e.shadow, prevObject.shadow) ||
-    (!deletions?.shadow && prevDeletions?.shadow))
+      (!deletions?.shadow && prevDeletions?.shadow))
   const shouldRemoveShadow = deletions?.shadow
   if (shouldUpdateShadow || shouldRemoveShadow) {
     applyShadowComponent(world, eid, shouldRemoveShadow ? undefined : e.shadow)
@@ -191,7 +191,7 @@ const updateInstanceProperties = (
 
   const shouldUpdateCamera = (e.camera !== undefined || prevObject?.camera !== undefined) &&
     (!prevObject || !isEqual(e.camera, prevObject.camera) ||
-    (!deletions?.camera && prevDeletions?.camera))
+      (!deletions?.camera && prevDeletions?.camera))
   const shouldRemoveCamera = deletions?.camera
   if (shouldUpdateCamera || shouldRemoveCamera) {
     applyCameraComponent(world, eid, shouldRemoveCamera ? undefined : e.camera)
@@ -199,7 +199,7 @@ const updateInstanceProperties = (
 
   const shouldUpdateLight = (e.light !== undefined || prevObject?.light !== undefined) &&
     (!prevObject || !isEqual(e.light, prevObject.light) ||
-    (!deletions?.light && prevDeletions?.light))
+      (!deletions?.light && prevDeletions?.light))
   const shouldRemoveLight = deletions?.light
   if (shouldUpdateLight || shouldRemoveLight) {
     applyLightComponent(world, eid, shouldRemoveLight ? undefined : e.light)
@@ -208,7 +208,7 @@ const updateInstanceProperties = (
   const shouldUpdateGltfModel =
     (e.gltfModel !== undefined || prevObject?.gltfModel !== undefined) &&
     (!prevObject || !isEqual(e.gltfModel, prevObject.gltfModel) ||
-    (!deletions?.gltfModel && prevDeletions?.gltfModel))
+      (!deletions?.gltfModel && prevDeletions?.gltfModel))
   const shouldRemoveGltfModel = deletions?.gltfModel
   if (shouldUpdateGltfModel || shouldRemoveGltfModel) {
     applyGltfModelComponent(world, eid, shouldRemoveGltfModel ? undefined : e.gltfModel)
@@ -216,7 +216,7 @@ const updateInstanceProperties = (
 
   const shouldUpdateSplat = (e.splat !== undefined || prevObject?.splat !== undefined) &&
     (!prevObject || !isEqual(e.splat, prevObject.splat) ||
-    (!deletions?.splat && prevDeletions?.splat))
+      (!deletions?.splat && prevDeletions?.splat))
   const shouldRemoveSplat = deletions?.splat
   if (shouldUpdateSplat || shouldRemoveSplat) {
     applySplatComponent(world, eid, shouldRemoveSplat ? undefined : e.splat)
@@ -224,7 +224,7 @@ const updateInstanceProperties = (
 
   const shouldUpdateCollider = (e.collider !== undefined || prevObject?.collider !== undefined) &&
     (!prevObject || !isEqual(e.collider, prevObject.collider) ||
-    (!deletions?.collider && prevDeletions?.collider))
+      (!deletions?.collider && prevDeletions?.collider))
   const shouldRemoveCollider = deletions?.collider
   if (shouldUpdateCollider || shouldRemoveCollider) {
     applyColliderComponent(
@@ -234,7 +234,7 @@ const updateInstanceProperties = (
 
   const shouldUpdateAudio = (e.audio !== undefined || prevObject?.audio !== undefined) &&
     (!prevObject || !isEqual(e.audio, prevObject.audio) ||
-     (!deletions?.audio && prevDeletions?.audio))
+      (!deletions?.audio && prevDeletions?.audio))
   const shouldRemoveAudio = deletions?.audio
   if (shouldUpdateAudio || shouldRemoveAudio) {
     applyAudioComponent(world, eid, shouldRemoveAudio ? undefined : e.audio)
@@ -242,8 +242,8 @@ const updateInstanceProperties = (
 
   const shouldUpdateVideoControls =
     (e.videoControls !== undefined || prevObject?.videoControls !== undefined) &&
-  (!prevObject || !isEqual(e.videoControls, prevObject.videoControls) ||
-  (!deletions?.videoControls && prevDeletions?.videoControls))
+    (!prevObject || !isEqual(e.videoControls, prevObject.videoControls) ||
+      (!deletions?.videoControls && prevDeletions?.videoControls))
   const shouldRemoveVideoControls = deletions?.videoControls
   if (shouldUpdateVideoControls || shouldRemoveVideoControls) {
     applyVideoControlsComponent(world, eid, shouldRemoveVideoControls ? undefined : e.videoControls)
@@ -266,7 +266,7 @@ const updateInstanceProperties = (
   const shouldUpdateImageTarget =
     (e.imageTarget !== undefined || prevObject?.imageTarget !== undefined) &&
     (!prevObject || !isEqual(e.imageTarget, prevObject.imageTarget) ||
-    (!deletions?.imageTarget && prevDeletions?.imageTarget))
+      (!deletions?.imageTarget && prevDeletions?.imageTarget))
   const shouldRemoveImageTarget = deletions?.imageTarget
   if (shouldUpdateImageTarget || shouldRemoveImageTarget) {
     applyImageTargetComponent(world, eid, shouldRemoveImageTarget ? undefined : e.imageTarget)
@@ -274,7 +274,7 @@ const updateInstanceProperties = (
 
   const shouldUpdateHidden = (e.hidden !== undefined || prevObject?.hidden !== undefined) &&
     (!prevObject || !isEqual(e.hidden, prevObject.hidden) ||
-    (!deletions?.hidden && prevDeletions?.hidden))
+      (!deletions?.hidden && prevDeletions?.hidden))
   const shouldRemoveHidden = deletions?.hidden
   if (shouldUpdateHidden || shouldRemoveHidden) {
     applyHiddenComponent(world, eid, shouldRemoveHidden ? undefined : e.hidden)
@@ -282,7 +282,7 @@ const updateInstanceProperties = (
 
   const shouldUpdateDisabled = (e.disabled !== undefined || prevObject?.disabled !== undefined) &&
     (!prevObject || !isEqual(e.disabled, prevObject.disabled) ||
-    (!deletions?.disabled && prevDeletions?.disabled))
+      (!deletions?.disabled && prevDeletions?.disabled))
   const shouldRemoveDisabled = deletions?.disabled
   if (shouldUpdateDisabled || shouldRemoveDisabled) {
     applyDisabledComponent(world, eid, shouldRemoveDisabled ? undefined : e.disabled)
@@ -291,7 +291,7 @@ const updateInstanceProperties = (
   const shouldUpdatePersistent =
     (e.persistent !== undefined || prevObject?.persistent !== undefined) &&
     (!prevObject || !isEqual(e.persistent, prevObject.persistent) ||
-    (!deletions?.persistent && prevDeletions?.persistent))
+      (!deletions?.persistent && prevDeletions?.persistent))
   const shouldRemovePersistent = deletions?.persistent
   if (shouldUpdatePersistent || shouldRemovePersistent) {
     applyPersistentComponent(world, eid, shouldRemovePersistent ? undefined : e.persistent)

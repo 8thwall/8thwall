@@ -39,9 +39,7 @@ const makeVideoMaterialSystem = (world: World) => {
       videoEidToTextureId.delete(eid)
     }
 
-    loadTexture(material, textureSrc, 'map', repeatX, repeatY, offsetX, offsetY, wrap,
-      THREE.LinearFilter, THREE.LinearFilter,
-      THREE.SRGBColorSpace).then((texture) => {
+    loadTexture(material, textureSrc, 'map', repeatX, repeatY, offsetX, offsetY, wrap, THREE.LinearFilter, THREE.LinearFilter, THREE.SRGBColorSpace).then((texture) => {
       if (abortController.signal.aborted) {
         return
       }

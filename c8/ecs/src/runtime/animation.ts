@@ -143,7 +143,7 @@ interface IVector3 {
 
 // Define a function type for getting the cursor for a component that animates a Vector3.
 type Vector3CursorFn<Schema extends AnimationSchema> =
- (world: World, componentId: Eid, schema: Schema) => IVector3 | null
+  (world: World, componentId: Eid, schema: Schema) => IVector3 | null
 
 // Get the cursor for the position of an animation component.
 const getPositionCursor: Vector3CursorFn<AnimationSchema> = (world, componentId, schema) => {

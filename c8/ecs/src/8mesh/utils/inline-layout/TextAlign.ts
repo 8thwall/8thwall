@@ -9,7 +9,7 @@ const JUSTIFY_RIGHT = 'justify-right'
 const JUSTIFY_CENTER = 'justify-center'
 
 type TextAlign = typeof LEFT | typeof RIGHT | typeof CENTER | typeof JUSTIFY |
-typeof JUSTIFY_LEFT | typeof JUSTIFY_RIGHT | typeof JUSTIFY_CENTER
+  typeof JUSTIFY_LEFT | typeof JUSTIFY_RIGHT | typeof JUSTIFY_CENTER
 
 const _computeLineOffset = (
   lineWidth: number, alignment: TextAlign, innerWidth: number, lastLine: boolean
@@ -65,11 +65,11 @@ const textAlign = (lines: InlineWithChildren, alignment: TextAlign, innerWidth: 
       const line = lines[i]
 
       // do not process last line for justify-left or justify-right
-      if (alignment.indexOf('-') !== -1 && i === lines.length - 1) return
+      if (alignment.indexOf('-') !== -1 && i === lines.length - 1) { return }
 
       // can only justify is space is remaining
       const remainingSpace = innerWidth - (line.width ?? 0)
-      if (remainingSpace <= 0) return
+      if (remainingSpace <= 0) { return }
 
       // count the valid spaces to extend
       // Do not take the first nor the last space into account

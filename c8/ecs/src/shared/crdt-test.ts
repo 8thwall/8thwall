@@ -758,7 +758,7 @@ describe('crdt', () => {
   {
     type ObjectUpdate = (
       ((object: DeepReadonly<GraphObject>) => DeepReadonly<GraphObject>)
-     | Partial<GraphObject>
+      | Partial<GraphObject>
     )
 
     const updateObject = (update: ObjectUpdate): Mutation => prev => ({
@@ -863,7 +863,8 @@ describe('crdt', () => {
     testMergeObjectMutation('Can merge component updates', [
       [
         updateObject({components: {component1: component('component1')}}),
-        null],
+        null,
+      ],
       [
         updateObject({components: {component1: component('component1', {valueA: 12})}}),
         updateObject({components: {component1: component('component1', {valueB: 42})}}),
@@ -874,7 +875,8 @@ describe('crdt', () => {
     testMergeObjectMutation('Can merge update to arrays of different sizes', [
       [
         updateObject({components: {component1: component('component1', {array: [1, 2, 3]})}}),
-        null],
+        null,
+      ],
       [
         updateObject({components: {component1: component('component1', {array: [1, 2, 3, 4]})}}),
         null,

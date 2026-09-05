@@ -192,7 +192,7 @@ type GeometryType = 'box' | 'sphere' | 'plane' | 'capsule' | 'cone' | 'cylinder'
   'polyhedron' | 'circle' | 'ring' | 'torus' | 'face'
 
 type Material = BasicMaterial | UnlitMaterial | ShadowMaterial | HiderMaterial | VideoMaterial
-| null
+  | null
 
 type Url = {type: 'url', url: string}
 

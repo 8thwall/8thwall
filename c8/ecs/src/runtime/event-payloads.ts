@@ -22,9 +22,9 @@ declare global {
     [events.RECORDER_PROCESS_FRAME]: FrameInfo
 
     // Input
-    [UiEvents.UI_CLICK]: {x: number; y: number}
-    [UiEvents.UI_PRESSED]: {x: number; y: number}
-    [UiEvents.UI_RELEASED]: {x: number; y: number}
+    [UiEvents.UI_CLICK]: {x: number, y: number}
+    [UiEvents.UI_PRESSED]: {x: number, y: number}
+    [UiEvents.UI_RELEASED]: {x: number, y: number}
     [UiEvents.UI_HOVER_START]: UiEvents.UiHoverEvent
     [UiEvents.UI_HOVER_END]: UiEvents.UiHoverEvent
     [PointerEvents.SCREEN_TOUCH_START]: PointerEvents.ScreenTouchStartEvent

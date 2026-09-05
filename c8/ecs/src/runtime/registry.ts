@@ -61,7 +61,7 @@ type ComponentCursor<S extends Schema, D extends Schema> = {
 }
 
 type RemovedComponentCursor<S extends Schema, D extends Schema> = Omit<
-ComponentCursor<S, D>, 'schema' | 'data'
+  ComponentCursor<S, D>, 'schema' | 'data'
 >
 
 type ComponentRegistration<ES extends ExtendedSchema<Schema>, ED extends ExtendedSchema<Schema>> = {

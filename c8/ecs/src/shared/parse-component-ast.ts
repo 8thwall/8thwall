@@ -238,7 +238,7 @@ const warnModeAlreadySet = (
 }
 
 const startCollection = (
-  name: string, collectionType: 'group'|'section', current: CollectionContext<Presentation>|null,
+  name: string, collectionType: 'group' | 'section', current: CollectionContext<Presentation> | null,
   collections: Record<string, Presentation>, comment: Comment, ctx: ParsingContext
 ): CollectionContext<Presentation> | null => {
   // Check that a collection isn't already in progress
@@ -258,7 +258,8 @@ const startCollection = (
   if (ctx.schema[name]) {
     ctx.warnings.push(createComponentError(
       `Cannot start @${collectionType} '${name}'. Field of name '${name}' already exists`,
-      'warning', comment
+      'warning',
+      comment
     ))
     return null
   }
@@ -310,8 +311,7 @@ const endGroup = (comment: Comment, ctx: ParsingContext) => {
   if (numExpectedFields && ctx.currentGroup.numFields !== numExpectedFields) {
     ctx.warnings.push(createComponentError(
       `expected ${numExpectedFields} fields for group '${ctx.currentGroup.name}' of type ${
-        ctx.currentGroup.presentation.type} (received ${ctx.currentGroup.numFields})`, 'warning',
-      ctx.currentGroup.comment
+        ctx.currentGroup.presentation.type} (received ${ctx.currentGroup.numFields})`, 'warning', ctx.currentGroup.comment
     ))
   }
 
@@ -332,7 +332,8 @@ const setCollectionLabel = (
   if (!collection) {
     ctx.warnings.push(createComponentError(
       `Cannot set label for ${collectionType} as no ${collectionType} in progress`,
-      'warning', comment
+      'warning',
+      comment
     ))
   } else if (collection.presentation.label) {
     ctx.warnings.push(createComponentError(
@@ -350,7 +351,8 @@ const setCollectionCondition = (
   if (!collection) {
     ctx.warnings.push(createComponentError(
       `Cannot set condition for ${collectionType} as no ${collectionType} in progress`,
-      'warning', comment
+      'warning',
+      comment
     ))
   } else if (collection.presentation.condition) {
     ctx.warnings.push(createComponentError(
@@ -398,7 +400,8 @@ const startSection = (directiveContent: string, comment: Comment, ctx: ParsingCo
     ctx.warnings.push(
       createComponentError(
         `Cannot create section ${name} inside group ${ctx.currentGroup.name}`,
-        'warning', comment
+        'warning',
+        comment
       )
     )
     return
@@ -429,7 +432,8 @@ const setSectionDefaultClosed = (comment: Comment, ctx: ParsingContext) => {
   if (!ctx.currentSection) {
     ctx.warnings.push(createComponentError(
       'Cannot set defaultClosed for section as no section in progress',
-      'warning', comment
+      'warning',
+      comment
     ))
   } else {
     ctx.currentSection.presentation.defaultClosed = true
@@ -528,7 +532,8 @@ const extractPresentationElement = (identifier: string, comment: Comment, ctx: P
       if (ctx.schema[identifier] !== 'string') {
         ctx.warnings.push(createComponentError(
           `@color is only valid for string fields, cannot apply to ${ctx.schema[identifier]}`,
-          'warning', comment
+          'warning',
+          comment
         ))
       } else if (presentation.mode) {
         warnModeAlreadySet(identifier, comment, directiveType, 'color', ctx)
@@ -546,7 +551,8 @@ const extractPresentationElement = (identifier: string, comment: Comment, ctx: P
       if (ctx.schema[identifier] !== 'string') {
         ctx.warnings.push(createComponentError(
           `@multiline is only valid for string fields, cannot apply to ${ctx.schema[identifier]}`,
-          'warning', comment
+          'warning',
+          comment
         ))
       } else if (presentation.mode) {
         warnModeAlreadySet(identifier, comment, directiveType, 'multiline', ctx)
@@ -567,7 +573,8 @@ const extractPresentationElement = (identifier: string, comment: Comment, ctx: P
         ctx.warnings.push(
           createComponentError(
             `@required is only valid for eid fields, cannot apply to ${ctx.schema[identifier]}`,
-            'warning', comment
+            'warning',
+            comment
           )
         )
       }
@@ -586,7 +593,8 @@ const extractPresentationElement = (identifier: string, comment: Comment, ctx: P
           createComponentError(
             `Cannot set condition for field ${
               identifier} as it is part of group ${ctx.currentGroup.name}`,
-            'warning', comment
+            'warning',
+            comment
           )
         )
       } else {
@@ -601,7 +609,8 @@ const extractPresentationElement = (identifier: string, comment: Comment, ctx: P
       } else if (!ALL_ATTRIBUTE_TYPES.includes(directiveContent as AttributeTypeName)) {
         ctx.warnings.push(createComponentError(
           `expected one of ${ALL_ATTRIBUTE_TYPES.join(', ')} for @attribute ${identifier}`,
-          'warning', comment
+          'warning',
+          comment
         ))
       } else {
         presentation.mode = 'attribute'
@@ -813,7 +822,8 @@ const parseSchema = (node: Expression | PatternLike) => {
   if (ctx.currentGroup) {
     warnings.push(createComponentError(
       `Expected '@group end' for group ${ctx.currentGroup.name}`,
-      'warning', ctx.currentGroup.comment
+      'warning',
+      ctx.currentGroup.comment
     ))
     ctx.currentGroup = null
   }
@@ -822,7 +832,8 @@ const parseSchema = (node: Expression | PatternLike) => {
   if (ctx.currentSection) {
     warnings.push(createComponentError(
       `Expected '@section end' for section ${ctx.currentSection.name}`,
-      'warning', ctx.currentSection.comment
+      'warning',
+      ctx.currentSection.comment
     ))
     ctx.currentSection = null
   }
@@ -927,7 +938,8 @@ const parseComponentInfo = (
     if (data.schemaDefaults) {
       componentErrors.push(createComponentError(
         'Cannot use schemaDefaults and defaults within schema at the same time',
-        'error', null
+        'error',
+        null
       ))
     } else {
       data.schemaDefaults = inlineDefaults

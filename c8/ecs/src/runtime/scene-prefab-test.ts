@@ -1013,13 +1013,11 @@ describe('Prefab instance test', () => {
     const nestedPrefabChildEid = sceneHandle.graphIdToPrefab.get('nestedPrefabChild')!
 
     assert.equal(
-      world.getParent(prefabChild1Eid), sceneHandle.graphIdToPrefab.get('prefab'),
-      'Prefab child 1 is parented to prefab'
+      world.getParent(prefabChild1Eid), sceneHandle.graphIdToPrefab.get('prefab'), 'Prefab child 1 is parented to prefab'
     )
 
     assert.equal(
-      world.getParent(nestedPrefabChildEid), sceneHandle.graphIdToPrefab.get('prefabChild1'),
-      'Nested prefab child is parented to prefab child 1'
+      world.getParent(nestedPrefabChildEid), sceneHandle.graphIdToPrefab.get('prefabChild1'), 'Nested prefab child is parented to prefab child 1'
     )
   })
 
@@ -1071,10 +1069,8 @@ describe('Prefab instance test', () => {
     ecs.Quaternion.set(world, prefabChildEid, {x: 1, y: 0, z: 0, w: 0})
     world.tick()
 
-    assertPosition(world, instanceChildEid, {x: 10, y: 20, z: 30},
-      'Instance child position updated to match prefab child after tick')
-    assertQuaternion(world, instanceChildEid, {x: 1, y: 0, z: 0, w: 0},
-      'Instance child quaternion updated to match prefab child after tick')
+    assertPosition(world, instanceChildEid, {x: 10, y: 20, z: 30}, 'Instance child position updated to match prefab child after tick')
+    assertQuaternion(world, instanceChildEid, {x: 1, y: 0, z: 0, w: 0}, 'Instance child quaternion updated to match prefab child after tick')
   })
 
   it(`instance child inheriting position/rotation from prefab child
@@ -1125,17 +1121,14 @@ describe('Prefab instance test', () => {
       'Instance child y position value falls after breaking inheritance'
     )
 
-    assertPosition(world, prefabChildEid, {x: 1, y: 2, z: 3},
-      'Prefab child position unchanged')
+    assertPosition(world, prefabChildEid, {x: 1, y: 2, z: 3}, 'Prefab child position unchanged')
 
     ecs.Position.set(world, prefabChildEid, {x: 10, y: 20, z: 30})
     ecs.Quaternion.set(world, prefabChildEid, {x: 1, y: 0, z: 0, w: 0})
     world.tick()
 
-    assertPosition(world, instanceChildEid, {x: 1, y: postUpdateInstanceChildY, z: 3},
-      'Instance child x position unchanged after prefab modification (inheritance broken)')
+    assertPosition(world, instanceChildEid, {x: 1, y: postUpdateInstanceChildY, z: 3}, 'Instance child x position unchanged after prefab modification (inheritance broken)')
 
-    assertQuaternion(world, instanceChildEid, {x: 0, y: 0, z: 0, w: 1},
-      'Instance quaternion unchanged after prefab modification (inheritance broken)')
+    assertQuaternion(world, instanceChildEid, {x: 0, y: 0, z: 0, w: 1}, 'Instance quaternion unchanged after prefab modification (inheritance broken)')
   })
 })

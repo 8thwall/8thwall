@@ -22,6 +22,5 @@ Object.values(FEATURES)
   })
 
 assert.deepEqual(
-  EDITIONS, EXPECTED_EDITIONS,
-  `Mismatch: ${JSON.stringify(EXPECTED_EDITIONS, null, 2)} vs ${JSON.stringify(EDITIONS, null, 2)}`
+  EDITIONS, EXPECTED_EDITIONS, `Mismatch: ${JSON.stringify(EXPECTED_EDITIONS, null, 2)} vs ${JSON.stringify(EDITIONS, null, 2)}`
 )

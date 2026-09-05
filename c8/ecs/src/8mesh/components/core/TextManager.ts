@@ -65,7 +65,7 @@ const getGlyphDimensions = (options) => {
       // eslint-disable-next-line no-console
       console.warn(
         `'${options.textType}' is not a supported text type.\n` +
-            'See https://github.com/felixmariotto/three-mesh-ui/wiki/Using-a-custom-text-type'
+        'See https://github.com/felixmariotto/three-mesh-ui/wiki/Using-a-custom-text-type'
       )
       break
   }
@@ -89,7 +89,7 @@ const getGlyphPairKerning = (textType, font, glyphPair) => {
       // eslint-disable-next-line no-console
       console.warn(
         `'${textType}' is not a supported text type.\n` +
-            'See https://github.com/felixmariotto/three-mesh-ui/wiki/Using-a-custom-text-type'
+        'See https://github.com/felixmariotto/three-mesh-ui/wiki/Using-a-custom-text-type'
       )
       break
   }

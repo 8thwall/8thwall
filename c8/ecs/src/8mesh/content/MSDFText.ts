@@ -65,9 +65,9 @@ function getGlyphDimensions(options: GetGlyphDimensionsOptions): GlyphDimension 
     width = charObj ? charObj.xadvance * fontScale : fontSize
   }
 
-  if (height === 0) height = fontSize * 0.7
+  if (height === 0) { height = fontSize * 0.7 }
 
-  if (glyph === '\n') width = 0
+  if (glyph === '\n') { width = 0 }
 
   const xadvance = charObj ? charObj.xadvance * fontScale : width
   const xoffset = charObj ? charObj.xoffset * fontScale : 0

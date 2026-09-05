@@ -16,7 +16,7 @@ type PartialMutableGLTF = {
   // immutable fields
   asset: DeepReadonly<THREE_TYPES.GLTF['asset']>
   parser: DeepReadonly<THREE_TYPES.GLTF['parser']>
-};
+}
 
 type CacheEntry = {
   gltf: DeepReadonly<THREE_TYPES.GLTF>

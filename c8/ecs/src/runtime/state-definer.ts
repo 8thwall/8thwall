@@ -16,13 +16,13 @@ class StateDefiner<CallbackArgs = void> implements
 IStateDefiner<CallbackArgs>, IStateDefinerInternal<CallbackArgs> {
   readonly name: string
 
-  isInitial: boolean = false;
+  isInitial: boolean = false
 
-  onEnterImpl?: State<CallbackArgs>['onEnter'] | undefined;
+  onEnterImpl?: State<CallbackArgs>['onEnter'] | undefined
 
-  onTickImpl?: State<CallbackArgs>['onTick'] | undefined;
+  onTickImpl?: State<CallbackArgs>['onTick'] | undefined
 
-  onExitImpl?: State<CallbackArgs>['onExit'] | undefined;
+  onExitImpl?: State<CallbackArgs>['onExit'] | undefined
 
   triggers: State<CallbackArgs>['triggers'] = {}
 

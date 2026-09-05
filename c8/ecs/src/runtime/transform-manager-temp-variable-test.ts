@@ -68,7 +68,7 @@ describe('transform-manager.ts', () => {
 
   factoryFunction.body.body.filter(e => e.type === 'VariableDeclaration').forEach((node) => {
     if (node.declarations[0].id.type === 'Identifier' &&
-        node.declarations[0].init && node.declarations[0].init.type === 'ArrowFunctionExpression') {
+      node.declarations[0].init && node.declarations[0].init.type === 'ArrowFunctionExpression') {
       const {name} = node.declarations[0].id
 
       const functionCode = code.slice(

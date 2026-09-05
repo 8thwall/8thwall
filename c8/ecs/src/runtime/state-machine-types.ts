@@ -122,7 +122,7 @@ type ComponentCallbackArgs<S extends Schema, D extends Schema> = {
 }
 
 interface ComponentStateMachineDefProps<
-  S extends Schema, D extends Schema
+  S extends Schema, D extends Schema,
 > extends BaseMachineDefProps {
   schemaAttribute: WorldAttribute<S>
   dataAttribute: WorldAttribute<D>

@@ -147,8 +147,7 @@ describe('world prefab api test', () => {
     const childGeometry = ecs.SphereGeometry.get(world, childEid)
     assert.deepEqual(childGeometry, {radius: 1})
 
-    assert.notEqual(Number(childInstanceEid), Number(instanceEid),
-      'Child instance entity is not the same as root')
+    assert.notEqual(Number(childInstanceEid), Number(instanceEid), 'Child instance entity is not the same as root')
   })
 
   it('updates to prefab propagate to instances', () => {
@@ -367,8 +366,7 @@ describe('world prefab api test', () => {
     const resultChildEid = world.getInstanceEntity(instanceEid, prefabChildEid)
     assert.isOk(resultEid, 'Instance entity exists')
     assert.equal(Number(resultEid), Number(instanceEid), 'Should return the instance itself')
-    assert.notEqual(Number(resultEid), Number(resultChildEid),
-      'Should not return the same eid for root & child')
+    assert.notEqual(Number(resultEid), Number(resultChildEid), 'Should not return the same eid for root & child')
   })
 
   it('prefab children are correctly parented', () => {
@@ -395,13 +393,11 @@ describe('world prefab api test', () => {
     const nestedPrefabChildEid = sceneHandle.graphIdToPrefab.get('nestedPrefabChild')!
 
     assert.equal(
-      world.getParent(prefabChild1Eid), sceneHandle.graphIdToPrefab.get('prefab'),
-      'Prefab child 1 is parented to prefab'
+      world.getParent(prefabChild1Eid), sceneHandle.graphIdToPrefab.get('prefab'), 'Prefab child 1 is parented to prefab'
     )
 
     assert.equal(
-      world.getParent(nestedPrefabChildEid), sceneHandle.graphIdToPrefab.get('prefabChild1'),
-      'Nested prefab child is parented to prefab child 1'
+      world.getParent(nestedPrefabChildEid), sceneHandle.graphIdToPrefab.get('prefabChild1'), 'Nested prefab child is parented to prefab child 1'
     )
   })
 })

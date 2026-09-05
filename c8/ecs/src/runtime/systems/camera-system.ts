@@ -15,7 +15,7 @@ const xrCameraChanged = (
   if (!curr || !change) {
     return false
   }
-  return XR_CAMERA_PROPERTIES.some((property => curr[property] !== change[property]))
+  return XR_CAMERA_PROPERTIES.some(property => curr[property] !== change[property])
 }
 
 const makeCameraSystem = (world: World) => {

@@ -95,7 +95,7 @@ export default class Text extends mix.withBase(Object3D)(
 
     if (!font || typeof font === 'string') {
       // eslint-disable-next-line no-console
-      if (!FontLibrary.getFontOf(this)) console.warn('no font was found')
+      if (!FontLibrary.getFontOf(this)) { console.warn('no font was found') }
       return
     }
 
@@ -149,7 +149,7 @@ export default class Text extends mix.withBase(Object3D)(
       let lineBreak = null
 
       if (whiteSpace !== Whitespace.NOWRAP) {
-        if (breakChars.includes(glyph) || glyph.match(/\s/g)) lineBreak = 'possible'
+        if (breakChars.includes(glyph) || glyph.match(/\s/g)) { lineBreak = 'possible' }
       }
 
       if (glyph.match(/\n/g)) {

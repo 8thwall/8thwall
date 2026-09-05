@@ -20,7 +20,7 @@ type PrefabsHandle = {
   getPrefab: (name: string) => Eid | undefined
 }
 
-type SceneHandle = SpacesHandle & PrefabsHandle &{
+type SceneHandle = SpacesHandle & PrefabsHandle & {
   remove: () => void
   updateBaseObjects: (newObjects: DeepReadonly<Record<string, GraphObject>>) => void
   updateDebug: (newGraph: DeepReadonly<SceneGraph>) => void

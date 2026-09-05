@@ -804,7 +804,8 @@ describe('Cloud Studio - Parse Component Ast', () => {
         [{
           message: 'expected only one @label for type',
           severity: 'warning',
-        }], 'location')
+        }],
+        'location')
     })
     it('Should create a warning if there are 2 @enums', () => {
       const content = `ecs.registerComponent({
@@ -835,7 +836,8 @@ describe('Cloud Studio - Parse Component Ast', () => {
         [{
           message: 'expected only one @condition for type',
           severity: 'warning',
-        }], 'location')
+        }],
+        'location')
     })
     it('Should create 2 warnings if there are 2 @labels and 2 @enums', () => {
       const content = `ecs.registerComponent({
@@ -858,7 +860,8 @@ describe('Cloud Studio - Parse Component Ast', () => {
             message: 'expected only one @enum for type',
             severity: 'warning',
           },
-        ], 'location')
+        ],
+        'location')
     })
     it('Should create a warning if there is an @enum and an @attribute', () => {
       const content = `ecs.registerComponent({

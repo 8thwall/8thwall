@@ -9,8 +9,8 @@ import {events} from '../event-ids'
 
 interface ImageTargetData {
   name: string
-  position: {x: number; y: number; z: number}
-  rotation: {x: number; y: number; z: number; w: number}
+  position: {x: number, y: number, z: number}
+  rotation: {x: number, y: number, z: number, w: number}
   scale: number
 }
 

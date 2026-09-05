@@ -84,7 +84,7 @@ export default function InlineManager(Base) {
     }
 
     calculateBestFit(bestFit) {
-      if (this.childrenInlines.length === 0) return
+      if (this.childrenInlines.length === 0) { return }
 
       // eslint-disable-next-line default-case
       switch (bestFit) {
@@ -120,7 +120,7 @@ export default function InlineManager(Base) {
         if (textHeight > innerHeight) {
           if (fontMultiplier <= minFontMultiplier) {  // can't shrink text
             this.childrenInlines.forEach((inlineComponent) => {
-              if (inlineComponent.isInlineBlock) return
+              if (inlineComponent.isInlineBlock) { return }
 
               // ensure fontSize does not shrink
               inlineComponent._fitFontSize = inlineComponent.getFontSize()
@@ -132,9 +132,9 @@ export default function InlineManager(Base) {
           maxFontMultiplier = fontMultiplier
           fontMultiplier -= (maxFontMultiplier - minFontMultiplier) / 2
         } else {
-          if (Math.abs(innerHeight - textHeight) < heightTolerance) break
+          if (Math.abs(innerHeight - textHeight) < heightTolerance) { break }
 
-          if (Math.abs(fontMultiplier - maxFontMultiplier) < 5e-10) maxFontMultiplier *= 2
+          if (Math.abs(fontMultiplier - maxFontMultiplier) < 5e-10) { maxFontMultiplier *= 2 }
 
           minFontMultiplier = fontMultiplier
           fontMultiplier += (maxFontMultiplier - minFontMultiplier) / 2
@@ -165,7 +165,7 @@ export default function InlineManager(Base) {
         } else {
           if (fontMultiplier >= maxFontMultiplier) {  // can't grow text
             this.childrenInlines.forEach((inlineComponent) => {
-              if (inlineComponent.isInlineBlock) return
+              if (inlineComponent.isInlineBlock) { return }
 
               // ensure fontSize does not grow
               inlineComponent._fitFontSize = inlineComponent.getFontSize()
@@ -174,7 +174,7 @@ export default function InlineManager(Base) {
             break
           }
 
-          if (Math.abs(innerHeight - textHeight) < heightTolerance) break
+          if (Math.abs(innerHeight - textHeight) < heightTolerance) { break }
 
           minFontMultiplier = fontMultiplier
           fontMultiplier += (maxFontMultiplier - minFontMultiplier) / 2
@@ -203,9 +203,9 @@ export default function InlineManager(Base) {
           maxFontMultiplier = fontMultiplier
           fontMultiplier -= (maxFontMultiplier - minFontMultiplier) / 2
         } else {
-          if (Math.abs(innerHeight - textHeight) < heightTolerance) break
+          if (Math.abs(innerHeight - textHeight) < heightTolerance) { break }
 
-          if (Math.abs(fontMultiplier - maxFontMultiplier) < 5e-10) maxFontMultiplier *= 2
+          if (Math.abs(fontMultiplier - maxFontMultiplier) < 5e-10) { maxFontMultiplier *= 2 }
 
           minFontMultiplier = fontMultiplier
           fontMultiplier += (maxFontMultiplier - minFontMultiplier) / 2
@@ -231,7 +231,7 @@ export default function InlineManager(Base) {
       this.childrenInlines.reduce((lastInlineOffset, inlineComponent) => {
         // Abort condition
 
-        if (!inlineComponent.inlines) return
+        if (!inlineComponent.inlines) { return }
 
         /// ///////////////////////////////////////////////////////////
         // Compute offset of each children according to its dimensions
@@ -258,7 +258,7 @@ export default function InlineManager(Base) {
               inline.offsetX = xoffset
 
               // restart the lastInlineOffset as zero.
-              if (inline.width === 0) return 0
+              if (inline.width === 0) { return 0 }
 
               // compute lastInlineOffset normally
               // except for kerning which won't apply
@@ -355,7 +355,7 @@ export default function InlineManager(Base) {
 
     calculateHeight(fontMultiplier) {
       this.childrenInlines.forEach((inlineComponent) => {
-        if (inlineComponent.isInlineBlock) return
+        if (inlineComponent.isInlineBlock) { return }
 
         // Set font size and recalculate dimensions
         inlineComponent._fitFontSize = inlineComponent.getFontSize() * fontMultiplier

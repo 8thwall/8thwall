@@ -135,7 +135,7 @@ const createAttribute = <T extends Schema>(
 }
 
 const createExtendedAttribute = <T extends ExtendedSchema<Schema>>(
-  extendedSchema: T | undefined, customDefaults?: Partial<ReadData<BaseSchema< T>>>
+  extendedSchema: T | undefined, customDefaults?: Partial<ReadData<BaseSchema<T>>>
 ): RootAttribute<BaseSchema<T>> => {
   if (!extendedSchema) {
     return createAttribute()

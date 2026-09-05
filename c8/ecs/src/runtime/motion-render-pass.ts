@@ -43,7 +43,7 @@ const createMotionRenderPass = (scene: Scene) => {
   })
 
   // eslint-disable-next-line prefer-destructuring
-  const uniforms = (motionShader.uniforms as typeof motionShaderUniformDefinition)
+  const uniforms = motionShader.uniforms as typeof motionShaderUniformDefinition
 
   let previousOverrideMaterial: Material | null = null
 

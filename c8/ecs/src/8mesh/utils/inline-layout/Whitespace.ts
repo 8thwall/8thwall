@@ -37,7 +37,7 @@ type WhiteSpace = typeof NORMAL | typeof NOWRAP | typeof PRE | typeof PRE_LINE |
  */
 // TODO (tri): rewrite this in a more functional way
 function _collapseRightInlines(inlines: Inline[], targetInline?: Inline): void {
-  if (!targetInline) return
+  if (!targetInline) { return }
 
   for (let i = 0; i < inlines.length; i++) {
     const inline = inlines[i]
@@ -55,7 +55,7 @@ function _collapseRightInlines(inlines: Inline[], targetInline?: Inline): void {
  */
 // TODO (tri): rewrite this in a more functional way
 function _collapseLeftInlines(inlines: Inline[], targetInline?: Inline): void {
-  if (!targetInline) return
+  if (!targetInline) { return }
 
   for (let i = 0; i < inlines.length; i++) {
     const inline = inlines[i]
@@ -81,7 +81,7 @@ function _distanceToNextBreak(
   accumulator = accumulator ?? 0
 
   // end of the text
-  if (!inlines[currentIdx]) return accumulator
+  if (!inlines[currentIdx]) { return accumulator }
 
   const inline = inlines[currentIdx]
   const kerning = inline.kerning ?? 0
@@ -89,7 +89,7 @@ function _distanceToNextBreak(
   const xadvance = inline.xadvance ?? inline.width ?? 0
 
   // if inline.lineBreak is set, it is 'mandatory' or 'possible'
-  if (inline.lineBreak) return accumulator + xadvance
+  if (inline.lineBreak) { return accumulator + xadvance }
 
   // no line break is possible on this character
   return _distanceToNextBreak(
@@ -203,7 +203,7 @@ function shouldBreak(
     case PRE_WRAP:
 
       // prevent additional computation if line break is mandatory
-      if (inline.lineBreak === 'mandatory') return true
+      if (inline.lineBreak === 'mandatory') { return true }
 
       /* eslint-disable no-case-declarations */
       const kerning = inline.kerning ?? 0
@@ -211,7 +211,7 @@ function shouldBreak(
       const xadvance = inline.xadvance ?? inline.width ?? 0
 
       // prevent additional computation if this character already exceed the available size
-      if (lastInlineOffset + xadvance + xoffset + kerning > innerWidth) return true
+      if (lastInlineOffset + xadvance + xoffset + kerning > innerWidth) { return true }
 
       const nextBreak = _distanceToNextBreak(inlines, i, letterSpacing)
       return _shouldFriendlyBreak(

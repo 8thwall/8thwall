@@ -41,7 +41,7 @@ Knows:
 - Its component ancestors clipping planes.
 
  */
-type Constructor<T = {}> = new (...args: any[]) => T;
+type Constructor<T = {}> = new (...args: any[]) => T
 
 // NOTE(christoph): These are provided by by mix.withBase(Object3D)(...other mixins)
 // TODO(christoph): Switch to composing this interface from each mixin interface
@@ -76,7 +76,7 @@ type BaseInstance = {
   getBorderRadiusBottomRight: () => number
   getBorderRadiusTopLeft: () => number
   getBorderRadiusTopRight: () => number
-  getDefines: () => Object
+  getDefines: () => object
   clippingPlanes: Array<Plane> | null
   backgroundMaterial: Material | undefined
 }
@@ -85,20 +85,20 @@ function MaterialManager<T extends Constructor<BaseInstance>>(Base: T) {
   // eslint-disable-next-line @typescript-eslint/no-shadow
   return class MaterialManager extends Base {
     backgroundUniforms: {
-      uTexture: { value: Texture }
-      uHasTexture: { value: boolean }
-      uColor: { value: Color }
-      uOpacity: { value: number }
-      uBackgroundMapping: { value: number }
-      uBorderWidth: { value: number }
-      uBorderColor: { value: Color }
-      uBorderRadiusTopLeft: { value: number }
-      uBorderRadiusTopRight: { value: number }
-      uBorderRadiusBottomRight: { value: number }
-      uBorderRadiusBottomLeft: { value: number }
-      uBorderOpacity: { value: number }
-      uSize: { value: Vec2 }
-      uTexSize: { value: Vec2 }
+      uTexture: {value: Texture}
+      uHasTexture: {value: boolean}
+      uColor: {value: Color}
+      uOpacity: {value: number}
+      uBackgroundMapping: {value: number}
+      uBorderWidth: {value: number}
+      uBorderColor: {value: Color}
+      uBorderRadiusTopLeft: {value: number}
+      uBorderRadiusTopRight: {value: number}
+      uBorderRadiusBottomRight: {value: number}
+      uBorderRadiusBottomLeft: {value: number}
+      uBorderOpacity: {value: number}
+      uSize: {value: Vec2}
+      uTexSize: {value: Vec2}
       uNineSliceBorderTop: {value: number}
       uNineSliceBorderBottom: {value: number}
       uNineSliceBorderLeft: {value: number}
@@ -112,14 +112,14 @@ function MaterialManager<T extends Constructor<BaseInstance>>(Base: T) {
 
     // Map of material uniforms from font urls
     textUniforms?: Record<string, {
-      uTexture: { value: Texture }
-      uColor: { value: Color }
-      uOpacity: { value: number }
-      uPxRange: { value: number }
-      uUseRGSS: { value: boolean }
+      uTexture: {value: Texture}
+      uColor: {value: Color}
+      uOpacity: {value: number}
+      uPxRange: {value: number}
+      uUseRGSS: {value: boolean}
     }>
 
-    defines?: Object
+    defines?: object
 
     constructor(...args: any[]) {
       super(...args)
@@ -167,7 +167,7 @@ function MaterialManager<T extends Constructor<BaseInstance>>(Base: T) {
 
       this.backgroundUniforms.uTexSize.value.set(texWidth, texHeight)
 
-      if (this.size) this.backgroundUniforms.uSize.value.copy(this.size)
+      if (this.size) { this.backgroundUniforms.uSize.value.copy(this.size) }
 
       if (!this.backgroundUniforms.uHasTexture.value) {
         this.backgroundUniforms.uColor.value = this.getBackgroundColor()
@@ -321,7 +321,7 @@ function MaterialManager<T extends Constructor<BaseInstance>>(Base: T) {
           })
         }
 
-        if (this.backgroundMaterial) this.backgroundMaterial.clippingPlanes = this.clippingPlanes
+        if (this.backgroundMaterial) { this.backgroundMaterial.clippingPlanes = this.clippingPlanes }
       }
     }
   }

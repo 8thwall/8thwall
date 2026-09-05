@@ -9,7 +9,7 @@ import {setLayersOnObject} from '../../utils/set-layers-on-object'
 
 const {Plane, Vector3, Object3D} = window.THREE
 
-type ComparableProp = boolean | number | string | Array | Object | undefined
+type ComparableProp = boolean | number | string | Array | object | undefined
 
 // NOTE(johnny): This function is used to compare properties of a MeshUIComponent.
 // booleans, strings, numbers, primitive arrays, color objects, and texture objects are accounted
@@ -406,7 +406,7 @@ export default function MeshUIComponent(Base) {
           child.userData.rootUi = this
         })
       }
-    };
+    }
 
     /**
      * When the user calls component.add, it registers for updates,
@@ -421,7 +421,7 @@ export default function MeshUIComponent(Base) {
       // eslint-disable-next-line no-restricted-syntax
       for (const id of Object.keys(args)) {
         // An inline component relies on its parent for positioning
-        if (args[id].isInline) this.update(null, true)
+        if (args[id].isInline) { this.update(null, true) }
         if (args[id].isText) {
           this._updateChildren()
         }
@@ -438,7 +438,7 @@ export default function MeshUIComponent(Base) {
       // eslint-disable-next-line no-restricted-syntax
       for (const id of Object.keys(args)) {
         // An inline component relies on its parent for positioning
-        if (args[id].isInline) this.update(null, true)
+        if (args[id].isInline) { this.update(null, true) }
       }
 
       const result = super.remove(...args)
@@ -461,8 +461,8 @@ export default function MeshUIComponent(Base) {
     _updateChildren() {
       this.traverse((child) => {
         // if this component/its children are Text, update their font texture urls
-        if (child.isText) child._updateFontTextureUrls()
-        if (child.isUI) child.update(true, true, false, true)
+        if (child.isText) { child._updateFontTextureUrls() }
+        if (child.isUI) { child.update(true, true, false, true) }
       })
       this.getHighestParent().update(false, true, false, true)
     }
@@ -570,7 +570,7 @@ export default function MeshUIComponent(Base) {
 
       // Abort if no option passed
 
-      if (!options || Object.keys(options).length === 0) return
+      if (!options || Object.keys(options).length === 0) { return }
 
       // DEPRECATION Warnings until
       // -------------------------------------- 7.x.x ---------------------------------------
@@ -667,7 +667,7 @@ export default function MeshUIComponent(Base) {
 
             case 'letterSpacing':
             case 'interLine':
-              if (this.isBlock && this.getBestFit() !== 'none') parsingNeedsUpdate = true
+              if (this.isBlock && this.getBestFit() !== 'none') { parsingNeedsUpdate = true }
               layoutNeedsUpdate = true
               rebuildText = true
               this[prop] = options[prop]
@@ -769,7 +769,7 @@ export default function MeshUIComponent(Base) {
       // Call component update
 
       this.update(parsingNeedsUpdate, layoutNeedsUpdate, innerNeedsUpdate, rebuildText)
-      if (layoutNeedsUpdate) this.getHighestParent().update(false, true, false, rebuildText)
+      if (layoutNeedsUpdate) { this.getHighestParent().update(false, true, false, rebuildText) }
     }
 
     /** Get completely rid of this component and its children, also unregister it for updates */

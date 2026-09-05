@@ -33,8 +33,7 @@ const assertVec3Equal = (actual: Vec3Source, expected: Vec3Source) => {
 const assertQuatEqual = (actual: QuatSource, expected: QuatSource, _message?: string) => {
   const message = _message ? ` (${_message})` : ''
   assert.closeTo(
-    ecs.math.quat.from(expected).dot(actual), 1, 1e-5,
-    `Quaternion: ${formatQuat(expected)} vs Actual: ${formatQuat(actual)}${message}, in euler: \
+    ecs.math.quat.from(expected).dot(actual), 1, 1e-5, `Quaternion: ${formatQuat(expected)} vs Actual: ${formatQuat(actual)}${message}, in euler: \
 ${formatQuatAsEuler(expected)} vs Actual: ${formatQuatAsEuler(actual)}`
   )
 }

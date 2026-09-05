@@ -49,7 +49,7 @@ const getGltfMeshData = (scene: THREE_TYPES.Group): MeshData => {
         const index = simplifiedIndices[i] * VERTEX_POSITION_STRIDE
         for (let j = 0; j < VERTEX_POSITION_STRIDE; j++) {
           simplifiedVertices[i * VERTEX_POSITION_STRIDE + j] =
-              Math.round(positions[index + j] * VERTEX_ROUNDING_FACTOR) / VERTEX_ROUNDING_FACTOR
+            Math.round(positions[index + j] * VERTEX_ROUNDING_FACTOR) / VERTEX_ROUNDING_FACTOR
         }
       }
 

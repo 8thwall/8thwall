@@ -15,8 +15,8 @@ const cleanups = createInstanced<World, Map<Eid, Cleanup>>(() => new Map())
 interface FaceData {
   id: number
   transform: {
-    position: {x: number; y: number; z: number}
-    rotation: {x: number; y: number; z: number; w: number}
+    position: {x: number, y: number, z: number}
+    rotation: {x: number, y: number, z: number, w: number}
     scale: number
     scaledWidth: number
     scaledHeight: number

@@ -7,7 +7,7 @@ const MOVING_TIMER = 30
 const MAX_SPEED_FACTOR = 0.01
 
 const capSpeed = (speed: number, maxSpeed: number) => Math.sign(speed) *
-Math.min(Math.abs(speed), maxSpeed * MAX_SPEED_FACTOR)
+  Math.min(Math.abs(speed), maxSpeed * MAX_SPEED_FACTOR)
 
 const UP_VECTOR = ecs.math.vec3.from({x: 0, y: 1, z: 0})
 const tempCameraPos = ecs.math.vec3.zero()

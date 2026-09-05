@@ -208,7 +208,7 @@ describe('Disabled behavior', () => {
     resetCounts()
 
     desc =
-    'Disable/enable an entity with a child entity and a parent entity that both have the component'
+      'Disable/enable an entity with a child entity and a parent entity that both have the component'
     ecs.Disabled.set(world, childEid)
     world.tick()
     expectRemoves(2, 'remove', desc)
@@ -326,7 +326,7 @@ describe('Disabled behavior', () => {
     resetCounts()
 
     desc =
-    'disabling an child and re-enabling it should disable it\'s children in the threejs scene'
+      'disabling an child and re-enabling it should disable it\'s children in the threejs scene'
     expectSceneObjects(5, 'initial scene objects', desc)
     ecs.Disabled.set(world, childEid)
     world.tick()
@@ -340,7 +340,7 @@ describe('Disabled behavior', () => {
     resetCounts()
 
     desc =
-    'disabling an child and re-enabling it should re-parent it to it\'s parent in the threejs scene'
+      'disabling an child and re-enabling it should re-parent it to it\'s parent in the threejs scene'
     expectSceneParent(
       world.three.entityToObject.get(childEid),
       world.three.entityToObject.get(eid),
@@ -398,7 +398,7 @@ describe('Disabled behavior', () => {
     resetCounts()
 
     desc = 'changing the parent of a object from a disabled object to a disabled object ' +
-           'should parent the three object to the new parent'
+      'should parent the three object to the new parent'
     world.setParent(childEid, eid)
     ecs.Disabled.set(world, eid)
     world.tick()

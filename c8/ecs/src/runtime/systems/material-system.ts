@@ -65,18 +65,12 @@ const makeMaterialSystem = (world: World) => {
       const magFilter = getMagFilter(textureFiltering as TextureFiltering)
       const minFilter = getMinFilter(textureFiltering as TextureFiltering, mipmaps)
       Promise.all([
-        loadTexture(material, textureSrc, 'map', repeatX, repeatY, offsetX, offsetY, wrap,
-          minFilter, magFilter, THREE.SRGBColorSpace),
-        loadTexture(material, roughnessMap, 'roughnessMap', repeatX, repeatY, offsetX, offsetY,
-          wrap, minFilter, magFilter, undefined),
-        loadTexture(material, metalnessMap, 'metalnessMap', repeatX, repeatY, offsetX, offsetY,
-          wrap, minFilter, magFilter, undefined),
-        loadTexture(material, normalMap, 'normalMap', repeatX, repeatY, offsetX, offsetY, wrap,
-          minFilter, magFilter, undefined),
-        loadTexture(material, opacityMap, 'alphaMap', repeatX, repeatY, offsetX, offsetY, wrap,
-          minFilter, magFilter, undefined),
-        loadTexture(material, emissiveMap, 'emissiveMap', repeatX, repeatY, offsetX, offsetY, wrap,
-          minFilter, magFilter, THREE.SRGBColorSpace),
+        loadTexture(material, textureSrc, 'map', repeatX, repeatY, offsetX, offsetY, wrap, minFilter, magFilter, THREE.SRGBColorSpace),
+        loadTexture(material, roughnessMap, 'roughnessMap', repeatX, repeatY, offsetX, offsetY, wrap, minFilter, magFilter, undefined),
+        loadTexture(material, metalnessMap, 'metalnessMap', repeatX, repeatY, offsetX, offsetY, wrap, minFilter, magFilter, undefined),
+        loadTexture(material, normalMap, 'normalMap', repeatX, repeatY, offsetX, offsetY, wrap, minFilter, magFilter, undefined),
+        loadTexture(material, opacityMap, 'alphaMap', repeatX, repeatY, offsetX, offsetY, wrap, minFilter, magFilter, undefined),
+        loadTexture(material, emissiveMap, 'emissiveMap', repeatX, repeatY, offsetX, offsetY, wrap, minFilter, magFilter, THREE.SRGBColorSpace),
       ]).then((textures) => {
         if (abortController.signal.aborted) {
           return

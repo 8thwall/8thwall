@@ -34,7 +34,7 @@ interface InputListenerApi {
   getTouchIds: () => number[]
 }
 
-interface InputApi extends InputListenerApi, InputManagerApi{
+interface InputApi extends InputListenerApi, InputManagerApi {
   attach: () => void
   detach: () => void
 }

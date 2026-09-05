@@ -85,7 +85,6 @@
       "ignoreUrls": true
     }
   ],
-  "@stylistic/max-statements-per-line": "off",
   "@stylistic/no-multi-spaces": [
     "error",
     {
@@ -245,8 +244,10 @@
     {
       "ignore": [
         "^[a-z0-9-]+$",
-        "^[a-z0-9-]+/",
-        "^@[a-z0-9-]+/[a-z0-9-]+$"
+        "^@[a-z0-9-]+/[a-z0-9-]+$",
+        "bzl/.*",
+        "reality/.*",
+        "c8/.*"
       ]
     }
   ],

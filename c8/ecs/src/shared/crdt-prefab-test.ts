@@ -75,7 +75,7 @@ describe('crdt', () => {
   {
     type ObjectUpdate = (
       ((object: DeepReadonly<GraphObject>) => DeepReadonly<GraphObject>)
-     | Partial<GraphObject>
+      | Partial<GraphObject>
     )
 
     const updateObject = (update: ObjectUpdate): Mutation => prev => ({

@@ -60,10 +60,8 @@ const makeUnlitMaterialSystem = (world: World) => {
       maybeRemoveStaleFromVideoManager(world, eid, material, 'alphaMap', opacityMap, videos)
 
       Promise.all([
-        loadTexture(material, textureSrc, 'map', repeatX, repeatY, offsetX, offsetY, wrap,
-          minFilter, magFilter, THREE.SRGBColorSpace),
-        loadTexture(material, opacityMap, 'alphaMap', repeatX, repeatY, offsetX, offsetY, wrap,
-          minFilter, magFilter, undefined),
+        loadTexture(material, textureSrc, 'map', repeatX, repeatY, offsetX, offsetY, wrap, minFilter, magFilter, THREE.SRGBColorSpace),
+        loadTexture(material, opacityMap, 'alphaMap', repeatX, repeatY, offsetX, offsetY, wrap, minFilter, magFilter, undefined),
       ]).then((textures) => {
         if (abortController.signal.aborted) {
           return

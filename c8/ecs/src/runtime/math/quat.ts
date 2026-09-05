@@ -954,10 +954,22 @@ class QuatImpl implements Quat {
     const q = fill4x1(SCRATCH_4, 0, 0, 0, 1)
     rotation4x4ToQuat(fill4x4(
       SCRATCH_4X4,
-      cross.x, cross.y, cross.z, 0,
-      cross2.x, cross2.y, cross2.z, 0,
-      dir.x, dir.y, dir.z, 0,
-      0, 0, 0, 1
+      cross.x,
+      cross.y,
+      cross.z,
+      0,
+      cross2.x,
+      cross2.y,
+      cross2.z,
+      0,
+      dir.x,
+      dir.y,
+      dir.z,
+      0,
+      0,
+      0,
+      0,
+      1
     ), q)
     return this.setXyzw(q[0], q[1], q[2], q[3])
   }

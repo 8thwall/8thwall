@@ -1,6 +1,5 @@
 import THREE from './three'
-import type {GLTFLoader, TextureLoader} from './three-types'
-import type {RGBELoader} from './three-types'
+import type {GLTFLoader, TextureLoader, RGBELoader} from './three-types'
 import {getResourceBase} from '../shared/resources'
 
 let _gltfLoader: GLTFLoader | null = null

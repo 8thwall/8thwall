@@ -41,8 +41,7 @@ describe('Persistent Entity test', () => {
     }
 
     const expectSameEid = (eid1: Eid, eid2: Eid, label: string) => {
-      assert.equal(eid1, eid2,
-        `${label} (expected: ${eid1}, actual: ${eid2}) on Test: ${currentMsg}`)
+      assert.equal(eid1, eid2, `${label} (expected: ${eid1}, actual: ${eid2}) on Test: ${currentMsg}`)
     }
 
     const sceneGraph = {

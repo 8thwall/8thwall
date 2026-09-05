@@ -127,8 +127,7 @@ describe('Transform Manager Set Functions', () => {
       ))
 
       assertPosition(world, child, ecs.math.vec3.xyz(-1, 1, -1))
-      assertQuaternion(world, child,
-        ecs.math.quat.yDegrees(180).times(ecs.math.quat.xDegrees(-45)))
+      assertQuaternion(world, child, ecs.math.quat.yDegrees(180).times(ecs.math.quat.xDegrees(-45)))
       assertScale(world, child, ecs.math.vec3.xyz(2, 2, 2))
     })
   })

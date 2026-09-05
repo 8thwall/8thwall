@@ -59,9 +59,9 @@ export default class InlineBlock extends mix.withBase(Object3D)(
     // Get image dimensions
 
     // eslint-disable-next-line no-console
-    if (!this.width) console.warn('inlineBlock has no width. Set to 0.3 by default')
+    if (!this.width) { console.warn('inlineBlock has no width. Set to 0.3 by default') }
     // eslint-disable-next-line no-console
-    if (!this.height) console.warn('inlineBlock has no height. Set to 0.3 by default')
+    if (!this.height) { console.warn('inlineBlock has no height. Set to 0.3 by default') }
     this.inlines = [{
       height: this.height || 0.3,
       width: this.width || 0.3,
@@ -97,7 +97,7 @@ export default class InlineBlock extends mix.withBase(Object3D)(
 
     this.size.set(width, height)
     this.frame.scale.set(width, height, 1)
-    if (this.frame) this.updateBackgroundMaterial()
+    if (this.frame) { this.updateBackgroundMaterial() }
 
     this.frame.renderOrder = this.overrideRenderOrder ?? this.getParentsNumber()
 
@@ -118,6 +118,6 @@ export default class InlineBlock extends mix.withBase(Object3D)(
   updateInner() {
     this.position.z = this.getOffset()
 
-    if (this.frame) this.updateBackgroundMaterial()
+    if (this.frame) { this.updateBackgroundMaterial() }
   }
 }

@@ -29,7 +29,7 @@ export default class UpdateManager {
    */
   static requestUpdate(component, updateParsing, updateLayout, updateInner, rebuildText) {
     component.traverse((child) => {
-      if (!child.isUI) return
+      if (!child.isUI) { return }
 
       // request updates for all descendants of the passed components
       if (!this.requestedUpdates[child.id]) {
@@ -41,10 +41,10 @@ export default class UpdateManager {
           needCallback: (updateParsing || updateLayout || updateInner),
         }
       } else {
-        if (updateParsing) this.requestedUpdates[child.id].updateParsing = true
-        if (updateLayout) this.requestedUpdates[child.id].updateLayout = true
-        if (updateInner) this.requestedUpdates[child.id].updateInner = true
-        if (rebuildText) this.requestedUpdates[child.id].rebuildText = true
+        if (updateParsing) { this.requestedUpdates[child.id].updateParsing = true }
+        if (updateLayout) { this.requestedUpdates[child.id].updateLayout = true }
+        if (updateInner) { this.requestedUpdates[child.id].updateInner = true }
+        if (rebuildText) { this.requestedUpdates[child.id].rebuildText = true }
       }
     })
   }

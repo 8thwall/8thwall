@@ -78,91 +78,91 @@ const loadTexture = <T extends THREE_TYPES.Material>(
   magnificationFilter: THREE_TYPES.MagnificationTextureFilter,
   colorSpace?: THREE_TYPES.ColorSpace
 ): Promise<THREE_TYPES.Texture | null> => new Promise((resolve) => {
-    if (material.userData[property as string] === src) {
-      const texture = material[property] as THREE_TYPES.Texture
-      if (!texture) {
-        resolve(null)
-        return
-      }
-      let needUpdate = false
-      if (texture.repeat) {
-        texture.repeat.set(repeatX, repeatY)
-        needUpdate = true
-      }
-      if (texture.offset) {
-        texture.offset.set(offsetX, offsetY)
-        needUpdate = true
-      }
-      const textureWrap = wrapping[wrap as TextureWrap]
-      if (textureWrap) {
-        texture.wrapS = textureWrap
-        texture.wrapT = textureWrap
-        needUpdate = true
-      }
-
-      const correctedMinFilter = texture instanceof THREE.VideoTexture
-        ? replaceUnsupportedVideoFilter(minificationFilter)
-        : minificationFilter
-
-      if (texture.minFilter !== correctedMinFilter) {
-        texture.minFilter = correctedMinFilter
-        needUpdate = true
-      }
-
-      if (texture.magFilter !== magnificationFilter) {
-        texture.magFilter = magnificationFilter
-        needUpdate = true
-      }
-
-      texture.needsUpdate = needUpdate
+  if (material.userData[property as string] === src) {
+    const texture = material[property] as THREE_TYPES.Texture
+    if (!texture) {
       resolve(null)
       return
     }
-
-    material.userData[property as string] = src
-    if (src) {
-      assets.load({url: src}).then((asset) => {
-        // If the material has changed since the texture was requested or is being removed,
-        // don't apply it
-        if (material.userData[property as string] !== src) {
-          resolve(null)
-          return
-        }
-
-        // Clean-up existing texture
-        disposeTexture(material[property] as THREE_TYPES.Texture)
-
-        const isVideo = SUPPORTED_VIDEO_FORMATS.includes(asset.data.type)
-        const texture = isVideo
-          ? createVideoTexture(asset.localUrl)
-          : textureLoader.load(asset.localUrl)
-        texture.userData.src = src
-        texture.userData.textureKey = property
-        texture.repeat.set(repeatX, repeatY)
-        texture.offset.set(offsetX, offsetY)
-        const textureWrap = wrapping[wrap as TextureWrap]
-        texture.wrapS = textureWrap
-        texture.wrapT = textureWrap
-        // NOTE(chloe): Video textures don't play nice with mipmap filtering, so we disable them.
-        texture.minFilter = isVideo
-          ? replaceUnsupportedVideoFilter(minificationFilter)
-          : minificationFilter
-        texture.magFilter = magnificationFilter
-        // ts couldn't resolve the type of material[property] although it always is a texture
-        material[property] = texture as any
-        material.needsUpdate = true
-        if (colorSpace) {
-          texture.colorSpace = colorSpace
-        }
-        resolve(texture)
-      })
-    } else {
-      disposeTexture(material[property] as THREE_TYPES.Texture)
-      material[property] = null as any
-      material.needsUpdate = true
-      resolve(null)
+    let needUpdate = false
+    if (texture.repeat) {
+      texture.repeat.set(repeatX, repeatY)
+      needUpdate = true
     }
-  })
+    if (texture.offset) {
+      texture.offset.set(offsetX, offsetY)
+      needUpdate = true
+    }
+    const textureWrap = wrapping[wrap as TextureWrap]
+    if (textureWrap) {
+      texture.wrapS = textureWrap
+      texture.wrapT = textureWrap
+      needUpdate = true
+    }
+
+    const correctedMinFilter = texture instanceof THREE.VideoTexture
+      ? replaceUnsupportedVideoFilter(minificationFilter)
+      : minificationFilter
+
+    if (texture.minFilter !== correctedMinFilter) {
+      texture.minFilter = correctedMinFilter
+      needUpdate = true
+    }
+
+    if (texture.magFilter !== magnificationFilter) {
+      texture.magFilter = magnificationFilter
+      needUpdate = true
+    }
+
+    texture.needsUpdate = needUpdate
+    resolve(null)
+    return
+  }
+
+  material.userData[property as string] = src
+  if (src) {
+    assets.load({url: src}).then((asset) => {
+      // If the material has changed since the texture was requested or is being removed,
+      // don't apply it
+      if (material.userData[property as string] !== src) {
+        resolve(null)
+        return
+      }
+
+      // Clean-up existing texture
+      disposeTexture(material[property] as THREE_TYPES.Texture)
+
+      const isVideo = SUPPORTED_VIDEO_FORMATS.includes(asset.data.type)
+      const texture = isVideo
+        ? createVideoTexture(asset.localUrl)
+        : textureLoader.load(asset.localUrl)
+      texture.userData.src = src
+      texture.userData.textureKey = property
+      texture.repeat.set(repeatX, repeatY)
+      texture.offset.set(offsetX, offsetY)
+      const textureWrap = wrapping[wrap as TextureWrap]
+      texture.wrapS = textureWrap
+      texture.wrapT = textureWrap
+      // NOTE(chloe): Video textures don't play nice with mipmap filtering, so we disable them.
+      texture.minFilter = isVideo
+        ? replaceUnsupportedVideoFilter(minificationFilter)
+        : minificationFilter
+      texture.magFilter = magnificationFilter
+      // ts couldn't resolve the type of material[property] although it always is a texture
+      material[property] = texture as any
+      material.needsUpdate = true
+      if (colorSpace) {
+        texture.colorSpace = colorSpace
+      }
+      resolve(texture)
+    })
+  } else {
+    disposeTexture(material[property] as THREE_TYPES.Texture)
+    material[property] = null as any
+    material.needsUpdate = true
+    resolve(null)
+  }
+})
 
 // Maybe remove material's texture from Video Manager if it holds a video element and if the given
 // src for this texture map is now stale.

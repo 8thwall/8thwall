@@ -15,8 +15,8 @@ import {events} from '../event-ids'
 interface FaceData {
   id: number
   transform: {
-    position: {x: number; y: number; z: number}
-    rotation: {x: number; y: number; z: number; w: number}
+    position: {x: number, y: number, z: number}
+    rotation: {x: number, y: number, z: number, w: number}
     scale: number
   }
 }
@@ -69,10 +69,10 @@ const makeFaceSystem = (world: World) => {
     mirroredDisplay: boolean
   ): number[] => {
     const numIndices =
-        (meshGeometryFace ? FaceMeshIndices.length : 0) +
-        (meshGeometryEyes ? FaceMeshEyeIndices.length : 0) +
-        (meshGeometryIris ? FaceMeshIrisIndices.length : 0) +
-        (meshGeometryMouth ? FaceMeshMouthIndices.length : 0)
+      (meshGeometryFace ? FaceMeshIndices.length : 0) +
+      (meshGeometryEyes ? FaceMeshEyeIndices.length : 0) +
+      (meshGeometryIris ? FaceMeshIrisIndices.length : 0) +
+      (meshGeometryMouth ? FaceMeshMouthIndices.length : 0)
     const indices = new Array(numIndices)
 
     let i = 0
@@ -223,8 +223,7 @@ const makeFaceSystem = (world: World) => {
 
       scratch.tempPos.set(position.x, position.y, position.z)
       scratch.cameraRot = scratch.cameraRot.times(scratch.rotY180)
-      scratch.tempQuat.set(scratch.cameraRot.x, scratch.cameraRot.y, scratch.cameraRot.z,
-        scratch.cameraRot.w)
+      scratch.tempQuat.set(scratch.cameraRot.x, scratch.cameraRot.y, scratch.cameraRot.z, scratch.cameraRot.w)
       scratch.tempPos.applyQuaternion(scratch.tempQuat)
 
       // shift data from the face controller by the mesh's position
@@ -236,8 +235,7 @@ const makeFaceSystem = (world: World) => {
       )
 
       // local rotation
-      scratch.engineRot.setXyzw(scratch.cameraRot.x, scratch.cameraRot.y, scratch.cameraRot.z,
-        scratch.cameraRot.w)
+      scratch.engineRot.setXyzw(scratch.cameraRot.x, scratch.cameraRot.y, scratch.cameraRot.z, scratch.cameraRot.w)
       scratch.meshRot = scratch.engineRot.times(rotation).times(scratch.rotY180)
       world.setQuaternion(
         eid,

@@ -23,7 +23,7 @@ const loadEnvironment = (
     world.three.scene.environment = null
     assets.load({url}).then((asset) => {
       if (activeSpace !== sceneHandle.getActiveSpace()?.id ||
-         !!world.three.scene.environment) {
+        !!world.three.scene.environment) {
         return
       }
       const ext = url.split('.').pop()
@@ -32,7 +32,7 @@ const loadEnvironment = (
       loader.load(asset.localUrl, (texture) => {
         // TODO: add loading promises map to prevent race condition instead of this.
         if (activeSpace !== sceneHandle.getActiveSpace()?.id ||
-         !!world.three.scene.environment) {
+          !!world.three.scene.environment) {
           texture.dispose()
           return
         }

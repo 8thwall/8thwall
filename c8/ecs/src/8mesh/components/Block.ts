@@ -79,7 +79,7 @@ export default class Block extends mix.withBase(Object3D)(
 
     this.size.set(width, height)
     this.frame.scale.set(width, height, 1)
-    if (this.frame) this.updateBackgroundMaterial()
+    if (this.frame) { this.updateBackgroundMaterial() }
 
     this.frame.renderOrder = this.overrideRenderOrder ?? this.getParentsNumber()
 
@@ -117,6 +117,6 @@ export default class Block extends mix.withBase(Object3D)(
       this.position.z = this.getOffset()
     }
 
-    if (this.frame) this.updateBackgroundMaterial()
+    if (this.frame) { this.updateBackgroundMaterial() }
   }
 }

@@ -66,20 +66,17 @@ describe('independent observer test', () => {
 
     const expectAdds = (expected: number, label: string) => {
       const actual = callbackCounts.get('add') || 0
-      assert.equal(actual, expected,
-        `'[adds]', ${label}, (${actual}, expected: ${expected})`)
+      assert.equal(actual, expected, `'[adds]', ${label}, (${actual}, expected: ${expected})`)
     }
 
     const expectRemoves = (expected: number, label: string) => {
       const actual = callbackCounts.get('remove') || 0
-      assert.equal(actual, expected,
-        `'[removes]', ${label}, (${actual}, expected: ${expected}: ${currentMsg})`)
+      assert.equal(actual, expected, `'[removes]', ${label}, (${actual}, expected: ${expected}: ${currentMsg})`)
     }
 
     const expectChanged = (expected: number, label: string) => {
       const actual = callbackCounts.get('changed') || 0
-      assert.equal(actual, expected,
-        `'[changed]', ${label} (${actual}, expected: ${expected}): ${currentMsg}`)
+      assert.equal(actual, expected, `'[changed]', ${label} (${actual}, expected: ${expected}): ${currentMsg}`)
     }
 
     const world = window.ecs.createWorld(...initThree())
