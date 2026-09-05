@@ -9,7 +9,7 @@ module.exports = {
     },
   },
   create(context) {
-    const fileName = context.getFilename()
+    const fileName = context.filename
     if (!TS_EXTENSIONS.some(ext => fileName.endsWith(ext))) {
       return {}
     }

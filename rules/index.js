@@ -1,20 +1,49 @@
 /* eslint-disable global-require */
-module.exports = {
+
+const defaultRules = {
   'acronym-capitalization': require('./acronym-capitalization'),
-  'implicit-any': require('./implicit-any'),
   'commonjs': require('./commonjs'),
-  'hardcoded-copy': require('./hardcoded-copy'),
-  'i18n-nesting': require('./i18n-nesting'),
+  'implicit-any': require('./implicit-any'),
   'inline-comment-spacing': require('./inline-comment-spacing'),
+  'multiline-ternary': require('./multiline-ternary'),
   'prefer-await': require('./prefer-await'),
-  'zod-tuple': require('./zod-tuple'),
   'type-only-imports': require('./type-only-imports'),
   'typedef-separators': require('./typedef-separators'),
-  'ui-component-styling': require('./ui-component-styling'),
-  'untyped-array': require('./untyped-array'),
-  'express-deprecated-send': require('./express-deprecated-send'),
-  'export-request-handler': require('./export-request-handler'),
-  'reality-shared-imports': require('./reality-shared-imports'),
   'underscore-argument': require('./underscore-argument'),
-  'multiline-ternary': require('./multiline-ternary'),
+  'untyped-array': require('./untyped-array'),
 }
+
+const optionalRules = {
+  'export-request-handler': require('./export-request-handler'),
+  'express-deprecated-send': require('./express-deprecated-send'),
+  'hardcoded-copy': require('./hardcoded-copy'),
+  'i18n-nesting': require('./i18n-nesting'),
+  'reality-shared-imports': require('./reality-shared-imports'),
+  'ui-component-styling': require('./ui-component-styling'),
+  'zod-tuple': require('./zod-tuple'),
+}
+
+const plugin = {
+  meta: {
+    namespace: 'local-rules',
+  },
+  configs: {
+
+  },
+  rules: {...defaultRules, ...optionalRules},
+  processors: {},
+}
+
+plugin.configs.default = {
+  plugins: {[plugin.meta.namespace]: plugin},
+  rules: Object.fromEntries(
+    Object.keys(defaultRules)
+      .map(e => ([`${plugin.meta.namespace}/${e}`, 'error']))
+  ),
+}
+
+plugin.configs.overrides = {
+  rules: require('./overrides.json'),
+}
+
+module.exports = plugin

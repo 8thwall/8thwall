@@ -1,14 +1,15 @@
 // @rule(js_binary)
-// @package(npm-eslint)
+// @package(npm-ecs)
 // @attr(export_library = 1)
-// @attr(externals = "eslint")
+// @attr(externals = "three")
 // @attr(target = "node")
 // @attr(commonjs = 1)
 
-import Eslint from 'eslint'
+import * as THREE from 'three'
 
 const doThing = () => {
-  console.log('Eslint is version: ', Eslint.CLIEngine.version)
+  // eslint-disable-next-line no-console
+  console.log('Eslint is version: ', THREE.UnsignedByteType)
 }
 
 export {

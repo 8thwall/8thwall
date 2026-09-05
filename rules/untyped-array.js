@@ -8,7 +8,7 @@ module.exports = {
   },
   create(context) {
     // Only ts/tsx
-    if (!context.getFilename().endsWith('.ts') && !context.getFilename().endsWith('.tsx')) {
+    if (!context.filename.endsWith('.ts') && !context.filename.endsWith('.tsx')) {
       return {}
     }
 
@@ -31,7 +31,6 @@ module.exports = {
           messageId: 'noUntypedArray',
         })
       },
-
     }
   },
 }

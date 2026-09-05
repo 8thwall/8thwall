@@ -5,11 +5,11 @@ js_binary(
     name = "pre-built-binary",
     commonjs = 1,
     export_library = 1,
-    externals = "eslint",
+    externals = "three",
     main = [
         "pre-built-binary.ts",
     ],
-    npm_rule = "@npm-eslint//:npm-eslint",
+    npm_rule = "@npm-ecs//:npm-ecs",
     target = "node",
 )
 
@@ -18,7 +18,7 @@ js_cli(
     main = [
         "cli-on-top.ts",
     ],
-    npm_rule = "@npm-eslint//:npm-eslint",
+    npm_rule = "@npm-ecs//:npm-ecs",
     deps = [
         "//bzl/examples/js/import:pre-built-binary",
     ],

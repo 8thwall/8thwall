@@ -3,7 +3,8 @@ const path = require('path')
 const DISALLOWED_PREFIX = '@repo/reality/shared/'
 
 // NOTE(christoph): This list reflects what is present in the reality/shared directory
-// eslint-disable-next-line max-len
+
+// eslint-disable-next-line @stylistic/max-len
 // Get all the subpaths with: ls reality/shared  | sed 's|\..*||g' | sort | grep -v "BUILD" | grep -v test | sed -E "s|(.*)|'\1',|g"
 const ALLOWED_SUBPATHS = [
   'asset-pointer',
@@ -41,7 +42,7 @@ const checkImport = (node, context) => {
     const pathWithinShared = source.substring(DISALLOWED_PREFIX.length)
     const subpath = pathWithinShared.split('/')[0]
     if (!ALLOWED_SUBPATHS.includes(subpath)) {
-      const fixedPath = fixImportPath(context.getFilename(), pathWithinShared)
+      const fixedPath = fixImportPath(context.filename, pathWithinShared)
       context.report({
         node: node.source,
         messageId: 'invalidMessage',
