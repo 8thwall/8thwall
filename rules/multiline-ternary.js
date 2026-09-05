@@ -10,7 +10,7 @@ module.exports = {
     schema: [],
   },
   create(context) {
-    const {sourceCode} = context
+    const sourceCode = context.sourceCode
 
     const checkTernary = (node) => {
       if (node.loc.start.line === node.loc.end.line) {

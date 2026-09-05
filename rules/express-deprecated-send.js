@@ -11,9 +11,10 @@ module.exports = {
     return {
       CallExpression(node) {
         // Only match something looking like "res.send(xxx)"
-        const isResSend = node.callee.type === 'MemberExpression' &&
-                          isIdentifierNamed(node.callee.object, 'res') &&
-                          isIdentifierNamed(node.callee.property, 'send')
+        const isResSend =
+          node.callee.type === 'MemberExpression' &&
+          isIdentifierNamed(node.callee.object, 'res') &&
+          isIdentifierNamed(node.callee.property, 'send')
 
         if (!isResSend) {
           return

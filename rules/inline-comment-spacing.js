@@ -134,7 +134,7 @@ module.exports = {
     },
   },
   create(context) {
-    const {sourceCode} = context
+    const sourceCode = context.sourceCode
     return {
       Program() {
         fixInlineCommentSpacing(context, sourceCode)

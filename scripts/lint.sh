@@ -40,10 +40,6 @@ while [ $# -gt 0 ]; do
       SINCE="$2"
       shift
       ;;
-    --*)
-      echo "Unknown argument: $1"
-      exit 1
-      ;;
     *)
       FILE_ARGS+=("$1")
       ;;
@@ -76,7 +72,7 @@ fi
 
 STATUS=0
 
-JS_FILES="$(printf '%s\n' "$FILES" | grep -E '\.m?[tj]sx?$')" || true
+JS_FILES="$(printf '%s\n' "$FILES" | grep -E '\.[tj]sx?$')" || true
 if [ -n "$JS_FILES" ]; then
   echo "Running ESLint..."
   printf '%s\n' "$JS_FILES" | xargs -n 100 "$ESLINT" --no-warn-ignored ${ESLINT_MODE[@]+${ESLINT_MODE[@]}} -- || STATUS=1

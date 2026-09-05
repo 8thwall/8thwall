@@ -11,8 +11,8 @@ module.exports = {
   create(context) {
     const checks = {}
 
-    CHAINING_METHODS.forEach((method) => {
-      checks[`MemberExpression > Identifier[name = ${method}]`] = (node) => {
+    CHAINING_METHODS.forEach(method => {
+      checks[`MemberExpression > Identifier[name = ${method}]`] = node => {
         context.report({
           node,
           messageId: 'noPromiseChaining',

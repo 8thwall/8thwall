@@ -2,6 +2,8 @@
 Repository rule for installing npm packages.
 """
 
+load("//bzl/node:host-platform.bzl", "host_platform")
+
 def _local_fail(msg):
     """Output failure message."""
     red = "\033[0;31m"
@@ -36,7 +38,9 @@ def _npm_package_impl(repository_ctx):
     for patchFile in repository_ctx.attr.patches:
         repository_ctx.symlink(patchFile, "patches/%s" % repository_ctx.path(patchFile).basename)
 
-    node = repository_ctx.path(repository_ctx.attr.node).realpath
+    node = repository_ctx.path(
+        repository_ctx.attr.node or Label("@nodejs_%s//:bin/node" % host_platform(repository_ctx)),
+    ).realpath
     node_bin_dir = node.dirname
     npm = "{}/npm".format(node_bin_dir)
 
@@ -127,7 +131,7 @@ npm_package = repository_rule(
         "package": attr.label(mandatory = True, allow_single_file = True),
         "package_lock": attr.label(mandatory = True, allow_single_file = True),
         "patches": attr.label_list(default = [], allow_files = True),
-        "node": attr.label(default = "@nodejs_host//:bin/node", allow_single_file = True),
+        "node": attr.label(default = None, allow_single_file = True),
         "exports_files": attr.label_list(default = [], allow_files = True),
         "excluded_files": attr.string_list(default = []),
         "export_zip": attr.bool(default = False),

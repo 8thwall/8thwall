@@ -1,16 +1,14 @@
 // Returns true if the function seems to be a handler function.
 // Middleware is exempt.
-const isRequestHandler = node => (
+const isRequestHandler = node =>
   node.params.length === 2 &&
   ['_', 'req'].includes(node.params[0].name) &&
- node.params[1].name === 'res'
-)
+  node.params[1].name === 'res'
 
 module.exports = {
   name: 'export-request-handler',
   meta: {
     docs: {
-      // eslint-disable-next-line max-len
       url: 'https://<REMOVED_BEFORE_OPEN_SOURCING>.atlassian.net/wiki/spaces/AR/pages/2633531527/Code+Organization#Express-Handlers',
     },
     messages: {
@@ -27,7 +25,7 @@ module.exports = {
           return
         }
 
-        node.declarations.forEach((declaration) => {
+        node.declarations.forEach(declaration => {
           const isFunction = declaration.init?.type === 'ArrowFunctionExpression'
           if (!isFunction) {
             return
@@ -53,7 +51,7 @@ module.exports = {
         handlerNames.add(node.id.name)
       },
       ExportNamedDeclaration(node) {
-        node.specifiers.forEach((specifier) => {
+        node.specifiers.forEach(specifier => {
           const localName = specifier.local.name
           if (handlerNames.has(localName)) {
             context.report({

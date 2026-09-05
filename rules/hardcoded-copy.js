@@ -25,77 +25,59 @@ const nonTranslatedStrings = new Set([
   'YouTube',
 ])
 
-const looksLikeCopy = str => (
+const looksLikeCopy = str =>
   !nonTranslatedStrings.has(str.trim()) &&
-  str.match(/((\b[A-Z][a-z]+\b)|[a-zA-Z] [a-zA-Z])/) &&  // Sentence case or has spaces in it
-  !str.match(/\d(r?em|px)\b|M ?\d/)  // Ignore pixel/em values in css and SVG paths
-)
+  str.match(/((\b[A-Z][a-z]+\b)|[a-zA-Z] [a-zA-Z])/) && // Sentence case or has spaces in it
+  !str.match(/\d(r?em|px)\b|M ?\d/) // Ignore pixel/em values in css and SVG paths
 
 // Ignore
 //   className='some classes'
 //   <Button icon='example icon name' />
 //   <Icon name='example icon name' />
-const nodeIsIgnoredAttribute = node => (
-  node.type === 'JSXAttribute' && (
-    node.name.name === 'className' ||
+const nodeIsIgnoredAttribute = node =>
+  node.type === 'JSXAttribute' &&
+  (node.name.name === 'className' ||
     node.name.name === 'icon' ||
     node.name.name === 'viewBox' ||
-    (node.name.name === 'name' && node.parent.name.name === 'Icon')
-  )
-)
+    (node.name.name === 'name' && node.parent.name.name === 'Icon'))
 
 // Ignore console.log('Blah')
-const nodeIsLog = node => (
+const nodeIsLog = node =>
   node.type === 'CallExpression' &&
   node.callee.type === 'MemberExpression' &&
   node.callee.object.name === 'console'
-)
 
 // Ignore <Trans>This is a placeholder</Trans>
-const nodeIsTrans = node => (
-  node.type === 'JSXElement' &&
-  node.openingElement.name.name === 'Trans'
-)
+const nodeIsTrans = node => node.type === 'JSXElement' && node.openingElement.name.name === 'Trans'
 
 // Ignore new Error('This is an error')
-const nodeIsErrorConstructor = node => (
-  node.type === 'NewExpression' &&
-  node.callee.name?.endsWith('Error')
-)
+const nodeIsErrorConstructor = node =>
+  node.type === 'NewExpression' && node.callee.name?.endsWith('Error')
 
-const nodeIsPath = node => (
-  node.type === 'JSXElement' &&
-  node.openingElement.name.name === 'path'
-)
+const nodeIsPath = node => node.type === 'JSXElement' && node.openingElement.name.name === 'path'
 
 // Ignore createUseStyles({myClass: {padding: '0.5rem 1rem'}})
-const nodeIsJss = node => (
+const nodeIsJss = node =>
   node.type === 'CallExpression' &&
   (!!node.callee.name?.match(/^create.*Styles$/) || nodeIsJss(node.callee))
-)
 
 const IGNORED_TS_NODES = [
-  'TypeAliasDeclaration', 'InterfaceDeclaration', 'TSTypeAliasDeclaration', 'TSTypeAnnotation',
+  'TypeAliasDeclaration',
+  'InterfaceDeclaration',
+  'TSTypeAliasDeclaration',
+  'TSTypeAnnotation',
 ]
 
 // Ignore type Direction = 'top left' | 'bottom right'
-const nodeIsTypeDefinition = node => (
-  IGNORED_TS_NODES.includes(node.type)
-)
+const nodeIsTypeDefinition = node => IGNORED_TS_NODES.includes(node.type)
 
 // These props are surfaced to the user and should always be translated.
-const userVisibleProps = new Set([
-  'alt',
-  'aria-label',
-  'content',
-  'text',
-])
+const userVisibleProps = new Set(['alt', 'aria-label', 'content', 'text'])
 
-const nodeIsUserVisibleAttribute = node => (
+const nodeIsUserVisibleAttribute = node =>
   node.type === 'JSXAttribute' && node.name && userVisibleProps.has(node.name.name)
-)
 
-const nodeIsIgnored = node => (
+const nodeIsIgnored = node =>
   nodeIsIgnoredAttribute(node) ||
   nodeIsLog(node) ||
   nodeIsTrans(node) ||
@@ -104,7 +86,6 @@ const nodeIsIgnored = node => (
   nodeIsErrorConstructor(node) ||
   nodeIsPath(node) ||
   (node.parent && !nodeIsUserVisibleAttribute(node.parent) && nodeIsIgnored(node.parent))
-)
 
 module.exports = {
   name: 'hardcoded-copy',
