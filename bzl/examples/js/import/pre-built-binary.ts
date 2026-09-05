@@ -9,7 +9,7 @@ import * as THREE from 'three'
 
 const doThing = () => {
   // eslint-disable-next-line no-console
-  console.log('Eslint is version: ', THREE.UnsignedByteType)
+  console.log('THREE.UnsignedByteType: ', THREE.UnsignedByteType)
 }
 
 export {

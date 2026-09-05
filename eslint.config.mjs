@@ -60,7 +60,6 @@ export default [
         },
       },
     },
-    // rules: logIntercept(base),
   },
   {
     files: ['**/*.ts'],
