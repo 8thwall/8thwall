@@ -430,6 +430,7 @@ load("@rules_nodejs//nodejs:repositories.bzl", "nodejs_register_toolchains", "ru
 rules_nodejs_dependencies()
 
 nodejs_register_toolchains(
+    # https://github.com/bazel-contrib/rules_nodejs/blob/v6.1.2/nodejs/private/node_versions.bzl
     name = "nodejs",
     node_version = "20.14.0",
 )
