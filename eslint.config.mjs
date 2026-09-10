@@ -23,7 +23,7 @@ const {default: pluginImport} = await resolve('eslint-plugin-import', 'lib/index
 const {fixupConfigRules} = await resolve('@eslint/compat', 'dist/cjs/index.cjs')
 const {includeIgnoreFile} = await resolve('eslint/config', '../lib/config-api.js')
 
-const ROOT = process.cwd()
+const ROOT = import.meta.dirname
 
 const EXTENSIONS = ['.js', '.ts', '.tsx', '.mjs']
 
