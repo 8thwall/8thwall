@@ -1,6 +1,8 @@
 import THREE from '../runtime/three'
 import type {GraphComponent} from './scene-graph'
 
+/* eslint-disable @stylistic/array-element-newline */
+
 const FaceMeshPositions = new Float32Array([
   0.001636, -0.477721, 0.618629,
   -0.000282, -0.314289, 0.74258,
@@ -3502,41 +3504,41 @@ const EarLMeshIndices = new Uint32Array([
 
 // refer to //reality/engine/faces/face-geometry.cc
 const attachmentPointToIndex: Record<string, number> = {
-  'forehead': 151,
-  'rightEyebrowInner': 55,
-  'rightEyebrowMiddle': 52,
-  'rightEyebrowOuter': 124,
-  'leftEyebrowInner': 285,
-  'leftEyebrowMiddle': 282,
-  'leftEyebrowOuter': 353,
-  'leftCheek': 280,
-  'rightCheek': 50,
-  'noseBridge': 6,
-  'noseTip': 4,
-  'leftEyeUpper': 386,  // 'leftEye' is the average of 'leftEyeUpper' & 'leftEyeLower'
-  'leftEyeLower': 374,
-  'rightEyeUpper': 159,  // 'rightEye' is the average of 'rightEyeUpper' & 'rightEyeLower'
-  'rightEyeLower': 145,
-  'leftEyeOuterCorner': 263,
-  'rightEyeOuterCorner': 33,
-  'upperLip': 12,  // 'mouth' is the average of 'upperLip' & 'lowerLip'
-  'lowerLip': 15,
-  'mouthRightCorner': 78,
-  'mouthLeftCorner': 308,
-  'chin': 175,
-  'leftIris': 473,
-  'rightIris': 468,
-  'leftUpperEyelid': 386,
-  'rightUpperEyelid': 159,
-  'leftLowerEyelid': 374,
-  'rightLowerEyelid': 145,
+  forehead: 151,
+  rightEyebrowInner: 55,
+  rightEyebrowMiddle: 52,
+  rightEyebrowOuter: 124,
+  leftEyebrowInner: 285,
+  leftEyebrowMiddle: 282,
+  leftEyebrowOuter: 353,
+  leftCheek: 280,
+  rightCheek: 50,
+  noseBridge: 6,
+  noseTip: 4,
+  leftEyeUpper: 386,  // 'leftEye' is the average of 'leftEyeUpper' & 'leftEyeLower'
+  leftEyeLower: 374,
+  rightEyeUpper: 159,  // 'rightEye' is the average of 'rightEyeUpper' & 'rightEyeLower'
+  rightEyeLower: 145,
+  leftEyeOuterCorner: 263,
+  rightEyeOuterCorner: 33,
+  upperLip: 12,  // 'mouth' is the average of 'upperLip' & 'lowerLip'
+  lowerLip: 15,
+  mouthRightCorner: 78,
+  mouthLeftCorner: 308,
+  chin: 175,
+  leftIris: 473,
+  rightIris: 468,
+  leftUpperEyelid: 386,
+  rightUpperEyelid: 159,
+  leftLowerEyelid: 374,
+  rightLowerEyelid: 145,
   // TODO(yuyan): fix these when ear mesh is added
-  'leftHelix': 585,
-  'leftCanal': 277,
-  'leftLobe': 420,
-  'rightHelix': 585,
-  'rightCanal': 277,
-  'rightLobe': 420,
+  leftHelix: 585,
+  leftCanal: 277,
+  leftLobe: 420,
+  rightHelix: 585,
+  rightCanal: 277,
+  rightLobe: 420,
 }
 
 const faceAttachmentNames = [

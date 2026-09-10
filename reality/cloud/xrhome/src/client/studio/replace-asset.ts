@@ -1,7 +1,7 @@
 import type {SceneGraph} from '@ecs/shared/scene-graph'
 import type {DeepReadonly} from 'ts-essentials'
 
-/* eslint-disable arrow-parens */
+/* eslint-disable @stylistic/arrow-parens */
 
 const replaceAsset = <T>(
   target: DeepReadonly<T>,

@@ -1,6 +1,6 @@
 // @visibility(//visibility:public)
 
-/* eslint-disable arrow-parens */
+/* eslint-disable @stylistic/arrow-parens */
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_AttributeValue.html
 
 type GenericAttribute<T extends string, A extends any> = Omit<NeverAttributes, T> & Record<T, A>

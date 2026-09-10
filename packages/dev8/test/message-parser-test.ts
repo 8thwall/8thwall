@@ -1,4 +1,5 @@
 import {assert} from 'chai'
+import {describe, it} from 'mocha'
 
 import {getMessageOffsets} from '../src/xrsimulator/message-parser'
 
@@ -46,7 +47,7 @@ describe('getMessageOffsets', () => {
     const message = makeMessage([0])
 
     assert.deepEqual(
-      getMessageOffsets(message.buffer),
+      getMessageOffsets(message.buffer as ArrayBuffer),
       [{start: 0, end: message.byteLength}]
     )
   })

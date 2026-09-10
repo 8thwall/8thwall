@@ -3,6 +3,8 @@ import type {Faces} from './scene-graph'
 const DEFAULT_RADIAL_SEGMENTS = 32
 const DEFAULT_CAP_SEGMENTS = 4
 
+/* eslint-disable @stylistic/array-element-newline */
+
 const TETRAHEDRON_VERTICES = [1, 1, 1, -1, -1, 1, -1, 1, -1, 1, -1, -1]
 const TETRAHEDRON_INDICES = [2, 1, 0, 0, 3, 2, 1, 3, 0, 2, 3, 1]
 const OCTAHEDRON_VERTICES = [
@@ -72,7 +74,7 @@ type GeometryMapping = {
     vertices: number[]
     indices: number[]
   }
-};
+}
 
 const FACES_TO_GEOMETRY: GeometryMapping = {
   4: {

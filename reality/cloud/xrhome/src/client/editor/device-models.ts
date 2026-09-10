@@ -1,5 +1,7 @@
 import UAParser from 'ua-parser-js'
 
+/* eslint-disable local-rules/hardcoded-copy */
+
 // Pixel height and pixel width are being used to calculate screen size.
 const detectIOSDeviceTitle = (height: number, width: number) => {
   if (height === 2778 && width === 1284) {

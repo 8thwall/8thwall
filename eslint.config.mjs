@@ -44,9 +44,6 @@ export default [
   pluginLocal.configs.default,
   pluginLocal.configs.overrides,
   {
-    linterOptions: {
-      reportUnusedDisableDirectives: false,  // todo: re-enable this
-    },
     settings: {
       'react': {
         version: 'detect',

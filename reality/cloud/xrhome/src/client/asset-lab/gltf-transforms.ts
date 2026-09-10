@@ -15,7 +15,7 @@ const smoothNormals: Transform = async (document: Document): Promise<void> => {
     for (const primitive of mesh.listPrimitives()) {
       const position = primitive.getAttribute('POSITION')
       // eslint-disable-next-line no-continue
-      if (!position) continue
+      if (!position) { continue }
 
       const positionArray = position.getArray()!
       const indices = primitive.getIndices()?.getArray()
@@ -60,11 +60,10 @@ const smoothNormals: Transform = async (document: Document): Promise<void> => {
 
           // Weight normal by triangle area
           const weight = edge1.cross(edge2).length() * 0.5
-          // eslint-disable-next-line semi-style
           normal.multiplyScalar(weight);
 
           // Add weighted normal to each vertex
-          [i1, i2, i3].forEach((idx) => {
+          ;[i1, i2, i3].forEach((idx) => {
             const key = `${positionArray[idx]},${positionArray[idx + 1]},${positionArray[idx + 2]}`
             const existing = vertexNormals.get(key)
             if (existing) {
@@ -129,7 +128,7 @@ const smoothNormals: Transform = async (document: Document): Promise<void> => {
       if (indices) {
         for (let i = 0; i < indices.length; i++) {
           const idx = indices[i] * 3
-          // eslint-disable-next-line @stylistic/max-len
+
           const key = `${positionArray[idx]},${positionArray[idx + 1]},${positionArray[idx + 2]}`
           const vertexNormal = vertexNormals.get(key)!
           normalArray[idx] = vertexNormal.x
@@ -177,12 +176,12 @@ const getAdjustBrightness = (settings: {textureBrightness: number}): Transform =
     const textures = document.getRoot().listTextures()
     for (const texture of textures) {
       // eslint-disable-next-line no-continue
-      if (!texture.getMimeType()?.startsWith('image/')) continue
+      if (!texture.getMimeType()?.startsWith('image/')) { continue }
 
       // eslint-disable-next-line no-await-in-loop
       const imageData = await texture.getImage()
       // eslint-disable-next-line no-continue
-      if (!imageData) continue
+      if (!imageData) { continue }
 
       // TODO (tri) clean up this looping await logic
       // Create ImageBitmap from the image data
@@ -202,7 +201,7 @@ const getAdjustBrightness = (settings: {textureBrightness: number}): Transform =
 
       for (let i = 0; i < data.length; i += 4) {
         // eslint-disable-next-line no-continue
-        if (data[i + 3] === 0) continue  // Skip fully transparent pixels
+        if (data[i + 3] === 0) { continue }  // Skip fully transparent pixels
 
         // Adjust RGB values
         data[i] = Math.min(255, Math.round(data[i] * settings.textureBrightness))          // R

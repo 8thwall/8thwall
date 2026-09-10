@@ -1,6 +1,6 @@
 import type {RegistryEntry} from './registry'
 
-/* eslint-disable arrow-parens */
+/* eslint-disable @stylistic/arrow-parens */
 
 const createMock = <ApiType extends {}>(entry: RegistryEntry<ApiType>) => {
   const handlers = {} as ApiType
