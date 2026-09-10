@@ -24,16 +24,16 @@ import {getRuntimeMetadataQuery} from './runtime-version/use-runtime-metadata'
 import {getProjectConfigStatusQuery} from '../hooks/use-project-config'
 
 type FileSyncStatus =
-| 'checking'  // Checking what the local state is
-| 'initialized'  // Local sync was already initialized, ready to start listening
-| 'listening'  // Listening for local changes
-| 'active'  // Actively syncing files, changes are being processed
+  | 'checking'  // Checking what the local state is
+  | 'initialized'  // Local sync was already initialized, ready to start listening
+  | 'listening'  // Listening for local changes
+  | 'active'  // Actively syncing files, changes are being processed
 
 type BuildStatus =
-| 'starting'
-| 'npm-install-failed'
-| 'failed'
-| 'running'
+  | 'starting'
+  | 'npm-install-failed'
+  | 'failed'
+  | 'running'
 
 type ILocalSyncContext = {
   appKey: string
@@ -325,8 +325,7 @@ const LocalSyncContextProvider: React.FC<{children: React.ReactNode}> = ({childr
         setPendingWrite(pendingWritesRef, path, 'disk')
       }
       await pushFile(appKey, path, content)
-      return
-    } catch (error) {
+    } catch {
       stateCtx.update({
         errorMsg: t('local_sync.error.invalid_file', {filePath: path}),
       })
@@ -370,7 +369,7 @@ const LocalSyncContextProvider: React.FC<{children: React.ReactNode}> = ({childr
         if (reason === 'npm-install') {
           status = 'npm-install-failed'
         }
-      } catch (e) {
+      } catch {
         // Unable to extract reason, continue with default reason
       }
       setBuildStatus(status)
