@@ -6,6 +6,8 @@ import {
   isMac,
 } from '../src/client/editor/device-models'
 
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+
 describe('Detecting iOS device title for', () => {
   it('iPhone 6.7"', () => {
     const h = 2778
@@ -479,26 +481,22 @@ describe('Verifying whether a device is a Mac.', () => {
   it('MacOS user agent verification success', () => {
     const ua = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) AppleWebKit/537.36 (KHTML,' +
       ' like Gecko) Chrome/85.0.4183.121 Safari/537.36'
-    // eslint-disable-next-line no-unused-expressions
     expect(isMac(ua, 'bogus platform')).to.be.true
   })
 
   it('iOS user agent verification success', () => {
     const ua = 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_1_2 like Mac OS X) ' +
       'AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.1 Mobile/15E148 Safari/604.1'
-    // eslint-disable-next-line no-unused-expressions
     expect(isMac(ua, 'bogus platform')).to.be.true
   })
 
   it('MacOS platform verification success', () => {
-    // eslint-disable-next-line no-unused-expressions
     expect(isMac('', 'MacIntel')).to.be.true
   })
 
   it('MacOS verification fail', () => {
     const ua = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) ' +
       'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36'
-    // eslint-disable-next-line no-unused-expressions
     expect(isMac(ua, 'bogus platform')).to.be.false
   })
 })

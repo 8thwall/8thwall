@@ -21,7 +21,7 @@ type GroupDisplayData = {
 
 type SectionDisplayData = {
   mode: 'section'
-  subFields: Record<string, SingleDisplayData|GroupDisplayData>
+  subFields: Record<string, SingleDisplayData | GroupDisplayData>
   presentation: SectionPresentation
 }
 
@@ -33,7 +33,6 @@ type FieldDisplayData = SingleDisplayData | GroupDisplayData | SectionDisplayDat
 type FieldDisplayDataTree = Record<string, FieldDisplayData>
 
 const shouldDisplayField = <T extends Schema>(
-  // eslint-disable-next-line arrow-parens
   metadata: DeepReadonly<StudioComponentMetadata<T>>, values: ReadData<T>, key: string
 ): boolean => {
   const presentation = metadata.schemaPresentation?.fields[key]
@@ -61,7 +60,6 @@ const shouldDisplayField = <T extends Schema>(
 }
 
 const filterConditionalFields = <T extends Schema>(
-  // eslint-disable-next-line arrow-parens
   metadata: DeepReadonly<StudioComponentMetadata<T>>, values: ReadData<T>
 ): Partial<T> => {
   const displayList = {}
@@ -75,11 +73,11 @@ const filterConditionalFields = <T extends Schema>(
 }
 
 const getCollectionData = (
-  mode: 'section'|'group',
+  mode: 'section' | 'group',
   currentFieldPresentation: FieldPresentation,
   parentData: Record<string, FieldDisplayData>,
   collectionPresentations: Record<string, Presentation>
-): GroupDisplayData|SectionDisplayData => {
+): GroupDisplayData | SectionDisplayData => {
   const name = currentFieldPresentation?.[mode]
   if (!name) {
     return undefined
@@ -101,7 +99,6 @@ const getCollectionData = (
 }
 
 const buildDisplayDataTree = <T extends Schema>(
-  // eslint-disable-next-line arrow-parens
   metadata: DeepReadonly<StudioComponentMetadata<T>>, values: ReadData<T>
 ): FieldDisplayDataTree => {
   const res = filterConditionalFields(metadata, values)

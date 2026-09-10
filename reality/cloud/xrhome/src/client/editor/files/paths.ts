@@ -39,7 +39,6 @@ const matchLocation = (file: EditorFileLocation, location: EditorFileLocation) =
 }
 
 const replaceLocation = <T extends ScopedFileLocation>(
-  // eslint-disable-next-line arrow-parens
   file: T, oldLocation: EditorFileLocation, newLocation: EditorFileLocation
 ): T => {
   if (matchLocation(file, oldLocation)) {

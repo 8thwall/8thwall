@@ -1,4 +1,4 @@
-/* eslint-disable quote-props */
+/* eslint-disable @stylistic/quote-props */
 import React from 'react'
 import {createUseStyles} from 'react-jss'
 import {Dropdown} from 'semantic-ui-react'

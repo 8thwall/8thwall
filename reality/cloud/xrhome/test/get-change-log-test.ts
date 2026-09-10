@@ -254,7 +254,6 @@ const multipleSpaces2: Expanse = {
   },
 }
 
-// eslint-disable-next-line arrow-parens
 const expectInSomeOrder = <T>(a: T[], b: T[]) => {
   expect(a.length).to.equal(b.length)
   expect(a).to.have.deep.members(b)

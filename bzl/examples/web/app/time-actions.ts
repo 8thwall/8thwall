@@ -1,5 +1,5 @@
 import {dispatchify} from 'bzl/examples/web/lib/dispatchify'
-import {DispatchifiedActions} from 'bzl/examples/web/lib/dispatchify-types'
+import type {DispatchifiedActions} from 'bzl/examples/web/lib/dispatchify-types'
 
 const setTime = newTime => dispatch => (
   dispatch({type: 'TIME/SET', currentTime: newTime})
@@ -18,6 +18,6 @@ type TimeActions = DispatchifiedActions<typeof rawActions>
 const timeActions = dispatchify(rawActions)
 
 export {
-  TimeActions,  // eslint-disable-line no-undef
+  TimeActions,
   timeActions,
 }

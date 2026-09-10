@@ -20,7 +20,6 @@ interface IRowJointToggleButton<T extends string> extends IJointToggleButton<T> 
   expanseField?: ExpanseField<DefaultableConfigDiffInfo<T, string[][]>>
 }
 
-// eslint-disable-next-line arrow-parens
 const RowJointToggleButton = <T extends string>({
   id: idOverride, label, disabled, options, value, leftContent, rightContent, onChange, onDelete,
   expanseField,

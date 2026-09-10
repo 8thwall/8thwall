@@ -21,7 +21,6 @@ type OpenDiskZipResponse = {
   templateZipUrl: string
 }
 
-// eslint-disable-next-line arrow-parens
 const fetchJson = async <T>(url: string, options?: RequestInit): Promise<T> => {
   const response = await fetch(url, options)
   if (!response.ok) {

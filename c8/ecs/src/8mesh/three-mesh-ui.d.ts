@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import type {Color, Object3D} from './utils/three-types'
 
 type BlockOptions = {
@@ -22,7 +21,7 @@ declare class Block extends Object3D {
   constructor(options: BlockOptions)
 
   // @todo add typed properties and functions from mixin classes
-  [property: string]: any // eslint-disable-line
+  ;[property: string]: any // eslint-disable-line
 }
 
 type TextOptions = {

@@ -15,7 +15,7 @@ import {
   resolveObjectReference, getObjectOrMergedInstance,
 } from '../src/client/studio/derive-scene-operations'
 
-/* eslint quote-props: ["error", "as-needed"] */
+/* eslint @stylistic/quote-props: ["error", "as-needed"] */
 const makeObject = (id: string, extra?: Partial<GraphObject>): GraphObject => ({
   id,
   name: '<unset>',

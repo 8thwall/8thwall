@@ -2,7 +2,7 @@ import type {DeepReadonly} from 'ts-essentials'
 
 import type {SceneGraph} from '@ecs/shared/scene-graph'
 
-/* eslint quote-props: ["error", "as-needed"] */
+/* eslint @stylistic/quote-props: ["error", "as-needed"] */
 
 const physicsScene: DeepReadonly<SceneGraph> = {
   objects: {

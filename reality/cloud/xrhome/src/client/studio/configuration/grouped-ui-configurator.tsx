@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-closing-tag-location */
 import React from 'react'
 import {useTranslation} from 'react-i18next'
 import {UI_DEFAULTS} from '@ecs/shared/ui-constants'

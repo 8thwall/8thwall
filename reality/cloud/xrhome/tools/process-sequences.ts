@@ -33,7 +33,6 @@ const asUrl = (v: any) => {
   }
 }
 
-// eslint-disable-next-line arrow-parens
 const asOneOf = <T>(values: T[], v: any): T => {
   if (!values.includes(v)) {
     throw new Error(`Expected one of ${values.join(', ')}, got ${v}`)
@@ -41,7 +40,6 @@ const asOneOf = <T>(values: T[], v: any): T => {
   return v
 }
 
-// eslint-disable-next-line arrow-parens
 const optionalOr = <T>(v: any, fn: (v: any) => T) => {
   if (!v) {
     return undefined

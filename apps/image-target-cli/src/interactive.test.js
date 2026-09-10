@@ -128,7 +128,7 @@ describe('selectCylindricalGeometry', () => {
     })
   })
 
-  /* eslint quote-props: ["error", "as-needed"] */
+  /* eslint @stylistic/quote-props: ["error", "as-needed"] */
 
   it('love.jpg + default crop', async () => {
     const crop = await selectCylindricalGeometry(

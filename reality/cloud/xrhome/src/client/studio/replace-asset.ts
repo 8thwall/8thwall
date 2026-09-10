@@ -1,8 +1,6 @@
 import type {SceneGraph} from '@ecs/shared/scene-graph'
 import type {DeepReadonly} from 'ts-essentials'
 
-/* eslint-disable arrow-parens */
-
 const replaceAsset = <T>(
   target: DeepReadonly<T>,
   oldPath: string,
@@ -23,7 +21,7 @@ const replaceAsset = <T>(
 
   let modified = false
   const newObj = {...target}
-  Object.keys(target).forEach(key => {
+  Object.keys(target).forEach((key) => {
     const value = target[key]
     const newValue = replaceAsset(value, oldPath, newPath)
     if (newValue !== value) {

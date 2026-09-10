@@ -93,8 +93,8 @@ const startClose = (instance: SocketInstance) => {
 
 const maybeStartClose = (instance: SocketInstance) => {
   if (instance.messageQueue.length === 0 &&
-      instance.subscribers.length === 0 &&
-      instance.restartListeners.length === 0
+    instance.subscribers.length === 0 &&
+    instance.restartListeners.length === 0
   ) {
     startClose(instance)
   }
@@ -171,7 +171,6 @@ const getOrCreateSocketInstance = (specifier: SocketSpecifier): SocketInstance =
   return createSocketInstance(specifier)
 }
 
-/* eslint-disable-next-line arrow-parens */
 const broadcastRawMessage = <T extends object>(specifier: SocketSpecifier, data: T) => {
   const instance = getOrCreateSocketInstance(specifier)
 
@@ -184,7 +183,6 @@ const broadcastRawMessage = <T extends object>(specifier: SocketSpecifier, data:
   }
 }
 
-/* eslint-disable-next-line arrow-parens */
 const broadcastMessage = <T extends object>(specifier: SocketSpecifier, data: T) => {
   broadcastRawMessage(specifier, {action: 'BROADCAST', broadcast_data: data})
 }

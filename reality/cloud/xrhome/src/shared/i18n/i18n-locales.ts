@@ -26,7 +26,6 @@ type LocaleOption8w = {
   content: string
 }
 
-// eslint-disable-next-line arrow-parens
 const filterUnsupported8w = <T>(localeMap: Partial<{[key in SupportedLocale8w]: T}>) => {
   const supportedSet = new Set(getSupportedLocales8w())
   Object.keys(localeMap).forEach((locale: SupportedLocale8w) => {

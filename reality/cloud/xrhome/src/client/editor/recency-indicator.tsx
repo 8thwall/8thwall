@@ -57,7 +57,7 @@ const RecencyIndicator: React.FunctionComponent<IRecencyIndicator> = ({
       ref.current.classList.remove(classes.lit)
       if (lastLogTime) {
         // Accessing offsetWidth triggers a reflow to force the animation to reset
-        // eslint-disable-next-line no-unused-expressions
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
         ref.current.offsetWidth
         ref.current.classList.add(classes.lit)
       }

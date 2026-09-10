@@ -159,7 +159,7 @@ const WAITING_FOR_USE = [
 const isIgnoredFile = (filePath: string) => (
   /(\/i18n\/.*\.(json|html)$)|.DS_Store|eslintrc|\.gitignore|(\.md$)|LICENSE|mock|\/BUILD$/
     .test(filePath) ||
-  IGNORED_PATHS.some(e => filePath.includes(e))
+    IGNORED_PATHS.some(e => filePath.includes(e))
 )
 
 const listFiles = async (files: string[], filePath: string) => {
@@ -248,7 +248,7 @@ const resolveDependencies = async (filePath: string, ctx: AnalysisContext) => {
 
     const deps: string[] = precinct(contents, {type, scss: {url: true}})
     const dir = path.dirname(filePath)
-    deps.forEach(((importPath) => {
+    deps.forEach((importPath) => {
       if (!importPath.startsWith('.')) {
         storeExternalDependency(importPath, ctx)
         return
@@ -261,7 +261,7 @@ const resolveDependencies = async (filePath: string, ctx: AnalysisContext) => {
       } else {
         withExtensionDeps.push(...CODE_RESOLUTION_SUFFIXES.map(e => fullPath + e))
       }
-    }))
+    })
 
     if (ext === '.ts' || ext === '.tsx' || ext === '.js') {
       try {
@@ -415,10 +415,8 @@ const logValidationFailures = (message: string, array: string[]) => {
   })
 }
 
-// eslint-disable-next-line arrow-parens
 const intersect = <T>(a: Set<T>, b: Set<T>): Array<T> => [...a].filter(e => b.has(e))
 
-// eslint-disable-next-line arrow-parens
 const subtract = <T>(a: Set<T>, b: Set<T>): Array<T> => [...a].filter(e => !b.has(e))
 
 const run = async () => {

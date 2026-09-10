@@ -4,7 +4,6 @@ type Resource<T> = T & {release?: () => void}
 
 type ResourcePool<T> = {get: () => Resource<T>}
 
-// eslint-disable-next-line arrow-parens
 const createResourcePool = <T extends {}>(create: () => Resource<T>): ResourcePool<T> => {
   const resources: Resource<T>[] = []
 
@@ -24,8 +23,8 @@ const createResourcePool = <T extends {}>(create: () => Resource<T>): ResourcePo
   return {get}
 }
 
-const createUseResourcePool = <T extends {}>(create: () => Resource<T>) => (
-  () => React.useState(() => createResourcePool(create))[0]
+const createUseResourcePool = <T extends {}>(create: () => Resource<T>) => () => (
+  React.useState(() => createResourcePool(create))[0]
 )
 
 const useImgPool = createUseResourcePool(() => document.createElement('img'))

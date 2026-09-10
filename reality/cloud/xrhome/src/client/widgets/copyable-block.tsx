@@ -1,4 +1,4 @@
-/* eslint-disable quote-props */
+/* eslint-disable @stylistic/quote-props */
 import * as React from 'react'
 import {CopyToClipboard} from 'react-copy-to-clipboard'
 import {useTranslation} from 'react-i18next'

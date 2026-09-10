@@ -62,7 +62,7 @@ const arrayEq = (a: DeepReadonly<string[]>, b: DeepReadonly<string[]>): boolean 
   return a.every((value, index) => value === b[index])
 }
 
-const getFromPath = (path: DeepReadonly<string[]>, obj: Object): unknown => {
+const getFromPath = (path: DeepReadonly<string[]>, obj: object): unknown => {
   if (path.length === 0) {
     return obj
   }
@@ -111,7 +111,6 @@ function getDiffTypeDirect<T>(
 }
 
 const getDiffType = (
-  // eslint-disable-next-line arrow-parens
   changeLog: DeepReadonly<ChangeLog>,
   beforeScene: DeepReadonly<Expanse>,
   afterScene: DeepReadonly<Expanse>,

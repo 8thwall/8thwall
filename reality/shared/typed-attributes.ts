@@ -1,13 +1,20 @@
 // @visibility(//visibility:public)
 
-/* eslint-disable arrow-parens */
 // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_AttributeValue.html
 
 type GenericAttribute<T extends string, A extends any> = Omit<NeverAttributes, T> & Record<T, A>
 type NeverAttributes = {
-  S?: never, N?: never, BOOL?: never
-  B?: never, SS?: never, NS?: never, BS?: never, M?: never, L?: never
-  NULL?: never, $unknown?: never
+  S?: never
+  N?: never
+  BOOL?: never
+  B?: never
+  SS?: never
+  NS?: never
+  BS?: never
+  M?: never
+  L?: never
+  NULL?: never
+  $unknown?: never
 }
 
 type StringAttribute<T extends string> = GenericAttribute<'S', T>
@@ -104,10 +111,10 @@ const toAttribute = <T extends BaseType>(value: T): AttributeForRaw<T> => {
       return {BOOL: value} as AttributeForRaw<T>
     case 'object': {
       if (Array.isArray(value)) {
-        if (value.every((v) => typeof v === 'string')) {
+        if (value.every(v => typeof v === 'string')) {
           return {SS: value} as AttributeForRaw<T>
         }
-        if (value.every((v) => typeof v === 'number')) {
+        if (value.every(v => typeof v === 'number')) {
           return {NS: value.map(v => v.toString())} as AttributeForRaw<T>
         }
         return {L: value.map(v => toAttribute(v))} as AttributeForRaw<T>
@@ -132,9 +139,9 @@ const fromAttribute = <T extends Attribute>(attribute: T): RawForAttribute<T> =>
     case 'SS':
       return attribute.SS as RawForAttribute<T>
     case 'NS':
-      return attribute.NS.map((v) => Number.parseFloat(v)) as any as RawForAttribute<T>
+      return attribute.NS.map(v => Number.parseFloat(v)) as any as RawForAttribute<T>
     case 'L':
-      return attribute.L.map((v) => fromAttribute(v)) as RawForAttribute<T>
+      return attribute.L.map(v => fromAttribute(v)) as RawForAttribute<T>
     case 'M':
       // eslint-disable-next-line @typescript-eslint/no-use-before-define
       return fromAttributes(attribute.M) as RawForAttribute<T>

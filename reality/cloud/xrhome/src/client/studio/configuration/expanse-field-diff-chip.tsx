@@ -13,7 +13,6 @@ interface IExpanseFieldDiffChip<VALUETYPE> {
   defaultRenderers?: DefaultRenderConfig<VALUETYPE>
 }
 
-// eslint-disable-next-line arrow-parens
 const ExpanseFieldDiffChip = <VALUETYPE, >({
   field,
   defaultRenderers,

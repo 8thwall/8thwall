@@ -193,7 +193,8 @@ const EidFieldEditor: React.FC<IEidFieldEditor> = ({label, value, onChange, requ
             value: id,
             content: displayNameForObject(object),
           }
-        })],
+        }),
+      ],
     },
   ]
 
@@ -385,7 +386,6 @@ interface ISchemaSingleField<T extends Schema> {
   onChange: (updater: (current: ReadData<T>) => ReadData<T>) => void
 }
 
-// eslint-disable-next-line arrow-parens
 const SchemaSingleField = <T extends Schema>({
   name, presentation, type, metadata, values, onChange,
 }: ISchemaSingleField<T>) => {
@@ -426,7 +426,8 @@ const SchemaSingleField = <T extends Schema>({
           selectedAttribute={attribute}
           onChange={handleChange}
         />
-      ) }
+      )
+    }
 
     default:
       return (
@@ -521,7 +522,7 @@ const SchemaConfigurator = <T extends Schema>({
         onChange={onChange}
       />}
   </div>
-  )
+)
 
 export {
   SchemaConfigurator,

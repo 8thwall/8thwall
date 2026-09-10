@@ -34,10 +34,10 @@ function create() {
     backgroundColor: 'initial',
   }
 
-  const isCompatibleMobile = () =>
-    // eslint-disable-next-line implicit-arrow-linebreak
+  const isCompatibleMobile = () => (
     XR8.XrDevice.isDeviceBrowserCompatible({allowedDevices: XR8.XrConfig.device().MOBILE}) &&
     !XR8.XrDevice.deviceEstimate().model.toLowerCase().includes('ipad')
+  )
 
   // Update the size of the camera feed canvas to fill the screen.
   const fillScreenWithCanvas = () => {
@@ -51,7 +51,7 @@ function create() {
 
     // Wait for orientation change to take effect before handling resize on mobile phones only.
     const displayOrientationMismatch = ((orientation_ === 0 || orientation_ === 180) && ww > wh) ||
-    ((orientation_ === 90 || orientation_ === -90) && wh > ww)
+      ((orientation_ === 90 || orientation_ === -90) && wh > ww)
     if (displayOrientationMismatch && isCompatibleMobile()) {
       window.requestAnimationFrame(fillScreenWithCanvas)
       return

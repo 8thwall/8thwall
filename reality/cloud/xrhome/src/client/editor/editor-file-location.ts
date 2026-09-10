@@ -17,7 +17,6 @@ const extractRepoId = (location: EditorFileLocation) => (
   typeof location === 'object' ? location?.repoId || null : null
 )
 
-// eslint-disable-next-line arrow-parens
 const falsyCompare = <T>(left: T, right: T) => (!left && !right) || left === right
 
 const editorFileLocationEqual = (left: EditorFileLocation, right: EditorFileLocation) => (
