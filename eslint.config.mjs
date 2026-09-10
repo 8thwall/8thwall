@@ -89,6 +89,12 @@ export default [
     },
   },
   {
+    files: ['**/*.ts', '**/*.tsx'],
+    rules: {
+      'import/named': 'off',
+    },
+  },
+  {
     files: ['**/*.d.ts'],
     rules: {
       'local-rules/acronym-capitalization': 'off',
