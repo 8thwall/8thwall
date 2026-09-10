@@ -266,6 +266,8 @@ const LocalSyncContextProvider: React.FC<{children: React.ReactNode}> = ({childr
     }
   })
 
+  // NOTE(christoph): The effect to initialize the empty git state may not have run yet
+  const canListen = !!repo
   React.useEffect(() => {
     window.electron.fileWatch?.addHandler(appKey, handleLocalSyncMessage)
     setFileSyncStatus('listening')
@@ -273,7 +275,7 @@ const LocalSyncContextProvider: React.FC<{children: React.ReactNode}> = ({childr
     return () => {
       window.electron.fileWatch?.removeHandler(appKey)
     }
-  }, [appKey])
+  }, [canListen, appKey])
 
   const canSyncFiles = fileSyncStatus === 'listening'
   useAbandonableEffect(async (abandon) => {
