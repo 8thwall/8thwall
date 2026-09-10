@@ -16,7 +16,7 @@ function useAnimationsNoRaf<T extends AnimationClip>(
   root?: React.RefObject<Object3D | undefined | null> | Object3D
 ): Api<T> {
   const ref = React.useRef<Object3D>(null)
-  // eslint-disable-next-line max-len, no-nested-ternary
+  // eslint-disable-next-line @stylistic/max-len, no-nested-ternary
   const [actualRef] = React.useState(() => (root
     ? (root instanceof Object3D
       ? {current: root}

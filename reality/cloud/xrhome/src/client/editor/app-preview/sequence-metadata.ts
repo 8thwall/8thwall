@@ -1,5 +1,5 @@
 /* eslint-disable local-rules/hardcoded-copy */
-/* eslint-disable max-len */
+/* eslint-disable @stylistic/max-len */
 import type {SequenceMetadata} from './app-preview-utils'
 
 const RESOURCE_BASE = 'https://simulator.8thwallcdn.org/sequences/resources'

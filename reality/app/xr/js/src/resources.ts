@@ -21,7 +21,7 @@ const unsupported = (resource: string) => () => {
 }
 
 const ResourceUrls = {
-  /* eslint-disable max-len */
+  /* eslint-disable @stylistic/max-len */
   resolveFaceModel: resolver('resources/face-model.tflite'),
   resolveFaceMeshModel: resolver('resources/face-mesh-model.tflite'),
   resolveFaceEarModel: resolver('resources/face-ear-model.tflite'),

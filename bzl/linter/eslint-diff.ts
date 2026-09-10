@@ -190,8 +190,8 @@ const getNewLintErrors = async (
       return true
     }
 
-    // If the line isn't present in "newLines", we can ignore the max-len rule.
-    if (message.ruleId === 'max-len') {
+    // If the line isn't present in "newLines", we can ignore the @stylistic/max-len rule.
+    if (message.ruleId === '@stylistic/max-len') {
       return false
     }
 

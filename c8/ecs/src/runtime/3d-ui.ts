@@ -234,13 +234,13 @@ const update3dUi = (
               object.set({
                 backgroundTexture: texture,
                 backgroundSize,
-                // eslint-disable-next-line max-len
+                // eslint-disable-next-line @stylistic/max-len
                 nineSliceBorderTop: parseNineSliceValue(nineSliceBorderTop, texture.image.height ?? 1.0),
-                // eslint-disable-next-line max-len
+                // eslint-disable-next-line @stylistic/max-len
                 nineSliceBorderBottom: parseNineSliceValue(nineSliceBorderBottom, texture.image.height ?? 1.0),
-                // eslint-disable-next-line max-len
+                // eslint-disable-next-line @stylistic/max-len
                 nineSliceBorderLeft: parseNineSliceValue(nineSliceBorderLeft, texture.image.width ?? 1.0),
-                // eslint-disable-next-line max-len
+                // eslint-disable-next-line @stylistic/max-len
                 nineSliceBorderRight: parseNineSliceValue(nineSliceBorderRight, texture.image.width ?? 1.0),
               })
             }
@@ -295,13 +295,13 @@ const update3dUi = (
               object.set({
                 backgroundTexture: videoTexture,
                 backgroundSize,
-                // eslint-disable-next-line max-len
+                // eslint-disable-next-line @stylistic/max-len
                 nineSliceBorderTop: parseNineSliceValue(nineSliceBorderTop, videoElement.videoHeight ?? 1.0),
-                // eslint-disable-next-line max-len
+                // eslint-disable-next-line @stylistic/max-len
                 nineSliceBorderBottom: parseNineSliceValue(nineSliceBorderBottom, videoElement.videoHeight ?? 1.0),
-                // eslint-disable-next-line max-len
+                // eslint-disable-next-line @stylistic/max-len
                 nineSliceBorderLeft: parseNineSliceValue(nineSliceBorderLeft, videoElement.videoWidth ?? 1.0),
-                // eslint-disable-next-line max-len
+                // eslint-disable-next-line @stylistic/max-len
                 nineSliceBorderRight: parseNineSliceValue(nineSliceBorderRight, videoElement.videoWidth ?? 1.0),
                 defines: {USE_VIDEO_TEXTURE: ''},
               })

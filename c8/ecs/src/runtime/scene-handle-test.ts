@@ -4,7 +4,7 @@
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-param-reassign */
-/* eslint-disable max-len */
+/* eslint-disable @stylistic/max-len */
 
 import type {BaseGraphObject} from '../shared/scene-graph'
 import {initThree} from './test-env'

@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unknown-property */
-/* eslint-disable max-len */
+/* eslint-disable @stylistic/max-len */
 // NOTE(dat): Preact doesn't mess with svg property. The above rule is so eslint doesn't change this
 // file's svg code.
 import * as React from 'preact'

@@ -119,7 +119,7 @@ type UseTheme = () => UiTheme
 const createThemedStyles: UseStylesCreator = createUseStyles
 const useUiTheme: UseTheme = jssUseTheme
 
-/* eslint-disable max-len, local-rules/hardcoded-copy */
+/* eslint-disable @stylistic/max-len, local-rules/hardcoded-copy */
 const LightTheme: UiTheme = {
   fgMain: brandBlack,
   fgMuted: gray4,
@@ -391,9 +391,9 @@ const LightTheme: UiTheme = {
   codeSearchResultAppCardPadding: 'auto',
   nonStudioViewBg: gray2,
 }
-/* eslint-enable max-len, local-rules/hardcoded-copy */
+/* eslint-enable @stylistic/max-len, local-rules/hardcoded-copy */
 
-/* eslint-disable max-len, local-rules/hardcoded-copy */
+/* eslint-disable @stylistic/max-len, local-rules/hardcoded-copy */
 const DarkTheme: UiTheme = {
   fgMain: brandWhite,
   fgMuted: gray3,
@@ -664,9 +664,9 @@ const DarkTheme: UiTheme = {
   codeSearchResultAppCardPadding: 'auto',
   nonStudioViewBg: gray6,
 }
-/* eslint-enable max-len, local-rules/hardcoded-copy */
+/* eslint-enable @stylistic/max-len, local-rules/hardcoded-copy */
 
-/* eslint-disable max-len, local-rules/hardcoded-copy */
+/* eslint-disable @stylistic/max-len, local-rules/hardcoded-copy */
 const Brand8DarkTheme: UiTheme = {
   ...DarkTheme,
   tagBorder: `1px solid ${hexColorWithAlpha(brandWhite, 0.05)}`,
@@ -830,9 +830,9 @@ const Brand8DarkTheme: UiTheme = {
 
   // TODO(alvin): Overwrite theme attributes with new ones.
 }
-/* eslint-enable max-len */
+/* eslint-enable @stylistic/max-len */
 
-/* eslint-disable max-len */
+/* eslint-disable @stylistic/max-len */
 const Brand8LightTheme: UiTheme = {
   ...LightTheme,
   tagBorder: `1px solid ${hexColorWithAlpha(brand8Black, 0.05)}`,
@@ -994,7 +994,7 @@ const Brand8LightTheme: UiTheme = {
   footerHeaderColor: hexColorWithAlpha(brand8Black, 0.3),
   // TODO(alvin): Overwrite theme attributes with new ones.
 }
-/* eslint-enable max-len, local-rules/hardcoded-copy */
+/* eslint-enable @stylistic/max-len, local-rules/hardcoded-copy */
 
 type UiThemeMode = 'light' | 'dark' | 'brand8dark' | 'brand8light'
 

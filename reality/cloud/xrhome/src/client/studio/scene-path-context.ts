@@ -1,7 +1,7 @@
 import type {SceneGraph} from '@ecs/shared/scene-graph'
 import React from 'react'
 
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 // From: https://stackoverflow.com/questions/59455679/typescript-type-definition-for-an-object-property-path
 // NOTE (Carson): Doesn't work for general concatenation, but nice for type checking explicit paths.
 

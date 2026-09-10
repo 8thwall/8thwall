@@ -644,7 +644,7 @@ const LayersControllerFactory = singleton((
       // to use your local version of semantics-worker.js, you can update the importScripts link to
       // https://<your_ip>:8888/reality/app/xr/js/semantics-worker.js.
       // To update the file on CDN, either run:
-      //   eslint-disable-next-line max-len
+      //   eslint-disable-next-line @stylistic/max-len
       //   1) bash ./reality/app/xr/js/src/semantics-worker-upload.sh
       //   2) The same build but upload with prod8, ex: https://github.com/8thwall/prod8/pull/374
 

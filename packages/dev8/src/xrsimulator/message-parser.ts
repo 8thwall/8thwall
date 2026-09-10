@@ -1,4 +1,4 @@
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 // based off of: https://github.com/jdiaz5513/capnp-ts/blob/108850ece76b33755d552f78eac736055ec8f1b4/packages/capnp-ts/src/serialization/message.ts#L229
 const getMessageSize = (frameData: ArrayBuffer, offset = 0): number => {
   if (!Number.isInteger(offset) || offset < 0 || offset + 4 > frameData.byteLength) {

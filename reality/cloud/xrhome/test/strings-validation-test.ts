@@ -165,7 +165,7 @@ describe('Strings Validation Test - Verify all i18n strings are valid', () => {
 
                     assert.sameMembers(
                       placeholders, otherPlaceholders,
-                      // eslint-disable-next-line max-len
+                      // eslint-disable-next-line @stylistic/max-len
                       `Placeholders mismatch for key: ${key} in locales ${locale} and ${otherLocale}`
                     )
                   })

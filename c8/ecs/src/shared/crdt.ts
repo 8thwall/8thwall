@@ -34,7 +34,7 @@ type SceneDoc = {
 // NOTE(christoph): This doc is the initial doc for all empty scenes.
 // This is the recommended way to set up an initial document structure.
 // https://automerge.org/docs/cookbook/modeling-data/#setting-up-an-initial-document-structure
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 const SCENE_DOC_INIT = 'hW9KgzZTQdMAYwEC3t4Bk0NXbHEaS/pXx1M4w8G+zCHXCsXZd1wj5aTLqIOPoRMGAQIDAhMCIwJAAlYCBxUJIQIjAjQBQgJWAoABAn8AfwF/AX8AfwB/B38Hb2JqZWN0c38AfwEBfwB/AH8AAA=='
 
 const distillScene = (doc: RawSceneDoc): SceneGraph => JSON.parse(JSON.stringify(doc))

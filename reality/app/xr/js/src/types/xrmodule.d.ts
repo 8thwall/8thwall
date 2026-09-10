@@ -4,7 +4,7 @@
 // @inliner-off
 import type {EmscriptenTexture} from '@repo/reality/app/xr/js/src/types/emscripten'
 
-/* eslint-disable import/group-exports, camelcase, max-len */
+/* eslint-disable import/group-exports, camelcase, @stylistic/max-len */
 
 declare global {
   interface Window {

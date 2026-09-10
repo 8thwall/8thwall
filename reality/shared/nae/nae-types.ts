@@ -26,7 +26,7 @@ type AndroidScreenOrientation =
   | 'sensorLandscape';
 
 // These represent the values for the iOS Info.plist key `UISupportedInterfaceOrientations`.
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 // https://developer.apple.com/documentation/bundleresources/information-property-list/uisupportedinterfaceorientations
 type IosScreenOrientation =
   | 'UIInterfaceOrientationPortrait'

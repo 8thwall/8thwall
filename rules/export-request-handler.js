@@ -10,7 +10,7 @@ module.exports = {
   name: 'export-request-handler',
   meta: {
     docs: {
-      // eslint-disable-next-line max-len
+      // eslint-disable-next-line @stylistic/max-len
       url: 'https://<REMOVED_BEFORE_OPEN_SOURCING>.atlassian.net/wiki/spaces/AR/pages/2633531527/Code+Organization#Express-Handlers',
     },
     messages: {

@@ -1,4 +1,4 @@
-/* eslint-disable max-len */
+/* eslint-disable @stylistic/max-len */
 import type {DeepReadonly} from 'ts-essentials'
 
 import type {World} from './world'

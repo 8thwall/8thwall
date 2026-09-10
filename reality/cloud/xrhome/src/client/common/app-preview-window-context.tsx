@@ -26,7 +26,7 @@ const AppPreviewWindowContextProvider: React.FC<React.PropsWithChildren> = ({chi
     return null
   }
 
-  // eslint-disable-next-line max-len
+  // eslint-disable-next-line @stylistic/max-len
   const getAndMaybeUpdateInlinePreviewWindow = (): Window => getAndMaybeUpdateWindowRef(inlinePreviewWindowRef)
   const ctxValue = {
     getInlinePreviewWindow: getAndMaybeUpdateInlinePreviewWindow,

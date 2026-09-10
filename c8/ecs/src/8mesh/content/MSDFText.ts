@@ -73,7 +73,7 @@ function getGlyphDimensions(options: GetGlyphDimensionsOptions): GlyphDimension 
   const xoffset = charObj ? charObj.xoffset * fontScale : 0
 
   // world-space length between lowest point and the text cursor position
-  // eslint-disable-next-line max-len
+  // eslint-disable-next-line @stylistic/max-len
   // const anchor = charObj ? ( ( charObj.yoffset + charObj.height - FONT.common.base ) * FONT_SIZE ) / FONT.common.lineHeight : 0;
 
   // some fonts have higher baseline heights due to having more space for ascenders, resulting

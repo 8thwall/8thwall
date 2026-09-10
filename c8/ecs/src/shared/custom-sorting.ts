@@ -1,6 +1,6 @@
 import type * as THREE_TYPES from '../runtime/three-types'
 
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 // based on https://github.com/mrdoob/three.js/blob/70d0eb132f3d2f87965bee2e13a38508b839ed9b/src/core/Raycaster.js#L96
 const customRaycastSort = (a: THREE_TYPES.Intersection, b: THREE_TYPES.Intersection): number => {
   const rootA = a.object.userData.rootUi

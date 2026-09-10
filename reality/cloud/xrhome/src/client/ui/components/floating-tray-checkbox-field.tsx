@@ -31,7 +31,7 @@ const useStyles = createThemedStyles(theme => ({
     '& input:checked + .indicator:before': {
       background: theme.fgMain,
       border: 'none',
-      // eslint-disable-next-line max-len
+      // eslint-disable-next-line @stylistic/max-len
       clipPath: 'path(\'M12.8,4.2c-.2-.2-.4-.2-.7-.2h0c-.2,0-.5.1-.6.3l-5,5.5-1.8-2c-.2-.2-.4-.3-.6-.3-.2,0-.5,0-.7.2-.2.2-.3.4-.3.6,0,.2,0,.5.2.6l2.5,2.7c.2.2.4.3.7.3s.5-.1.7-.3l5.7-6.3c.2-.2.2-.4.2-.6,0-.2-.1-.4-.3-.6Z\')',
     },
     '& .indicator': {

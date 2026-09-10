@@ -117,7 +117,7 @@ const loadJsxr = async () => {
         printErr: log(true),
         onAbort: onError,
         onError,
-        /* eslint-enable max-len */
+        /* eslint-enable @stylistic/max-len */
         locateFile,
       }),
       getRendererAsync(),

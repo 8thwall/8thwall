@@ -55,7 +55,7 @@ const CreateControllers = (renderer, scene) => {
       // before ThreeJS r127
       // See:
       //  https://github.com/mrdoob/three.js/releases/tag/r127
-      // eslint-disable-next-line max-len
+      // eslint-disable-next-line @stylistic/max-len
       //  https://github.com/mrdoob/three.js/commit/f1a577e6d4ffa98cba0ed07f2a123812f82e22d5#diff-5fa11b4a2b3fc499aa3a6c03b3e7d4caf9724ba2636fea4d577d93ceb2184e65R122
       if (r3 >= 127) {
         return

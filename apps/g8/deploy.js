@@ -21,9 +21,9 @@ const readline = require('readline/promises')
 /* eslint-enable import/no-unresolved */
 
 // TODO(pawel) This requires the following patches (as of february 10 2023)
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 // https://gitlab.<REMOVED_BEFORE_OPEN_SOURCING>.com/repo/<REMOVED_BEFORE_OPEN_SOURCING>/-/merge_requests/2664
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 // https://gitlab.<REMOVED_BEFORE_OPEN_SOURCING>.com/repo/<REMOVED_BEFORE_OPEN_SOURCING>/-/merge_requests/2539
 const buildInliner = true
 
@@ -118,14 +118,14 @@ const runDeploy = async () => {
 
   // Build a new version of g8.
   console.log('Building g8.')
-  // eslint-disable-next-line max-len
+  // eslint-disable-next-line @stylistic/max-len
   await exec('bazel build //apps/g8:g8 -c opt --platforms=//bzl:osx_universal ' +
     '--copt=-mmacos-version-min=11.0 --linkopt=-mmacos-version-min=11.0 ' +
     `--//apps/g8:version=${nextVersion}`)
   await exec(`cp ${workspace}/bazel-bin/apps/g8/g8 ${tmpDir}`)
 
   console.log('Building auth8.')
-  // eslint-disable-next-line max-len
+  // eslint-disable-next-line @stylistic/max-len
   await exec('bazel build //apps/client/auth:auth8 -c opt --platforms=//bzl:osx_universal ' +
     '--copt=-mmacos-version-min=11.0 --linkopt=-mmacos-version-min=11.0')
   await exec(`cp ${workspace}/bazel-bin/apps/client/auth/auth8 ${tmpDir}`)

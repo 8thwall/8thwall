@@ -261,7 +261,7 @@ const PositionAnimation = registerComponent({
     reverse: 'boolean',
     easeIn: 'boolean',
     easeOut: 'boolean',
-    // eslint-disable-next-line max-len
+    // eslint-disable-next-line @stylistic/max-len
     // @enum Quadratic, Cubic, Quartic, Quintic, Sinusoidal, Exponential, Circular, Elastic, Back, Bounce
     // @condition easeIn=true|easeOut=true
     easingFunction: 'string',
@@ -316,7 +316,7 @@ const ScaleAnimation = registerComponent({
     reverse: 'boolean',
     easeIn: 'boolean',
     easeOut: 'boolean',
-    // eslint-disable-next-line max-len
+    // eslint-disable-next-line @stylistic/max-len
     // @enum Quadratic, Cubic, Quartic, Quintic, Sinusoidal, Exponential, Circular, Elastic, Back, Bounce
     // @condition easeIn=true|easeOut=true
     easingFunction: 'string',
@@ -372,7 +372,7 @@ const RotateAnimation = registerComponent({
     reverse: 'boolean',
     easeIn: 'boolean',
     easeOut: 'boolean',
-    // eslint-disable-next-line max-len
+    // eslint-disable-next-line @stylistic/max-len
     // @enum Quadratic, Cubic, Quartic, Quintic, Sinusoidal, Exponential, Circular, Elastic, Back, Bounce
     // @condition easeIn=true|easeOut=true
     easingFunction: 'string',
@@ -469,7 +469,7 @@ const CustomVec3Animation = registerComponent({
     reverse: 'boolean',
     easeIn: 'boolean',
     easeOut: 'boolean',
-    // eslint-disable-next-line max-len
+    // eslint-disable-next-line @stylistic/max-len
     // @enum Quadratic, Cubic, Quartic, Quintic, Sinusoidal, Exponential, Circular, Elastic, Back, Bounce
     // @condition easeIn=true|easeOut=true
     easingFunction: 'string',
@@ -522,7 +522,7 @@ const CustomPropertyAnimation = registerComponent({
     reverse: 'boolean',
     easeIn: 'boolean',
     easeOut: 'boolean',
-    // eslint-disable-next-line max-len
+    // eslint-disable-next-line @stylistic/max-len
     // @enum Quadratic, Cubic, Quartic, Quintic, Sinusoidal, Exponential, Circular, Elastic, Back, Bounce
     // @condition easeIn=true|easeOut=true
     easingFunction: 'string',

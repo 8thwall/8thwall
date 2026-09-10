@@ -520,7 +520,7 @@ const ImageTargetTrackingConfigurator: React.FC<IImageTargetTrackingConfigurator
             />
             <div className={isRotated ? classes.flippedHorizontally : undefined}>
               <FloatingPanelIconButton
-                // eslint-disable-next-line max-len
+                // eslint-disable-next-line @stylistic/max-len
                 text={t('asset_configurator.image_target_configurator.visualizer.tracking_regions.swap_orientations')}
                 stroke='swapOrientation'
                 buttonSize='tiny'

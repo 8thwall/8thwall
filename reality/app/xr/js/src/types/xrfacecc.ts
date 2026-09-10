@@ -4,7 +4,7 @@
 // @inliner-off
 import type {EmscriptenModule} from '@repo/reality/app/xr/js/src/types/emscripten'
 
-/* eslint-disable import/group-exports, camelcase, max-len */
+/* eslint-disable import/group-exports, camelcase, @stylistic/max-len */
 
 export type XrFaceccModule = EmscriptenModule & {
   _c8EmAsm_updateCameraEnvironment: (bytes: number, numBytes: number) => void

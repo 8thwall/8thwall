@@ -32,7 +32,7 @@ const run = async (ccPaths: string[]) => {
 // @inliner-off
 import type {EmscriptenModule} from '@repo/reality/app/xr/js/src/types/emscripten'
 
-/* eslint-disable import/group-exports, camelcase, max-len */
+/* eslint-disable import/group-exports, camelcase, @stylistic/max-len */
 `)
 
   // Type the module with found methods

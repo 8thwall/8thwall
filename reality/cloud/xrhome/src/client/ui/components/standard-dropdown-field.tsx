@@ -104,7 +104,7 @@ const useStyles = createThemedStyles(theme => ({
       background: theme.fgPrimary,
       width: '12px',
       height: '12px',
-      // eslint-disable-next-line max-len
+      // eslint-disable-next-line @stylistic/max-len
       clipPath: 'path("m 0.445 6.111 a 0.5 0.5 0 0 1 1.1082 -1.1337 l 2.8883 2.6636 l 5.8793 -7.1223 a 0.5 0.5 0 0 1 1.2846 1.0599 l -6.4314 7.8021 q -0.561 0.5884 -1.096 0.1504 z")',
       transform: 'translateY(-50%)',
     },

@@ -38,7 +38,7 @@ const publishingStateContext = React.createContext<PublishingStateContext | null
 const usePublishingStateContext = (): PublishingStateContext => {
   const ctx = React.useContext(publishingStateContext)
   if (!ctx) {
-    // eslint-disable-next-line max-len
+    // eslint-disable-next-line @stylistic/max-len
     throw new Error('usePublishingStateContext must be used within a PublishingStateContextProvider')
   }
   return ctx

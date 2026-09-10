@@ -1,4 +1,4 @@
-/* eslint-disable local-rules/hardcoded-copy, max-len */
+/* eslint-disable local-rules/hardcoded-copy, @stylistic/max-len */
 const GITHUB_TEMPLATES = [
   {
     title: 'World Effects',

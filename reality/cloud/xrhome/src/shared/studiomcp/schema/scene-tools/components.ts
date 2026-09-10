@@ -1,4 +1,4 @@
-/* eslint-disable max-len */
+/* eslint-disable @stylistic/max-len */
 import {z} from 'zod'
 
 import type {EntityReference} from '@ecs/shared/scene-graph'
