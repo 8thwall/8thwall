@@ -1,4 +1,4 @@
-import {promises as fs} from 'fs'
+import fs from 'fs/promises'
 
 import {parseComponentAst} from '../src/shared/ecs/shared/parse-component-ast'
 

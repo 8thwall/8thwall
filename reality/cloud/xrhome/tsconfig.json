@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "strict": true,
     "incremental": true,
     "tsBuildInfoFile": ".tsbuildinfo",
     "allowJs": true,
@@ -11,9 +12,10 @@
     "isolatedModules": false,
     "jsx": "react",
     "module": "commonjs",
-    "moduleResolution": "node",
+    "strictNullChecks": false,
     "noImplicitAny": false,
-    "noImplicitUseStrict": false,
+    "useUnknownInCatchVariables": false,
+    "moduleResolution": "bundler",
     "noLib": false,
     "outDir": "dist/",
     "preserveConstEnums": true,
