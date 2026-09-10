@@ -128,7 +128,6 @@ const smoothNormals: Transform = async (document: Document): Promise<void> => {
       if (indices) {
         for (let i = 0; i < indices.length; i++) {
           const idx = indices[i] * 3
-
           const key = `${positionArray[idx]},${positionArray[idx + 1]},${positionArray[idx + 2]}`
           const vertexNormal = vertexNormals.get(key)!
           normalArray[idx] = vertexNormal.x

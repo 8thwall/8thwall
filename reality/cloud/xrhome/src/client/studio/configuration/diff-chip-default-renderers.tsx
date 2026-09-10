@@ -86,7 +86,6 @@ const applyDefaultRenderValue = <VALUETYPE, PATHLIST extends readonly string[][]
 }
 
 const applyDefaultRenderDiff = <VALUETYPE, PATHLIST extends readonly string[][]>(
-
   passedProps: DefaultableDiffProps<VALUETYPE, PATHLIST> | undefined,
   defaultRenderDiff: DiffProps<VALUETYPE, PATHLIST>['renderDiff']
 ): DiffProps<VALUETYPE, PATHLIST> | undefined => {
