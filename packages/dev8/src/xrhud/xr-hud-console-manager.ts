@@ -294,7 +294,7 @@ const ConsoleManager = () => {
         if (logTab_.lastChild) {
           logTab_.removeChild(logTab_.lastChild)
         }
-        // eslint-disable-next-line max-len
+        // eslint-disable-next-line @stylistic/max-len
         logstream_ = `${logStreamLast_} ${prefix}<b class='console-dup'>${count}</b> ${currLogStr_}${suffix}`
       } else {
         count = 0

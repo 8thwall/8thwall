@@ -1123,7 +1123,7 @@ const xrconfigComponent = () => {
         if (!sessionAttributes.fillsCameraTexture) {
           // Reject non-camera sessions (i.e. headset, dekstop) if aframe version < 1.1
           if (parseFloat(window.AFRAME.version) < 1.1) {
-            // eslint-disable-next-line max-len
+            // eslint-disable-next-line @stylistic/max-len
             throw new Error(`Detected A-Frame version ${parseFloat(window.AFRAME.REVISION)}, Non-camera Session requires A-Frame 1.1.0 or later`)
           }
         }

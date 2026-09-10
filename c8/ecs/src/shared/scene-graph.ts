@@ -1,7 +1,7 @@
 import type * as FlexStyles from './flex-style-types'
 import type {RuntimeVersionTarget} from './runtime-version'
 
-/* eslint-disable max-len */
+/* eslint-disable @stylistic/max-len */
 /**
  * @schema array(z.number()).length(2).describe('A 2D vector represented by [x, y] coordinates. Can represent a point in a plane, a directional vector, or other 2D quantities.')
  */
@@ -21,7 +21,7 @@ type Vec4Tuple = [number, number, number, number]
  * @schema array(z.number()).length(6).describe('Used to represent shadow camera frustum bounds: left, right, top, bottom, near, far.')
  */
 type Vec6Tuple = [number, number, number, number, number, number]
-/* eslint-enable max-len */
+/* eslint-enable @stylistic/max-len */
 
 /**
  * @description An object ID.

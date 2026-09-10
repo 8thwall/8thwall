@@ -2,7 +2,7 @@ const MACOS_SHORTCUTS_INDEX = 0
 const WINDOWS_SHORTCUTS_INDEX = 1
 
 const CLOUD_STUDIO_SHORTCUTS = {
-  /* eslint-disable max-len, local-rules/hardcoded-copy */
+  /* eslint-disable @stylistic/max-len, local-rules/hardcoded-copy */
   'project_settings_page.shortcut_binding.heading.cloud_studio': {
     'project_settings_page.shortcut_binding.action.handle_focus_object': ['F', 'F'],
     'project_settings_page.shortcut_binding.action.translate': ['W', 'W'],
@@ -21,7 +21,7 @@ const CLOUD_STUDIO_SHORTCUTS = {
     'project_settings_page.shortcut_binding.action.camera_pan': ['⌥-Right Click+Drag, Right Click+Drag, Middle Click+Drag', 'Alt-Right Click+Drag, Right Click+Drag, Middle Click+Drag'],
     'project_settings_page.shortcut_binding.action.camera_zoom': ['Scroll, ⌥-Scroll', 'Scroll, Alt-Scroll'],
   },
-  /* eslint-enable max-len, local-rules/hardcoded-copy */
+  /* eslint-enable @stylistic/max-len, local-rules/hardcoded-copy */
 }
 
 export {

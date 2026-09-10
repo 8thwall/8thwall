@@ -134,7 +134,7 @@ const justifyContent = (
   // Apply
   const axis = direction.indexOf(ROW) ? 'x' : 'y'
   boxComponent.childrenBoxes.forEach((child: any, childIndex: number) => {
-    // eslint-disable-next-line max-len
+    // eslint-disable-next-line @stylistic/max-len
     boxComponent.childrenPos[child.id][axis] -= justificationOffset - justificationMargins[childIndex]
   })
 }

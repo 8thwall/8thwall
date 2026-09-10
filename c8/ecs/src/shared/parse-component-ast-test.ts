@@ -1156,7 +1156,7 @@ describe('Cloud Studio - Parse Component Ast', () => {
       })\n`
       assert.deepEqualExcludingEvery(parseComponentAst(content).errors,
         [{
-          // eslint-disable-next-line max-len
+          // eslint-disable-next-line @stylistic/max-len
           message: 'expected a number type for property \'y\' in vector3 group \'someVectorGroup\' (received string)',
           severity: 'warning',
         }],

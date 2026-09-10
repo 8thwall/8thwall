@@ -7,7 +7,7 @@
 // Since the client does extra processing before the data goes into redux, we define IApp for
 // example which should generally be used instead of using App directly from db.ts.
 
-/* eslint-disable camelcase, quotes, max-len */
+/* eslint-disable camelcase, quotes, @stylistic/max-len */
 
 import type {TermsAgreements} from '../../../shared/tos'
 import type {SpecialFeatureFlag} from '../../../shared/special-features'

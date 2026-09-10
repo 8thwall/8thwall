@@ -95,7 +95,7 @@ const useStyles = createThemedStyles(theme => ({
     height: '8.875rem',
     border: `0.5px solid ${gray2}`,
     borderRadius: '0.5rem',
-    // eslint-disable-next-line max-len
+    // eslint-disable-next-line @stylistic/max-len
     background: 'radial-gradient(142.09% 149.79% at 50% 0%, #000 0%, rgba(91, 49, 119, 0.25) 35%, rgba(87, 191, 255, 0.35) 73.57%), #000;',
     position: 'relative',
     overflow: 'hidden',

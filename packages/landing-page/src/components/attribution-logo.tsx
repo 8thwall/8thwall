@@ -1,4 +1,4 @@
-/* eslint-disable max-len */
+/* eslint-disable @stylistic/max-len */
 import * as React from 'preact'
 
 // By inlining the logo, we can use the "currentColor" token.

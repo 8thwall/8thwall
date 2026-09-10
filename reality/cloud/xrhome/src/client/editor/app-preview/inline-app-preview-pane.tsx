@@ -437,7 +437,7 @@ const InlineAppPreviewPane: React.FC<IInlineAppPreviewPane> = ({
                       <Popup
                         content={(
                           <>
-                            {/* eslint-disable-next-line max-len */}
+                            {/* eslint-disable-next-line @stylistic/max-len */}
                             {t('editor_page.inline_app_preview.iframe.connection_warning_button.popup.reload')}
                           </>
                         )}

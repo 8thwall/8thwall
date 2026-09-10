@@ -1,4 +1,4 @@
-/* eslint-disable max-len */
+/* eslint-disable @stylistic/max-len */
 /**
  * @see https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Whitespace#whitespace_helper_functions
  *
@@ -11,7 +11,7 @@
  * This does not use Javascript's "\s" because that includes non-breaking
  * spaces (and also some other characters).
  * */
-/* eslint-enable max-len */
+/* eslint-enable @stylistic/max-len */
 
 import type {Inline, LineBreak} from './inline-types'
 

@@ -117,7 +117,7 @@ const NAE_BUNDLE_ID_MAX_LENGTH = 150
 // These default icons are from the Figma design:
 // - https://www.figma.com/design/D2RD4vup3zX0SPubnjcEwW/NAE?node-id=19886-2352
 // They are uploaded to AWS with:
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 // `aws s3 cp default-icon-1.jpeg s3://<REMOVED_BEFORE_OPEN_SOURCING>/images/nae/icons/defaulticon1 --content-type image/jpeg`
 const NAE_DEFAULT_ICONS = [
   'defaulticonpng1',

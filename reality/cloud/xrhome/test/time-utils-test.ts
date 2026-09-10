@@ -14,7 +14,7 @@ import {
 
 // JS parses date strings with a time but no timezone as local time, but
 // those with the zero offset "Z" at the end are parsed as UTC.
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse#examples
 
 describe('time-utils.ts Test', () => {

@@ -39,7 +39,7 @@ const TooltipIcon: React.FC<ITooltipIcon> = ({content, wide, position = 'top lef
   const theme = useUiTheme()
   const classes = useStyles()
 
-  /* eslint-disable max-len */
+  /* eslint-disable @stylistic/max-len */
   const trigger = (
     <button type='button' className={classes.icon}>
       <svg width='12' height='12' viewBox='0 0 12 12' fill='none' xmlns='http://www.w3.org/2000/svg'>
@@ -47,7 +47,7 @@ const TooltipIcon: React.FC<ITooltipIcon> = ({content, wide, position = 'top lef
       </svg>
     </button>
   )
-  /* eslint-enable max-len */
+  /* eslint-enable @stylistic/max-len */
   return (
     <Popup
       wide={wide}

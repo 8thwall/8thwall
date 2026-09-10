@@ -117,7 +117,7 @@ const FaceMeshAnchor = registerComponent({
 const FaceAttachment = registerComponent({
   name: 'face-attachment',
   schema: {
-    // eslint-disable-next-line max-len
+    // eslint-disable-next-line @stylistic/max-len
     // @enum forehead, rightEyebrowInner, rightEyebrowMiddle, rightEyebrowOuter, leftEyebrowInner, leftEyebrowMiddle, leftEyebrowOuter, leftCheek, rightCheek, noseBridge, noseTip, leftEye, rightEye, leftEyeOuterCorner, rightEyeOuterCorner, upperLip, lowerLip, mouth, mouthRightCorner, mouthLeftCorner, chin, leftIris, rightIris, leftUpperEyelid, rightUpperEyelid, leftLowerEyelid, rightLowerEyelid, leftHelix, leftCanal, leftLobe, rightHelix, rightCanal, rightLobe
     point: 'string',
   },

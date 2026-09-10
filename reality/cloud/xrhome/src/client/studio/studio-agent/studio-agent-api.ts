@@ -96,7 +96,7 @@ const makeBaseApi = (
         : makePrimitive(parentId, o.type)
       newObject.name = makeObjectName(o.name, sceneCtx.scene, parentId)
       if (invalidParentId) {
-        // eslint-disable-next-line max-len
+        // eslint-disable-next-line @stylistic/max-len
         errors[newObject.id] = `Parent with ID ${o.parentId} not found. Added to active root ${activeRoot.id} instead.`
       }
       return newObject
@@ -590,14 +590,14 @@ const makeBaseApi = (
       action.bindings = bindings.filter((binding) => {
         const {input, modifiers} = binding
         if (!validateInput(input)) {
-          // eslint-disable-next-line max-len
+          // eslint-disable-next-line @stylistic/max-len
           acc.errors.push(`Failed to add a binding for action ${actionName}: Input '${input}' cannot be found in input list`)
           return false
         }
         if (modifiers) {
           const invalidModifiers = modifiers.filter(modifier => !validateInput(modifier))
           if (invalidModifiers.length > 0) {
-            // eslint-disable-next-line max-len
+            // eslint-disable-next-line @stylistic/max-len
             acc.errors.push(`Failed to add a binding for action ${actionName}: Modifiers '${invalidModifiers.join(', ')}' cannot be found in input list`)
             return false
           }

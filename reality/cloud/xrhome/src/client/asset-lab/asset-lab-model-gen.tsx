@@ -646,7 +646,7 @@ const AssetLabModelGen = () => {
                   }}
                   disabled={!hasResult || postProcessing || isGenerating || isSubmitting}
                   active={
-                    // eslint-disable-next-line max-len
+                    // eslint-disable-next-line @stylistic/max-len
                     !postProcessing && !isGenerating && workflowParameters.has('hasAnimation') && hasResult
                   }
                 >

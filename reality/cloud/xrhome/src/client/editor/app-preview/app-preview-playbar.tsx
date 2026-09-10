@@ -68,7 +68,7 @@ const StartMarkerIndicator: React.FC = () => {
   return (
     <svg width='9' height='9'>
       <path
-        // eslint-disable-next-line max-len
+        // eslint-disable-next-line @stylistic/max-len
         d='M8.68018 8.19258V1.10443C8.68018 0.406494 7.83487 0.0586046 7.3436 0.554363L0.319661 7.64251C-0.169192 8.13584 0.18025 8.97406 0.874761 8.97406H7.8987C8.3303 8.97406 8.68018 8.62418 8.68018 8.19258Z'
         fill={theme.playbarMarkerBg}
       />
@@ -81,7 +81,7 @@ const EndMarkerIndicator: React.FC = () => {
   return (
     <svg width='9' height='9'>
       <path
-            // eslint-disable-next-line max-len
+            // eslint-disable-next-line @stylistic/max-len
         d='M0.119934 8.19258V1.10443C0.119934 0.406494 0.965244 0.0586046 1.45651 0.554363L8.48045 7.64251C8.9693 8.13584 8.61986 8.97406 7.92535 8.97406H0.901414C0.469815 8.97406 0.119934 8.62418 0.119934 8.19258Z'
         fill={theme.playbarMarkerBg}
       />

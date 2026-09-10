@@ -1,4 +1,4 @@
-/* eslint-disable max-len */
+/* eslint-disable @stylistic/max-len */
 const backgroundFragment = `
 
 uniform sampler2D uTexture;

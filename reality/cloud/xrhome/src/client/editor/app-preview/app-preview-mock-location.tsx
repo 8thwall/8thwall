@@ -142,11 +142,11 @@ const AppPreviewMockLocation: React.FC<IAppPreviewMockLocation> = (
 
   const deviceLocationOption = {
     value: 'device',
-    // eslint-disable-next-line max-len
+    // eslint-disable-next-line @stylistic/max-len
     name: t('editor_page.inline_app_preview.iframe.coordinate_dropdown.section_name.current_location'),
     section: 'DEVICE',
     content: <DropdownOptionContent
-      // eslint-disable-next-line max-len
+      // eslint-disable-next-line @stylistic/max-len
       textContent={t('editor_page.inline_app_preview.iframe.coordinate_dropdown.section_name.current_location')}
       stroke='gpsArrow'
     />,
@@ -169,13 +169,13 @@ const AppPreviewMockLocation: React.FC<IAppPreviewMockLocation> = (
     },
     {
       key: 'LOCATIONS',
-      // eslint-disable-next-line max-len
+      // eslint-disable-next-line @stylistic/max-len
       textContent: t('editor_page.inline_app_preview.iframe.coordinate_dropdown.section_name.locations'),
       stroke: 'vpsLocation',
     },
     {
       key: 'MAP-POINTS',
-      // eslint-disable-next-line max-len
+      // eslint-disable-next-line @stylistic/max-len
       textContent: t('editor_page.inline_app_preview.iframe.coordinate_dropdown.section_name.map_points'),
       stroke: 'mapPointLocation',
     },

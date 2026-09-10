@@ -143,7 +143,7 @@ export default function BoxComponent(Base) {
       // This is for stretch alignment
       // @TODO : Conceive a better performant way
       if (this.parentUI && this.parentUI.getAlignItems() === AlignItems.STRETCH) {
-        // eslint-disable-next-line max-len
+        // eslint-disable-next-line @stylistic/max-len
         if (!COLUMN_DIRECTIONS.includes(this.parentUI.getContentDirection())) {
           return this.parentUI.getWidth() - (this.parentUI.padding * 2 || 0)
         }
@@ -160,7 +160,7 @@ export default function BoxComponent(Base) {
       // This is for stretch alignment
       // @TODO : Conceive a better performant way
       if (this.parentUI && this.parentUI.getAlignItems() === AlignItems.STRETCH) {
-        // eslint-disable-next-line max-len
+        // eslint-disable-next-line @stylistic/max-len
         if (!ROW_DIRECTIONS.includes(this.parentUI.getContentDirection())) {
           return this.parentUI.getHeight() - (this.parentUI.padding * 2 || 0)
         }
