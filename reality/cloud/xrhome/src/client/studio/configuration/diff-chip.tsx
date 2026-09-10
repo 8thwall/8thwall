@@ -179,7 +179,6 @@ const BannerChip = ({bannerContent, positioned}: BannerChipProps) => {
   )
 }
 const consolidateDiffs = <PATHLIST extends readonly string[][]>(
-
   finalPaths: PATHLIST,
   defaults: {[K in keyof PATHLIST]: Primitive},
   sceneDiff: SceneDiffContext

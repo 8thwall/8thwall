@@ -69,7 +69,6 @@ const useStyles = createThemedStyles(theme => ({
 }))
 
 const applyDefaultRenderValue = <VALUETYPE, PATHLIST extends readonly string[][]>(
-
   passedProps: DefaultableDiffProps<VALUETYPE, PATHLIST> | undefined,
   defaultRenderValue: DiffProps<VALUETYPE, PATHLIST>['renderValue']
 ): DiffProps<VALUETYPE, PATHLIST> | undefined => {
@@ -146,7 +145,6 @@ const GroupFieldsDiff = <VALUETYPE extends unknown[]>({
 // REQUIRES: Ensure that the labels and renderMethods stay in the same order,
 // without deletions or additions.
 const makeRenderValueGroup = <GROUPFIELDS extends GroupFieldsDiffProps<unknown[]>>(
-
   labels: GROUPFIELDS['labels'],
   renderMethods: GROUPFIELDS['renderMethods']
 ) => (value: GROUPFIELDS['value']) => (

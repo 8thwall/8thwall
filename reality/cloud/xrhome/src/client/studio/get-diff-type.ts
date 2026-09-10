@@ -111,7 +111,6 @@ function getDiffTypeDirect<T>(
 }
 
 const getDiffType = (
-
   changeLog: DeepReadonly<ChangeLog>,
   beforeScene: DeepReadonly<Expanse>,
   afterScene: DeepReadonly<Expanse>,

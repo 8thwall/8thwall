@@ -33,7 +33,6 @@ type FieldDisplayData = SingleDisplayData | GroupDisplayData | SectionDisplayDat
 type FieldDisplayDataTree = Record<string, FieldDisplayData>
 
 const shouldDisplayField = <T extends Schema>(
-
   metadata: DeepReadonly<StudioComponentMetadata<T>>, values: ReadData<T>, key: string
 ): boolean => {
   const presentation = metadata.schemaPresentation?.fields[key]
