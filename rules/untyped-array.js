@@ -13,7 +13,7 @@ module.exports = {
     }
 
     return {
-      'VariableDeclarator > ArrayExpression': (arrayExpression) => {
+      'VariableDeclarator > ArrayExpression': arrayExpression => {
         if (arrayExpression.elements.length > 0) {
           return
         }

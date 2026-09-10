@@ -415,35 +415,65 @@ register_toolchains(
 )
 
 # Load rules_nodejs to provide nodejs toolchains.
+
+# Dependencies of rules_nodejs (see its MODULE.bazel), required in WORKSPACE mode.
+http_archive(
+    name = "bazel_lib",
+    sha256 = "6fd3b1e1a38ca744f9664be4627ced80895c7d2ee353891c172f1ab61309c933",
+    strip_prefix = "bazel-lib-3.0.0",
+    urls = ["https://github.com/bazel-contrib/bazel-lib/releases/download/v3.0.0/bazel-lib-v3.0.0.tar.gz"],
+)
+
+http_archive(
+    name = "bazel_features",
+    sha256 = "5ab1a90d09fd74555e0df22809ad589627ddff263cff82535815aa80ca3e3562",
+    strip_prefix = "bazel_features-1.39.0",
+    urls = ["https://github.com/bazel-contrib/bazel_features/releases/download/v1.39.0/bazel_features-v1.39.0.tar.gz"],
+)
+
+load("@bazel_features//:deps.bzl", "bazel_features_deps")
+
+bazel_features_deps()
+
+http_archive(
+    # NOTE(christoph): Named differently than "rules_cc" because org_tensorflow's workspace setup
+    # installs its own (patched) @rules_cc. This one is only for rules_nodejs, which needs a newer
+    # version that exports CcInfo.
+    name = "rules_cc_nodejs",
+    sha256 = "2037875b9a4456dce4a79d112a8ae885bbc4aad968e6587dca6e64f3a0900cdf",
+    strip_prefix = "rules_cc-0.0.9",
+    urls = ["https://github.com/bazelbuild/rules_cc/releases/download/0.0.9/rules_cc-0.0.9.tar.gz"],
+)
+
 http_archive(
     name = "rules_nodejs",
-    sha256 = "b6016a89a12a3d339ece93f2b3988f5e812f452ad497bc963634646ff4aa100b",
-    strip_prefix = "rules_nodejs-6.1.2",
+    patch_cmds = [
+        # Point rules_nodejs at rules_cc_nodejs since @rules_cc is owned by org_tensorflow here.
+        "perl -pi -e 's|\\@rules_cc//|\\@rules_cc_nodejs//|g' nodejs/toolchain.bzl nodejs/repositories.bzl nodejs/private/current_node_cc_headers.bzl nodejs/BUILD.bazel",
+    ],
+    sha256 = "5e803a42bd0af134529f0724edb4d26e295e3c17a0af0655e5265250c82ce9b5",
+    strip_prefix = "rules_nodejs-6.7.5",
     urls = [
-        "https://github.com/bazelbuild/rules_nodejs/releases/download/v6.1.2/rules_nodejs-v6.1.2.tar.gz",
+        "https://github.com/bazel-contrib/rules_nodejs/releases/download/v6.7.5/rules_nodejs-v6.7.5.tar.gz",
     ],
 )
 
 # Rules for downloading Node.js toolchains.
-load("@rules_nodejs//nodejs:repositories.bzl", "nodejs_register_toolchains", "rules_nodejs_dependencies")
+load("@rules_nodejs//nodejs:repositories.bzl", "nodejs_register_toolchains")
 
-rules_nodejs_dependencies()
-
+# Node toolchain to install.
 nodejs_register_toolchains(
-    # https://github.com/bazel-contrib/rules_nodejs/blob/v6.1.2/nodejs/private/node_versions.bzl
     name = "nodejs",
-    node_version = "20.14.0",
+    # https://github.com/bazel-contrib/rules_nodejs/blob/v6.7.5/nodejs/private/node_versions.bzl
+    node_version = "22.23.1",
 )
 
 load("//bzl/crosstool:node-toolchain.bzl", "node_toolchain")
 
 node_toolchain(name = "node-toolchain")
 
-EMCC_NODE = "@nodejs_host//:bin/node"
-
 emscripten_config(
     name = "emscripten-config",
-    node = EMCC_NODE,
     python = EMCC_PYTHON,
 )
 
@@ -496,11 +526,13 @@ npm_package(
 # Node modules for eslint.
 npm_package(
     name = "npm-eslint",
+    # NOTE(christoph): Some plugins don't declare ESLint 10 support yet.
     env = {
-        "NPM_CONFIG_LEGACY_PEER_DEPS": "1",
+        "NPM_CONFIG_LEGACY_PEER_DEPS": "true",
     },
     exports_files = [
         "node_modules/eslint/bin/eslint.js",
+        "node_modules/prettier/bin/prettier.cjs",
     ],
     package = "//bzl/npmpackage/eslint:package.json",
     package_lock = "//bzl/npmpackage/eslint:package-lock.json",
@@ -551,6 +583,12 @@ npm_package(
 # Node modules for 8th Wall's js engine.
 npm_package(
     name = "npm-jsxr",
+    # NOTE(christoph): The ua-parser-js git dependency's `prepare` script installs its fuzzing
+    # devDependencies (@jazzer.js), whose native build fails under Node 22. The pinned fork
+    # commits its dist/, so skipping lifecycle scripts is safe here.
+    env = {
+        "NPM_CONFIG_IGNORE_SCRIPTS": "true",
+    },
     package = "//reality/app/xr/js:package.json",
     package_lock = "//reality/app/xr/js:package-lock.json",
 )

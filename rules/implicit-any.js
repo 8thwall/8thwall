@@ -14,7 +14,7 @@ module.exports = {
       return {}
     }
 
-    const checkParam = (param) => {
+    const checkParam = param => {
       if (param.type === 'AssignmentPattern') {
         // We're ok with default arguments like:
         //   const add = (arg = 1) => arg + 1
@@ -32,7 +32,7 @@ module.exports = {
     }
 
     return {
-      'VariableDeclarator > ArrowFunctionExpression': (node) => {
+      'VariableDeclarator > ArrowFunctionExpression': node => {
         // We're ok with types on the identifier like:
         //   const add: (arg: number) => number = arg => arg + 1
         if (node.parent.id.typeAnnotation) {
@@ -40,7 +40,7 @@ module.exports = {
         }
         node.params.forEach(checkParam)
       },
-      'FunctionDeclaration': (node) => {
+      FunctionDeclaration: node => {
         node.params.forEach(checkParam)
       },
     }

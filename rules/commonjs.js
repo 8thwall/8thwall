@@ -22,8 +22,8 @@ module.exports = {
         }
       },
       MemberExpression(node) {
-        const isCommonJsExport = isIdentifierNamed(node.object, 'module') &&
-          isIdentifierNamed(node.property, 'exports')
+        const isCommonJsExport =
+          isIdentifierNamed(node.object, 'module') && isIdentifierNamed(node.property, 'exports')
         if (isCommonJsExport) {
           context.report({
             node,

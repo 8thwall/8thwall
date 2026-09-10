@@ -1,13 +1,23 @@
+"""
+Repository rules to download the Emscripten toolchain and generate its config.
+"""
+
+load("//bzl/node:host-platform.bzl", "host_platform")
+
 _TEMPLATE = Label("//bzl/crosstool:emscripten.config.tpl")
 
 def _emscripten_config_impl(repository_ctx):
     repository_ctx.file("BUILD", content = "exports_files([\"emscripten.config\"])", executable = False)
+
+    # NOTE(christoph): rules_nodejs 6 exposes only aliases on @nodejs_host, which cannot be
+    # resolved by repository_ctx.path. Point at the real file in the host platform repo.
+    node = repository_ctx.attr.node or Label("@nodejs_%s//:bin/node" % host_platform(repository_ctx))
     repository_ctx.template(
         "emscripten.config",
         repository_ctx.path(_TEMPLATE),
         substitutions = {
             "{python_toolchain}": str(repository_ctx.path(repository_ctx.attr.python)),
-            "{node_toolchain}": str(repository_ctx.path(repository_ctx.attr.node)),
+            "{node_toolchain}": str(repository_ctx.path(node)),
         },
         executable = False,
     )
@@ -15,7 +25,7 @@ def _emscripten_config_impl(repository_ctx):
 emscripten_config = repository_rule(
     implementation = _emscripten_config_impl,
     attrs = {
-        "node": attr.label(mandatory = True),
+        "node": attr.label(),
         "python": attr.label(mandatory = True),
         "_template": attr.label(
             default = _TEMPLATE,

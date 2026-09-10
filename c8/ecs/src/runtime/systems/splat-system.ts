@@ -1,13 +1,13 @@
-import {loadScript} from '../../shared/load-script'
-import {getResourceBase} from '../../shared/resources'
-import type {Eid} from '../../shared/schema'
-import {assets} from '../assets'
-import {Splat} from '../components'
-import {events} from '../event-ids'
-import {addChild, notifyChanged} from '../matrix-refresh'
-import type {Object3D} from '../three-types'
-import type {World} from '../world'
-import {makeSystemHelper} from './system-helper'
+import { loadScript } from '../../shared/load-script'
+import { getResourceBase } from '../../shared/resources'
+import type { Eid } from '../../shared/schema'
+import { assets } from '../assets'
+import { Splat } from '../components'
+import { events } from '../event-ids'
+import { addChild, notifyChanged } from '../matrix-refresh'
+import type { Object3D } from '../three-types'
+import type { World } from '../world'
+import { makeSystemHelper } from './system-helper'
 
 const removeRaycast = (object: Object3D) => {
   object.raycast = () => {}
@@ -17,7 +17,7 @@ const removeRaycast = (object: Object3D) => {
 }
 
 const makeSplatSystem = (world: World) => {
-  const {enter, changed, exit} = makeSystemHelper(Splat)
+  const { enter, changed, exit } = makeSystemHelper(Splat)
   const managers: Map<Eid, any> = new Map()
   let Model: any
 
@@ -28,7 +28,7 @@ const makeSplatSystem = (world: World) => {
         promise = new Promise<void>((resolve, reject) => {
           loadScript(`${getResourceBase()}splat/splat-loader.js`).then(() => {
             Model = (window as any).Model
-            Model.setInternalConfig({workerUrl: `${getResourceBase()}splat/splat-worker.js`})
+            Model.setInternalConfig({ workerUrl: `${getResourceBase()}splat/splat-worker.js` })
             resolve()
           }).catch(reject)
         })
@@ -44,18 +44,18 @@ const makeSplatSystem = (world: World) => {
       return
     }
 
-    const {url, skybox} = Splat.get(world, eid)
+    const { url, skybox } = Splat.get(world, eid)
 
     if (!url) {
       return
     }
 
-    assets.load({url}).then(async (asset) => {
+    assets.load({ url }).then(async (asset) => {
       await getModelPromise()
       const manager = Model.ThreejsModelManager.create(
-        {camera: world.three.activeCamera, renderer: world.three.renderer}
+        { camera: world.three.activeCamera, renderer: world.three.renderer },
       )
-      manager.configure({pointFrustumLimit: 0, bakeSkyboxMeters: 190})
+      manager.configure({ pointFrustumLimit: 0, bakeSkyboxMeters: 190 })
       const buffer = new Uint8Array(await asset.data.arrayBuffer())
       manager.setModelBytes(asset.remoteUrl, buffer)
       manager.setOnLoaded(() => {
@@ -64,7 +64,7 @@ const makeSplatSystem = (world: World) => {
         model.userData.isSplat = true
         removeRaycast(model)
         addChild(object, model)
-        world.events.dispatch(eid, events.SPLAT_MODEL_LOADED, {model})
+        world.events.dispatch(eid, events.SPLAT_MODEL_LOADED, { model })
         managers.set(eid, manager)
       })
     })

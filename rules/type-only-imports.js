@@ -1,4 +1,4 @@
-/* eslint-disable no-continue, prefer-destructuring, @typescript-eslint/no-use-before-define, func-names, no-restricted-syntax, @stylistic/max-len, @stylistic/indent-binary-ops, @stylistic/no-extra-parens */
+/* eslint-disable no-continue, prefer-destructuring, func-names */
 
 // Adapted from https://github.com/typescript-eslint/typescript-eslint/blob/main/packages/eslint-plugin/src/rules/consistent-type-imports.ts
 
@@ -31,7 +31,14 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 const {AST_TOKEN_TYPES, AST_NODE_TYPES} = require('@typescript-eslint/types')
-const util = require('@typescript-eslint/utils/eslint-utils')
+const {nullThrows, NullThrowsReasons} = require('@typescript-eslint/utils/eslint-utils')
+const {
+  isClosingBraceToken,
+  isCommaToken,
+  isOpeningBraceToken,
+} = require('@typescript-eslint/utils/ast-utils')
+
+const util = {nullThrows, NullThrowsReasons, isClosingBraceToken, isCommaToken, isOpeningBraceToken}
 
 const ENABLE_AUTOFIX = true
 
@@ -57,39 +64,43 @@ module.exports = {
       // prefer type imports
       ImportDeclaration(node) {
         const source = node.source.value
-        const sourceImports = sourceImportsMap[source] ||
-                    (sourceImportsMap[source] = {
-                      source,
-                      reportValueImports: [],
-                      typeOnlyNamedImport: null,
-                      valueOnlyNamedImport: null,
-                    })
+        const sourceImports =
+          sourceImportsMap[source] ||
+          (sourceImportsMap[source] = {
+            source,
+            reportValueImports: [],
+            typeOnlyNamedImport: null,
+            valueOnlyNamedImport: null,
+          })
         if (node.importKind === 'type') {
           if (!sourceImports.typeOnlyNamedImport && node.specifiers.every(isImportSpecifierToken)) {
             sourceImports.typeOnlyNamedImport = node
           }
-        } else if (!sourceImports.valueOnlyNamedImport &&
-                        node.specifiers.every(isImportSpecifierToken)) {
+        } else if (
+          !sourceImports.valueOnlyNamedImport &&
+          node.specifiers.every(isImportSpecifierToken)
+        ) {
           sourceImports.valueOnlyNamedImport = node
         }
         const typeSpecifiers = []
         const valueSpecifiers = []
         const unusedSpecifiers = []
         for (const specifier of node.specifiers) {
-          const [variable] = context.sourceCode.getDeclaredVariables(specifier)
+          const [variable] = sourceCode.getDeclaredVariables(specifier)
           if (variable.references.length === 0) {
             unusedSpecifiers.push(specifier)
           } else {
-            const onlyHasTypeReferences = variable.references.every((ref) => {
+            const onlyHasTypeReferences = variable.references.every(ref => {
               /**
-                              * keep origin import kind when export
-                              * export { Type }
-                              * export default Type;
-                              */
-              if (ref.identifier.parent && (ref.identifier.parent.type ===
-                                AST_NODE_TYPES.ExportSpecifier ||
-                                ref.identifier.parent.type ===
-                                    AST_NODE_TYPES.ExportDefaultDeclaration)) {
+               * keep origin import kind when export
+               * export { Type }
+               * export default Type;
+               */
+              if (
+                ref.identifier.parent &&
+                (ref.identifier.parent.type === AST_NODE_TYPES.ExportSpecifier ||
+                  ref.identifier.parent.type === AST_NODE_TYPES.ExportDefaultDeclaration)
+              ) {
                 if (ref.isValueReference && ref.isTypeReference) {
                   return node.importKind === 'type'
                 }
@@ -112,12 +123,12 @@ module.exports = {
                       child = parent
                       parent = parent.parent
                       continue
-                      // END CASE 1
-                      /// ///////////
-                      // CASE 2:
-                      // `type T = { [foo]: string }` will create a value reference because "foo" must be a value type
-                      // however this value reference is safe to use with type-only imports.
-                      // Also this is represented as a non-type AST - hence it uses MemberExpression
+                    // END CASE 1
+                    /// ///////////
+                    // CASE 2:
+                    // `type T = { [foo]: string }` will create a value reference because "foo" must be a value type
+                    // however this value reference is safe to use with type-only imports.
+                    // Also this is represented as a non-type AST - hence it uses MemberExpression
                     case AST_NODE_TYPES.TSPropertySignature:
                       return parent.key === child
                     case AST_NODE_TYPES.MemberExpression:
@@ -127,7 +138,7 @@ module.exports = {
                       child = parent
                       parent = parent.parent
                       continue
-                      // END CASE 2
+                    // END CASE 2
                     default:
                       return false
                   }
@@ -142,8 +153,10 @@ module.exports = {
             }
           }
         }
-        if ((node.importKind === 'value' && typeSpecifiers.length) ||
-                    (node.importKind === 'type' && valueSpecifiers.length)) {
+        if (
+          (node.importKind === 'value' && typeSpecifiers.length) ||
+          (node.importKind === 'type' && valueSpecifiers.length)
+        ) {
           sourceImports.reportValueImports.push({
             node,
             typeSpecifiers,
@@ -155,15 +168,16 @@ module.exports = {
       'Program:exit': function () {
         for (const sourceImports of Object.values(sourceImportsMap)) {
           for (const report of sourceImports.reportValueImports) {
-            if (report.valueSpecifiers.length === 0 &&
-                            report.unusedSpecifiers.length === 0) {
+            if (report.valueSpecifiers.length === 0 && report.unusedSpecifiers.length === 0) {
               // import is all type-only, convert the entire import to `import type`
               context.report({
                 node: report.node,
                 messageId: 'typeOverValue',
-                fix: ENABLE_AUTOFIX && (function* fix(fixer) {
-                  yield* fixToTypeImport(fixer, report, sourceImports)
-                }),
+                fix:
+                  ENABLE_AUTOFIX &&
+                  function* fix(fixer) {
+                    yield* fixToTypeImport(fixer, report, sourceImports)
+                  },
               })
             }
           }
@@ -171,11 +185,17 @@ module.exports = {
       },
     }
     function classifySpecifier(node) {
-      const defaultSpecifier = node.specifiers[0].type === AST_NODE_TYPES.ImportDefaultSpecifier
-        ? node.specifiers[0]
-        : null
-      const namespaceSpecifier = node.specifiers.find(specifier => specifier.type === AST_NODE_TYPES.ImportNamespaceSpecifier) || null
-      const namedSpecifiers = node.specifiers.filter(specifier => specifier.type === AST_NODE_TYPES.ImportSpecifier)
+      const defaultSpecifier =
+        node.specifiers[0].type === AST_NODE_TYPES.ImportDefaultSpecifier
+          ? node.specifiers[0]
+          : null
+      const namespaceSpecifier =
+        node.specifiers.find(
+          specifier => specifier.type === AST_NODE_TYPES.ImportNamespaceSpecifier
+        ) || null
+      const namedSpecifiers = node.specifiers.filter(
+        specifier => specifier.type === AST_NODE_TYPES.ImportSpecifier
+      )
       return {
         defaultSpecifier,
         namespaceSpecifier,
@@ -183,8 +203,8 @@ module.exports = {
       }
     }
     /**
-         * Returns information for fixing named specifiers.
-         */
+     * Returns information for fixing named specifiers.
+     */
     function getFixesNamedSpecifiers(fixer, node, typeNamedSpecifiers, allNamedSpecifiers) {
       if (allNamedSpecifiers.length === 0) {
         return {
@@ -198,13 +218,26 @@ module.exports = {
         // e.g.
         // import Foo, {Type1, Type2} from 'foo'
         // import DefType, {Type1, Type2} from 'foo'
-        const openingBraceToken = util.nullThrows(sourceCode.getTokenBefore(typeNamedSpecifiers[0], util.isOpeningBraceToken), util.NullThrowsReasons.MissingToken('{', node.type))
-        const commaToken = util.nullThrows(sourceCode.getTokenBefore(openingBraceToken, util.isCommaToken), util.NullThrowsReasons.MissingToken(',', node.type))
-        const closingBraceToken = util.nullThrows(sourceCode.getFirstTokenBetween(openingBraceToken, node.source, util.isClosingBraceToken), util.NullThrowsReasons.MissingToken('}', node.type))
+        const openingBraceToken = util.nullThrows(
+          sourceCode.getTokenBefore(typeNamedSpecifiers[0], util.isOpeningBraceToken),
+          util.NullThrowsReasons.MissingToken('{', node.type)
+        )
+        const commaToken = util.nullThrows(
+          sourceCode.getTokenBefore(openingBraceToken, util.isCommaToken),
+          util.NullThrowsReasons.MissingToken(',', node.type)
+        )
+        const closingBraceToken = util.nullThrows(
+          sourceCode.getFirstTokenBetween(openingBraceToken, node.source, util.isClosingBraceToken),
+          util.NullThrowsReasons.MissingToken('}', node.type)
+        )
         // import DefType, {...} from 'foo'
         //               ^^^^^^^ remove
-        removeTypeNamedSpecifiers.push(fixer.removeRange([commaToken.range[0], closingBraceToken.range[1]]))
-        typeNamedSpecifiersTexts.push(sourceCode.text.slice(openingBraceToken.range[1], closingBraceToken.range[0]))
+        removeTypeNamedSpecifiers.push(
+          fixer.removeRange([commaToken.range[0], closingBraceToken.range[1]])
+        )
+        typeNamedSpecifiersTexts.push(
+          sourceCode.text.slice(openingBraceToken.range[1], closingBraceToken.range[0])
+        )
       } else {
         const typeNamedSpecifierGroups = []
         let group = []
@@ -220,7 +253,10 @@ module.exports = {
           typeNamedSpecifierGroups.push(group)
         }
         for (const namedSpecifiers of typeNamedSpecifierGroups) {
-          const {removeRange, textRange} = getNamedSpecifierRanges(namedSpecifiers, allNamedSpecifiers)
+          const {removeRange, textRange} = getNamedSpecifierRanges(
+            namedSpecifiers,
+            allNamedSpecifiers
+          )
           removeTypeNamedSpecifiers.push(fixer.removeRange(removeRange))
           typeNamedSpecifiersTexts.push(sourceCode.text.slice(...textRange))
         }
@@ -231,8 +267,8 @@ module.exports = {
       }
     }
     /**
-         * Returns ranges for fixing named specifier.
-         */
+     * Returns ranges for fixing named specifier.
+     */
     function getNamedSpecifierRanges(namedSpecifierGroup, allNamedSpecifiers) {
       const first = namedSpecifierGroup[0]
       const last = namedSpecifierGroup[namedSpecifierGroup.length - 1]
@@ -260,13 +296,20 @@ module.exports = {
       }
     }
     /**
-         * insert specifiers to named import node.
-         * e.g.
-         * import type { Already, Type1, Type2 } from 'foo'
-         *                        ^^^^^^^^^^^^^ insert
-         */
+     * insert specifiers to named import node.
+     * e.g.
+     * import type { Already, Type1, Type2 } from 'foo'
+     *                        ^^^^^^^^^^^^^ insert
+     */
     function insertToNamedImport(fixer, target, insertText) {
-      const closingBraceToken = util.nullThrows(sourceCode.getFirstTokenBetween(sourceCode.getFirstToken(target), target.source, util.isClosingBraceToken), util.NullThrowsReasons.MissingToken('}', target.type))
+      const closingBraceToken = util.nullThrows(
+        sourceCode.getFirstTokenBetween(
+          sourceCode.getFirstToken(target),
+          target.source,
+          util.isClosingBraceToken
+        ),
+        util.NullThrowsReasons.MissingToken('}', target.type)
+      )
       const before = sourceCode.getTokenBefore(closingBraceToken)
       if (!util.isCommaToken(before) && !util.isOpeningBraceToken(before)) {
         // eslint-disable-next-line no-param-reassign
@@ -282,74 +325,108 @@ module.exports = {
         // import * as types from 'foo'
         yield* fixToTypeImportByInsertType(fixer, node, false)
         return
-      } else if (defaultSpecifier) {
-        if (report.typeSpecifiers.includes(defaultSpecifier) &&
-                    namedSpecifiers.length === 0 &&
-                    !namespaceSpecifier) {
+      }
+      if (defaultSpecifier) {
+        if (
+          report.typeSpecifiers.includes(defaultSpecifier) &&
+          namedSpecifiers.length === 0 &&
+          !namespaceSpecifier
+        ) {
           // e.g.
           // import Type from 'foo'
           yield* fixToTypeImportByInsertType(fixer, node, true)
           return
         }
-      } else if (namedSpecifiers.every(specifier => report.typeSpecifiers.includes(specifier)) &&
-                    !namespaceSpecifier) {
+      } else if (
+        namedSpecifiers.every(specifier => report.typeSpecifiers.includes(specifier)) &&
+        !namespaceSpecifier
+      ) {
         // e.g.
         // import {Type1, Type2} from 'foo'
         yield* fixToTypeImportByInsertType(fixer, node, false)
         return
       }
-      const typeNamedSpecifiers = namedSpecifiers.filter(specifier => report.typeSpecifiers.includes(specifier))
-      const fixesNamedSpecifiers = getFixesNamedSpecifiers(fixer, node, typeNamedSpecifiers, namedSpecifiers)
+      const typeNamedSpecifiers = namedSpecifiers.filter(specifier =>
+        report.typeSpecifiers.includes(specifier)
+      )
+      const fixesNamedSpecifiers = getFixesNamedSpecifiers(
+        fixer,
+        node,
+        typeNamedSpecifiers,
+        namedSpecifiers
+      )
       const afterFixes = []
       if (typeNamedSpecifiers.length) {
         if (sourceImports.typeOnlyNamedImport) {
-          const insertTypeNamedSpecifiers = insertToNamedImport(fixer, sourceImports.typeOnlyNamedImport, fixesNamedSpecifiers.typeNamedSpecifiersText)
+          const insertTypeNamedSpecifiers = insertToNamedImport(
+            fixer,
+            sourceImports.typeOnlyNamedImport,
+            fixesNamedSpecifiers.typeNamedSpecifiersText
+          )
           if (sourceImports.typeOnlyNamedImport.range[1] <= node.range[0]) {
             yield insertTypeNamedSpecifiers
           } else {
             afterFixes.push(insertTypeNamedSpecifiers)
           }
         } else {
-          yield fixer.insertTextBefore(node, `import type {${fixesNamedSpecifiers.typeNamedSpecifiersText}} from ${sourceCode.getText(node.source)};\n`)
+          yield fixer.insertTextBefore(
+            node,
+            `import type {${fixesNamedSpecifiers.typeNamedSpecifiersText}} from ${sourceCode.getText(node.source)};\n`
+          )
         }
       }
       const fixesRemoveTypeNamespaceSpecifier = []
-      if (namespaceSpecifier &&
-                report.typeSpecifiers.includes(namespaceSpecifier)) {
+      if (namespaceSpecifier && report.typeSpecifiers.includes(namespaceSpecifier)) {
         // e.g.
         // import Foo, * as Type from 'foo'
         // import DefType, * as Type from 'foo'
         // import DefType, * as Type from 'foo'
-        const commaToken = util.nullThrows(sourceCode.getTokenBefore(namespaceSpecifier, util.isCommaToken), util.NullThrowsReasons.MissingToken(',', node.type))
+        const commaToken = util.nullThrows(
+          sourceCode.getTokenBefore(namespaceSpecifier, util.isCommaToken),
+          util.NullThrowsReasons.MissingToken(',', node.type)
+        )
         // import Def, * as Ns from 'foo'
         //           ^^^^^^^^^ remove
-        fixesRemoveTypeNamespaceSpecifier.push(fixer.removeRange([commaToken.range[0], namespaceSpecifier.range[1]]))
+        fixesRemoveTypeNamespaceSpecifier.push(
+          fixer.removeRange([commaToken.range[0], namespaceSpecifier.range[1]])
+        )
         // import type * as Ns from 'foo'
         // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ insert
-        yield fixer.insertTextBefore(node, `import type ${sourceCode.getText(namespaceSpecifier)} from ${sourceCode.getText(node.source)};\n`)
+        yield fixer.insertTextBefore(
+          node,
+          `import type ${sourceCode.getText(namespaceSpecifier)} from ${sourceCode.getText(node.source)};\n`
+        )
       }
-      if (defaultSpecifier &&
-                report.typeSpecifiers.includes(defaultSpecifier)) {
+      if (defaultSpecifier && report.typeSpecifiers.includes(defaultSpecifier)) {
         if (report.typeSpecifiers.length === node.specifiers.length) {
-          const importToken = util.nullThrows(sourceCode.getFirstToken(node, isImportToken), util.NullThrowsReasons.MissingToken('import', node.type))
+          const importToken = util.nullThrows(
+            sourceCode.getFirstToken(node, isImportToken),
+            util.NullThrowsReasons.MissingToken('import', node.type)
+          )
           // import type Type from 'foo'
           //        ^^^^ insert
           yield fixer.insertTextAfter(importToken, ' type')
         } else {
-          const commaToken = util.nullThrows(sourceCode.getTokenAfter(defaultSpecifier, util.isCommaToken), util.NullThrowsReasons.MissingToken(',', defaultSpecifier.type))
+          const commaToken = util.nullThrows(
+            sourceCode.getTokenAfter(defaultSpecifier, util.isCommaToken),
+            util.NullThrowsReasons.MissingToken(',', defaultSpecifier.type)
+          )
           // import Type , {...} from 'foo'
           //        ^^^^^ pick
           const defaultText = sourceCode.text
             .slice(defaultSpecifier.range[0], commaToken.range[0])
             .trim()
-          yield fixer.insertTextBefore(node, `import type ${defaultText} from ${sourceCode.getText(node.source)};\n`)
-          const afterToken = util.nullThrows(sourceCode.getTokenAfter(commaToken, {includeComments: true}), util.NullThrowsReasons.MissingToken('any token', node.type))
+          yield fixer.insertTextBefore(
+            node,
+            `import type ${defaultText} from ${sourceCode.getText(node.source)};\n`
+          )
+          const afterToken = util.nullThrows(
+            sourceCode.getTokenAfter(commaToken, {includeComments: true}),
+            util.NullThrowsReasons.MissingToken('any token', node.type)
+          )
           // import Type , {...} from 'foo'
           //        ^^^^^^^ remove
-          yield fixer.removeRange([
-            defaultSpecifier.range[0],
-            afterToken.range[0],
-          ])
+          yield fixer.removeRange([defaultSpecifier.range[0], afterToken.range[0]])
         }
       }
       yield* fixesNamedSpecifiers.removeTypeNamedSpecifiers
@@ -359,26 +436,46 @@ module.exports = {
     function* fixToTypeImportByInsertType(fixer, node, isDefaultImport) {
       // import type Foo from 'foo'
       //       ^^^^^ insert
-      const importToken = util.nullThrows(sourceCode.getFirstToken(node, isImportToken), util.NullThrowsReasons.MissingToken('import', node.type))
+      const importToken = util.nullThrows(
+        sourceCode.getFirstToken(node, isImportToken),
+        util.NullThrowsReasons.MissingToken('import', node.type)
+      )
       yield fixer.insertTextAfter(importToken, ' type')
       if (isDefaultImport) {
         // Has default import
-        const openingBraceToken = sourceCode.getFirstTokenBetween(importToken, node.source, util.isOpeningBraceToken)
+        const openingBraceToken = sourceCode.getFirstTokenBetween(
+          importToken,
+          node.source,
+          util.isOpeningBraceToken
+        )
         if (openingBraceToken) {
           // Only braces. e.g. import Foo, {} from 'foo'
-          const commaToken = util.nullThrows(sourceCode.getTokenBefore(openingBraceToken, util.isCommaToken), util.NullThrowsReasons.MissingToken(',', node.type))
-          const closingBraceToken = util.nullThrows(sourceCode.getFirstTokenBetween(openingBraceToken, node.source, util.isClosingBraceToken), util.NullThrowsReasons.MissingToken('}', node.type))
+          const commaToken = util.nullThrows(
+            sourceCode.getTokenBefore(openingBraceToken, util.isCommaToken),
+            util.NullThrowsReasons.MissingToken(',', node.type)
+          )
+          const closingBraceToken = util.nullThrows(
+            sourceCode.getFirstTokenBetween(
+              openingBraceToken,
+              node.source,
+              util.isClosingBraceToken
+            ),
+            util.NullThrowsReasons.MissingToken('}', node.type)
+          )
           // import type Foo, {} from 'foo'
           //                  ^^ remove
-          yield fixer.removeRange([
-            commaToken.range[0],
-            closingBraceToken.range[1],
-          ])
-          const specifiersText = sourceCode.text.slice(commaToken.range[1], closingBraceToken.range[1])
+          yield fixer.removeRange([commaToken.range[0], closingBraceToken.range[1]])
+          const specifiersText = sourceCode.text.slice(
+            commaToken.range[1],
+            closingBraceToken.range[1]
+          )
           if (node.specifiers.length > 1) {
             // import type Foo from 'foo'
             // import type {...} from 'foo' // <- insert
-            yield fixer.insertTextAfter(node, `\nimport type${specifiersText} from ${sourceCode.getText(node.source)};`)
+            yield fixer.insertTextAfter(
+              node,
+              `\nimport type${specifiersText} from ${sourceCode.getText(node.source)};`
+            )
           }
         }
       }

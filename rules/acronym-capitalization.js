@@ -3,7 +3,7 @@ module.exports = {
   meta: {
     type: 'suggestion',
     messages: {
-      badCapitalization: '{{name}} should be capitalized like HtmlData, not HTMLData\').',
+      badCapitalization: "{{name}} should be capitalized like HtmlData, not HTMLData').",
     },
   },
   create(context) {
@@ -23,18 +23,18 @@ module.exports = {
     }
 
     return {
-      VariableDeclarator: (node) => {
+      VariableDeclarator: node => {
         if (node.id.type === 'Identifier') {
           checkName(node.id, node.id.name)
         }
       },
       // TypeScript: type FooBar = ...
-      TSTypeAliasDeclaration: (node) => {
+      TSTypeAliasDeclaration: node => {
         checkName(node.id, node.id.name)
       },
 
       // TypeScript: interface FooBar { ... }
-      TSInterfaceDeclaration: (node) => {
+      TSInterfaceDeclaration: node => {
         checkName(node.id, node.id.name)
       },
     }

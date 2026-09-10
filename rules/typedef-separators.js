@@ -1,4 +1,4 @@
-const resolveName = (node) => {
+const resolveName = node => {
   if (!node) {
     return null
   }
@@ -57,10 +57,8 @@ const checkDeclaration = (context, node) => {
   })
 
   if (unneededSeparatorLocations.length) {
-    reportInconsistency(
-      context,
-      node,
-      fixer => unneededSeparatorLocations.map(loc => fixer.replaceTextRange([loc, loc + 1], ''))
+    reportInconsistency(context, node, fixer =>
+      unneededSeparatorLocations.map(loc => fixer.replaceTextRange([loc, loc + 1], ''))
     )
   }
 }
