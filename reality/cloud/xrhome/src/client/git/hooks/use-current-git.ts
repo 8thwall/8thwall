@@ -9,9 +9,7 @@ import {getRepoState} from '../repo-state'
 type GitSelector<T> = (git: DeepReadonly<IGit>) => T
 
 function useScopedGit(repoId: string): RepoState
-// eslint-disable-next-line no-redeclare
 function useScopedGit<T>(repoId: string, selector: GitSelector<T>): T
-// eslint-disable-next-line no-redeclare
 function useScopedGit<T>(repoId: string, selector?: GitSelector<T>) {
   return useSelector((s) => {
     if (!repoId) {
@@ -27,9 +25,7 @@ function useScopedGit<T>(repoId: string, selector?: GitSelector<T>) {
 }
 
 function useCurrentGit(): RepoState
-// eslint-disable-next-line no-redeclare
 function useCurrentGit<T>(selector: GitSelector<T>): T
-// eslint-disable-next-line no-redeclare
 function useCurrentGit<T>(selector?: GitSelector<T>) {
   const repoId = useCurrentRepoId()
   return useSelector((s) => {

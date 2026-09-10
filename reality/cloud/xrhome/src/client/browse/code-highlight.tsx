@@ -1,4 +1,4 @@
-/* eslint-disable quote-props */
+/* eslint-disable @stylistic/quote-props */
 import React from 'react'
 import {useLocation} from 'react-router-dom'
 import Highlight, {defaultProps, Language} from 'prism-react-renderer'

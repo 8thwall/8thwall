@@ -92,6 +92,7 @@ export default [
     files: ['**/*.ts', '**/*.tsx'],
     rules: {
       'import/named': 'off',
+      'no-redeclare': 'off',
     },
   },
   {
@@ -234,6 +235,14 @@ export default [
       globals: {
         ...globals.mocha,
       },
+    },
+  },
+  {
+    // TODO(christoph): Decide on an approach here and apply
+    rules: {
+      '@stylistic/array-element-newline': 'off',
+      '@stylistic/function-call-argument-newline': 'off',
+      '@stylistic/quote-props': 'off',
     },
   },
 ]

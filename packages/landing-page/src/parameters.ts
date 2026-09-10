@@ -55,7 +55,6 @@ const defaultParameters: LandingParameters = {
 const KNOWN_ORBIT_IDLE: OrbitIdle[] = ['none', 'spin', 'bounce']
 const KNOWN_ORBIT_INTERACTIONS: OrbitInteraction[] = ['drag', 'none']
 
-// eslint-disable-next-line arrow-parens
 const toKnown = <T>(known: Readonly<T[]>, value: any) => (
   known.includes(value) ? (value as T) : known[0]
 )

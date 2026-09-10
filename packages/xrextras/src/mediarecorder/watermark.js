@@ -77,6 +77,5 @@ const drawWatermark = (ctx) => {
 }
 
 export {
-  // eslint-disable-next-line import/prefer-default-export
   drawWatermark,
 }

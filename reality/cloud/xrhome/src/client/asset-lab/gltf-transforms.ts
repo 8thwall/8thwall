@@ -60,11 +60,10 @@ const smoothNormals: Transform = async (document: Document): Promise<void> => {
 
           // Weight normal by triangle area
           const weight = edge1.cross(edge2).length() * 0.5
-          // eslint-disable-next-line semi-style
-          normal.multiplyScalar(weight);
+          normal.multiplyScalar(weight)
 
           // Add weighted normal to each vertex
-          [i1, i2, i3].forEach((idx) => {
+          ;[i1, i2, i3].forEach((idx) => {
             const key = `${positionArray[idx]},${positionArray[idx + 1]},${positionArray[idx + 2]}`
             const existing = vertexNormals.get(key)
             if (existing) {
@@ -129,7 +128,7 @@ const smoothNormals: Transform = async (document: Document): Promise<void> => {
       if (indices) {
         for (let i = 0; i < indices.length; i++) {
           const idx = indices[i] * 3
-          // eslint-disable-next-line @stylistic/max-len
+
           const key = `${positionArray[idx]},${positionArray[idx + 1]},${positionArray[idx + 2]}`
           const vertexNormal = vertexNormals.get(key)!
           normalArray[idx] = vertexNormal.x

@@ -82,24 +82,24 @@ const bannerFromRenderValue = <T, >(
   renderValue: (val: DeepReadonly<T>) => React.ReactNode,
   before: DeepReadonly<T>,
   after: DeepReadonly<T>) => (
-    <>
-      {renderValue(before)}
-      <TripleRight />
-      {renderValue(after)}
-    </>
-  )
+  <>
+    {renderValue(before)}
+    <TripleRight />
+    {renderValue(after)}
+  </>
+)
 
 const twoSidedBannerFromRenderValue = <T, >(
   renderValueBefore: (val: DeepReadonly<T>) => React.ReactNode,
   renderValueAfter: (val: DeepReadonly<T>) => React.ReactNode,
   before: DeepReadonly<T>,
   after: DeepReadonly<T>) => (
-    <>
-      {renderValueBefore(before)}
-      <TripleRight />
-      {renderValueAfter(after)}
-    </>
-  )
+  <>
+    {renderValueBefore(before)}
+    <TripleRight />
+    {renderValueAfter(after)}
+  </>
+)
 
 interface BannerlessChipProps {
   // subset of useStyles keys
@@ -116,8 +116,8 @@ const BannerlessChip = ({coloring, positioned}: BannerlessChipProps) => {
   return (
     <div
       className={
-          combine(classes.diffChip, bool(positioned, classes.chipPositioning), classes[coloring])
-        }
+        combine(classes.diffChip, bool(positioned, classes.chipPositioning), classes[coloring])
+      }
       aria-label={t(diffTypeLoc[coloring])}
       title={t(diffTypeLoc[coloring])}
     />
@@ -158,8 +158,8 @@ const BannerChip = ({bannerContent, positioned}: BannerChipProps) => {
       <div
         ref={bannerContent ? refs.setReference : undefined}
         className={
-            combine(classes.diffChip, bool(positioned, classes.chipPositioning), classes.changed)
-          }
+          combine(classes.diffChip, bool(positioned, classes.chipPositioning), classes.changed)
+        }
         aria-label={t(diffTypeLoc.changed)}
         title={t(diffTypeLoc.changed)}
       />
@@ -179,9 +179,9 @@ const BannerChip = ({bannerContent, positioned}: BannerChipProps) => {
   )
 }
 const consolidateDiffs = <PATHLIST extends readonly string[][]>(
-  // eslint-disable-next-line arrow-parens
+
   finalPaths: PATHLIST,
-  defaults: { [K in keyof PATHLIST]: Primitive },
+  defaults: {[K in keyof PATHLIST]: Primitive},
   sceneDiff: SceneDiffContext
 ): DiffType<unknown> => {
   const diffTypes = finalPaths.map((path, i) => getDiffType(
@@ -248,7 +248,6 @@ type IDiffChip<VALUETYPE> = {
   defaults?: Primitive[]
 }
 
-// eslint-disable-next-line arrow-parens
 const DiffChip = <VALUETYPE, >({
   finalPaths,
   renderDiff,

@@ -3,7 +3,7 @@ import type React from 'react'
 import {derivePrecision} from './configuration/number-formatting'
 
 const useArrowKeyIncrement = <T extends string | number>(
-  // eslint-disable-next-line arrow-parens
+
   value: T,
   onChange: (newValue: number | string) => void,
   min: number = -Infinity,

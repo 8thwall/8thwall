@@ -6,7 +6,9 @@ import {ensureXrAndExtras} from './ensure'
 
 let xrextrasAframe = null
 
-const onxrloaded = () => { XR8.addCameraPipelineModule(XRExtras.Loading.pipelineModule()) }
+const onxrloaded = () => {
+  XR8.addCameraPipelineModule(XRExtras.Loading.pipelineModule())
+}
 
 // We want to start showing the loading screen eagerly (before AFRAME has loaded and parsed the
 // scene and set up everything). We also need to work around a bug in the AFRAME loading in iOS
@@ -55,7 +57,7 @@ const eagerload = () => {
       window.XRExtras.AlmostThere.configure({url: redirectUrl})
     }
 
-    // eslint-disable-next-line no-unused-expressions
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     window.XR8
       ? window.XRExtras.AlmostThere.checkCompatibility(runConfig)
       : window.addEventListener(
@@ -138,7 +140,7 @@ function create() {
     AFRAME.registerSystem('eager-load-system', {
       init() {
         try {
-          /* eslint-disable-next-line no-unused-expressions */
+          /* eslint-disable-next-line @typescript-eslint/no-unused-expressions */
           window.XRExtras
             ? eagerload()
             : window.addEventListener('xrextrasloaded', eagerload, {once: true})

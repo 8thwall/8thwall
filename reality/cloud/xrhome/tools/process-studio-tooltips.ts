@@ -25,7 +25,6 @@ const makeTooltipStringsPath = (language: string) => (
   path.join(xrhomeDir, 'src', 'client', 'i18n', language, 'studio-tooltips.json')
 )
 
-// eslint-disable-next-line arrow-parens
 const sortJson = <T>(value: T): T => {
   if (Array.isArray(value)) {
     return value.map(sortJson) as T
@@ -72,7 +71,6 @@ const asUrl = (v: any) => {
   }
 }
 
-// eslint-disable-next-line arrow-parens
 const optionalOr = <T>(v: any, fn: (v: any) => T) => {
   if (!v) {
     return undefined
@@ -217,7 +215,6 @@ const storePropertyData = (
   }
 }
 
-// eslint-disable-next-line arrow-parens
 const asOneOf = <T>(values: T[], v: any): T => {
   if (!values.includes(v)) {
     throw new Error(`Expected one of ${values.join(', ')}, got ${v}`)

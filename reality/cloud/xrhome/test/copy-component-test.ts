@@ -10,7 +10,7 @@ import {
   pasteDirectPropertiesIntoObject,
 } from '../src/client/studio/configuration/copy-component'
 
-/* eslint quote-props: ["error", "as-needed"] */
+/* eslint @stylistic/quote-props: ["error", "as-needed"] */
 const makeObject = (id: string, extra?: Partial<GraphObject>): GraphObject => ({
   id,
   name: '<unset>',

@@ -3,7 +3,6 @@ import {useDispatch} from 'react-redux'
 
 import type {RawActions, Actions, Dispatch} from './types/actions'
 
-/* eslint-disable-next-line arrow-parens */
 const useActions = <T extends RawActions>(actions: Actions<T>) => {
   const dispatch = useDispatch<Dispatch>()
 

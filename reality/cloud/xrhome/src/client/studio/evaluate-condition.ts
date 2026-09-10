@@ -7,7 +7,7 @@ import {TYPE_TO_FIELD_DEFAULT} from './configuration/schema-presentation-constan
 // Combine the sparse current values, schema and defaults into a single map for ease of
 // lookup of whatever the current value is for a given key
 const aggregateValues = <T extends Schema>(
-  // eslint-disable-next-line arrow-parens
+
   metadata: DeepReadonly<StudioComponentMetadata<T>>, values: ReadData<T>
 ) => {
   const allValues: Map<string, PropertyType> = new Map()
@@ -69,7 +69,7 @@ const getEqualityResult = (
 
 // Evaluate a true/false condition for the current values of the component
 const evaluateCondition = <T extends Schema>(
-  // eslint-disable-next-line arrow-parens
+
   metadata: DeepReadonly<StudioComponentMetadata<T>>, values: ReadData<T>, condition: string
 ): boolean => {
   // Condition is optional, and evaluates to true if not present

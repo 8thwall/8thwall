@@ -27,7 +27,13 @@
       "objects": "always-multiline"
     }
   ],
-  "@stylistic/curly-newline": "error",
+  "@stylistic/curly-newline": [
+    "error",
+    {
+      "consistent": true,
+      "minElements": 2
+    }
+  ],
   "@stylistic/function-call-argument-newline": [
     "error",
     "consistent"
@@ -137,7 +143,12 @@
   "@typescript-eslint/no-explicit-any": "off",
   "@typescript-eslint/no-require-imports": "off",
   "@typescript-eslint/no-shadow": "error",
-  "@typescript-eslint/no-use-before-define": "error",
+  "@typescript-eslint/no-use-before-define": [
+    "error",
+    {
+      "functions": false
+    }
+  ],
   "array-callback-return": [
     "error",
     {
@@ -184,7 +195,10 @@
   ],
   "consistent-return": "error",
   "constructor-super": "error",
-  "curly": "error",
+  "curly": [
+    "error",
+    "multi-line"
+  ],
   "default-case": "error",
   "default-case-last": "error",
   "dot-notation": [
@@ -345,7 +359,6 @@
   ],
   "no-path-concat": "error",
   "no-proto": "error",
-  "no-redeclare": "error",
   "no-restricted-globals": [
     "error",
     {
@@ -481,7 +494,6 @@
   "no-template-curly-in-string": "error",
   "no-this-before-super": "error",
   "no-throw-literal": "error",
-  "no-undef": "error",
   "no-undef-init": "error",
   "no-unneeded-ternary": [
     "error",

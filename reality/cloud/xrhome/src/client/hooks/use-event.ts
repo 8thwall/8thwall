@@ -4,7 +4,7 @@ import {
   useInsertionEffect,
 } from 'react'
 
-type AnyFunction = (...args: any[]) => any;
+type AnyFunction = (...args: any[]) => any
 
 /**
  * Suppress the warning when using useLayoutEffect with SSR.
@@ -31,7 +31,6 @@ function shouldNotBeInvokedBeforeMount() {
  * - No dependency lists required
  * - Properties or state accessed within the callback will always be "current"
  */
-// eslint-disable-next-line arrow-parens
 const useEvent = <TCallback extends AnyFunction>(callback: TCallback): TCallback => {
   // Keep track of the latest callback:
   const latestRef = useRef<TCallback>(shouldNotBeInvokedBeforeMount as any)

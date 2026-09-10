@@ -69,7 +69,7 @@ const useStyles = createThemedStyles(theme => ({
 }))
 
 const applyDefaultRenderValue = <VALUETYPE, PATHLIST extends readonly string[][]>(
-  // eslint-disable-next-line arrow-parens
+
   passedProps: DefaultableDiffProps<VALUETYPE, PATHLIST> | undefined,
   defaultRenderValue: DiffProps<VALUETYPE, PATHLIST>['renderValue']
 ): DiffProps<VALUETYPE, PATHLIST> | undefined => {
@@ -87,7 +87,7 @@ const applyDefaultRenderValue = <VALUETYPE, PATHLIST extends readonly string[][]
 }
 
 const applyDefaultRenderDiff = <VALUETYPE, PATHLIST extends readonly string[][]>(
-  // eslint-disable-next-line arrow-parens
+
   passedProps: DefaultableDiffProps<VALUETYPE, PATHLIST> | undefined,
   defaultRenderDiff: DiffProps<VALUETYPE, PATHLIST>['renderDiff']
 ): DiffProps<VALUETYPE, PATHLIST> | undefined => {
@@ -118,11 +118,10 @@ const renderValueDefault = (value: DeepReadonly<string>) => (
 
 type GroupFieldsDiffProps<VALUETYPE extends unknown[]> = {
   value: DeepReadonly<VALUETYPE>
-  labels: { [K in keyof VALUETYPE]: string | React.ReactNode }
-  renderMethods: { [K in keyof VALUETYPE]: (v: VALUETYPE[K]) => React.ReactNode }
+  labels: {[K in keyof VALUETYPE]: string | React.ReactNode}
+  renderMethods: {[K in keyof VALUETYPE]: (v: VALUETYPE[K]) => React.ReactNode}
 }
 
-// eslint-disable-next-line arrow-parens
 const GroupFieldsDiff = <VALUETYPE extends unknown[]>({
   value, labels, renderMethods,
 }: GroupFieldsDiffProps<VALUETYPE>): React.ReactElement => {
@@ -147,7 +146,7 @@ const GroupFieldsDiff = <VALUETYPE extends unknown[]>({
 // REQUIRES: Ensure that the labels and renderMethods stay in the same order,
 // without deletions or additions.
 const makeRenderValueGroup = <GROUPFIELDS extends GroupFieldsDiffProps<unknown[]>>(
-  // eslint-disable-next-line arrow-parens
+
   labels: GROUPFIELDS['labels'],
   renderMethods: GROUPFIELDS['renderMethods']
 ) => (value: GROUPFIELDS['value']) => (
@@ -156,7 +155,7 @@ const makeRenderValueGroup = <GROUPFIELDS extends GroupFieldsDiffProps<unknown[]
     labels={labels}
     renderMethods={renderMethods}
   />
-  )
+)
 
 const renderValueVector3 = (step: number, value: DeepReadonly<[number, number, number]>) => (
   <GroupFieldsDiff
@@ -170,10 +169,10 @@ const renderValueVector3 = (step: number, value: DeepReadonly<[number, number, n
   />
 )
 
-const makeRenderValueVector3 = ({step}: {step: number}) => (
-  (value: DeepReadonly<[number, number, number]>) => (
-    renderValueVector3(step, value)
-  )
+const makeRenderValueVector3 = ({
+  step,
+}: {step: number}) => (value: DeepReadonly<[number, number, number]>) => (
+  renderValueVector3(step, value)
 )
 
 const renderDiffVector3 = (
@@ -208,30 +207,28 @@ const renderDiffVector3 = (
 
 const makeRenderDiffVector3 = ({step}: NumberRenderConfig):
 DiffProps<DeepReadonly<[number, number, number]>, string[][]>['renderDiff'] => (
-  (
-    before: DeepReadonly<[number, number, number]>,
-    after: DeepReadonly<[number, number, number]>
-  ) => renderDiffVector3(
-    step,
-    before,
-    after
-  )
+  before: DeepReadonly<[number, number, number]>,
+  after: DeepReadonly<[number, number, number]>
+) => renderDiffVector3(
+  step,
+  before,
+  after
 )
 
 const BooleanDiffValue: React.FC<{value: DeepReadonly<boolean>}> =
-({value}) => {
-  const {t} = useTranslation(['cloud-studio-pages'])
-  const classes = useStyles()
+  ({value}) => {
+    const {t} = useTranslation(['cloud-studio-pages'])
+    const classes = useStyles()
 
-  return (
-    <>
-      <span className={classes.iconBacking}>
-        {value ? <Icon stroke='checkmark' /> : <Icon stroke='blankStroke' />}
-      </span>
-      <SrOnly>{value ? t('scene_diff.true') : t('scene_diff.false')}</SrOnly>
-    </>
-  )
-}
+    return (
+      <>
+        <span className={classes.iconBacking}>
+          {value ? <Icon stroke='checkmark' /> : <Icon stroke='blankStroke' />}
+        </span>
+        <SrOnly>{value ? t('scene_diff.true') : t('scene_diff.false')}</SrOnly>
+      </>
+    )
+  }
 
 const renderValueBoolean = (value: DeepReadonly<boolean>) => (
   <BooleanDiffValue value={value} />
@@ -281,10 +278,10 @@ type ResourceRenderConfig = {
   altText?: string
 }
 
-const makeRenderValueVisualResource = ({altText}: ResourceRenderConfig) => (
-  (value: DeepReadonly<Resource>) => (
-    <CompactImage resource={value} altText={altText} />
-  )
+const makeRenderValueVisualResource = ({
+  altText,
+}: ResourceRenderConfig) => (value: DeepReadonly<Resource>) => (
+  <CompactImage resource={value} altText={altText} />
 )
 
 const NonVisualResource: React.FC<{

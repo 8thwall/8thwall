@@ -60,7 +60,6 @@ const getLeafPaths = (obj: Json): UpdatedPaths => {
 }
 
 // Returns a \ b
-// eslint-disable-next-line arrow-parens
 const setDiff = <T>(a: Set<T>, b: Set<T>): Set<T> => {
   let diffSet: Set<T> = new Set()
   a.forEach((aElem) => {
@@ -71,7 +70,6 @@ const setDiff = <T>(a: Set<T>, b: Set<T>): Set<T> => {
   return diffSet
 }
 
-// eslint-disable-next-line arrow-parens
 const setIntersect = <T>(a: Set<T>, b: Set<T>): Set<T> => {
   let intersectSet: Set<T> = new Set()
   a.forEach((aElem) => {

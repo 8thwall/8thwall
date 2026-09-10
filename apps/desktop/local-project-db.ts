@@ -1,7 +1,6 @@
 import type {Project} from '@repo/reality/shared/desktop/local-sync-types'
 
 import {getDb} from './application-state'
-/* eslint quotes: ["error", "single", { "allowTemplateLiterals": true }] */
 
 const upsertLocalProject = (
   appKey: string, location: string, initialization: Project['initialization']
