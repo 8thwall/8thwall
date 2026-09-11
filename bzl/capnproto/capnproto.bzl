@@ -2,7 +2,6 @@
 Build rules for capnproto
 """
 
-load("//bzl/unity:unity.bzl", "csharp_library")
 load("//bzl/js:js.bzl", "js_files_provider")
 load("@rules_cc//cc:defs.bzl", "cc_library")
 load("@rules_java//java:defs.bzl", "java_library")
@@ -227,14 +226,6 @@ def cs_capnp_library(
         visibility = ["//visibility:public"],
     )
 
-    cs_libs = ["//third_party/capnpcs:capnp-runtime"]
-    csharp_library(
-        name = name,
-        srcs = outs,
-        deps = cs_libs + deps,
-        **kargs
-    )
-
     return providers
 
 def js_capnp_library(
@@ -317,7 +308,6 @@ def capnp_library(
         deps = [],
         **kargs):
     cc_deps = [d + ".capnp-cc" for d in deps]
-    cs_deps = [d + ".capnp-cs" for d in deps]
     java_deps = [d + ".capnp-java" for d in deps]
     js_deps = [d + ".capnp-js" for d in deps]
     ts_deps = [d + ".capnp-ts" for d in deps]
@@ -327,13 +317,6 @@ def capnp_library(
         name = name + ".capnp-cc",
         srcs = srcs,
         deps = cc_deps,
-        **kargs
-    )
-
-    cs_capnp_library(
-        name = name + ".capnp-cs",
-        srcs = srcs,
-        deps = cs_deps,
         **kargs
     )
 
