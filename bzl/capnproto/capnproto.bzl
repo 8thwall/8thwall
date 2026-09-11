@@ -18,7 +18,6 @@ def _impl_capnp_src_gen(ctx):
     includes = depset(
         ctx.attr.includes +
         [ctx.attr.capnp_cc_system_include] +
-        [ctx.attr.capnp_cs_system_include] +
         [ctx.attr.capnp_java_system_include],
         transitive = [dep[capnp_files_provider].includes for dep in ctx.attr.deps],
     )
@@ -89,10 +88,8 @@ _capnp_src_gen = rule(
             "@capnproto//:capnp-capnp",
             "@capnproto_java//:capnp-java-annotations",
             "@capnproto_python//:capnp-python-annotations",
-            "//third_party/capnpcs:capnp-cs-annotations",
         ]),
         "capnp_cc_system_include": attr.string(default = Label("@capnproto//:capnp").workspace_root + "/c++/src"),
-        "capnp_cs_system_include": attr.string(default = Label("//third_party/capnpcs:capnpc-cs").workspace_root + "third_party/capnpcs/compiler"),
         "capnp_java_system_include": attr.string(default = Label("@capnproto_java//:capnpc-java").workspace_root + "/compiler/src/main/schema"),
         "outs": attr.output_list(),
     },
@@ -201,33 +198,6 @@ def java_capnp_library(
 
     return providers
 
-def cs_capnp_library(
-        name,
-        srcs = [],
-        deps = [],
-        data = [],
-        **kargs):
-    """Bazel rule to create a C# capnproto library from capnp source files
-    """
-
-    includes = []
-
-    outs = ([_cs_filename(s) for s in srcs])
-
-    providers = _capnp_src_gen(
-        name = name + "_gencapnp_cs",
-        srcs = srcs,
-        deps = [s + "_gencapnp_cs" for s in deps],
-        data = data,
-        includes = [],
-        capnpc_exe = "@capnproto//:capnp",
-        capnpc_plugin = "//third_party/capnpcs:capnpc-cs",
-        outs = outs,
-        visibility = ["//visibility:public"],
-    )
-
-    return providers
-
 def js_capnp_library(
         name,
         srcs = [],
@@ -292,7 +262,6 @@ def python_capnp_library(
         "@capnproto_python//:capnp-python-annotations",
         "@capnproto//:capnp-capnp",
         "@capnproto_java//:capnp-java-annotations",
-        "//third_party/capnpcs:capnp-cs-annotations",
     ]
     py_library(
         name = name,
