@@ -7,9 +7,6 @@ using Java = import "/capnp/java.capnp";
 $Java.package("com.the8thwall.reality.engine.api.base");
 $Java.outerClassname("ImageTypes");  # Must match this file's name!
 
-using Cs = import "/capnp/cs.capnp";
-$Cs.namespace("C8");
-
 struct ImageUnion {
   oneOf :union {
     grayImagePointer @0 :GrayImagePointer;

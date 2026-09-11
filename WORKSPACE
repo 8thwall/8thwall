@@ -755,44 +755,6 @@ apple_developer_team(
     },
 )
 
-load("//bzl/unity:unity-version.bzl", "unity_version")
-
-# Creates a 'platform' and 'toolchain' for each version of Unity installed
-# locally (e.g., 2021.3.37f1), and creates a 'constraint_value' for any strings
-# added to the versions attribute for any strings added to the versions
-# attribute.
-#
-# To install new Unity versions on your mac, use the following example command:
-#   brew install unity-hub
-#   /Applications/Unity\ Hub.app/Contents/MacOS/Unity\ Hub -- --headless install -v "2021.3.37f1" -m android ios mac-il2cpp windows-mono
-#
-# If a new Unity version is installed that matches any of the below versions,
-# run 'bazel clean' to update future executions.
-unity_version(
-    name = "unity-version",
-    unity_search_paths = [
-        "/Applications/Unity/Hub/Editor",  # Default for macOS
-        "/opt/niantic/public/unity",  # Default for Linux
-        "/c/Program Files/Unity/Hub/Editor",  # Default for Windows (WSL or msys2 format)
-    ],
-    # Each string below creates a version constraint_value that can be used in
-    # unity rules. Valid strings are major versions, e.g "2022", minor version
-    # "2021.3" or patch versions "2021.3.37f1". These are then accessed as
-    # targets such as "@unity-version//:2021.3".
-    versions = [
-        "6000.0",
-        "2022.3",
-        "2021.3",
-        "2020.3",
-        "2019.4",
-        "2018.4",
-    ],
-)
-
-load("@unity-version//:repo.bzl", "register_unity_toolchains")
-
-register_unity_toolchains()
-
 # Install a newer version of googletest than is provided in org_tensorflow.
 http_archive(
     name = "com_google_googletest",

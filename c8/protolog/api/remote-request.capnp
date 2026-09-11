@@ -12,8 +12,6 @@ using Java = import "/capnp/java.capnp";
 $Java.package("com.the8thwall.c8.protolog.api");
 $Java.outerClassname("RemoteRequest");  # Must match this file's name!
 
-using Cs = import "/capnp/cs.capnp";
-$Cs.namespace("C8");
 
 struct RemoteServiceRequest {
   # latest image and all previous sensor data
