@@ -1,4 +1,4 @@
-load("//bzl/redist:linux_binary_redist.bzl","linux_redist")
+load("//bzl/redist:linux_binary_redist.bzl", "linux_redist")
 
 package(
     default_visibility = ["//visibility:public"],
@@ -7,13 +7,13 @@ package(
 linux_redist(
     name = "flatc_linux_redist",
     binary_executable = "@flatbuffers//:flatc",
+    tags = [
+        "manual",
+    ],
     target_compatible_with = select({
         "//bzl/conditions:linux": [],
         "//conditions:default": ["@platforms//:incompatible"],
     }),
-    tags = [
-        "manual",
-    ],
 )
 
 alias(
