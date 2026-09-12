@@ -1,3 +1,14 @@
+--- /dev/null
++++ b/MODULE.bazel
+@@ -0,0 +1,8 @@
++module(
++    name = "cpuinfo",
++    repo_name = "org_pytorch_cpuinfo",
++    version = "0.0.0-20220819-8ec7bd9",
++)
++
++bazel_dep(name = "bazel_skylib", version = "1.7.1")
++bazel_dep(name = "platforms", version = "0.0.11")
 diff --git a/BUILD.bazel b/BUILD.bazel
 index 90bef8d..f17514d 100644
 --- a/BUILD.bazel
@@ -11,19 +22,7 @@ index 90bef8d..f17514d 100644
  exports_files(["LICENSE"])
  
  C99OPTS = [
-@@ -144,11 +146,6 @@ cc_library(
-         "include",
-         "src",
-     ],
--    linkstatic = select({
--        # https://github.com/bazelbuild/bazel/issues/11552
--        ":macos_x86_64": False,
--        "//conditions:default": True,
--    }),
-     # Headers must be in textual_hdrs to allow us to set the standard to C99
-     textual_hdrs = [
-         "include/cpuinfo.h",
-@@ -394,20 +391,62 @@ config_setting(
+@@ -394,20 +396,62 @@ config_setting(
  )
  
  config_setting(

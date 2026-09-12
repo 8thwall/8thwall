@@ -69,6 +69,93 @@ archive_override(
     urls = ["https://huggingface.co/datasets/8thWall/bazel-dependencies/resolve/main/protobuf/protobuf-25.3-nia-v0.3.tar"],
 )
 
+bazel_dep(name = "org_tensorflow", version = "2.11.0")
+
+archive_override(
+    integrity = "sha256-3PONtok5asOuhGsGBjmgsPiFiazWH7kQDvMLEB1SkXI=",
+    module_name = "org_tensorflow",
+    patches = ["//bzl/thirdpartybuild/tensorflow:tensorflow.patch"],
+    strip_prefix = "tensorflow-v2.11.0-p8",
+    urls = ["https://huggingface.co/datasets/8thWall/bazel-dependencies/resolve/main/tensorflow/tensorflow-v2.11.0-p8.tar"],
+)
+
+archive_override(
+    integrity = "sha256-zO6ZKLHkkcrbbXM8iHtUHLP1YBqvrJR3sNFDqN5imWw=",
+    module_name = "cpuinfo",
+    patch_strip = 1,
+    patches = ["//bzl/thirdpartybuild/tensorflow:cpuinfo.patch"],
+    strip_prefix = "cpuinfo-8ec7bd91ad0470e61cf38f618cc1f270dede599c",
+    urls = ["https://github.com/pytorch/cpuinfo/archive/8ec7bd91ad0470e61cf38f618cc1f270dede599c.zip"],
+)
+
+archive_override(
+    integrity = "sha256-GDks8HNuHWLsu41pXDFJa2UHhZ6MdVQdetC6CS3FIRU=",
+    module_name = "farmhash",
+    patches = ["//bzl/thirdpartybuild/tensorflow:farmhash.patch"],
+    strip_prefix = "farmhash-0d859a811870d10f53a594927d0d0b97573ad06d",
+    urls = ["https://github.com/google/farmhash/archive/0d859a811870d10f53a594927d0d0b97573ad06d.tar.gz"],
+)
+
+archive_override(
+    integrity = "sha256-X02rwq4h4fU3Ql1YpJzcocSeoR2w1iceKksn6Wl1SOs=",
+    module_name = "fft2d",
+    patches = ["//bzl/thirdpartybuild/tensorflow:fft2d.patch"],
+    strip_prefix = "OouraFFT-1.0",
+    urls = ["https://github.com/petewarden/OouraFFT/archive/v1.0.tar.gz"],
+)
+
+archive_override(
+    integrity = "sha256-Uit6gtkg69DEQIpTZYZqQLgdHA1gsjaQEdMVzKA8ZHY=",
+    module_name = "gemmlowp",
+    patches = ["//bzl/thirdpartybuild/tensorflow:gemmlowp.patch"],
+    strip_prefix = "gemmlowp-e844ffd17118c1e17d94e1ba4354c075a4577b88",
+    urls = ["https://github.com/google/gemmlowp/archive/e844ffd17118c1e17d94e1ba4354c075a4577b88.zip"],
+)
+
+archive_override(
+    integrity = "sha256-3Wv0AyIwPPiYLzQOQTk5fI+jUP9pHVJUWZyyHgE4/GU=",
+    module_name = "ruy",
+    patch_strip = 1,
+    patches = ["//bzl/thirdpartybuild/tensorflow:ruy.patch"],
+    strip_prefix = "ruy-841ea4172ba904fe3536789497f9565f2ef64129",
+    urls = ["https://github.com/google/ruy/archive/841ea4172ba904fe3536789497f9565f2ef64129.zip"],
+)
+
+archive_override(
+    integrity = "sha256-eharDXZ9n4gZlz2+odxF5OCCNviatwLZbzif3HjFhVw=",
+    module_name = "xnnpack",
+    patch_strip = 1,
+    patches = ["//bzl/thirdpartybuild/tensorflow:xnnpack.patch"],
+    strip_prefix = "XNNPACK-e8f74a9763aa36559980a0c2f37f587794995622",
+    urls = ["https://github.com/google/XNNPACK/archive/e8f74a9763aa36559980a0c2f37f587794995622.zip"],
+)
+
+single_version_override(
+    module_name = "fp16",
+    patch_strip = 1,
+    patches = ["//bzl/thirdpartybuild/tensorflow:fp16.patch"],
+)
+
+single_version_override(
+    module_name = "eigen",
+    patch_strip = 1,
+    patches = ["//bzl/thirdpartybuild/tensorflow:eigen.patch"],
+    version = "3.4.0.bcr.1.1",
+)
+
+single_version_override(
+    module_name = "flatbuffers",
+    patch_strip = 1,
+    patches = ["//bzl/thirdpartybuild/tensorflow:flatbuffers.patch"],
+    version = "24.3.7",
+)
+
+single_version_override(
+    module_name = "pthreadpool",
+    patch_strip = 1,
+    patches = ["//bzl/thirdpartybuild/tensorflow:pthreadpool.patch"],
+)
+
 bazel_dep(name = "llvm-project", version = "17.0.3")
 
 # Hedron's Compile Commands Extractor for Bazel
@@ -109,6 +196,7 @@ bazel_dep(name = "bazel_skylib", version = "1.7.1")
 
 # Required to fix com_google_protobuf_javalite support
 bazel_dep(name = "grpc-java", version = "1.64.0")
+bazel_dep(name = "grpc", repo_name = "com_github_grpc_grpc", version = "1.56.3.bcr.1")
 
 http_file = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_file")
 

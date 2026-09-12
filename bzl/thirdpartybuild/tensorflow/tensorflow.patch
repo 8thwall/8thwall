@@ -1,0 +1,180 @@
+--- /dev/null
++++ MODULE.bazel
+@@ -0,0 +1,25 @@
++module(
++    name = "org_tensorflow",
++    version = "2.11.0",
++)
++
++bazel_dep(name = "abseil-cpp", version = "20230802.0.bcr.1", repo_name = "com_google_absl")
++bazel_dep(name = "bazel_skylib", version = "1.7.1")
++bazel_dep(name = "cpuinfo", version = "0.0.0-20220819-8ec7bd9")
++bazel_dep(name = "eigen", version = "3.4.0.bcr.1.1", repo_name = "eigen_archive")
++bazel_dep(name = "farmhash", version = "0.0.0-20190321-0d859a8", repo_name = "farmhash_archive")
++bazel_dep(name = "fft2d", version = "1.0")
++bazel_dep(name = "flatbuffers", version = "24.3.7")
++bazel_dep(name = "fp16", version = "0.0.0-20210320-0a92994", repo_name = "FP16")
++bazel_dep(name = "gemmlowp", version = "0.0.0-20210928-e844ffd")
++bazel_dep(name = "grpc", version = "1.56.3.bcr.1", repo_name = "com_github_grpc_grpc")
++bazel_dep(name = "googletest", version = "1.14.0.bcr.1", repo_name = "com_google_googletest")
++bazel_dep(name = "google_benchmark", version = "1.8.2", repo_name = "com_google_benchmark")
++bazel_dep(name = "nsync", version = "1.29.2")
++bazel_dep(name = "platforms", version = "0.0.11")
++bazel_dep(name = "protobuf", version = "25.3-nia", repo_name = "com_google_protobuf")
++bazel_dep(name = "pthreadpool", version = "0.0.0-20230829-4fe0e1e")
++bazel_dep(name = "rules_android", version = "0.1.1", repo_name = "build_bazel_rules_android")
++bazel_dep(name = "ruy", version = "0.0.0-20220901-841ea41")
++bazel_dep(name = "xnnpack", version = "0.0.0-20220831-e8f74a9", repo_name = "XNNPACK")
++bazel_dep(name = "zlib", version = "1.3")
+diff --git tensorflow/tsl/platform/default/build_config.bzl tensorflow/tsl/platform/default/build_config.bzl
+--- tensorflow/tsl/platform/default/build_config.bzl
++++ tensorflow/tsl/platform/default/build_config.bzl
+@@ -235,7 +235,6 @@ def tf_proto_library(
+         name = protolib_name + "_genproto",
+         srcs = srcs,
+         outs = outs,
+-        gen_cc = 1,
+         includes = includes,
+         plugin = grpc_cpp_plugin,
+         plugin_language = "grpc",
+@@ -409,7 +408,6 @@ def tf_proto_library_py(
+         name = name + "_genproto",
+         srcs = srcs,
+         outs = outs,
+-        gen_py = 1,
+         includes = includes,
+         plugin = grpc_python_plugin,
+         plugin_language = "grpc",
+diff --git a/tensorflow/tensorflow.bzl b/tensorflow/tensorflow.bzl
+--- tensorflow/tensorflow.bzl
++++ tensorflow/tensorflow.bzl
+@@ -18,17 +18,17 @@ load(
+     "cc_test",
+ )
+ load(
+-    "@local_config_tensorrt//:build_defs.bzl",
++    "//tensorflow/lite:bzlmod_config.bzl",
+     "if_tensorrt",
+ )
+ load(
+-    "@local_config_cuda//cuda:build_defs.bzl",
++    "//tensorflow/lite:bzlmod_config.bzl",
+     "cuda_library",
+     "if_cuda",
+ )
+ load(
+-    "@local_config_rocm//rocm:build_defs.bzl",
++    "//tensorflow/lite:bzlmod_config.bzl",
+     "if_rocm",
+     "if_rocm_is_configured",
+     "rocm_copts",
+ )
+diff --git a/tensorflow/lite/bzlmod_config.bzl b/tensorflow/lite/bzlmod_config.bzl
+new file mode 100644
+--- /dev/null
++++ tensorflow/lite/bzlmod_config.bzl
+@@ -0,0 +1,28 @@
++"""Disabled accelerator helpers for the standalone TensorFlow Lite module."""
++
++def cuda_library(copts = [], **kwargs):
++    native.cc_library(copts = copts, **kwargs)
++
++def cuda_gpu_architectures():
++    return []
++
++def if_cuda(if_true, if_false = []):
++    return if_false
++
++def if_gpu_is_configured(value):
++    return []
++
++def if_rocm(if_true, if_false = []):
++    return if_false
++
++def if_rocm_is_configured(value):
++    return []
++
++def if_tensorrt(if_true, if_false = []):
++    return if_false
++
++def rocm_copts(opts = []):
++    return []
++
++def rocm_gpu_architectures():
++    return []
+diff --git a/tensorflow/tsl/platform/default/build_config_root.bzl b/tensorflow/tsl/platform/default/build_config_root.bzl
+--- tensorflow/tsl/platform/default/build_config_root.bzl
++++ tensorflow/tsl/platform/default/build_config_root.bzl
+@@ -2,5 +2,6 @@
+ # be separate to avoid cyclic references.
+ 
+-load("@local_config_remote_execution//:remote_execution.bzl", "gpu_test_tags")
++def gpu_test_tags():
++    return ["local"]
+ 
+ # RBE settings for tests that require a GPU. This is used in exec_properties of rules
+diff --git a/tensorflow/tsl/platform/default/build_config.bzl b/tensorflow/tsl/platform/default/build_config.bzl
+--- tensorflow/tsl/platform/default/build_config.bzl
++++ tensorflow/tsl/platform/default/build_config.bzl
+@@ -8,7 +8,7 @@ load(
+     "if_not_windows",
+     "if_tsl_link_protobuf",
+ )
+-load("@local_config_cuda//cuda:build_defs.bzl", "if_cuda")
+-load("@local_config_rocm//rocm:build_defs.bzl", "if_rocm")
++load("//tensorflow/lite:bzlmod_config.bzl", "if_cuda")
++load("//tensorflow/lite:bzlmod_config.bzl", "if_rocm")
+ load(
+     "//third_party/mkl:build_defs.bzl",
+diff --git a/tensorflow/tsl/tsl.bzl b/tensorflow/tsl/tsl.bzl
+--- tensorflow/tsl/tsl.bzl
++++ tensorflow/tsl/tsl.bzl
+@@ -1,14 +1,14 @@
+ """Provides build configuration for TSL"""
+ 
+ load(
+-    "@local_config_cuda//cuda:build_defs.bzl",
++    "//tensorflow/lite:bzlmod_config.bzl",
+     "if_cuda",
+ )
+ load(
+-    "@local_config_tensorrt//:build_defs.bzl",
++    "//tensorflow/lite:bzlmod_config.bzl",
+     "if_tensorrt",
+ )
+ load(
+-    "@local_config_rocm//rocm:build_defs.bzl",
++    "//tensorflow/lite:bzlmod_config.bzl",
+     "if_rocm",
+ )
+diff --git a/tensorflow/core/kernels/BUILD b/tensorflow/core/kernels/BUILD
+--- tensorflow/core/kernels/BUILD
++++ tensorflow/core/kernels/BUILD
+@@ -37,7 +37,7 @@ load(
+     "tf_cuda_tests_tags",
+ )
+-load("@local_config_cuda//cuda:build_defs.bzl", "if_cuda")
++load("//tensorflow/lite:bzlmod_config.bzl", "if_cuda")
+ load(
+-    "@local_config_rocm//rocm:build_defs.bzl",
++    "//tensorflow/lite:bzlmod_config.bzl",
+     "if_rocm",
+ )
+diff --git a/tensorflow/core/kernels/mlir_generated/build_defs.bzl b/tensorflow/core/kernels/mlir_generated/build_defs.bzl
+--- tensorflow/core/kernels/mlir_generated/build_defs.bzl
++++ tensorflow/core/kernels/mlir_generated/build_defs.bzl
+@@ -1,11 +1,11 @@
+ """Generates cubin headers for TF dialect ops."""
+ 
+-load("@local_config_cuda//cuda:build_defs.bzl", "cuda_gpu_architectures")
++load("//tensorflow/lite:bzlmod_config.bzl", "cuda_gpu_architectures")
+ load(
+-    "@local_config_rocm//rocm:build_defs.bzl",
++    "//tensorflow/lite:bzlmod_config.bzl",
+     "rocm_gpu_architectures",
+ )
+ load(
+-    "//tensorflow/compiler/xla/stream_executor:build_defs.bzl",
++    "//tensorflow/lite:bzlmod_config.bzl",
+     "if_gpu_is_configured",
+ )

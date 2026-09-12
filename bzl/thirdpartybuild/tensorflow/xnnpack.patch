@@ -1,0 +1,63 @@
+diff --git a/MODULE.bazel b/MODULE.bazel
+new file mode 100644
+--- /dev/null
++++ b/MODULE.bazel
+@@ -0,0 +1,10 @@
++module(
++    name = "xnnpack",
++    version = "0.0.0-20220831-e8f74a9",
++)
++
++bazel_dep(name = "bazel_skylib", version = "1.7.1")
++bazel_dep(name = "cpuinfo", version = "0.0.0-20220819-8ec7bd9")
++bazel_dep(name = "fp16", version = "0.0.0-20210320-0a92994", repo_name = "FP16")
++bazel_dep(name = "fxdiv", version = "0.0.0-20201209-63058ef", repo_name = "FXdiv")
++bazel_dep(name = "pthreadpool", version = "0.0.0-20230829-4fe0e1e")
+diff --git a/BUILD.bazel b/BUILD.bazel
+--- a/BUILD.bazel
++++ b/BUILD.bazel
+@@ -16268,33 +16268,34 @@ config_setting(
+     },
+ )
+ 
+-config_setting(
++selects.config_setting_group(
+     name = "emscripten",
+-    values = {"crosstool_top": "@emsdk//emscripten_toolchain:everything"},
++    match_any = [
++        ":emscripten_wasm",
++        ":emscripten_wasmsimd",
++        ":emscripten_wasmrelaxedsimd",
++    ],
+ )
+ 
+ config_setting(
+     name = "emscripten_wasm",
+     values = {
+-        "crosstool_top": "@emsdk//emscripten_toolchain:everything",
+-        "cpu": "wasm",
++        "cpu": "wasm32",
+     },
+ )
+ 
+ config_setting(
+     name = "emscripten_wasmsimd",
+     values = {
+-        "crosstool_top": "@emsdk//emscripten_toolchain:everything",
+-        "cpu": "wasm",
+-        "features": "wasm_simd",
++        "cpu": "wasm32",
++        "features": "simd",
+     },
+ )
+ 
+ config_setting(
+     name = "emscripten_wasmrelaxedsimd",
+     values = {
+-        "crosstool_top": "@emsdk//emscripten_toolchain:everything",
+-        "cpu": "wasm",
+-        "features": "wasm_relaxed_simd",
++        "cpu": "wasm32",
++        "features": "relaxed_simd",
+     },
+ )

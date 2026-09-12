@@ -629,11 +629,6 @@ npm_package(
     package_lock = "//bzl/npmpackage/tauri-shell:package-lock.json",
 )
 
-# These are execution platforms that are capable of compiling code.
-register_execution_platforms(
-    "@local_execution_config_platform//:platform",
-)
-
 load("//bzl/crosstool:execution-platform-configure.bzl", "execution_platform_configure")
 
 # Override the built-in 'local_config_platform' rule to ensure a
@@ -803,20 +798,6 @@ http_archive(
 )
 
 git_repository(
-    name = "cpuinfo",
-    commit = "8ec7bd91ad0470e61cf38f618cc1f270dede599c",
-    patch_args = ["-p1"],
-    patches = [
-        "//third_party/cpuinfo:cpuinfo.fix_support_for_wasm.patch",
-        "//third_party/cpuinfo:cpuinfo.support_cpu_darwin_transition.patch",
-        "//third_party/cpuinfo:cpuinfo.bazel7_detected_correctly_k8.patch",
-    ],
-    remote = "https://github.com/pytorch/cpuinfo.git",
-    repo_mapping = {"@org_pytorch_cpuinfo": "@cpuinfo"},
-    shallow_since = "1660926227 -0700",
-)
-
-git_repository(
     name = "miniaudio",
     build_file = "//bzl/thirdpartybuild:miniaudio.BUILD",
     commit = "4a5b74bef029b3592c54b6048650ee5f972c1a48",  # v0.11.21
@@ -838,21 +819,6 @@ git_repository(
     commit = "986e8eed00ded8168ef4eaa6f925dc6be50b40fa",
     remote = "https://github.com/gflags/gflags",
     shallow_since = "1641684284 +0000",
-)
-
-# Mirror XNNPACK that is provided in org_tensorflow to add patch.
-http_archive(
-    name = "XNNPACK",
-    build_file = "//third_party/xnnpack:xnnpack.BUILD",
-    patch_args = ["-p1"],
-    patches = [
-        "//third_party/xnnpack:xnnpack_add_android_x86_64_linkopt.patch",  # Fix Bazel ambiguous match error
-        "//third_party/xnnpack:xnnpack.llvm_windows_support.patch",
-        "//third_party/xnnpack:xnnpack.remove_linux_k8_linkopts.patch",  # Resolves ambiguous match on linkopts for :linux_k8 and :android
-    ],
-    sha256 = "7a16ab0d767d9f8819973dbea1dc45e4e08236f89ab702d96f389fdc78c5855c",
-    strip_prefix = "XNNPACK-e8f74a9763aa36559980a0c2f37f587794995622",
-    url = "https://github.com/google/XNNPACK/archive/e8f74a9763aa36559980a0c2f37f587794995622.zip",
 )
 
 # Install a newer version of googleapis than is provided in org_tensorflow.
@@ -925,46 +891,6 @@ rules_jvm_external_deps()
 load("@rules_jvm_external//:setup.bzl", "rules_jvm_external_setup")
 
 rules_jvm_external_setup()
-
-# Nia Protobuf 25.3.0 based section - it has to be defined before org_tensorflow section - BEGIN
-
-http_archive(
-    name = "com_github_grpc_grpc",
-    patch_args = ["-p1"],
-    patches = [
-        "//third_party/grpc:grpc-v1.27.3-support_nia_protobuf_25.3.patch",
-    ],
-    sha256 = "c2ab8a42a0d673c1acb596d276055adcc074c1116e427f118415da3e79e52969",
-    strip_prefix = "grpc-1.27.3",
-    urls = ["https://github.com/grpc/grpc/archive/refs/tags/v1.27.3.tar.gz"],
-)
-
-# The public protobuf repo for the 25.3 release (v3.25.3).  This archive is patched using patch
-# files from nia-protobuf-internal, which includes Niantic-specific changes to protoc and the
-# C# runtime assembly, as described in this document: https://go/niantic-internal-protobuf-doc
-http_archive(
-    name = "com_google_protobuf",
-    sha256 = "674afb2d0daaf266859b4fa8f9f1c051dbac56800a621dfb48d2302842960bfe",
-    strip_prefix = "protobuf-25.3-nia-v0.3",
-    urls = ["https://huggingface.co/datasets/8thWall/bazel-dependencies/resolve/main/protobuf/protobuf-25.3-nia-v0.3.tar"],
-)
-
-# Nia Protobuf 25.3.0 based section - it has to be defined before org_tensorflow section - END
-
-http_archive(
-    name = "org_tensorflow",
-    patches = [
-        "//third_party/tensorflow:tensorflow-v2.11.0-p8-bazel_6.1.2.patch",
-        "//third_party/tensorflow:tensorflow-inject_flatc_redist.patch",
-        "//third_party/tensorflow:tf_protobuf_nia_v0.1.patch",
-        "//third_party/tensorflow:tensorflow_minosversion.patch",
-        "//third_party/tensorflow:tensorflow-v2.11.0-p8-disable_llvm-raw.patch",
-        "//third_party/tensorflow:tensorflow-v2.11.0-p8-fix_ubuntu_local_python_configuration.patch",
-    ],
-    sha256 = "dcf38db689396ac3ae846b060639a0b0f88589acd61fb9100ef30b101d529172",
-    strip_prefix = "tensorflow-v2.11.0-p8",
-    url = "https://huggingface.co/datasets/8thWall/bazel-dependencies/resolve/main/tensorflow/tensorflow-v2.11.0-p8.tar",
-)
 
 # If --//bzl/gpu:cuda-support=hermetic the v1-cuda-triplet contains
 # the following tools and libraries :
@@ -1070,28 +996,6 @@ new_git_repository(
     shallow_since = "1485387435 +0300",
 )
 
-# Initialize the TensorFlow repository and all dependencies.
-#
-# The cascade of load() statements and tf_workspace?() calls works around the
-# restriction that load() statements need to be at the top of .bzl files.
-# E.g. we can not retrieve a new repository with http_archive and then load()
-# a macro from that repository in the same file.
-load("@org_tensorflow//tensorflow:workspace3.bzl", "tf_workspace3")
-
-tf_workspace3()
-
-load("@org_tensorflow//tensorflow:workspace2.bzl", "tf_workspace2")
-
-tf_workspace2()
-
-load("@org_tensorflow//tensorflow:workspace1.bzl", "tf_workspace1")
-
-tf_workspace1()
-
-load("@org_tensorflow//tensorflow:workspace0.bzl", "tf_workspace0")
-
-tf_workspace0()
-
 ### Rules proto grpc project configured for nia protobuf - BEGIN
 
 # General Settings - https://rules-proto-grpc.com/en/latest/index.html#installation
@@ -1153,14 +1057,6 @@ nuget_rules_proto_grpc_packages()
 load("@rules_proto_grpc//cpp:repositories.bzl", rules_proto_grpc_cpp_repos = "cpp_repos")
 
 rules_proto_grpc_cpp_repos()
-
-load("@com_github_grpc_grpc//bazel:grpc_deps.bzl", "grpc_deps")
-
-grpc_deps()
-
-load("@com_github_grpc_grpc//bazel:grpc_extra_deps.bzl", "grpc_extra_deps")
-
-grpc_extra_deps()
 
 ### Rules proto grpc project configured for default protobuf - END
 

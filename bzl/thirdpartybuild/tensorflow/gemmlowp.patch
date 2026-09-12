@@ -1,0 +1,7 @@
+--- /dev/null
++++ MODULE.bazel
+@@ -0,0 +1,4 @@
++module(
++    name = "gemmlowp",
++    version = "0.0.0-20210928-e844ffd",
++)
