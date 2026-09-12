@@ -1,0 +1,48 @@
+--- a/build_defs.bzl
++++ b/build_defs.bzl
+@@ -7,11 +7,11 @@ Rules for building C++ flatbuffers with Bazel.
+ 
+ load("@rules_cc//cc:defs.bzl", "cc_library")
+ 
+-TRUE_FLATC_PATH = "@com_github_google_flatbuffers//:flatc"
++TRUE_FLATC_PATH = "@flatbuffers//:flatc"
+ 
+ DEFAULT_INCLUDE_PATHS = [
+     "./",
+     "$(GENDIR)",
+     "$(BINDIR)",
+-    "$(execpath @com_github_google_flatbuffers//:flatc).runfiles/com_github_google_flatbuffers",
++    "$(execpath @flatbuffers//:flatc).runfiles/com_github_google_flatbuffers",
+ ]
+@@ -47,6 +47,6 @@ def flatbuffer_library_public(
+         compatible_with = None,
+         restricted_to = None,
+         target_compatible_with = None,
+-        flatc_path = "@com_github_google_flatbuffers//:flatc",
++        flatc_path = "@flatbuffers//:flatc",
+         output_to_bindir = False,
+         tools = None,
+@@ -262,7 +262,7 @@ def flatbuffer_cc_library(
+             "-parse_headers",
+         ],
+         deps = [
+-            "@com_github_google_flatbuffers//:runtime_cc",
+-            "@com_github_google_flatbuffers//:flatbuffers",
++            "@flatbuffers//:runtime_cc",
++            "@flatbuffers//:flatbuffers",
+         ] + deps,
+         includes = cc_include_paths,
+@@ -282,3 +282,13 @@ def flatbuffer_cc_library(
+         restricted_to = restricted_to,
+         visibility = srcs_filegroup_visibility if srcs_filegroup_visibility != None else visibility,
+     )
++
++# TensorFlow 2.11 loads these legacy helpers while evaluating packages whose
++# Java and Android targets are not part of the standalone Lite C++ build.
++flatc_path = "@flatbuffers//:flatc"
++
++def flatbuffer_java_library(name, srcs, visibility = None, **kwargs):
++    native.filegroup(name = name, srcs = [], visibility = visibility)
++
++def flatbuffer_android_library(name, srcs, visibility = None, **kwargs):
++    native.filegroup(name = name, srcs = [], visibility = visibility)

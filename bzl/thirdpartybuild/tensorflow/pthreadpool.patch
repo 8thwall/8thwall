@@ -1,0 +1,14 @@
+diff --git a/src/gcd.c b/src/gcd.c
+--- a/src/gcd.c
++++ b/src/gcd.c
+@@ -21,6 +21,10 @@
+ #include "threadpool-object.h"
+ #include "threadpool-utils.h"
+ 
++#ifndef DISPATCH_APPLY_AUTO
++#define DISPATCH_APPLY_AUTO dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
++#endif
++
+ static void thread_main(void* arg, size_t thread_index) {
+ 	struct pthreadpool* threadpool = (struct pthreadpool*) arg;
+ 	struct thread_info* thread = &threadpool->threads[thread_index];

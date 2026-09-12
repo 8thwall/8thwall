@@ -1,0 +1,12 @@
+--- a/BUILD.bazel
++++ b/BUILD.bazel
+@@ -13,3 +13,9 @@ cc_library(
+     includes = ["include"],
+     strip_include_prefix = "include",
+ )
++
++alias(
++    name = "FP16",
++    actual = ":fp16",
++    visibility = ["//visibility:public"],
++)

@@ -1,0 +1,12 @@
+--- a/BUILD.bazel
++++ b/BUILD.bazel
+@@ -66,3 +66,9 @@ cc_library(
+     includes = ["."],
+     visibility = ["//visibility:public"],
+ )
++
++alias(
++    name = "eigen3",
++    actual = ":eigen",
++    visibility = ["//visibility:public"],
++)

@@ -1,0 +1,24 @@
+diff --git a/MODULE.bazel b/MODULE.bazel
+new file mode 100644
+--- /dev/null
++++ b/MODULE.bazel
+@@ -0,0 +1,9 @@
++module(
++    name = "ruy",
++    version = "0.0.0-20220901-841ea41",
++)
++
++bazel_dep(name = "bazel_skylib", version = "1.7.1")
++bazel_dep(name = "cpuinfo", version = "0.0.0-20220819-8ec7bd9")
++bazel_dep(name = "googletest", version = "1.14.0.bcr.1", repo_name = "com_google_googletest")
++bazel_dep(name = "platforms", version = "0.0.11")
+diff --git a/ruy/build_defs.oss.bzl b/ruy/build_defs.oss.bzl
+--- a/ruy/build_defs.oss.bzl
++++ b/ruy/build_defs.oss.bzl
+@@ -11,5 +11,6 @@ def ruy_copts_warnings():
+     # https://github.com/abseil/abseil-cpp/blob/1112609635037a32435de7aa70a9188dcb591458/absl/base/BUILD.bazel#L155
+     return select({
+         "@bazel_tools//src/conditions:windows": [],
++        "@platforms//cpu:wasm32": [],
+         "//conditions:default": ["-pthread"],
+     })
