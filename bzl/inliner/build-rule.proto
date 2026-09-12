@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+package inliner;
+
+message BuildRule {
+  // Leading attributes.
+  string rule = 1;
+  string name = 2;
+  string gwt_name = 3;
+  string package_name = 4;
+  string visible_node_name = 5;
+  string size = 6;
+  string timeout = 7;
+  bool testonly = 8;
+  string src = 9;
+  string srcdir = 10;
+  repeated string srcs = 11;
+  string out = 12;
+  repeated string outs = 13;
+  repeated string hdrs = 14;
+  bool has_services = 15;
+  reserved 16; // For 'include' attribute'
+  reserved 17;  // For 'of' attribute.
+  reserved 18;  // For 'baseline' attribute.
+
+  // Standard attributes.
+  repeated string args = 64;
+  repeated string data = 65;
+  repeated string compatible_with = 66;
+  repeated string copts = 67;
+  repeated string defines = 68;
+  string deprecation = 69;
+  repeated string distribs = 70;
+  repeated string features = 71;
+  repeated string includes = 72;
+  repeated string licenses = 73;
+  repeated string output_licenses = 74;
+  repeated string linkopts = 75;
+  bool linkstatic = 76;
+  string nocopts = 77;
+  repeated string restricted_to = 78;
+  repeated string tags = 79;
+  repeated string textual_hdrs = 80;
+  repeated string visibility = 81;
+  int32 stamp = 82;
+  bool flaky = 83;
+  bool local = 84;
+  string malloc = 85;
+  uint32 shard_count = 86;
+  repeated string target_compatible_with = 87;
+
+  // Trailing attributes.
+  string destdir = 1024;
+  repeated string exports = 1025;
+  repeated string runtime_deps = 1026;
+  repeated string deps = 1027;
+  string implementation = 1028;
+  string implements = 1029;
+  bool alwayslink = 1030;
+
+  // Inliner rule hash.
+  fixed32 rulehash = 9999;
+}
