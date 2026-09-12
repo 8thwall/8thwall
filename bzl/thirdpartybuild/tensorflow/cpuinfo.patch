@@ -22,19 +22,7 @@ index 90bef8d..f17514d 100644
  exports_files(["LICENSE"])
  
  C99OPTS = [
-@@ -144,11 +146,6 @@ cc_library(
-         "include",
-         "src",
-     ],
--    linkstatic = select({
--        # https://github.com/bazelbuild/bazel/issues/11552
--        ":macos_x86_64": False,
--        "//conditions:default": True,
--    }),
-     # Headers must be in textual_hdrs to allow us to set the standard to C99
-     textual_hdrs = [
-         "include/cpuinfo.h",
-@@ -394,20 +391,62 @@ config_setting(
+@@ -394,20 +396,62 @@ config_setting(
  )
  
  config_setting(
@@ -101,74 +89,3 @@ index 90bef8d..f17514d 100644
  config_setting(
      name = "emscripten_asmjs",
      values = {
-diff --git a/BUILD.bazel b/BUILD.bazel
-index eee72b5..07c1076 100644
---- a/BUILD.bazel
-+++ b/BUILD.bazel
-@@ -114,7 +114,9 @@ cc_library(
-         ":linux_mips64": COMMON_SRCS + LINUX_SRCS,
-         ":linux_riscv64": COMMON_SRCS + LINUX_SRCS,
-         ":linux_s390x": COMMON_SRCS + LINUX_SRCS,
--        ":macos_x86_64": COMMON_SRCS + X86_SRCS + MACH_SRCS + MACH_X86_SRCS,
-+        # ":macos_x86_64": COMMON_SRCS + X86_SRCS + MACH_SRCS + MACH_X86_SRCS,
-+        # ":osx_x86_64": COMMON_SRCS + X86_SRCS + MACH_SRCS + MACH_X86_SRCS,
-+        ":macos_intel": COMMON_SRCS + X86_SRCS + MACH_SRCS + MACH_X86_SRCS,
-         ":macos_arm64": COMMON_SRCS + MACH_SRCS + MACH_ARM_SRCS,
-         ":windows_x86_64": COMMON_SRCS + X86_SRCS + WINDOWS_X86_SRCS,
-         ":android_armv7": COMMON_SRCS + ARM_SRCS + LINUX_SRCS + LINUX_ARM32_SRCS + ANDROID_ARM_SRCS,
-@@ -245,6 +247,23 @@ config_setting(
-     },
- )
-
-+config_setting(
-+    name = "osx_x86_64",
-+    values = {
-+        "apple_platform_type": "macos",
-+        "cpu": "darwin_x86_64",
-+    },
-+)
-+
-+selects.config_setting_group(
-+    name = "macos_intel",
-+    match_any = [
-+        ":macos_x86_64",
-+        ":osx_x86_64"
-+    ],
-+)
-+
-+
- config_setting(
-     name = "windows_x86_64",
-     values = {"cpu": "x64_windows"},
-diff -ruN cpuinfo/BUILD.bazel ../external-patched/cpuinfo/BUILD.bazel
---- cpuinfo/BUILD.bazel	2024-02-21 13:53:11.458549589 +0000
-+++ ../external-patched/cpuinfo/BUILD.bazel	2024-02-21 13:17:53.047760336 +0000
-@@ -106,6 +106,7 @@
-     name = "cpuinfo_impl",
-     srcs = select({
-         ":linux_x86_64": COMMON_SRCS + X86_SRCS + LINUX_SRCS + LINUX_X86_SRCS,
-+        ":linux_k8": COMMON_SRCS + X86_SRCS + LINUX_SRCS + LINUX_X86_SRCS,
-         ":linux_arm": COMMON_SRCS + ARM_SRCS + LINUX_SRCS + LINUX_ARM32_SRCS,
-         ":linux_armhf": COMMON_SRCS + ARM_SRCS + LINUX_SRCS + LINUX_ARM32_SRCS,
-         ":linux_armv7a": COMMON_SRCS + ARM_SRCS + LINUX_SRCS + LINUX_ARM32_SRCS,
-@@ -196,7 +197,7 @@
- 
- config_setting(
-     name = "linux_x86_64",
--    values = {"cpu": "k8"},
-+    values = {"cpu": "x86_64"},
- )
- 
- config_setting(
-@@ -240,6 +241,11 @@
- )
- 
- config_setting(
-+    name = "linux_k8",
-+    values = {"cpu": "k8"},
-+)
-+
-+config_setting(
-     name = "macos_x86_64",
-     values = {
-         "apple_platform_type": "macos",

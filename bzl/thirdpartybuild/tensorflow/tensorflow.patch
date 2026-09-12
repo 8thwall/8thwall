@@ -1,9 +1,8 @@
 --- /dev/null
 +++ MODULE.bazel
-@@ -0,0 +1,26 @@
+@@ -0,0 +1,25 @@
 +module(
-+    name = "tensorflow_lite",
-+    repo_name = "org_tensorflow",
++    name = "org_tensorflow",
 +    version = "2.11.0",
 +)
 +
@@ -27,118 +26,25 @@
 +bazel_dep(name = "ruy", version = "0.0.0-20220901-841ea41")
 +bazel_dep(name = "xnnpack", version = "0.0.0-20220831-e8f74a9", repo_name = "XNNPACK")
 +bazel_dep(name = "zlib", version = "1.3")
-diff --color -ruN tensorflow/lite/delegates/coreml/builders/op_builder.h tensorflow/lite/delegates/coreml/builders/op_builder.h
---- tensorflow/lite/delegates/coreml/builders/op_builder.h	2023-09-27 16:49:33
-+++ tensorflow/lite/delegates/coreml/builders/op_builder.h	2024-05-01 17:11:57
-@@ -18,8 +18,8 @@
- #include <functional>
- #include <string>
- 
--#include "mlmodel/format/Model.pb.h"
--#include "mlmodel/format/NeuralNetwork.pb.h"
-+#include "Model.pb.h"
-+#include "NeuralNetwork.pb.h"
- #include "tensorflow/lite/c/common.h"
- 
- namespace tflite {
-diff --color -ruN tensorflow/lite/delegates/coreml/coreml_executor.h tensorflow/lite/delegates/coreml/coreml_executor.h
---- tensorflow/lite/delegates/coreml/coreml_executor.h	2023-09-27 16:49:33
-+++ tensorflow/lite/delegates/coreml/coreml_executor.h	2024-05-01 17:12:42
-@@ -17,7 +17,7 @@
- #include <string>
- #include <vector>
- 
--#include "mlmodel/format/Model.pb.h"
-+#include "Model.pb.h"
- 
- // Data for input/output tensors.
- struct TensorData {
-diff --color -ruN tensorflow/tsl/platform/default/build_config.bzl tensorflow/tsl/platform/default/build_config.bzl
---- tensorflow/tsl/platform/default/build_config.bzl	2023-09-27 16:49:33
-+++ tensorflow/tsl/platform/default/build_config.bzl	2024-05-01 17:13:52
-@@ -235,7 +235,7 @@
+diff --git tensorflow/tsl/platform/default/build_config.bzl tensorflow/tsl/platform/default/build_config.bzl
+--- tensorflow/tsl/platform/default/build_config.bzl
++++ tensorflow/tsl/platform/default/build_config.bzl
+@@ -235,7 +235,6 @@ def tf_proto_library(
          name = protolib_name + "_genproto",
          srcs = srcs,
          outs = outs,
 -        gen_cc = 1,
-+        # gen_cc = 1,
          includes = includes,
          plugin = grpc_cpp_plugin,
          plugin_language = "grpc",
-@@ -409,7 +409,7 @@
+@@ -409,7 +408,6 @@ def tf_proto_library_py(
          name = name + "_genproto",
          srcs = srcs,
          outs = outs,
 -        gen_py = 1,
-+        # gen_py = 1,
          includes = includes,
          plugin = grpc_python_plugin,
          plugin_language = "grpc",
-diff --color -ruN third_party/coremltools.BUILD third_party/coremltools.BUILD
---- third_party/coremltools.BUILD	2023-09-27 16:49:33
-+++ third_party/coremltools.BUILD	2024-05-01 17:15:50
-@@ -1,4 +1,4 @@
--load("@com_google_protobuf//:protobuf.bzl", "cc_proto_library")
-+# load("@com_google_protobuf//:protobuf.bzl", "cc_proto_library")
- 
- package(default_visibility = ["//visibility:public"])
- 
-@@ -8,8 +8,17 @@
- 
- cc_proto_library(
-     name = "mlmodel_cc_proto",
-+    # srcs = glob(["mlmodel/format/*.proto"]),
-+    deps = [":mlmodel_proto"],
-+    # include = "mlmodel/format",
-+    # default_runtime = "@com_google_protobuf//:protobuf_lite",
-+    # protoc = "@com_google_protobuf//:protoc",
-+)
-+
-+proto_library(
-+    name = "mlmodel_proto",
-     srcs = glob(["mlmodel/format/*.proto"]),
--    include = "mlmodel/format",
--    default_runtime = "@com_google_protobuf//:protobuf_lite",
--    protoc = "@com_google_protobuf//:protoc",
-+    strip_import_prefix = "mlmodel/format",
-+    # import_prefix = "mlmodel/format",
-+    visibility = ["//visibility:public"],
- )
-diff --color -ruN tensorflow/lite/delegates/gpu/metal/common.mm tensorflow/lite/delegates/gpu/metal/common.mm
---- tensorflow/lite/delegates/gpu/metal/common.mm	2023-09-27 16:49:33
-+++ tensorflow/lite/delegates/gpu/metal/common.mm	2024-06-27 21:32:15
-@@ -139,19 +139,6 @@
-   } else if (@available(macOS 10.11, iOS 9.0, tvOS 9.0, *)) {
-     [options setLanguageVersion:MTLLanguageVersion1_1];
-   }
--#if (defined(__MAC_10_11) && __MAC_OS_X_VERSION_MIN_REQUIRED >= __MAC_10_11) ||    \
--    (defined(__IPHONE_9_0) && __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_9_0) || \
--    (defined(__TVOS_9_0) && __TV_OS_VERSION_MIN_REQUIRED >= __TVOS_9_0)
--  // Minimum target OS version is able to support Metal.
--#else
--#pragma message(VAR_NAME_VALUE(__MAC_OS_X_VERSION_MIN_REQUIRED))
--#pragma message(VAR_NAME_VALUE(__IPHONE_OS_VERSION_MIN_REQUIRED))
--#pragma message(VAR_NAME_VALUE(__TV_OS_VERSION_MIN_REQUIRED))
--// NOLINTBEGIN
--#error \
--    "The Metal delegate is not supported on current target SDK. Minimum supported os: iOS/tvOS 9.0, macOS 10.11"
--// NOLINTEND
--#endif
- 
-   NSMutableDictionary<NSString*, NSString*>* macros_dict = [NSMutableDictionary dictionary];
-   for (const auto& pair : macros) {
-diff --color -ruN tensorflow/lite/ios/ios.bzl tensorflow/lite/ios/ios.bzl
---- tensorflow/lite/ios/ios.bzl	2023-09-27 16:49:33
-+++ tensorflow/lite/ios/ios.bzl	2024-06-27 15:29:02
-@@ -6,7 +6,7 @@
- load("@build_bazel_rules_apple//apple:ios.bzl", "ios_static_framework")
- 
- # LINT.IfChange
--TFL_MINIMUM_OS_VERSION = "11.0"
-+TFL_MINIMUM_OS_VERSION = "13.0"
- # LINT.ThenChange(
- #   TensorFlowLiteC.podspec.template,
- #   TensorFlowLiteSelectTfOps.podspec.template,
 diff --git a/tensorflow/tensorflow.bzl b/tensorflow/tensorflow.bzl
 --- tensorflow/tensorflow.bzl
 +++ tensorflow/tensorflow.bzl
@@ -253,17 +159,6 @@ diff --git a/tensorflow/core/kernels/BUILD b/tensorflow/core/kernels/BUILD
 -    "@local_config_rocm//rocm:build_defs.bzl",
 +    "//tensorflow/lite:bzlmod_config.bzl",
      "if_rocm",
- )
-diff --git a/tensorflow/core/platform/BUILD b/tensorflow/core/platform/BUILD
---- tensorflow/core/platform/BUILD
-+++ tensorflow/core/platform/BUILD
-@@ -39,6 +39,6 @@ load(
-     "tf_cuda_library",
- )
- load(
--    "@local_config_rocm//rocm:build_defs.bzl",
-+    "//tensorflow/lite:bzlmod_config.bzl",
-     "if_rocm_is_configured",
  )
 diff --git a/tensorflow/core/kernels/mlir_generated/build_defs.bzl b/tensorflow/core/kernels/mlir_generated/build_defs.bzl
 --- tensorflow/core/kernels/mlir_generated/build_defs.bzl

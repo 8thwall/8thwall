@@ -69,11 +69,11 @@ archive_override(
     urls = ["https://huggingface.co/datasets/8thWall/bazel-dependencies/resolve/main/protobuf/protobuf-25.3-nia-v0.3.tar"],
 )
 
-bazel_dep(name = "tensorflow_lite", repo_name = "org_tensorflow", version = "2.11.0")
+bazel_dep(name = "org_tensorflow", version = "2.11.0")
 
 archive_override(
     integrity = "sha256-3PONtok5asOuhGsGBjmgsPiFiazWH7kQDvMLEB1SkXI=",
-    module_name = "tensorflow_lite",
+    module_name = "org_tensorflow",
     patches = ["//bzl/thirdpartybuild/tensorflow:tensorflow.patch"],
     strip_prefix = "tensorflow-v2.11.0-p8",
     urls = ["https://huggingface.co/datasets/8thWall/bazel-dependencies/resolve/main/tensorflow/tensorflow-v2.11.0-p8.tar"],

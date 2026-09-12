@@ -683,7 +683,7 @@ register_toolchains(
     # Toolchain for compiling for Niantic Linuxes from OSX, Linux x86 and Linux arm64.
     "//bzl/crosstool:cc-toolchain-v1-linux",  # https://<REMOVED_BEFORE_OPEN_SOURCING>.atlassian.net/l/cp/co6yA1pW
     "//bzl/crosstool:cc-toolchain-v2-linux",  # https://<REMOVED_BEFORE_OPEN_SOURCING>.atlassian.net/l/cp/X25vkYhE
-    # Required by Bazel 7 to allow transitive external dependencies (including tensorflow_lite)
+    # Required by Bazel 7 to allow transitive external dependencies (from org_tensorflow as usual)
     # to use local python version. See https://bit.ly/49ySxPJ for more information.
     "@bazel_tools//tools/python:autodetecting_toolchain",
 )
@@ -750,7 +750,7 @@ apple_developer_team(
     },
 )
 
-# Install a newer version of googletest than is provided by tensorflow_lite.
+# Install a newer version of googletest than is provided in org_tensorflow.
 http_archive(
     name = "com_google_googletest",
     patch_args = ["-p1"],
@@ -764,7 +764,7 @@ http_archive(
     ],
 )
 
-# Install a newer version of vulkan_headers than is provided by tensorflow_lite.
+# Install a newer version of vulkan_headers than is provided in org_tensorflow.
 http_archive(
     name = "vulkan_headers",
     build_file = "//bzl/thirdpartybuild:vulkan-headers.BUILD",
@@ -813,7 +813,7 @@ http_archive(
     url = "https://huggingface.co/datasets/8thWall/bazel-dependencies/resolve/main/miniaudio-addon/miniaudio-addon-0.11.21-p17.tar.gz",
 )
 
-# Install a newer version of gflags than is provided by tensorflow_lite.
+# Install a newer version of gflags than is provided in org_tensorflow.
 git_repository(
     name = "com_github_gflags_gflags",
     commit = "986e8eed00ded8168ef4eaa6f925dc6be50b40fa",
@@ -821,7 +821,7 @@ git_repository(
     shallow_since = "1641684284 +0000",
 )
 
-# Install a newer version of googleapis than is provided by tensorflow_lite.
+# Install a newer version of googleapis than is provided in org_tensorflow.
 niantic_maybe(
     git_repository,
     name = "com_google_googleapis",
@@ -842,8 +842,8 @@ switched_rules_by_language(
     grpc = True,
 )
 
-# Keep the legacy WORKSPACE repository for consumers that still resolve @zlib
-# outside Bzlmod.
+# This is duplicated here only for org_tensorflow->com_github_grpc_grp internal dependency that is still using
+# native.bind which are deprecated and not working for MODULE.bazel deps (See https://bazel.build/external/migration#bind-targets)
 new_git_repository(
     name = "zlib",
     build_file = "//bzl/thirdpartybuild:zlib.BUILD",
@@ -876,7 +876,7 @@ RULES_JVM_EXTERNAL_SHA = (
     "b17d7388feb9bfa7f2fa09031b32707df529f26c91ab9e5d909eb1676badd9a6"
 )
 
-# This version is newer than the one provided by tensorflow_lite.
+# This version is newer than the one provided by org_tensorflow
 http_archive(
     name = "rules_jvm_external",
     sha256 = RULES_JVM_EXTERNAL_SHA,
