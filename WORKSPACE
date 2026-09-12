@@ -123,70 +123,6 @@ load("@v8_python_deps//:requirements.bzl", v8_python_deps_install_deps = "instal
 
 v8_python_deps_install_deps()
 
-pip_parse(
-    name = "a4lidartag_deps",
-    envsubst = ["PIP_INDEX_URL"],
-    extra_pip_args = [
-        "--index-url",
-        "${PIP_INDEX_URL:-https://pypi.org/simple}",
-    ],
-    python_interpreter_target = python_interpreter,
-    requirements_lock = "//bzl/python:a4lidartag_requirements.txt",
-)
-
-# Define repos for python pip dependencies.
-load("@a4lidartag_deps//:requirements.bzl", a4lidartag_install_deps = "install_deps")
-
-a4lidartag_install_deps()
-
-pip_parse(
-    name = "whismur_deps",
-    envsubst = ["PIP_INDEX_URL"],
-    extra_pip_args = [
-        "--index-url",
-        "${PIP_INDEX_URL:-https://pypi.org/simple}",
-    ],
-    python_interpreter_target = python_interpreter,
-    requirements_lock = "//bzl/python:whismur_requirements.txt",
-)
-
-# Define repos for python pip dependencies.
-load("@whismur_deps//:requirements.bzl", whismur_install_deps = "install_deps")
-
-whismur_install_deps()
-
-pip_parse(
-    name = "benchmark_quest_deps",
-    envsubst = ["PIP_INDEX_URL"],
-    extra_pip_args = [
-        "--index-url",
-        "${PIP_INDEX_URL:-https://pypi.org/simple}",
-    ],
-    python_interpreter_target = python_interpreter,
-    requirements_lock = "//bzl/python:benchmark_quest_requirements.txt",
-)
-
-# Define repos for python pip dependencies.
-load("@benchmark_quest_deps//:requirements.bzl", benchmark_quest_install_deps = "install_deps")
-
-benchmark_quest_install_deps()
-
-pip_parse(
-    name = "nae_publish_deps",
-    envsubst = ["PIP_INDEX_URL"],
-    extra_pip_args = [
-        "--index-url",
-        "${PIP_INDEX_URL:-https://pypi.org/simple}",
-    ],
-    python_interpreter_target = python_interpreter,
-    requirements_lock = "//bzl/python:nae_publish_requirements.txt",
-)
-
-# Define repos for python pip dependencies.
-load("@nae_publish_deps//:requirements.bzl", nae_publish_install_deps = "install_deps")
-
-nae_publish_install_deps()
-
 ################################################# END 1
 
 # Load and cache select environment variables at bazel startup for tool locations.
@@ -527,13 +463,6 @@ npm_package(
     package_lock = "//bzl/npmpackage/capnpc-js:package-lock.json",
 )
 
-# Node modules for Discord Activity Backend.
-npm_package(
-    name = "npm-discord-activity",
-    package = "//apps/client/exploratory/discord-activity-example:package.json",
-    package_lock = "//apps/client/exploratory/discord-activity-example:package-lock.json",
-)
-
 # Node modules for 8th Wall tune-parameters.
 npm_package(
     name = "npm-tune-parameters",
@@ -541,25 +470,11 @@ npm_package(
     package_lock = "//bzl/npmpackage/tune-parameters:package-lock.json",
 )
 
-# Node modules for 8th Wall responsive immersive.
-npm_package(
-    name = "npm-responsive-immersive",
-    package = "//apps/client/public/web/responsive-immersive:package.json",
-    package_lock = "//apps/client/public/web/responsive-immersive:package-lock.json",
-)
-
 # Node modules for 8th Wall's js engine.
 npm_package(
     name = "npm-jsxr",
     package = "//reality/app/xr/js:package.json",
     package_lock = "//reality/app/xr/js:package-lock.json",
-)
-
-# Node modules for 8th Wall's Omniscope js app.
-npm_package(
-    name = "npm-omni-js",
-    package = "//apps/client/internalqa/omniscope/js:package.json",
-    package_lock = "//apps/client/internalqa/omniscope/js:package-lock.json",
 )
 
 # Node modules for rendering.
@@ -589,27 +504,6 @@ npm_package(
         "//c8/ecs/patches:@types+css-font-loading-module+0.0.14.patch",
         "//c8/ecs/patches:@types+node+16.18.36.patch",
     ],
-)
-
-# Node modules for ecr in reality/cloud/aws/ecr
-npm_package(
-    name = "npm-ecr",
-    package = "//reality/app/nae/npm:package.json",
-    package_lock = "//reality/app/nae/npm:package-lock.json",
-)
-
-# Node modules for nae-assets-car-api in reality/cloud/aws/cdk/nae-assets-car-api
-npm_package(
-    name = "npm-nae-assets-car-api",
-    package = "//reality/cloud/aws/cdk/nae-assets-car-api/src/api:package.json",
-    package_lock = "//reality/cloud/aws/cdk/nae-assets-car-api/src/api:package-lock.json",
-)
-
-# Node modules for scanmap.
-npm_package(
-    name = "npm-scanmap",
-    package = "//apps/client/exploratory/scanmap/npm:package.json",
-    package_lock = "//apps/client/exploratory/scanmap/npm:package-lock.json",
 )
 
 # Node modules for packaging HTML apps into native apps.
@@ -773,22 +667,6 @@ http_archive(
     url = "https://github.com/KhronosGroup/Vulkan-Headers/archive/refs/tags/v1.3.296.zip",
 )
 
-new_git_repository(
-    name = "vulkan-memory-allocator",
-    build_file = "//bzl/thirdpartybuild:vulkan-memory-allocator.BUILD",
-    commit = "e87036508bb156f9986ea959323de1869e328f58",
-    remote = "https://chromium.googlesource.com/external/github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator.git",
-    shallow_since = "1689220916 -0400",
-)
-
-http_archive(
-    name = "vulkan-utility-libraries",
-    build_file = "//bzl/thirdpartybuild:vulkan-utility-libraries.BUILD",
-    sha256 = "9dc5247bfb1585ecab48fdd4708b52ba1839cebf0347077bbc897580401b15ca",
-    strip_prefix = "Vulkan-Utility-Libraries-1.3.295",
-    url = "https://github.com/KhronosGroup/Vulkan-Utility-Libraries/archive/v1.3.295.tar.gz",
-)
-
 http_archive(
     name = "com_google_benchmark",
     build_file = "//bzl/thirdpartybuild:benchmark.BUILD",
@@ -803,14 +681,6 @@ git_repository(
     commit = "4a5b74bef029b3592c54b6048650ee5f972c1a48",  # v0.11.21
     remote = "https://github.com/mackron/miniaudio.git",
     shallow_since = "1700011380 +1000",
-)
-
-# Source repo: https://github.com/8thwall/miniaudio-addon
-http_archive(
-    name = "miniaudio-addon",
-    sha256 = "b70cfaaae5cfe2d0974a4ae3e95b85117d5a145c797a2b900758e60a0aac05a3",
-    strip_prefix = "miniaudio-addon-0.11.21-p17",
-    url = "https://huggingface.co/datasets/8thWall/bazel-dependencies/resolve/main/miniaudio-addon/miniaudio-addon-0.11.21-p17.tar.gz",
 )
 
 # Install a newer version of gflags than is provided in org_tensorflow.
@@ -860,14 +730,6 @@ new_git_repository(
     commit = "f5fd0ad2663e239a31184ad4c9919991dda16f46",
     remote = "https://chromium.googlesource.com/chromium/src/third_party/zlib",
     shallow_since = "1691776355 -0700",
-)
-
-new_git_repository(
-    name = "cnpy",
-    build_file = "//bzl/thirdpartybuild:cnpy.BUILD",
-    commit = "4e8810b1a8637695171ed346ce68f6984e585ef4",
-    remote = "https://github.com/rogersce/cnpy.git",
-    shallow_since = "1527823740 +0000",
 )
 
 # The following rules allow exporting java libraries into maven/artifactory
@@ -934,19 +796,6 @@ http_archive(
     strip_prefix = "3.0.x-niantic-bazel_7.0.0_with_protoc_exe",
     urls = [
         "https://huggingface.co/datasets/8thWall/bazel-dependencies/resolve/main/protobuf/protobuf-3.0.0-niantic-bazel_7.0.0_with_protoc_exe.tar",
-    ],
-)
-
-# More modern protobuf version for use of later protobuf v3 features
-# Assumption is made that the presence of this http_archive does not disrupt
-# the functionality of the protobuf v3.9.2 embedded in the 8w fork of TF, and
-# the protobuf v3.0.0 included above.
-http_archive(
-    name = "com_google_protobuf_3.17.3",
-    sha256 = "528927e398f4e290001886894dac17c5c6a2e5548f3fb68004cfb01af901b53a",
-    strip_prefix = "protobuf-3.17.3",
-    urls = [
-        "https://github.com/protocolbuffers/protobuf/archive/v3.17.3.zip",
     ],
 )
 
@@ -1107,14 +956,6 @@ new_git_repository(
     shallow_since = "1641188409 +0100",
 )
 
-new_git_repository(
-    name = "yaml-cpp",
-    build_file = "//bzl/thirdpartybuild:yaml-cpp.BUILD",
-    commit = "9a3624205e8774953ef18f57067b3426c1c5ada6",
-    remote = "https://github.com/jbeder/yaml-cpp",
-    shallow_since = "1569430560 -0700",
-)
-
 http_archive(
     name = "cli11",
     build_file = "//bzl/thirdpartybuild:cli11.BUILD",
@@ -1140,24 +981,10 @@ filegroup(
     shallow_since = "1476195465 -0700",
 )
 
-# Node modules for trees in the workspace. These should cover all of the js_binary, js_cli, and
-# js_test rules under a given tree in the workspace.
-npm_package(
-    name = "npm-apps-client-gitlab",  # For targets in //apps/client/gitlab
-    package = "//apps/client/gitlab/npm:package.json",
-    package_lock = "//apps/client/gitlab/npm:package-lock.json",
-)
-
 npm_package(
     name = "npm-c8-model-web",  # For targets in //c8/model/web
     package = "//c8/model/web/npm:package.json",
     package_lock = "//c8/model/web/npm:package-lock.json",
-)
-
-npm_package(
-    name = "npm-apps-client-studio2d-web3js",  # For targets in //apps/client/studio2d/web3js
-    package = "//apps/client/studio2d/web3js/npm:package.json",
-    package_lock = "//apps/client/studio2d/web3js/npm:package-lock.json",
 )
 
 npm_package(
@@ -1173,44 +1000,9 @@ npm_package(
 )
 
 npm_package(
-    name = "npm-ci-support",  # For targets in //ci-support
-    package = "//ci-support/npm:package.json",
-    package_lock = "//ci-support/npm:package-lock.json",
-)
-
-npm_package(
-    name = "npm-platform-client-geo-game-board",  # For targets in //platform/client/geo-game-board
-    package = "//platform/client/geo-game-board/npm:package.json",
-    package_lock = "//platform/client/geo-game-board/npm:package-lock.json",
-)
-
-npm_package(
     name = "npm-examples-js-resolve",
     package = "//bzl/examples/js/resolve:package.json",
     package_lock = "//bzl/examples/js/resolve:package-lock.json",
-)
-
-npm_package(
-    name = "npm-lambda-edge-log",
-    package = "//reality/cloud/aws/edge-lambda/lambda-edge-log:package.json",
-    package_lock = "//reality/cloud/aws/edge-lambda/lambda-edge-log:package-lock.json",
-)
-
-npm_package(
-    name = "npm-studio-deploy",
-    export_zip = True,
-    package = "//reality/cloud/aws/lambda/studio-deploy:package.json",
-    package_lock = "//reality/cloud/aws/lambda/studio-deploy:package-lock.json",
-    patches = [
-        "//reality/cloud/aws/lambda/studio-deploy/patches:ts-loader+6.2.2.patch",
-    ],
-)
-
-npm_package(
-    name = "npm-ecs-build",
-    export_zip = True,
-    package = "//reality/cloud/studio-local/ecs-build:package.json",
-    package_lock = "//reality/cloud/studio-local/ecs-build:package-lock.json",
 )
 
 npm_package(
@@ -1218,19 +1010,6 @@ npm_package(
     export_zip = True,
     package = "//apps/desktop:package.json",
     package_lock = "//apps/desktop:package-lock.json",
-)
-
-npm_package(
-    name = "npm-public-api",
-    export_zip = True,
-    package = "//reality/cloud/aws/lambda/public-api:package.json",
-    package_lock = "//reality/cloud/aws/lambda/public-api:package-lock.json",
-)
-
-npm_package(
-    name = "npm-nae-lambda-builder",
-    package = "//reality/cloud/aws/cdk/nae-lambda-builder:package.json",
-    package_lock = "//reality/cloud/aws/cdk/nae-lambda-builder:package-lock.json",
 )
 
 npm_package(
@@ -1242,13 +1021,6 @@ npm_package(
     package_lock = "//bzl/js/proto:package-lock.json",
 )
 # End npm_package rules.
-
-# Created by //reality/cloud/aws/edge-lambda/serve-images/zip-sharp-linux.sh
-http_file(
-    name = "sharp-linux-install",
-    sha256 = "ca33ba4092e1c9ea4d9f68069d06c71563aa90c0ede7b3f14b6ebfe7dfb0e00b",
-    url = "https://huggingface.co/datasets/8thWall/bazel-dependencies/resolve/main/sharp/sharp-linux-install-lynjnd4y.zip",
-)
 
 git_repository(
     name = "glslang",
@@ -1290,30 +1062,6 @@ new_git_repository(
     shallow_since = "1482497684 +0300",
 )
 
-new_git_repository(
-    name = "opencv_contrib",
-    build_file = "//bzl/thirdpartybuild:opencv_contrib.BUILD",
-    commit = "86342522b0eb2b16fa851c020cc4e0fef4e010b7",
-    remote = "https://github.com/opencv/opencv_contrib",
-    shallow_since = "1482491383 +0200",
-)
-
-new_git_repository(
-    name = "vectorclass",
-    build_file = "//bzl/thirdpartybuild:vectorclass.BUILD",
-    commit = "08959ebe6ea5d8317330b242e28ba0d2938ac52f",
-    remote = "https://github.com/vectorclass/version2",
-    shallow_since = "1659863902 +0200",
-)
-
-new_git_repository(
-    name = "s2geometry",
-    build_file = "//bzl/thirdpartybuild:s2geometry.BUILD",
-    commit = "c5055c076bd22281c67445d1df4f3225bfbf9925",
-    remote = "https://github.com/google/s2geometry.git",
-    shallow_since = "1648814009 +0200",
-)
-
 # Libwebsockets - Websocket C-API library
 # Licence: MIT (https://github.com/warmcat/libwebsockets/blob/main/LICENSE)
 new_git_repository(
@@ -1339,22 +1087,6 @@ new_git_repository(
     ],
     remote = "https://github.com/ocornut/imgui",
     shallow_since = "1621961154 +0200",
-)
-
-new_git_repository(
-    name = "imnodes",
-    build_file = "//bzl/thirdpartybuild:imnodes.BUILD",
-    commit = "0fbc7f1a2aab73b3ad4be86241bf3f4802bdb800",
-    remote = "https://github.com/Nelarius/imnodes",
-    shallow_since = "1626262086 +0300",
-)
-
-new_git_repository(
-    name = "implot",
-    build_file = "//bzl/thirdpartybuild:implot.BUILD",
-    commit = "6ee1559715fae9480fcaeb81f24d80a4d1e8c407",
-    remote = "https://github.com/epezent/implot",
-    shallow_since = "1634698866 -0700",
 )
 
 new_git_repository(
@@ -1387,15 +1119,6 @@ new_git_repository(
     commit = "78fde8cde56492d464575e3bf289056c8289cec8",
     remote = "https://github.com/8thwall/libgit2.git",
     shallow_since = "1731372343 -0800",
-)
-
-# Argument parsing library
-new_git_repository(
-    name = "cxxopts",
-    build_file = "//bzl/thirdpartybuild:cxxopts.BUILD",
-    commit = "302302b30839505703d37fb82f536c53cf9172fa",
-    remote = "https://github.com/jarro2783/cxxopts.git",
-    shallow_since = "1596495594 +1000",
 )
 
 new_git_repository(
@@ -1538,14 +1261,6 @@ new_git_repository(
     shallow_since = "1629788404 +0300",
 )
 
-new_git_repository(
-    name = "vlfeat",
-    build_file = "//bzl/thirdpartybuild:vlfeat.BUILD",
-    commit = "1b9075fc42fe54b42f0e937f8b9a230d8e2c7701",
-    remote = "https://github.com/vlfeat/vlfeat",
-    shallow_since = "1515711330 +0000",
-)
-
 git_repository(
     name = "fmt",
     commit = "a33701196adfad74917046096bf5a2aa0ab0bb50",
@@ -1566,14 +1281,6 @@ git_repository(
         "Move-Item -Path support/bazel/WORKSPACE.bazel -Destination WORKSPACE.bazel",
     ],
     remote = "https://github.com/fmtlib/fmt",
-)
-
-new_git_repository(
-    name = "moodycamel",
-    build_file = "//bzl/thirdpartybuild:concurrentqueue.BUILD",
-    commit = "79cec4c3bf1ca23ea4a03adfcd3c2c3659684dd2",
-    remote = "https://github.com/cameron314/concurrentqueue",
-    shallow_since = "1580387311 -0500",
 )
 
 new_git_repository(
@@ -1696,31 +1403,12 @@ load("@com_google_protobuf//:protobuf_deps.bzl", nia_protobuf_deps = "protobuf_d
 
 nia_protobuf_deps()
 
-niantic_maybe(
-    http_archive,
-    name = "torch",
-    build_file = "//bzl/thirdpartybuild:torch.BUILD",
-    sha256 = "6b64703b360f06f85d36e2fffb1dd3659a14a3a15d78f43acfd6c9eea206bf46",
-    strip_prefix = "libtorch",
-    urls = [
-        "https://download.pytorch.org/libtorch/cu118/libtorch-cxx11-abi-shared-with-deps-2.1.1%2Bcu118.zip",
-    ],
-)
-
 # Downloaded from https://gitlab.com/<REMOVED_BEFORE_OPEN_SOURCING>/repos/legacy/niantic-ar/3rd-party/angle/-/tags
 http_archive(
     name = "angle",
     sha256 = "42c4d922e2b78732c2145445907d72f6cf551a9a3ea378528ad3a09704e3b3a4",
     strip_prefix = "angle-nia-5943-p3",
     url = "https://huggingface.co/datasets/8thWall/bazel-dependencies/resolve/main/angle/angle-nia-5943-p3.tar.gz",
-)
-
-# Downloaded from https://developers.meta.com/horizon/downloads/package/oculus-platform-sdk
-http_archive(
-    name = "oculus-platform-sdk",
-    build_file = "//bzl/thirdpartybuild:oculus-platform-sdk.BUILD",
-    sha256 = "dee1b5b1e33fc4ac52358d2a83175f51d7f569212fd26d016ae851cbdc9a3468",
-    url = "https://huggingface.co/datasets/8thWall/bazel-dependencies/resolve/main/ovr_platform_sdk/ovr_platform_sdk_69.0.zip",
 )
 
 # C++ wrapper classes for Node-API.
@@ -1730,14 +1418,6 @@ http_archive(
     sha256 = "10223967fb13567b271639b530c6b13276bced48b57eea9d7c3e172f72cfee92",
     strip_prefix = "node-addon-api-7.0.0",
     url = "https://github.com/nodejs/node-addon-api/archive/refs/tags/v7.0.0.zip",
-)
-
-http_archive(
-    name = "addon-tools-raub",
-    build_file = "//bzl/thirdpartybuild:addon-tools-raub.BUILD",
-    sha256 = "961159c82a24afc3347e2f593143394aa6d2b4be30f6f85c9bb742da03f4ce4c",
-    strip_prefix = "addon-tools-raub-7.2.0",
-    url = "https://github.com/node-3d/addon-tools-raub/archive/refs/tags/7.2.0.zip",
 )
 
 http_archive(
@@ -1786,33 +1466,6 @@ new_git_repository(
     shallow_since = "1727187792 -0700",
 )
 
-http_archive(
-    name = "spdlog",
-    build_file = "//bzl/thirdpartybuild:spdlog.BUILD",
-    patch_args = ["-p1"],
-    patches = [
-        "@the8thwall//:third_party/spdlog/public_logger.patch",
-    ],
-    sha256 = "4dccf2d10f410c1e2feaff89966bfc49a1abb29ef6f08246335b110e001e09a9",
-    strip_prefix = "spdlog-1.12.0",
-    url = "https://github.com/gabime/spdlog/archive/refs/tags/v1.12.0.tar.gz",
-)
-
-new_git_repository(
-    name = "nanoflann",
-    build_file = "//bzl/thirdpartybuild:nanoflann.BUILD",
-    commit = "37b31cb554688a51a1f773420aa1b2c94c99237b",  # v1.5.3
-    remote = "https://github.com/jlblancoc/nanoflann.git",
-)
-
-new_git_repository(
-    name = "bullet3",
-    build_file = "//bzl/thirdpartybuild:bullet3.BUILD",
-    commit = "6bb8d1123d8a55d407b19fd3357c724d0f5c9d3c",
-    remote = "https://github.com/bulletphysics/bullet3.git",
-    shallow_since = "1701210212 -0800",
-)
-
 new_git_repository(
     name = "joltphysics",
     build_file = "//bzl/thirdpartybuild:joltphysics.BUILD",
@@ -1829,100 +1482,8 @@ new_git_repository(
     shallow_since = "1675598033 -0800",
 )
 
-new_git_repository(
-    name = "webgl-conformance",
-    build_file = "//bzl/thirdpartybuild:webgl-conformance.BUILD",
-    commit = "8a1bf5671d342458bc258ad8a575ad269292c361",  # 7/10/2024
-    remote = "https://github.com/KhronosGroup/WebGL.git",
-)
-
-new_git_repository(
-    name = "openxr",
-    build_file = "//bzl/thirdpartybuild:openxr.BUILD",
-    commit = "f90488c4fb1537f4256d09d4a4d3ad5543ebaf24",
-    remote = "https://github.com/KhronosGroup/OpenXR-SDK.git",
-    shallow_since = "1718057169 -0500",
-)
-
 http_file(
     name = "android-manifest-merger",
     sha256 = "4e06d2f8b545741847495f4cfdd14eb8ccf42eb21241e8be0387759ce074c415",
     url = "https://huggingface.co/datasets/8thWall/bazel-dependencies/resolve/main/android-manifest-merger/android-manifest-merger-31.5.2.jar",
-)
-
-AAPT2_VERSION = "8.10.0-rc02-12782657"
-
-http_file(
-    name = "android-aapt2-linux-jar",
-    sha256 = "8a6e4d59a2e51c117b4a54ac2853f6f62c7effa4c54bbbc5cdf531ba215e909e",
-    url = "https://dl.google.com/android/maven2/com/android/tools/build/aapt2/{}/aapt2-{}-linux.jar".format(
-        AAPT2_VERSION,
-        AAPT2_VERSION,
-    ),
-)
-
-# TODO(lreyna): Bazelify the deps from https://github.com/indygreg/apple-platform-rs, so we can
-# build the `rcodesign` binary ourselves.
-http_archive(
-    name = "apple-codesign-linux-x86_64",
-    build_file_content = """
-filegroup(
-    name = "rcodesign_bin",
-    srcs = ["rcodesign"],
-    visibility = ["//visibility:public"],
-)
-""",
-    sha256 = "dbe85cedd8ee4217b64e9a0e4c2aef92ab8bcaaa41f20bde99781ff02e600002",
-    strip_prefix = "apple-codesign-0.29.0-x86_64-unknown-linux-musl",
-    url = "https://github.com/indygreg/apple-platform-rs/releases/download/apple-codesign%2F0.29.0/apple-codesign-0.29.0-x86_64-unknown-linux-musl.tar.gz",
-)
-
-http_archive(
-    name = "apple-codesign-osx-arm64",
-    build_file_content = """
-filegroup(
-    name = "rcodesign_bin",
-    srcs = ["rcodesign"],
-    visibility = ["//visibility:public"],
-)
-""",
-    sha256 = "d1a532150adaf90048260d76359261aa716abafc45c53c5dc18845029184334a",
-    strip_prefix = "apple-codesign-0.29.0-aarch64-apple-darwin",
-    url = "https://github.com/indygreg/apple-platform-rs/releases/download/apple-codesign%2F0.29.0/apple-codesign-0.29.0-aarch64-apple-darwin.tar.gz",
-)
-
-http_archive(
-    name = "apple-codesign-osx-x86_64",
-    build_file_content = """
-filegroup(
-    name = "rcodesign_bin",
-    srcs = ["rcodesign"],
-    visibility = ["//visibility:public"],
-)
-""",
-    sha256 = "14ef11bedd51a8d95eafd767939ae96d5900e5a61511bef75bb21db6e7c74140",
-    strip_prefix = "apple-codesign-0.29.0-x86_64-apple-darwin",
-    url = "https://github.com/indygreg/apple-platform-rs/releases/download/apple-codesign%2F0.29.0/apple-codesign-0.29.0-x86_64-apple-darwin.tar.gz",
-)
-
-npm_package(
-    name = "npm-tauri-app",
-    package = "//apps/client/exploratory/tauri-app:package.json",
-    package_lock = "//apps/client/exploratory/tauri-app:package-lock.json",
-)
-
-http_archive(
-    name = "itms-transporter-macosx-universal",
-    build_file = "//bzl/thirdpartybuild:itms-transporter.BUILD",
-    sha256 = "719b9152088f56d5bcb7b1bb61238a19e20823968e12ce33b084e9d25be43b7c",
-    strip_prefix = "itms-transporter-4.1.0-macosx-universal",
-    url = "https://huggingface.co/datasets/8thWall/bazel-dependencies/resolve/main/itms-transporter/itms-transporter-4.1.0-macosx-universal.tgz",
-)
-
-http_archive(
-    name = "itms-transporter-linux-x86_64",
-    build_file = "//bzl/thirdpartybuild:itms-transporter.BUILD",
-    sha256 = "559edac54cc020a7ef13d49f7034b942a4d4c7da93582c81eb0d7b8aec5de52a",
-    strip_prefix = "itms-transporter-4.1.0-linux-x86_64",
-    url = "https://huggingface.co/datasets/8thWall/bazel-dependencies/resolve/main/itms-transporter/itms-transporter-4.1.0-linux-x86_64.tgz",
 )

@@ -11,7 +11,6 @@ genrule(
 
 exports_files([
     "requirements.txt",
-    "a4lidartag_requirements.txt",
 ])
 
 # Hermetic python toolchains
