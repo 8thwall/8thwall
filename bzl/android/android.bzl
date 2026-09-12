@@ -442,6 +442,7 @@ def android_java_library(name, deps = [], srcs = [], visibility = None):
         name = name,
         deps = deps,
         srcs = srcs,
+        target_compatible_with = ["@platforms//os:android"],
         visibility = visibility,
     )
     native.java_import(

@@ -4,7 +4,7 @@ set -eu
 
 ROOT="$(realpath "$(dirname "$0")/..")"
 
-bazel build //reality/app/xr/js:serve-xr --config=wasmrelease
+./scripts/build-bazel.sh
 
 nvm use desktop
 cd "$ROOT/apps/desktop"

@@ -49,6 +49,7 @@ git_override(
 bazel_dep(name = "rules_java", repo_name = "rules_java", version = "7.6.1")
 bazel_dep(name = "rules_apple", repo_name = "build_bazel_rules_apple", version = "3.1.1")
 bazel_dep(name = "zlib", repo_name = "zlib", version = "1.3")
+bazel_dep(name = "curl", version = "8.8.0")
 
 git_override(
     commit = "04f42ceca40f73e2978b50e93806c2a18c1281fc",
