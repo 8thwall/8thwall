@@ -1,21 +1,5 @@
 // Copyright (c) 2018 8th Wall, Inc.
 // Original Author: Nicholas Butko (nb@8thwall.com)
-/*
-#include "bzl/inliner/rules2.h"
-
-cc_test {
-  size = "small";
-  deps = {
-    ":image-point",
-    "//c8:exceptions",
-    "//reality/quality/datasets:benchmark-dataset",
-    "//third_party/cvlite/features2d:fast",
-    "//third_party/cvlite/features2d:keypoint",
-    "@com_google_benchmark//:benchmark",
-  };
-}
-cc_end(0x5b2efd64);
-*/
 
 #include <benchmark/benchmark.h>
 

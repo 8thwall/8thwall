@@ -6,7 +6,16 @@ build_files=$(
   grep "/BUILD$"
 )
 
-echo "$build_files" | xargs bazel run --run_under="cd $PWD && " //bzl/inlinerjs -- --no-new
+bazel build //bzl/inlinerjs --noshow_progress > /dev/null
+echo "$build_files" | xargs ./bazel-bin/bzl/inlinerjs/inlinerjs --no-new
+
+cc_files=$(
+  git ls-tree -r --name-only HEAD | \
+  grep "\.cc$"
+)
+
+bazel build //bzl/inliner --noshow_progress > /dev/null
+echo "$cc_files" | sort | xargs -n 60 -P 10 ./bazel-bin/bzl/inliner/inliner > /dev/null
 
 if type buildifier &> /dev/null; then
   if buildifier --version | grep "5.1.0"; then

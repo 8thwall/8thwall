@@ -123,9 +123,14 @@ def main(argv):
 
         stdinSourceData = b''
 
+        # NOTE(christoph): If we pass it here, we can re-use across multiple invocations, avoiding
+        # the blocking call in parse-build-rules.sh
+        parse_env = dict(os.environ, WORKSPACE_OVERRIDE = os.getcwd())
+
         if stdinSource:
             parseRulesProc = subprocess.Popen(
                  [PARSE_BUILD_RULES] + sources + ['-stdin'],
+                 env = parse_env,
                  stdin=subprocess.PIPE,
                  stdout=subprocess.PIPE)
             stdinSourceData = sys.stdin.buffer.read()
@@ -135,16 +140,17 @@ def main(argv):
         else:
             inline_rules_output = subprocess.Popen(
                 [PARSE_BUILD_RULES] + sources,
+                env = parse_env,
                 stdout=subprocess.PIPE).stdout.read().decode('utf-8').rstrip()
 
         hashes = HASH_RE.findall(inline_rules_output)
         if len(hashes) != len(sources):
-            print('One or more build rules is missing a hash from parse-build-rules', file=sys.stderr)
+            print("One or more build rules is missing a hash from parse-build-rules [%s]" % build_file_path, file=sys.stderr)
             sys.exit(2)
 
         inline_rules = inline_rules_output.split('\n\n')
         if len(inline_rules) != len(sources):
-            print('One or more build rules is missing output from parse-build-rules', file=sys.stderr)
+            print("One or more build rules is missing output from parse-build-rules [%s]" % build_file_path, file=sys.stderr)
             sys.exit(2)
 
         sourceHashes = dict(zip(sources, hashes))
@@ -195,7 +201,8 @@ def main(argv):
             try:
                 ruleName = re.findall(r'    name = "([\w\.-]+)"', previousRule)[0]
             except IndexError:
-                print("Warning: rule missing 'name' attribute in [%s]" % build_file_path, file=sys.stderr)
+                print("rule missing 'name' attribute in [%s]" % build_file_path, file=sys.stderr)
+                sys.exit(2)
 
             try:
                 ruleFile = re.findall(r'# file: ([\w\.-]+)', previousRule)[0]
@@ -257,11 +264,11 @@ def main(argv):
              build_file.write(START_TAG)
              build_file.write(('\n\n').join(x[1] for x in outputRules))
              build_file.write(END_TAG + '\n')
-             print('Updated %s' % build_file_path, file=sys.stderr)
+             print('Updated %s' % build_file_path)
         else:
              if build_contents:
                  build_file.write(build_contents + '\n')
-             print('Removed autogen rules in %s' % build_file_path, file=sys.stderr)
+             print('Removed autogen rules in %s' % build_file_path)
 
         build_file.truncate()
         build_file.close()
