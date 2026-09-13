@@ -7,7 +7,7 @@
 
 cc_test {
   size = "small";
-  deps = {":lev-event-listener", "//bzl/inliner:rules", "@com_google_googletest//:gtest_main"};
+  deps = {":lev-event-listener", "@com_google_googletest//:gtest_main"};
 }
 cc_end(0x72483bde);
 

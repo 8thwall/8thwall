@@ -14,7 +14,6 @@ cc_library(
         "-fno-strict-aliasing",
     ],
     deps = [
-        "//bzl/inliner:rules",
         "//c8:c8-log",
         "//c8:exceptions",
         "//c8/events:event-listener",

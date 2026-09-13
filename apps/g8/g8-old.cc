@@ -1,42 +1,6 @@
 // Copyright (c) 2019 8th Wall, Inc.
 // Original Author: Erik Murphy-Chutorian (mc@8thwall.com)
 
-#include "bzl/inliner/rules2.h"
-
-cc_library {
-  hdrs = {
-    "g8-old.h",
-  };
-  deps = {
-    ":git-service-factory",
-    ":g8-helpers",
-    ":g8-plumbing",
-    "//c8:c8-log",
-    "//c8:process",
-    "//c8:map",
-    "//c8:set",
-    "//c8:vector",
-    "//c8/git:g8-api.capnp-cc",
-    "//c8/git:g8-git",
-    "//c8/io:capnp-messages",
-    "//c8/io:file-io",
-    "//c8/pixels:base64",
-    "//c8/stats:scope-timer",
-    "//c8/string:format",
-    "//c8/string:join",
-    "//c8/string:split",
-    "//c8/string:strcat",
-    "//c8/string:trim",
-    "@cli11//:cli11",
-    "@json//:json",
-    "@curl//:curl",
-  };
-  linkopts = {
-    "-framework Security",
-  };
-}
-cc_end(0x0980e395);
-
 #include <capnp/pretty-print.h>
 #include <libgen.h>
 #include <unistd.h>

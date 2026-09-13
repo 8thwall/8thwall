@@ -39,7 +39,7 @@
 // the use of this software, even if advised of the possibility of such damage.
 //
 //M*/
-#include "bzl/inliner/rules.h"
+#include "bzl/inliner/rules2.h"
 
 cc_library {
   hdrs = {
@@ -48,7 +48,6 @@ cc_library {
   deps = {
     ":compat-ptsetreg",
     ":fundam",
-    "//bzl/inliner:rules",
     "//third_party/cvlite/core",
     "//third_party/cvlite/imgproc:distortion-model",
     "//third_party/cvlite/imgproc:undistort",
@@ -57,6 +56,7 @@ cc_library {
     "-D__OPENCV_BUILD",
   };
 }
+cc_end(0x9e532ad3);
 
 #include "third_party/cvlite/calib3d/calibration.h"
 

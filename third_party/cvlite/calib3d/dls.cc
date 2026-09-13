@@ -1,17 +1,17 @@
-#include "bzl/inliner/rules.h"
+#include "bzl/inliner/rules2.h"
 
 cc_library {
   hdrs = {
     "dls.h",
   };
   deps = {
-    "//bzl/inliner:rules",
     "//third_party/cvlite/core",
   };
   copts = {
     "-D__OPENCV_BUILD",
   };
 }
+cc_end(0x561249fe);
 
 #include "third_party/cvlite/calib3d/dls.h"
 

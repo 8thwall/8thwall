@@ -8,7 +8,6 @@ cc_library {
     "line3.h",
   };
   deps = {
-    "//bzl/inliner:rules",
     "//c8:hpoint",
     "//c8:vector",
   };

@@ -45,20 +45,20 @@
  // the use of this software, even if advised of the possibility of such damage.
  //
  //M*/
-#include "bzl/inliner/rules.h"
+#include "bzl/inliner/rules2.h"
 
 cc_library {
   hdrs = {
     "homography-decomp.h",
   };
   deps = {
-    "//bzl/inliner:rules",
     "//third_party/cvlite/core",
   };
   copts = {
     "-D__OPENCV_BUILD",
   };
 }
+cc_end(0xef102562);
 
 #include "third_party/cvlite/calib3d/homography-decomp.h"
 

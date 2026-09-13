@@ -1,14 +1,13 @@
 // Copyright (c) 2018 8th Wall, Inc.
 // Original Author: Alvin Portillo (alvin@8thwall.com)
 
-#include "bzl/inliner/rules.h"
+#include "bzl/inliner/rules2.h"
 
 cc_library {
   hdrs = {
     "base-x-encoding.h",
   };
   deps = {
-    "//bzl/inliner:rules",
     "//c8:map",
     "//c8:string",
     "//c8:vector",
@@ -17,6 +16,7 @@ cc_library {
     "//visibility:public",
   };
 }
+cc_end(0x801361ce);
 
 #include <string.h>
 

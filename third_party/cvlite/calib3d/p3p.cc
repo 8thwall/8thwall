@@ -1,4 +1,4 @@
-#include "bzl/inliner/rules.h"
+#include "bzl/inliner/rules2.h"
 
 cc_library {
   hdrs = {
@@ -6,13 +6,13 @@ cc_library {
   };
   deps = {
     ":polynom-solver",
-    "//bzl/inliner:rules",
     "//third_party/cvlite/core",
   };
   copts = {
     "-D__OPENCV_BUILD",
   };
 }
+cc_end(0x037c616d);
 
 #include "third_party/cvlite/calib3d/p3p.h"
 
