@@ -26,7 +26,7 @@ cc_end(0x1ea63e63);
 #include "c8/media/demuxer.h"
 #include "c8/string.h"
 #include "c8/vector.h"
-#include "external/libvpx/tools_common.h"
+#include "tools_common.h"
 
 // Part of the API for libvpx/tools_common.h requires usage_exit to be defined in the file that
 // imports the header.

@@ -14,8 +14,6 @@ cc_library(
         "mDNSShared/dns_sd.h",
     ]),
     copts = [
-        "-Iexternal/androidmdnsresponder/mDNSCore",
-        "-Iexternal/androidmdnsresponder/mDNSPosix",
         "-D_GNU_SOURCE",
         "-DHAVE_IPV6",
         "-DHAVE_LINUX",
@@ -37,7 +35,11 @@ cc_library(
         "-Werror=implicit-function-declaration",
         "-Wno-pedantic",
     ],
-    includes = ["mDNSShared"],
+    includes = [
+        "mDNSCore",
+        "mDNSPosix",
+        "mDNSShared",
+    ],
     linkopts = [
         "-llog",
     ],

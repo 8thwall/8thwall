@@ -10,9 +10,8 @@ cc_library {
     "//c8/stats:scope-timer",
     "@libgit2//:libgit2",
   };
-  copts = {"-Iexternal/libgit2/src"};
 }
-cc_end(0x56f418ab);
+cc_end(0xe72f4623);
 
 // #include <capnp/pretty-print.h>
 #include <git2.h>

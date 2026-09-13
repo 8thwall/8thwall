@@ -59,9 +59,6 @@ cc_library(
     srcs = [
         "api-blobs.cc",
     ],
-    copts = [
-        "-Iexternal/libgit2/src",
-    ],
     visibility = [
         "//visibility:private",
     ],
@@ -81,7 +78,7 @@ cc_library(
         "@libgit2",
     ],
 )
-# cc_end(0xd5bfeb64)
+# cc_end(0xedfc5499)
 
 # file: api-common-remote-test.cc
 cc_test(
@@ -111,9 +108,6 @@ cc_library(
     hdrs = [
         "api-common.h",
     ],
-    copts = [
-        "-Iexternal/libgit2/src",
-    ],
     visibility = [
         "//c8/git:internal",
     ],
@@ -131,7 +125,7 @@ cc_library(
         "@libgit2",
     ],
 )
-# cc_end(0xc7c347e6)
+# cc_end(0x2414c7be)
 
 # file: api-diff.cc
 cc_library(
@@ -139,9 +133,6 @@ cc_library(
     srcs = [
         "api-diff.cc",
     ],
-    copts = [
-        "-Iexternal/libgit2/src",
-    ],
     visibility = [
         "//visibility:private",
     ],
@@ -161,7 +152,7 @@ cc_library(
         "@libgit2",
     ],
 )
-# cc_end(0xc44e3519)
+# cc_end(0x29d22669)
 
 # file: api-files.cc
 cc_library(
@@ -169,9 +160,6 @@ cc_library(
     srcs = [
         "api-files.cc",
     ],
-    copts = [
-        "-Iexternal/libgit2/src",
-    ],
     visibility = [
         "//visibility:private",
     ],
@@ -191,7 +179,7 @@ cc_library(
         "@libgit2",
     ],
 )
-# cc_end(0x5b7ef7ea)
+# cc_end(0xd03aa379)
 
 # file: api-inspect.cc
 cc_library(
@@ -199,9 +187,6 @@ cc_library(
     srcs = [
         "api-inspect.cc",
     ],
-    copts = [
-        "-Iexternal/libgit2/src",
-    ],
     visibility = [
         "//visibility:private",
     ],
@@ -217,16 +202,13 @@ cc_library(
         "@libgit2",
     ],
 )
-# cc_end(0x0bc86e0b)
+# cc_end(0x473967d7)
 
 # file: api-repository.cc
 cc_library(
     name = "api-repository",
     srcs = [
         "api-repository.cc",
-    ],
-    copts = [
-        "-Iexternal/libgit2/src",
     ],
     visibility = [
         "//visibility:private",
@@ -247,7 +229,7 @@ cc_library(
         "@libgit2",
     ],
 )
-# cc_end(0x8e0ec781)
+# cc_end(0x685ebbef)
 
 # file: filters.cc
 cc_library(
@@ -257,9 +239,6 @@ cc_library(
     ],
     hdrs = [
         "filters.h",
-    ],
-    copts = [
-        "-Iexternal/libgit2/src",
     ],
     visibility = [
         "//visibility:private",
@@ -274,7 +253,7 @@ cc_library(
         "@libgit2",
     ],
 )
-# cc_end(0x6f9d5a83)
+# cc_end(0xbe9d4bc9)
 
 # file: g8-git-js.cc
 cc_binary(
@@ -403,9 +382,6 @@ cc_library(
     hdrs = [
         "hooks.h",
     ],
-    copts = [
-        "-Iexternal/libgit2/src",
-    ],
     visibility = [
         "//c8/git:internal",
     ],
@@ -417,7 +393,7 @@ cc_library(
         "@libgit2",
     ],
 )
-# cc_end(0x0a793e94)
+# cc_end(0xd742a306)
 
 # file: pkt-test.cc
 cc_test(

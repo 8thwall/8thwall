@@ -1,5 +1,3 @@
-load("//bzl/android:android.bzl", "android_java_library")
-
 package(default_visibility = ["//visibility:public"])
 
 cc_library(
@@ -27,25 +25,6 @@ cc_library(
         "//conditions:default": [],
     }),
 )
-
-android_java_library(
-    name = "android-network-util",
-    srcs = [
-        "NetworkUtil.java",
-    ],
-)
-
-# android_test(
-#     name = "android-network-util-test",
-#     srcs = [
-#         "NetworkUtilTest.java",
-#     ],
-#     test_class = "com.the8thwall.c8.network.NetworkUtilTest",
-#     deps = [
-#         ":android-network-util-java",
-#         "@mockito//jar",
-#     ],
-# )
 
 cc_library(
     name = "fetch",

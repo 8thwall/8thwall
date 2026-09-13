@@ -11,9 +11,8 @@ cc_library {
     "//c8/git:api-common",
     "//c8/stats:scope-timer",
   };
-  copts = {"-Iexternal/libgit2/src"};
 }
-cc_end(0xd7a074f0);
+cc_end(0x0aae461f);
 
 #include "c8/git/api-common.h"
 #include "c8/stats/scope-timer.h"

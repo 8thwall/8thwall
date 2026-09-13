@@ -15,6 +15,7 @@ def xcode_app_impl(ctx, app_name, project_info, device, apple_export_options, sc
 
     # Specific Xcode DEVELOPER_DIR used to build apps (optional)
     developer_dir = ctx.attr._xcode_app_developer_dir[BuildSettingInfo].value
+    xcpretty_path = [f.path for f in xcpretty_files if f.path.endswith("/bin/xcpretty")][0]
 
     bundle_id = get_bundle_id(app_name)
     outputs = []
@@ -140,7 +141,7 @@ def xcode_app_impl(ctx, app_name, project_info, device, apple_export_options, sc
             outputs = [xcode_archive_out],
             env = _developer_dir_wrapper(
                 {
-                    "XCPRETTY": "external/xcpretty/bin/xcpretty",
+                    "XCPRETTY": xcpretty_path,
                     "XCARCHIVE_PATH": xcode_archive_out.path,
                 },
                 developer_dir,
@@ -161,7 +162,7 @@ def xcode_app_impl(ctx, app_name, project_info, device, apple_export_options, sc
             outputs = [app_output],
             env = _developer_dir_wrapper(
                 {
-                    "XCPRETTY": "external/xcpretty/bin/xcpretty",
+                    "XCPRETTY": xcpretty_path,
                     "XCARCHIVE_PATH": xcode_archive_out.path,
                     "EXPORT_OPTIONS_PLIST_PATH": apple_export_options_plist_path,
                     "APP_OUTPUT_DIR": app_output.dirname,
@@ -181,7 +182,7 @@ def xcode_app_impl(ctx, app_name, project_info, device, apple_export_options, sc
             outputs = [app_output],
             env = _developer_dir_wrapper(
                 {
-                    "XCPRETTY": "external/xcpretty/bin/xcpretty",
+                    "XCPRETTY": xcpretty_path,
                     "XCODE_SRCROOT": project_info.xcodeproj.dirname,
                     "PRODUCT_NAME": app_name,
                     "APP_OUTPUT": app_output.path,

@@ -220,10 +220,6 @@ cc_library(
     hdrs = [
         "tools_common.h",
     ],
-    copts = [
-        "-Iexternal/libvpx",
-        "-Iexternal/libvpx/third_party/libyuv/include",
-    ],
     includes = [
         ".",
     ] + select({

@@ -18,8 +18,6 @@ cc_library(
         "mDNSShared/dns_sd.h",
     ]),
     copts = [
-        "-Iexternal/androidmdnsresponder/mDNSCore",
-        "-Iexternal/androidmdnsresponder/mDNSWindows",
         "-DHAVE_IPV6",
         "-DNOT_HAVE_SA_LEN",
         "-DPLATFORM_NO_RLIMIT",
@@ -40,7 +38,11 @@ cc_library(
         "-Werror=implicit-function-declaration",
         "-Wno-pedantic",
     ],
-    includes = ["mDNSShared"],
+    includes = [
+        "mDNSCore",
+        "mDNSShared",
+        "mDNSWindows",
+    ],
     linkopts = onWindows(["-lWs2_32"]),
     visibility = ["//visibility:public"],
     deps = [],

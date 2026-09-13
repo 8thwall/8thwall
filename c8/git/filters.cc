@@ -17,9 +17,8 @@ cc_library {
     "//c8/string:format",
     "@libgit2//:libgit2",
   };
-  copts = {"-Iexternal/libgit2/src"};
 }
-cc_end(0x6f9d5a83);
+cc_end(0xbe9d4bc9);
 
 #include <git2.h>
 #include <git2/sparse.h>

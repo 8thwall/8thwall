@@ -200,12 +200,420 @@ bazel_dep(name = "bazel_skylib", version = "1.7.1")
 bazel_dep(name = "grpc-java", version = "1.64.0")
 bazel_dep(name = "grpc", repo_name = "com_github_grpc_grpc", version = "1.56.3.bcr.1")
 
+http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+local_repository = use_repo_rule("@bazel_tools//tools/build_defs/repo:local.bzl", "local_repository")
+
+local_repository(
+    name = "remote_coverage_tools",
+    path = "third_party/remote_coverage_tools",
+)
+
+http_archive(
+    name = "vulkan_headers",
+    build_file = "//bzl/thirdpartybuild:vulkan-headers.BUILD",
+    sha256 = "45a8c99f867a686b85bbb6fa460dad41840ecfa1ca111a29f044387f47308dce",
+    strip_prefix = "Vulkan-Headers-1.3.296",
+    url = "https://github.com/KhronosGroup/Vulkan-Headers/archive/refs/tags/v1.3.296.zip",
+)
+
+http_archive(
+    name = "com_google_benchmark",
+    build_file = "//bzl/thirdpartybuild:benchmark.BUILD",
+    sha256 = "3aff99169fa8bdee356eaa1f691e835a6e57b1efeadb8a0f9f228531158246ac",
+    strip_prefix = "benchmark-1.7.0",
+    url = "https://github.com/google/benchmark/archive/refs/tags/v1.7.0.tar.gz",
+)
+
+http_archive(
+    name = "node-addon-api",
+    build_file = "//bzl/thirdpartybuild:node-addon-api.BUILD",
+    sha256 = "10223967fb13567b271639b530c6b13276bced48b57eea9d7c3e172f72cfee92",
+    strip_prefix = "node-addon-api-7.0.0",
+    url = "https://github.com/nodejs/node-addon-api/archive/refs/tags/v7.0.0.zip",
+)
+
+http_archive(
+    name = "org_brotli",
+    sha256 = "84a9a68ada813a59db94d83ea10c54155f1d34399baf377842ff3ab9b3b3256e",
+    strip_prefix = "brotli-3914999fcc1fda92e750ef9190aa6db9bf7bdb07",
+    url = "https://github.com/google/brotli/archive/3914999fcc1fda92e750ef9190aa6db9bf7bdb07.zip",
+)
+
+http_archive(
+    name = "eigen3",
+    build_file = "//bzl/thirdpartybuild:eigen3.BUILD",
+    patches = [
+        "//third_party/eigen3:TriangularSolver.h.patch",
+    ],
+    sha256 = "8586084f71f9bde545ee7fa6d00288b264a2b7ac3607b974e54d13e7162c1c72",
+    strip_prefix = "eigen-3.4.0",
+    url = "https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.tar.gz",
+)
+
+http_archive(
+    name = "giflib",
+    build_file = "//bzl/thirdpartybuild:giflib.BUILD",
+    sha256 = "be7ffbd057cadebe2aa144542fd90c6838c6a083b5e8a9048b8ee3b66b29d5fb",
+    strip_prefix = "giflib-5.2.2",
+    url = "https://huggingface.co/datasets/8thWall/bazel-dependencies/resolve/main/giflib/giflib-5.2.2.tar.gz",
+)
+
+http_archive(
+    name = "cli11",
+    build_file = "//bzl/thirdpartybuild:cli11.BUILD",
+    sha256 = "562c4be7507dc6fb4997ecd648bf935d84efe17b54715fa5cfbddac05279f668",
+    strip_prefix = "CLI11-2.3.2",
+    url = "https://github.com/CLIUtils/CLI11/archive/refs/tags/v2.3.2.zip",
+)
+
+http_archive(
+    name = "mono-macosx",
+    build_file = "//bzl/thirdpartybuild:mono.BUILD",
+    sha256 = "8d569e7dc07207a3e008b3756bb1f10a93a720e325dcf559e6e0e5a449b94421",
+    strip_prefix = "Mono.framework/Versions/6.12.0",
+    url = "https://huggingface.co/datasets/8thWall/bazel-dependencies/resolve/main/mono/Mono.framework-6.12.0-macosx-x86_64.tar",
+)
+
+http_archive(
+    name = "zstd",
+    build_file = "//bzl/thirdpartybuild:zstd.BUILD",
+    sha256 = "30f35f71c1203369dc979ecde0400ffea93c27391bfd2ac5a9715d2173d92ff7",
+    strip_prefix = "zstd-1.5.6",
+    url = "https://github.com/facebook/zstd/archive/refs/tags/v1.5.6.tar.gz",
+)
+
+http_archive(
+    name = "spz",
+    build_file = "//bzl/thirdpartybuild:spz.BUILD",
+    sha256 = "266c144fddb87f428495bbe1e44748fc3f1e5bfaa9e354a5d0d0284c4f8946cc",
+    strip_prefix = "spz-3.0.0",
+    url = "https://github.com/nianticlabs/spz/archive/refs/tags/v3.0.0.tar.gz",
+)
+
+http_archive(
+    name = "com_google_googletest",
+    patch_args = ["-p1"],
+    patches = [
+        "//third_party/googletest:googletest-1.14.0-wasm_support.patch",
+    ],
+    sha256 = "8ad598c73ad796e0d8280b082cebd82a630d73e73cd3c70057938a6501bba5d7",
+    strip_prefix = "googletest-1.14.0",
+    urls = [
+        "https://github.com/google/googletest/archive/refs/tags/v1.14.0.tar.gz",
+    ],
+)
+
+git_repository = use_repo_rule("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
+
+git_repository(
+    name = "miniaudio",
+    build_file = "//bzl/thirdpartybuild:miniaudio.BUILD",
+    commit = "4a5b74bef029b3592c54b6048650ee5f972c1a48",  # v0.11.21
+    remote = "https://github.com/mackron/miniaudio.git",
+    shallow_since = "1700011380 +1000",
+)
+
+git_repository(
+    name = "com_github_gflags_gflags",
+    commit = "986e8eed00ded8168ef4eaa6f925dc6be50b40fa",
+    remote = "https://github.com/gflags/gflags",
+    shallow_since = "1641684284 +0000",
+)
+
+git_repository(
+    name = "fmt",
+    commit = "a33701196adfad74917046096bf5a2aa0ab0bb50",
+    patch_cmds = [
+        "mv support/bazel/.bazelrc .bazelrc",
+        "mv support/bazel/.bazelversion .bazelversion",
+        "mv support/bazel/BUILD.bazel BUILD.bazel",
+        "mv support/bazel/WORKSPACE.bazel WORKSPACE.bazel",
+    ],
+    patch_cmds_win = [
+        "Move-Item -Path support/bazel/.bazelrc -Destination .bazelrc",
+        "Move-Item -Path support/bazel/.bazelversion -Destination .bazelversion",
+        "Move-Item -Path support/bazel/BUILD.bazel -Destination BUILD.bazel",
+        "Move-Item -Path support/bazel/WORKSPACE.bazel -Destination WORKSPACE.bazel",
+    ],
+    remote = "https://github.com/fmtlib/fmt",
+)
+
+new_git_repository = use_repo_rule("@bazel_tools//tools/build_defs/repo:git.bzl", "new_git_repository")
+
+new_git_repository(
+    name = "flecs",
+    build_file = "//bzl/thirdpartybuild:flecs.BUILD",
+    commit = "bf9ec9f8aecd987bee63e6c0af4164c7be14b42f",  # https://github.com/SanderMertens/flecs/releases/tag/v4.0.2
+    remote = "https://github.com/SanderMertens/flecs.git",
+    shallow_since = "1727187792 -0700",
+)
+
+new_git_repository(
+    name = "joltphysics",
+    build_file = "//bzl/thirdpartybuild:joltphysics.BUILD",
+    commit = "0373ec0dd762e4bc2f6acdb08371ee84fa23c6db",  #  v5.3.0
+    remote = "https://github.com/jrouwe/JoltPhysics.git",
+    shallow_since = "1742071981 +0100",
+)
+
+new_git_repository(
+    name = "sophus",
+    build_file = "//bzl/thirdpartybuild:sophus.BUILD",
+    commit = "de0f8d3d92bf776271e16de56d1803940ebccab9",  # 1.22.10
+    remote = "https://github.com/strasdat/Sophus.git",
+    shallow_since = "1675598033 -0800",
+)
+
+new_git_repository(
+    name = "json",
+    build_file = "//bzl/thirdpartybuild:json.BUILD",
+    commit = "4f8fba14066156b73f1189a2b8bd568bde5284c5",
+    remote = "https://github.com/nlohmann/json.git",
+    shallow_since = "1641188409 +0100",
+)
+
+new_git_repository(
+    name = "spirv_cross",
+    build_file = "//bzl/thirdpartybuild:spirv-cross.BUILD",
+    commit = "61c603f3baa5270e04bcfb6acf83c654e3c57679",
+    remote = "https://github.com/KhronosGroup/SPIRV-Cross.git",
+    shallow_since = "1660048855 +0200",
+)
+
+new_git_repository(
+    name = "capnproto_python",
+    build_file = "//bzl/thirdpartybuild:capnproto_python.BUILD",
+    commit = "b3ab9ab2a6eeb493ee2fe1d61a09a933828145c7",
+    remote = "https://github.com/jparyani/pycapnp.git",
+    shallow_since = "1501210794 -0700",
+)
+
+new_git_repository(
+    name = "kissfftlib",
+    build_file = "//bzl/thirdpartybuild:kissfft.BUILD",
+    commit = "8f47a67f595a6641c566087bf5277034be64f24d",
+    remote = "https://github.com/mborgerding/kissfft.git",
+    shallow_since = "1612920557 -0500",
+)
+
+new_git_repository(
+    name = "draco",
+    build_file = "//bzl/thirdpartybuild:draco.BUILD",
+    commit = "bd1e8de7dd0596c2cbe5929cbe1f5d2257cd33db",
+    remote = "https://github.com/google/draco.git",
+    shallow_since = "1645135565 -0800",
+)
+
+new_git_repository(
+    name = "libmp4v2",
+    build_file = "//bzl/thirdpartybuild:libmp4v2.BUILD",
+    commit = "b0e3019fb301362dedd376ba3f4fb7263b277c11",
+    remote = "https://github.com/8thwall/libmp4v2",
+    shallow_since = "1589395781 -0700",
+)
+
+new_git_repository(
+    name = "libjpegturbo",
+    build_file = "//bzl/thirdpartybuild:libjpegturbo.BUILD",
+    commit = "9171fd4bdef0f3aecba61413b858b1766bbad8d5",
+    patch_args = ["-p1"],
+    patches = [
+        "//third_party/libjpegturbo:turbojpeg.c.patch",
+    ],
+    remote = "https://github.com/libjpeg-turbo/libjpeg-turbo.git",
+    shallow_since = "1651080868 -0500",
+)
+
+new_git_repository(
+    name = "capnproto",
+    build_file = "//bzl/thirdpartybuild:capnproto.BUILD",
+    commit = "c3c2655f6d6efeb93ae6b3ea718eecd00b72f5d0",
+    remote = "https://github.com/8thwall/capnproto.git",
+    shallow_since = "1699486035 -0800",
+)
+
+new_git_repository(
+    name = "capnproto_java",
+    build_file = "//bzl/thirdpartybuild:capnproto_java.BUILD",
+    commit = "be364f41c66b8c41484e0cb5bc25f726613cc04a",
+    remote = "https://github.com/dwrensha/capnproto-java",
+    shallow_since = "1488309561 -0500",
+)
+
+new_git_repository(
+    name = "ceres",
+    build_file = "//bzl/thirdpartybuild:ceres.BUILD",
+    commit = "2b32b321242b32f6364108694e0069f87e56326c",
+    remote = "https://github.com/ceres-solver/ceres-solver",
+    shallow_since = "1613587123 +0000",
+)
+
+new_git_repository(
+    name = "ceres2",
+    build_file = "//bzl/thirdpartybuild:ceres2.BUILD",
+    commit = "fd6197ce0ef5794bba455fe6f907dcdabcf624eb",
+    remote = "https://github.com/ceres-solver/ceres-solver",
+    shallow_since = "1686411471 +0200",
+)
+
+new_git_repository(
+    name = "png",
+    build_file = "//bzl/thirdpartybuild:png.BUILD",
+    commit = "eddf9023206dc40974c26f589ee2ad63a4227a1e",
+    remote = "https://github.com/glennrp/libpng.git",
+    shallow_since = "1543674960 -0500",
+)
+
+new_git_repository(
+    name = "tinygltf",
+    build_file = "//bzl/thirdpartybuild:tinygltf.BUILD",
+    commit = "e0b393c6958c0a7cbe134a240fad7915aae53db3",
+    remote = "https://github.com/syoyo/tinygltf.git",
+    shallow_since = "1694518115 +0900",
+)
+
+new_git_repository(
+    name = "zlib-chromium",
+    build_file = "//bzl/thirdpartybuild:zlib-chromium.BUILD",
+    commit = "f5fd0ad2663e239a31184ad4c9919991dda16f46",
+    remote = "https://chromium.googlesource.com/chromium/src/third_party/zlib",
+    shallow_since = "1691776355 -0700",
+)
+
+new_git_repository(
+    name = "libevent",
+    build_file = "//third_party/libevent:libevent.BUILD",
+    commit = "e7ff4ef2b4fc950a765008c18e74281cdb5e7668",
+    remote = "https://github.com/libevent/libevent",
+    shallow_since = "1485387435 +0300",
+)
+
+http_archive(
+    name = "org_freetype_freetype2",
+    build_file = "//bzl/thirdpartybuild:freetype2.BUILD",
+    sha256 = "e09aa914e4f7a5d723ac381420949c55c0b90b15744adce5d1406046022186ab",
+    strip_prefix = "freetype-2.10.2",
+    urls = [
+        "http://download.savannah.gnu.org/releases/freetype/freetype-2.10.2.tar.gz",
+        "https://sourceforge.net/projects/freetype/files/freetype2/2.10.2/freetype-2.10.2.tar.gz",
+    ],
+)
+
+http_archive(
+    name = "mdnsresponder",
+    build_file = "//bzl/thirdpartybuild:mdnsresponder.BUILD",
+    patches = ["//third_party/mdnsresponder:dllmain.c.patch"],
+    sha256 = "75d66beadae8a64a5d30986afe45259b73b03bc6f4cb1b64acca7079cf11e056",
+    strip_prefix = "mDNSResponder-mDNSResponder-765.50.9",
+    url = "https://opensource.apple.com/tarballs/mDNSResponder/mDNSResponder-765.50.9.tar.gz",
+)
+
+new_git_repository(
+    name = "libyuv",
+    build_file = "//bzl/thirdpartybuild:libyuv.BUILD",
+    commit = "de71c67e53d79190b5b7cc760ade9027855dd945",
+    remote = "https://chromium.googlesource.com/libyuv/libyuv",
+    shallow_since = "1651045085 +0000",
+)
+
+new_git_repository(
+    name = "xcpretty",
+    build_file_content = """
+filegroup(
+    name = 'xcpretty',
+    srcs = glob(
+        include=['**'],
+        exclude=['features/assets/**'],
+    ),
+    visibility = ["//visibility:public"],
+)""",
+    commit = "fb3afc6f4495fa89c2dcb351b274eacb74595285",
+    remote = "https://github.com/supermarin/xcpretty.git",
+    shallow_since = "1476195465 -0700",
+)
+
+new_git_repository(
+    name = "opencv",
+    build_file = "//bzl/thirdpartybuild:opencv.BUILD",
+    commit = "70bbf17b133496bd7d54d034b0f94bd869e0e810",
+    remote = "https://github.com/opencv/opencv",
+    shallow_since = "1482497684 +0300",
+)
+
+new_git_repository(
+    name = "libgit2",
+    build_file = "//bzl/thirdpartybuild:libgit2.BUILD",
+    commit = "78fde8cde56492d464575e3bf289056c8289cec8",
+    remote = "https://github.com/8thwall/libgit2.git",
+    shallow_since = "1731372343 -0800",
+)
+
+new_git_repository(
+    name = "androidmdnsresponder",
+    build_file = "//bzl/thirdpartybuild:androidmdnsresponder.BUILD",
+    commit = "85d33e8312069bc5b3d0e307589e0919922e687c",
+    remote = "https://android.googlesource.com/platform/external/mdnsresponder",
+    shallow_since = "1507706791 +0000",
+)
+
+new_git_repository(
+    name = "opus",
+    build_file = "//bzl/thirdpartybuild:opus.BUILD",
+    commit = "d633f523e36e3b6d01cc6d57386458d770d618be",
+    remote = "https://github.com/xiph/opus.git",
+    shallow_since = "1611443214 -0800",
+)
+
+new_git_repository(
+    name = "libwebm",
+    build_file = "//bzl/thirdpartybuild:libwebm.BUILD",
+    commit = "485fb67b324aec5298765e899dc054459d3946e5",
+    remote = "https://chromium.googlesource.com/webm/libwebm",
+    shallow_since = "1606261220 +0000",
+)
+
+new_git_repository(
+    name = "libvpx",
+    build_file = "//bzl/thirdpartybuild:libvpx.BUILD",
+    commit = "0d8354669ac525a27c78bc8c761e98e0f8c3905c",
+    patches = ["//third_party/libvpx:config.patch"],
+    remote = "https://chromium.googlesource.com/webm/libvpx",
+    shallow_since = "1612419145 -0800",
+)
+
+new_git_repository(
+    name = "openh264",
+    build_file = "//bzl/thirdpartybuild:openh264.BUILD",
+    commit = "22a46624f3b5c88e017ae5fb78f7a66e06bfccb9",
+    remote = "https://github.com/8thwall/openh264",
+    shallow_since = "1612314198 -0800",
+)
+
+new_git_repository(
+    name = "fdkaac",
+    build_file = "//bzl/thirdpartybuild:fdkaac.BUILD",
+    commit = "573e93e4d0d08127dd3b2297a0ce52221527d90a",
+    patches = [
+        "//third_party/fdk-aac:FDK_archdef.h.patch",
+        "//third_party/fdk-aac:FDK_lpp_tran.cpp.patch",
+    ],
+    remote = "https://github.com/mstorsjo/fdk-aac",
+    shallow_since = "1629788404 +0300",
+)
+
 http_file = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_file")
 
 http_file(
     name = "android-bundle-tool",
     sha256 = "45881ead13388872d82c4255b195488b7fc33f2cac5a9a977b0afc5e92367592",
     url = "https://github.com/google/bundletool/releases/download/1.17.1/bundletool-all-1.17.1.jar",
+)
+
+http_file(
+    name = "android-manifest-merger",
+    sha256 = "4e06d2f8b545741847495f4cfdd14eb8ccf42eb21241e8be0387759ce074c415",
+    url = "https://huggingface.co/datasets/8thWall/bazel-dependencies/resolve/main/android-manifest-merger/android-manifest-merger-31.5.2.jar",
 )
 
 http_jar = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_jar")

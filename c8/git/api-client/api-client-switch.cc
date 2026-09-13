@@ -16,9 +16,8 @@ cc_library {
     "//c8:c8-log",
     "@libgit2//:libgit2",
   };
-  copts = {"-Iexternal/libgit2/src"};
 }
-cc_end(0x3dc789f5);
+cc_end(0xc70b6fe8);
 
 #include <git2.h>
 #include <git2/oid.h>

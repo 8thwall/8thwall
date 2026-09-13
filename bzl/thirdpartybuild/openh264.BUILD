@@ -6,10 +6,6 @@ cc_library(
         ":public-headers",
     ],
     copts = [
-        "-Iexternal/openh264/codec/processing/interface",
-        "-Iexternal/openh264/codec/decoder/core/inc",
-        "-Iexternal/openh264/codec/encoder/core/inc",
-        "-Iexternal/openh264/codec/common/inc",
     ] + select({
         "@the8thwall//bzl/conditions:wasm": [
             "-DNO_PTHREADS",
@@ -17,6 +13,10 @@ cc_library(
         "//conditions:default": [],
     }),
     includes = [
+        "codec/common/inc",
+        "codec/decoder/core/inc",
+        "codec/encoder/core/inc",
+        "codec/processing/interface",
         "include",
     ],
     visibility = ["//visibility:public"],
@@ -53,15 +53,16 @@ cc_library(
         "codec/common/inc/*.h",
         "codec/api/svc/*.h",
     ]),
-    copts = [
-        "-Iexternal/openh264/codec/api/svc",
-        "-Iexternal/openh264/codec/common/inc",
-    ] + select({
+    copts = select({
         "@the8thwall//bzl/conditions:wasm": [
             "-DNO_PTHREADS",
         ],
         "//conditions:default": [],
     }),
+    includes = [
+        "codec/api/svc",
+        "codec/common/inc",
+    ],
     visibility = ["//visibility:private"],
 )
 
@@ -92,17 +93,18 @@ cc_library(
     hdrs = glob([
         "codec/processing/interface/*.h",
     ]),
-    copts = [
-        "-Iexternal/openh264/codec/processing/interface",
-        "-Iexternal/openh264/codec/processing/src/common",
-        "-Iexternal/openh264/codec/api/svc",
-        "-Iexternal/openh264/codec/common/inc",
-    ] + select({
+    copts = select({
         "@the8thwall//bzl/conditions:wasm": [
             "-DNO_PTHREADS",
         ],
         "//conditions:default": [],
     }),
+    includes = [
+        "codec/api/svc",
+        "codec/common/inc",
+        "codec/processing/interface",
+        "codec/processing/src/common",
+    ],
     visibility = ["//visibility:private"],
     deps = [
         ":common",
@@ -117,18 +119,19 @@ cc_library(
         "codec/encoder/plus/src/welsEncoderExt.cpp",
         "codec/encoder/plus/inc/*.h",
     ]),
-    copts = [
-        "-Iexternal/openh264/codec/api/svc",
-        "-Iexternal/openh264/codec/encoder/core/inc",
-        "-Iexternal/openh264/codec/encoder/plus/inc",
-        "-Iexternal/openh264/codec/common/inc",
-        "-Iexternal/openh264/codec/processing/interface",
-    ] + select({
+    copts = select({
         "@the8thwall//bzl/conditions:wasm": [
             "-DNO_PTHREADS",
         ],
         "//conditions:default": [],
     }),
+    includes = [
+        "codec/api/svc",
+        "codec/common/inc",
+        "codec/encoder/core/inc",
+        "codec/encoder/plus/inc",
+        "codec/processing/interface",
+    ],
     visibility = ["//visibility:private"],
     deps = [
         ":common",
@@ -144,18 +147,19 @@ cc_library(
         "codec/decoder/plus/src/welsDecoderExt.cpp",
         "codec/decoder/plus/inc/*.h",
     ]),
-    copts = [
-        "-Iexternal/openh264/codec/api/svc",
-        "-Iexternal/openh264/codec/decoder/core/inc",
-        "-Iexternal/openh264/codec/decoder/plus/inc",
-        "-Iexternal/openh264/codec/common/inc",
-        "-Iexternal/openh264/codec/processing/interface",
-    ] + select({
+    copts = select({
         "@the8thwall//bzl/conditions:wasm": [
             "-DNO_PTHREADS",
         ],
         "//conditions:default": [],
     }),
+    includes = [
+        "codec/api/svc",
+        "codec/common/inc",
+        "codec/decoder/core/inc",
+        "codec/decoder/plus/inc",
+        "codec/processing/interface",
+    ],
     visibility = ["//visibility:private"],
     deps = [
         ":common",

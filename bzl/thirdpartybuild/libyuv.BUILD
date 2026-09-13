@@ -8,9 +8,6 @@ cc_library(
         "include/libyuv.h",
         "include/libyuv/*.h",
     ]),
-    copts = [
-        "-Iexternal/libvpx/third_party/libyuv/include",
-    ],
     includes = [
         "include",
     ],
