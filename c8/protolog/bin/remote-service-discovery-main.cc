@@ -1,15 +1,15 @@
 // Copyright (c) 2018 8th Wall, Inc.
 // Original Author: Nicholas Butko (nb@8thwall.com)
 
-#include "bzl/inliner/rules.h"
+#include "bzl/inliner/rules2.h"
 
 cc_binary {
   deps = {
-    "//bzl/inliner:rules",
     "//c8:c8-log",
     "//c8/protolog:remote-service-discovery",
   };
 }
+cc_end(0xe8d6ee79);
 
 #include <iostream>
 #include "c8/c8-log.h"

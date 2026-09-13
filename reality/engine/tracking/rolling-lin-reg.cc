@@ -1,14 +1,14 @@
 // Copyright (c) 2017 8th Wall, Inc.
 // Original Author: Scott Pollack (scott@8thwall.com)
 
-#include "bzl/inliner/rules.h"
+#include "bzl/inliner/rules2.h"
 
 cc_library {
   hdrs = {"rolling-lin-reg.h"};
   deps = {
-    "//bzl/inliner:rules",
   };
 }
+cc_end(0x4a756668);
 
 #include <iostream>
 

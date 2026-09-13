@@ -77,25 +77,6 @@ cc_library(
 )
 # cc_end(0xad24a444)
 
-cc_library(
-    name = "base-x-encoding",
-    srcs = [
-        "base-x-encoding.cc",
-    ],
-    hdrs = [
-        "base-x-encoding.h",
-    ],
-    visibility = [
-        "//visibility:public",
-    ],
-    deps = [
-        "//bzl/inliner:rules",
-        "//c8:map",
-        "//c8:string",
-        "//c8:vector",
-    ],
-)
-
 # file: base-x-encoding-test.cc
 cc_test(
     name = "base-x-encoding-test",
@@ -112,22 +93,26 @@ cc_test(
 )
 # cc_end(0xe5b1d6f3)
 
+# file: base-x-encoding.cc
 cc_library(
-    name = "capnp-messages",
+    name = "base-x-encoding",
     srcs = [
-        "capnp-messages.cc",
+        "base-x-encoding.cc",
     ],
     hdrs = [
-        "capnp-messages.h",
+        "base-x-encoding.h",
     ],
     visibility = [
         "//visibility:public",
     ],
     deps = [
-        "//bzl/inliner:rules",
-        "@capnproto//:capnp-lib",
+        "//bzl/inliner:rules2",
+        "//c8:map",
+        "//c8:string",
+        "//c8:vector",
     ],
 )
+# cc_end(0x801361ce)
 
 # file: capnp-messages-test.cc
 cc_test(
@@ -144,6 +129,25 @@ cc_test(
     ],
 )
 # cc_end(0x6e8f52f7)
+
+# file: capnp-messages.cc
+cc_library(
+    name = "capnp-messages",
+    srcs = [
+        "capnp-messages.cc",
+    ],
+    hdrs = [
+        "capnp-messages.h",
+    ],
+    visibility = [
+        "//visibility:public",
+    ],
+    deps = [
+        "//bzl/inliner:rules2",
+        "@capnproto//:capnp-lib",
+    ],
+)
+# cc_end(0xd1c291cb)
 
 # file: compress-test.cc
 cc_test(
@@ -324,6 +328,7 @@ cc_library(
 )
 # cc_end(0xfe753c31)
 
+# file: kj-event-loop.cc
 cc_library(
     name = "kj-event-loop",
     srcs = [
@@ -336,11 +341,12 @@ cc_library(
         "//visibility:public",
     ],
     deps = [
-        "//bzl/inliner:rules",
+        "//bzl/inliner:rules2",
         "//c8:exceptions",
         "@capnproto//:kj",
     ],
 )
+# cc_end(0x5c3fe708)
 
 # file: mime-sniff-test.cc
 cc_test(

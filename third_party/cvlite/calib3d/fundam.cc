@@ -39,7 +39,7 @@
 // the use of this software, even if advised of the possibility of such damage.
 //
 //M*/
-#include "bzl/inliner/rules.h"
+#include "bzl/inliner/rules2.h"
 
 cc_library {
   hdrs = {
@@ -50,13 +50,13 @@ cc_library {
     ":levmarq",
     ":ptsetreg",
     ":rho",
-    "//bzl/inliner:rules",
     "//third_party/cvlite/core",
   };
   copts = {
     "-D__OPENCV_BUILD",
   };
 }
+cc_end(0xe9546fde);
 
 #include "third_party/cvlite/calib3d/fundam.h"
 

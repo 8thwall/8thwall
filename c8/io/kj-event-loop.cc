@@ -1,14 +1,13 @@
 // Copyright (c) 2018 8th Wall, Inc.
 // Original Author: Nicholas Butko (nb@8thwall.com)
 
-#include "bzl/inliner/rules.h"
+#include "bzl/inliner/rules2.h"
 
 cc_library {
   hdrs = {
     "kj-event-loop.h",
   };
   deps = {
-    "//bzl/inliner:rules",
     "//c8:exceptions",
     "@capnproto//:kj",
   };
@@ -16,6 +15,7 @@ cc_library {
     "//visibility:public",
   };
 }
+cc_end(0x5c3fe708);
 
 #include "c8/io/kj-event-loop.h"
 

@@ -205,7 +205,7 @@ cc_test(
         "tflite-multiclass-test.cc",
     ],
     data = [
-        "//reality/engine/deepnets/testdata:office9x16",
+        "//reality/engine/deepnets/testdata:office",
     ],
     deps = [
         ":tflite-interpreter",

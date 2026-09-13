@@ -1,17 +1,17 @@
 // Copyright (c) 2018 8th Wall, Inc.
 // Original Author: Nicholas Butko (nb@8thwall.com)
 
-#include "bzl/inliner/rules.h"
+#include "bzl/inliner/rules2.h"
 
 cc_binary {
   deps = {
-    "//bzl/inliner:rules",
     "//c8:c8-log",
     "//c8:c8-log-proto",
     "//c8/pixels:pixels",
     "//c8/protolog/api:remote-service.capnp-cc",
   };
 }
+cc_end(0x612926ae);
 
 #include <capnp/ez-rpc.h>
 #include <chrono>

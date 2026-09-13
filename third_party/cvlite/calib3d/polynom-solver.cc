@@ -1,17 +1,17 @@
-#include "bzl/inliner/rules.h"
+#include "bzl/inliner/rules2.h"
 
 cc_library {
   hdrs = {
     "polynom-solver.h",
   };
   deps = {
-    "//bzl/inliner:rules",
     "//third_party/cvlite/core",
   };
   copts = {
     "-D__OPENCV_BUILD",
   };
 }
+cc_end(0xced23932);
 
 #include "third_party/cvlite/calib3d/polynom-solver.h"
 

@@ -265,7 +265,7 @@ def main(argv):
         build_file.close()
 
         # Reformat using buildifier.
-        subprocess.call([BUILDIFIER, build_file_path])
+        # subprocess.call([BUILDIFIER, build_file_path])
 
         def updateCcFile(sourceData):
             upgradeState = 0

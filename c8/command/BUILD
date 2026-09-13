@@ -81,11 +81,12 @@ cc_test(
     ],
     deps = [
         ":command",
+        ":transfer-buffer",
         "//bzl/inliner:rules2",
         "@com_google_googletest//:gtest_main",
     ],
 )
-# cc_end(0x200b56ea)
+# cc_end(0x4a130255)
 
 # file: transfer-buffer-test.cc
 cc_test(

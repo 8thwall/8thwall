@@ -298,7 +298,6 @@ cc_library(
     deps = [
         ":texture",
         "//bzl/inliner:rules2",
-        "//c8:c8-log",
         "//c8:hmatrix",
         "//c8:map",
         "//c8:string",
@@ -306,7 +305,7 @@ cc_library(
         "//c8/string:join",
     ],
 )
-# cc_end(0x951d5d96)
+# cc_end(0xdf105a8d)
 
 # file: object8-test.cc
 cc_test(

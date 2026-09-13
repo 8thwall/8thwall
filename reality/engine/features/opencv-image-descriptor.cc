@@ -1,7 +1,7 @@
 // Copyright (c) 2017 8th Wall, Inc.
 // Original Author: Erik Murphy-Chutorian (mc@8thwall.com)
 
-#include "bzl/inliner/rules.h"
+#include "bzl/inliner/rules2.h"
 
 cc_library {
   visibility = {
@@ -9,13 +9,13 @@ cc_library {
   };
   hdrs = {"opencv-image-descriptor.h"};
   deps = {
-    "//bzl/inliner:rules",
     "//c8/cvlite:convert",
     "//c8:exceptions",
     "//reality/engine/features:image-descriptor",
     "//third_party/cvlite/core:core",
   };
 }
+cc_end(0xd22dbce2);
 
 #include "reality/engine/features/opencv-image-descriptor.h"
 

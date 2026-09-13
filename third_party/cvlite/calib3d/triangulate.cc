@@ -38,20 +38,20 @@
 // the use of this software, even if advised of the possibility of such damage.
 //
 //M*/
-#include "bzl/inliner/rules.h"
+#include "bzl/inliner/rules2.h"
 
 cc_library {
   hdrs = {
     "triangulate.h",
   };
   deps = {
-    "//bzl/inliner:rules",
     "//third_party/cvlite/core",
   };
   copts = {
     "-D__OPENCV_BUILD",
   };
 }
+cc_end(0x3cbc17f9);
 
 #include "third_party/cvlite/calib3d/triangulate.h"
 

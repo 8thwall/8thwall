@@ -498,12 +498,13 @@ cc_library(
         "//bzl/inliner:rules2",
         "//c8:hvector",
         "//c8:map",
+        "//c8:set",
         "//c8:string",
         "//c8/pixels/render:object8",
         "//c8/pixels/render:renderer",
     ],
 )
-# cc_end(0xe2d1fd1a)
+# cc_end(0xba4de755)
 
 # file: packed-test.cc
 cc_test(
@@ -581,6 +582,21 @@ cc_library(
 )
 # cc_end(0xe093b06b)
 
+# cc_end(0x3c62e0c8)
+
+# file: pixel-transforms-benchmark-test.cc
+cc_test(
+    name = "pixel-transforms-benchmark-test",
+    size = "small",
+    srcs = [
+        "pixel-transforms-benchmark-test.cc",
+    ],
+    deps = [
+        "//bzl/inliner:rules2",
+        "//reality/quality/datasets:benchmark-dataset",
+        "@com_google_benchmark//:benchmark",
+    ],
+)
 # cc_end(0x3c62e0c8)
 
 # file: pixel-transforms-test.cc

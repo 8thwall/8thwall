@@ -31,9 +31,7 @@ cc_library {
     "@json//:json",
     "@curl//:curl",
   };
-  linkopts = {
-    "-framework Security",
-  };
+  linkopts = SECURITY_OPTION;
 }
 cc_end(0x0980e395);
 
