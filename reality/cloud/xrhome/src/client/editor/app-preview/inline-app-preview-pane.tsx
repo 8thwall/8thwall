@@ -38,6 +38,9 @@ import {AppPreviewMockLocation} from './app-preview-mock-location'
 import {AppPreviewAspectRatio} from './app-preview-aspect-ratio'
 import {StaticBanner} from '../../ui/components/banner'
 import {SEQUENCE_METADATA} from './sequence-metadata'
+import useDebounce from '../../common/use-debounce'
+import {useEvent} from '../../hooks/use-event'
+import {hexColorWithAlpha} from '../../../shared/colors'
 
 const useStyles = createThemedStyles(theme => ({
   appPreviewPane: {
@@ -73,6 +76,10 @@ const useStyles = createThemedStyles(theme => ({
     // adding a outline and clip path to hides it.
     outline: `10px solid ${theme.tabPaneBg}`,
     clipPath: 'inset(-1px)',
+  },
+  iframeFocused: {
+    'outline': `1px solid ${hexColorWithAlpha(theme.sfcBorderFocus, 0.75)}`,
+    'outlineOffset': '-2px',
   },
   notInteractive: {
     pointerEvents: 'none',
@@ -218,8 +225,57 @@ const InlineAppPreviewPane: React.FC<IInlineAppPreviewPane> = ({
 
   const [isRefreshing, setIsRefreshing] = React.useState(false)
   const [lockedInUrl, setLockedInUrl] = React.useState<string>('')
+  const [iframeFocused, setIframeFocused] = React.useState(false)
 
   const iframeRef = React.useRef<HTMLIFrameElement>(null)
+
+  // React.useEffect(() => {
+  //   console.log({iframeFocused})
+  // }, [iframeFocused])
+
+  const refreshFocused = useEvent((delay = true) => {
+    // console.log('refresh focused, active:', document.activeElement, 'current:', iframeRef.current)
+    setIframeFocused(document.activeElement === iframeRef.current)
+    if (delay) {
+      setTimeout(() => refreshFocused(false), 300)
+    }
+  })
+
+  // React.useEffect(() => {
+  //   const handleFocusChange = () => {
+  //     console.log('focusin')
+  //     refreshFocused()
+  //     setTimeout(() => {
+  //       refreshFocused()
+  //     }, 500)
+  //   }
+
+  //   document.addEventListener('focusin', handleFocusChange)
+  //   return () => document.removeEventListener('focusin', handleFocusChange)
+  // }, [])
+
+  // React.useEffect(() => {
+  //   const timeout = setInterval(refreshFocused, 1000)
+  //   return () => clearInterval(timeout)
+  // }, [])
+
+  React.useEffect(() => {
+    refreshFocused()
+    // const handleFocusChange = (e) => {
+    //   console.log(e)
+    //   refreshFocused()
+    //   // setTimeout(refreshFocused, 0)
+    //   // setTimeout(refreshFocused, 50)
+    //   // setTimeout(refreshFocused, 500)
+    // }
+
+    window.addEventListener('blur', refreshFocused)
+    window.addEventListener('focus', refreshFocused)
+    return () => {
+      window.removeEventListener('blur', refreshFocused)
+      window.addEventListener('focus', refreshFocused)
+    }
+  }, [])
 
   useStandalonePostMessageBridge({
     isActive: isStandalone,
@@ -511,8 +567,28 @@ const InlineAppPreviewPane: React.FC<IInlineAppPreviewPane> = ({
                 {/* NOTE(christoph): We don't mount the iframe until the build is initialized. */}
                 {!isPendingLoad &&
                   <iframe
-                    ref={iframeRef}
-                    className={combine(classes.iframe, loadingSequence && classes.dimmed)}
+                    // ref={iframeRef}
+                    ref={(r) => {
+                      console.log('iframeRef', r)
+                      if (r && r !== iframeRef.current) {
+                        console.log('iframeRef changed', r, iframeRef.current)
+                        r.focus()
+                        // const update = () => {
+                        //   console.log('updating', document.activeElement)
+                        //   setIframeFocused(document.activeElement === iframeRef.current)
+                        // }
+
+                        // r.addEventListener('focus', update)
+                        // r.addEventListener('focusout', update)
+                        // r.addEventListener('focusin', update)
+                        // r.addEventListener('blur', update)
+                        iframeRef.current = r
+                      }
+                    }}
+                    // onFocus={() => setIframeFocused(true)}
+                    // onBlur={() => setIframeFocused(false)}
+                    className={combine(classes.iframe, loadingSequence && classes.dimmed,
+                      iframeFocused && classes.iframeFocused)}
                     style={getStyles(contentRect)}
                     src={activeUrl}
                     title={t('editor_page.inline_app_preview.iframe.title')}
