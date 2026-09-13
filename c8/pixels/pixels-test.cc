@@ -7,7 +7,6 @@ cc_test {
   size = "small";
   deps = {
     ":pixels",
-    "//bzl/inliner:rules",
     "@com_google_googletest//:gtest_main",
   };
 }

@@ -18,11 +18,11 @@ cc_test {
     "@com_google_googletest//:gtest_main",
   };
   data = {
-    "//reality/engine/deepnets/testdata:office",
+    "//reality/engine/deepnets/testdata:office9x16",
   };
   testonly = 1;
 }
-cc_end(0xfda2e1c9);
+cc_end(0xf8b08c5f);
 
 #include <cmath>
 #include <cstdio>

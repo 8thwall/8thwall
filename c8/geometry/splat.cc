@@ -9,7 +9,7 @@ cc_library {
     "splat.h",
   };
   deps = {
-    "//c8/spz:load-spz",
+    "@spz",
     "//c8:color",
     "//c8:half",
     "//c8:hmatrix",
@@ -26,7 +26,7 @@ cc_library {
     "//visibility:public",
   };
 }
-cc_end(0xab1c7343);
+cc_end(0xd00755bb);
 
 #include <numeric>
 

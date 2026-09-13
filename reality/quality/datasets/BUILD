@@ -16,7 +16,6 @@ cc_library(
         "//visibility:public",
     ],
     deps = [
-        "//bzl/inliner:rules",
         "//c8:map",
         "//c8:string",
         "//c8:vector",

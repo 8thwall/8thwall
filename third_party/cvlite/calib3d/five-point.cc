@@ -28,7 +28,7 @@
     (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-#include "bzl/inliner/rules.h"
+#include "bzl/inliner/rules2.h"
 
 cc_library {
   hdrs = {
@@ -37,13 +37,13 @@ cc_library {
   deps = {
     ":ptsetreg",
     ":triangulate",
-    "//bzl/inliner:rules",
     "//third_party/cvlite/core",
   };
   copts = {
     "-D__OPENCV_BUILD",
   };
 }
+cc_end(0x822a4f8d);
 
 #include "third_party/cvlite/calib3d/five-point.h"
 

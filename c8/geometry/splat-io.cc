@@ -5,13 +5,13 @@ cc_library {
     "splat-io.h",
   };
   deps = {
-    "//c8/spz:load-spz",
+    "@spz",
   };
   visibility = {
     "//visibility:public",
   };
 }
-cc_end(0x5aee4fb3);
+cc_end(0x823d0140);
 
 #include "c8/geometry/splat-io.h"
 

@@ -11,7 +11,7 @@ cc_library {
     ":client-gl",
     ":gl-headers",
     ":gl-buffer-object",
-    "//c8:log",
+    "//c8:c8-log",
     "//c8:exceptions",
     "//c8:map",
   };
@@ -19,7 +19,7 @@ cc_library {
     "//visibility:public",
   };
 }
-cc_end(0x1364c358);
+cc_end(0x76afccb3);
 
 #include "c8/c8-log.h"
 #include "c8/exceptions.h"

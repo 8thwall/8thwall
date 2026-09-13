@@ -597,7 +597,7 @@ cc_library(
         "@spz",
     ],
 )
-# cc_end(0xfba235ae)
+# cc_end(0xe6eca742)
 
 # file: mesh-benchmark-test.cc
 cc_test(
@@ -827,7 +827,7 @@ cc_library(
         "@spz",
     ],
 )
-# cc_end(0x5aee4fb3)
+# cc_end(0x823d0140)
 
 # file: splat.cc
 cc_library(
@@ -857,7 +857,7 @@ cc_library(
         "@spz",
     ],
 )
-# cc_end(0xab1c7343)
+# cc_end(0xd00755bb)
 
 # file: spline-test.cc
 cc_test(

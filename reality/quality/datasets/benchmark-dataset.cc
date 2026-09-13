@@ -3,7 +3,6 @@
 
 #include "reality/quality/datasets/benchmark-dataset.h"
 
-#include "bzl/inliner/rules.h"
 #include "c8/io/image-io.h"
 #include "c8/map.h"
 #include "c8/string.h"

@@ -50,14 +50,6 @@ cc_binary(
 )
 
 cc_library(
-    name = "rules",
-    hdrs = [
-        "rules.h",
-    ],
-    visibility = ["//visibility:public"],
-)
-
-cc_library(
     name = "rules2",
     hdrs = [
         "rules2.h",

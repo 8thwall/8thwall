@@ -1,9 +1,8 @@
-#include "bzl/inliner/rules.h"
+#include "bzl/inliner/rules2.h"
 
 cc_library {
   hdrs = {"remote-service-connection.h"};
   deps = {
-    "//bzl/inliner:rules",
     "//c8:c8-log",
     "//c8:c8-log-proto",
     "//c8:exceptions",
@@ -20,6 +19,7 @@ cc_library {
   };
   visibility = {":protolog-pkgs"};
 }
+cc_end(0x1e416be3);
 
 #include "c8/protolog/remote-service-connection.h"
 

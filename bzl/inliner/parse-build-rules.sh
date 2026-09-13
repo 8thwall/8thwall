@@ -9,10 +9,10 @@ CC="${CC:-llvm-g++}"
 if [ $1 ]; then
   SRC_DIR=`dirname $1`
   pushd "${SRC_DIR}" > /dev/null
-  WORKSPACE=`bazel info workspace`
+  WORKSPACE="${WORKSPACE_OVERRIDE:-$(bazel info workspace)}"
   popd > /dev/null
 else
-  WORKSPACE="."
+  WORKSPACE="${WORKSPACE_OVERRIDE:-.}"
 fi
 
 COPTS="-std=c++14 -fexceptions -fcxx-exceptions -I${WORKSPACE}"

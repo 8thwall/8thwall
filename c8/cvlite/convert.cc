@@ -1,14 +1,13 @@
 // Copyright (c) 2017 8th Wall, Inc.
 // Original Author: Erik Murphy-Chutorian (mc@8thwall.com)
 
-#include "bzl/inliner/rules.h"
+#include "bzl/inliner/rules2.h"
 
 cc_library {
   hdrs = {
     "convert.h",
   };
   deps = {
-    "//bzl/inliner:rules",
     "//c8:hmatrix",
     "//c8:hpoint",
     "//third_party/cvlite/core:core",
@@ -17,6 +16,7 @@ cc_library {
     "//visibility:public",
   };
 }
+cc_end(0x1490368f);
 
 #include "c8/cvlite/convert.h"
 #include "c8/hmatrix.h"

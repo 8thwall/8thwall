@@ -42,20 +42,20 @@
  * Recognition Workshops (CVPRW), 2014 IEEE Conference on, pp. 119-125.
  * IEEE, 2014.
  */
-#include "bzl/inliner/rules.h"
+#include "bzl/inliner/rules2.h"
 
 cc_library {
   hdrs = {
     "rho.h",
   };
   deps = {
-    "//bzl/inliner:rules",
     "//third_party/cvlite/core",
   };
   copts = {
     "-D__OPENCV_BUILD",
   };
 }
+cc_end(0xbf523728);
 
 #include "third_party/cvlite/calib3d/rho.h"
 

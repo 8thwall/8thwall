@@ -10,7 +10,6 @@ cc_test {
   deps = {
     ":hpoint",
     ":vector",
-    "//bzl/inliner:rules",
     "@com_google_googletest//:gtest_main",
   };
 }

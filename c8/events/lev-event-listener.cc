@@ -1,7 +1,7 @@
 // Copyright (c) 2018 8th Wall, Inc.
 // Original Author: Dat Chu (dat@8thwall.com)
 
-#include "bzl/inliner/rules.h"
+#include "bzl/inliner/rules2.h"
 
 cc_library {
   hdrs = {
@@ -9,13 +9,13 @@ cc_library {
   };
   deps = {
     ":event-listener",
-    "//bzl/inliner:rules",
     "//c8:c8-log",
     "//c8:exceptions",
     "//c8:map",
     "@libevent//:event",
   };
 }
+cc_end(0x9516ca98);
 #include <event2/event.h>
 
 #include "c8/c8-log.h"

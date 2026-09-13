@@ -7,11 +7,13 @@ cc_library {
   hdrs = {
     "descriptor-bit-counter.h",
   };
-  deps = {};
+  deps = {
+    "//c8:exceptions",
+  };
   visibility = {
     "//visibility:public",
   };
 }
-cc_end(0xcb054e7b);
+cc_end(0xd958b762);
 
 #include "descriptor-bit-counter.h"
