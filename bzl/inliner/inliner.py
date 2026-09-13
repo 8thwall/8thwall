@@ -18,7 +18,7 @@ def main(argv):
     START_TAG_RE = re.compile(START_TAG)
     END_TAG_RE = re.compile(END_TAG)
     HASH_RE = re.compile(r'cc_end\(([x0-9a-z]+)\)')
-
+    
     inPlace=True
     stdinSource=False
 
@@ -122,10 +122,15 @@ def main(argv):
         build_contents = build_file.read()
 
         stdinSourceData = b''
+        
+        # NOTE(christoph): If we pass it here, we can re-use across multiple invocations, avoiding
+        # the blocking call in parse-build-rules.sh
+        parse_env = dict(os.environ, WORKSPACE_OVERRIDE = os.getcwd())
 
         if stdinSource:
             parseRulesProc = subprocess.Popen(
                  [PARSE_BUILD_RULES] + sources + ['-stdin'],
+                 env = parse_env,
                  stdin=subprocess.PIPE,
                  stdout=subprocess.PIPE)
             stdinSourceData = sys.stdin.buffer.read()
@@ -135,16 +140,17 @@ def main(argv):
         else:
             inline_rules_output = subprocess.Popen(
                 [PARSE_BUILD_RULES] + sources,
+                env = parse_env,
                 stdout=subprocess.PIPE).stdout.read().decode('utf-8').rstrip()
 
         hashes = HASH_RE.findall(inline_rules_output)
         if len(hashes) != len(sources):
-            print('One or more build rules is missing a hash from parse-build-rules', file=sys.stderr)
+            print("One or more build rules is missing a hash from parse-build-rules [%s]" % build_file_path, file=sys.stderr)
             sys.exit(2)
 
         inline_rules = inline_rules_output.split('\n\n')
         if len(inline_rules) != len(sources):
-            print('One or more build rules is missing output from parse-build-rules', file=sys.stderr)
+            print("One or more build rules is missing output from parse-build-rules [%s]" % build_file_path, file=sys.stderr)
             sys.exit(2)
 
         sourceHashes = dict(zip(sources, hashes))
@@ -195,7 +201,8 @@ def main(argv):
             try:
                 ruleName = re.findall(r'    name = "([\w\.-]+)"', previousRule)[0]
             except IndexError:
-                print("Warning: rule missing 'name' attribute in [%s]" % build_file_path, file=sys.stderr)
+                print("rule missing 'name' attribute in [%s]" % build_file_path, file=sys.stderr)
+                sys.exit(2)
 
             try:
                 ruleFile = re.findall(r'# file: ([\w\.-]+)', previousRule)[0]

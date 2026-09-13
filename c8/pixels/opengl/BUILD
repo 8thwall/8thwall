@@ -387,8 +387,6 @@ cc_library(
 )
 # cc_end(0x015bf574)
 
-# cc_end(0x5200857f)
-
 # file: gl-command-buffer-test.cc
 cc_test(
     name = "gl-command-buffer-test",
