@@ -24,8 +24,8 @@ cc_library {
 }
 cc_end(0xba3ef855);
 
-#include "ceres/ceres.h"
 #include "c8/geometry/parameterized-geometry.h"
+#include "ceres/ceres.h"
 #include "reality/engine/geometry/bundle-residual.h"
 
 namespace c8 {

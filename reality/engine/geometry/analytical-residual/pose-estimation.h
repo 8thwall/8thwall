@@ -10,8 +10,8 @@ namespace c8 {
 namespace analytic {
 
 /** Perform pose estimation on a single camera.
- * This method is designed to replace PoseEstimationAnalytic in bundle-residual-analytic. When pose-estimation.py
- * has auto-memoize then we can switch it over.
+ * This method is designed to replace PoseEstimationAnalytic in bundle-residual-analytic. When
+ * pose-estimation.py has auto-memoize then we can switch it over.
  *
  * @param scale A scale value used for curvy image targets, based off SnavelyReprojectionResidual.
  * Scale the error value allow us to optimize with a smaller parameter tolerance (~1E-8)
@@ -21,7 +21,7 @@ namespace analytic {
  * Experiment has shown that optimizing in pixel space range results in better fit for synthetic
  * data.
  */
-class PoseEstimation: public ceres::SizedCostFunction<2, 6> {
+class PoseEstimation : public ceres::SizedCostFunction<2, 6> {
 public:
   PoseEstimation(double x, double y, double z, const ObservedPoint &pt, double scale = 1.f);
 
@@ -32,5 +32,5 @@ private:
   double x_, y_, z_, u_, v_, w_, scale_;
 };
 
-}
-}
+}  // namespace analytic
+}  // namespace c8

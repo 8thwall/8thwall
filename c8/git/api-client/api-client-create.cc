@@ -33,11 +33,11 @@ ConstRootMessage<G8ClientResponse> g8ClientCreate(ClientContext &ctx) {
 
   for (const auto client : req.getClient()) {
     if (!clientNameIsValid(client.cStr())) {
-      RESPOND_ERROR(
-        strCat(
-          "Invalid client name: ",
-          client.cStr(), 
-          "; only numbers, letters, un-bounding dashes (-), and un-bounding underscores (_) ([a-zA-Z0-9])"));
+      RESPOND_ERROR(strCat(
+        "Invalid client name: ",
+        client.cStr(),
+        "; only numbers, letters, un-bounding dashes (-), and un-bounding underscores (_) "
+        "([a-zA-Z0-9])"));
     }
   }
 

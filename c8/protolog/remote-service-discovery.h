@@ -6,12 +6,14 @@
 #pragma once
 
 #include <event2/event.h>
+
 #include <list>
 #include <memory>
 #include <mutex>
 #include <queue>
 #include <string>
 #include <thread>
+
 #include "c8/map.h"
 #include "c8/network/dns-service-discovery.h"
 #include "c8/string.h"

@@ -33,6 +33,7 @@
 #pragma once
 
 #include <array>
+
 #include "c8/hmatrix.h"
 #include "c8/hpoint.h"
 
@@ -79,10 +80,7 @@ private:
   // solutionsR: 4 possible solutions of rotation matrix of the world w.r.t the camera frame
   // solutionsT: 4 possible solutions of translation of the world origin w.r.t the camera frame
   int computePoses(
-    const Mat33 &featureVectors,
-    const Mat33 &worldPoints,
-    Mat433 &solutionsR,
-    Mat43 &solutionsT);
+    const Mat33 &featureVectors, const Mat33 &worldPoints, Mat433 &solutionsR, Mat43 &solutionsT);
 
   ap3p() {}
 

@@ -24,15 +24,14 @@ cc_library {
 }
 cc_end(0x486b83e8);
 
-#include "c8/media/media-recorder.h"
-
 #include <nlohmann/json.hpp>
 
 #include "c8/media/codec/registry.h"
+#include "c8/media/media-recorder.h"
 
 namespace c8 {
 
-MediaRecorder::~MediaRecorder() {};
+MediaRecorder::~MediaRecorder(){};
 
 MediaStatus MediaRecorder::start(StringView config) {
   // Remove any prior muxers or encoders.

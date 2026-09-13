@@ -1,13 +1,13 @@
 // Copyright (c) 2018 8th Wall, Inc.
 // Original Author: Erik Murphy-Chutorian (mc@8thwall.com)
 
-#include "bzl/inliner/rules.h"
+#include "reality/quality/datasets/benchmark-dataset.h"
 
+#include "bzl/inliner/rules.h"
 #include "c8/io/image-io.h"
 #include "c8/map.h"
 #include "c8/string.h"
 #include "c8/vector.h"
-#include "reality/quality/datasets/benchmark-dataset.h"
 
 namespace c8 {
 namespace {

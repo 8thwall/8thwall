@@ -76,9 +76,8 @@ TEST_F(RendererTest, TestMeshGeometry) {
   auto meshPos = HMatrixGen::translation(0.f, 0.f, 4.f);
   drawMesh.setLocal(meshPos);
 
-  scene->add(
-    ObGen::perspectiveCamera(
-      Intrinsics::getCameraIntrinsics(DeviceInfos::APPLE_IPHONE_XS), 640, 480));
+  scene->add(ObGen::perspectiveCamera(
+    Intrinsics::getCameraIntrinsics(DeviceInfos::APPLE_IPHONE_XS), 640, 480));
 
   Renderer renderer;
   renderer.render(*scene);
@@ -115,9 +114,8 @@ TEST_F(RendererTest, TestMeshGeometryInstanced) {
   auto meshPos = HMatrixGen::translation(0.f, 0.f, 4.f);
   drawMesh.setLocal(meshPos);
 
-  scene->add(
-    ObGen::perspectiveCamera(
-      Intrinsics::getCameraIntrinsics(DeviceInfos::APPLE_IPHONE_XS), 640, 480));
+  scene->add(ObGen::perspectiveCamera(
+    Intrinsics::getCameraIntrinsics(DeviceInfos::APPLE_IPHONE_XS), 640, 480));
 
   Renderer renderer;
   renderer.render(*scene);
@@ -152,9 +150,8 @@ TEST_F(RendererTest, TestQuadMesh) {
     updateWorldPosition(HMatrixGen::yDegrees(-10), HMatrixGen::xDegrees(10)),
     HMatrixGen::zDegrees(10));
 
-  auto &camera = scene->add(
-    ObGen::perspectiveCamera(
-      Intrinsics::getCameraIntrinsics(DeviceInfos::APPLE_IPHONE_XS), 640, 480));
+  auto &camera = scene->add(ObGen::perspectiveCamera(
+    Intrinsics::getCameraIntrinsics(DeviceInfos::APPLE_IPHONE_XS), 640, 480));
   camera.setLocal(camPos);
 
   Renderer renderer;
@@ -183,9 +180,8 @@ TEST_F(RendererTest, TestRgbaPixels) {
 
   // The Texture does not own the pixel data, but points to the pixel data owned by imBuffer.
   quad.material().setShader(Shaders::IMAGE).setColorTexture(TexGen::rgbaPixels(imBuffer.pixels()));
-  scene->add(
-    ObGen::perspectiveCamera(
-      Intrinsics::getCameraIntrinsics(DeviceInfos::APPLE_IPHONE_XS), 640, 480));
+  scene->add(ObGen::perspectiveCamera(
+    Intrinsics::getCameraIntrinsics(DeviceInfos::APPLE_IPHONE_XS), 640, 480));
 
   Renderer renderer;
   renderer.render(*scene);
@@ -218,9 +214,8 @@ TEST_F(RendererTest, TestRgbaPixelBuffer) {
     quad.material()
       .setShader(Shaders::IMAGE)
       .setColorTexture(TexGen::rgbaPixelBuffer(std::move(imBuffer)));
-    scene->add(
-      ObGen::perspectiveCamera(
-        Intrinsics::getCameraIntrinsics(DeviceInfos::APPLE_IPHONE_XS), 640, 480));
+    scene->add(ObGen::perspectiveCamera(
+      Intrinsics::getCameraIntrinsics(DeviceInfos::APPLE_IPHONE_XS), 640, 480));
   }
 
   Renderer renderer;
@@ -247,9 +242,8 @@ TEST_F(RendererTest, TestDepthPixels) {
   DepthFloatPixels pr = p.pixels();
   {
     quad.material().setShader(Shaders::IMAGE).setDepthTexture(TexGen::depthPixels(pr));
-    scene->add(
-      ObGen::perspectiveCamera(
-        Intrinsics::getCameraIntrinsics(DeviceInfos::APPLE_IPHONE_XS), 640, 480));
+    scene->add(ObGen::perspectiveCamera(
+      Intrinsics::getCameraIntrinsics(DeviceInfos::APPLE_IPHONE_XS), 640, 480));
   }
   Renderer renderer;
   renderer.render(*scene);
@@ -272,9 +266,8 @@ TEST_F(RendererTest, TestDepthPixelBuffer) {
     quad.material()
       .setShader(Shaders::IMAGE)
       .setDepthTexture(TexGen::depthPixelBuffer(std::move(p)));
-    scene->add(
-      ObGen::perspectiveCamera(
-        Intrinsics::getCameraIntrinsics(DeviceInfos::APPLE_IPHONE_XS), 640, 480));
+    scene->add(ObGen::perspectiveCamera(
+      Intrinsics::getCameraIntrinsics(DeviceInfos::APPLE_IPHONE_XS), 640, 480));
   }
   Renderer renderer;
   renderer.render(*scene);
@@ -304,9 +297,8 @@ TEST_F(RendererTest, TestQuadPoints) {
     updateWorldPosition(HMatrixGen::yDegrees(-10), HMatrixGen::xDegrees(10)),
     HMatrixGen::zDegrees(10));
 
-  auto &camera = scene->add(
-    ObGen::perspectiveCamera(
-      Intrinsics::getCameraIntrinsics(DeviceInfos::APPLE_IPHONE_XS), 640, 480));
+  auto &camera = scene->add(ObGen::perspectiveCamera(
+    Intrinsics::getCameraIntrinsics(DeviceInfos::APPLE_IPHONE_XS), 640, 480));
   camera.setLocal(camPos);
 
   Renderer renderer;
@@ -333,11 +325,10 @@ TEST_F(RendererTest, TestSubScenesRender) {
   int lHeight = 480;
   const Vector<RenderSpec> renderSpecs1 = {{lWidth, lHeight, "r1", "c1"}};
   auto subscene1 = ObGen::subScene("leftScene", renderSpecs1);
-  subscene1->add(
-    ObGen::named(
-      ObGen::perspectiveCamera(
-        Intrinsics::getCameraIntrinsics(DeviceInfos::APPLE_IPHONE_XS), lWidth, lHeight),
-      "c1"));
+  subscene1->add(ObGen::named(
+    ObGen::perspectiveCamera(
+      Intrinsics::getCameraIntrinsics(DeviceInfos::APPLE_IPHONE_XS), lWidth, lHeight),
+    "c1"));
   auto &lQuad = subscene1->add(ObGen::quad());
   lQuad.geometry().setColors({
     Color::MINT,
@@ -354,11 +345,10 @@ TEST_F(RendererTest, TestSubScenesRender) {
   int rHeight = 480;
   const Vector<RenderSpec> renderSpecs2 = {{rWidth, rHeight, "r2", "c2"}};
   auto subscene2 = ObGen::subScene("rightScene", renderSpecs2);
-  subscene2->add(
-    ObGen::named(
-      ObGen::perspectiveCamera(
-        Intrinsics::getCameraIntrinsics(DeviceInfos::APPLE_IPHONE_XS), rWidth, rHeight),
-      "c2"));
+  subscene2->add(ObGen::named(
+    ObGen::perspectiveCamera(
+      Intrinsics::getCameraIntrinsics(DeviceInfos::APPLE_IPHONE_XS), rWidth, rHeight),
+    "c2"));
   auto &rQuad = subscene2->add(ObGen::quad());
   auto quadPos2 = HMatrixGen::translation(0.0f, 0.0f, 4.0f);
   rQuad.setLocal(quadPos2);
@@ -669,9 +659,8 @@ TEST_F(RendererTest, TestCube) {
   quad.material().setShader(Shaders::IMAGE).setColorTexture(TexGen::rgbaPixels(cubeTexture));
   quad.setLocal(HMatrixGen::translation(1.0f, 0.0f, 4.0f));
 
-  scene->add(
-    ObGen::perspectiveCamera(
-      Intrinsics::getCameraIntrinsics(DeviceInfos::APPLE_IPHONE_XS), 640, 480));
+  scene->add(ObGen::perspectiveCamera(
+    Intrinsics::getCameraIntrinsics(DeviceInfos::APPLE_IPHONE_XS), 640, 480));
 
   Renderer renderer;
 
@@ -715,9 +704,8 @@ TEST_F(RendererTest, TestPixelLines) {
   scene->add(ObGen::pixelLines(threePixelLines, Color::CHERRY, 640, 480, 3.0f));
 
   // perspective camera should be ignored by pixel lines.
-  scene->add(
-    ObGen::perspectiveCamera(
-      Intrinsics::getCameraIntrinsics(DeviceInfos::APPLE_IPHONE_XS), 640, 480));
+  scene->add(ObGen::perspectiveCamera(
+    Intrinsics::getCameraIntrinsics(DeviceInfos::APPLE_IPHONE_XS), 640, 480));
 
   Renderer renderer;
 
@@ -783,9 +771,8 @@ TEST_F(RendererTest, TestScene) {
   scene->add(ObGen::named(orientedPoint({0.0f, -1.0f, 0.0f}, {}, 0.5f), "origin"));
 
   // Add floor visualization.
-  scene->add(
-    ObGen::named(
-      ObGen::positioned(groundLineGrid(11, 1.0f), HMatrixGen::translateY(-1.0f)), "ground"));
+  scene->add(ObGen::named(
+    ObGen::positioned(groundLineGrid(11, 1.0f), HMatrixGen::translateY(-1.0f)), "ground"));
 
   // Add cube.
   auto &cube = scene->add(ObGen::cubeMesh());
@@ -794,9 +781,8 @@ TEST_F(RendererTest, TestScene) {
 
   // Update camera position.
   auto camPos = HMatrixGen::translation(.2f, 0.f, -3.f) * HMatrixGen::rotationD(10.f, 0.f, 0.f);
-  auto &camera = scene->add(
-    ObGen::perspectiveCamera(
-      Intrinsics::getCameraIntrinsics(DeviceInfos::APPLE_IPHONE_XS), 640, 480));
+  auto &camera = scene->add(ObGen::perspectiveCamera(
+    Intrinsics::getCameraIntrinsics(DeviceInfos::APPLE_IPHONE_XS), 640, 480));
   camera.setLocal(camPos);
 
   scene->add(ObGen::ambientLight(Color::WHITE, .4f));
@@ -806,10 +792,9 @@ TEST_F(RendererTest, TestScene) {
   scene->add(ObGen::positioned(ObGen::pointLight(Color::MATCHA, 1.f, true), lightPos));
 
   // The other should be purple.
-  scene->add(
-    ObGen::positioned(
-      ObGen::directionalLight(Color::PURPLE, .4f, true),
-      rotationToVector({.3f, 0.f, 1.f}).toRotationMat()));
+  scene->add(ObGen::positioned(
+    ObGen::directionalLight(Color::PURPLE, .4f, true),
+    rotationToVector({.3f, 0.f, 1.f}).toRotationMat()));
 
   Renderer renderer;
   renderer.render(*scene);
@@ -837,9 +822,8 @@ TEST_F(RendererTest, TestPixelsPointsPerspective) {
   int height = diameter * 5;
 
   auto scene = ObGen::scene(width, height);
-  scene->add(
-    ObGen::perspectiveCamera(
-      Intrinsics::getCameraIntrinsics(DeviceInfos::APPLE_IPHONE_XS), width, height));
+  scene->add(ObGen::perspectiveCamera(
+    Intrinsics::getCameraIntrinsics(DeviceInfos::APPLE_IPHONE_XS), width, height));
   auto &ptCloud = scene->add(ObGen::pixelPoints());
 
   Vector<HPoint2> points;
@@ -952,9 +936,8 @@ TEST_F(RendererTest, TestAssetsGlbDiffuseJpg) {
   auto meshPos = HMatrixGen::translation(0.05f, -0.175f, 0.6f);
   drawMesh.setLocal(meshPos);
 
-  scene->add(
-    ObGen::perspectiveCamera(
-      Intrinsics::getCameraIntrinsics(DeviceInfos::APPLE_IPHONE_XS), 1000, 1000));
+  scene->add(ObGen::perspectiveCamera(
+    Intrinsics::getCameraIntrinsics(DeviceInfos::APPLE_IPHONE_XS), 1000, 1000));
 
   Renderer renderer;
   renderer.render(*scene);
@@ -999,9 +982,8 @@ TEST_F(RendererTest, TestAssetsGlbDiffuseJpgInstanced) {
     {1.2f, 1.2f, 1.2f},
   });
 
-  scene->add(
-    ObGen::perspectiveCamera(
-      Intrinsics::getCameraIntrinsics(DeviceInfos::APPLE_IPHONE_XS), 1000, 1000));
+  scene->add(ObGen::perspectiveCamera(
+    Intrinsics::getCameraIntrinsics(DeviceInfos::APPLE_IPHONE_XS), 1000, 1000));
 
   Renderer renderer;
   renderer.render(*scene);
@@ -1022,50 +1004,48 @@ TEST_F(RendererTest, TestSplat) {
   auto scene = ObGen::scene(151, 251);
   scene->renderSpec().clearColor = Color::TRUE_BLACK;
 
-  scene->add(
-    ObGen::splatAttributes(
-      {
-        // Positions
-        {-0.5f, 0.5f, 0.0f},
-        {-1.5f, -2.9f, -1.5f},
-        {0.0f, 0.0f, 0.0f},
-        {1.5f, 2.9f, -1.5f},
-        {1.5f, -2.9f, -1.0f},
-        {-1.5f, 2.9f, -1.5f},
-      },
-      {
-        // Rotations
-        Quaternion::fromPitchYawRollDegrees(0.0f, 90.0f, 90.0f),
-        Quaternion::fromPitchYawRollDegrees(0.0f, 0.0f, 0.0f),
-        Quaternion::fromPitchYawRollDegrees(90.0f, 0.0f, 90.0f),
-        Quaternion::fromPitchYawRollDegrees(0.0f, 0.0f, 0.0f),
-        Quaternion::fromPitchYawRollDegrees(0.0f, 0.0f, 0.0f),
-        Quaternion::fromPitchYawRollDegrees(0.0f, 0.0f, 0.0f),
-      },
-      {
-        // Scales
-        {1.0f, 1.0f, 3.0f},
-        {1.0f, 1.0f, 1.0f},
-        {1.0f, 2.0f, 3.0f},
-        {1.0f, 1.0f, 1.0f},
-        {1.0f, 1.0f, 1.0f},
-        {1.0f, 1.0f, 1.0f},
-      },
-      {
-        // Colors
-        Color::WHITE,
-        Color::BLUE,
-        Color::WHITE,
-        Color::GREEN,
-        Color::RED,
-        Color::YELLOW,
-      }));
+  scene->add(ObGen::splatAttributes(
+    {
+      // Positions
+      {-0.5f, 0.5f, 0.0f},
+      {-1.5f, -2.9f, -1.5f},
+      {0.0f, 0.0f, 0.0f},
+      {1.5f, 2.9f, -1.5f},
+      {1.5f, -2.9f, -1.0f},
+      {-1.5f, 2.9f, -1.5f},
+    },
+    {
+      // Rotations
+      Quaternion::fromPitchYawRollDegrees(0.0f, 90.0f, 90.0f),
+      Quaternion::fromPitchYawRollDegrees(0.0f, 0.0f, 0.0f),
+      Quaternion::fromPitchYawRollDegrees(90.0f, 0.0f, 90.0f),
+      Quaternion::fromPitchYawRollDegrees(0.0f, 0.0f, 0.0f),
+      Quaternion::fromPitchYawRollDegrees(0.0f, 0.0f, 0.0f),
+      Quaternion::fromPitchYawRollDegrees(0.0f, 0.0f, 0.0f),
+    },
+    {
+      // Scales
+      {1.0f, 1.0f, 3.0f},
+      {1.0f, 1.0f, 1.0f},
+      {1.0f, 2.0f, 3.0f},
+      {1.0f, 1.0f, 1.0f},
+      {1.0f, 1.0f, 1.0f},
+      {1.0f, 1.0f, 1.0f},
+    },
+    {
+      // Colors
+      Color::WHITE,
+      Color::BLUE,
+      Color::WHITE,
+      Color::GREEN,
+      Color::RED,
+      Color::YELLOW,
+    }));
 
-  scene->add(
-    ObGen::positioned(
-      ObGen::perspectiveCamera(
-        Intrinsics::getCameraIntrinsics(DeviceInfos::APPLE_IPHONE_XS), 151, 251),
-      HMatrixGen::translation(0.0f, 0.0f, -10.0f)));
+  scene->add(ObGen::positioned(
+    ObGen::perspectiveCamera(
+      Intrinsics::getCameraIntrinsics(DeviceInfos::APPLE_IPHONE_XS), 151, 251),
+    HMatrixGen::translation(0.0f, 0.0f, -10.0f)));
 
   Renderer renderer;
   renderer.render(*scene);
@@ -1107,9 +1087,8 @@ TEST_F(RendererTest, TestSplatSpz) {
   auto scene = ObGen::scene(outCols, outRows);
   scene->renderSpec().clearColor = Color::TRUE_BLACK;
 
-  auto &camera = scene->add(
-    ObGen::perspectiveCamera(
-      Intrinsics::getCameraIntrinsics(DeviceInfos::APPLE_IPHONE_XS), outCols, outRows));
+  auto &camera = scene->add(ObGen::perspectiveCamera(
+    Intrinsics::getCameraIntrinsics(DeviceInfos::APPLE_IPHONE_XS), outCols, outRows));
   camera.setLocal(HMatrixGen::translation(1.1122911f, -0.73037136f, -6.7184558f));
 
   auto &splat = scene->add(ObGen::splatTexture(fullSplat.header, splatTexture(fullSplat)));
@@ -1147,9 +1126,8 @@ TEST_F(RendererTest, TestSplatBakeSkybox) {
   auto scene = ObGen::scene(outCols, outRows);
   scene->renderSpec().clearColor = Color::TRUE_BLACK;
 
-  auto &camera = scene->add(
-    ObGen::perspectiveCamera(
-      Intrinsics::getCameraIntrinsics(DeviceInfos::APPLE_IPHONE_XS), outCols, outRows));
+  auto &camera = scene->add(ObGen::perspectiveCamera(
+    Intrinsics::getCameraIntrinsics(DeviceInfos::APPLE_IPHONE_XS), outCols, outRows));
   camera.setLocal(HMatrixGen::translation(1.1122911f, -0.73037136f, -6.7184558f));
 
   auto &splat = scene->add(ObGen::splatTexture(fullSplat.header, splatTexture(fullSplat)));
@@ -1195,9 +1173,8 @@ TEST_F(RendererTest, TestSplatTextureStacked) {
   auto scene = ObGen::scene(outCols, outRows);
   scene->renderSpec().clearColor = Color::TRUE_BLACK;
 
-  auto &camera = scene->add(
-    ObGen::perspectiveCamera(
-      Intrinsics::getCameraIntrinsics(DeviceInfos::APPLE_IPHONE_XS), outCols, outRows));
+  auto &camera = scene->add(ObGen::perspectiveCamera(
+    Intrinsics::getCameraIntrinsics(DeviceInfos::APPLE_IPHONE_XS), outCols, outRows));
   camera.setLocal(HMatrixGen::translation(1.1122911f, -0.73037136f, -6.7184558f));
 
   auto &splat =
@@ -1326,9 +1303,8 @@ TEST_F(RendererTest, TestSplatMultiTex) {
   auto scene = ObGen::scene(outCols, outRows);
   scene->renderSpec().clearColor = Color::TRUE_BLACK;
 
-  auto &camera = scene->add(
-    ObGen::perspectiveCamera(
-      Intrinsics::getCameraIntrinsics(DeviceInfos::APPLE_IPHONE_XS), outCols, outRows));
+  auto &camera = scene->add(ObGen::perspectiveCamera(
+    Intrinsics::getCameraIntrinsics(DeviceInfos::APPLE_IPHONE_XS), outCols, outRows));
   camera.setLocal(HMatrixGen::translation(1.1122911f, -0.73037136f, -6.7184558f));
 
   auto &splat = scene->add(ObGen::splatMultiTex(splatView));
@@ -1374,9 +1350,8 @@ TEST_F(RendererTest, TestInterleavedRgbaPixelBuffer) {
     quad.material()
       .setShader(Shaders::IMAGE)
       .setColorTexture(TexGen::rgbaPixelBuffer(std::move(imBuffer)));
-    scene->add(
-      ObGen::perspectiveCamera(
-        Intrinsics::getCameraIntrinsics(DeviceInfos::APPLE_IPHONE_XS), width, height));
+    scene->add(ObGen::perspectiveCamera(
+      Intrinsics::getCameraIntrinsics(DeviceInfos::APPLE_IPHONE_XS), width, height));
   }
 
   Renderer renderer;
@@ -1461,9 +1436,8 @@ TEST_F(RendererTest, TestInterleavedInstanceRgbaPixelBuffer) {
     quad.material()
       .setShader(Shaders::IMAGE)
       .setColorTexture(TexGen::rgbaPixelBuffer(std::move(imBuffer)));
-    scene->add(
-      ObGen::perspectiveCamera(
-        Intrinsics::getCameraIntrinsics(DeviceInfos::APPLE_IPHONE_XS), 640, 480));
+    scene->add(ObGen::perspectiveCamera(
+      Intrinsics::getCameraIntrinsics(DeviceInfos::APPLE_IPHONE_XS), 640, 480));
   }
 
   Renderer renderer;
@@ -1517,9 +1491,8 @@ TEST_F(RendererTest, TestGravityAlignedVectors) {
   // aliasing.
   auto scene = ObGen::scene(4000, 4000);
   scene->add(ObGen::barCloud(bars, Color::CHERRY, 0.01f));
-  auto &camera = scene->add(
-    ObGen::perspectiveCamera(
-      Intrinsics::getCameraIntrinsics(DeviceInfos::APPLE_IPHONE_XS), 4000, 4000));
+  auto &camera = scene->add(ObGen::perspectiveCamera(
+    Intrinsics::getCameraIntrinsics(DeviceInfos::APPLE_IPHONE_XS), 4000, 4000));
 
   // To see the distortion of the up-angle, it's important to have a high degree of pitch.
   // Offsetting slightly in x allows the bars behind each other to be seen better.

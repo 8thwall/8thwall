@@ -20,19 +20,19 @@ cc_library {
 }
 cc_end(0xfc8cf484);
 
-#include "reality/engine/logging/remote-disk-recorder.h"
-
+#include <chrono>
 #include <memory>
 #include <queue>
-#include <chrono>
 #include <thread>
+
 #include "c8/c8-log-proto.h"
 #include "c8/c8-log.h"
 #include "c8/io/capnp-messages.h"
+#include "c8/protolog/remote-disk-logger.h"
 #include "c8/string.h"
 #include "c8/vector.h"
-#include "c8/protolog/remote-disk-logger.h"
 #include "reality/engine/logging/reality-request-expand-image.h"
+#include "reality/engine/logging/remote-disk-recorder.h"
 
 using namespace std::chrono_literals;
 
@@ -78,7 +78,7 @@ void RemoteDiskRecorder::flush() {
     multirequest.initRecords(1);
     multirequest.getRecords().setWithCaveats(0, msgQueue_[i]->builder());
     remoteDiskLogger_->log(multirequest);
-    while(remoteDiskLogger_->hasPendingRequests()) {
+    while (remoteDiskLogger_->hasPendingRequests()) {
       std::this_thread::sleep_for(500us);
     }
   }
@@ -111,7 +111,8 @@ bool RemoteDiskRecorder::isLogging() {
 }
 
 void RemoteDiskRecorder::logToDisk(int numFrames, int fd) {
-  C8Log("[remote-disk-recorder] %s frames=%d fd=%d", "RemoteDiskRecorder::logToDisk", numFrames, fd);
+  C8Log(
+    "[remote-disk-recorder] %s frames=%d fd=%d", "RemoteDiskRecorder::logToDisk", numFrames, fd);
   if (remoteDiskLogger_ != nullptr) {
     stop();
   }

@@ -31,19 +31,19 @@ constexpr auto SOCKPAIR_TYPE = AF_INET;
 constexpr auto SOCKPAIR_TYPE = AF_UNIX;
 #endif
 
-std::map<EventFlags, short> EventFlagToLevFlag = {{EventFlag::READ, EV_READ},
-                                                  {EventFlag::WRITE, EV_WRITE},
-                                                  {EventFlag::EDGE_TRIGGER, EV_ET},
-                                                  {EventFlag::PERSIST, EV_PERSIST}};
-}
+std::map<EventFlags, short> EventFlagToLevFlag = {
+  {EventFlag::READ, EV_READ},
+  {EventFlag::WRITE, EV_WRITE},
+  {EventFlag::EDGE_TRIGGER, EV_ET},
+  {EventFlag::PERSIST, EV_PERSIST}};
+}  // namespace
 
 LevEventListener::LevEventListener() {
 #ifdef _WIN32
   WSADATA WsaData;
   int startupCode = WSAStartup(0x0201, &WsaData);
   if (startupCode != 0) {
-    C8_THROW(
-      "Unable to initialize Windows Winsock. Error code = " + std::to_string(startupCode));
+    C8_THROW("Unable to initialize Windows Winsock. Error code = " + std::to_string(startupCode));
   }
 #endif
 

@@ -6,6 +6,7 @@
 #pragma once
 
 #include <random>
+
 #include "capnp/message.h"
 #include "reality/engine/api/request/sensor.capnp.h"
 #include "reality/engine/api/response/sensor-test.capnp.h"
@@ -13,7 +14,7 @@
 namespace c8 {
 
 class SensorTestRequestExecutor {
- public:
+public:
   // Default constructor.
   SensorTestRequestExecutor() = default;
 
@@ -22,15 +23,13 @@ class SensorTestRequestExecutor {
   SensorTestRequestExecutor &operator=(SensorTestRequestExecutor &&) = default;
 
   // Main method to execute a request.
-  void execute(
-    const RequestSensor::Reader &sensor,
-    ResponseSensorTest::Builder *response) const;
+  void execute(const RequestSensor::Reader &sensor, ResponseSensorTest::Builder *response) const;
 
   // Disallow copying.
   SensorTestRequestExecutor(const SensorTestRequestExecutor &) = delete;
   SensorTestRequestExecutor &operator=(const SensorTestRequestExecutor &) = delete;
 
- private:
+private:
 };
 
 }  // namespace c8

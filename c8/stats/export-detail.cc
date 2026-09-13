@@ -21,6 +21,7 @@ cc_library {
 cc_end(0xbf189526);
 
 #include <sstream>
+
 #include "c8/io/capnp-messages.h"
 #include "c8/stats/export-detail.h"
 #include "c8/stats/scope-timer.h"
@@ -37,7 +38,7 @@ inline void replaceChar(String &haystack, char target, char replacement) {
     }
   }
 }
-}
+}  // namespace
 
 HashMap<String, uint64_t> computeFlamegraphValues(const LoggingDetail::Reader &reader) {
   HashMap<String, uint64_t> durations;

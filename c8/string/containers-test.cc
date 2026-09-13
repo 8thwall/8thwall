@@ -23,7 +23,7 @@ class ContainersTest : public ::testing::Test {};
 // Test vector transform.
 TEST_F(ContainersTest, Transform) {
   Vector<int> v = {0, 1, 2};
-  auto tv = map<int, int>(v, [](const auto &i) { return i + 1;});
+  auto tv = map<int, int>(v, [](const auto &i) { return i + 1; });
   EXPECT_EQ(1, tv[0]);
   EXPECT_EQ(2, tv[1]);
   EXPECT_EQ(3, tv[2]);

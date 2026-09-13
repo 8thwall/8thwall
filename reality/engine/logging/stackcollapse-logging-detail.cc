@@ -27,15 +27,14 @@ cc_end(0xdad525ae);
 
 #include <capnp/message.h>
 #include <capnp/serialize-packed.h>
-
-#include <unistd.h>
 #include <fcntl.h>
+#include <unistd.h>
 
-#include "c8/string.h"
-#include "c8/vector.h"
 #include "c8/c8-log.h"
 #include "c8/io/capnp-messages.h"
 #include "c8/stats/api/detail.capnp.h"
+#include "c8/string.h"
+#include "c8/vector.h"
 
 using namespace c8;
 
@@ -46,16 +45,16 @@ int main(int argc, char *argv[]) {
   auto root = packedReader.getRoot<LoggingDetail>();
   message.setRoot(root);
 
-  for (auto detail: message.reader().getEvents()) {
+  for (auto detail : message.reader().getEvents()) {
     auto length = detail.getEndTimeMicros() - detail.getStartTimeMicros();
     auto name = String(detail.getEventName().cStr());
     if (name.empty()) {
       name = "";
     }
-    for (auto& c : name) {
-      c = c == '/' ? ';' : c; // replace forward slash with semi
+    for (auto &c : name) {
+      c = c == '/' ? ';' : c;  // replace forward slash with semi
     }
-    C8Log("%s %" PRId64, name.c_str() + 1, length); // skip first delimiter
+    C8Log("%s %" PRId64, name.c_str() + 1, length);  // skip first delimiter
   }
 
   return 0;

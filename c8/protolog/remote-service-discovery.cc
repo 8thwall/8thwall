@@ -17,17 +17,15 @@ cc_library {
   visibility = {":protolog-pkgs"};
 }
 
-#include "c8/protolog/remote-service-discovery.h"
-
+#include <fcntl.h>
 #include <kj/async-io.h>
 #include <kj/async-unix.h>
 #include <kj/async.h>
 #include <kj/common.h>
 #include <kj/debug.h>
-
-#include <fcntl.h>
 #include <stdio.h>
 #include <unistd.h>
+
 #include <algorithm>
 #include <ctime>
 #include <thread>
@@ -37,6 +35,7 @@ cc_library {
 #include "c8/events/lev-event-listener.h"
 #include "c8/exceptions.h"
 #include "c8/network/dns-service-discovery.h"
+#include "c8/protolog/remote-service-discovery.h"
 #include "c8/string.h"
 #include "c8/vector.h"
 
@@ -89,8 +88,7 @@ void RemoteServiceDiscovery::startBrowsing() {
                      C8Log("[remote-service-discovery] %s", "stop listener");
                      fdListener.removeFdEvent(readFd);
                      fdListener.stop();
-                   })
-                     .eagerlyEvaluate(nullptr);
+                   }).eagerlyEvaluate(nullptr);
       tasks.add(std::move(defer));
     };
 
@@ -102,16 +100,18 @@ void RemoteServiceDiscovery::startBrowsing() {
     // Browse for RemoteService Services
     C8Log("[remote-service-discovery] %s", "add browse query");
     auto browseQuery = DnsServiceDiscovery::newBrowseRequest(
-      SERVICE_NAME,
-      fdListener,
-      [this](DnsServiceAd serviceAd, bool add, bool more) {
+      SERVICE_NAME, fdListener, [this](DnsServiceAd serviceAd, bool add, bool more) {
         {
           if (wifiInterfaceIndex_ > 0 && wifiInterfaceIndex_ != serviceAd.interfaceIndex) {
             serviceAd.displayName = "USB";
           } else {
             serviceAd.displayName = serviceAd.serviceName;
           }
-          C8Log("[remote-service-discovery] browse callback: %s; add: %d; more: %d", serviceAd.displayName.c_str(), add, more);
+          C8Log(
+            "[remote-service-discovery] browse callback: %s; add: %d; more: %d",
+            serviceAd.displayName.c_str(),
+            add,
+            more);
           std::lock_guard<std::mutex> lock(serverListLock_);
           auto addListIt = std::find(
             this->addingServerList_.begin(), this->addingServerList_.end(), serviceAd.displayName);
@@ -221,7 +221,10 @@ void RemoteServiceDiscovery::fetchServiceInfo(
 
     // Create a new resolve query.
     auto serverAd = this->browseInfo_[serviceName];
-    C8Log("[remote-service-discovery] %s \"%s\"", "resolve-thread start resolve lookup", serverAd.displayName.c_str());
+    C8Log(
+      "[remote-service-discovery] %s \"%s\"",
+      "resolve-thread start resolve lookup",
+      serverAd.displayName.c_str());
     auto request = DnsServiceDiscovery::newResolveRequest(
       serverAd,
       fdListener,

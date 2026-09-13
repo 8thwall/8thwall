@@ -32,7 +32,7 @@ cc_end(0x95316561);
 namespace {
 class IdGenerator {
 public:
-  IdGenerator(std::mt19937 *rng) : rng_(rng) {};
+  IdGenerator(std::mt19937 *rng) : rng_(rng){};
   virtual uint32_t next() { return uniformDist_(*rng_); }
 
 private:

@@ -5,13 +5,13 @@
 
 #pragma once
 
-#include "c8/string.h"
-#include "c8/vector.h"
-#include "c8/media/codec/codec-api.h"
+#include <opus.h>
 
 #include <nlohmann/json.hpp>
 
-#include <opus.h>
+#include "c8/media/codec/codec-api.h"
+#include "c8/string.h"
+#include "c8/vector.h"
 
 namespace c8 {
 

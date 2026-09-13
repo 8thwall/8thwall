@@ -22,7 +22,6 @@ cc_library {
 cc_end(0x6bf065da);
 
 #include "c8/media/codec/opus-decoder.h"
-
 #include "c8/media/demuxer.h"
 
 namespace c8 {

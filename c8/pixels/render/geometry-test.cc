@@ -377,7 +377,7 @@ TEST_F(GeometryTest, TestSphere) {
   for (int i = 0; i < sphere->vertices().size(); i++) {
     auto &v = sphere->vertices()[i];
     auto &n = sphere->normals()[i];
-    std::array<HVector3, 1UL> t = { HVector3{v.x(), v.y(), v.z()} };
+    std::array<HVector3, 1UL> t = {HVector3{v.x(), v.y(), v.z()}};
     EXPECT_THAT(t, equalsVec({n}));
   }
   radius = 4.5f;
@@ -385,7 +385,7 @@ TEST_F(GeometryTest, TestSphere) {
   for (int i = 0; i < sphere->vertices().size(); i++) {
     auto &v = sphere->vertices()[i];
     auto &n = sphere->normals()[i];
-    std::array<HVector3, 1UL> t = { HVector3{v.x(), v.y(), v.z()} };
+    std::array<HVector3, 1UL> t = {HVector3{v.x(), v.y(), v.z()}};
     EXPECT_THAT(t, equalsVec({4.5f * n}));
   }
 
@@ -444,8 +444,7 @@ TEST_F(GeometryTest, TestSphereSmall) {
     {0.25f, 1.f},
     {0.5f, 1.f},
     {0.75f, 1.0f},
-    {1.f, 1.f}
-  };
+    {1.f, 1.f}};
   Vector<HVector3> normals = {
     {0.f, 1.f, 0.f},
     {0.f, 1.f, 0.f},
@@ -464,20 +463,17 @@ TEST_F(GeometryTest, TestSphereSmall) {
     {0.f, -1.f, 0.f},
   };
   Vector<MeshIndices> indices = {
-    {6, 5, 1},
-    {7, 6, 2},
-    {8, 7, 3},
-    {9, 8, 4},
-    {6, 10, 5},
-    {7, 11, 6},
-    {8, 12, 7},
-    {9, 13, 8}
-  };
+    {6, 5, 1}, {7, 6, 2}, {8, 7, 3}, {9, 8, 4}, {6, 10, 5}, {7, 11, 6}, {8, 12, 7}, {9, 13, 8}};
 
   for (int i = 0; i < sphere->triangles().size(); i++) {
-    EXPECT_THAT(triVerts(*sphere, i), equalsVec({verts[indices[i].a], verts[indices[i].b], verts[indices[i].c]}));
-    EXPECT_THAT(triUvs(*sphere, i), equalsVec({uvs[indices[i].a], uvs[indices[i].b], uvs[indices[i].c]}));
-    EXPECT_THAT(triNormals(*sphere, i), equalsVec({normals[indices[i].a], normals[indices[i].b], normals[indices[i].c]}));
+    EXPECT_THAT(
+      triVerts(*sphere, i),
+      equalsVec({verts[indices[i].a], verts[indices[i].b], verts[indices[i].c]}));
+    EXPECT_THAT(
+      triUvs(*sphere, i), equalsVec({uvs[indices[i].a], uvs[indices[i].b], uvs[indices[i].c]}));
+    EXPECT_THAT(
+      triNormals(*sphere, i),
+      equalsVec({normals[indices[i].a], normals[indices[i].b], normals[indices[i].c]}));
   }
 }
 

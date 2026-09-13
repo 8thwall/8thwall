@@ -17,10 +17,10 @@ cc_library {
   };
 }
 
-#include "reality/engine/features/opencv-image-descriptor.h"
-
 #include <string>
+
 #include "c8/exceptions.h"
+#include "reality/engine/features/opencv-image-descriptor.h"
 #include "third_party/cvlite/core/core.hpp"
 
 namespace c8 {
@@ -37,7 +37,8 @@ template <size_t N>
 ImageDescriptor<N> toImageDescriptor(const c8cv::Mat &input) {
   if (!(input.cols == 1 && input.rows == N) && !(input.cols == N && input.rows == 1)) {
     // C8_THROW_INVALID_ARGUMENT("descriptor must be a Nx1 or 1xN vector");
-    C8_THROW_INVALID_ARGUMENT("descriptor must be a Nx1 or 1xN vector, with N=" + std::to_string(N));
+    C8_THROW_INVALID_ARGUMENT(
+      "descriptor must be a Nx1 or 1xN vector, with N=" + std::to_string(N));
   }
 
   if (input.type() != CV_8UC1) {

@@ -7,7 +7,6 @@
 
 #include "c8/pixels/opengl/gl-version.h"
 
-
 #if __APPLE__ && !C8_USE_ANGLE
 #include <TargetConditionals.h>
 #if TARGET_OS_IPHONE

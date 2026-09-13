@@ -34,8 +34,8 @@
 #include <utility>
 
 #include "Eigen/Core"
-#include "ceres/autodiff_cost_function.h"
 #include "bzl/examples/ceres/types.h"
+#include "ceres/autodiff_cost_function.h"
 
 namespace ceres::examples {
 
@@ -69,18 +69,17 @@ namespace ceres::examples {
 //   residuals = I^{1/2) * error
 // where I is the information matrix which is the inverse of the covariance.
 class PoseGraph3dErrorTerm {
- public:
-  PoseGraph3dErrorTerm(Pose3d t_ab_measured,
-                       Eigen::Matrix<double, 6, 6> sqrt_information)
-      : t_ab_measured_(std::move(t_ab_measured)),
-        sqrt_information_(std::move(sqrt_information)) {}
+public:
+  PoseGraph3dErrorTerm(Pose3d t_ab_measured, Eigen::Matrix<double, 6, 6> sqrt_information)
+      : t_ab_measured_(std::move(t_ab_measured)), sqrt_information_(std::move(sqrt_information)) {}
 
   template <typename T>
-  bool operator()(const T* const p_a_ptr,
-                  const T* const q_a_ptr,
-                  const T* const p_b_ptr,
-                  const T* const q_b_ptr,
-                  T* residuals_ptr) const {
+  bool operator()(
+    const T *const p_a_ptr,
+    const T *const q_a_ptr,
+    const T *const p_b_ptr,
+    const T *const q_b_ptr,
+    T *residuals_ptr) const {
     Eigen::Map<const Eigen::Matrix<T, 3, 1>> p_a(p_a_ptr);
     Eigen::Map<const Eigen::Quaternion<T>> q_a(q_a_ptr);
 
@@ -95,15 +94,13 @@ class PoseGraph3dErrorTerm {
     Eigen::Matrix<T, 3, 1> p_ab_estimated = q_a_inverse * (p_b - p_a);
 
     // Compute the error between the two orientation estimates.
-    Eigen::Quaternion<T> delta_q =
-        t_ab_measured_.q.template cast<T>() * q_ab_estimated.conjugate();
+    Eigen::Quaternion<T> delta_q = t_ab_measured_.q.template cast<T>() * q_ab_estimated.conjugate();
 
     // Compute the residuals.
     // [ position         ]   [ delta_p          ]
     // [ orientation (3x1)] = [ 2 * delta_q(0:2) ]
     Eigen::Map<Eigen::Matrix<T, 6, 1>> residuals(residuals_ptr);
-    residuals.template block<3, 1>(0, 0) =
-        p_ab_estimated - t_ab_measured_.p.template cast<T>();
+    residuals.template block<3, 1>(0, 0) = p_ab_estimated - t_ab_measured_.p.template cast<T>();
     residuals.template block<3, 1>(3, 0) = T(2.0) * delta_q.vec();
 
     // Scale the residuals by the measurement uncertainty.
@@ -112,16 +109,15 @@ class PoseGraph3dErrorTerm {
     return true;
   }
 
-  static ceres::CostFunction* Create(
-      const Pose3d& t_ab_measured,
-      const Eigen::Matrix<double, 6, 6>& sqrt_information) {
+  static ceres::CostFunction *Create(
+    const Pose3d &t_ab_measured, const Eigen::Matrix<double, 6, 6> &sqrt_information) {
     return new ceres::AutoDiffCostFunction<PoseGraph3dErrorTerm, 6, 3, 4, 3, 4>(
-        new PoseGraph3dErrorTerm(t_ab_measured, sqrt_information));
+      new PoseGraph3dErrorTerm(t_ab_measured, sqrt_information));
   }
 
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
- private:
+private:
   // The measurement for the position of B relative to A in the A frame.
   const Pose3d t_ab_measured_;
   // The square root of the measurement information matrix.

@@ -40,12 +40,8 @@ float RollingLinReg::slope(float x, float y) {
   return beta_;
 }
 
-float RollingLinReg::slope() const {
-  return beta_;
-}
+float RollingLinReg::slope() const { return beta_; }
 
-float RollingLinReg::offset() const {
-  return alpha_;
-}
+float RollingLinReg::offset() const { return alpha_; }
 
 }  // namespace c8

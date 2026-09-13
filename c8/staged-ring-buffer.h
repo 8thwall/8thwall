@@ -99,7 +99,7 @@ public:
   //   stages - A braced-initializer list containing the stages in order from first to last.
   //   params - Any additional constructor arguments to forward to every constructed frame.
   template <typename... Params>
-  StagedRingBuffer(size_t size, std::initializer_list<StageEnum> stages, Params &&... params);
+  StagedRingBuffer(size_t size, std::initializer_list<StageEnum> stages, Params &&...params);
 
   ~StagedRingBuffer() = default;
 
@@ -227,7 +227,7 @@ private:
 template <typename T, typename StageEnum>
 template <typename... Params>
 StagedRingBuffer<T, StageEnum>::StagedRingBuffer(
-  size_t size, std::initializer_list<StageEnum> stages, Params &&... params) {
+  size_t size, std::initializer_list<StageEnum> stages, Params &&...params) {
   if (size < 2) {
     C8_THROW_INVALID_ARGUMENT("StagedRingBuffer size must be >= 2");
   }

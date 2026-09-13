@@ -1199,9 +1199,7 @@ std::unique_ptr<Renderable> splatMultiTex(const SplatMultiTextureView &splat) {
       Shaders::RENDERER_SPLAT_POSITIONCOLOR_TEX, TexGen::rgba32Pixels(splat.positionColor))
     .setTexture(
       Shaders::RENDERER_SPLAT_ROTATIONSCALE_TEX, TexGen::rgba32Pixels(splat.rotationScale))
-    .setTexture(
-      Shaders::RENDERER_SPLAT_SHCOLOR_TEX, TexGen::sceneTexture("shScene", "shColor"));
-
+    .setTexture(Shaders::RENDERER_SPLAT_SHCOLOR_TEX, TexGen::sceneTexture("shScene", "shColor"));
 
   // Uniforms
   el->material().set(Shaders::RENDERER_ANTIALIASED, static_cast<float>(splat.header.antialiased));

@@ -24,7 +24,8 @@ struct PlanarImageGeometry {
  * i.e. it denotes the location and size of a sticker on a curvy
  */
 struct ActivationRegion {
-  float left = 0.f;    // (-1, 1) 0 and 1 are back of curvy from a left-right perspective, 0.5 is front.
+  float left =
+    0.f;  // (-1, 1) 0 and 1 are back of curvy from a left-right perspective, 0.5 is front.
   float right = 0.f;   // (0:1] right > left, right - left <= 1
   float top = 0.f;     // [0,1] ymin
   float bottom = 0.f;  // [0,1] ymax

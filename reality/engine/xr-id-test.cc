@@ -6,14 +6,15 @@
 cc_test {
   size = "small";
   deps = {
-    ":xr-id", "//bzl/inliner:rules", "@com_google_googletest//:gtest_main",
+    ":xr-id",
+    "//bzl/inliner:rules",
+    "@com_google_googletest//:gtest_main",
   };
 }
 cc_end(0xe3f3e51d);
 
-#include "reality/engine/xr-id.h"
-
 #include "gtest/gtest.h"
+#include "reality/engine/xr-id.h"
 
 namespace c8 {
 

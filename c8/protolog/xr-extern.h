@@ -11,6 +11,7 @@ extern "C" {
 
 #include <stdbool.h>
 #include <stdint.h>
+
 #include "c8/protolog/api-limits.h"
 
 // NOTE: These constants must be kept exactly in sync with its equivalent in XRExtern.
@@ -78,7 +79,7 @@ struct c8_XRConfigurationLegacy {
 
 // Message for wrapping serialized capnp data without implied ownership.
 struct c8_NativeByteArray {
-  const void* bytes;
+  const void *bytes;
   int size;
 };
 

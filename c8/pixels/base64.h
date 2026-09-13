@@ -12,4 +12,4 @@
 namespace c8 {
 std::string encode(const std::vector<uint8_t> &data);
 std::vector<uint8_t> decode(const std::string &base64Data);
-}
+}  // namespace c8

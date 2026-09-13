@@ -18,9 +18,8 @@ cc_library {
 }
 cc_end(0x6b96aac6);
 
-#include "c8/pixels/opengl/gl-error.h"
-
 #include "c8/c8-log.h"
+#include "c8/pixels/opengl/gl-error.h"
 #include "c8/pixels/opengl/gl.h"
 
 namespace c8 {

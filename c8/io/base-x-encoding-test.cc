@@ -17,13 +17,12 @@ cc_end(0xe5b1d6f3);
 
 #include "c8/io/base-x-encoding.h"
 #include "c8/string.h"
-
 #include "gtest/gtest.h"
 
 namespace c8 {
 
 class BaseXEncodingTest : public ::testing::Test {};
-String encodeToString(const BaseXEncoding& encoding, const String& text) {
+String encodeToString(const BaseXEncoding &encoding, const String &text) {
   auto encodedBuffer = encoding.encode(text);
   return String(encodedBuffer->begin(), encodedBuffer->end());
 }
@@ -35,7 +34,9 @@ TEST_F(BaseXEncodingTest, TestEncodeBase62) {
 
 TEST_F(BaseXEncodingTest, TestEncodeBase58) {
   BaseXEncoding encoding("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUV");
-  EXPECT_STREQ("75p7uvTyxe3x7duGKxzz8640d8HMw2GlCsPOQIRtREab", encodeToString(encoding, "if you ain\'t first, you\'re last'").c_str());
+  EXPECT_STREQ(
+    "75p7uvTyxe3x7duGKxzz8640d8HMw2GlCsPOQIRtREab",
+    encodeToString(encoding, "if you ain\'t first, you\'re last'").c_str());
 }
 
 TEST_F(BaseXEncodingTest, TestEncodeBase16) {

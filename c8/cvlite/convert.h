@@ -7,8 +7,8 @@
 
 #include <type_traits>
 
-#include "c8/vector.h"
 #include "c8/hpoint.h"
+#include "c8/vector.h"
 #include "third_party/cvlite/core/affine.hpp"
 #include "third_party/cvlite/core/core.hpp"
 
@@ -41,8 +41,8 @@ private:
 // row-major.
 c8cv::Matx44f toMatx(const HMatrix &matrix);
 
-// Convert the upper-left submatrix of the HMatrix to a c8cv::Matx, changing the internal storage from
-// column-major to row-major.
+// Convert the upper-left submatrix of the HMatrix to a c8cv::Matx, changing the internal storage
+// from column-major to row-major.
 c8cv::Matx44d toMatx44d(const HMatrix &matrix);
 c8cv::Matx34f toMatx34f(const HMatrix &matrix);
 c8cv::Matx34d toMatx34d(const HMatrix &matrix);
@@ -70,10 +70,11 @@ HMatrix toHMatrix(const c8cv::Matx22d &matrix);
 c8cv::Affine3f toAffine3(const HMatrix &matrix);
 
 // Return a read-only wrapper to the HPoint vector as a c8cv::Mat.
-MatBackedInputArray asInputArray(const Vector<HPoint2>& points);
-MatBackedInputArray asInputArray(const Vector<HPoint3>& points);
+MatBackedInputArray asInputArray(const Vector<HPoint2> &points);
+MatBackedInputArray asInputArray(const Vector<HPoint3> &points);
 
-// Return a read-only wrapper to the HPoint vector as a c8cv::Mat, where each Mat element is a D-channel homogeneous vector.
+// Return a read-only wrapper to the HPoint vector as a c8cv::Mat, where each Mat element is a
+// D-channel homogeneous vector.
 MatBackedInputArray as3ChanInputArray(const Vector<HPoint2> &points);
 MatBackedInputArray as4ChanInputArray(const Vector<HPoint3> &points);
 

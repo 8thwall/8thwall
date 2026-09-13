@@ -7,8 +7,7 @@ cc_library {
   hdrs = {
     "model-config.h",
   };
-  deps = {
-  };
+  deps = {};
 }
 cc_end(0xc10138f5);
 

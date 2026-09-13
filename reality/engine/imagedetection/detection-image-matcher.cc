@@ -152,13 +152,8 @@ void DetectionImageMatcher::match(
           static_cast<int>(featureType_));
         return;
       }
-      matches->push_back(
-        PointMatch{
-          wordKptIdx,
-          static_cast<size_t>(idx),
-          rotation,
-          static_cast<float>(d),
-          firstPoint.scale()});
+      matches->push_back(PointMatch{
+        wordKptIdx, static_cast<size_t>(idx), rotation, static_cast<float>(d), firstPoint.scale()});
     }
   }
 }

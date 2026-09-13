@@ -26,8 +26,8 @@ cc_end(0xf6487735);
 #include "c8/c8-log-proto.h"
 #include "c8/c8-log.h"
 #include "c8/git/g8-git.h"
-#include "c8/symbol-visibility.h"
 #include "c8/stats/scope-timer.h"
+#include "c8/symbol-visibility.h"
 
 namespace {
 
@@ -349,7 +349,6 @@ void c8EmAsm_g8Inspect(uint8_t *ptr, int size) {
     },
     data().inspectResponse.bytes().begin(),
     data().inspectResponse.bytes().size());
-
 
   c8::C8Log("[g8-git-js] ^^^^^^^^^^^^^^^^^^^^ %s ^^^^^^^^^^^^^^^^^^^^", "c8EmAsm_g8Inspect");
 }

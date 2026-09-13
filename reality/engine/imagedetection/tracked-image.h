@@ -19,8 +19,8 @@ struct TrackedImage {
   Status status = Status::UNKNOWN_STATUS;
   int index = -1;
   String name;
-  HMatrix pose = HMatrixGen::i(); // pose relative to camera
-  HMatrix worldPose = HMatrixGen::i(); // pose from tam
+  HMatrix pose = HMatrixGen::i();       // pose relative to camera
+  HMatrix worldPose = HMatrixGen::i();  // pose from tam
   float scale = 1.0f;
   int32_t lastSeen = -1;
   int32_t firstSeen = 0;

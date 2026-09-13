@@ -31,8 +31,8 @@ cc_end(0xc6de5f86);
 #include "c8/pixels/keyframe-sprite-sheet.h"
 #include "c8/pixels/opengl/offscreen-gl-context.h"
 #include "c8/pixels/pixel-transforms.h"
-#include "gtest/gtest.h"
 #include "c8/stats/scope-timer.h"
+#include "gtest/gtest.h"
 
 namespace c8 {
 
@@ -204,12 +204,7 @@ TEST_F(KeyframeSpriteSheetTest, FillGrid) {
     for (int j = 0; j < 4; j++) {
       RGBA8888PlanePixelBuffer buffer(w, w);
       RGBA8888PlanePixels pix = buffer.pixels();
-      fill(
-        Color::CHERRY.r(),
-        Color::CHERRY.g(),
-        Color::CHERRY.b(),
-        60 * i + 7 * j,
-        &pix);
+      fill(Color::CHERRY.r(), Color::CHERRY.g(), Color::CHERRY.b(), 60 * i + 7 * j, &pix);
       auto tex = readImageToLinearTexture(pix);
       kfs.insert(tex.id(), std::to_string(4 * i + j), &renderer);
     }

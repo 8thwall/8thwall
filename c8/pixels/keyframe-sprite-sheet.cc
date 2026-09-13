@@ -82,8 +82,7 @@ bool KeyframeSpriteSheet::has(const String &tag) const { return tagToLayoutIndex
 
 SpriteInfo KeyframeSpriteSheet::sprite(const String &tag) const {
   if (!tagToLayoutIndex_.count(tag)) {
-    C8_THROW_INVALID_ARGUMENT(
-      "[KeyframeSpriteSheet] Tag \"%s\" not in spriteSheet", tag.c_str());
+    C8_THROW_INVALID_ARGUMENT("[KeyframeSpriteSheet] Tag \"%s\" not in spriteSheet", tag.c_str());
   }
   Viewport vp = idxToViewport(tagToLayoutIndex_.at(tag));
   float xpos = (float)vp.x / width_;

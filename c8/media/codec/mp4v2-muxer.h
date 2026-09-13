@@ -6,11 +6,12 @@
 #pragma once
 
 #include <mp4v2/mp4v2.h>
+
 #include <nlohmann/json.hpp>
 
 #include "c8/map.h"
-#include "c8/string.h"
 #include "c8/media/codec/codec-api.h"
+#include "c8/string.h"
 
 namespace c8 {
 

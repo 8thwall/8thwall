@@ -16,15 +16,13 @@ cc_test {
 }
 cc_end(0x8ce0d6ec);
 
-#include "c8/string/join.h"
-
 #include <string>
 
 #include "c8/string-view.h"
 #include "c8/string.h"
 #include "c8/string/format.h"
+#include "c8/string/join.h"
 #include "c8/vector.h"
-
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 

@@ -21,7 +21,7 @@ struct Box3 {
   // Construct a box given the center point as well as the width, height, and depth.
   static Box3 from(const HPoint3 &center, const HVector3 &size);
 
-  bool intersects(const Box3 &b) const;  // Check if two boxes overlap.
+  bool intersects(const Box3 &b) const;    // Check if two boxes overlap.
   bool contains(const HPoint3 &pt) const;  // Check if box contains point
   Box3 merge(const Box3 &b) const;  // Get the box that contains all points of this and another box.
   HPoint3 center() const;           // Get the center point of this box.

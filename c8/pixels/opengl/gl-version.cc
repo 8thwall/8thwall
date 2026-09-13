@@ -24,7 +24,7 @@ cc_end(0x45e3181f);
 
 extern "C" {
 
-const char* c8_glVersion() { return reinterpret_cast<const char *>(glGetString(GL_VERSION)); }
+const char *c8_glVersion() { return reinterpret_cast<const char *>(glGetString(GL_VERSION)); }
 
 const char *c8_glShadingVersion() {
   return reinterpret_cast<const char *>(glGetString(GL_SHADING_LANGUAGE_VERSION));

@@ -14,21 +14,13 @@ public:
   Lockable();
   Lockable(std::unique_ptr<T> &&c) : class_(std::move(c)){};
 
-  T *operator->() {
-    return class_.get();
-  }
+  T *operator->() { return class_.get(); }
 
-  T *ptr() {
-    return class_.get();
-  }
+  T *ptr() { return class_.get(); }
 
-  T &ref() {
-    return *class_;
-  }
+  T &ref() { return *class_; }
 
-  std::lock_guard<std::mutex> lock() {
-    return std::lock_guard<std::mutex>(mtx_);
-  }
+  std::lock_guard<std::mutex> lock() { return std::lock_guard<std::mutex>(mtx_); }
 
 private:
   std::mutex mtx_;

@@ -11,6 +11,7 @@
 
 #include <mutex>
 #include <queue>
+
 #include "c8/map.h"
 #include "c8/pixels/opengl/gl.h"
 #include "c8/pixels/pipeline/pipeline-texture.h"

@@ -54,19 +54,18 @@ cc_library {
 }
 cc_end(0xb128cddf);
 
-#include "reality/engine/features/gr8cpu.h"
-
 #include "c8/exceptions.h"
+#include "reality/engine/features/gr8cpu.h"
 
 namespace c8 {
 namespace {
-  class Gr8CpuNop : public Gr8CpuInterface {
+class Gr8CpuNop : public Gr8CpuInterface {
 public:
   ImagePoints detectAndCompute(YPlanePixels frame) override {
     C8_THROW("CPU feature extraction not supported on this platform");
   };
 };
-}
+}  // namespace
 
 Gr8Cpu Gr8Cpu::create(
   int nfeatures,

@@ -10,9 +10,9 @@
 namespace c8 {
 
 #ifdef WIN32
-  using FdInt = intptr_t;
+using FdInt = intptr_t;
 #else
-  using FdInt = int;
+using FdInt = int;
 #endif
 
 // Bitmask flags to pass to event listeners.
@@ -37,11 +37,9 @@ struct EventFlag {
 
 // Interface for observing a file descriptor.
 class FdEventListener {
- public:
-
+public:
   // Add a fd to the list of events being observed.
-  virtual void addFdEvent(
-    FdInt fd, EventFlags flags, std::function<void()> callback) = 0;
+  virtual void addFdEvent(FdInt fd, EventFlags flags, std::function<void()> callback) = 0;
 
   // Remove an fd from the list of events being observed.
   virtual void removeFdEvent(FdInt fd) = 0;
@@ -49,10 +47,9 @@ class FdEventListener {
 
 // Interface for listening on a signal.
 class SignalEventListener {
- public:
+public:
   // Add a fd to the list of events being observed.
-  virtual void addSignalEvent(
-    FdInt fd, EventFlags flags, std::function<void()> callback) = 0;
+  virtual void addSignalEvent(FdInt fd, EventFlags flags, std::function<void()> callback) = 0;
 
   // Remove an fd from the list of events being observed.
   virtual void removeSignalEvent(FdInt fd) = 0;
@@ -60,10 +57,9 @@ class SignalEventListener {
 
 // Interface for listening on a timer.
 class TimerEventListener {
- public:
+public:
   // Add a timer to the list of events being observed.
-  virtual void addTimerEvent(
-    FdInt fd, EventFlags flags, std::function<void()> callback) = 0;
+  virtual void addTimerEvent(FdInt fd, EventFlags flags, std::function<void()> callback) = 0;
 
   // Remove a time from the list of events being observed.
   virtual void removeTimerEvent(FdInt fd) = 0;

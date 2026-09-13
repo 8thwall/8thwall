@@ -3,7 +3,6 @@
 
 #include "bzl/inliner/rules2.h"
 
-
 cc_test {
   size = "small";
   deps = {
@@ -15,12 +14,11 @@ cc_test {
 }
 cc_end(0x25c861ee);
 
-#include "reality/engine/features/opencv-image-descriptor.h"
-
+#include "c8/stats/scope-timer.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "reality/engine/features/gr8.h"
-#include "c8/stats/scope-timer.h"
+#include "reality/engine/features/opencv-image-descriptor.h"
 #include "third_party/cvlite/core/core.hpp"
 
 namespace c8 {

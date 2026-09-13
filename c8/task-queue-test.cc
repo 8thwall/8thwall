@@ -14,14 +14,12 @@ cc_test {
 }
 cc_end(0x0874252b);
 
-#include "c8/thread-pool.h"
-
 #include <numeric>
 #include <thread>
 
 #include "c8/task-queue.h"
+#include "c8/thread-pool.h"
 #include "c8/vector.h"
-
 #include "gtest/gtest.h"
 
 namespace c8 {

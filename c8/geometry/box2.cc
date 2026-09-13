@@ -53,4 +53,4 @@ float intersectionOverUnion(const Box2 &bboxA, const Box2 &bboxB) {
   return intersection / bboxUnion;
 }
 
-}
+}  // namespace c8

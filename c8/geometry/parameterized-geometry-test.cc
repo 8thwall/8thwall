@@ -57,10 +57,10 @@ CurvyImageGeometry geom, fullGeom;
 CurvyImageGeometry coneGeom, coneFullGeom;
 class ParameterizedGeometryTest : public ::testing::Test {
 public:
-    static void SetUpTestSuite() {
-      curvyForTarget(480, 640, {0.6}, &geom, &fullGeom);
-      curvyForTarget(480, 640, {0.6, false, {}, 1.42}, &coneGeom, &coneFullGeom);
-    }
+  static void SetUpTestSuite() {
+    curvyForTarget(480, 640, {0.6}, &geom, &fullGeom);
+    curvyForTarget(480, 640, {0.6, false, {}, 1.42}, &coneGeom, &coneFullGeom);
+  }
 };
 
 // Get a consistent test intrinsic matrix.
@@ -89,24 +89,25 @@ Vector<HPoint3> getPointsOnCurvy(CurvyImageGeometry geom) {
                          {0.f, curvyHalfHeight, -geom.radius}};
 }
 
-void getRandomPointsOnCurvy(CurvyImageGeometry geom, int numPoints, Vector<HPoint3> *points, Vector<HVector3> *normals) {
+void getRandomPointsOnCurvy(
+  CurvyImageGeometry geom, int numPoints, Vector<HPoint3> *points, Vector<HVector3> *normals) {
   points->reserve(numPoints);
   normals->reserve(numPoints);
   points->clear();
   normals->clear();
   // float halfConeTheta = computeTheta(geom) / 2;
   RandomNumbers randomNum;
-  for (size_t i = 0; i < numPoints; i++)
-  {
+  for (size_t i = 0; i < numPoints; i++) {
     float y = randomNum.nextUniform32f() - 0.5;
     float radiusAtY = geom.radius * (y + 0.5) * geom.radiusBottom * (y - 0.5);
     float theta = randomNum.nextUniform32f() * 2 * M_PI;
     points->emplace_back(-radiusAtY * std::sin(theta), y, radiusAtY * std::cos(theta));
 
-    // float normalY = ((geom.radius < geom.radiusBottom) ? 1.f : -1.f) * radiusAtY * tan(halfConeTheta);
-    normals->push_back(HVector3 {-radiusAtY * std::sin(theta), y, radiusAtY * std::cos(theta)}.unit());
+    // float normalY = ((geom.radius < geom.radiusBottom) ? 1.f : -1.f) * radiusAtY *
+    // tan(halfConeTheta);
+    normals->push_back(
+      HVector3{-radiusAtY * std::sin(theta), y, radiusAtY * std::cos(theta)}.unit());
   }
-
 }
 
 void generateRays(
@@ -119,7 +120,7 @@ void generateRays(
 }
 
 TEST_F(ParameterizedGeometryTest, constructSimpleGeometryFromSpec) {
-  CurvyImageGeometry equivalentGeom {0.198943, 1.0, {0.2, 0.8f, 0.f, 1.f}, 640, 480};
+  CurvyImageGeometry equivalentGeom{0.198943, 1.0, {0.2, 0.8f, 0.f, 1.f}, 640, 480};
   EXPECT_NEAR(geom.radius, equivalentGeom.radius, 1e-6);
   EXPECT_NEAR(geom.height, equivalentGeom.height, 1e-6);
   EXPECT_EQ(geom.srcRows, equivalentGeom.srcRows);
@@ -132,8 +133,9 @@ TEST_F(ParameterizedGeometryTest, constructSimpleGeometryFromSpec) {
 
 TEST_F(ParameterizedGeometryTest, constructCroppedGeometryFromSpecSimple) {
   // we crop at half the size right in the middle of the target
-  // since the arc stays the same but the tracked curvy is half as big, the radius grows twice as big
-  CurvyImageGeometry equivalentGeom {0.397887, 1.0, {0.35, 0.65f, 0.25f, 0.75f}, 320, 240};
+  // since the arc stays the same but the tracked curvy is half as big, the radius grows twice as
+  // big
+  CurvyImageGeometry equivalentGeom{0.397887, 1.0, {0.35, 0.65f, 0.25f, 0.75f}, 320, 240};
   CurvyImageGeometry specGeom, specFullGeom;
   curvyForTarget(240, 320, {0.6, false, {2, 2, 0.25, 0.25}}, &specGeom, &specFullGeom);
   EXPECT_NEAR(specGeom.radius, equivalentGeom.radius, 1e-6);
@@ -147,7 +149,8 @@ TEST_F(ParameterizedGeometryTest, constructCroppedGeometryFromSpecSimple) {
   EXPECT_EQ(specGeom.isCone, equivalentGeom.isCone);
 
   EXPECT_NEAR(specFullGeom.radius, specGeom.radius, 1e-6) << "Cylinder radius is always the same";
-  EXPECT_NEAR(specFullGeom.height, specGeom.height * 2, 1e-6) << "Cylinder full height is scaled inverse to activation region";
+  EXPECT_NEAR(specFullGeom.height, specGeom.height * 2, 1e-6)
+    << "Cylinder full height is scaled inverse to activation region";
   EXPECT_NEAR(specFullGeom.activationRegion.left, 0.2, 1e-6);
   EXPECT_NEAR(specFullGeom.activationRegion.right, 0.8, 1e-6);
   EXPECT_NEAR(specFullGeom.activationRegion.top, 0.f, 1e-6);
@@ -157,7 +160,7 @@ TEST_F(ParameterizedGeometryTest, constructCroppedGeometryFromSpecSimple) {
 TEST_F(ParameterizedGeometryTest, constructCroppedGeometryFromSpec) {
   CurvyImageGeometry specGeom, specFullGeom;
   curvyForTarget(400, 533, {0.6, false, {1.2, 1.2, 0.1, 0.1}}, &specGeom, &specFullGeom);
-  CurvyImageGeometry equivalentGeom {0.238881, 1.0, {0.26, 0.76f, 0.1f, 0.933333f}, 533, 400};
+  CurvyImageGeometry equivalentGeom{0.238881, 1.0, {0.26, 0.76f, 0.1f, 0.933333f}, 533, 400};
   EXPECT_NEAR(specGeom.radius, equivalentGeom.radius, 1e-6);
   EXPECT_NEAR(specGeom.height, equivalentGeom.height, 1e-6);
   EXPECT_EQ(specGeom.srcRows, equivalentGeom.srcRows);
@@ -170,11 +173,12 @@ TEST_F(ParameterizedGeometryTest, constructCroppedGeometryFromSpec) {
 }
 
 TEST_F(ParameterizedGeometryTest, constructFullConeFromSpec) {
-  float base = 27.6 / 20.2; // cup circumference top / cup circumference bottom
+  float base = 27.6 / 20.2;  // cup circumference top / cup circumference bottom
   CurvyImageGeometry specGeom, specFullGeom;
   curvyForTarget(1600, 654, {1.0, false, {1.0, 1.0, 0., 0.}, base}, &specGeom, &specFullGeom);
   float radiusTop = 0.391509f;
-  CurvyImageGeometry equivalentGeom {radiusTop, 1.0, {0.f, 1.f, 0.f, 1.0f}, 654, 1600, true, radiusTop / base};
+  CurvyImageGeometry equivalentGeom{
+    radiusTop, 1.0, {0.f, 1.f, 0.f, 1.0f}, 654, 1600, true, radiusTop / base};
   EXPECT_NEAR(specGeom.radius, equivalentGeom.radius, 1e-3);
   EXPECT_NEAR(specGeom.height, equivalentGeom.height, 1e-6);
   EXPECT_EQ(specGeom.srcRows, equivalentGeom.srcRows);
@@ -188,12 +192,14 @@ TEST_F(ParameterizedGeometryTest, constructFullConeFromSpec) {
 }
 
 TEST_F(ParameterizedGeometryTest, constructCroppedConeFromSpec) {
-  float base = 27.6 / 20.2; // cup circumference top / cup circumference bottom
+  float base = 27.6 / 20.2;  // cup circumference top / cup circumference bottom
   CurvyImageGeometry specGeom, specFullGeom;
   curvyForTarget(490, 654, {1.0, false, {3.265306, 1.0, 0.6, 0.}, base}, &specGeom, &specFullGeom);
-  float radiusTopNoCrop = 0.391509f; // this value should be the same as the test in constructFullConeFromSpec
+  float radiusTopNoCrop =
+    0.391509f;  // this value should be the same as the test in constructFullConeFromSpec
   float radiusBottomNoCrop = radiusTopNoCrop / base;
-  CurvyImageGeometry equivalentGeom {radiusTopNoCrop, 1.0, {0.6f, 0.90625f, 0.f, 1.0f}, 654, 490, true, radiusBottomNoCrop};
+  CurvyImageGeometry equivalentGeom{
+    radiusTopNoCrop, 1.0, {0.6f, 0.90625f, 0.f, 1.0f}, 654, 490, true, radiusBottomNoCrop};
   EXPECT_NEAR(specGeom.radius, equivalentGeom.radius, 1e-3);
   EXPECT_NEAR(specGeom.height, equivalentGeom.height, 1e-6);
   EXPECT_EQ(specGeom.srcRows, equivalentGeom.srcRows);
@@ -207,11 +213,13 @@ TEST_F(ParameterizedGeometryTest, constructCroppedConeFromSpec) {
 
   // we construct the same cropped cone but this time with vertical crop in the middle
   CurvyImageGeometry specGeom2, specFullGeom2;
-  curvyForTarget(490, 654/2, {1.0, false, {3.265306, 2.0, 0.6, 0.25}, base}, &specGeom2, &specFullGeom2);
+  curvyForTarget(
+    490, 654 / 2, {1.0, false, {3.265306, 2.0, 0.6, 0.25}, base}, &specGeom2, &specFullGeom2);
   // radius is twice as big since the crop height is twice as small
   float radiusTop = 2 * (radiusTopNoCrop * 0.75 + 0.25 * radiusBottomNoCrop);
   float radiusBottom = 2 * (radiusTopNoCrop * 0.25 + 0.75 * radiusBottomNoCrop);
-  CurvyImageGeometry equivalentGeom2 {radiusTop, 1.0, {0.6f, 0.90625f, 0.25f, 0.75f}, 654/2, 490, true, radiusBottom};
+  CurvyImageGeometry equivalentGeom2{
+    radiusTop, 1.0, {0.6f, 0.90625f, 0.25f, 0.75f}, 654 / 2, 490, true, radiusBottom};
   EXPECT_NEAR(specGeom2.radius, equivalentGeom2.radius, 1e-3);
   EXPECT_NEAR(specGeom2.height, equivalentGeom2.height, 1e-6);
   EXPECT_EQ(specGeom2.srcRows, equivalentGeom2.srcRows);
@@ -254,7 +262,8 @@ TEST_F(ParameterizedGeometryTest, constructCroppedConeFromSpecSimple) {
 TEST_F(ParameterizedGeometryTest, constructCroppedFezFromSpecSimple) {
   // this is the same as constructCroppedConeFromSpecSimple just up side down
   CurvyImageGeometry specGeom, specFullGeom;
-  curvyForTarget(480, 640, {1.0, false, {2.0, 2.0, 0.25, 0.25}, 1.f / 1.5}, &specGeom, &specFullGeom);
+  curvyForTarget(
+    480, 640, {1.0, false, {2.0, 2.0, 0.25, 0.25}, 1.f / 1.5}, &specGeom, &specFullGeom);
 
   EXPECT_NEAR(specGeom.radiusBottom, 0.219011f, 1e-3);
   EXPECT_NEAR(specGeom.height, 1.f, 1e-6);
@@ -540,8 +549,7 @@ TEST_F(ParameterizedGeometryTest, cameraRaysToTargetWorldBothRotationAndTranslat
       recoveredWorldPts[i].toString().c_str(),
       pts[i].toString().c_str(),
       recoveredRays[i].toString().c_str(),
-      rays[i].toString().c_str()
-    );
+      rays[i].toString().c_str());
   }
 
   for (int i = 6; i < 9; i++) {
@@ -552,8 +560,7 @@ TEST_F(ParameterizedGeometryTest, cameraRaysToTargetWorldBothRotationAndTranslat
       recoveredWorldPts[i].toString().c_str(),
       pts[i].toString().c_str(),
       recoveredRays[i].toString().c_str(),
-      rays[i].toString().c_str()
-    );
+      rays[i].toString().c_str());
   }
 }
 
@@ -635,11 +642,17 @@ TEST_F(ParameterizedGeometryTest, mapToGeometryNormalCone) {
   // normals of the points have to be perpendicular to the point itself
   for (int i = 0; i < NUM_POINTS; i++) {
     EXPECT_TRUE(linesPerpendicular(modelNormals[i], line(modelPtsBottom[i], modelPtsTop[i])))
-      << c8::format("bottom pt %f, %f, %f top pt %f %f %f normals %f %f %f",
-      modelPtsBottom[i].x(), modelPtsBottom[i].y(), modelPtsBottom[i].z(),
-      modelPtsTop[i].x(), modelPtsTop[i].y(), modelPtsTop[i].z(),
-      modelNormals[i].x(), modelNormals[i].y(), modelNormals[i].z()
-      );
+      << c8::format(
+           "bottom pt %f, %f, %f top pt %f %f %f normals %f %f %f",
+           modelPtsBottom[i].x(),
+           modelPtsBottom[i].y(),
+           modelPtsBottom[i].z(),
+           modelPtsTop[i].x(),
+           modelPtsTop[i].y(),
+           modelPtsTop[i].z(),
+           modelNormals[i].x(),
+           modelNormals[i].y(),
+           modelNormals[i].z());
   }
 }
 
@@ -673,11 +686,17 @@ TEST_F(ParameterizedGeometryTest, mapToGeometryNormalCylinder) {
   // normals of the points have to be perpendicular to the point itself
   for (int i = 0; i < NUM_POINTS; i++) {
     EXPECT_TRUE(linesPerpendicular(modelNormals[i], line(modelPtsBottom[i], modelPtsTop[i])))
-      << c8::format("bottom pt %f, %f, %f top pt %f %f %f normals %f %f %f",
-      modelPtsBottom[i].x(), modelPtsBottom[i].y(), modelPtsBottom[i].z(),
-      modelPtsTop[i].x(), modelPtsTop[i].y(), modelPtsTop[i].z(),
-      modelNormals[i].x(), modelNormals[i].y(), modelNormals[i].z()
-      );
+      << c8::format(
+           "bottom pt %f, %f, %f top pt %f %f %f normals %f %f %f",
+           modelPtsBottom[i].x(),
+           modelPtsBottom[i].y(),
+           modelPtsBottom[i].z(),
+           modelPtsTop[i].x(),
+           modelPtsTop[i].y(),
+           modelPtsTop[i].z(),
+           modelNormals[i].x(),
+           modelNormals[i].y(),
+           modelNormals[i].z());
   }
 }
 
@@ -697,7 +716,8 @@ TEST_F(ParameterizedGeometryTest, mapToGeometry) {
   mapToGeometry(randomGeom, imPts, &worldPts, &normalPts);
 
   for (HPoint3 &worldPt : worldPts) {
-    float r = randomGeom.radius * (worldPt.y() + 0.5) + randomGeom.radiusBottom * (0.5 - worldPt.y());
+    float r =
+      randomGeom.radius * (worldPt.y() + 0.5) + randomGeom.radiusBottom * (0.5 - worldPt.y());
     float rSq = std::pow(r, 2);
     float xSq = std::pow(worldPt.x(), 2);
     float zSq = std::pow(worldPt.z(), 2);
@@ -709,12 +729,14 @@ TEST_F(ParameterizedGeometryTest, mapRainbowToUnconed) {
   float topRadius = 4431;
   float bottomRadius = 3179;
   CurvyImageGeometry randomGeom, randomFullGeom;
-  curvyForTarget(3000, 1436, {1.0, false, {}, topRadius / bottomRadius}, &randomGeom, &randomFullGeom);
-  RainbowMetadata metadata = buildRainbowMetadata(randomGeom, topRadius / randomGeom.srcRows, bottomRadius / randomGeom.srcRows);
+  curvyForTarget(
+    3000, 1436, {1.0, false, {}, topRadius / bottomRadius}, &randomGeom, &randomFullGeom);
+  RainbowMetadata metadata = buildRainbowMetadata(
+    randomGeom, topRadius / randomGeom.srcRows, bottomRadius / randomGeom.srcRows);
 
   int outputWidth = 1600;
   int outputHeight = outputWidth * (metadata.r1 - metadata.r2) / (metadata.theta * metadata.r1);
-  HPoint2 middlePt {(3000.f - 1) / 2.f, 0.f};
+  HPoint2 middlePt{(3000.f - 1) / 2.f, 0.f};
   HPoint2 unconedPt = mapRainbowToUnconed(metadata, 1600, 652, middlePt);
   EXPECT_NEAR(799.5, unconedPt.x(), 0.5);
   EXPECT_NEAR(0, unconedPt.y(), 0.5);
@@ -725,7 +747,8 @@ TEST_F(ParameterizedGeometryTest, mapRainbowToUnconed) {
   // These tests are showing rather high (multiple full pixel difference) in mapping
   // suggesting that there might be errors in the calculation
   // TODO(dat): Reduce these errors. Check for off-by-one error
-  HPoint2 unconedBottomPt = mapRainbowToUnconed(metadata, outputWidth, outputHeight, {2999.f / 2, bottomLine});
+  HPoint2 unconedBottomPt =
+    mapRainbowToUnconed(metadata, outputWidth, outputHeight, {2999.f / 2, bottomLine});
   EXPECT_NEAR((outputWidth - 1) / 2.f, unconedBottomPt.x(), 0.5);
   EXPECT_NEAR(outputHeight - 1, unconedBottomPt.y(), 3);
 
@@ -747,8 +770,8 @@ TEST_F(ParameterizedGeometryTest, mapRainbowToUnconed) {
 }
 
 TEST_F(ParameterizedGeometryTest, mapRainbowToGeometry) {
-  CurvyImageGeometry geom {0.33f, 1.f, {0.f, 1.f, 0.f, 1.f}, 640, 306, true, 0.24f};
-  auto rainbowMetadata = buildRainbowMetadata(geom, 4463.f / 1436 , 3212.f / 1436);
+  CurvyImageGeometry geom{0.33f, 1.f, {0.f, 1.f, 0.f, 1.f}, 640, 306, true, 0.24f};
+  auto rainbowMetadata = buildRainbowMetadata(geom, 4463.f / 1436, 3212.f / 1436);
   float bottomLine = (4463.f / 1436 - 3212.f / 1436) * (306 - 1);
   Vector<HPoint2> imPts = {
     {305.f, 319.5f},
@@ -761,7 +784,7 @@ TEST_F(ParameterizedGeometryTest, mapRainbowToGeometry) {
   mapRainbowToGeometryPoints(geom, rainbowMetadata, imPts, &worldPts);
 
   EXPECT_EQ(imPts.size(), worldPts.size());
-  HPoint3 midPointTop {0.f, 0.5f, -geom.radius};
+  HPoint3 midPointTop{0.f, 0.5f, -geom.radius};
   EXPECT_THAT(midPointTop.data(), equalsPoint(worldPts[0]));
 
   EXPECT_NEAR(0, worldPts[1].x(), 1e-3);
@@ -788,8 +811,7 @@ TEST_F(ParameterizedGeometryTest, CurvyCameraRaysToVisiblePointsInCamera) {
   Vector<HPoint3> searchPtsInModel = getPointsOnCurvy(geom);
   Vector<HPoint2> searchRaysInCamera;
   Vector<HPoint3> searchPtsInCamera;
-  generateRays(
-    searchPtsInModel, nextPose, &searchRaysInCamera, &searchPtsInCamera);
+  generateRays(searchPtsInModel, nextPose, &searchRaysInCamera, &searchPtsInCamera);
 
   Vector<HPoint3> recoveredSearchPtsInCamera;
   Vector<size_t> recoveredVisibleSearchPtIndices;

@@ -13,9 +13,10 @@ cc_test {
 }
 cc_end(0x71ad0134);
 
+#include <benchmark/benchmark.h>
+
 #include "reality/engine/features/gr8gl.h"
 #include "reality/quality/datasets/benchmark-dataset.h"
-#include <benchmark/benchmark.h>
 
 namespace c8 {
 

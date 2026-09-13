@@ -26,12 +26,12 @@ cc_end(0xe9902e7a);
 #include "c8/string/format.h"
 
 #if C8_OPENGL_VERSION_2
-#define GL_RED                            0x1903
-#define GL_R32F                           0x822E
-#define GL_R32UI                          0x8236
-#define GL_RGBA32UI                       0x8D70
-#define GL_RED_INTEGER                    0x8D94
-#define GL_RGBA_INTEGER                   0x8D99
+#define GL_RED 0x1903
+#define GL_R32F 0x822E
+#define GL_R32UI 0x8236
+#define GL_RGBA32UI 0x8D70
+#define GL_RED_INTEGER 0x8D94
+#define GL_RGBA_INTEGER 0x8D99
 #endif
 
 namespace c8 {
@@ -81,8 +81,7 @@ GlTexture2D makeLinearRGBA32Texture2D(int width, int height) {
 
 GlTexture2D makeNearestR32Texture2D(int width, int height) {
   GlTexture2D tex;
-  tex.initialize(
-    GL_TEXTURE_2D, GL_R32UI, width, height, GL_RED_INTEGER, GL_UNSIGNED_INT, nullptr);
+  tex.initialize(GL_TEXTURE_2D, GL_R32UI, width, height, GL_RED_INTEGER, GL_UNSIGNED_INT, nullptr);
 
   tex.bind();
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);

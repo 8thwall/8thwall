@@ -16,10 +16,9 @@ cc_library {
 }
 cc_end(0x201fb865);
 
-#include "reality/engine/features/image-point-testing.h"
-
 #include "c8/string/format.h"
 #include "gmock/gmock.h"
+#include "reality/engine/features/image-point-testing.h"
 #include "reality/engine/features/image-point.h"
 
 namespace c8 {

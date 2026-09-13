@@ -7,9 +7,9 @@
 
 #pragma once
 
-#include "c8/pixels/opengl/gl.h"
-
 #include <cstddef>
+
+#include "c8/pixels/opengl/gl.h"
 
 namespace c8 {
 

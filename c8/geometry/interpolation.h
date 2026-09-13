@@ -27,17 +27,12 @@ int nearestNeighbourIndexSorted(const Vector<float> &xs, float val);
 // @param xs The x-coordinates of the data points.
 // @param ys The y-coordinates of the data points, should be the same length as xs.
 // @param newXs The x-coordinates to evaluate the interpolated values at.
-Vector<float> interp(
-  const Vector<float> &xs,
-  const Vector<float> &ys,
-  const Vector<float> &newXs);
+Vector<float> interp(const Vector<float> &xs, const Vector<float> &ys, const Vector<float> &newXs);
 // Runs the one-dimensional interp() function on x, y, z of ys independently, then creates a series
 // of new HVectors/HPoints from the result.
 template <typename TypeWithXYZ>
 Vector<TypeWithXYZ> interp(
-  const Vector<float> &xs,
-  const Vector<TypeWithXYZ> &ys,
-  const Vector<float> &newXs) {
+  const Vector<float> &xs, const Vector<TypeWithXYZ> &ys, const Vector<float> &newXs) {
   Vector<float> x;
   Vector<float> y;
   Vector<float> z;

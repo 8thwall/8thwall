@@ -52,7 +52,7 @@ namespace cmd {
 // FixedArrayWrap is a class to wrap a fixed-size array of trivially copyable data for use with
 // Command.
 template <typename T, size_t N>
-requires std::is_trivially_copyable_v<T>
+  requires std::is_trivially_copyable_v<T>
 class FixedArrayWrap {
 public:
   FixedArrayWrap() = default;
@@ -70,7 +70,8 @@ private:
 // TransferWrap is a class to wrap a dynamic-size array of trivially copyable data for use with
 // Command. The data is owned by a TransferBuffer.
 template <typename T>
-requires(std::is_trivially_copyable_v<T> || std::is_void_v<T>) class TransferWrap {
+  requires(std::is_trivially_copyable_v<T> || std::is_void_v<T>)
+class TransferWrap {
 public:
   using Type = T;
   TransferWrap() = default;
@@ -144,7 +145,7 @@ bool storeTransferWrap(T &&arg, TransferBuffer &buffer) {
 //  Command<glClearColor> clearColorCommand { 0.0f, 0.0f, 0.0f, 1.0f };
 //  Command<glClear> clearCommand { GL_COLOR_BUFFER_BIT };
 template <typename Func, typename... Args>
-requires internal::FunctionPointer<Func>
+  requires internal::FunctionPointer<Func>
 class Command {
 public:
   using ArgsType = std::tuple<Args...>;

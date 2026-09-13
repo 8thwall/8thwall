@@ -20,7 +20,7 @@ cc_end(0xf6561b77);
 
 namespace c8 {
 
-thread_local Vector<ScopeTimer*> ScopeTimer::THREAD_CURRENT_;
+thread_local Vector<ScopeTimer *> ScopeTimer::THREAD_CURRENT_;
 thread_local std::unique_ptr<LoggingContext> ScopeTimer::LAST_COMPLETED_;
 thread_local LatencySummarizer ScopeTimer::SUMMARIZER_;
 

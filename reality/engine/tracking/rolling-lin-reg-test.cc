@@ -12,9 +12,9 @@ cc_test {
 }
 cc_end(0x0c88c69c);
 
-#include "reality/engine/tracking/rolling-lin-reg.h"
-
 #include <gtest/gtest.h>
+
+#include "reality/engine/tracking/rolling-lin-reg.h"
 
 namespace c8 {
 

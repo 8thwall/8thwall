@@ -18,9 +18,9 @@ cc_end(0xf7f0e447);
 #include <array>
 
 #include "c8/pixels/pixels.h"
+#include "c8/stats/scope-timer.h"
 #include "gtest/gtest.h"
 #include "reality/engine/lighting/lighting-estimator.h"
-#include "c8/stats/scope-timer.h"
 
 namespace c8 {
 
@@ -40,8 +40,7 @@ TEST_F(LightingEstimatorTest, TestEstimateLighting) {
 
   TaskQueue taskQueue;
   ThreadPool threadPool(1);
-  float val =
-    LightingEstimator::estimateLighting(src, &taskQueue, &threadPool, 1);
+  float val = LightingEstimator::estimateLighting(src, &taskQueue, &threadPool, 1);
   EXPECT_TRUE(true);
   EXPECT_FLOAT_EQ(-0.36f, val);
 }

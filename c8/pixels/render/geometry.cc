@@ -590,8 +590,7 @@ std::unique_ptr<Geometry> sphere(float radius, int widthSegments, int heightSegm
       pts.push_back(HPoint3{radius * cosP * sinT, radius * cosT, radius * sinP * sinT});
       normals.push_back({cosP * sinT, cosT, sinP * sinT});
       uvs.push_back(
-        {static_cast<float>(lon) / widthSegments,
-         static_cast<float>(lat) / heightSegments});
+        {static_cast<float>(lon) / widthSegments, static_cast<float>(lat) / heightSegments});
     }
   }
 

@@ -62,7 +62,7 @@ private:
 // within the desired radius.
 struct TargetBinMap {
 public:
-  TargetBinMap(int nx, int ny) : map_(nx * ny), map2_(nx * ny), nx_(nx), ny_(ny) {};
+  TargetBinMap(int nx, int ny) : map_(nx * ny), map2_(nx * ny), nx_(nx), ny_(ny){};
 
   void reset(
     HPoint2 mn, HPoint2 mx, const Vector<TargetPoint> &points, const Vector<size_t> *indices) {

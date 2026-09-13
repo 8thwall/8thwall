@@ -38,7 +38,8 @@ namespace c8 {
 
 class FaceDetectorLocalTest : public ::testing::Test {};
 
-static constexpr char MODEL_PATH[] = "third_party/mediapipe/models/face_landmark_with_attention.tflite";
+static constexpr char MODEL_PATH[] =
+  "third_party/mediapipe/models/face_landmark_with_attention.tflite";
 static constexpr char IMAGE_PATH[] = "reality/engine/deepnets/testdata/crop.jpg";
 
 TEST_F(FaceDetectorLocalTest, TestAnaylyze) {
@@ -49,14 +50,15 @@ TEST_F(FaceDetectorLocalTest, TestAnaylyze) {
 
   // Take a hardcoded crop of the test image with a well centered face.
 
-  RenderedSubImage img{{0, 0, 192, 192},
-                       pix,
-                       {
-                         ImageRoi::Source::FACE,
-                         0,
-                         "",
-                         HMatrixGen::i(),
-                       }};
+  RenderedSubImage img{
+    {0, 0, 192, 192},
+    pix,
+    {
+      ImageRoi::Source::FACE,
+      0,
+      "",
+      HMatrixGen::i(),
+    }};
 
   // by default we don't do ears
   EarConfig earConfig;
@@ -69,7 +71,7 @@ TEST_F(FaceDetectorLocalTest, TestAnaylyze) {
   EXPECT_EQ(1, faces.size());
   bool foundFace = false;
   EXPECT_EQ(478, faces[0].points.size());
-  for (const auto &face: faces) {
+  for (const auto &face : faces) {
     auto roi = face.roi;
     if (roi.source == ImageRoi::Source::FACE) {
       foundFace = true;

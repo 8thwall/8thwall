@@ -20,9 +20,9 @@ cc_end(0x4d1680ec);
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
+#include "c8/io/file-io.h"
 #include "c8/model/model-data.h"
 #include "c8/model/model-manager.h"
-#include "c8/io/file-io.h"
 
 namespace c8 {
 

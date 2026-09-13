@@ -32,8 +32,8 @@ void *GlBufferObject::mapBuffer(GLenum access) const noexcept {
 }
 
 // Bind the buffer object and map a buffer range.
-void *GlBufferObject::mapBufferRange(GLintptr offset, GLsizeiptr length, GLbitfield access) const
-  noexcept {
+void *GlBufferObject::mapBufferRange(
+  GLintptr offset, GLsizeiptr length, GLbitfield access) const noexcept {
   return glMapBufferRange(target_, offset, length, access);
 }
 

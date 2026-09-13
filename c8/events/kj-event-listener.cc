@@ -18,7 +18,6 @@ cc_library {
 #include <kj/vector.h>
 
 #include "c8/events/kj-event-listener.h"
-
 #include "c8/exceptions.h"
 
 using kj::UnixEventPort;
@@ -34,23 +33,19 @@ kj::Promise<void> waitForRead(
   bool persist,
   std::function<void()> done,
   std::function<void()> callback) {
-  return observer->whenBecomesReadable().then([
-    persist,
-    callback(std::move(callback)),
-    done,
-    observer(std::move(observer))
-  ]() mutable->kj::Promise<void> {
-    // Call the user-provided callback function.
-    callback();
-    if (persist) {
-      // Continue with tail recursion.
-      return waitForRead(
-        std::move(observer), persist, done, std::move(callback));
-    } else {
-      done();
-      return kj::READY_NOW;
-    }
-  });
+  return observer->whenBecomesReadable().then(
+    [persist, callback(std::move(callback)), done, observer(std::move(observer))]() mutable
+    -> kj::Promise<void> {
+      // Call the user-provided callback function.
+      callback();
+      if (persist) {
+        // Continue with tail recursion.
+        return waitForRead(std::move(observer), persist, done, std::move(callback));
+      } else {
+        done();
+        return kj::READY_NOW;
+      }
+    });
 }
 
 // Wait for the fd to become writable, then call the user-supplied callback.
@@ -60,38 +55,31 @@ kj::Promise<void> waitForWrite(
   bool persist,
   std::function<void()> done,
   std::function<void()> callback) {
-  return observer->whenBecomesWritable().then([
-    persist,
-    callback(std::move(callback)),
-    done,
-    observer(std::move(observer))
-  ]() mutable->kj::Promise<void> {
-    // Call the user-provided callback function.
-    callback();
-    if (persist) {
-      // Continue with tail recursion.
-      return waitForWrite(
-        std::move(observer), persist, done, std::move(callback));
-    } else {
-      done();
-      return kj::READY_NOW;
-    }
-  });
+  return observer->whenBecomesWritable().then(
+    [persist, callback(std::move(callback)), done, observer(std::move(observer))]() mutable
+    -> kj::Promise<void> {
+      // Call the user-provided callback function.
+      callback();
+      if (persist) {
+        // Continue with tail recursion.
+        return waitForWrite(std::move(observer), persist, done, std::move(callback));
+      } else {
+        done();
+        return kj::READY_NOW;
+      }
+    });
 }
-}
+}  // namespace
 
 KjEventListener::KjEventListener()
-    : ioContext(kj::setupAsyncIo()),
-      donePair(kj::newPromiseAndFulfiller<void>()) {}
+    : ioContext(kj::setupAsyncIo()), donePair(kj::newPromiseAndFulfiller<void>()) {}
 
-void KjEventListener::addFdEvent(
-  int fd, EventFlags flags, std::function<void()> callback) {
+void KjEventListener::addFdEvent(int fd, EventFlags flags, std::function<void()> callback) {
   if (!(flags & EventFlag::EDGE_TRIGGER)) {
     C8_THROW("KJ only supports Edge-triggered I/O");
   }
 
-  UnixEventPort::FdObserver::Flags kjFdFlags =
-    static_cast<UnixEventPort::FdObserver::Flags>(0);
+  UnixEventPort::FdObserver::Flags kjFdFlags = static_cast<UnixEventPort::FdObserver::Flags>(0);
 
   if (flags & EventFlag::READ) {
     kjFdFlags = static_cast<UnixEventPort::FdObserver::Flags>(
@@ -110,45 +98,33 @@ void KjEventListener::addFdEvent(
   kj::Vector<kj::Promise<void>> newPromises;
 
   auto done = [fd, this]() {
-    kj::evalLater([fd, this]() {
-      removeFdEvent(fd);
-    }).detach([](kj::Exception&& e) { throw e; });
+    kj::evalLater([fd, this]() { removeFdEvent(fd); }).detach([](kj::Exception &&e) { throw e; });
   };
 
   if (flags & EventFlag::READ) {
     kj::Own<UnixEventPort::FdObserver> fdObserver =
-      kj::heap<UnixEventPort::FdObserver>(
-        ioContext.unixEventPort, fd, kjFdFlags);
-    newPromises.add(
-      waitForRead(std::move(fdObserver), persist, done, callback));
+      kj::heap<UnixEventPort::FdObserver>(ioContext.unixEventPort, fd, kjFdFlags);
+    newPromises.add(waitForRead(std::move(fdObserver), persist, done, callback));
   }
   if (flags & EventFlag::WRITE) {
     kj::Own<UnixEventPort::FdObserver> fdObserver =
-      kj::heap<UnixEventPort::FdObserver>(
-        ioContext.unixEventPort, fd, kjFdFlags);
-    newPromises.add(
-      waitForWrite(std::move(fdObserver), persist, done, callback));
+      kj::heap<UnixEventPort::FdObserver>(ioContext.unixEventPort, fd, kjFdFlags);
+    newPromises.add(waitForWrite(std::move(fdObserver), persist, done, callback));
   }
 
   if (newPromises.size() > 0) {
     // Add any read/write to the list of promises.
-    promises.emplace(
-      fd,
-      kj::joinPromises(newPromises.releaseAsArray()).eagerlyEvaluate(nullptr));
+    promises.emplace(fd, kj::joinPromises(newPromises.releaseAsArray()).eagerlyEvaluate(nullptr));
   }
 }
 
-void KjEventListener::removeFdEvent(int fd) {
-  promises.erase(fd);
-}
+void KjEventListener::removeFdEvent(int fd) { promises.erase(fd); }
 
 void KjEventListener::wait() {
   donePair = kj::newPromiseAndFulfiller<void>();
   donePair.promise.wait(ioContext.waitScope);
 }
 
-void KjEventListener::stop() {
-  donePair.fulfiller->fulfill();
-}
+void KjEventListener::stop() { donePair.fulfiller->fulfill(); }
 
 }  // namespace c8

@@ -6,13 +6,15 @@
 #pragma once
 
 #include <event2/event.h>
+
 #include <memory>
+
 #include "c8/events/event-listener.h"
 #include "c8/map.h"
 
 namespace c8 {
 struct EventCB {
-  event* event;
+  event *event;
   std::function<void()> callback;
 };
 
@@ -21,13 +23,12 @@ struct EventCB {
  * interface, we will keep a map from socketId to evutil_socket_t.
  */
 class LevEventListener : public FdEventListener {
- public:
+public:
   LevEventListener();
 
   // Listen to a socket ID and call callback whenever it becomes
   // available, subject to the provided EventFlags.
-  void addFdEvent(
-    FdInt fd, EventFlags flags, std::function<void()> callback) override;
+  void addFdEvent(FdInt fd, EventFlags flags, std::function<void()> callback) override;
 
   // Remove a socket ID from the list of events to observe. Silently
   // returns if fd is not in the list of observed events.
@@ -40,18 +41,19 @@ class LevEventListener : public FdEventListener {
   void stop();
 
   short convertToLevFlags(EventFlags flags);
-  event_base* getEventBase() { return eventBase_; }
+  event_base *getEventBase() { return eventBase_; }
 
   // Create TCP socket using evutil_socketpair. AF_UNIX on UNIX, AF_INET on Windows.
   // Can be used with kjEventListener as well.
   static int createSocketPair(evutil_socket_t *sockets);
 
   // Disallow copy and assign.
-  LevEventListener(const LevEventListener&) = delete;
-  LevEventListener& operator=(const LevEventListener&) = delete;
+  LevEventListener(const LevEventListener &) = delete;
+  LevEventListener &operator=(const LevEventListener &) = delete;
 
   virtual ~LevEventListener();
- private:
+
+private:
   event_base *eventBase_;
   TreeMap<int, std::unique_ptr<EventCB>> fdIntToEvent_;
 };

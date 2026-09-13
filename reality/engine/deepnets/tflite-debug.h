@@ -56,7 +56,7 @@ String subgraphVecStr(
 String modelStr(const tflite::Model *m, int level);
 
 // Analyze the tensor DAG and collect some stats.
-TfliteGraphStats getGraphStats(const tflite::SubGraph* g);
+TfliteGraphStats getGraphStats(const tflite::SubGraph *g);
 
 // Convert a tflite graph into GraphViz dot format, so that it can be rendered to pdf.
 String getGraphVizString(const tflite::SubGraph *g, const tflite::Model *m);

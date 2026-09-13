@@ -4,8 +4,8 @@
 #include <gtest/gtest.h>
 
 extern "C" {
-  // Prototype for the assembly function defined in hello-world-x64.asm.
-  extern int exampleIntAsm();
+// Prototype for the assembly function defined in hello-world-x64.asm.
+extern int exampleIntAsm();
 }
 
 namespace nc {

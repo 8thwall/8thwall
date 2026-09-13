@@ -5,7 +5,8 @@
 
 cc_library {
   visibility = {
-    "//reality/engine/executor:__subpackages__", "//reality/engine/lighting:__subpackages__",
+    "//reality/engine/executor:__subpackages__",
+    "//reality/engine/lighting:__subpackages__",
   };
   hdrs = {
     "lighting-request-executor.h",
@@ -95,11 +96,13 @@ void LightingRequestExecutor::execute(
     size_t imageAddr = static_cast<size_t>(grayImagePtr.getUInt8PixelDataPointer());
     rowStart = reinterpret_cast<uint8_t *>(imageAddr);
   }
-  // NOTE: this is actually an RGBA8888 in the case of pyramid. See estimateLighting usage of numChannels
+  // NOTE: this is actually an RGBA8888 in the case of pyramid. See estimateLighting usage of
+  // numChannels
   ConstYPlanePixels yImg(rows, cols, bytesPerRow, rowStart);
 
   // Call the lighting::estimateLighting method using the y-plane image
-  response->getGlobal().setExposure(LightingEstimator::estimateLighting(yImg, taskQueue, threadPool, numChannels));
+  response->getGlobal().setExposure(
+    LightingEstimator::estimateLighting(yImg, taskQueue, threadPool, numChannels));
   response->getGlobal().setTemperature(6500);
 }
 

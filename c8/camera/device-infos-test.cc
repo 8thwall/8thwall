@@ -16,9 +16,9 @@ cc_end(0x2f8f9459);
 
 #include <gtest/gtest.h>
 
+#include "c8/camera/device-infos.h"
 #include "c8/io/capnp-messages.h"
 #include "reality/engine/api/device/info.capnp.h"
-#include "c8/camera/device-infos.h"
 
 using MutableDeviceInfo = c8::MutableRootMessage<c8::DeviceInfo>;
 

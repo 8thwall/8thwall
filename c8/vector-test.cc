@@ -13,7 +13,6 @@ cc_test {
 cc_end(0xdc739ba0);
 
 #include "c8/vector.h"
-
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 

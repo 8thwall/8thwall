@@ -9,8 +9,8 @@
 #pragma once
 
 #include "c8/pixels/opengl/gl-buffer-object.h"
-#include "c8/pixels/opengl/gl.h"
 #include "c8/pixels/opengl/gl-version.h"
+#include "c8/pixels/opengl/gl.h"
 #include "c8/pixels/pixels.h"
 
 #if C8_OPENGL_VERSION_3

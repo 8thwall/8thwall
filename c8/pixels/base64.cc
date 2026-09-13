@@ -6,51 +6,46 @@
 #include "bzl/inliner/rules2.h"
 
 cc_library {
-  hdrs = {
-    "base64.h"
-  };
-  deps = {
-  };
+  hdrs = {"base64.h"};
+  deps = {};
   visibility = {
     "//visibility:public",
   };
 }
 cc_end(0x413acf62);
 
-#include "c8/pixels/base64.h"
-
 #include <sstream>
+
+#include "c8/pixels/base64.h"
 using std::stringstream;
 
 namespace c8 {
 namespace {
-  const char *alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+const char *alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
-  uint8_t charToNum(const char c) {
-    if (c >= 97) {
-      // a-z
-      return c - 'a' + 26;
-    }
-    if (c >= 65) {
-      // A-Z
-      return c - 'A';
-    }
-    if (c == '+') {
-      return 62;
-    }
-    if (c == '/') {
-      return 63;
-    }
-    // 0-9
-    return c - '0' + 52;
+uint8_t charToNum(const char c) {
+  if (c >= 97) {
+    // a-z
+    return c - 'a' + 26;
   }
-
-  void charsToNums(const char *chars, uint8_t *nums) {
-    for (int i = 0; i < 4; i++)
-      nums[i] = charToNum(chars[i]);
+  if (c >= 65) {
+    // A-Z
+    return c - 'A';
   }
+  if (c == '+') {
+    return 62;
+  }
+  if (c == '/') {
+    return 63;
+  }
+  // 0-9
+  return c - '0' + 52;
 }
 
+void charsToNums(const char *chars, uint8_t *nums) {
+  for (int i = 0; i < 4; i++) nums[i] = charToNum(chars[i]);
+}
+}  // namespace
 
 std::string encode(const std::vector<uint8_t> &data) {
   if (data.size() == 0) {
@@ -87,7 +82,7 @@ std::string encode(const std::vector<uint8_t> &data) {
 }
 
 std::vector<uint8_t> decode(const std::string &base64Data) {
-  bool hasPadding = base64Data[base64Data.size() -1] == '=';
+  bool hasPadding = base64Data[base64Data.size() - 1] == '=';
   if (!hasPadding && base64Data.size() % 4 != 0) {
     // Add at most two "==" for padding.
     return decode(base64Data + (base64Data.size() % 4 == 1 ? "=" : "=="));
@@ -101,7 +96,7 @@ std::vector<uint8_t> decode(const std::string &base64Data) {
   outputData.reserve(outputTriplet * 3);
 
   uint8_t quadNums[4];
-  const char* quad = base64Data.c_str();
+  const char *quad = base64Data.c_str();
 
   // process normally except for the last group if there is padding
   for (int i = 0; i < outputTriplet - hasPadding; i++) {
@@ -128,4 +123,4 @@ std::vector<uint8_t> decode(const std::string &base64Data) {
   return outputData;
 }
 
-}
+}  // namespace c8

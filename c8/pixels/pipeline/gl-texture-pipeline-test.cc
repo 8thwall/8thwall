@@ -10,6 +10,7 @@
 #if JAVASCRIPT || __APPLE__ && TARGET_OS_MAC
 
 #include <system_error>
+
 #include "c8/pixels/opengl/gl.h"
 #include "c8/pixels/opengl/offscreen-gl-context.h"
 #include "c8/pixels/pipeline/gl-texture-pipeline.h"

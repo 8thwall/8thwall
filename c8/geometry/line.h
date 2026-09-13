@@ -7,6 +7,7 @@
 
 #include <string>
 #include <vector>
+
 #include "c8/hpoint.h"
 #include "c8/hvector.h"
 
@@ -24,4 +25,4 @@ float angleBetweenABAndAC(HPoint2 A, HPoint2 B, HPoint2 C);
 // height and width are pre-rotated
 HPoint2 rotateCW(const HPoint2 &pt, int height);
 HPoint2 rotateCCW(const HPoint2 &pt, int width);
-}
+}  // namespace c8

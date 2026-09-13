@@ -22,11 +22,11 @@ cc_end(0x08ff163a);
 #include <algorithm>
 #include <cctype>
 
+#include "c8/camera/device-infos.h"
 #include "c8/exceptions.h"
 #include "c8/map.h"
 #include "c8/set.h"
 #include "c8/string/format.h"
-#include "c8/camera/device-infos.h"
 
 namespace c8 {
 
@@ -42,7 +42,7 @@ String getHuaweiModelBase(const String &modelNumber) {
   return modelNumber.substr(0, p);
 }
 
-TreeSet<String>& getHuaweiModelPrefixes() {
+TreeSet<String> &getHuaweiModelPrefixes() {
   static TreeSet<String> huaweiModelPrefixes;
   return huaweiModelPrefixes;
 }
@@ -63,9 +63,8 @@ String getModel(const String &manufacturerUpperCase, const String &model) {
 
     const auto &huaweiModelPrefixes = getHuaweiModelPrefixes();
     if (
-      (huaweiModelPrefixes.find(model.substr(0, 3)) != huaweiModelPrefixes.end()) &&
-      (model.length() > 3 && model[3] == '-')
-    ) {
+      (huaweiModelPrefixes.find(model.substr(0, 3)) != huaweiModelPrefixes.end())
+      && (model.length() > 3 && model[3] == '-')) {
       return getHuaweiModelBase(model);
     }
   }
@@ -219,8 +218,10 @@ DeviceInfos::DeviceModel DeviceInfos::getDeviceModel(const DeviceInfo::Reader &d
      }},
     {"LGE", {{"NEXUS 4", LGE_NEXUS_4}, {"NEXUS 5", LGE_NEXUS_5}, {"NEXUS 5X", LGE_NEXUS_5X}}},
     {"MOTOROLA",
-     {{"NEXUS 6", MOTOROLA_NEXUS_6}, {"MOTOG3", MOTOROLA_MOTOG3}, {"EDGE", MOTOROLA_EDGE_PLUS},
-     {"RAZR+", MOTOROLA_RAZR_PLUS}}},
+     {{"NEXUS 6", MOTOROLA_NEXUS_6},
+      {"MOTOG3", MOTOROLA_MOTOG3},
+      {"EDGE", MOTOROLA_EDGE_PLUS},
+      {"RAZR+", MOTOROLA_RAZR_PLUS}}},
     {"OSTERHOUT_DESIGN_GROUP", {{"R7-W", ODG_R7}}},
     {"ONEPLUS",
      {
@@ -235,17 +236,28 @@ DeviceInfos::DeviceModel DeviceInfos::getDeviceModel(const DeviceInfo::Reader &d
      }},
     {"SAMSUNG",
      {
-       {"SM-G360", SAMSUNG_GALAXY_CORE_PRIME},  {"SM-J710", SAMSUNG_GALAXY_J7},
-       {"SM-G900", SAMSUNG_GALAXY_S5},          {"SM-G920", SAMSUNG_GALAXY_S6},
-       {"SM-G925", SAMSUNG_GALAXY_S6_EDGE},     {"SM-G930", SAMSUNG_GALAXY_S7},
-       {"SM-G935", SAMSUNG_GALAXY_S7_EDGE},     {"SM-G950", SAMSUNG_GALAXY_S8},
-       {"SM-G955", SAMSUNG_GALAXY_S8_PLUS},     {"SM-G960", SAMSUNG_GALAXY_S9},
-       {"SM-G965", SAMSUNG_GALAXY_S9_PLUS},     {"SM-G975", SAMSUNG_GALAXY_S10_PLUS},
-       {"SM-G973", SAMSUNG_GALAXY_S10},         {"SM-G970", SAMSUNG_GALAXY_S10e},
-       {"SM-N950", SAMSUNG_GALAXY_NOTE8},       {"SM-N960", SAMSUNG_GALAXY_NOTE9},
-       {"SM-N975", SAMSUNG_GALAXY_NOTE10_PLUS}, {"SM-T580", SAMSUNG_GALAXY_TAB_A},
-       {"SM-G991", SAMSUNG_GALAXY_S21_5G},      {"SM-G998", SAMSUNG_GALAXY_S21_ULTRA_5G},
-       {"SM-S906", SAMSUNG_GALAXY_S22_PLUS},    {"SM-F926", SAMSUNG_ZFOLD_3},
+       {"SM-G360", SAMSUNG_GALAXY_CORE_PRIME},
+       {"SM-J710", SAMSUNG_GALAXY_J7},
+       {"SM-G900", SAMSUNG_GALAXY_S5},
+       {"SM-G920", SAMSUNG_GALAXY_S6},
+       {"SM-G925", SAMSUNG_GALAXY_S6_EDGE},
+       {"SM-G930", SAMSUNG_GALAXY_S7},
+       {"SM-G935", SAMSUNG_GALAXY_S7_EDGE},
+       {"SM-G950", SAMSUNG_GALAXY_S8},
+       {"SM-G955", SAMSUNG_GALAXY_S8_PLUS},
+       {"SM-G960", SAMSUNG_GALAXY_S9},
+       {"SM-G965", SAMSUNG_GALAXY_S9_PLUS},
+       {"SM-G975", SAMSUNG_GALAXY_S10_PLUS},
+       {"SM-G973", SAMSUNG_GALAXY_S10},
+       {"SM-G970", SAMSUNG_GALAXY_S10e},
+       {"SM-N950", SAMSUNG_GALAXY_NOTE8},
+       {"SM-N960", SAMSUNG_GALAXY_NOTE9},
+       {"SM-N975", SAMSUNG_GALAXY_NOTE10_PLUS},
+       {"SM-T580", SAMSUNG_GALAXY_TAB_A},
+       {"SM-G991", SAMSUNG_GALAXY_S21_5G},
+       {"SM-G998", SAMSUNG_GALAXY_S21_ULTRA_5G},
+       {"SM-S906", SAMSUNG_GALAXY_S22_PLUS},
+       {"SM-F926", SAMSUNG_ZFOLD_3},
        {"SM-F711", SAMSUNG_ZFLIP_3},
      }},
     {"XIAOMI",
@@ -261,7 +273,7 @@ DeviceInfos::DeviceModel DeviceInfos::getDeviceModel(const DeviceInfo::Reader &d
   // Build the list of Huawei prefixes from deviceMap
   auto &huaweiModelPrefixes = getHuaweiModelPrefixes();
   if (huaweiModelPrefixes.size() == 0) {
-    for (const auto& [prefix, model] : deviceMap.at("HUAWEI")) {
+    for (const auto &[prefix, model] : deviceMap.at("HUAWEI")) {
       huaweiModelPrefixes.insert(prefix);
     }
   }
@@ -286,7 +298,9 @@ DeviceInfos::DeviceModel DeviceInfos::getDeviceModel(const DeviceInfo::Reader &d
   return NOT_SPECIFIED;
 }
 
-#define MODEL_INFO(model, name, single, multi) case model: return {name, single, multi};
+#define MODEL_INFO(model, name, single, multi) \
+  case model:                                  \
+    return {name, single, multi};
 
 ModelInfo getModelInfo(const DeviceInfos::DeviceModel &model) {
   // Name should be close to https://browser.geekbench.com/mobile-benchmarks.json
@@ -301,7 +315,8 @@ ModelInfo getModelInfo(const DeviceInfos::DeviceModel &model) {
     MODEL_INFO(DeviceInfos::DeviceModel::APPLE_IPAD_AIR2, "iPad Air 2", 436, 915)
     MODEL_INFO(DeviceInfos::DeviceModel::APPLE_IPAD_PRO10, "iPad Pro 10.5-inch", 941, 2201)
     MODEL_INFO(DeviceInfos::DeviceModel::APPLE_IPAD_PRO12, "iPad Pro 12.9-inch", 770, 1311)
-    MODEL_INFO(DeviceInfos::DeviceModel::APPLE_IPAD_PRO12_G2, "iPad Pro 12.9-inch 2nd generation", 884, 2162)
+    MODEL_INFO(
+      DeviceInfos::DeviceModel::APPLE_IPAD_PRO12_G2, "iPad Pro 12.9-inch 2nd generation", 884, 2162)
     MODEL_INFO(DeviceInfos::DeviceModel::APPLE_IPAD_PRO9, "iPad Pro 9.7-inch", 727, 1059)
     MODEL_INFO(DeviceInfos::DeviceModel::APPLE_IPHONE_5, "iPhone 5", 0, 0)
     MODEL_INFO(DeviceInfos::DeviceModel::APPLE_IPHONE_5C, "iPhone 5C", 0, 0)
@@ -385,7 +400,8 @@ ModelInfo getModelInfo(const DeviceInfos::DeviceModel &model) {
     MODEL_INFO(DeviceInfos::DeviceModel::SAMSUNG_GALAXY_S6, "Samsung Galaxy S6", 185, 750)
     MODEL_INFO(DeviceInfos::DeviceModel::SAMSUNG_GALAXY_S6_EDGE, "Samsung Galaxy S6 edge", 264, 904)
     MODEL_INFO(DeviceInfos::DeviceModel::SAMSUNG_GALAXY_S7, "Samsung Galaxy S7", 287, 627)
-    MODEL_INFO(DeviceInfos::DeviceModel::SAMSUNG_GALAXY_S7_EDGE, "Samsung Galaxy S7 edge", 322, 1005)
+    MODEL_INFO(
+      DeviceInfos::DeviceModel::SAMSUNG_GALAXY_S7_EDGE, "Samsung Galaxy S7 edge", 322, 1005)
     MODEL_INFO(DeviceInfos::DeviceModel::SAMSUNG_GALAXY_S8, "Samsung Galaxy S8", 361, 1282)
     MODEL_INFO(DeviceInfos::DeviceModel::SAMSUNG_GALAXY_S8_PLUS, "Samsung Galaxy S8+", 395, 1211)
     MODEL_INFO(DeviceInfos::DeviceModel::SAMSUNG_GALAXY_S9, "Samsung Galaxy S9", 509, 1723)
@@ -394,17 +410,24 @@ ModelInfo getModelInfo(const DeviceInfos::DeviceModel &model) {
     MODEL_INFO(DeviceInfos::DeviceModel::SAMSUNG_GALAXY_S10e, "Samsung Galaxy S10e", 883, 2092)
     MODEL_INFO(DeviceInfos::DeviceModel::SAMSUNG_GALAXY_S10_PLUS, "Samsung Galaxy S10+", 882, 2159)
     MODEL_INFO(DeviceInfos::DeviceModel::SAMSUNG_GALAXY_S21_5G, "Samsung Galaxy S21 5G", 1139, 3048)
-    MODEL_INFO(DeviceInfos::DeviceModel::SAMSUNG_GALAXY_S21_ULTRA_5G, "Samsung Galaxy S21 Ultra 5G", 1165, 3097)
+    MODEL_INFO(
+      DeviceInfos::DeviceModel::SAMSUNG_GALAXY_S21_ULTRA_5G,
+      "Samsung Galaxy S21 Ultra 5G",
+      1165,
+      3097)
     MODEL_INFO(DeviceInfos::DeviceModel::SAMSUNG_GALAXY_S22_PLUS, "Samsung Galaxy S22+", 1478, 3473)
     MODEL_INFO(DeviceInfos::DeviceModel::SAMSUNG_ZFOLD_3, "Samsung Galaxy Z Fold3", 2153, 3331)
     MODEL_INFO(DeviceInfos::DeviceModel::SAMSUNG_ZFLIP_3, "Samsung Galaxy Z Flip3", 1153, 3248)
     MODEL_INFO(DeviceInfos::DeviceModel::SAMSUNG_GALAXY_NOTE8, "Samsung Galaxy Note 8", 367, 1357)
     MODEL_INFO(DeviceInfos::DeviceModel::SAMSUNG_GALAXY_NOTE9, "Samsung Galaxy Note 9", 520, 1788)
-    MODEL_INFO(DeviceInfos::DeviceModel::SAMSUNG_GALAXY_NOTE10_PLUS, "Samsung Galaxy Note10+", 613, 1864)
-    MODEL_INFO(DeviceInfos::DeviceModel::SAMSUNG_GALAXY_TAB_A, "Samsung Galaxy Tab A 10.1", 121, 440)
+    MODEL_INFO(
+      DeviceInfos::DeviceModel::SAMSUNG_GALAXY_NOTE10_PLUS, "Samsung Galaxy Note10+", 613, 1864)
+    MODEL_INFO(
+      DeviceInfos::DeviceModel::SAMSUNG_GALAXY_TAB_A, "Samsung Galaxy Tab A 10.1", 121, 440)
     MODEL_INFO(DeviceInfos::DeviceModel::XIAOMI_MIX_2, "Xiaomi Mi Mix 2", 397, 1234)
     MODEL_INFO(DeviceInfos::DeviceModel::XIAOMI_REDMI_4X, "Xiaomi Redmi 4X", 144, 655)
-    default: return {"Unknown", 0, 0};
+    default:
+      return {"Unknown", 0, 0};
   }
 }
 

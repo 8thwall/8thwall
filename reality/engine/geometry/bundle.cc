@@ -761,10 +761,9 @@ bool poseEstimationAnalytical(
       residualOutput->pointResidualsX.push_back(pointResiduals[i]);
       residualOutput->pointResidualsY.push_back(pointResiduals[i + 1]);
       // Using the distance function to represent a combined residual.
-      residualOutput->pointResiduals.push_back(
-        std::sqrt(
-          std::pow(residualOutput->pointResidualsX.back(), 2)
-          + std::pow(residualOutput->pointResidualsY.back(), 2)));
+      residualOutput->pointResiduals.push_back(std::sqrt(
+        std::pow(residualOutput->pointResidualsX.back(), 2)
+        + std::pow(residualOutput->pointResidualsY.back(), 2)));
     }
   }
   return summary.IsSolutionUsable();

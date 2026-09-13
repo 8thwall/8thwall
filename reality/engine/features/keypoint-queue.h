@@ -3,6 +3,7 @@
 #pragma once
 
 #include <utility>
+
 #include "reality/engine/features/image-point.h"
 
 namespace c8 {

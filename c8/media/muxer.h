@@ -5,11 +5,10 @@
 
 #pragma once
 
-#include "c8/media/media-status.h"
-
 #include <nlohmann/json_fwd.hpp>
 
 #include "c8/media/codec/codec-api.h"
+#include "c8/media/media-status.h"
 
 namespace c8 {
 
@@ -20,22 +19,22 @@ public:
   Muxer() = default;
 
   // Default move constructors.
-  Muxer(Muxer&&) = default;
-  Muxer& operator=(Muxer&&) = default;
+  Muxer(Muxer &&) = default;
+  Muxer &operator=(Muxer &&) = default;
 
   // Disallow copying.
-  Muxer(const Muxer&) = delete;
-  Muxer& operator=(const Muxer&) = delete;
+  Muxer(const Muxer &) = delete;
+  Muxer &operator=(const Muxer &) = delete;
 
   // Open new media file for muxing.
-  MediaStatus open(const char* path);
+  MediaStatus open(const char *path);
 
   // Add a new track to the muxer.
-  MediaStatus addTrack(const nlohmann::json& trackConfig);
+  MediaStatus addTrack(const nlohmann::json &trackConfig);
 
   // The Codec should be calling write on the muxer...
   // Lazy create tracks on first write. Duration, packet timestamp, synchronized, rendering offset.
-  MediaStatus write(const nlohmann::json& writeConfig, const uint8_t* data, size_t byteSize);
+  MediaStatus write(const nlohmann::json &writeConfig, const uint8_t *data, size_t byteSize);
 
   // Close and finish writing media file.
   MediaStatus close();
@@ -47,7 +46,7 @@ private:
   friend class MuxerRegistry;
 
   // Construct a Muxer with an implementation of a MuxerApi.
-  Muxer(MuxerApi* muxer);
+  Muxer(MuxerApi *muxer);
 
   std::unique_ptr<MuxerApi> muxer_;
 };

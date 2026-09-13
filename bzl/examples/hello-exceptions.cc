@@ -9,5 +9,6 @@ int main() {
   printf("Hello, World!\n");
   try {
     throw 1;
-  } catch (...) { }
+  } catch (...) {
+  }
 }

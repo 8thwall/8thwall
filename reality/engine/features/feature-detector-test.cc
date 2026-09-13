@@ -15,17 +15,15 @@ cc_test {
 }
 cc_end(0x96093ebe);
 
-#include "reality/engine/features/feature-detector.h"
+#include <iostream>
 
-#include "gtest/gtest.h"
-
-#include "c8/vector.h"
 #include "c8/pixels/pixel-buffer.h"
 #include "c8/pixels/pixel-transforms.h"
 #include "c8/pixels/pixels.h"
 #include "c8/stats/scope-timer.h"
-
-#include <iostream>
+#include "c8/vector.h"
+#include "gtest/gtest.h"
+#include "reality/engine/features/feature-detector.h"
 
 namespace c8 {
 

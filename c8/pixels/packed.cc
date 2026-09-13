@@ -8,15 +8,14 @@ cc_library {
   visibility = {
     "//visibility:public",
   };
-  deps = {
-    "//c8:exceptions"
-  };
+  deps = {"//c8:exceptions"};
 }
 cc_end(0xfbcea514);
 
-#include "c8/pixels/packed.h"
-#include "c8/exceptions.h"
 #include <cmath>
+
+#include "c8/exceptions.h"
+#include "c8/pixels/packed.h"
 
 namespace c8 {
 // You can pick a BASE that is smaller than 256 as well but it won't use all the bits in a uint8_t
@@ -24,13 +23,10 @@ namespace c8 {
 // around as high as 1e-5
 constexpr float BASE = 256.f;
 
-inline float fract(float x) {
-  return x - floor(x);
-}
+inline float fract(float x) { return x - floor(x); }
 
 float decodeFloat(uint8_t x, uint8_t y, uint8_t z, uint8_t a) {
-  return (x + y / BASE + z / (BASE * BASE) + a / (BASE * BASE * BASE))
-    / BASE;
+  return (x + y / BASE + z / (BASE * BASE) + a / (BASE * BASE * BASE)) / BASE;
 }
 
 // How this works. Note that this method uses multiplication instead of bit-shifting to emulate what
@@ -55,5 +51,4 @@ void encodeFloat01(float value, uint8_t *x, uint8_t *y, uint8_t *z, uint8_t *w) 
   *w = BASE * (floatW);
 }
 
-
-}
+}  // namespace c8

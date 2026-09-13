@@ -337,7 +337,7 @@ TEST_F(FaceTrackerTest, TestMesh) {
   EXPECT_EQ(478, result.localFaces->at(0).points.size());
 
   // Since we didn't enable ears, local faces should not output EAR rois
-  for (const auto &localFace: *result.localFaces) {
+  for (const auto &localFace : *result.localFaces) {
     auto roi = localFace.roi;
     EXPECT_NE(ImageRoi::Source::EAR_LEFT, roi.source);
     EXPECT_NE(ImageRoi::Source::EAR_RIGHT, roi.source);

@@ -18,7 +18,6 @@
  * of the programming guide with some additions like error checking.
  */
 
-
 // For the CUDA runtime routines (prefixed with "cuda_")
 
 /**

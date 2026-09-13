@@ -5,8 +5,8 @@
 
 #include "c8/c8-log.h"
 #include "c8/map.h"
-#include "c8/set.h"
 #include "c8/pixels/render/gesture-detector.h"
+#include "c8/set.h"
 #include "c8/stats/scope-timer.h"
 #include "c8/symbol-visibility.h"
 
@@ -52,7 +52,7 @@ private:
     }
   };
 
-  uint32_t addListener(const String &event) {    
+  uint32_t addListener(const String &event) {
     auto &listeners = listeners_[event];
     if (listeners.empty()) {
       gestureDetector_.addListener(event, &listen_);
@@ -107,14 +107,10 @@ void c8EmAsm_removeListener(uint32_t wid, const char *event, uint32_t eid) {
 }
 
 C8_PUBLIC
-uint32_t c8EmAsm_createGestureDetector() {
-  return GestureDetectorWrapper::create();
-}
+uint32_t c8EmAsm_createGestureDetector() { return GestureDetectorWrapper::create(); }
 
 C8_PUBLIC
-void c8EmAsm_destroyGestureDetector(uint32_t wid) {
-  GestureDetectorWrapper::destroy(wid);
-}
+void c8EmAsm_destroyGestureDetector(uint32_t wid) { GestureDetectorWrapper::destroy(wid); }
 
 C8_PUBLIC
 void c8EmAsm_observe(uint32_t wid, const char *touchJson) {
@@ -142,44 +138,52 @@ void c8EmAsm_observe(uint32_t wid, const char *touchJson) {
     eventsJson.push_back({
       {"id", id},
       {"event", name},
-      {"state", {
-        {"touchCount", state.touchCount},
-        {"positionRaw", {
-          {"x", state.positionRaw.x()},
-          {"y", state.positionRaw.y()},
-        }},
-        {"position", {
-          {"x", state.position.x()},
-          {"y", state.position.y()},
-        }},
-        {"velocity", {
-          {"x", state.velocity.x()},
-          {"y", state.velocity.y()},
-        }},
-        {"positionClip", {
-          {"x", state.positionClip.x()},
-          {"y", state.positionClip.y()},
-        }},
-        {"normalizedViewSize", {
-          {"x", state.normalizedViewSize.x()},
-          {"y", state.normalizedViewSize.y()},
-        }},
-        {"spread", state.spread},
-        {"touchMillis", state.touchMillis},
-        {"startMillis", state.startMillis},
-        {"startPosition", {
-          {"x", state.startPosition.x()},
-          {"y", state.startPosition.y()},
-        }},
-        {"startSpread", state.startSpread},
-        {"positionChange", {
-          {"x", state.positionChange.x()},
-          {"y", state.positionChange.y()},
-        }},
-        {"spreadChange", state.spreadChange},
-        {"startRotationRadian", state.startRotationRadian},
-        {"rotationRadianChange", state.rotationRadianChange},
-      }},
+      {"state",
+       {
+         {"touchCount", state.touchCount},
+         {"positionRaw",
+          {
+            {"x", state.positionRaw.x()},
+            {"y", state.positionRaw.y()},
+          }},
+         {"position",
+          {
+            {"x", state.position.x()},
+            {"y", state.position.y()},
+          }},
+         {"velocity",
+          {
+            {"x", state.velocity.x()},
+            {"y", state.velocity.y()},
+          }},
+         {"positionClip",
+          {
+            {"x", state.positionClip.x()},
+            {"y", state.positionClip.y()},
+          }},
+         {"normalizedViewSize",
+          {
+            {"x", state.normalizedViewSize.x()},
+            {"y", state.normalizedViewSize.y()},
+          }},
+         {"spread", state.spread},
+         {"touchMillis", state.touchMillis},
+         {"startMillis", state.startMillis},
+         {"startPosition",
+          {
+            {"x", state.startPosition.x()},
+            {"y", state.startPosition.y()},
+          }},
+         {"startSpread", state.startSpread},
+         {"positionChange",
+          {
+            {"x", state.positionChange.x()},
+            {"y", state.positionChange.y()},
+          }},
+         {"spreadChange", state.spreadChange},
+         {"startRotationRadian", state.startRotationRadian},
+         {"rotationRadianChange", state.rotationRadianChange},
+       }},
     });
   }
   nlohmann::json resultJson;

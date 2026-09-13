@@ -15,13 +15,13 @@ cc_test {
 }
 cc_end(0x073cea5c);
 
-#include "reality/engine/geometry/orientation.h"
-
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
+
 #include "c8/c8-log-proto.h"
 #include "c8/io/capnp-messages.h"
 #include "c8/protolog/xr-requests.h"
+#include "reality/engine/geometry/orientation.h"
 
 using testing::Eq;
 using testing::Pointwise;

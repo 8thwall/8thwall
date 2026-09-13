@@ -1,20 +1,20 @@
 // Copyright (c) 2018 8th Wall, Inc.
 // Original Author: Dat Chu (dat@8thwall.com)
 
-#include "bzl/inliner/rules2.h"
 #include <cmath>
+
+#include "bzl/inliner/rules2.h"
 
 cc_test {
   size = "small";
-  deps = {
-    ":kj-event-listener", "//bzl/inliner:rules", "@com_google_googletest//:gtest_main"
-  };
+  deps = {":kj-event-listener", "//bzl/inliner:rules", "@com_google_googletest//:gtest_main"};
 }
 cc_end(0xc1d764fb);
 
 #include <kj/debug.h>
-#include "c8/events/kj-event-listener.h"
+
 #include "c8/events/event-listener.h"
+#include "c8/events/kj-event-listener.h"
 #include "gtest/gtest.h"
 
 namespace c8 {
@@ -34,8 +34,10 @@ TEST_F(KjEventListenerTest, TestSimpleHelloWorldEvent) {
   std::string str_to_write = "Hello, world! Hola, mundo!";
 
   int invokeCount = 0;
-  eventListener.addFdEvent(readFd, EventFlag::READ | EventFlag::EDGE_TRIGGER | EventFlag::PERSIST,
-    [&invokeCount, &eventListener, readFd, &str_to_write] () mutable {
+  eventListener.addFdEvent(
+    readFd,
+    EventFlag::READ | EventFlag::EDGE_TRIGGER | EventFlag::PERSIST,
+    [&invokeCount, &eventListener, readFd, &str_to_write]() mutable {
       std::unique_ptr<char[]> readBuffer(new char[str_to_write.size() + 1]);
       read(readFd, readBuffer.get(), str_to_write.size() + 1);
       EXPECT_STREQ(str_to_write.c_str(), readBuffer.get());
@@ -43,8 +45,7 @@ TEST_F(KjEventListenerTest, TestSimpleHelloWorldEvent) {
       invokeCount++;
 
       eventListener.stop();
-    }
-  );
+    });
 
   write(writeFd, str_to_write.c_str(), str_to_write.size() + 1);
 

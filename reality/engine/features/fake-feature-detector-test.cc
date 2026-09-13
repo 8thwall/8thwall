@@ -14,12 +14,12 @@ cc_test {
 }
 cc_end(0xb7f837d2);
 
-#include "reality/engine/features/fake-feature-detector.h"
-
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
+
 #include "c8/geometry/worlds.h"
 #include "c8/vector.h"
+#include "reality/engine/features/fake-feature-detector.h"
 #include "reality/engine/features/local-matcher.h"
 
 namespace c8 {

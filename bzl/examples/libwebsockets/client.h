@@ -1,6 +1,6 @@
 #pragma once
 
 extern "C" {
-    void RunClient();
-    void StopClient();
+void RunClient();
+void StopClient();
 }

@@ -15,7 +15,6 @@ cc_test {
 cc_end(0xc0eed5e3);
 
 #include "c8/pixels/opengl/client-gl.h"
-
 #include "c8/pixels/opengl/gl-version.h"
 #include "c8/pixels/opengl/gl.h"
 #include "c8/pixels/opengl/glext.h"
@@ -31,8 +30,7 @@ TEST_F(ClientGlTest, ExtensionFunctionPointers) {
 
 #if C8_OPENGL_VERSION_3
   // Get an extension method that we expect to exist in OpenGL 3
-  auto glGetObjectLabel =
-    (PFNGLGETOBJECTLABELEXTPROC)clientGlGetProcAddress("glGetObjectLabelEXT");
+  auto glGetObjectLabel = (PFNGLGETOBJECTLABELEXTPROC)clientGlGetProcAddress("glGetObjectLabelEXT");
 
   // Ensure the pointer is not nullptr.
   EXPECT_NE(nullptr, glGetObjectLabel);

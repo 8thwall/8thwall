@@ -98,7 +98,7 @@ Material &Material::setDepthTexture(std::unique_ptr<Texture> &&depthTexture) {
   return *this;
 }
 
-const Texture* Material::texture(const String &name) const {
+const Texture *Material::texture(const String &name) const {
   auto it = textures_.find(name);
   if (it != textures_.end()) {
     return it->second.get();
@@ -106,7 +106,7 @@ const Texture* Material::texture(const String &name) const {
   return nullptr;
 }
 
-Texture* Material::texture(const String &name) {
+Texture *Material::texture(const String &name) {
   auto it = textures_.find(name);
   if (it != textures_.end()) {
     return it->second.get();
@@ -292,7 +292,7 @@ std::unique_ptr<Material> pointCloudPhysical() {
   auto g = MatGen::empty();
   g->setShader(Shaders::POINT_CLOUD_PHYSICAL);
   g->set(Shaders::POINT_CLOUD_POINT_SIZE, 0.015f);
-  g->set(Shaders::DEPTH_TEXTURE, 1); // Bind depth texture to texture unit 1
+  g->set(Shaders::DEPTH_TEXTURE, 1);  // Bind depth texture to texture unit 1
   return g;
 }
 

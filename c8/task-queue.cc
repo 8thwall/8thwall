@@ -17,11 +17,10 @@ cc_library {
 }
 cc_end(0xf5856d55);
 
-#include "c8/task-queue.h"
-
-#include "c8/thread-pool.h"
-
 #include <atomic>
+
+#include "c8/task-queue.h"
+#include "c8/thread-pool.h"
 
 namespace c8 {
 

@@ -2,9 +2,8 @@
 // Original Author: Christoph Bartschat (christoph@8thwall.com)
 #pragma once
 
-#include "c8/pixels/opengl/gl.h"
-
 #include "c8/pixels/opengl/gl-vertex-array.h"
+#include "c8/pixels/opengl/gl.h"
 
 namespace c8 {
 

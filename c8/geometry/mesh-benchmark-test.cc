@@ -70,8 +70,7 @@ static void BenchmarkComputeVertexNormalsWithFacemeshData(benchmark::State &stat
   Vector<UV> boxUVs;
   for (auto _ : state) {
     Vector<HVector3> boxVertexNormals;
-    computeVertexNormals(
-      FACEMESH_SAMPLE_VERTICES, FACEMESH_INDICES, &boxVertexNormals);
+    computeVertexNormals(FACEMESH_SAMPLE_VERTICES, FACEMESH_INDICES, &boxVertexNormals);
   }
 }
 

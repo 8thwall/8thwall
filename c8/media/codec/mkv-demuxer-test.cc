@@ -16,10 +16,10 @@ cc_test {
 }
 cc_end(0x9129b522);
 
-#include "gtest/gtest.h"
-#include "c8/media/codec/mkv-demuxer.h"
-
 #include <nlohmann/json.hpp>
+
+#include "c8/media/codec/mkv-demuxer.h"
+#include "gtest/gtest.h"
 
 namespace c8 {
 

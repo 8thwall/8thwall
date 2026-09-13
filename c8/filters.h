@@ -48,9 +48,7 @@ public:
     return result;
   }
 
-  void setAlphaFactor(T alphaFactor) {
-    alphaFactor_ = alphaFactor;
-  }
+  void setAlphaFactor(T alphaFactor) { alphaFactor_ = alphaFactor; }
 
   T rawInput() const { return currentInput_; }
 

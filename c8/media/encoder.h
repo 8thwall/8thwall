@@ -5,11 +5,10 @@
 
 #pragma once
 
-#include "c8/media/media-status.h"
-
 #include <nlohmann/json_fwd.hpp>
 
 #include "c8/media/codec/codec-api.h"
+#include "c8/media/media-status.h"
 
 namespace c8 {
 
@@ -34,7 +33,7 @@ public:
   MediaStatus start(Muxer *muxer);
 
   // Encode new input data.
-  MediaStatus encode(const nlohmann::json& sampleConfig, const uint8_t *data, size_t byteSize);
+  MediaStatus encode(const nlohmann::json &sampleConfig, const uint8_t *data, size_t byteSize);
 
   // Finish encoding and flush any remaining output to the muxer.
   MediaStatus finish();

@@ -5,7 +5,8 @@
 
 cc_library {
   visibility = {
-    "//reality/engine/executor:__subpackages__", "//reality/engine/camera:__subpackages__",
+    "//reality/engine/executor:__subpackages__",
+    "//reality/engine/camera:__subpackages__",
   };
   hdrs = {
     "camera-request-executor.h",
@@ -27,8 +28,9 @@ cc_library {
 cc_end(0x9e465c3b);
 
 #include <capnp/list.h>
-#include "c8/c8-log.h"
+
 #include "c8/c8-log-proto.h"
+#include "c8/c8-log.h"
 #include "c8/camera/device-infos.h"
 #include "c8/geometry/intrinsics.h"
 #include "c8/io/capnp-messages.h"
@@ -113,12 +115,9 @@ void CameraRequestExecutor::execute(
       float h = sensor.getCamera().getPixelIntrinsics().getPixelsHeight();
       setIntrinsicsMatrix(
         Intrinsics::getDisplayIntrinsics(
-          toPinholeModelStruct(projectionMatrix, w, h),
-          config.getGraphicsIntrinsics()
-        ),
+          toPinholeModelStruct(projectionMatrix, w, h), config.getGraphicsIntrinsics()),
         config.getGraphicsIntrinsics(),
-        &c
-      );
+        &c);
     } else {
       setIntrinsicForProjectionMatrix(projectionMatrix, &c);
     }
@@ -129,11 +128,9 @@ void CameraRequestExecutor::execute(
     setIntrinsicsMatrix(
       Intrinsics::getDisplayIntrinsics(
         toPinholeModelStruct(sensor.getCamera().getPixelIntrinsics()),
-        config.getGraphicsIntrinsics()
-      ),
+        config.getGraphicsIntrinsics()),
       config.getGraphicsIntrinsics(),
-      &c
-    );
+      &c);
     return;
   }
 
@@ -147,13 +144,10 @@ void CameraRequestExecutor::execute(
         sensor.getCamera(),
         deviceInfo,
         config.getCameraConfiguration().getCaptureGeometry(),
-        config.getGraphicsIntrinsics()
-      ),
+        config.getGraphicsIntrinsics()),
       &cameraModelBuilder);
     setIntrinsicsMatrix(
-      toPinholeModelStruct(cameraModelMessage.reader()),
-      config.getGraphicsIntrinsics(),
-      &c);
+      toPinholeModelStruct(cameraModelMessage.reader()), config.getGraphicsIntrinsics(), &c);
     return;
   }
   // TODO(nb): Add a fallback when the pixels intrinsics are known but not the graphics

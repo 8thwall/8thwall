@@ -23,10 +23,9 @@ cc_library {
 }
 cc_end(0x84f068bc);
 
-#include "c8/media/codec/mp4v2-demuxer.h"
-
 #include <filesystem>
 
+#include "c8/media/codec/mp4v2-demuxer.h"
 #include "c8/string-view.h"
 #include "c8/string/strcat.h"
 

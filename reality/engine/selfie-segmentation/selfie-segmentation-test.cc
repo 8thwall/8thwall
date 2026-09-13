@@ -38,8 +38,7 @@ namespace c8 {
 
 static constexpr char SELFIE_SEGMENTAION_TFLITE_PATH[] =
   "reality/engine/selfie-segmentation/data/selfie_multiclass_256x256.tflite";
-static constexpr char IMAGE_PATH[] =
-  "reality/engine/testdata/real_test_face.jpg";
+static constexpr char IMAGE_PATH[] = "reality/engine/testdata/real_test_face.jpg";
 
 static constexpr bool WRITE_IMAGE = false;
 

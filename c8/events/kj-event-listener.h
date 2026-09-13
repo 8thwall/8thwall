@@ -5,25 +5,24 @@
 
 #pragma once
 
-#include <map>
-
 #include <kj/async-io.h>
 #include <kj/async-unix.h>
 #include <kj/async.h>
 #include <kj/common.h>
+
+#include <map>
 
 #include "c8/events/event-listener.h"
 
 namespace c8 {
 
 class KjEventListener : public FdEventListener {
- public:
+public:
   KjEventListener();
 
   // Listen to a file descriptor and call callback whenever it becomes
   // available, subject to the provided EventFlags.
-  void addFdEvent(
-    int fd, EventFlags flags, std::function<void()> callback) override;
+  void addFdEvent(int fd, EventFlags flags, std::function<void()> callback) override;
 
   // Remove a file descriptor from the list of events to observe. Silently
   // returns if fd is not in the list of observed events.
@@ -36,13 +35,13 @@ class KjEventListener : public FdEventListener {
   void stop();
 
   // Mutable accessor for the kj::AsyncIoContext.
-  kj::AsyncIoContext& mutableIoContext() { return ioContext; }
+  kj::AsyncIoContext &mutableIoContext() { return ioContext; }
 
   // Disallow copy and assign.
-  KjEventListener(const KjEventListener&) = delete;
-  KjEventListener& operator=(const KjEventListener&) = delete;
+  KjEventListener(const KjEventListener &) = delete;
+  KjEventListener &operator=(const KjEventListener &) = delete;
 
- private:
+private:
   kj::AsyncIoContext ioContext;
   std::map<int, kj::Promise<void>> promises;
   kj::PromiseFulfillerPair<void> donePair;

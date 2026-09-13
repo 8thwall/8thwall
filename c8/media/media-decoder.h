@@ -9,13 +9,12 @@
 // TODO(mc): Add example usage.
 
 #include "c8/map.h"
-#include "c8/pixels/pixels.h"
-#include "c8/string-view.h"
-#include "c8/string.h"
-
 #include "c8/media/decoder.h"
 #include "c8/media/demuxer.h"
 #include "c8/media/media-status.h"
+#include "c8/pixels/pixels.h"
+#include "c8/string-view.h"
+#include "c8/string.h"
 
 namespace c8 {
 

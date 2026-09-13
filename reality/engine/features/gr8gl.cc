@@ -523,12 +523,8 @@ void computeGr8Descriptors(
   // Split work up into blocks.
   const int blockSize = 30;
   for (int j = 0; j < nkeypoints; j += blockSize) {
-    taskQueue->addTask(
-      std::bind(
-        std::cref(computeDescriptorRange),
-        keypointIndices,
-        j,
-        std::min(nkeypoints, j + blockSize)));
+    taskQueue->addTask(std::bind(
+      std::cref(computeDescriptorRange), keypointIndices, j, std::min(nkeypoints, j + blockSize)));
   }
 
   taskQueue->executeWithThreadPool(threadPool);

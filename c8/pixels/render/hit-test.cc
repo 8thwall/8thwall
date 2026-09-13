@@ -24,10 +24,10 @@ cc_end(0x45f56af5);
 #include <cmath>
 
 #include "c8/c8-log.h"
-#include "c8/geometry/splat.h"
-#include "c8/half.h"
 #include "c8/geometry/egomotion.h"
+#include "c8/geometry/splat.h"
 #include "c8/geometry/two-d.h"
+#include "c8/half.h"
 #include "c8/pixels/render/hit-test.h"
 
 namespace c8 {
@@ -214,9 +214,9 @@ Vector<HitTestResult> hitsForSplat(const Renderable &node, const Camera &camera,
     const auto *splatTex = node.material().colorTexture();
     const PackedSplat *splats =
       reinterpret_cast<const PackedSplat *>(splatTex->rgba32Pixels().pixels());
-    int maxNumSplats = 
-       (splatTex->rgba32Pixels().rowElements() * splatTex->rgba32Pixels().rows() * sizeof(uint32_t))
-       / sizeof(PackedSplat);
+    int maxNumSplats =
+      (splatTex->rgba32Pixels().rowElements() * splatTex->rgba32Pixels().rows() * sizeof(uint32_t))
+      / sizeof(PackedSplat);
     int numSplats = node.geometry().instanceIds().size();
 
     result = hitsForSplat(
@@ -228,9 +228,9 @@ Vector<HitTestResult> hitsForSplat(const Renderable &node, const Camera &camera,
     const auto *splatTex = node.material().texture(Shaders::RENDERER_SPLAT_DATA_TEX);
     const PackedSplat *splats =
       reinterpret_cast<const PackedSplat *>(splatTex->rgba32Pixels().pixels());
-    int maxNumSplats = 
-       (splatTex->rgba32Pixels().rowElements() * splatTex->rgba32Pixels().rows() * sizeof(uint32_t))
-       / sizeof(PackedSplat);
+    int maxNumSplats =
+      (splatTex->rgba32Pixels().rowElements() * splatTex->rgba32Pixels().rows() * sizeof(uint32_t))
+      / sizeof(PackedSplat);
     int numSplats = node.geometry().instanceCount() * 128;
     const uint32_t *ids =
       node.material().texture(Shaders::RENDERER_SPLAT_IDS_TEX)->r32Pixels().pixels();

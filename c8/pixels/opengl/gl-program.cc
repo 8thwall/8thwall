@@ -36,8 +36,10 @@ GLuint compileShader(GLenum shaderType, const char *shaderCode) {
     glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &maxLength);
     Vector<GLchar> errorLog(maxLength);
     glGetShaderInfoLog(shader, maxLength, &maxLength, &errorLog[0]);
-    C8Log("[gl-program] %s shader compilation failed:\n%s", shaderTypeToString(shaderType),
-          &errorLog[0]);
+    C8Log(
+      "[gl-program] %s shader compilation failed:\n%s",
+      shaderTypeToString(shaderType),
+      &errorLog[0]);
     glDeleteShader(shader);
     return 0;  // 0 indicates failure
   }
@@ -105,9 +107,11 @@ GlProgramObject &GlProgramObject::operator=(GlProgramObject &&rhs) noexcept {
   return *this;
 }
 
-bool GlProgramObject::initialize(const char *vertexShaderCode, const char *fragmentShaderCode,
-                                 const Vector<std::pair<String, GlVertexAttrib>> &vertexAttribs,
-                                 const Vector<Uniform> &uniforms) {
+bool GlProgramObject::initialize(
+  const char *vertexShaderCode,
+  const char *fragmentShaderCode,
+  const Vector<std::pair<String, GlVertexAttrib>> &vertexAttribs,
+  const Vector<Uniform> &uniforms) {
   GLuint vertexShader = compileShader(GL_VERTEX_SHADER, vertexShaderCode);
   GLuint fragmentShader = compileShader(GL_FRAGMENT_SHADER, fragmentShaderCode);
 
@@ -128,9 +132,11 @@ bool GlProgramObject::initialize(const char *vertexShaderCode, const char *fragm
   return true;
 }
 
-bool GlProgramObject::initialize(const char *vertexShaderCode, const char *fragmentShaderCode,
-                                 const Vector<String> &vertexAttribs,
-                                 const Vector<Uniform> &uniforms) {
+bool GlProgramObject::initialize(
+  const char *vertexShaderCode,
+  const char *fragmentShaderCode,
+  const Vector<String> &vertexAttribs,
+  const Vector<Uniform> &uniforms) {
   GLuint vertexShader = compileShader(GL_VERTEX_SHADER, vertexShaderCode);
   GLuint fragmentShader = compileShader(GL_FRAGMENT_SHADER, fragmentShaderCode);
 
@@ -186,8 +192,8 @@ GLint GlProgramObject::location(const String &name) const {
   return loc->second;
 }
 
-GLint GlProgramObject::location(const std::string &name, int index,
-                                const std::string &property) const {
+GLint GlProgramObject::location(
+  const std::string &name, int index, const std::string &property) const {
   return location(nameForStructArray(name, index, property));
 }
 
@@ -201,8 +207,11 @@ GLint GlProgramObject::location(const std::string &name, int index) const {
 
 // GlProgram
 
-void GlProgram::initialize(char const *vertexShaderCode, char const *fragmentShaderCode,
-                           Vector<String> attributes, Vector<String> uniforms) {
+void GlProgram::initialize(
+  char const *vertexShaderCode,
+  char const *fragmentShaderCode,
+  Vector<String> attributes,
+  Vector<String> uniforms) {
   // Compile shaders into program
   GLuint vertexShader = compileShader(GL_VERTEX_SHADER, vertexShaderCode);
   GLuint fragmentShader = compileShader(GL_FRAGMENT_SHADER, fragmentShaderCode);
@@ -223,11 +232,11 @@ void GlProgram::initialize(char const *vertexShaderCode, char const *fragmentSha
     } else if (attribute == "tangent") {
       glBindAttribLocation(program, static_cast<GLuint>(GlVertexAttrib::SLOT_6), "tangent");
     } else if (attribute == "instancePosition") {
-      glBindAttribLocation(program, static_cast<GLuint>(GlVertexAttrib::SLOT_9),
-                           "instancePosition");
+      glBindAttribLocation(
+        program, static_cast<GLuint>(GlVertexAttrib::SLOT_9), "instancePosition");
     } else if (attribute == "instanceRotation") {
-      glBindAttribLocation(program, static_cast<GLuint>(GlVertexAttrib::SLOT_8),
-                           "instanceRotation");
+      glBindAttribLocation(
+        program, static_cast<GLuint>(GlVertexAttrib::SLOT_8), "instanceRotation");
     } else if (attribute == "instanceScale") {
       glBindAttribLocation(program, static_cast<GLuint>(GlVertexAttrib::SLOT_10), "instanceScale");
     } else if (attribute == "instanceColor") {

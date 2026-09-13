@@ -18,10 +18,9 @@ cc_test {
 }
 cc_end(0x859614ea);
 
-#include "c8/pixels/opengl/gl-texture.h"
-
-#include "c8/pixels/opengl/gl-pixel-buffer.h"
 #include "c8/pixels/opengl/gl-framebuffer.h"
+#include "c8/pixels/opengl/gl-pixel-buffer.h"
+#include "c8/pixels/opengl/gl-texture.h"
 #include "c8/pixels/opengl/gl.h"
 #include "c8/pixels/opengl/offscreen-gl-context.h"
 #include "c8/pixels/opengl/texture-transforms.h"
@@ -152,6 +151,5 @@ TEST_F(GlTextureTest, TextureReadWriteGlPixelBuffer) {
   EXPECT_EQ(GL_NO_ERROR, glGetError());
 }
 #endif
-
 
 }  // namespace c8

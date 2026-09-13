@@ -30,8 +30,7 @@ public:
     int modelSize,
     size_t modelCacheSize = SELFIE_SEGMENTATION_CACHE_SIZE);
   SelfieSegmentation(
-    const Vector<uint8_t> &modelData,
-    size_t modelCacheSize = SELFIE_SEGMENTATION_CACHE_SIZE);
+    const Vector<uint8_t> &modelData, size_t modelCacheSize = SELFIE_SEGMENTATION_CACHE_SIZE);
 
   // Default move constructors.
   SelfieSegmentation(SelfieSegmentation &&) = default;

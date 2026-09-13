@@ -5,11 +5,10 @@
 
 #pragma once
 
-#include "c8/media/media-status.h"
-
 #include <nlohmann/json_fwd.hpp>
 
 #include "c8/media/codec/codec-api.h"
+#include "c8/media/media-status.h"
 
 namespace c8 {
 

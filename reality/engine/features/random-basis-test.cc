@@ -13,13 +13,12 @@ cc_test {
 }
 cc_end(0xe169a316);
 
-#include "reality/engine/features/random-basis.h"
+#include <gtest/gtest.h>
 
 #include <random>
 
 #include "c8/float-vector.h"
-
-#include <gtest/gtest.h>
+#include "reality/engine/features/random-basis.h"
 
 namespace c8 {
 

@@ -14,9 +14,8 @@ cc_test {
 cc_end(0x11df7bc7);
 
 #include "c8/protolog/api-limits.h"
-#include "reality/engine/hittest/hit-test-performer.h"
-
 #include "gtest/gtest.h"
+#include "reality/engine/hittest/hit-test-performer.h"
 
 using MutableXrHitTestRequest = c8::MutableRootMessage<c8::XrHitTestRequest>;
 using MutableXrHitTestResponse = c8::MutableRootMessage<c8::XrHitTestResponse>;

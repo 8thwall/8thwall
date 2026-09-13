@@ -15,10 +15,11 @@ cc_library {
 }
 cc_end(0xb87c5504);
 
-#include "c8/c8-log-proto.h"
-
 #include <capnp/pretty-print.h>
+
 #include <sstream>
+
+#include "c8/c8-log-proto.h"
 #include "c8/c8-log.h"
 #include "c8/string.h"
 

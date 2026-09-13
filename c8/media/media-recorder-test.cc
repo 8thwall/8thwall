@@ -15,10 +15,8 @@ cc_test {
 cc_end(0x18fe7062);
 
 #include "c8/media/media-recorder.h"
-
 #include "c8/pixels/pixel-buffer.h"
 #include "c8/pixels/pixels.h"
-
 #include "gtest/gtest.h"
 
 namespace c8 {

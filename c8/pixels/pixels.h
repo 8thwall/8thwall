@@ -98,7 +98,8 @@ public:
   virtual ~ConstPixels32() noexcept {}
 
   // Allowed implicit conversions.
-  ConstPixels32(const Pixels32 &b) : ConstPixels32(b.rows(), b.cols(), b.rowElements(), b.pixels()){};
+  ConstPixels32(const Pixels32 &b)
+      : ConstPixels32(b.rows(), b.cols(), b.rowElements(), b.pixels()){};
   ConstPixels32 &operator=(const Pixels32 &b) {
     *this = ConstPixels32(b);
     return *this;

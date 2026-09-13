@@ -17,16 +17,16 @@ cc_test {
 }
 cc_end(0x90249d63);
 
-#include "reality/engine/camera/camera-request-executor.h"
-
 #include <capnp/message.h>
 #include <gtest/gtest.h>
+
 #include "c8/hmatrix.h"
 #include "c8/io/capnp-messages.h"
 #include "c8/pixels/pixels.h"
 #include "c8/protolog/xr-requests.h"
-#include "reality/engine/api/device/info.capnp.h"
 #include "c8/stats/scope-timer.h"
+#include "reality/engine/api/device/info.capnp.h"
+#include "reality/engine/camera/camera-request-executor.h"
 
 using MutableDeviceInfo = c8::MutableRootMessage<c8::DeviceInfo>;
 using MutableRequestSensor = c8::MutableRootMessage<c8::RequestSensor>;
@@ -92,11 +92,7 @@ TEST_F(CameraRequestExecutorTest, TestCamera) {
 
   CameraRequestExecutor executor;
   executor.execute(
-    sensorBuilder,
-    configBuilder,
-    poseResponseBuilder,
-    deviceInfoBuilder,
-    &responseBuilder);
+    sensorBuilder, configBuilder, poseResponseBuilder, deviceInfoBuilder, &responseBuilder);
 
   EXPECT_EQ(5.0f, responseBuilder.getExtrinsic().getRotation().getW());
   EXPECT_EQ(6.0f, responseBuilder.getExtrinsic().getRotation().getX());
@@ -108,10 +104,11 @@ TEST_F(CameraRequestExecutorTest, TestCamera) {
 
   // HMatrix specifies construction in row-major order, but internally stores it in column-major
   // order.  We use it to test that the expected data is stored in column-major order.
-  HMatrix expectedExtrinsic{{2.92424, 0.00000, 0.0000000, 0.000000},  // Row 0
-                            {0.00000, 1.64488, 0.0015625, 0.000000},  // Row 1
-                            {0.00000, 0.00000, -1.000600, -0.60018},  // Row 2
-                            {0.00000, 0.00000, -1.000000, 0.000000}};
+  HMatrix expectedExtrinsic{
+    {2.92424, 0.00000, 0.0000000, 0.000000},  // Row 0
+    {0.00000, 1.64488, 0.0015625, 0.000000},  // Row 1
+    {0.00000, 0.00000, -1.000600, -0.60018},  // Row 2
+    {0.00000, 0.00000, -1.000000, 0.000000}};
 
   for (int i = 0; i < 16; ++i) {
     EXPECT_EQ(expectedExtrinsic.data()[i], responseBuilder.getIntrinsic().getMatrix44f()[i]);
@@ -171,18 +168,15 @@ TEST_F(CameraRequestExecutorTest, TestCameraWithKnownModel) {
   ResponseCamera::Builder responseBuilder = responseMessage.builder();
   CameraRequestExecutor executor;
   executor.execute(
-    sensorBuilder,
-    configBuilder,
-    poseResponseBuilder,
-    deviceInfoBuilder,
-    &responseBuilder);
+    sensorBuilder, configBuilder, poseResponseBuilder, deviceInfoBuilder, &responseBuilder);
 
   // HMatrix specifies construction in row-major order, but internally stores it in column-major
   // order.  We use it to test that the expected data is stored in column-major order.
-  HMatrix expectedIntrinsic{{2.3422587, 0.00000, 0.000000, 0.000000},  // Row 0
-                            {0.00000, 1.7566941, 0.000000, 0.000000},  // Row 1
-                            {0.00000, 0.00000, -1.000000, 0.00000},    // Row 2
-                            {0.00000, 0.00000, -1.000000, 0.000000}};
+  HMatrix expectedIntrinsic{
+    {2.3422587, 0.00000, 0.000000, 0.000000},  // Row 0
+    {0.00000, 1.7566941, 0.000000, 0.000000},  // Row 1
+    {0.00000, 0.00000, -1.000000, 0.00000},    // Row 2
+    {0.00000, 0.00000, -1.000000, 0.000000}};
 
   for (int i = 0; i < 16; ++i) {
     EXPECT_FLOAT_EQ(expectedIntrinsic.data()[i], responseBuilder.getIntrinsic().getMatrix44f()[i]);
@@ -255,19 +249,16 @@ TEST_F(CameraRequestExecutorTest, TestAspectRatioIntrinsics) {
   configBuilder.getGraphicsIntrinsics().setTextureHeight(640);
 
   executor.execute(
-    sensorBuilder,
-    configBuilder,
-    poseResponseBuilder,
-    deviceInfoBuilder,
-    &responseBuilder);
+    sensorBuilder, configBuilder, poseResponseBuilder, deviceInfoBuilder, &responseBuilder);
 
   // HMatrix specifies construction in row-major order, but internally stores it in column-major
   // order.  We use it to test that the expected data is stored in column-major order.
 
-  HMatrix expectedIntrinsic{{2.3422587, 0.00000, 0.000000, 0.000000},  // Row 0
-                            {0.00000, 1.7566941, 0.000000, 0.000000},  // Row 1
-                            {0.00000, 0.00000, -1.000000, 0.00000},    // Row 2
-                            {0.00000, 0.00000, -1.000000, 0.000000}};
+  HMatrix expectedIntrinsic{
+    {2.3422587, 0.00000, 0.000000, 0.000000},  // Row 0
+    {0.00000, 1.7566941, 0.000000, 0.000000},  // Row 1
+    {0.00000, 0.00000, -1.000000, 0.00000},    // Row 2
+    {0.00000, 0.00000, -1.000000, 0.000000}};
 
   for (int i = 0; i < 16; ++i) {
     EXPECT_FLOAT_EQ(expectedIntrinsic.data()[i], responseBuilder.getIntrinsic().getMatrix44f()[i]);
@@ -286,16 +277,13 @@ TEST_F(CameraRequestExecutorTest, TestAspectRatioIntrinsics) {
   configBuilder.getGraphicsIntrinsics().setTextureHeight(1280);
 
   executor.execute(
-    sensorBuilder,
-    configBuilder,
-    poseResponseBuilder,
-    deviceInfoBuilder,
-    &responseBuilder);
+    sensorBuilder, configBuilder, poseResponseBuilder, deviceInfoBuilder, &responseBuilder);
 
-  HMatrix expectedIntrinsic2{{3.1230116, 0.00000, 0.000000, 0.000000},  // Row 0
-                             {0.00000, 1.7566941, 0.000000, 0.000000},  // Row 1
-                             {0.00000, 0.00000, -1.000000, 0.00000},    // Row 2
-                             {0.00000, 0.00000, -1.000000, 0.000000}};
+  HMatrix expectedIntrinsic2{
+    {3.1230116, 0.00000, 0.000000, 0.000000},  // Row 0
+    {0.00000, 1.7566941, 0.000000, 0.000000},  // Row 1
+    {0.00000, 0.00000, -1.000000, 0.00000},    // Row 2
+    {0.00000, 0.00000, -1.000000, 0.000000}};
 
   for (int i = 0; i < 16; ++i) {
     EXPECT_FLOAT_EQ(expectedIntrinsic2.data()[i], responseBuilder.getIntrinsic().getMatrix44f()[i]);
@@ -314,16 +302,13 @@ TEST_F(CameraRequestExecutorTest, TestAspectRatioIntrinsics) {
   configBuilder.getGraphicsIntrinsics().setTextureWidth(720);
   configBuilder.getGraphicsIntrinsics().setTextureHeight(1280);
   executor.execute(
-    sensorBuilder,
-    configBuilder,
-    poseResponseBuilder,
-    deviceInfoBuilder,
-    &responseBuilder);
+    sensorBuilder, configBuilder, poseResponseBuilder, deviceInfoBuilder, &responseBuilder);
 
-  HMatrix expectedIntrinsic3{{3.1230117, 0.00000, 0.000000, 0.000000},  // Row 0
-                             {0.00000, 1.7566941, 0.000000, 0.000000},  // Row 1
-                             {0.00000, 0.00000, -1.000000, 0.00000},    // Row 2
-                             {0.00000, 0.00000, -1.000000, 0.000000}};
+  HMatrix expectedIntrinsic3{
+    {3.1230117, 0.00000, 0.000000, 0.000000},  // Row 0
+    {0.00000, 1.7566941, 0.000000, 0.000000},  // Row 1
+    {0.00000, 0.00000, -1.000000, 0.00000},    // Row 2
+    {0.00000, 0.00000, -1.000000, 0.000000}};
 
   for (int i = 0; i < 16; ++i) {
     EXPECT_FLOAT_EQ(expectedIntrinsic3.data()[i], responseBuilder.getIntrinsic().getMatrix44f()[i]);
@@ -342,16 +327,13 @@ TEST_F(CameraRequestExecutorTest, TestAspectRatioIntrinsics) {
   configBuilder.getGraphicsIntrinsics().setTextureWidth(480);
   configBuilder.getGraphicsIntrinsics().setTextureHeight(640);
   executor.execute(
-    sensorBuilder,
-    configBuilder,
-    poseResponseBuilder,
-    deviceInfoBuilder,
-    &responseBuilder);
+    sensorBuilder, configBuilder, poseResponseBuilder, deviceInfoBuilder, &responseBuilder);
 
-  HMatrix expectedIntrinsic4{{3.1230116, 0.00000, 0.000000, 0.000000},  // Row 0
-                             {0.00000, 2.3422587, 0.000000, 0.000000},  // Row 1
-                             {0.00000, 0.00000, -1.000000, 0.00000},    // Row 2
-                             {0.00000, 0.00000, -1.000000, 0.000000}};
+  HMatrix expectedIntrinsic4{
+    {3.1230116, 0.00000, 0.000000, 0.000000},  // Row 0
+    {0.00000, 2.3422587, 0.000000, 0.000000},  // Row 1
+    {0.00000, 0.00000, -1.000000, 0.00000},    // Row 2
+    {0.00000, 0.00000, -1.000000, 0.000000}};
 
   for (int i = 0; i < 16; ++i) {
     EXPECT_FLOAT_EQ(expectedIntrinsic4.data()[i], responseBuilder.getIntrinsic().getMatrix44f()[i]);
@@ -371,16 +353,13 @@ TEST_F(CameraRequestExecutorTest, TestAspectRatioIntrinsics) {
   configBuilder.getGraphicsIntrinsics().setTextureHeight(640);
 
   executor.execute(
-    sensorBuilder,
-    configBuilder,
-    poseResponseBuilder,
-    deviceInfoBuilder,
-    &responseBuilder);
+    sensorBuilder, configBuilder, poseResponseBuilder, deviceInfoBuilder, &responseBuilder);
 
-  HMatrix expectedIntrinsic5{{3.1230116, 0.00000, 0.000000, 0.000000},  // Row 0
-                             {0.00000, 2.3422587, 0.000000, 0.000000},  // Row 1
-                             {0.00000, 0.00000, -1.000000, 0.00000},    // Row 2
-                             {0.00000, 0.00000, -1.000000, 0.000000}};
+  HMatrix expectedIntrinsic5{
+    {3.1230116, 0.00000, 0.000000, 0.000000},  // Row 0
+    {0.00000, 2.3422587, 0.000000, 0.000000},  // Row 1
+    {0.00000, 0.00000, -1.000000, 0.00000},    // Row 2
+    {0.00000, 0.00000, -1.000000, 0.000000}};
 
   for (int i = 0; i < 16; ++i) {
     EXPECT_FLOAT_EQ(expectedIntrinsic5.data()[i], responseBuilder.getIntrinsic().getMatrix44f()[i]);
@@ -400,16 +379,13 @@ TEST_F(CameraRequestExecutorTest, TestAspectRatioIntrinsics) {
   configBuilder.getGraphicsIntrinsics().setTextureHeight(1280);
 
   executor.execute(
-    sensorBuilder,
-    configBuilder,
-    poseResponseBuilder,
-    deviceInfoBuilder,
-    &responseBuilder);
+    sensorBuilder, configBuilder, poseResponseBuilder, deviceInfoBuilder, &responseBuilder);
 
-  HMatrix expectedIntrinsic6{{4.1640158, 0.00000, 0.000000, 0.000000},  // Row 0
-                             {0.00000, 2.3422587, 0.000000, 0.000000},  // Row 1
-                             {0.00000, 0.00000, -1.000000, 0.00000},    // Row 2
-                             {0.00000, 0.00000, -1.000000, 0.000000}};
+  HMatrix expectedIntrinsic6{
+    {4.1640158, 0.00000, 0.000000, 0.000000},  // Row 0
+    {0.00000, 2.3422587, 0.000000, 0.000000},  // Row 1
+    {0.00000, 0.00000, -1.000000, 0.00000},    // Row 2
+    {0.00000, 0.00000, -1.000000, 0.000000}};
 
   for (int i = 0; i < 16; ++i) {
     EXPECT_FLOAT_EQ(expectedIntrinsic6.data()[i], responseBuilder.getIntrinsic().getMatrix44f()[i]);
@@ -428,16 +404,13 @@ TEST_F(CameraRequestExecutorTest, TestAspectRatioIntrinsics) {
   configBuilder.getGraphicsIntrinsics().setTextureWidth(480);
   configBuilder.getGraphicsIntrinsics().setTextureHeight(480);
   executor.execute(
-    sensorBuilder,
-    configBuilder,
-    poseResponseBuilder,
-    deviceInfoBuilder,
-    &responseBuilder);
+    sensorBuilder, configBuilder, poseResponseBuilder, deviceInfoBuilder, &responseBuilder);
 
-  HMatrix expectedIntrinsic7{{2.3422587, 0.00000, 0.000000, 0.000000},  // Row 0
-                             {0.00000, 2.3422587, 0.000000, 0.000000},  // Row 1
-                             {0.00000, 0.00000, -1.000000, 0.00000},    // Row 2
-                             {0.00000, 0.00000, -1.000000, 0.000000}};
+  HMatrix expectedIntrinsic7{
+    {2.3422587, 0.00000, 0.000000, 0.000000},  // Row 0
+    {0.00000, 2.3422587, 0.000000, 0.000000},  // Row 1
+    {0.00000, 0.00000, -1.000000, 0.00000},    // Row 2
+    {0.00000, 0.00000, -1.000000, 0.000000}};
 
   for (int i = 0; i < 16; ++i) {
     EXPECT_FLOAT_EQ(expectedIntrinsic7.data()[i], responseBuilder.getIntrinsic().getMatrix44f()[i]);
@@ -508,19 +481,16 @@ TEST_F(CameraRequestExecutorTest, TestCenterPointIntrinsics) {
   configBuilder.getGraphicsIntrinsics().setTextureHeight(640);
 
   executor.execute(
-    sensorBuilder,
-    configBuilder,
-    poseResponseBuilder,
-    deviceInfoBuilder,
-    &responseBuilder);
+    sensorBuilder, configBuilder, poseResponseBuilder, deviceInfoBuilder, &responseBuilder);
 
   // HMatrix specifies construction in row-major order, but internally stores it in column-major
   // order.  We use it to test that the expected data is stored in column-major order.
 
-  HMatrix expectedIntrinsic{{2.3422587, 0.00000, -0.500000, 0.000000},  // Row 0
-                            {0.00000, 1.7566941, 0.500000, 0.000000},   // Row 1
-                            {0.00000, 0.00000, -1.000000, 0.00000},     // Row 2
-                            {0.00000, 0.00000, -1.000000, 0.000000}};
+  HMatrix expectedIntrinsic{
+    {2.3422587, 0.00000, -0.500000, 0.000000},  // Row 0
+    {0.00000, 1.7566941, 0.500000, 0.000000},   // Row 1
+    {0.00000, 0.00000, -1.000000, 0.00000},     // Row 2
+    {0.00000, 0.00000, -1.000000, 0.000000}};
 
   for (int i = 0; i < 16; ++i) {
     EXPECT_FLOAT_EQ(expectedIntrinsic.data()[i], responseBuilder.getIntrinsic().getMatrix44f()[i]);
@@ -549,16 +519,13 @@ TEST_F(CameraRequestExecutorTest, TestCenterPointIntrinsics) {
   configBuilder.getGraphicsIntrinsics().setTextureHeight(640);
 
   executor.execute(
-    sensorBuilder,
-    configBuilder,
-    poseResponseBuilder,
-    deviceInfoBuilder,
-    &responseBuilder);
+    sensorBuilder, configBuilder, poseResponseBuilder, deviceInfoBuilder, &responseBuilder);
 
-  HMatrix expectedIntrinsic2{{2.3422587, 0.00000, 0.500000, 0.000000},   // Row 0
-                             {0.00000, 1.7566941, -0.500000, 0.000000},  // Row 1
-                             {0.00000, 0.00000, -1.000000, 0.00000},     // Row 2
-                             {0.00000, 0.00000, -1.000000, 0.000000}};
+  HMatrix expectedIntrinsic2{
+    {2.3422587, 0.00000, 0.500000, 0.000000},   // Row 0
+    {0.00000, 1.7566941, -0.500000, 0.000000},  // Row 1
+    {0.00000, 0.00000, -1.000000, 0.00000},     // Row 2
+    {0.00000, 0.00000, -1.000000, 0.000000}};
 
   for (int i = 0; i < 16; ++i) {
     EXPECT_FLOAT_EQ(expectedIntrinsic2.data()[i], responseBuilder.getIntrinsic().getMatrix44f()[i]);

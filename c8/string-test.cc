@@ -13,7 +13,6 @@ cc_test {
 cc_end(0xfd1425d3);
 
 #include "c8/string.h"
-
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 

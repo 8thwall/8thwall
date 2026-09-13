@@ -29,8 +29,8 @@ cc_end(0x96dfcf55);
 #include "c8/pixels/pixel-buffer.h"
 #include "c8/pixels/pixel-transforms.h"
 #include "c8/pixels/pixels.h"
-#include "reality/engine/depth/depthnet-depth-map.h"
 #include "c8/stats/scope-timer.h"
+#include "reality/engine/depth/depthnet-depth-map.h"
 
 namespace c8 {
 constexpr size_t DEPTHNET_CACHE_SIZE = 7900000;
@@ -39,8 +39,8 @@ Depthnet::Depthnet(const uint8_t *modelData, int modelSize)
     : interpreter_(modelData, modelSize, DEPTHNET_CACHE_SIZE) {}
 
 // Constructor reads in the TFLite model
-Depthnet::Depthnet(const Vector<uint8_t> &modelData) : interpreter_(modelData, DEPTHNET_CACHE_SIZE) {}
-
+Depthnet::Depthnet(const Vector<uint8_t> &modelData)
+    : interpreter_(modelData, DEPTHNET_CACHE_SIZE) {}
 
 DepthFloatPixels Depthnet::detectDepth(
   // The input is (1, 256, 192, 3) to match the dimensions of the datarecorder depth maps which is

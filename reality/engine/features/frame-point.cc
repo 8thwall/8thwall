@@ -341,22 +341,15 @@ void FrameWithPoints::addAll(const FrameWithPoints &toCopy) {
   auto beforeNumKeypoints = store_.numKeypoints();
   store_.addKeypoints(toCopy.store().numKeypoints());
   // Copy Orb features
-  for (auto it = toCopy.store_.begin<OrbFeature>();
-       it != toCopy.store_.end<OrbFeature>();
-       ++it) {
-    store_.add<OrbFeature>(
-      toCopy.store_.get<OrbFeature>(*it).clone(), *it + beforeNumKeypoints);
+  for (auto it = toCopy.store_.begin<OrbFeature>(); it != toCopy.store_.end<OrbFeature>(); ++it) {
+    store_.add<OrbFeature>(toCopy.store_.get<OrbFeature>(*it).clone(), *it + beforeNumKeypoints);
   }
   // Copy Gorb features
-  for (auto it = toCopy.store_.begin<GorbFeature>();
-       it != toCopy.store_.end<GorbFeature>();
-       ++it) {
-    store_.add<GorbFeature>(
-      toCopy.store_.get<GorbFeature>(*it).clone(), *it + beforeNumKeypoints);
+  for (auto it = toCopy.store_.begin<GorbFeature>(); it != toCopy.store_.end<GorbFeature>(); ++it) {
+    store_.add<GorbFeature>(toCopy.store_.get<GorbFeature>(*it).clone(), *it + beforeNumKeypoints);
   }
   // Copy Learned features
-  for (auto it = toCopy.store_.begin<LearnedFeature>();
-       it != toCopy.store_.end<LearnedFeature>();
+  for (auto it = toCopy.store_.begin<LearnedFeature>(); it != toCopy.store_.end<LearnedFeature>();
        ++it) {
     store_.add<LearnedFeature>(
       toCopy.store_.get<LearnedFeature>(*it).clone(), *it + beforeNumKeypoints);

@@ -439,17 +439,10 @@ TEST_F(GlVertexArrayTest, InterleavedBufferFlow) {
   const int posDims = 3;
   const int colorDims = 3;
   const int interleavedStride = sizeof(vertexColorDataTop[0]);
-  EXPECT_EQ(
-    (posDims + colorDims) * sizeof(float), interleavedStride);
+  EXPECT_EQ((posDims + colorDims) * sizeof(float), interleavedStride);
 
   vao.setInterleavedAttribute(
-    interleavedIdx,
-    "position",
-    posDims,
-    GL_FLOAT,
-    GL_FALSE,
-    interleavedStride,
-    0);
+    interleavedIdx, "position", posDims, GL_FLOAT, GL_FALSE, interleavedStride, 0);
   EXPECT_EQ(GL_NO_ERROR, glGetError());
 
   vao.setInterleavedAttribute(
@@ -480,13 +473,19 @@ TEST_F(GlVertexArrayTest, InterleavedBufferFlow) {
   EXPECT_EQ(GL_NO_ERROR, glGetError());
 
   // Ensure the upper left is nearly red.
-  EXPECT_THAT(getPixel(px, 0, 0), Pointwise(FloatEqLowPrecision(), {0.992156863f, 0.00392156886f, 0.00392156886f, 1.0f}));
+  EXPECT_THAT(
+    getPixel(px, 0, 0),
+    Pointwise(FloatEqLowPrecision(), {0.992156863f, 0.00392156886f, 0.00392156886f, 1.0f}));
 
   // Ensure the bottom left is nearly green.
-  EXPECT_THAT(getPixel(px, 0, 126), Pointwise(FloatEqLowPrecision(), {0.00392156886f, 0.992156863f, 0.00392156886f, 1.0f}));
+  EXPECT_THAT(
+    getPixel(px, 0, 126),
+    Pointwise(FloatEqLowPrecision(), {0.00392156886f, 0.992156863f, 0.00392156886f, 1.0f}));
 
   // Ensure the upper right is nearly blue.
-  EXPECT_THAT(getPixel(px, 126, 0), Pointwise(FloatEqLowPrecision(), {0.00392156886f, 0.00392156886f, 0.992156863f, 1.0f}));
+  EXPECT_THAT(
+    getPixel(px, 126, 0),
+    Pointwise(FloatEqLowPrecision(), {0.00392156886f, 0.00392156886f, 0.992156863f, 1.0f}));
 
   // Ensure the bottom right is black.
   EXPECT_THAT(getPixel(px, 127, 127), Pointwise(FloatEqLowPrecision(), {0.0f, 0.0f, 0.0f, 1.0f}));

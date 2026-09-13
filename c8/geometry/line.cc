@@ -4,9 +4,7 @@
 #include "bzl/inliner/rules2.h"
 
 cc_library {
-  hdrs = {
-    "line.h"
-  };
+  hdrs = {"line.h"};
   deps = {
     "//c8:hpoint",
     "//c8:hvector",
@@ -55,12 +53,8 @@ float angleBetweenABAndAC(HPoint2 A, HPoint2 B, HPoint2 C) {
   return angle;
 }
 
-HPoint2 rotateCW(const HPoint2 &pt, int height) {
-  return {height - 1 - pt.y(), pt.x()};
-}
+HPoint2 rotateCW(const HPoint2 &pt, int height) { return {height - 1 - pt.y(), pt.x()}; }
 
-HPoint2 rotateCCW(const HPoint2 &pt, int width) {
-  return {pt.y(), width - 1 - pt.x()};
-}
+HPoint2 rotateCCW(const HPoint2 &pt, int width) { return {pt.y(), width - 1 - pt.x()}; }
 
-}
+}  // namespace c8

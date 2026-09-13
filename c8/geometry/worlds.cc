@@ -23,12 +23,12 @@ cc_end(0xb3de112d);
 
 #include <cmath>
 
-#include "c8/hmatrix.h"
 #include "c8/geometry/facemesh-data.h"
-#include "c8/geometry/mesh.h"
 #include "c8/geometry/mesh-types.h"
+#include "c8/geometry/mesh.h"
 #include "c8/geometry/two-d.h"
 #include "c8/geometry/worlds.h"
+#include "c8/hmatrix.h"
 
 using namespace c8;
 
@@ -113,12 +113,13 @@ Vector<HPoint3> Worlds::gravityNormalPlanesWorld() {
 
   Line2 table(HPoint2(-0.5f, -1.0f), HPoint2(0.5f, 1.0f));
 
-  Vector<Line2> chairs{Line2(HPoint2(-0.5f, -2.25f), HPoint2(0.5f, -1.25f)),
-                       Line2(HPoint2(-0.5f, 1.25f), HPoint2(0.5f, 2.25f)),
-                       Line2(HPoint2(-1.75f, -1.25f), HPoint2(-.75f, -.25f)),
-                       Line2(HPoint2(.75f, -1.25f), HPoint2(1.75f, -.25f)),
-                       Line2(HPoint2(-1.75f, .25f), HPoint2(-.75f, 1.25f)),
-                       Line2(HPoint2(.75f, .25f), HPoint2(1.75f, 1.25f))};
+  Vector<Line2> chairs{
+    Line2(HPoint2(-0.5f, -2.25f), HPoint2(0.5f, -1.25f)),
+    Line2(HPoint2(-0.5f, 1.25f), HPoint2(0.5f, 2.25f)),
+    Line2(HPoint2(-1.75f, -1.25f), HPoint2(-.75f, -.25f)),
+    Line2(HPoint2(.75f, -1.25f), HPoint2(1.75f, -.25f)),
+    Line2(HPoint2(-1.75f, .25f), HPoint2(-.75f, 1.25f)),
+    Line2(HPoint2(.75f, .25f), HPoint2(1.75f, 1.25f))};
 
   Line2 floor(HPoint2(-3.0f, -3.0f), HPoint2(3.0f, 3.0f));
 

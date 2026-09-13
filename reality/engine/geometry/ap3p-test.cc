@@ -13,11 +13,11 @@ cc_test {
 }
 cc_end(0x544ed6e8);
 
-#include "reality/engine/geometry/ap3p.h"
-
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
+
 #include "c8/geometry/worlds.h"
+#include "reality/engine/geometry/ap3p.h"
 
 using testing::Eq;
 using testing::FloatNear;

@@ -37,11 +37,11 @@ cc_end(0x0ad0e597);
 #include "c8/geometry/egomotion.h"
 #include "c8/geometry/homography.h"
 #include "c8/geometry/interpolation.h"
-#include "c8/geometry/two-d.h"
 #include "c8/geometry/line.h"
+#include "c8/geometry/parameterized-geometry.h"
+#include "c8/geometry/two-d.h"
 #include "c8/hmatrix.h"
 #include "c8/string/format.h"
-#include "c8/geometry/parameterized-geometry.h"
 
 namespace c8 {
 

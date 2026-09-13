@@ -12,10 +12,9 @@ cc_test {
 }
 cc_end(0x19bf7ffc);
 
-#include "c8/thread-pool.h"
-
 #include <thread>
 
+#include "c8/thread-pool.h"
 #include "gtest/gtest.h"
 
 namespace c8 {

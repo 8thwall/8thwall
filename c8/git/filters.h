@@ -6,5 +6,5 @@ namespace g8 {
 
 int register_lfs_filter();
 
-} // namespace g8
-} // namespace c8
+}  // namespace g8
+}  // namespace c8

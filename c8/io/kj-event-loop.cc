@@ -17,9 +17,8 @@ cc_library {
   };
 }
 
-#include "c8/io/kj-event-loop.h"
-
 #include "c8/exceptions.h"
+#include "c8/io/kj-event-loop.h"
 
 using namespace c8;
 

@@ -197,12 +197,8 @@ void GlobalMatcher<Descriptor>::matchBruteForce(
 
     // TODO(nb): check the sign on this; it's inconsistent with others. And normalize.
     auto rotation = wordPt.angle() - dictionaryPt.angle();
-    matches->push_back(PointMatch{
-      i,
-      dictKptIdx,
-      rotation,
-      static_cast<float>(minD),
-      dictionaryPt.scale()});
+    matches->push_back(
+      PointMatch{i, dictKptIdx, rotation, static_cast<float>(minD), dictionaryPt.scale()});
   }
 }
 
@@ -269,7 +265,9 @@ void GlobalMatcher<Descriptor>::matchMapPopCount(
   // TODO(Riyaan): Since 1s are more common in Q than 0s, ideally our intervals should skew
   // a bit to the left by a small proportion, which can be dynamically set based on |Q|
 
-  if (popCountToFeatureIdxLut_.empty() || trainPtsArray_ == nullptr || trainPtsArray_->empty<Descriptor>()) {
+  if (
+    popCountToFeatureIdxLut_.empty() || trainPtsArray_ == nullptr
+    || trainPtsArray_->empty<Descriptor>()) {
     return;
   }
 

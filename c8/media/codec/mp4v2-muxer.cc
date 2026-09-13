@@ -23,7 +23,6 @@ cc_library {
 cc_end(0x61adc65c);
 
 #include "c8/media/codec/mp4v2-muxer.h"
-
 #include "c8/string-view.h"
 #include "c8/string/strcat.h"
 

@@ -16,13 +16,12 @@ cc_library {
 }
 cc_end(0x8190e604);
 
-#include "reality/engine/features/descriptor-lsh-index.h"
+#include <bitset>
+#include <random>
 
 #include "c8/map.h"
 #include "c8/set.h"
-
-#include <bitset>
-#include <random>
+#include "reality/engine/features/descriptor-lsh-index.h"
 
 namespace c8 {
 
