@@ -18,7 +18,7 @@ def main(argv):
     START_TAG_RE = re.compile(START_TAG)
     END_TAG_RE = re.compile(END_TAG)
     HASH_RE = re.compile(r'cc_end\(([x0-9a-z]+)\)')
-    
+
     inPlace=True
     stdinSource=False
 
@@ -122,7 +122,7 @@ def main(argv):
         build_contents = build_file.read()
 
         stdinSourceData = b''
-        
+
         # NOTE(christoph): If we pass it here, we can re-use across multiple invocations, avoiding
         # the blocking call in parse-build-rules.sh
         parse_env = dict(os.environ, WORKSPACE_OVERRIDE = os.getcwd())
