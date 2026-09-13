@@ -389,6 +389,29 @@ cc_library(
 
 # cc_end(0x5200857f)
 
+# file: gl-command-buffer-test.cc
+cc_test(
+    name = "gl-command-buffer-test",
+    size = "small",
+    srcs = [
+        "gl-command-buffer-test.cc",
+    ],
+    deps = [
+        ":gl-framebuffer",
+        ":gl-headers",
+        ":gl-program",
+        ":gl-quad",
+        ":gl-texture",
+        ":offscreen-gl-context",
+        "//bzl/inliner:rules2",
+        "//c8:scope-exit",
+        "//c8/command:command-buffer",
+        "//c8/pixels:pixel-buffer",
+        "@com_google_googletest//:gtest_main",
+    ],
+)
+# cc_end(0x5200857f)
+
 # file: gl-error.cc
 cc_library(
     name = "gl-error",
@@ -682,11 +705,12 @@ cc_library(
         ":gl-buffer-object",
         ":gl-headers",
         "//bzl/inliner:rules2",
+        "//c8:c8-log",
         "//c8:exceptions",
         "//c8:map",
     ],
 )
-# cc_end(0xf9a383ab)
+# cc_end(0x76afccb3)
 
 # file: offscreen-gl-context-test.cc
 cc_test(

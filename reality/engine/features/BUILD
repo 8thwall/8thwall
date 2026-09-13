@@ -413,19 +413,6 @@ cc_library(
 )
 # cc_end(0x6cb435bd)
 
-cc_library(
-    name = "feature-scales",
-    srcs = [
-        "feature-scales.cc",
-    ],
-    hdrs = [
-        "feature-scales.h",
-    ],
-    deps = [
-        "//bzl/inliner:rules",
-    ],
-)
-
 # file: feature-scales-test.cc
 cc_test(
     name = "feature-scales-test",
@@ -440,6 +427,21 @@ cc_test(
     ],
 )
 # cc_end(0xdc4110a4)
+
+# file: feature-scales.cc
+cc_library(
+    name = "feature-scales",
+    srcs = [
+        "feature-scales.cc",
+    ],
+    hdrs = [
+        "feature-scales.h",
+    ],
+    deps = [
+        "//bzl/inliner:rules2",
+    ],
+)
+# cc_end(0xd697d92c)
 
 # file: feature-set-request-executor-test.cc
 cc_test(
@@ -536,6 +538,44 @@ cc_library(
     ],
 )
 # cc_end(0xf58b6f94)
+
+# file: gl-reality-frame.cc
+cc_library(
+    name = "gl-reality-frame",
+    srcs = [
+        "gl-reality-frame.cc",
+    ],
+    hdrs = [
+        "gl-reality-frame.h",
+    ],
+    visibility = [
+        "//visibility:public",
+    ],
+    deps = [
+        ":gr8-defs",
+        ":gr8-feature-shader",
+        "//bzl/inliner:rules2",
+        "//c8:c8-log",
+        "//c8:exceptions",
+        "//c8:hpoint",
+        "//c8:parameter-data",
+        "//c8:string",
+        "//c8:vector",
+        "//c8/geometry:pixel-pinhole-camera-model",
+        "//c8/pixels",
+        "//c8/pixels:gr8-pyramid",
+        "//c8/pixels:pixel-buffer",
+        "//c8/pixels/opengl:gl-error",
+        "//c8/pixels/opengl:gl-framebuffer",
+        "//c8/pixels/opengl:gl-headers",
+        "//c8/pixels/opengl:gl-program",
+        "//c8/pixels/opengl:gl-quad",
+        "//c8/pixels/opengl:gl-texture",
+        "//c8/stats:scope-timer",
+        "//reality/engine/geometry:image-warp",
+    ],
+)
+# cc_end(0xf3e5898a)
 
 # file: global-matcher-test.cc
 cc_test(
@@ -859,44 +899,6 @@ cc_test(
 
 # file: gr8gl.cc
 cc_library(
-    name = "gl-reality-frame",
-    srcs = [
-        "gl-reality-frame.cc",
-    ],
-    hdrs = [
-        "gl-reality-frame.h",
-    ],
-    visibility = [
-        "//visibility:public",
-    ],
-    deps = [
-        ":gr8-defs",
-        ":gr8-feature-shader",
-        "//bzl/inliner:rules2",
-        "//c8:c8-log",
-        "//c8:exceptions",
-        "//c8:hpoint",
-        "//c8:parameter-data",
-        "//c8:string",
-        "//c8:vector",
-        "//c8/geometry:pixel-pinhole-camera-model",
-        "//c8/pixels",
-        "//c8/pixels:gr8-pyramid",
-        "//c8/pixels:pixel-buffer",
-        "//c8/pixels/opengl:gl-error",
-        "//c8/pixels/opengl:gl-framebuffer",
-        "//c8/pixels/opengl:gl-headers",
-        "//c8/pixels/opengl:gl-program",
-        "//c8/pixels/opengl:gl-quad",
-        "//c8/pixels/opengl:gl-texture",
-        "//c8/stats:scope-timer",
-        "//reality/engine/geometry:image-warp",
-    ],
-)
-# cc_end(0xf3e5898a)
-
-# file: gr8gl.cc
-cc_library(
     name = "gr8gl",
     srcs = [
         "gr8gl.cc",
@@ -928,19 +930,6 @@ cc_library(
 )
 # cc_end(0x375d0b28)
 
-cc_library(
-    name = "image-descriptor",
-    srcs = [
-        "image-descriptor.cc",
-    ],
-    hdrs = [
-        "image-descriptor.h",
-    ],
-    deps = [
-        "//bzl/inliner:rules",
-    ],
-)
-
 # file: image-descriptor-test.cc
 cc_test(
     name = "image-descriptor-test",
@@ -955,6 +944,21 @@ cc_test(
     ],
 )
 # cc_end(0x977ae4d0)
+
+# file: image-descriptor.cc
+cc_library(
+    name = "image-descriptor",
+    srcs = [
+        "image-descriptor.cc",
+    ],
+    hdrs = [
+        "image-descriptor.h",
+    ],
+    deps = [
+        "//bzl/inliner:rules2",
+    ],
+)
+# cc_end(0xb3926bfd)
 
 # file: image-point-test.cc
 cc_test(
@@ -1105,26 +1109,6 @@ cc_library(
 )
 # cc_end(0x253de0d9)
 
-cc_library(
-    name = "opencv-image-descriptor",
-    srcs = [
-        "opencv-image-descriptor.cc",
-    ],
-    hdrs = [
-        "opencv-image-descriptor.h",
-    ],
-    visibility = [
-        "//visibility:private",
-    ],
-    deps = [
-        "//bzl/inliner:rules",
-        "//c8:exceptions",
-        "//c8/cvlite:convert",
-        "//reality/engine/features:image-descriptor",
-        "//third_party/cvlite/core",
-    ],
-)
-
 # file: opencv-image-descriptor-test.cc
 cc_test(
     name = "opencv-image-descriptor-test",
@@ -1141,6 +1125,28 @@ cc_test(
     ],
 )
 # cc_end(0x25c861ee)
+
+# file: opencv-image-descriptor.cc
+cc_library(
+    name = "opencv-image-descriptor",
+    srcs = [
+        "opencv-image-descriptor.cc",
+    ],
+    hdrs = [
+        "opencv-image-descriptor.h",
+    ],
+    visibility = [
+        "//visibility:private",
+    ],
+    deps = [
+        "//bzl/inliner:rules2",
+        "//c8:exceptions",
+        "//c8/cvlite:convert",
+        "//reality/engine/features:image-descriptor",
+        "//third_party/cvlite/core",
+    ],
+)
+# cc_end(0xd22dbce2)
 
 # file: pca-basis-test.cc
 cc_test(

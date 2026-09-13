@@ -15,6 +15,8 @@ else
   WORKSPACE="."
 fi
 
+# WORKSPACE="."
+
 COPTS="-std=c++14 -fexceptions -fcxx-exceptions -I${WORKSPACE}"
 SYSTEM_INCLUDES=`${CC} -Wp,-v -x c++ - -fsyntax-only < /dev/null 2>&1 | sed -e '/#include <...> search starts here:/,/End of search list\./!d;//d' -e 's/^ *\([^ ]*\).*/-I\1/' | awk '{ printf "%s ", $0 }'`
 $BIN "$@" -- ${COPTS} ${SYSTEM_INCLUDES}

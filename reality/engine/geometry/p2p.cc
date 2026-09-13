@@ -8,7 +8,6 @@ cc_library {
     "p2p.h",
   };
   deps = {
-    "//bzl/inliner:rules2",
     "//c8:hmatrix",
     "//c8:hpoint",
     "//c8:vector",

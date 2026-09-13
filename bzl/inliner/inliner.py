@@ -93,6 +93,8 @@ def main(argv):
                     '^\s*(%s)\s*{' % '|'.join(RULES),
                 ] + list(allSources),
                 stdout=subprocess.PIPE).stdout.read().decode('utf-8').rstrip()
+            if not grep_sources:
+                continue
             sources = sorted(
               grep_sources.split('\n'),
               key=lambda name: os.path.splitext(os.path.basename(name))[0])

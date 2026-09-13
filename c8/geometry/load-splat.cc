@@ -8,7 +8,7 @@ cc_library {
     "load-splat.h",
   };
   deps = {
-    "//c8/spz:load-spz",
+    "@spz",
     "//c8:c8-log",
     "//c8:map",
     "//c8:scope-exit",
@@ -20,7 +20,7 @@ cc_library {
     "//visibility:public",
   };
 }
-cc_end(0xfba235ae);
+cc_end(0xe6eca742);
 
 #include <draco/compression/decode.h>
 
