@@ -118,7 +118,7 @@ ts_proto_library = rule(
         "_well_known_protos": attr.label(
             allow_files = True,
             default = (
-                "@com_google_protobuf//:well_known_protos"
+                "@com_google_protobuf//:well_known_type_protos"
             ),
         ),
     },

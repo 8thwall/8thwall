@@ -1,14 +1,17 @@
 #!/bin/bash --norc
 set -eu
 
-ROOT="$(realpath "$(dirname "$0")/..")"
-
 bazel build //reality/app/xr/js:serve-xr --config=wasmrelease
 bazel test //c8/ecs/... --config=node
-bazel test --keep_going  --test_output=errors \
+bazel test --keep_going=0  --test_output=errors \
   -- \
-  //apps/... \
-  //c8/...  \
-  //reality/... \
+  //... \
+  -//bzl/... \
+  //bzl/examples/... \
+  -//bzl/examples/android-kotlin/... \
+  -//bzl/examples/android/... \
+  -//bzl/examples/grpc/... \
+  -//bzl/examples/proto/... \
+  -//bzl/examples/pybind11/...
 
-echo "Bazel Tests Passed!"
+echo "All Bazel Builds Passed!"
