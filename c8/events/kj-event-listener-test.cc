@@ -7,7 +7,7 @@
 
 cc_test {
   size = "small";
-  deps = {":kj-event-listener", "//bzl/inliner:rules", "@com_google_googletest//:gtest_main"};
+  deps = {":kj-event-listener", "@com_google_googletest//:gtest_main"};
 }
 cc_end(0xc1d764fb);
 
