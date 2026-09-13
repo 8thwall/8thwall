@@ -264,11 +264,11 @@ def main(argv):
              build_file.write(START_TAG)
              build_file.write(('\n\n').join(x[1] for x in outputRules))
              build_file.write(END_TAG + '\n')
-             print('Updated %s' % build_file_path, file=sys.stderr)
+             print('Updated %s' % build_file_path)
         else:
              if build_contents:
                  build_file.write(build_contents + '\n')
-             print('Removed autogen rules in %s' % build_file_path, file=sys.stderr)
+             print('Removed autogen rules in %s' % build_file_path)
 
         build_file.truncate()
         build_file.close()
