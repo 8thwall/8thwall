@@ -97,14 +97,8 @@ def main(argv):
               grep_sources.split('\n'),
               key=lambda name: os.path.splitext(os.path.basename(name))[0])
 
-        # print(sources, allSources)
         # Convert to relative paths.
-        sources = [os.path.relpath(x) for x in sources if x]
-        
-        if not sources:
-            continue
-            
-        print(build_dir)
+        sources = [os.path.relpath(x) for x in sources]
 
         build_file_path = os.path.join(build_dir, BUILD_FILE)
 
@@ -271,7 +265,7 @@ def main(argv):
         build_file.close()
 
         # Reformat using buildifier.
-        # subprocess.call([BUILDIFIER, build_file_path])
+        subprocess.call([BUILDIFIER, build_file_path])
 
         def updateCcFile(sourceData):
             upgradeState = 0
