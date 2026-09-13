@@ -4,11 +4,11 @@
 #pragma once
 
 #include "c8/map.h"
+#include "c8/media/media-recorder.h"
 #include "c8/pixels/pixel-buffer.h"
 #include "c8/pixels/pixels.h"
 #include "c8/string.h"
 #include "c8/vector.h"
-#include "c8/media/media-recorder.h"
 
 namespace c8 {
 
@@ -105,24 +105,18 @@ public:
   MediaStatus encode(const String &path, ConstRGBA8888PlanePixels frame);
 
   // Variable framerate variant.
-  MediaStatus encode(
-    const String &path,
-    ConstRGBA8888PlanePixels frame,
-    double frameTimeSeconds);
+  MediaStatus encode(const String &path, ConstRGBA8888PlanePixels frame, double frameTimeSeconds);
 
   // Finish all videos that this VideoCollection is managing, and return the names of the files that
   // were written.
   Vector<String> finish();
 
   // Override the default framerate for fixed framerate encoding.
-  void setFpsForFixedFramerate(double fps) {fps_ = fps;}
+  void setFpsForFixedFramerate(double fps) { fps_ = fps; }
 
 private:
   MediaStatus encode(
-    const String &path,
-    ConstRGBA8888PlanePixels frame,
-    bool hasFrameTime,
-    double frameTimeSeconds);
+    const String &path, ConstRGBA8888PlanePixels frame, bool hasFrameTime, double frameTimeSeconds);
   TreeMap<String, VideoWriter> videos_;
   double fps_ = 30.0;
 };

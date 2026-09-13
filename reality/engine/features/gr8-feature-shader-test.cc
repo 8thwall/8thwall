@@ -31,9 +31,9 @@ cc_end(0xdd008f74);
 #include "c8/pixels/opengl/offscreen-gl-context.h"
 #include "c8/pixels/pixel-buffer.h"
 #include "c8/pixels/pixel-transforms.h"
+#include "c8/stats/scope-timer.h"
 #include "gtest/gtest.h"
 #include "reality/engine/features/gr8-feature-shader.h"
-#include "c8/stats/scope-timer.h"
 
 namespace c8 {
 
@@ -47,9 +47,7 @@ uint8_t *pix(RGBA8888PlanePixels im, int r, int c) {
 int clip(int val, int min, int max) { return val < min ? min : (val >= max ? max - 1 : val); }
 
 RGBA8888PlanePixelBuffer drawImageToImage(
-  ConstRGBA8888PlanePixels in,
-  Gr8FeatureShader *shaders,
-  const GlProgramObject *shader) {
+  ConstRGBA8888PlanePixels in, Gr8FeatureShader *shaders, const GlProgramObject *shader) {
   auto width = in.cols();
   auto height = in.rows();
   auto src = readImageToNearestTexture(in);

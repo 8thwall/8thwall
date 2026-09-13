@@ -14,6 +14,7 @@ cc_library {
 cc_end(0x632f7415);
 
 #include <cmath>
+
 #include "reality/engine/tracking/fft-compute.h"
 
 namespace c8 {

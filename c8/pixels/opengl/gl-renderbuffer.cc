@@ -46,9 +46,9 @@ void GlRenderbuffer::initialize(
   width_ = width;
   height_ = height;
 
-  bind();    // Create the buffer by binding it.
+  bind();  // Create the buffer by binding it.
   glRenderbufferStorage(target_, internalFormat, width_, height_);  // init storage.
-  unbind();  // Unbind the buffer.
+  unbind();                                                         // Unbind the buffer.
 }
 
 GlRenderbuffer::GlRenderbuffer(GlRenderbuffer &&rhs) noexcept {

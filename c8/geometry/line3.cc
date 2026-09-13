@@ -8,7 +8,9 @@ cc_library {
     "line3.h",
   };
   deps = {
-    "//bzl/inliner:rules", "//c8:hpoint", "//c8:vector",
+    "//bzl/inliner:rules",
+    "//c8:hpoint",
+    "//c8:vector",
   };
   visibility = {
     "//visibility:public",
@@ -16,9 +18,9 @@ cc_library {
 }
 cc_end(0xd6a4d7e5);
 
-#include "c8/geometry/line3.h"
-
 #include <cmath>
+
+#include "c8/geometry/line3.h"
 
 namespace c8 {
 
@@ -34,7 +36,12 @@ float Line3::magnitude() const noexcept {
   return std::sqrt(xd * xd + yd * yd + zd * zd);
 }
 
-bool Line3::intersects(const Line3 &other, float* muThis, float* muOther, HPoint3 *ptThis, HPoint3 *ptOther) const noexcept {
+bool Line3::intersects(
+  const Line3 &other,
+  float *muThis,
+  float *muOther,
+  HPoint3 *ptThis,
+  HPoint3 *ptOther) const noexcept {
   if (!muThis || !muOther || !ptThis || !ptOther) {
     return false;
   }
@@ -43,11 +50,13 @@ bool Line3::intersects(const Line3 &other, float* muThis, float* muOther, HPoint
   HPoint3 p4 = other.end();
   HPoint3 p13 = {p1_.x() - p3.x(), p1_.y() - p3.y(), p1_.z() - p3.z()};
   HPoint3 p43 = {p4.x() - p3.x(), p4.y() - p3.y(), p4.z() - p3.z()};
-  if (std::fabs(p43.x()) < EPSILON && std::fabs(p43.y()) < EPSILON && std::fabs(p43.z()) < EPSILON) {
+  if (
+    std::fabs(p43.x()) < EPSILON && std::fabs(p43.y()) < EPSILON && std::fabs(p43.z()) < EPSILON) {
     return false;
   }
   HPoint3 p21 = {p2_.x() - p1_.x(), p2_.y() - p1_.y(), p2_.z() - p1_.z()};
-  if (std::fabs(p21.x()) < EPSILON && std::fabs(p21.y()) < EPSILON && std::fabs(p21.z()) < EPSILON) {
+  if (
+    std::fabs(p21.x()) < EPSILON && std::fabs(p21.y()) < EPSILON && std::fabs(p21.z()) < EPSILON) {
     return false;
   }
 
@@ -66,7 +75,8 @@ bool Line3::intersects(const Line3 &other, float* muThis, float* muOther, HPoint
   *muThis = numer / denom;
   *muOther = (d1343 + d4321 * (*muThis)) / d4343;
 
-  (*ptThis) = {p1_.x() + (*muThis) * p21.x(), p1_.y() + (*muThis) * p21.y(), p1_.z() + (*muThis) * p21.z()};
+  (*ptThis) = {
+    p1_.x() + (*muThis) * p21.x(), p1_.y() + (*muThis) * p21.y(), p1_.z() + (*muThis) * p21.z()};
 
   (*ptOther) = {
     p3.x() + (*muOther) * p43.x(),

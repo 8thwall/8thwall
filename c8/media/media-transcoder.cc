@@ -20,10 +20,10 @@ cc_library {
 }
 cc_end(0x595e42ff);
 
-#include "c8/media/media-transcoder.h"
-
 #include <algorithm>
 #include <nlohmann/json.hpp>
+
+#include "c8/media/media-transcoder.h"
 
 namespace c8 {
 

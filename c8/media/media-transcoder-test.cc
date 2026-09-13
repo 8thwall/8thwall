@@ -20,13 +20,10 @@ cc_test {
 cc_end(0x9a8540f8);
 
 #include "c8/media/media-transcoder.h"
-
 #include "c8/pixels/pixel-buffer.h"
 #include "c8/pixels/pixels.h"
-
 #include "c8/string.h"
 #include "c8/vector.h"
-
 #include "gtest/gtest.h"
 
 namespace c8 {

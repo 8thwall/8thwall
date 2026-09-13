@@ -18,13 +18,12 @@ cc_test {
 }
 cc_end(0xde958e05);
 
-#include "c8/media/codec/openh264-decoder.h"
-
-#include "gtest/gtest.h"
-#include "c8/media/codec/mp4v2-demuxer.h"
-#include "c8/media/demuxer.h"
-
 #include <nlohmann/json.hpp>
+
+#include "c8/media/codec/mp4v2-demuxer.h"
+#include "c8/media/codec/openh264-decoder.h"
+#include "c8/media/demuxer.h"
+#include "gtest/gtest.h"
 
 namespace c8 {
 

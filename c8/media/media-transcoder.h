@@ -7,12 +7,11 @@
 
 #include <tuple>
 
-#include "c8/string-view.h"
-#include "c8/vector.h"
-
 #include "c8/media/media-decoder.h"
 #include "c8/media/media-recorder.h"
 #include "c8/media/media-status.h"
+#include "c8/string-view.h"
+#include "c8/vector.h"
 
 namespace c8 {
 
@@ -29,7 +28,7 @@ public:
   MediaStatus open(StringView inputConfig, StringView outputConfig);
 
   // Returns information about the input and output media files in JSON format.
-  MediaStatus getInfo(String* inputInfo, String* outputInfo);
+  MediaStatus getInfo(String *inputInfo, String *outputInfo);
 
   // Transcode one frame/sample.
   MediaStatus transcode(String *metadata);

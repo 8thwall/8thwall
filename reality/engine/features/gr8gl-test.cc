@@ -579,7 +579,7 @@ TEST_F(Gr8GlTest, KeypointsForCropAndToPointsWithEmptyDescriptors) {
     EXPECT_FLOAT_EQ(outKps1.at(i).pt.y, outKps2.at(i).pt.y);
   }
 
-  auto emptyImagePoints = Gr8Gl::toPointsWithEmptyDescriptors(outKps1); 
+  auto emptyImagePoints = Gr8Gl::toPointsWithEmptyDescriptors(outKps1);
   size_t numFeaturePts = std::min<size_t>(outKps1.size(), 2500);
   EXPECT_EQ(emptyImagePoints.size(), numFeaturePts);
   for (size_t i = 0; i < numFeaturePts; i++) {

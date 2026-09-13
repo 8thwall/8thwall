@@ -15,14 +15,13 @@ cc_end(0x021d12dc);
 
 #include "c8/ref-vector.h"
 #include "c8/vector.h"
-
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
 namespace c8 {
 
-using testing::ElementsAre;
 using std::ref;
+using testing::ElementsAre;
 
 class RefVectorTest : public ::testing::Test {};
 

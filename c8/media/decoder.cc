@@ -33,7 +33,7 @@ MediaStatus Decoder::start(Demuxer *demuxer) {
 MediaStatus Decoder::decode(
   const nlohmann::json &sampleConfig,
   const uint8_t **data,
-  size_t* byteSize,
+  size_t *byteSize,
   nlohmann::json *sampleMetadata) {
   if (!decoder_.get()) {
     return {"Invalid Decoder"};

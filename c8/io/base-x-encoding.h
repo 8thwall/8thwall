@@ -30,13 +30,14 @@ public:
   BaseXEncoding(const BaseXEncoding &) = delete;
   BaseXEncoding &operator=(const BaseXEncoding &) = delete;
 
-  // Encodes the provided string into the alphabet / base specified at the time the encoder was created.
+  // Encodes the provided string into the alphabet / base specified at the time the encoder was
+  // created.
   std::unique_ptr<Vector<uint8_t>> encode(String str) const;
   std::unique_ptr<Vector<uint8_t>> encode(const char *cStr) const;
 
-  // Decodes the provided string from the alphabet / base specified at the time the encoder was created.
-  // If a character that is not in the encoder's alphabet is encountered, decoding will stop and an empty
-  // vector will be returned.
+  // Decodes the provided string from the alphabet / base specified at the time the encoder was
+  // created. If a character that is not in the encoder's alphabet is encountered, decoding will
+  // stop and an empty vector will be returned.
   std::unique_ptr<Vector<uint8_t>> decode(String str);
   std::unique_ptr<Vector<uint8_t>> decode(const char *cStr);
 

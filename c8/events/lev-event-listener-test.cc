@@ -1,19 +1,18 @@
 // Copyright (c) 2018 8th Wall, Inc.
 // Original Author: Dat Chu (dat@8thwall.com)
 
-#include "bzl/inliner/rules2.h"
 #include <cmath>
+
+#include "bzl/inliner/rules2.h"
 
 cc_test {
   size = "small";
-  deps = {
-    ":lev-event-listener", "//bzl/inliner:rules", "@com_google_googletest//:gtest_main"
-  };
+  deps = {":lev-event-listener", "//bzl/inliner:rules", "@com_google_googletest//:gtest_main"};
 }
 cc_end(0x72483bde);
 
-#include "c8/events/lev-event-listener.h"
 #include "c8/events/event-listener.h"
+#include "c8/events/lev-event-listener.h"
 #include "gtest/gtest.h"
 
 namespace c8 {
@@ -40,7 +39,8 @@ TEST_F(LevEventListenerTest, TestSimpleHelloWorldEvent) {
   // communication.
   evutil_socket_t sockets[2];
   if (LevEventListener::createSocketPair(sockets) < 0) {
-    FAIL() << "Unable to open socket pair. " << evutil_socket_error_to_string(EVUTIL_SOCKET_ERROR());
+    FAIL() << "Unable to open socket pair. "
+           << evutil_socket_error_to_string(EVUTIL_SOCKET_ERROR());
   }
 
   // Set up reading from one socket
@@ -50,8 +50,10 @@ TEST_F(LevEventListenerTest, TestSimpleHelloWorldEvent) {
 
   // Listen for reading events
   int invokeCount = 0;
-  listener.addFdEvent(listenSocketId, EventFlag::READ | EventFlag::PERSIST,
-    [dataString, listenSocketId, &invokeCount, &listener] () {
+  listener.addFdEvent(
+    listenSocketId,
+    EventFlag::READ | EventFlag::PERSIST,
+    [dataString, listenSocketId, &invokeCount, &listener]() {
       std::unique_ptr<char[]> readBuffer(new char[sizeof(dataString)]);
       read(listenSocketId, readBuffer.get(), sizeof(dataString));
       EXPECT_STREQ(dataString, readBuffer.get());

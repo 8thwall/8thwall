@@ -8,9 +8,9 @@
 #include <nlohmann/json_fwd.hpp>
 
 #include "c8/media/decoder.h"
+#include "c8/media/demuxer.h"
 #include "c8/media/encoder.h"
 #include "c8/media/muxer.h"
-#include "c8/media/demuxer.h"
 
 namespace c8 {
 

@@ -6,14 +6,13 @@
 
 #pragma once
 
-#include <limits>
 #include <algorithm>
+#include <limits>
 
 #include "c8/color.h"
 #include "c8/pixels/pixels.h"
 #include "c8/string.h"
 #include "c8/vector.h"
-
 
 struct DrawArea {
   float offsetX_ = 60;
@@ -38,11 +37,11 @@ namespace c8 {
 class Figure {
 public:
   Figure(float numTicks = 20.f) : numTicks_(numTicks) {}
-  template<class InputIt>
+  template <class InputIt>
   void xAxis(InputIt first, InputIt last);
   // each series should have at least N points where N is the length of the vector passed into
   // xAxis()
-  template<class InputIt>
+  template <class InputIt>
   void line(InputIt first, InputIt last, Color color, const String &name);
   void legend();
   void draw(RGBA8888PlanePixels out);
@@ -62,8 +61,7 @@ private:
   bool isDrawLegend_ = false;
 };
 
-
-template<class InputIt>
+template <class InputIt>
 void Figure::xAxis(InputIt first, InputIt last) {
   std::copy(first, last, std::back_inserter(xPoints_));
   for (InputIt it = first; it != last; it++) {
@@ -77,7 +75,7 @@ void Figure::xAxis(InputIt first, InputIt last) {
   }
 }
 
-template<class InputIt>
+template <class InputIt>
 void Figure::line(InputIt first, InputIt last, Color color, const String &name) {
   Vector<float> data;
   std::copy(first, last, std::back_inserter(data));
@@ -100,6 +98,5 @@ void Figure::line(InputIt first, InputIt last, Color color, const String &name) 
   minY_ = minY_ < minY ? minY_ : minY;
   maxY_ = maxY_ > maxY ? maxY_ : maxY;
 }
-
 
 }  // namespace c8

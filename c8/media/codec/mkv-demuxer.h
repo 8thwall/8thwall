@@ -7,12 +7,13 @@
 
 #include <mkvparser/mkvparser.h>
 #include <mkvparser/mkvreader.h>
+
 #include <nlohmann/json.hpp>
 
 #include "c8/map.h"
+#include "c8/media/codec/codec-api.h"
 #include "c8/string.h"
 #include "c8/vector.h"
-#include "c8/media/codec/codec-api.h"
 
 namespace c8 {
 
@@ -50,14 +51,12 @@ public:
   virtual MediaStatus close() override;
 
 private:
-
   nlohmann::json config_;
 
   struct TrackConfig {
     TrackConfig(long long inId) : id(inId) {}
 
-    ~TrackConfig() {
-    }
+    ~TrackConfig() {}
 
     // Default move constructors.
     TrackConfig(TrackConfig &&) = default;
@@ -76,7 +75,7 @@ private:
 
     unsigned long long defaultFrameDuration = 0;
 
-    enum State {UNSTARTED, ADVANCING, FINISHED};
+    enum State { UNSTARTED, ADVANCING, FINISHED };
     State state = UNSTARTED;
 
     unsigned long samples = 0;
@@ -89,9 +88,9 @@ private:
     long long channels = 0;
     long long bitDepth = 0;
 
-    const mkvparser::Cluster* cluster = nullptr;
-    const mkvparser::BlockEntry* blockEntry = nullptr;
-    const mkvparser::Block* block = nullptr;
+    const mkvparser::Cluster *cluster = nullptr;
+    const mkvparser::BlockEntry *blockEntry = nullptr;
+    const mkvparser::Block *block = nullptr;
     int blockFrame = 0;
 
     Vector<uint8_t> buffer;
@@ -101,7 +100,7 @@ private:
     uint8_t level = 0;
   };
 
-  MediaStatus advanceTrack(TrackConfig& track);
+  MediaStatus advanceTrack(TrackConfig &track);
 
   String path_;
 

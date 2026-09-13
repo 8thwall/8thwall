@@ -15,15 +15,13 @@ cc_test {
 }
 cc_end(0x1d0831e5);
 
-#include "reality/engine/features/pca-basis.h"
-
 #include <Eigen/Dense>
 #include <random>
 
 #include "c8/float-vector.h"
 #include "c8/io/capnp-messages.h"
-
 #include "gtest/gtest.h"
+#include "reality/engine/features/pca-basis.h"
 
 namespace std {
 
@@ -203,7 +201,7 @@ TEST_F(PcaBasisTest, BinarizeAndStore) {
 
       bool psign = 0.0f < pmf;
       bool bsign = bit != 0;
-      EXPECT_EQ(psign, bsign) << m <<  "  " << n;
+      EXPECT_EQ(psign, bsign) << m << "  " << n;
     }
   }
 }

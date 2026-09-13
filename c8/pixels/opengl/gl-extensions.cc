@@ -15,7 +15,6 @@ cc_library {
 cc_end(0x13746573);
 
 #include "c8/pixels/opengl/gl-extensions.h"
-
 #include "c8/pixels/opengl/gl.h"
 
 namespace c8 {

@@ -4,9 +4,7 @@
 #include "bzl/inliner/rules.h"
 
 cc_library {
-  hdrs = {
-    "capnp-messages.h"
-  };
+  hdrs = {"capnp-messages.h"};
   deps = {
     "//bzl/inliner:rules",
     "@capnproto//:capnp-lib",

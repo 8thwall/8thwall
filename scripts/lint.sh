@@ -54,13 +54,12 @@ done
 if [ "$CHECK_ONLY" = 1 ]; then
   ESLINT_MODE=()
   BUILDIFIER_MODE=(-mode=check -lint=warn)
+  CLANG_MODE=(--dry-run)
 else
   ESLINT_MODE=(--fix)
   BUILDIFIER_MODE=(-lint=fix)
+  CLANG_MODE=(-i)
 fi
-
-bazel build //bzl/linter:eslint >/dev/null
-ESLINT="bazel-bin/bzl/linter/eslint"
 
 if [ "${#FILE_ARGS[@]}" -gt 0 ]; then
   FILES="$(printf '%s\n' "${FILE_ARGS[@]}")"
@@ -78,14 +77,26 @@ STATUS=0
 
 JS_FILES="$(printf '%s\n' "$FILES" | grep -E '\.m?[tj]sx?$')" || true
 if [ -n "$JS_FILES" ]; then
+  echo "Building ESLint..."
+  bazel build //bzl/linter:eslint >/dev/null
+  ESLINT="bazel-bin/bzl/linter/eslint"
   echo "Running ESLint..."
   printf '%s\n' "$JS_FILES" | xargs -n 100 "$ESLINT" --no-warn-ignored ${ESLINT_MODE[@]+${ESLINT_MODE[@]}} -- || STATUS=1
 fi
 
-BAZEL_FILES="$(printf '%s\n' "$FILES" | grep -E '(WORKSPACE|/BUILD|\.bzl|\.bazel)$')" || true
+BAZEL_FILES="$(printf '%s\n' "$FILES" | grep -E '(WORKSPACE|/BUILD|\.BUILD|\.bzl|\.bazel)$')" || true
 if [ -n "$BAZEL_FILES" ]; then
   echo "Running Buildifier..."
   printf '%s\n' "$BAZEL_FILES" | xargs -n 100 buildifier ${BUILDIFIER_MODE[@]+${BUILDIFIER_MODE[@]}} || STATUS=1
+fi
+
+CLANG_FILES="$(printf '%s\n' "$FILES" | grep -vE "^third_party/" | grep -E '(\.cc|\.h)$')" || true
+if [ -n "$CLANG_FILES" ]; then
+  echo "Building ClangFormat..."
+  bazel build //bzl/llvm:clang-format >/dev/null
+  CLANG_FORMAT="./bazel-bin/bzl/llvm/clang-format"
+  echo "Running ClangFormat..."
+  printf '%s\n' "$CLANG_FILES" | xargs -n 100 "$CLANG_FORMAT" ${CLANG_MODE[@]+${CLANG_MODE[@]}} || STATUS=1
 fi
 
 exit "$STATUS"

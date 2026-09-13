@@ -27,22 +27,22 @@ cc_library {
 }
 cc_end(0x69106930);
 
+#include <ft2build.h>
+
 #include <algorithm>
 #include <iostream>
-
-#include <ft2build.h>
 #include FT_FREETYPE_H
 
 #include <freetype/ftglyph.h>
 
 #include "c8/color-maps.h"
+#include "c8/geometry/mesh-types.h"
+#include "c8/geometry/mesh.h"
 #include "c8/pixels/draw2.h"
 #include "c8/pixels/embedded-drawing-font.h"
 #include "c8/pixels/pixel-transforms.h"
-#include "c8/string-view.h"
-#include "c8/geometry/mesh.h"
-#include "c8/geometry/mesh-types.h"
 #include "c8/stats/scope-timer.h"
+#include "c8/string-view.h"
 
 namespace c8 {
 
@@ -229,8 +229,9 @@ std::tuple<HPoint2, HPoint2> calculateTextWidth(StringView text, HPoint2 pt, flo
 
     FT_Done_Glyph(glyph);
   }
-  return {{static_cast<float>(minX) / 64.0f, static_cast<float>(minY) / 64.0f},
-          {static_cast<float>(maxX) / 64.0f, static_cast<float>(maxY) / 64.0f}};
+  return {
+    {static_cast<float>(minX) / 64.0f, static_cast<float>(minY) / 64.0f},
+    {static_cast<float>(maxX) / 64.0f, static_cast<float>(maxY) / 64.0f}};
 }
 
 }  // namespace
@@ -562,9 +563,7 @@ void heatMap(uint8_t val, uint8_t *r, uint8_t *g, uint8_t *b) {
   *b = c[2];
 }
 
-Color heatMap(uint8_t val) {
-  return Color::hot(val / 255.0f);
-}
+Color heatMap(uint8_t val) { return Color::hot(val / 255.0f); }
 
 void drawCompass(const HMatrix &extrinsic, const HMatrix &intrinsic, RGBA8888PlanePixels dest) {
   Vector<HPoint3> compassPoints;
@@ -650,7 +649,8 @@ void drawAnchor(
   const HMatrix &anchorPose,
   float len,
   RGBA8888PlanePixels dest) {
-  drawAnchor(extrinsic, intrinsic, anchorPose, len, {Color::CHERRY, Color::MANGO, Color::MINT}, dest);
+  drawAnchor(
+    extrinsic, intrinsic, anchorPose, len, {Color::CHERRY, Color::MANGO, Color::MINT}, dest);
 }
 
 void drawAnchor(
@@ -871,14 +871,7 @@ void drawMeshAndNormals(
   auto projectedPoints = flatten<2>((cam * cameraMotion.inv() * vertices));
 
   drawVertexNormals(
-    vertices,
-    indices,
-    normalScalingFactor,
-    cam,
-    cameraMotion,
-    Color(0, 255, 0),
-    lineWidth,
-    dest);
+    vertices, indices, normalScalingFactor, cam, cameraMotion, Color(0, 255, 0), lineWidth, dest);
 
   drawMesh(projectedPoints, indices, Color(255, 255, 0), lineWidth, dest);
 

@@ -197,7 +197,7 @@ HMatrix Intrinsics::orthographicProjectionRightHanded(
   float xLeft, float xRight, float yUp, float yDown, float zNear, float zFar) noexcept {
   float xScale = 2 / (xRight - xLeft);
   float yScale = 2 / (yUp - yDown);
-  float zScale = - 2 / (zFar - zNear);
+  float zScale = -2 / (zFar - zNear);
   float tx = -(xRight + xLeft) / (xRight - xLeft);
   float ty = -(yUp + yDown) / (yUp - yDown);
   float tz = -(zFar + zNear) / (zFar - zNear);

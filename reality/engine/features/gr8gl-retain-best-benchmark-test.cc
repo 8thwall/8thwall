@@ -16,12 +16,13 @@ cc_test {
 }
 cc_end(0xa4b27889);
 
+#include <benchmark/benchmark.h>
+
 #include "reality/engine/features/gr8gl-slow.h"
 #include "reality/engine/features/gr8gl.h"
 #include "reality/quality/datasets/benchmark-dataset.h"
-#include "third_party/cvlite/features2d/keypoint.h"
 #include "third_party/cvlite/features2d/fast.h"
-#include <benchmark/benchmark.h>
+#include "third_party/cvlite/features2d/keypoint.h"
 
 namespace c8 {
 
@@ -42,7 +43,8 @@ public:
       c8cv::Mat descriptors;
       keyPointsArray.emplace_back();
 
-      c8cv::Ptr<c8cv::FastFeatureDetector> fd = c8cv::FastFeatureDetector::create(FAST_THRESHOLD, true);
+      c8cv::Ptr<c8cv::FastFeatureDetector> fd =
+        c8cv::FastFeatureDetector::create(FAST_THRESHOLD, true);
       Vector<c8cv::KeyPoint> cvpts;
       fd->detect(mat, cvpts);
       for (auto pt : cvpts) {
@@ -85,7 +87,6 @@ BENCHMARK_F(Gr8GlRetainBestBenchmarkTest, retainBestHead)(benchmark::State &stat
     auto row = rows[i];
     Gr8Gl::retainBest(points, points.size() / 2, col, row, 0, true);
     i = (i + 1) % numImages;
-
   }
 }
 

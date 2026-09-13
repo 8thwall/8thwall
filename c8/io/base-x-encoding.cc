@@ -19,7 +19,9 @@ cc_library {
 }
 
 #include <string.h>
+
 #include <memory>
+
 #include "c8/io/base-x-encoding.h"
 #include "c8/vector.h"
 

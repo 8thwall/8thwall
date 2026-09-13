@@ -12,10 +12,12 @@ cc_binary {
 cc_end(0xc2df7a21);
 
 #include <capnp/ez-rpc.h>
+
 #include <Eigen/Core>
 #include <Eigen/Geometry>
 #include <chrono>
 #include <thread>
+
 #include "c8/c8-log.h"
 #include "c8/io/capnp-messages.h"
 #include "c8/protolog/api/remote-service-interface.capnp.h"

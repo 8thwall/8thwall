@@ -13,15 +13,14 @@ cc_test {
 }
 cc_end(0xe289bebf);
 
-#include "c8/pixels/gr8-pyramid.h"
-
-#include "c8/c8-log.h"
 #include <queue>
 #include <vector>
+
+#include "c8/c8-log.h"
+#include "c8/pixels/gr8-pyramid.h"
 #include "gtest/gtest.h"
 
 namespace c8 {
-
 
 class Gr8PyramidTest : public ::testing::Test {};
 
@@ -84,7 +83,6 @@ TEST_F(Gr8PyramidTest, TestMapToBase) {
   EXPECT_FLOAT_EQ(21.5, 5 * map[3][2] + map[3][3]);
   // Level 3 scale:
   EXPECT_FLOAT_EQ(4, map[3][4]);
-
 }
 
 }  // namespace c8

@@ -26,7 +26,7 @@ constexpr static int debug_ = 0;
 #else
 constexpr static int debug_ = 1;
 #endif
-}
+}  // namespace
 
 RayPointFilterConfig createRayPointFilterConfig(float minAlpha, float update90v, float vAlpha) {
   auto minCutoff = 1.0f / (1.0f / minAlpha - 1.0f);
@@ -78,7 +78,6 @@ HPoint3 RayPointFilter3::filter(const HPoint3 &pt) {
   if (debug_) {
     debugData_ = {jointVelocity, updateAlpha, config_.vScale * jointVelocity};
   }
-
 
   return {filteredX_, filteredY_, filteredZ_};
 }

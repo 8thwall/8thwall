@@ -33,12 +33,12 @@
 #include <string>
 #include <thread>
 
+#include "bzl/examples/ceres/pose_graph_3d_error_term.h"
+#include "bzl/examples/ceres/read_g2o.h"
+#include "bzl/examples/ceres/types.h"
 #include "ceres/ceres.h"
 #include "gflags/gflags.h"
 #include "glog/logging.h"
-#include "bzl/examples/ceres/read_g2o.h"
-#include "bzl/examples/ceres/pose_graph_3d_error_term.h"
-#include "bzl/examples/ceres/types.h"
 
 DEFINE_string(input, "", "The pose graph definition filename in g2o format.");
 DEFINE_int32(num_threads, 4, "Number of threads used in solving");
@@ -48,9 +48,8 @@ namespace {
 
 // Constructs the nonlinear least squares optimization problem from the pose
 // graph constraints.
-void BuildOptimizationProblem(const VectorOfConstraints& constraints,
-                              MapOfPoses* poses,
-                              ceres::Problem* problem) {
+void BuildOptimizationProblem(
+  const VectorOfConstraints &constraints, MapOfPoses *poses, ceres::Problem *problem) {
   CHECK(poses != nullptr);
   CHECK(problem != nullptr);
   if (constraints.empty()) {
@@ -58,34 +57,31 @@ void BuildOptimizationProblem(const VectorOfConstraints& constraints,
     return;
   }
 
-  ceres::LossFunction* loss_function = nullptr;
-  ceres::Manifold* quaternion_manifold = new EigenQuaternionManifold;
+  ceres::LossFunction *loss_function = nullptr;
+  ceres::Manifold *quaternion_manifold = new EigenQuaternionManifold;
 
-  for (const auto& constraint : constraints) {
+  for (const auto &constraint : constraints) {
     auto pose_begin_iter = poses->find(constraint.id_begin);
     CHECK(pose_begin_iter != poses->end())
-        << "Pose with ID: " << constraint.id_begin << " not found.";
+      << "Pose with ID: " << constraint.id_begin << " not found.";
     auto pose_end_iter = poses->find(constraint.id_end);
-    CHECK(pose_end_iter != poses->end())
-        << "Pose with ID: " << constraint.id_end << " not found.";
+    CHECK(pose_end_iter != poses->end()) << "Pose with ID: " << constraint.id_end << " not found.";
 
-    const Eigen::Matrix<double, 6, 6> sqrt_information =
-        constraint.information.llt().matrixL();
+    const Eigen::Matrix<double, 6, 6> sqrt_information = constraint.information.llt().matrixL();
     // Ceres will take ownership of the pointer.
-    ceres::CostFunction* cost_function =
-        PoseGraph3dErrorTerm::Create(constraint.t_be, sqrt_information);
+    ceres::CostFunction *cost_function =
+      PoseGraph3dErrorTerm::Create(constraint.t_be, sqrt_information);
 
-    problem->AddResidualBlock(cost_function,
-                              loss_function,
-                              pose_begin_iter->second.p.data(),
-                              pose_begin_iter->second.q.coeffs().data(),
-                              pose_end_iter->second.p.data(),
-                              pose_end_iter->second.q.coeffs().data());
+    problem->AddResidualBlock(
+      cost_function,
+      loss_function,
+      pose_begin_iter->second.p.data(),
+      pose_begin_iter->second.q.coeffs().data(),
+      pose_end_iter->second.p.data(),
+      pose_end_iter->second.q.coeffs().data());
 
-    problem->SetManifold(pose_begin_iter->second.q.coeffs().data(),
-                         quaternion_manifold);
-    problem->SetManifold(pose_end_iter->second.q.coeffs().data(),
-                         quaternion_manifold);
+    problem->SetManifold(pose_begin_iter->second.q.coeffs().data(), quaternion_manifold);
+    problem->SetManifold(pose_end_iter->second.q.coeffs().data(), quaternion_manifold);
   }
 
   // The pose graph optimization problem has six DOFs that are not fully
@@ -102,7 +98,7 @@ void BuildOptimizationProblem(const VectorOfConstraints& constraints,
 }
 
 // Returns true if the solve was successful.
-bool SolveOptimizationProblem(ceres::Problem* problem) {
+bool SolveOptimizationProblem(ceres::Problem *problem) {
   CHECK(problem != nullptr);
 
   ceres::Solver::Options options;
@@ -120,17 +116,16 @@ bool SolveOptimizationProblem(ceres::Problem* problem) {
 }
 
 // Output the poses to the file with format: id x y z q_x q_y q_z q_w.
-bool OutputPoses(const std::string& filename, const MapOfPoses& poses) {
+bool OutputPoses(const std::string &filename, const MapOfPoses &poses) {
   std::fstream outfile;
   outfile.open(filename.c_str(), std::istream::out);
   if (!outfile) {
     LOG(ERROR) << "Error opening the file: " << filename;
     return false;
   }
-  for (const auto& pair : poses) {
-    outfile << pair.first << " " << pair.second.p.transpose() << " "
-            << pair.second.q.x() << " " << pair.second.q.y() << " "
-            << pair.second.q.z() << " " << pair.second.q.w() << '\n';
+  for (const auto &pair : poses) {
+    outfile << pair.first << " " << pair.second.p.transpose() << " " << pair.second.q.x() << " "
+            << pair.second.q.y() << " " << pair.second.q.z() << " " << pair.second.q.w() << '\n';
   }
   return true;
 }
@@ -138,7 +133,7 @@ bool OutputPoses(const std::string& filename, const MapOfPoses& poses) {
 }  // namespace
 }  // namespace ceres::examples
 
-int main(int argc, char** argv) {
+int main(int argc, char **argv) {
   google::InitGoogleLogging(argv[0]);
   GFLAGS_NAMESPACE::ParseCommandLineFlags(&argc, &argv, true);
 
@@ -148,22 +143,22 @@ int main(int argc, char** argv) {
   ceres::examples::VectorOfConstraints constraints;
 
   CHECK(ceres::examples::ReadG2oFile(FLAGS_input, &poses, &constraints))
-      << "Error reading the file: " << FLAGS_input;
+    << "Error reading the file: " << FLAGS_input;
 
   std::cout << "Number of poses: " << poses.size() << '\n';
   std::cout << "Number of constraints: " << constraints.size() << '\n';
 
   CHECK(ceres::examples::OutputPoses("poses_original.txt", poses))
-      << "Error outputting to poses_original.txt";
+    << "Error outputting to poses_original.txt";
 
   ceres::Problem problem;
   ceres::examples::BuildOptimizationProblem(constraints, &poses, &problem);
 
   CHECK(ceres::examples::SolveOptimizationProblem(&problem))
-      << "The solve was not successful, exiting.";
+    << "The solve was not successful, exiting.";
 
   CHECK(ceres::examples::OutputPoses("poses_optimized.txt", poses))
-      << "Error outputting to poses_original.txt";
+    << "Error outputting to poses_original.txt";
 
   return 0;
 }

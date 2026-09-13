@@ -52,7 +52,7 @@ uint16_t floatToHalf(float f) {
   // Handle inf and nan from float.
   if (exponent == 0xFF) {
     if (mantissa == 0) {
-      return (sign << 15) | 0x7C00; // Inf
+      return (sign << 15) | 0x7C00;  // Inf
     }
 
     return (sign << 15) | 0x7C01;  // Nan
@@ -76,8 +76,8 @@ uint16_t floatToHalf(float f) {
   return (sign << 15) | (newMantissa >> 13);
 }
 
-uint32_t packHalf2x16(std::array<float, 2> v) { 
-  return (floatToHalf(v[1]) << 16) | (floatToHalf(v[0])); 
+uint32_t packHalf2x16(std::array<float, 2> v) {
+  return (floatToHalf(v[1]) << 16) | (floatToHalf(v[0]));
 }
 
 std::array<float, 2> unpackHalf2x16(uint32_t v) {

@@ -54,9 +54,8 @@ cc_library {
 }
 cc_end(0xc736d15d);
 
-#include "reality/engine/features/gr8cpu.h"
-
 #include "reality/engine/features/gr8.h"
+#include "reality/engine/features/gr8cpu.h"
 
 namespace c8 {
 Gr8Cpu Gr8Cpu::create(

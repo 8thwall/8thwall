@@ -55,8 +55,8 @@ void writeModelToPLY(
     file << std::to_string(vertexData[i].x()) << " " << std::to_string(vertexData[i].y()) << " "
          << std::to_string(vertexData[i].z());
     if (hasNormal) {
-      file << " " << std::to_string(vertexNormal[i].x()) << " " << std::to_string(vertexNormal[i].y())
-           << " " << std::to_string(vertexNormal[i].z());
+      file << " " << std::to_string(vertexNormal[i].x()) << " "
+           << std::to_string(vertexNormal[i].y()) << " " << std::to_string(vertexNormal[i].z());
     }
     if (hasUv) {
       file << " " << std::to_string(vertexUv[i].x()) << " " << std::to_string(vertexUv[i].y());

@@ -5,14 +5,14 @@
 
 #pragma once
 
-#include "c8/string-view.h"
-#include "c8/string.h"
-#include "c8/vector.h"
-#include "c8/media/codec/codec-api.h"
+#include <vpx/vpx_decoder.h>
 
 #include <nlohmann/json.hpp>
 
-#include <vpx/vpx_decoder.h>
+#include "c8/media/codec/codec-api.h"
+#include "c8/string-view.h"
+#include "c8/string.h"
+#include "c8/vector.h"
 
 struct VpxInterface;
 

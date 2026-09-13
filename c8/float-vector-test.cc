@@ -12,11 +12,10 @@ cc_test {
 }
 cc_end(0x00bde77b);
 
-#include "c8/float-vector.h"
-
 #include <algorithm>
 #include <cmath>
 
+#include "c8/float-vector.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 

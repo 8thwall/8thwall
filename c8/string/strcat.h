@@ -6,12 +6,13 @@
 #pragma once
 
 #include <sstream>
+
 #include "c8/string.h"
 
 namespace c8 {
 
-template <typename ...Stringish>
-String strCat(Stringish&&... args) noexcept {
+template <typename... Stringish>
+String strCat(Stringish &&...args) noexcept {
   std::stringstream out;
   (out << ... << args);
   return out.str();

@@ -25,8 +25,8 @@ cc_end(0xf7756424);
 
 #include <benchmark/benchmark.h>
 
-#include "reality/engine/features/gr8cpu.h"
 #include "c8/stats/scope-timer.h"
+#include "reality/engine/features/gr8cpu.h"
 #include "reality/quality/datasets/benchmark-dataset.h"
 
 namespace c8 {

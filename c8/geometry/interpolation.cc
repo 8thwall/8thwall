@@ -54,8 +54,7 @@ int nearestNeighbourIndexSorted(const Vector<float> &xs, float val) {
   return it - xs.begin();
 }
 
-Vector<float> interp(
-  const Vector<float> &xs, const Vector<float> &ys, const Vector<float> &newXs) {
+Vector<float> interp(const Vector<float> &xs, const Vector<float> &ys, const Vector<float> &newXs) {
   if (xs.empty() || xs.size() != ys.size() || newXs.empty()) {
     return {};
   }

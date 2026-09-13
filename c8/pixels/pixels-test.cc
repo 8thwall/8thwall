@@ -6,13 +6,14 @@
 cc_test {
   size = "small";
   deps = {
-    ":pixels", "//bzl/inliner:rules", "@com_google_googletest//:gtest_main",
+    ":pixels",
+    "//bzl/inliner:rules",
+    "@com_google_googletest//:gtest_main",
   };
 }
 cc_end(0x935285cc);
 
 #include "c8/pixels/pixels.h"
-
 #include "gtest/gtest.h"
 
 namespace c8 {

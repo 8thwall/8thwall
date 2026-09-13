@@ -46,10 +46,10 @@ cc_library {
 }
 cc_end(0xf9a9d511);
 
-#include "reality/engine/geometry/ap3p.h"
-
 #include <cmath>
 #include <complex>
+
+#include "reality/engine/geometry/ap3p.h"
 #if defined(_MSC_VER) && (_MSC_VER <= 1700)
 static inline double cbrt(double x) { return (double)c8cv::cubeRoot((float)x); };
 #endif
@@ -63,7 +63,7 @@ using namespace std;
 
 namespace {
 
-constexpr complex<double> cdiv(complex<double> l, complex<double>r) {
+constexpr complex<double> cdiv(complex<double> l, complex<double> r) {
   double a = l.real();
   double b = l.imag();
   double c = r.real();
@@ -275,11 +275,12 @@ int ap3p::computePoses(
   double g5 = f11 * f22;
   double g6 = f11 * f25 - f15 * f21;
   double g7 = -f15 * f24;
-  Arr5 coeffs = {g5 * g5 + g1 * g1 + g3 * g3,
-                 2 * (g5 * g6 + g1 * g2 + g3 * g4),
-                 g6 * g6 + 2 * g5 * g7 + g2 * g2 + g4 * g4 - g1 * g1 - g3 * g3,
-                 2 * (g6 * g7 - g1 * g2 - g3 * g4),
-                 g7 * g7 - g2 * g2 - g4 * g4};
+  Arr5 coeffs = {
+    g5 * g5 + g1 * g1 + g3 * g3,
+    2 * (g5 * g6 + g1 * g2 + g3 * g4),
+    g6 * g6 + 2 * g5 * g7 + g2 * g2 + g4 * g4 - g1 * g1 - g3 * g3,
+    2 * (g6 * g7 - g1 * g2 - g3 * g4),
+    g7 * g7 - g2 * g2 - g4 * g4};
   Arr4 s{};
   solveQuartic(coeffs, s);
   polishQuarticRoots(coeffs, s);
@@ -310,9 +311,10 @@ int ap3p::computePoses(
     ctheta3 *= ntheta3;
     stheta3 *= ntheta3;
 
-    Mat33 C13 = {Arr3{ctheta3, 0, -stheta3},
-                 Arr3{stheta1p * stheta3, ctheta1p, stheta1p * ctheta3},
-                 Arr3{ctheta1p * stheta3, -stheta1p, ctheta1p * ctheta3}};
+    Mat33 C13 = {
+      Arr3{ctheta3, 0, -stheta3},
+      Arr3{stheta1p * stheta3, ctheta1p, stheta1p * ctheta3},
+      Arr3{ctheta1p * stheta3, -stheta1p, ctheta1p * ctheta3}};
 
     Mat33 temp_matrix{};
     Mat33 R{};
@@ -320,9 +322,10 @@ int ap3p::computePoses(
     mat_mult(temp_matrix, Cb1k3tzT, R);
 
     // R' * p3
-    Arr3 rp3 = {w3[0] * R[0][0] + w3[1] * R[1][0] + w3[2] * R[2][0],
-                w3[0] * R[0][1] + w3[1] * R[1][1] + w3[2] * R[2][1],
-                w3[0] * R[0][2] + w3[1] * R[1][2] + w3[2] * R[2][2]};
+    Arr3 rp3 = {
+      w3[0] * R[0][0] + w3[1] * R[1][0] + w3[2] * R[2][0],
+      w3[0] * R[0][1] + w3[1] * R[1][1] + w3[2] * R[2][1],
+      w3[0] * R[0][2] + w3[1] * R[1][2] + w3[2] * R[2][2]};
 
     Arr3 pxstheta1p{};
     vect_scale(stheta1p, b3p, pxstheta1p);

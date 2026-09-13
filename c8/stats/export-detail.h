@@ -12,4 +12,4 @@ HashMap<String, uint64_t> computeFlamegraphValues(const LoggingDetail::Reader &r
 // for generating an svg.
 String flamegraphText(LoggingContext *lc = nullptr);
 
-}
+}  // namespace c8

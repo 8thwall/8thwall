@@ -41,7 +41,7 @@
 
 #pragma once
 
-//#include <thread>
+// #include <thread>
 
 #include "c8/pixels/pixels.h"
 #include "c8/task-queue.h"
@@ -133,7 +133,7 @@ public:
       umax);
   }
 
-  static Gr8* createPtr(
+  static Gr8 *createPtr(
     int nfeatures = 500,
     float scaleFactor = 1.2f,
     int nlevels = 8,
@@ -243,9 +243,7 @@ public:
 
   // Compute the Gr8 features and descriptors on an image
   void detectAndCompute(
-    c8cv::InputArray image,
-    std::vector<c8cv::KeyPoint> &keypoints,
-    c8cv::OutputArray descriptors);
+    c8cv::InputArray image, std::vector<c8cv::KeyPoint> &keypoints, c8cv::OutputArray descriptors);
 
   Gr8(Gr8 &&) = default;
 

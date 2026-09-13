@@ -8,18 +8,16 @@
 cc_test {
   size = "small";
   deps = {
-    ":half", 
+    ":half",
     "@com_google_googletest//:gtest_main",
   };
 }
 cc_end(0x80a7dda4);
 
 #include <cmath>
-#include <cmath>
 #include <limits>
 
 #include "c8/half.h"
-
 #include "gtest/gtest.h"
 
 namespace c8 {
@@ -119,7 +117,7 @@ TEST_F(HalfTest, FloatToHalf) {
   // Largest normal number:
   EXPECT_EQ(floatToHalf(std::pow(2.0f, 15.0f) * (1.0f + 1023.0f / 1024.0f)), 0x7BFF);
   EXPECT_EQ(floatToHalf(-std::pow(2.0f, 15.0f) * (1.0f + 1023.0f / 1024.0f)), 0xFBFF);
-  
+
   // Infinity
   EXPECT_EQ(floatToHalf(std::numeric_limits<float>::infinity()), 0x7C00);
   EXPECT_EQ(floatToHalf(-std::numeric_limits<float>::infinity()), 0xFC00);

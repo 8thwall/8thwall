@@ -22,13 +22,12 @@ cc_end(0xb485f497);
 #include <gtest/gtest.h>
 
 #include "c8/hmatrix.h"
-#include "c8/pixels/opengl/offscreen-gl-context.h"
 #include "c8/pixels/opengl/gl-framebuffer.h"
 #include "c8/pixels/opengl/gl-quad.h"
 #include "c8/pixels/opengl/gl-texture.h"
-#include "c8/pixels/test-image.h"
-
+#include "c8/pixels/opengl/offscreen-gl-context.h"
 #include "c8/pixels/render/image-shader.h"
+#include "c8/pixels/test-image.h"
 
 namespace c8 {
 

@@ -29,14 +29,14 @@ cc_library {
 
 #include <capnp/rpc-twoparty.h>
 #include <capnp/serialize.h>
+#include <fcntl.h>
 #include <kj/async-io.h>
 #include <kj/async-unix.h>
 #include <kj/async.h>
 #include <kj/common.h>
-
-#include <fcntl.h>
 #include <stdio.h>
 #include <unistd.h>
+
 #include <algorithm>
 #include <ctime>
 #include <iostream>
@@ -108,9 +108,7 @@ void RemoteServiceConnection::logToServer(RemoteServiceDiscovery::ServiceInfo se
   }
 
   C8Log("[remote-service-connection] %s", "rpc thread start");
-  thrd_ = std::thread([this,
-                       readFd,
-                       server]() {
+  thrd_ = std::thread([this, readFd, server]() {
     C8Log("[remote-service-connection] %s", "rpc thread running");
     KjEventListener fdListener;
 
@@ -130,17 +128,14 @@ void RemoteServiceConnection::logToServer(RemoteServiceDiscovery::ServiceInfo se
       auto defer = kj::evalLater([&fdListener, readFd]() {
                      fdListener.removeFdEvent(readFd);
                      fdListener.stop();
-                   })
-                     .eagerlyEvaluate(nullptr);
+                   }).eagerlyEvaluate(nullptr);
       tasks.add(std::move(defer));
     };
 
     fdListener.addFdEvent(
       readFd,
       EventFlag::READ | EventFlag::EDGE_TRIGGER | EventFlag::PERSIST,
-      [this, readFd, terminate]() {
-        this->drainFdAndSendRpcs(readFd, terminate);
-      });
+      [this, readFd, terminate]() { this->drainFdAndSendRpcs(readFd, terminate); });
 
     // Create an entry in the connectionState
     this->connectionState_.reset(new ConnectionState());
@@ -160,7 +155,6 @@ void RemoteServiceConnection::disconnect() {
     KJ_SYSCALL(write(writeFd_, &terminateChar, sizeof(terminateChar)));
   }
 }
-
 
 RemoteServiceConnection::~RemoteServiceConnection() {
   C8Log("[remote-service-connection] %s", "~RemoteServiceConnection");
@@ -187,9 +181,9 @@ void RemoteServiceConnection::send(MutableRootMessage<RemoteServiceRequest> &req
   KJ_SYSCALL(write(writeFd_, &updateChar, sizeof(updateChar)));
 }
 
-ConstRootMessage<RemoteServiceResponse>& RemoteServiceConnection::receive() {
+ConstRootMessage<RemoteServiceResponse> &RemoteServiceConnection::receive() {
   if (responsePair_.fillingMsg == nullptr) {
-    //C8Log("[remote-service-connection] %s", "no new response, repeating last response.");
+    // C8Log("[remote-service-connection] %s", "no new response, repeating last response.");
     if (responsePair_.drainingMsg == nullptr) {
       C8Log("[remote-service-connection] %s", "initializing default last response.");
       responsePair_.drainingMsg.reset(new ConstRootMessage<RemoteServiceResponse>());
@@ -247,9 +241,8 @@ void RemoteServiceConnection::connectToServer(
 // Drain any bytes on the read File descriptor, then send the current queue to each of the connected
 //  Rpc servers.
 void RemoteServiceConnection::drainFdAndSendRpcs(
-  evutil_socket_t readFd,
-  std::function<void()> terminate) {
-  //C8Log("[remote-service-connection] %s", "Draining Fd for terminate character");
+  evutil_socket_t readFd, std::function<void()> terminate) {
+  // C8Log("[remote-service-connection] %s", "Draining Fd for terminate character");
   char readBuffer[4096];
   ssize_t n = 0;
   do {
@@ -263,17 +256,15 @@ void RemoteServiceConnection::drainFdAndSendRpcs(
   } while (n == sizeof(readBuffer));
 
   if (
-    status_.load() != ConnectionStatus::CONNECTED
-    || connectionState_ == nullptr
+    status_.load() != ConnectionStatus::CONNECTED || connectionState_ == nullptr
     || connectionState_->rpcClient.get() == nullptr) {
     C8Log("[remote-service-connection] %s", "Not connected; dropping messages.");
     return;
   }
 
-
   // If this RPC server is still pending the previous request, return but come back later
   if (requestPair_.drainingMsg != nullptr) {
-    //C8Log("[remote-service-connection] %s", "RPC is pending, delaying drain.");
+    // C8Log("[remote-service-connection] %s", "RPC is pending, delaying drain.");
     KJ_SYSCALL(write(this->writeFd_, &updateChar, sizeof(updateChar)));
     return;
   }

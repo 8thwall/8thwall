@@ -22,10 +22,9 @@ cc_library {
 cc_end(0xcf1aafbe);
 
 #include "c8/media/codec/fdk-aac-decoder.h"
-
+#include "c8/media/demuxer.h"
 #include "c8/string.h"
 #include "c8/vector.h"
-#include "c8/media/demuxer.h"
 
 namespace c8 {
 

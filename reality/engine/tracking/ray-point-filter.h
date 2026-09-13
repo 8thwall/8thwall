@@ -48,6 +48,7 @@ public:
   // For Debug and Tuning
   FilterDebugData debugData() const { return debugData_; }
   RayPointFilterConfig config() const { return config_; }
+
 private:
   float filteredX_ = 0.0f;  // filtered x values
   float filteredY_ = 0.0f;  // filtered y values
@@ -72,6 +73,7 @@ public:
   // For Debug and Tuning
   FilterDebugData debugData() const { return debugData_; }
   RayPointFilterConfig config() const { return config_; }
+
 private:
   float filteredX_ = 0.0f;  // filtered x values
   float filteredY_ = 0.0f;  // filtered y values

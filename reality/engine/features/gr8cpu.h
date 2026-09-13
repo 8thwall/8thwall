@@ -61,9 +61,7 @@ public:
     int fastThreshold = 20);
 
   // Compute the Gr8 features and descriptors in an image.
-  ImagePoints detectAndCompute(YPlanePixels frame) {
-    return impl_->detectAndCompute(frame);
-  }
+  ImagePoints detectAndCompute(YPlanePixels frame) { return impl_->detectAndCompute(frame); }
 
   Gr8Cpu(Gr8Cpu &&) = default;
   Gr8Cpu &operator=(Gr8Cpu &&) = default;

@@ -12,10 +12,9 @@ cc_test {
 }
 cc_end(0xbf2d2fbc);
 
-#include "c8/staged-ring-buffer.h"
-
 #include <thread>
 
+#include "c8/staged-ring-buffer.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 

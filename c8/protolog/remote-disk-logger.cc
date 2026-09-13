@@ -29,14 +29,14 @@ cc_library {
 
 #include <capnp/rpc-twoparty.h>
 #include <capnp/serialize.h>
+#include <fcntl.h>
 #include <kj/async-io.h>
 #include <kj/async-unix.h>
 #include <kj/async.h>
 #include <kj/common.h>
-
-#include <fcntl.h>
 #include <stdio.h>
 #include <unistd.h>
+
 #include <algorithm>
 #include <ctime>
 #include <iostream>
@@ -122,8 +122,7 @@ void RemoteDiskLogger::logToDisk(int numFrames, int fd) {
       auto defer = kj::evalLater([&fdListener, readFd]() {
                      fdListener.removeFdEvent(readFd);
                      fdListener.stop();
-                   })
-                     .eagerlyEvaluate(nullptr);
+                   }).eagerlyEvaluate(nullptr);
       tasks.add(std::move(defer));
     };
 

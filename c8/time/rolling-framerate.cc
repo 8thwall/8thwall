@@ -13,9 +13,8 @@ cc_library {
 }
 cc_end(0x28566985);
 
-#include "c8/time/rolling-framerate.h"
-
 #include "c8/time/now.h"
+#include "c8/time/rolling-framerate.h"
 
 namespace c8 {
 

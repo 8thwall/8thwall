@@ -229,7 +229,10 @@ TEST_F(CommandBufferTest, TestMultiWriter) {
           &localCount);
       }
 
-      EXPECT_EQ(100, buffer.runSyncCommand(+[](int *local) -> int { return *local; }, &localCount));
+      EXPECT_EQ(
+        100,
+        buffer.runSyncCommand(
+          +[](int *local) -> int { return *local; }, &localCount));
 
       for (int i = 0; i < 50; ++i) {
         buffer.queueCommand(
@@ -240,7 +243,10 @@ TEST_F(CommandBufferTest, TestMultiWriter) {
           &localCount);
       }
 
-      EXPECT_EQ(150, buffer.runSyncCommand(+[](int *local) -> int { return *local; }, &localCount));
+      EXPECT_EQ(
+        150,
+        buffer.runSyncCommand(
+          +[](int *local) -> int { return *local; }, &localCount));
 
       done.fetch_add(1);
     });
@@ -333,7 +339,8 @@ TEST_F(CommandBufferTest, TestRunSyncCommandWithReturnValuesSPSC) {
   });
 
   for (int i = 0; i < 10; ++i) {
-    buffer.queueCommand(+[](std::atomic<int> *count) { count->fetch_add(10); }, &sharedCount);
+    buffer.queueCommand(
+      +[](std::atomic<int> *count) { count->fetch_add(10); }, &sharedCount);
 
     int result = buffer.runSyncCommand(
       +[](std::atomic<int> *count) -> int { return count->load(); }, &sharedCount);
@@ -380,8 +387,8 @@ TEST_F(CommandBufferTest, TestRunSyncCommandWithReturnValuesMPSC) {
   }
 
   // After all writers finish, verify final sum
-  int finalSum =
-    buffer.runSyncCommand(+[](std::atomic<int> *sum) -> int { return sum->load(); }, &globalSum);
+  int finalSum = buffer.runSyncCommand(
+    +[](std::atomic<int> *sum) -> int { return sum->load(); }, &globalSum);
 
   EXPECT_EQ(finalSum, numThreads * opsPerThread);
 

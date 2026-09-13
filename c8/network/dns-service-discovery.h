@@ -4,6 +4,7 @@
 #pragma once
 
 #include <dns_sd.h>
+
 #include <memory>
 #include <string>
 #include <type_traits>
@@ -43,7 +44,7 @@ struct DnsServiceAddress {
 // Connections to the mDNS daemon are asynchronous and require an
 // FdEventListener implementation.
 class DnsServiceDiscovery {
- public:
+public:
   // Create a new mDNS connection for a registration request. The registered
   // service will be unregistered when the returned object goes out of scope.
   // Throws a runtime error on failure.
@@ -52,10 +53,7 @@ class DnsServiceDiscovery {
   //   fdListener - An FdEventListener to run the mDNS callbacks.
   using RegisterCallback = std::function<void()>;
   static DnsServiceDiscovery newRegisterRequest(
-    const char* regtype,
-    uint16_t port,
-    FdEventListener& fdListener,
-    RegisterCallback callback);
+    const char *regtype, uint16_t port, FdEventListener &fdListener, RegisterCallback callback);
 
   // Create a new mDNS connection for a browse request. If 'add' is true, the
   // service is newly added and if false, the service is newly removed. If
@@ -63,7 +61,7 @@ class DnsServiceDiscovery {
   // information. Throws a runtime error on failure.
   using BrowseCallback = std::function<void(DnsServiceAd, bool add, bool more)>;
   static DnsServiceDiscovery newBrowseRequest(
-    const char* regtype, FdEventListener& fdListener, BrowseCallback callback);
+    const char *regtype, FdEventListener &fdListener, BrowseCallback callback);
 
   // Create a new mDNS connection for a resolve request. The callback provides
   // the resolved service information along with a 'more' bool returning true if
@@ -71,9 +69,7 @@ class DnsServiceDiscovery {
   // Throws a runtime error on failure.
   using ResolveCallback = std::function<void(DnsServiceInfo, bool more)>;
   static DnsServiceDiscovery newResolveRequest(
-    const DnsServiceAd& serviceAd,
-    FdEventListener& fdListener,
-    ResolveCallback callback);
+    const DnsServiceAd &serviceAd, FdEventListener &fdListener, ResolveCallback callback);
 
   // Create a new mDNS connection for a get address request. The callback provides
   // the IPv4 or IPv6 address along with a 'more' bool returning true if
@@ -81,54 +77,48 @@ class DnsServiceDiscovery {
   // Throws a runtime error on failure.
   using GetAddrInfoCallback = std::function<void(DnsServiceAddress, bool more)>;
   static DnsServiceDiscovery newGetAddrInfoRequest(
-    const DnsServiceInfo& serviceInfo,
-    FdEventListener& fdListener,
-    GetAddrInfoCallback callback);
+    const DnsServiceInfo &serviceInfo, FdEventListener &fdListener, GetAddrInfoCallback callback);
 
   // Destructor.
   ~DnsServiceDiscovery() = default;
 
   // Move constructor.
-  DnsServiceDiscovery(DnsServiceDiscovery&& rhs) = default;
+  DnsServiceDiscovery(DnsServiceDiscovery &&rhs) = default;
 
   // Disallow copy and assign.
-  DnsServiceDiscovery(const DnsServiceDiscovery&) = delete;
-  DnsServiceDiscovery& operator=(const DnsServiceDiscovery&) = delete;
+  DnsServiceDiscovery(const DnsServiceDiscovery &) = delete;
+  DnsServiceDiscovery &operator=(const DnsServiceDiscovery &) = delete;
 
- private:
+private:
   // Private constructor. To create a DnsServiceDiscovery, use one of the static
   // new* methods to create the desired connection type.
-  DnsServiceDiscovery(
-    DNSServiceRef ref, int trackedFd, FdEventListener* listener) noexcept
+  DnsServiceDiscovery(DNSServiceRef ref, int trackedFd, FdEventListener *listener) noexcept
       : serviceRef(ref, &DNSServiceRefDeallocate), fd(trackedFd, listener) {}
 
-  std::unique_ptr<
-    std::remove_pointer_t<DNSServiceRef>,
-    decltype(&DNSServiceRefDeallocate)>
+  std::unique_ptr<std::remove_pointer_t<DNSServiceRef>, decltype(&DNSServiceRefDeallocate)>
     serviceRef;
 
   // Scope guard for a file descriptor that needs to be unregistered.
   class TrackedFd {
-   public:
-    TrackedFd(int fd_, FdEventListener* listener)
-        : fd(fd_), fdListener(listener) {}
+  public:
+    TrackedFd(int fd_, FdEventListener *listener) : fd(fd_), fdListener(listener) {}
     ~TrackedFd() {
       if (fd) {
         fdListener->removeFdEvent(fd);
       }
     }
-    TrackedFd(TrackedFd&& rhs) {
+    TrackedFd(TrackedFd &&rhs) {
       fd = rhs.fd;
       fdListener = rhs.fdListener;
       rhs.fd = 0;
     }
 
-    TrackedFd(const TrackedFd&) = delete;
-    TrackedFd& operator=(const TrackedFd&) = delete;
+    TrackedFd(const TrackedFd &) = delete;
+    TrackedFd &operator=(const TrackedFd &) = delete;
 
-   private:
+  private:
     int fd;
-    FdEventListener* fdListener;
+    FdEventListener *fdListener;
   };
 
   TrackedFd fd;

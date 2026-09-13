@@ -18,13 +18,12 @@ cc_test {
 }
 cc_end(0x6db8b235);
 
-#include "c8/media/codec/vpx-decoder.h"
-
-#include "gtest/gtest.h"
-#include "c8/media/codec/mkv-demuxer.h"
-#include "c8/media/demuxer.h"
-
 #include <nlohmann/json.hpp>
+
+#include "c8/media/codec/mkv-demuxer.h"
+#include "c8/media/codec/vpx-decoder.h"
+#include "c8/media/demuxer.h"
+#include "gtest/gtest.h"
 
 namespace c8 {
 

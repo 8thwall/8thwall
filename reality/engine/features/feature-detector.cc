@@ -35,9 +35,8 @@ static constexpr int FEATURES_PER_FRAME_CPU = 500;
 }  // namespace
 
 FeatureDetector::FeatureDetector()
-    : feat_(
-        Gr8Cpu::create(
-          FEATURES_PER_FRAME_CPU, 1.44f, 4, 31, 0, 2, Gr8CpuInterface::FAST_SCORE, FAST_THRESHOLD)),
+    : feat_(Gr8Cpu::create(
+      FEATURES_PER_FRAME_CPU, 1.44f, 4, 31, 0, 2, Gr8CpuInterface::FAST_SCORE, FAST_THRESHOLD)),
       glFeat_(Gr8Gl::create()) {}
 
 void FeatureDetector::detectFeatures(YPlanePixels frame, FrameWithPoints *pts) {

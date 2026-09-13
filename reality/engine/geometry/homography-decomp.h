@@ -55,4 +55,3 @@ struct HomographyDecomp {
 Vector<HomographyDecomp> decomposeHomographyMat(const HMatrix &h);
 
 }  // namespace c8
-

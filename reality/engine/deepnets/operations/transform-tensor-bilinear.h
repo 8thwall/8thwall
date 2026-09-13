@@ -7,6 +7,6 @@
 
 namespace c8 {
 
-TfLiteRegistration* RegisterTransformTensorBilinearV2();
+TfLiteRegistration *RegisterTransformTensorBilinearV2();
 
 }  // namespace c8

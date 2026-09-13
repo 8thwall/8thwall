@@ -43,7 +43,8 @@ Quaternion rotationToVector(HVector3 src, HVector3 dest) {
     cross.x(),
     cross.y(),
     cross.z(),
-  }.normalize();
+  }
+    .normalize();
 }
 
 Quaternion rotationToVector(HVector3 dest) { return rotationToVector({0.f, 0.f, 1.f}, dest); }

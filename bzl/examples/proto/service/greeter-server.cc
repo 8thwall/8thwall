@@ -4,16 +4,16 @@
 /** You can run this on the laptop while the client runs on the phone as well
  */
 
-#include <iostream>
-#include <memory>
-#include <string>
-
 #include <grpcpp/ext/proto_server_reflection_plugin.h>
 #include <grpcpp/grpcpp.h>
 #include <grpcpp/health_check_service_interface.h>
 
-#include "bzl/examples/proto/service/greeter.pb.h"
+#include <iostream>
+#include <memory>
+#include <string>
+
 #include "bzl/examples/proto/service/greeter.grpc.pb.h"
+#include "bzl/examples/proto/service/greeter.pb.h"
 
 using grpc::Server;
 using grpc::ServerBuilder;
@@ -25,8 +25,7 @@ using helloworld::HelloRequest;
 
 // Logic and data behind the server's behavior.
 class GreeterServiceImpl final : public Greeter::Service {
-  Status SayHello(ServerContext* context, const HelloRequest* request,
-                  HelloReply* reply) override {
+  Status SayHello(ServerContext *context, const HelloRequest *request, HelloReply *reply) override {
     std::string prefix("Hello ");
     reply->set_message(prefix + request->name());
     return Status::OK;
@@ -54,7 +53,7 @@ void RunServer() {
   server->Wait();
 }
 
-int main(int argc, char** argv) {
+int main(int argc, char **argv) {
   RunServer();
 
   return 0;

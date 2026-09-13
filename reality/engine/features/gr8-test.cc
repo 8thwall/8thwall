@@ -14,36 +14,35 @@ cc_test {
 }
 cc_end(0x1a22c026);
 
-#include "reality/engine/features/gr8.h"
-
-#include "c8/c8-log.h"
 #include <queue>
 #include <vector>
+
+#include "c8/c8-log.h"
 #include "gtest/gtest.h"
+#include "reality/engine/features/gr8.h"
 
 namespace c8 {
 
 namespace {
-  struct KeypointResponseMore {
+struct KeypointResponseMore {
   inline bool operator()(const c8cv::KeyPoint &kp1, const c8cv::KeyPoint &kp2) const {
     return kp1.response > kp2.response;
   }
 };
 struct KeypointResponsePairMore {
   inline bool operator()(
-    const std::pair<int, c8cv::KeyPoint> &kp1,
-    const std::pair<int, c8cv::KeyPoint> &kp2) const {
+    const std::pair<int, c8cv::KeyPoint> &kp1, const std::pair<int, c8cv::KeyPoint> &kp2) const {
     return kp1.first != kp2.first ? kp1.first < kp2.first
                                   : kp1.second.response > kp2.second.response;
   }
 };
-}
+}  // namespace
 
 class Gr8Test : public ::testing::Test {
 public:
   const float size = -1.0f;
   const float angle = -1.0f;
-  int numRows = 32*3, numCols = 32*3;
+  int numRows = 32 * 3, numCols = 32 * 3;
   // Expected sort: 9, 7, 6, 4, 3, 1, 8, 5, 2
   // /-----------------------------------------\
   // |      ;      |      ;      |      ;      |
@@ -104,12 +103,11 @@ public:
     std::sort(keypoints.begin(), keypoints.end(), comp);
     std::sort(gtKeypoints.begin(), gtKeypoints.end(), comp);
     for (size_t i = 0; i < correctUpTo; i++) {
-      EXPECT_EQ(gtKeypoints[i].pt, keypoints[i].pt) <<
-        i << "th element should be key point " << IDX_SEQUENCE[i];
+      EXPECT_EQ(gtKeypoints[i].pt, keypoints[i].pt)
+        << i << "th element should be key point " << IDX_SEQUENCE[i];
     }
   }
 };
-
 
 TEST_F(Gr8Test, TestRetainBest) {
 

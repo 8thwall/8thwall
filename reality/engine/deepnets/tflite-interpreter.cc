@@ -110,7 +110,7 @@ std::vector<int> TFLiteInterpreter::getInputTensorDims(size_t index) {
 }
 
 std::vector<int> TFLiteInterpreter::getOutputTensorDims(size_t index) {
- if (interpreter_ == nullptr) {
+  if (interpreter_ == nullptr) {
     return {};
   }
 

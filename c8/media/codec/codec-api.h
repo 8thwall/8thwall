@@ -7,7 +7,6 @@
 
 #include <cstdint>
 #include <functional>
-
 #include <nlohmann/json_fwd.hpp>
 
 #include "c8/media/media-status.h"

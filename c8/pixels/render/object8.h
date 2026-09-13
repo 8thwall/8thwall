@@ -739,7 +739,7 @@ void updateSplatTextureStacked(
 );
 
 std::unique_ptr<Renderable> splatMultiTex(const SplatMultiTextureView &splat);
-void updateSplatMultiTex(Renderable *splat, const uint32_t* indices, int numIndices);
+void updateSplatMultiTex(Renderable *splat, const uint32_t *indices, int numIndices);
 void updateSplatMultiTexCamera(Renderable *splat, const Camera &sceneCamera);
 
 }  // namespace ObGen

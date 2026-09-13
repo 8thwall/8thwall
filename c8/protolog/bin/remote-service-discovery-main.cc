@@ -12,6 +12,7 @@ cc_binary {
 }
 
 #include <iostream>
+
 #include "c8/c8-log.h"
 #include "c8/protolog/remote-service-discovery.h"
 
@@ -59,19 +60,20 @@ int main(int argc, char *argv[]) {
       continue;
     }
 
-    rsd.fetchServiceInfo(servers[choice], [](RemoteServiceDiscovery::ServiceInfo info, RemoteServiceDiscovery *rsd) {
-      C8Log("%s", "fetchServiceInfo:");
-      C8Log("  interfaceIndex: %d", info.interfaceIndex);
-      C8Log("  serviceName:    %s", info.serviceName.c_str());
-      C8Log("  regtype:        %s", info.regtype.c_str());
-      C8Log("  replyDomain:    %s", info.replyDomain.c_str());
-      C8Log("  fullName:       %s", info.fullName.c_str());
-      C8Log("  hostTarget:     %s", info.hostTarget.c_str());
-      C8Log("  port:           %d", info.port);
-      C8Log("  hostname:       %s", info.hostname.c_str());
-      C8Log("  address:        %s", info.address.c_str());
-      printServerListPrompt(*rsd);
-    });
+    rsd.fetchServiceInfo(
+      servers[choice], [](RemoteServiceDiscovery::ServiceInfo info, RemoteServiceDiscovery *rsd) {
+        C8Log("%s", "fetchServiceInfo:");
+        C8Log("  interfaceIndex: %d", info.interfaceIndex);
+        C8Log("  serviceName:    %s", info.serviceName.c_str());
+        C8Log("  regtype:        %s", info.regtype.c_str());
+        C8Log("  replyDomain:    %s", info.replyDomain.c_str());
+        C8Log("  fullName:       %s", info.fullName.c_str());
+        C8Log("  hostTarget:     %s", info.hostTarget.c_str());
+        C8Log("  port:           %d", info.port);
+        C8Log("  hostname:       %s", info.hostname.c_str());
+        C8Log("  address:        %s", info.address.c_str());
+        printServerListPrompt(*rsd);
+      });
 
     C8Log("Connection info for %s:", servers[choice].c_str());
     C8Log("%s", "TODO(nb): implement me.");

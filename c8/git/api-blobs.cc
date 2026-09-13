@@ -44,11 +44,11 @@ cc_end(0xd5bfeb64);
 #include "c8/git/api-common.h"
 #include "c8/git/hooks.h"
 #include "c8/io/capnp-messages.h"
+#include "c8/stats/scope-timer.h"
 #include "c8/string/format.h"
 #include "c8/string/strcat.h"
 #include "c8/vector.h"
 #include "capnp/pretty-print.h"
-#include "c8/stats/scope-timer.h"
 
 namespace c8 {
 

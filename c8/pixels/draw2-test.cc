@@ -15,11 +15,10 @@ cc_test {
 }
 cc_end(0xad62546c);
 
-#include "c8/pixels/draw2.h"
-
-#include "c8/pixels/pixel-buffer.h"
 #include "c8/color.h"
+#include "c8/pixels/draw2.h"
 #include "c8/pixels/embedded-drawing-font.h"
+#include "c8/pixels/pixel-buffer.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
@@ -305,10 +304,10 @@ TEST_F(Draw2Test, Diagonal8020Line) {
   fill(Color::OFF_WHITE, canvas_.pixels());
   drawLine({0.0f, -0.2f}, {5.0f, 4.8f}, 1, Color::PURPLE_GRAY, canvas_.pixels());
 
-  //EXPECT_EQ(Color::OFF_WHITE, pix(2, 0));
+  // EXPECT_EQ(Color::OFF_WHITE, pix(2, 0));
   EXPECT_EQ(mixSRGB(Color::PURPLE_GRAY, Color::OFF_WHITE, 0.20f), pix(2, 1));
   EXPECT_EQ(mixSRGB(Color::PURPLE_GRAY, Color::OFF_WHITE, 0.80f), pix(2, 2));
-  //EXPECT_EQ(Color::OFF_WHITE, pix(2, 3));
+  // EXPECT_EQ(Color::OFF_WHITE, pix(2, 3));
 }
 
 TEST_F(Draw2Test, SteepDiagonal8020Line) {

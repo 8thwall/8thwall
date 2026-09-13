@@ -24,8 +24,7 @@ namespace c8 {
 
 // definitions
 void SensorTestRequestExecutor::execute(
-  const RequestSensor::Reader &sensor,
-  ResponseSensorTest::Builder *response) const {
+  const RequestSensor::Reader &sensor, ResponseSensorTest::Builder *response) const {
   // Echo the pose sensor to the output.
 
   int rows, cols, bytesPerRow;

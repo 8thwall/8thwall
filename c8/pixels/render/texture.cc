@@ -116,7 +116,8 @@ String Texture::toString() const noexcept {
     return format("subscene[%s]", sceneMaterialSpec_->subsceneName.c_str());
   } else {
     return format(
-      "native %d pix %d,%d r32 %d,%d pix32 %d,%d depth %d,%d buf %d,%d rbuf32 %d,%d buf32 %d,%d bufdepth %d,%d",
+      "native %d pix %d,%d r32 %d,%d pix32 %d,%d depth %d,%d buf %d,%d rbuf32 %d,%d buf32 %d,%d "
+      "bufdepth %d,%d",
       nativeId_,
       rgbaPixels_.cols(),
       rgbaPixels_.rows(),
@@ -218,13 +219,11 @@ std::unique_ptr<Texture> depthPixelBuffer(DepthFloatPixelBuffer &&depthPixelBuff
   return t;
 }
 
-
 std::unique_ptr<Texture> sceneTexture(const String &subsceneName, const String &renderSpecName) {
   auto t = TexGen::empty();
   t->setSceneTexture(subsceneName, renderSpecName);
   return t;
 }
-
 
 }  // namespace TexGen
 

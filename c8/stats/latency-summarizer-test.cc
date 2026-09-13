@@ -14,10 +14,10 @@ cc_test {
 }
 cc_end(0xfd8d4b07);
 
-#include "c8/stats/latency-summarizer.h"
-
 #include <gtest/gtest.h>
+
 #include "c8/io/capnp-messages.h"
+#include "c8/stats/latency-summarizer.h"
 #include "c8/stats/logging-context.h"
 
 using MutableLoggingDetail = c8::MutableRootMessage<c8::LoggingDetail>;

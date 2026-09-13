@@ -19,10 +19,9 @@ cc_library {
 }
 cc_end(0xc0771a27);
 
-#include "c8/pixels/test-image.h"
-
 #include "c8/pixels/pixel-buffer.h"
 #include "c8/pixels/pixel-transforms.h"
+#include "c8/pixels/test-image.h"
 #include "c8/time/now.h"
 
 namespace {

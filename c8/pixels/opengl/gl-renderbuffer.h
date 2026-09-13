@@ -2,9 +2,9 @@
 // Original Author: Nicholas Butko (nb@8thwall.com)
 #pragma once
 
-#include "c8/pixels/opengl/gl.h"
-
 #include <cstddef>
+
+#include "c8/pixels/opengl/gl.h"
 
 namespace c8 {
 
@@ -22,11 +22,7 @@ public:
 
   // Initialize and allocate the renderbuffer, with parameters having the same meaning as
   // glRenderbufferStorage.
-  void initialize(
-    GLenum target,
-    GLint internalFormat,
-    GLsizei width,
-    GLsizei height) noexcept;
+  void initialize(GLenum target, GLint internalFormat, GLsizei width, GLsizei height) noexcept;
 
   void bind() const noexcept;
   void unbind() const noexcept;

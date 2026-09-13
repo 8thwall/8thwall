@@ -379,7 +379,10 @@ int resolveTreeForChangePoint(git_repository *repo, git_tree **tree, const std::
 void setRemoteProgressCallbacks(git_remote_callbacks *callbacks);
 
 void writeClientInfo(
-  ClientContext &ctx, G8Client::Builder responseClient, const String &branchName, git_branch_t gitBranch);
+  ClientContext &ctx,
+  G8Client::Builder responseClient,
+  const String &branchName,
+  git_branch_t gitBranch);
 
 // NOTE(christoph): Errors from this function are not checked because it is the last thing
 // called by consumers before returning the response.

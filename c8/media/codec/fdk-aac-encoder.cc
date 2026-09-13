@@ -22,13 +22,12 @@ cc_library {
 }
 cc_end(0x7f808e8b);
 
-#include "c8/media/codec/fdk-aac-encoder.h"
-
 #include <fdk-aac/aacenc_lib.h>
 
+#include "c8/media/codec/fdk-aac-encoder.h"
+#include "c8/media/muxer.h"
 #include "c8/string.h"
 #include "c8/vector.h"
-#include "c8/media/muxer.h"
 
 #define CHECK_AACENC(result)                              \
   if (int aacStatus = (result); aacStatus != AACENC_OK) { \

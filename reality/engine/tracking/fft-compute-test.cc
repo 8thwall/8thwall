@@ -5,12 +5,13 @@
 
 cc_test {
   size = "small";
-  deps = {":fft-compute", "//c8:c8-log", "//c8:vector","@com_google_googletest//:gtest_main"};
+  deps = {":fft-compute", "//c8:c8-log", "//c8:vector", "@com_google_googletest//:gtest_main"};
 }
 cc_end(0x3488f85b);
 
-#include <cmath>
 #include <gtest/gtest.h>
+
+#include <cmath>
 
 #include "c8/c8-log.h"
 #include "reality/engine/tracking/fft-compute.h"
@@ -83,7 +84,8 @@ TEST_F(FftComputeTest, ComputeOnMultipleSineWave) {
     // where A is the amplitude (half the height from the top of the sine wave to the bottom)
     //       f is the frequency
     //       t is the time variable
-    //       psi is the phase (we don't compute return the phase right now so we don't test it either)
+    //       psi is the phase (we don't compute return the phase right now so we don't test it
+    //       either)
     auto sineWave1 = amplitude1 * 2 * std::sin(2 * M_PI * freq1 * i / 360);
     auto sineWave2 = amplitude2 * 2 * std::sin(2 * M_PI * freq2 * i / 360);
     auto sineWave3 = amplitude3 * 2 * std::sin(2 * M_PI * freq3 * i / 360);
@@ -125,7 +127,7 @@ TEST_F(FftComputeTest, MultiplySignalMeansMultiplyAmplitude) {
   float amplitude2 = 2.f;
   float freq3 = 5.f;
   float amplitude3 = 3.f;
-  float signalMultiple = 1.37f; // just some number
+  float signalMultiple = 1.37f;  // just some number
   for (int i = 0; i < 360; i++) {
     auto sineWave1 = amplitude1 * 2 * std::sin(2 * M_PI * freq1 * i / 360);
     auto sineWave2 = amplitude2 * 2 * std::sin(2 * M_PI * freq2 * i / 360);

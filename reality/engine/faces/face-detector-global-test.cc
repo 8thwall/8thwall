@@ -16,7 +16,7 @@ cc_test {
     "//reality/engine/deepnets/testdata:faces",
     "//third_party/mediapipe/models:face-detection-front",
   };
-  linkstatic=1;
+  linkstatic = 1;
 }
 cc_end(0xfea29787);
 
@@ -25,10 +25,10 @@ cc_end(0xfea29787);
 
 #include "c8/io/file-io.h"
 #include "c8/io/image-io.h"
+#include "c8/stats/scope-timer.h"
 #include "c8/string.h"
 #include "gtest/gtest.h"
 #include "reality/engine/faces/face-detector-global.h"
-#include "c8/stats/scope-timer.h"
 
 namespace c8 {
 

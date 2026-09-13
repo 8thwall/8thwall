@@ -25,10 +25,7 @@ public:
   LightingEstimator &operator=(const LightingEstimator &) = delete;
 
   static float estimateLighting(
-    ConstYPlanePixels src,
-    TaskQueue *taskQueue,
-    ThreadPool *threadPool,
-    int numChannels);
+    ConstYPlanePixels src, TaskQueue *taskQueue, ThreadPool *threadPool, int numChannels);
 
   static float scoreHistogram(const std::array<int32_t, 256> &histogram);
 

@@ -35,4 +35,4 @@ private:
   int w_;
   int h_;
 };
-}
+}  // namespace c8

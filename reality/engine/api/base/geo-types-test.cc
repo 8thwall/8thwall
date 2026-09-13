@@ -11,6 +11,7 @@ cc_test {
 cc_end(0x7bce47c9);
 
 #include <gtest/gtest.h>
+
 #include "c8/io/capnp-messages.h"
 #include "reality/engine/api/base/geo-types.capnp.h"
 

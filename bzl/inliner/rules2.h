@@ -243,4 +243,3 @@ constexpr InlinerConstString inlinerDefaultName(const char (&str)[N]) {
     constexpr bool inlinerHashCheck = (inlinerRule() == expected) || expected == 0; \
     static_assert(inlinerHashCheck, "Invalid hash, re-run inliner");                \
   }
-

@@ -1,13 +1,13 @@
 // Copyright (c) 2017 8th Wall, Inc.
 // Original Author: Erik Murphy-Chutorian (mc@8thwall.com)
 
+#include "c8/hmatrix.h"
+
 #include <cmath>
 #include <iostream>
 #include <ostream>
 #include <sstream>
 #include <string>
-
-#include "c8/hmatrix.h"
 
 static inline void unrolled4x4Mul4x1(const float *A, const float *B, float *Outs) {
   Outs[0] = A[0] * B[0] + A[4] * B[1] + A[8] * B[2] + A[12] * B[3];
@@ -127,10 +127,11 @@ static inline void unrolled4x4Mul4x4(const float *A, const float *B, float *Outs
 // HMatrixBenchmarkTest/MatMulVecHPoint3      83883 ns      83873 ns      81761
 // (simd) compile with :hmatrix instead of :hmatrix:nosimd
 // HMatrixBenchmarkTest/MatMulVecHPoint3     121087 ns     120747 ns     117349
-static inline void unrolled4x4Mul4xN(const float *A, const float *B, float *Outs, size_t numPoints) {
+static inline void unrolled4x4Mul4xN(
+  const float *A, const float *B, float *Outs, size_t numPoints) {
   size_t i = 0;
   // do it in group of 4
-  for (; i + 4 < numPoints; i+=4) {
+  for (; i + 4 < numPoints; i += 4) {
     unrolled4x4Mul4x4(A, B, Outs);
     B += 16;
     Outs += 16;
@@ -309,23 +310,25 @@ HMatrix::HMatrix(const float matData[16], const float inverseMatData[16], bool n
 HMatrix HMatrix::t() const noexcept {
   const HMatrix &m = *this;
   if (noInvert_) {
-    HMatrix tr{{m(0, 0), m(1, 0), m(2, 0), m(3, 0)},
-               {m(0, 1), m(1, 1), m(2, 1), m(3, 1)},
-               {m(0, 2), m(1, 2), m(2, 2), m(3, 2)},
-               {m(0, 3), m(1, 3), m(2, 3), m(3, 3)},
-               noInvert_};
+    HMatrix tr{
+      {m(0, 0), m(1, 0), m(2, 0), m(3, 0)},
+      {m(0, 1), m(1, 1), m(2, 1), m(3, 1)},
+      {m(0, 2), m(1, 2), m(2, 2), m(3, 2)},
+      {m(0, 3), m(1, 3), m(2, 3), m(3, 3)},
+      noInvert_};
     tr.invertFailed_ = invertFailed_;
     return tr;
   }
   HMatrix i = this->inv();
-  return HMatrix{{m(0, 0), m(1, 0), m(2, 0), m(3, 0)},
-                 {m(0, 1), m(1, 1), m(2, 1), m(3, 1)},
-                 {m(0, 2), m(1, 2), m(2, 2), m(3, 2)},
-                 {m(0, 3), m(1, 3), m(2, 3), m(3, 3)},
-                 {i(0, 0), i(1, 0), i(2, 0), i(3, 0)},
-                 {i(0, 1), i(1, 1), i(2, 1), i(3, 1)},
-                 {i(0, 2), i(1, 2), i(2, 2), i(3, 2)},
-                 {i(0, 3), i(1, 3), i(2, 3), i(3, 3)}};
+  return HMatrix{
+    {m(0, 0), m(1, 0), m(2, 0), m(3, 0)},
+    {m(0, 1), m(1, 1), m(2, 1), m(3, 1)},
+    {m(0, 2), m(1, 2), m(2, 2), m(3, 2)},
+    {m(0, 3), m(1, 3), m(2, 3), m(3, 3)},
+    {i(0, 0), i(1, 0), i(2, 0), i(3, 0)},
+    {i(0, 1), i(1, 1), i(2, 1), i(3, 1)},
+    {i(0, 2), i(1, 2), i(2, 2), i(3, 2)},
+    {i(0, 3), i(1, 3), i(2, 3), i(3, 3)}};
 }
 
 HMatrix HMatrix::translate(float x, float y, float z) const noexcept {
@@ -352,7 +355,7 @@ HMatrix operator*(float scalar, const HMatrix &matrix) { return operator*(matrix
 
 HMatrix operator*(const HMatrix &mat, float scalar) {
   HMatrix result;
-  for (int i = 0; i < 16; i+=4) {
+  for (int i = 0; i < 16; i += 4) {
     result.matrix_[i] = mat.matrix_[i] * scalar;
     result.matrix_[i + 1] = mat.matrix_[i + 1] * scalar;
     result.matrix_[i + 2] = mat.matrix_[i + 2] * scalar;
@@ -364,7 +367,7 @@ HMatrix operator*(const HMatrix &mat, float scalar) {
   }
 
   auto invScalar = 1.f / scalar;
-  for (int i = 0; i < 16; i+=4) {
+  for (int i = 0; i < 16; i += 4) {
     result.inverseMatrix_[i] = mat.inverseMatrix_[i] * invScalar;
     result.inverseMatrix_[i + 1] = mat.inverseMatrix_[i + 1] * invScalar;
     result.inverseMatrix_[i + 2] = mat.inverseMatrix_[i + 2] * invScalar;
@@ -451,42 +454,45 @@ HMatrix HMatrixGen::xRadians(float rads) noexcept {
   float cose = std::cos(rads);
   float sine = std::sin(rads);
   float nsin = -sine;
-  return HMatrix{{1.0f, 0.0f, 0.0f, 0.0f},
-                 {0.0f, cose, nsin, 0.0f},
-                 {0.0f, sine, cose, 0.0f},
-                 {0.0f, 0.0f, 0.0f, 1.0f},
-                 {1.0f, 0.0f, 0.0f, 0.0f},
-                 {0.0f, cose, sine, 0.0f},
-                 {0.0f, nsin, cose, 0.0f},
-                 {0.0f, 0.0f, 0.0f, 1.0f}};
+  return HMatrix{
+    {1.0f, 0.0f, 0.0f, 0.0f},
+    {0.0f, cose, nsin, 0.0f},
+    {0.0f, sine, cose, 0.0f},
+    {0.0f, 0.0f, 0.0f, 1.0f},
+    {1.0f, 0.0f, 0.0f, 0.0f},
+    {0.0f, cose, sine, 0.0f},
+    {0.0f, nsin, cose, 0.0f},
+    {0.0f, 0.0f, 0.0f, 1.0f}};
 }
 
 HMatrix HMatrixGen::yRadians(float rads) noexcept {
   float cose = std::cos(rads);
   float sine = std::sin(rads);
   float nsin = -sine;
-  return HMatrix{{cose, 0.0f, sine, 0.0f},
-                 {0.0f, 1.0f, 0.0f, 0.0f},
-                 {nsin, 0.0f, cose, 0.0f},
-                 {0.0f, 0.0f, 0.0f, 1.0f},
-                 {cose, 0.0f, nsin, 0.0f},
-                 {0.0f, 1.0f, 0.0f, 0.0f},
-                 {sine, 0.0f, cose, 0.0f},
-                 {0.0f, 0.0f, 0.0f, 1.0f}};
+  return HMatrix{
+    {cose, 0.0f, sine, 0.0f},
+    {0.0f, 1.0f, 0.0f, 0.0f},
+    {nsin, 0.0f, cose, 0.0f},
+    {0.0f, 0.0f, 0.0f, 1.0f},
+    {cose, 0.0f, nsin, 0.0f},
+    {0.0f, 1.0f, 0.0f, 0.0f},
+    {sine, 0.0f, cose, 0.0f},
+    {0.0f, 0.0f, 0.0f, 1.0f}};
 }
 
 HMatrix HMatrixGen::zRadians(float rads) noexcept {
   float cose = std::cos(rads);
   float sine = std::sin(rads);
   float nsin = -sine;
-  return HMatrix{{cose, nsin, 0.0f, 0.0f},
-                 {sine, cose, 0.0f, 0.0f},
-                 {0.0f, 0.0f, 1.0f, 0.0f},
-                 {0.0f, 0.0f, 0.0f, 1.0f},
-                 {cose, sine, 0.0f, 0.0f},
-                 {nsin, cose, 0.0f, 0.0f},
-                 {0.0f, 0.0f, 1.0f, 0.0f},
-                 {0.0f, 0.0f, 0.0f, 1.0f}};
+  return HMatrix{
+    {cose, nsin, 0.0f, 0.0f},
+    {sine, cose, 0.0f, 0.0f},
+    {0.0f, 0.0f, 1.0f, 0.0f},
+    {0.0f, 0.0f, 0.0f, 1.0f},
+    {cose, sine, 0.0f, 0.0f},
+    {nsin, cose, 0.0f, 0.0f},
+    {0.0f, 0.0f, 1.0f, 0.0f},
+    {0.0f, 0.0f, 0.0f, 1.0f}};
 }
 
 namespace {
@@ -509,36 +515,39 @@ HMatrix HMatrixGen::zDegrees(float degrees) noexcept {
 }
 
 HMatrix HMatrixGen::z90() noexcept {
-  return HMatrix{{0.0f, -1.0f, 0.0f, 0.0f},
-                 {1.0f, 0.0f, 0.0f, 0.0f},
-                 {0.0f, 0.0f, 1.0f, 0.0f},
-                 {0.0f, 0.0f, 0.0f, 1.0f},
-                 {0.0f, 1.0f, 0.0f, 0.0f},
-                 {-1.0f, 0.0f, 0.0f, 0.0f},
-                 {0.0f, 0.0f, 1.0f, 0.0f},
-                 {0.0f, 0.0f, 0.0f, 1.0f}};
+  return HMatrix{
+    {0.0f, -1.0f, 0.0f, 0.0f},
+    {1.0f, 0.0f, 0.0f, 0.0f},
+    {0.0f, 0.0f, 1.0f, 0.0f},
+    {0.0f, 0.0f, 0.0f, 1.0f},
+    {0.0f, 1.0f, 0.0f, 0.0f},
+    {-1.0f, 0.0f, 0.0f, 0.0f},
+    {0.0f, 0.0f, 1.0f, 0.0f},
+    {0.0f, 0.0f, 0.0f, 1.0f}};
 }
 
 HMatrix HMatrixGen::z180() noexcept {
-  return HMatrix{{-1.0f, 0.0f, 0.0f, 0.0f},
-                 {0.0f, -1.0f, 0.0f, 0.0f},
-                 {0.0f, 0.0f, 1.0f, 0.0f},
-                 {0.0f, 0.0f, 0.0f, 1.0f},
-                 {-1.0f, 0.0f, 0.0f, 0.0f},
-                 {0.0f, -1.0f, 0.0f, 0.0f},
-                 {0.0f, 0.0f, 1.0f, 0.0f},
-                 {0.0f, 0.0f, 0.0f, 1.0f}};
+  return HMatrix{
+    {-1.0f, 0.0f, 0.0f, 0.0f},
+    {0.0f, -1.0f, 0.0f, 0.0f},
+    {0.0f, 0.0f, 1.0f, 0.0f},
+    {0.0f, 0.0f, 0.0f, 1.0f},
+    {-1.0f, 0.0f, 0.0f, 0.0f},
+    {0.0f, -1.0f, 0.0f, 0.0f},
+    {0.0f, 0.0f, 1.0f, 0.0f},
+    {0.0f, 0.0f, 0.0f, 1.0f}};
 }
 
 HMatrix HMatrixGen::z270() noexcept {
-  return HMatrix{{0.0f, 1.0f, 0.0f, 0.0f},
-                 {-1.0f, 0.0f, 0.0f, 0.0f},
-                 {0.0f, 0.0f, 1.0f, 0.0f},
-                 {0.0f, 0.0f, 0.0f, 1.0f},
-                 {0.0f, -1.0f, 0.0f, 0.0f},
-                 {1.0f, 0.0f, 0.0f, 0.0f},
-                 {0.0f, 0.0f, 1.0f, 0.0f},
-                 {0.0f, 0.0f, 0.0f, 1.0f}};
+  return HMatrix{
+    {0.0f, 1.0f, 0.0f, 0.0f},
+    {-1.0f, 0.0f, 0.0f, 0.0f},
+    {0.0f, 0.0f, 1.0f, 0.0f},
+    {0.0f, 0.0f, 0.0f, 1.0f},
+    {0.0f, -1.0f, 0.0f, 0.0f},
+    {1.0f, 0.0f, 0.0f, 0.0f},
+    {0.0f, 0.0f, 1.0f, 0.0f},
+    {0.0f, 0.0f, 0.0f, 1.0f}};
 }
 
 HMatrix HMatrixGen::rotationR(float x, float y, float z) noexcept {
@@ -655,11 +664,10 @@ HMatrix HMatrixGen::fromRotationAndTranslation(const HMatrix &R, const HVector3 
     {R(1, 0), R(1, 1), R(1, 2), t.y()},
     {R(2, 0), R(2, 1), R(2, 2), t.z()},
     {0.0f, 0.0f, 0.0f, 1.0f},
-    {R(0, 0), R(1, 0), R(2, 0), - R(0, 0) * t.x() - R(1, 0) * t.y() - R(2, 0) * t.z()},
-    {R(0, 1), R(1, 1), R(2, 1), - R(0, 1) * t.x() - R(1, 1) * t.y() - R(2, 1) * t.z()},
-    {R(0, 2), R(1, 2), R(2, 2), - R(0, 2) * t.x() - R(1, 2) * t.y() - R(2, 2) * t.z()},
-    {0.0f, 0.0f, 0.0f, 1.0f}
-  };
+    {R(0, 0), R(1, 0), R(2, 0), -R(0, 0) * t.x() - R(1, 0) * t.y() - R(2, 0) * t.z()},
+    {R(0, 1), R(1, 1), R(2, 1), -R(0, 1) * t.x() - R(1, 1) * t.y() - R(2, 1) * t.z()},
+    {R(0, 2), R(1, 2), R(2, 2), -R(0, 2) * t.x() - R(1, 2) * t.y() - R(2, 2) * t.z()},
+    {0.0f, 0.0f, 0.0f, 1.0f}};
 }
 
 String HMatrix::toString() const noexcept {

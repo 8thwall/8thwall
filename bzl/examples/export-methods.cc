@@ -1,4 +1,5 @@
 #include "bzl/examples/export-methods.h"
+
 #include "bzl/examples/example-methods.h"
 
 extern "C" {

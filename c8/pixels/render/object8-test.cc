@@ -23,9 +23,9 @@ cc_end(0xf9477035);
 #include <nlohmann/json.hpp>
 
 #include "c8/c8-log.h"
-#include "c8/hpoint.h"
 #include "c8/geometry/egomotion.h"
 #include "c8/geometry/intrinsics.h"
+#include "c8/hpoint.h"
 #include "c8/pixels/render/object8.h"
 
 using testing::Eq;

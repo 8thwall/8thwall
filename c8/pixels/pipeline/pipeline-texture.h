@@ -23,7 +23,7 @@ struct PipelineTexture {
   PipelineTexture() noexcept = default;
   PipelineTexture(PipelineTexture &&) noexcept = default;
   PipelineTexture &operator=(PipelineTexture &&) noexcept = default;
-  ~PipelineTexture() { cleanup(); } // TODO(nb): use auto-cleaning types (GlTexture2D).
+  ~PipelineTexture() { cleanup(); }  // TODO(nb): use auto-cleaning types (GlTexture2D).
   PipelineTexture(const PipelineTexture &) = delete;
   PipelineTexture &operator=(const PipelineTexture &) = delete;
 };

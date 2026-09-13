@@ -1,8 +1,8 @@
 // Example build file with a cc_library rule.
 
-#include "bzl/inliner/rules2.h"
-
 #include <stdio.h>
+
+#include "bzl/inliner/rules2.h"
 
 cc_binary {
   deps = {
@@ -14,7 +14,7 @@ cc_binary {
 }
 cc_end(0x77866aa0)
 
-int main() {
+  int main() {
   printf("\nInliner Hash: 0x%08x\n", inlinerRule());
   return 0;
 }

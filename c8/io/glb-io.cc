@@ -33,7 +33,7 @@ struct GlbHeader {
   uint32_t length;
 };
 
-struct GlbChunkHeader{
+struct GlbChunkHeader {
   uint32_t length;
   uint32_t type;
 };
@@ -50,16 +50,14 @@ T readStruct(ReadPtr *readPtr) {
   return s;
 }
 
-}
+}  // namespace
 
 GlbRawData readGlbRaw(const String &filename) {
   auto data = readFile(filename);
   return readGlbRaw(data.data(), data.size());
 }
 
-GlbRawData readGlbRaw(const Vector<uint8_t> &data) {
-  return readGlbRaw(data.data(), data.size());
-}
+GlbRawData readGlbRaw(const Vector<uint8_t> &data) { return readGlbRaw(data.data(), data.size()); }
 
 GlbRawData readGlbRaw(const uint8_t *data, size_t size) {
   if (size == 0) {
@@ -113,7 +111,7 @@ GlbRawData readGlbRaw(const uint8_t *data, size_t size) {
     return {};
   }
 
-  Vector<uint8_t> bin(curr.ptr, curr.ptr + binHeader.length); 
+  Vector<uint8_t> bin(curr.ptr, curr.ptr + binHeader.length);
   curr.ptr += binHeader.length;
 
   if (curr.ptr != end.ptr) {

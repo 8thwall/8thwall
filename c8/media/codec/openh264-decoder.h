@@ -5,14 +5,14 @@
 
 #pragma once
 
-#include "c8/string-view.h"
-#include "c8/string.h"
-#include "c8/vector.h"
-#include "c8/media/codec/codec-api.h"
+#include <openh264/codec_api.h>
 
 #include <nlohmann/json.hpp>
 
-#include <openh264/codec_api.h>
+#include "c8/media/codec/codec-api.h"
+#include "c8/string-view.h"
+#include "c8/string.h"
+#include "c8/vector.h"
 
 class ISVCDecoder;
 

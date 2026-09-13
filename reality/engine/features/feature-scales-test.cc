@@ -6,14 +6,15 @@
 cc_test {
   size = "small";
   deps = {
-    ":feature-scales", "//bzl/inliner:rules", "@com_google_googletest//:gtest_main",
+    ":feature-scales",
+    "//bzl/inliner:rules",
+    "@com_google_googletest//:gtest_main",
   };
 }
 cc_end(0xdc4110a4);
 
-#include "reality/engine/features/feature-scales.h"
-
 #include "gtest/gtest.h"
+#include "reality/engine/features/feature-scales.h"
 
 namespace c8 {
 
@@ -36,7 +37,7 @@ For Scale 7 seen at distance 5, dmin is 4.564354645876384, dmax is 19.6258895177
 (4.56, 5.00, 5.48] -1 0 0 0 1 1 1 2 2 2 3 3 3 4 4 4 5 5 5 6 6 6 7 7 7 -1
 */
 TEST_F(FeatureScalesTest, DMinForScale) {
-  EXPECT_FLOAT_EQ(dMinForScale(0, 5.0f), 1.3954082f); //1.2738276131297606f);
+  EXPECT_FLOAT_EQ(dMinForScale(0, 5.0f), 1.3954082f);  // 1.2738276131297606f);
   // EXPECT_FLOAT_EQ(dMinForScale(5, 5.0f), 3.169690726303045f);
   // EXPECT_FLOAT_EQ(dMinForScale(7, 5.0f), 4.564354645876384f);
 }

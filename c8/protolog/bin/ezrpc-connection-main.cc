@@ -14,9 +14,11 @@ cc_binary {
 }
 
 #include <capnp/ez-rpc.h>
+
 #include <chrono>
 #include <iostream>
 #include <thread>
+
 #include "c8/c8-log-proto.h"
 #include "c8/c8-log.h"
 #include "c8/pixels/pixels.h"

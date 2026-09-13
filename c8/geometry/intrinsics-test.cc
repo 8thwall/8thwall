@@ -387,9 +387,10 @@ TEST_F(IntrinsicsTest, TestOrthographicProjectionRightHanded) {
 
   // Right-handed, camera looks down -z
   auto mat3 = Intrinsics::orthographicProjectionRightHanded(-5.0f, 5.0f, 5.0f, -5.0f, 0.f, -5.f);
-  HPoint3 points[3] = {{-5.f, 5.f, 0.f},   // Should map to -1
-                       {0.f, 0.f, 2.5f},   // Center of clip space, should map to 0, 0, 0
-                       {-5.1f, 0.f, 0.f}}; // Should be outside clip space
+  HPoint3 points[3] = {
+    {-5.f, 5.f, 0.f},    // Should map to -1
+    {0.f, 0.f, 2.5f},    // Center of clip space, should map to 0, 0, 0
+    {-5.1f, 0.f, 0.f}};  // Should be outside clip space
   EXPECT_THAT((mat3 * points[0]).data(), equalsPoint({-1.f, 1.f, -1.f}, 1e-5));
   EXPECT_THAT((mat3 * points[1]).data(), equalsPoint({0.f, 0.f, 0.f}, 1e-5));
   EXPECT_TRUE((mat3 * points[2]).x() < -1.f);

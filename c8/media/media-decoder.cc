@@ -24,11 +24,10 @@ cc_library {
 }
 cc_end(0xb1100439);
 
-#include "c8/media/media-decoder.h"
-
 #include <nlohmann/json.hpp>
 
 #include "c8/media/codec/registry.h"
+#include "c8/media/media-decoder.h"
 
 namespace c8 {
 

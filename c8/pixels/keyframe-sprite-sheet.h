@@ -23,10 +23,10 @@ struct SpriteInfo {
 
   void setQuadUvsFlippedY(Renderable &quad) const {
     quad.geometry().setUvs(
-      {{lowerLeftUv.x(), upperRightUv.y()},    // tl(2)
-       {lowerLeftUv.x(), lowerLeftUv.y()},     // bl(1)
-       {upperRightUv.x(), lowerLeftUv.y()},    // br(4)
-       {upperRightUv.x(), upperRightUv.y()}}); // tr(3)
+      {{lowerLeftUv.x(), upperRightUv.y()},     // tl(2)
+       {lowerLeftUv.x(), lowerLeftUv.y()},      // bl(1)
+       {upperRightUv.x(), lowerLeftUv.y()},     // br(4)
+       {upperRightUv.x(), upperRightUv.y()}});  // tr(3)
   }
 
   String toString() const {

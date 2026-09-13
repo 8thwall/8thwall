@@ -12,12 +12,14 @@
 #include <kj/async-unix.h>
 #include <kj/async.h>
 #include <kj/common.h>
+
 #include <list>
 #include <memory>
 #include <mutex>
 #include <queue>
 #include <string>
 #include <thread>
+
 #include "c8/io/capnp-messages.h"
 #include "c8/protolog/api/remote-request.capnp.h"
 #include "c8/protolog/api/remote-service-interface.capnp.h"

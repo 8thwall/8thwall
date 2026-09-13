@@ -401,7 +401,6 @@ void recenterAndScale(CameraCoordinates::Reader system, FaceResponse::Builder r)
   // Mesh vertices and normals are already in local space.
 }
 
-
 void mirror(FaceResponse::Builder r) {
   // mirror the face transform and geometry
   for (auto face : r.getFaces()) {

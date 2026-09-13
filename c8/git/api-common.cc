@@ -1279,7 +1279,7 @@ void writeResponseClients(ClientContext &ctx) {
     }
 
     if (includeRemote) {
-    auto responseRemoteClient = response.builder().initRemoteClient(remoteBranches.size());
+      auto responseRemoteClient = response.builder().initRemoteClient(remoteBranches.size());
 
       for (int i = 0; i < remoteBranches.size(); i++) {
         writeClientInfo(ctx, responseRemoteClient[i], remoteBranches[i], GIT_BRANCH_REMOTE);

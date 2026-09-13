@@ -26,8 +26,8 @@ cc_end(0xfa3ebe59);
 #include <gtest/gtest.h>
 
 #include "c8/camera/device-infos.h"
-#include "c8/hmatrix.h"
 #include "c8/geometry/intrinsics.h"
+#include "c8/hmatrix.h"
 #include "c8/io/image-io.h"
 #include "c8/pixels/opengl/gl-framebuffer.h"
 #include "c8/pixels/opengl/gl-quad.h"

@@ -14,13 +14,12 @@ cc_test {
 }
 cc_end(0x78354f7b);
 
-#include "reality/engine/imagedetection/image-targets-rigid-assembly.h"
+#include <gmock/gmock.h>
+#include <gtest/gtest.h>
 
 #include "c8/geometry/intrinsics.h"
 #include "c8/hmatrix.h"
-
-#include <gmock/gmock.h>
-#include <gtest/gtest.h>
+#include "reality/engine/imagedetection/image-targets-rigid-assembly.h"
 
 using testing::Eq;
 using testing::FloatNear;
@@ -42,7 +41,8 @@ static c8_PixelPinholeCameraModel testK() {
 }
 
 TrackedImage TI(int index, const HMatrix &pose) {
-  return TrackedImage{ TrackedImage::Status::TRACKED, index, "", pose, HMatrixGen::i(), 1.0f, 0, 0, testK(), testK() };
+  return TrackedImage{
+    TrackedImage::Status::TRACKED, index, "", pose, HMatrixGen::i(), 1.0f, 0, 0, testK(), testK()};
 }
 
 TEST_F(ImageTagetsRigidAssemblyTest, TestInit) {
@@ -97,7 +97,7 @@ TEST_F(ImageTagetsRigidAssemblyTest, TestObserve) {
   // Loose the second
   targets.at(0).status = TrackedImage::Status::NOT_FOUND;
   ra.observe(targets);
-  EXPECT_EQ(ra.valid(), false); // none observable
+  EXPECT_EQ(ra.valid(), false);  // none observable
   EXPECT_EQ(ra.valid(3), false);
   EXPECT_EQ(ra.valid(5), false);
 

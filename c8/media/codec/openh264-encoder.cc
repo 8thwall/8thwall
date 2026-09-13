@@ -23,10 +23,9 @@ cc_library {
 cc_end(0x9c646b44);
 
 #include "c8/media/codec/openh264-encoder.h"
-
+#include "c8/media/muxer.h"
 #include "c8/string.h"
 #include "c8/vector.h"
-#include "c8/media/muxer.h"
 
 namespace c8 {
 

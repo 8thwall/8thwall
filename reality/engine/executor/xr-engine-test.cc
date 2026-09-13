@@ -13,12 +13,12 @@ cc_test {
 }
 cc_end(0xff8a7e2f);
 
-#include "reality/engine/executor/xr-engine.h"
-
 #include <capnp/message.h>
 #include <gtest/gtest.h>
+
 #include "c8/io/capnp-messages.h"
 #include "reality/engine/api/reality.capnp.h"
+#include "reality/engine/executor/xr-engine.h"
 
 using MutableRealityRequest = c8::MutableRootMessage<c8::RealityRequest>;
 using MutableRealityResponse = c8::MutableRootMessage<c8::RealityResponse>;

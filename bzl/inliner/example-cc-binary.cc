@@ -9,6 +9,6 @@ cc_binary {
 }
 cc_end(0x3f4ec0e2)
 
-int main() {
+  int main() {
   return 0;
 }

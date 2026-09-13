@@ -1,6 +1,7 @@
 #pragma once
 
 #include <array>
+
 #include "c8/hmatrix.h"
 #include "c8/pixels/image-roi.h"
 #include "c8/pixels/pixel-buffer.h"

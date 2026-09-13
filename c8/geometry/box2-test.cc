@@ -9,7 +9,7 @@ cc_test {
     ":box2",
     "@com_google_googletest//:gtest_main",
   };
-  linkstatic=1;
+  linkstatic = 1;
 }
 cc_end(0x6c9b4834);
 

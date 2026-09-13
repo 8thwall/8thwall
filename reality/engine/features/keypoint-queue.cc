@@ -15,6 +15,4 @@ cc_end(0xe768e357);
 
 #include "reality/engine/features/keypoint-queue.h"
 
-namespace c8 {
-
-}  // namespace c8
+namespace c8 {}  // namespace c8

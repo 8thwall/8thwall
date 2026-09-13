@@ -14,9 +14,9 @@ cc_test {
 }
 cc_end(0xa7c7b78d);
 
-#include "c8/pixels/fast-frame-hash.h"
-
 #include <gtest/gtest.h>
+
+#include "c8/pixels/fast-frame-hash.h"
 #include "c8/pixels/pixel-buffer.h"
 #include "c8/pixels/test-image.h"
 

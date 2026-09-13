@@ -16,9 +16,9 @@ cc_library {
 }
 cc_end(0x76022676);
 
-#include "c8/pixels/fast-frame-hash.h"
-
 #include <cmath>
+
+#include "c8/pixels/fast-frame-hash.h"
 
 namespace c8 {
 

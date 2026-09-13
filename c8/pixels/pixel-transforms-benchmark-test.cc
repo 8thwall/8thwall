@@ -10,6 +10,7 @@
 // --benchmark_report_aggregates_only=true flags for more accurate results.
 
 #include <random>
+
 #include "bzl/inliner/rules2.h"
 
 cc_test {
@@ -21,12 +22,11 @@ cc_test {
 }
 cc_end(0x3c62e0c8);
 
-#include "c8/pixels/pixel-transforms.h"
+#include <benchmark/benchmark.h>
 
+#include "c8/pixels/pixel-transforms.h"
 #include "c8/stats/scope-timer.h"
 #include "reality/quality/datasets/benchmark-dataset.h"
-
-#include <benchmark/benchmark.h>
 
 using namespace c8;
 
@@ -35,8 +35,7 @@ namespace c8 {
 class Benchmark480x640 : public benchmark::Fixture {
 public:
   Benchmark480x640()
-      : numImages(BenchmarkDataset::size(BenchmarkName::SIMPLE10_480x640)),
-        index(0) {
+      : numImages(BenchmarkDataset::size(BenchmarkName::SIMPLE10_480x640)), index(0) {
     // Preload all of the benchmark images.
     images.reserve(numImages);
     for (int i = 0; i < numImages; ++i) {

@@ -63,13 +63,12 @@
 #pragma once
 
 #include "c8/map.h"
-#include "c8/pixels/pixels.h"
-#include "c8/string-view.h"
-#include "c8/string.h"
-
 #include "c8/media/encoder.h"
 #include "c8/media/media-status.h"
 #include "c8/media/muxer.h"
+#include "c8/pixels/pixels.h"
+#include "c8/string-view.h"
+#include "c8/string.h"
 
 namespace c8 {
 

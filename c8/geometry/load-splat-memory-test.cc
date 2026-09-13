@@ -172,8 +172,7 @@ TEST_F(SplatMemoryTest, TestMemoryUsage) {
   C8Log(
     "[load-splat-memory-test] Points loaded                : %ld", splatData.positions.size() / 3);
   C8Log("[load-splat-memory-test] Memory used  [splat data]    : %ld MB", expectedMemoryMB);
-  C8Log(
-    "[load-splat-memory-test] Memory used  [after - before]: %ld MB", memoryDiffMB);
+  C8Log("[load-splat-memory-test] Memory used  [after - before]: %ld MB", memoryDiffMB);
 
   ASSERT_EQ(splatData.positions.size() / 3, NUM_POINTS);
 
@@ -183,7 +182,6 @@ TEST_F(SplatMemoryTest, TestMemoryUsage) {
   } else {
     C8Log("[load-splat-memory-test] WARNING: Memory reporting not working, skipping memory check");
   }
-
 }
 
 }  // namespace c8

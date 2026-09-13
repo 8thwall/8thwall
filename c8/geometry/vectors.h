@@ -53,10 +53,7 @@ inline Vector<HVector2> asVectors(const Vector<HPoint2> &points) {
   Vector<HVector2> vectors;
   vectors.reserve(points.size());
   std::transform(
-    points.begin(),
-    points.end(),
-    std::back_inserter(vectors),
-    [](const HPoint2 pt) -> HVector2 {
+    points.begin(), points.end(), std::back_inserter(vectors), [](const HPoint2 pt) -> HVector2 {
       return {pt.x(), pt.y()};
     });
   return vectors;

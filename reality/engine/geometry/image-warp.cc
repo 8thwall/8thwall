@@ -41,14 +41,15 @@ HMatrix rotationToVertical(Quaternion pose) {
 
 HMatrix twoDProjectionMat(const HMatrix &h) {
   auto ih = h.inv();
-  return HMatrix{{h(0, 0), h(0, 1), 0.0f, h(0, 2)},
-                 {h(1, 0), h(1, 1), 0.0f, h(1, 2)},
-                 {0.0000f, 0.0000f, 1.0f, 0.0000f},
-                 {h(2, 0), h(2, 1), 0.0f, h(2, 2)},
-                 {ih(0, 0), ih(0, 1), 0.0f, ih(0, 2)},
-                 {ih(1, 0), ih(1, 1), 0.0f, ih(1, 2)},
-                 {0.00000f, 0.00000f, 1.0f, 0.00000f},
-                 {ih(2, 0), ih(2, 1), 0.0f, ih(2, 2)}};
+  return HMatrix{
+    {h(0, 0), h(0, 1), 0.0f, h(0, 2)},
+    {h(1, 0), h(1, 1), 0.0f, h(1, 2)},
+    {0.0000f, 0.0000f, 1.0f, 0.0000f},
+    {h(2, 0), h(2, 1), 0.0f, h(2, 2)},
+    {ih(0, 0), ih(0, 1), 0.0f, ih(0, 2)},
+    {ih(1, 0), ih(1, 1), 0.0f, ih(1, 2)},
+    {0.00000f, 0.00000f, 1.0f, 0.00000f},
+    {ih(2, 0), ih(2, 1), 0.0f, ih(2, 2)}};
 }
 
 HMatrix glRotationHomography(c8_PixelPinholeCameraModel k1, const HMatrix &rotationMat) {
@@ -144,8 +145,9 @@ HMatrix glImageTargetWarp(
 
   // Find the translation that centers the target in the viewport.
   auto center = imageTargetCenterPixel(camK, camMotion);
-  auto c = HPoint2{2.0f * (center.x() / (camK.pixelsWidth - 1.00f) - 0.5f),
-                   2.0f * (center.y() / (camK.pixelsHeight - 1.0f) - 0.5f)};
+  auto c = HPoint2{
+    2.0f * (center.x() / (camK.pixelsWidth - 1.00f) - 0.5f),
+    2.0f * (center.y() / (camK.pixelsHeight - 1.0f) - 0.5f)};
   auto glc = glsh * c.extrude();
   auto tx = -glc.x();
   auto ty = -glc.y();
@@ -166,10 +168,12 @@ HMatrix glImageCurvyWarp(c8_PixelPinholeCameraModel camK, const HMatrix &camMoti
   auto corners = flatten<2>(proj * borderPts);
 
   // Convert these to clip space.
-  auto ul = HPoint2{2.0f * (corners[0].x() / (camK.pixelsWidth - 1.00f) - 0.5f),
-                    2.0f * (corners[0].y() / (camK.pixelsHeight - 1.0f) - 0.5f)};
-  auto lr = HPoint2{2.0f * (corners[1].x() / (camK.pixelsWidth - 1.00f) - 0.5f),
-                    2.0f * (corners[1].y() / (camK.pixelsHeight - 1.0f) - 0.5f)};
+  auto ul = HPoint2{
+    2.0f * (corners[0].x() / (camK.pixelsWidth - 1.00f) - 0.5f),
+    2.0f * (corners[0].y() / (camK.pixelsHeight - 1.0f) - 0.5f)};
+  auto lr = HPoint2{
+    2.0f * (corners[1].x() / (camK.pixelsWidth - 1.00f) - 0.5f),
+    2.0f * (corners[1].y() / (camK.pixelsHeight - 1.0f) - 0.5f)};
 
   // Apply a rotation-only homography to these points. They are now rotated in the right orientation
   // but not at the correct center or scale.
@@ -183,8 +187,9 @@ HMatrix glImageCurvyWarp(c8_PixelPinholeCameraModel camK, const HMatrix &camMoti
 
   // Find the translation that centers the target in the viewport.
   auto center = (proj * HPoint3(0.0f, 0.0f, 0.0f)).flatten();
-  auto c = HPoint2{2.0f * (center.x() / (camK.pixelsWidth - 1.00f) - 0.5f),
-                   2.0f * (center.y() / (camK.pixelsHeight - 1.0f) - 0.5f)};
+  auto c = HPoint2{
+    2.0f * (center.x() / (camK.pixelsWidth - 1.00f) - 0.5f),
+    2.0f * (center.y() / (camK.pixelsHeight - 1.0f) - 0.5f)};
   auto glc = glsh * c.extrude();
   auto tx = -glc.x();
   auto ty = -glc.y();

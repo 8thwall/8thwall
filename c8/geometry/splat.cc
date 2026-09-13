@@ -241,21 +241,18 @@ SplatAttributes splatAttributes(const SplatRawData &d, bool rubToRuf) {
   for (int i = 0; i < d.header.numPoints; i++) {
     result.positions.push_back(
       HPoint3{d.positions[i * 3], d.positions[i * 3 + 1], rubToRufMul * d.positions[i * 3 + 2]});
-    result.rotations.push_back(normalizeQ(
-      Quaternion{
-        rubToRufMul * d.rotations[i * 4 + 0],
-        d.rotations[i * 4 + 1],
-        d.rotations[i * 4 + 2],
-        rubToRufMul * d.rotations[i * 4 + 3]}));
-    result.scales.push_back(
-      HVector3{
-        std::exp(d.scales[i * 3]), std::exp(d.scales[i * 3 + 1]), std::exp(d.scales[i * 3 + 2])});
-    result.colors.push_back(
-      Color{
-        clamp((0.5 + 0.282095 * d.colors[i * 3]) * 255.0, 255.0),
-        clamp((0.5 + 0.282095 * d.colors[i * 3 + 1]) * 255.0, 255.0),
-        clamp((0.5 + 0.282095 * d.colors[i * 3 + 2]) * 255.0, 255.0),
-        clamp(1.0f / (1.0f + std::exp(-d.alphas[i])) * 255.0, 255.0)});
+    result.rotations.push_back(normalizeQ(Quaternion{
+      rubToRufMul * d.rotations[i * 4 + 0],
+      d.rotations[i * 4 + 1],
+      d.rotations[i * 4 + 2],
+      rubToRufMul * d.rotations[i * 4 + 3]}));
+    result.scales.push_back(HVector3{
+      std::exp(d.scales[i * 3]), std::exp(d.scales[i * 3 + 1]), std::exp(d.scales[i * 3 + 2])});
+    result.colors.push_back(Color{
+      clamp((0.5 + 0.282095 * d.colors[i * 3]) * 255.0, 255.0),
+      clamp((0.5 + 0.282095 * d.colors[i * 3 + 1]) * 255.0, 255.0),
+      clamp((0.5 + 0.282095 * d.colors[i * 3 + 2]) * 255.0, 255.0),
+      clamp(1.0f / (1.0f + std::exp(-d.alphas[i])) * 255.0, 255.0)});
 
     const auto *shi = &d.sh[i * shStride];
     std::array<uint8_t, 15> shR;

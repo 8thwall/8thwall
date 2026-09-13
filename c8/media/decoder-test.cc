@@ -16,12 +16,12 @@ cc_test {
 }
 cc_end(0x99e5acaf);
 
+#include <nlohmann/json.hpp>
+
 #include "c8/media/codec/codec-api.h"
 #include "c8/media/decoder.h"
 #include "c8/media/demuxer.h"
 #include "c8/media/media-status.h"
-
-#include <nlohmann/json.hpp>
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 

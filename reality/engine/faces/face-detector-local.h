@@ -3,8 +3,8 @@
 
 #pragma once
 
-#include "c8/vector.h"
 #include "c8/geometry/face-types.h"
+#include "c8/vector.h"
 #include "reality/engine/deepnets/tflite-interpreter.h"
 #include "reality/engine/ears/ear-types.h"
 
@@ -17,8 +17,8 @@ class FaceDetectorLocal {
 public:
   // Construct from a tflite model.
   FaceDetectorLocal(const uint8_t *modelData, int modelSize, const EarConfig &earConfig)
-      : earConfig_(earConfig), interpreter_(modelData, modelSize, FACE_LOCAL_CACHE_SIZE,
-      NUM_THREADS) {}
+      : earConfig_(earConfig),
+        interpreter_(modelData, modelSize, FACE_LOCAL_CACHE_SIZE, NUM_THREADS) {}
   FaceDetectorLocal(const Vector<uint8_t> &modelData, const EarConfig &earConfig)
       : earConfig_(earConfig), interpreter_(modelData, FACE_LOCAL_CACHE_SIZE, NUM_THREADS) {}
 

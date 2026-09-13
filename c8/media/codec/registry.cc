@@ -32,14 +32,10 @@ cc_library {
 }
 cc_end(0x03a99199);
 
-#include "c8/media/codec/registry.h"
-
 #include <algorithm>
 #include <filesystem>
 #include <nlohmann/json.hpp>
 
-#include "c8/string.h"
-#include "c8/string/strcat.h"
 #include "c8/media/codec/fdk-aac-decoder.h"
 #include "c8/media/codec/fdk-aac-encoder.h"
 #include "c8/media/codec/mkv-demuxer.h"
@@ -48,7 +44,10 @@ cc_end(0x03a99199);
 #include "c8/media/codec/openh264-decoder.h"
 #include "c8/media/codec/openh264-encoder.h"
 #include "c8/media/codec/opus-decoder.h"
+#include "c8/media/codec/registry.h"
 #include "c8/media/codec/vpx-decoder.h"
+#include "c8/string.h"
+#include "c8/string/strcat.h"
 
 namespace c8 {
 
@@ -96,9 +95,8 @@ Muxer MuxerRegistry::create(const nlohmann::json &config) {
     return {nullptr};
   }
 
-  std::transform(filetype.begin(), filetype.end(), filetype.begin(), [](auto c) {
-    return std::tolower(c);
-  });
+  std::transform(
+    filetype.begin(), filetype.end(), filetype.begin(), [](auto c) { return std::tolower(c); });
 
   if (filetype == ".mp4") {
     return {new Mp4v2Muxer(config)};
@@ -118,9 +116,8 @@ Demuxer DemuxerRegistry::create(const nlohmann::json &config) {
     return {nullptr};
   }
 
-  std::transform(filetype.begin(), filetype.end(), filetype.begin(), [](auto c) {
-    return std::tolower(c);
-  });
+  std::transform(
+    filetype.begin(), filetype.end(), filetype.begin(), [](auto c) { return std::tolower(c); });
 
   if (filetype == ".mp4") {
     return {new Mp4v2Demuxer(config)};

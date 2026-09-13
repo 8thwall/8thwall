@@ -14,12 +14,13 @@ cc_test {
 }
 cc_end(0xbda016c2);
 
-#include "reality/engine/sensortest/sensortest-request-executor.h"
+#include <gtest/gtest.h>
 
 #include <random>
-#include <gtest/gtest.h>
+
 #include "c8/io/capnp-messages.h"
 #include "c8/stats/scope-timer.h"
+#include "reality/engine/sensortest/sensortest-request-executor.h"
 
 using MutableRequestSensor = c8::MutableRootMessage<c8::RequestSensor>;
 using MutableResponseSensorTest = c8::MutableRootMessage<c8::ResponseSensorTest>;
@@ -112,7 +113,7 @@ TEST_F(SensorTestRequestExecutorTestTest, TestSensorTestPyramid) {
   auto pyramidImage = currentFramePyramid.getImage();
   pyramidImage.setRows(3);
   pyramidImage.setCols(3);
-  pyramidImage.setBytesPerRow(3 * 4); // Pyramid always contains 4-channel images
+  pyramidImage.setBytesPerRow(3 * 4);  // Pyramid always contains 4-channel images
   pyramidImage.setUInt8PixelDataPointer(pixelDataAddr);
   auto pyramidLevels = currentFramePyramid.initLevels(4);
   // we only compute data on the last level

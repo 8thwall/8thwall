@@ -144,8 +144,8 @@ public:
   // root message.
   ConstRootMessageView(const void *bytes, size_t size)
       : message_(new capnp::FlatArrayMessageReader(
-          kj::ArrayPtr<const capnp::word>(reinterpret_cast<const capnp::word *>(bytes), size),
-          NO_TRAVERSAL_LIMIT_READER_OPTIONS)) {}
+        kj::ArrayPtr<const capnp::word>(reinterpret_cast<const capnp::word *>(bytes), size),
+        NO_TRAVERSAL_LIMIT_READER_OPTIONS)) {}
 
   // Default move constructors.
   ConstRootMessageView(ConstRootMessageView &&a) = default;

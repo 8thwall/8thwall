@@ -12,12 +12,14 @@
 #include <kj/async-unix.h>
 #include <kj/async.h>
 #include <kj/common.h>
+
 #include <list>
 #include <memory>
 #include <mutex>
 #include <queue>
 #include <string>
 #include <thread>
+
 #include "c8/exceptions.h"
 #include "c8/io/capnp-messages.h"
 #include "c8/protolog/api/remote-request.capnp.h"
@@ -96,7 +98,7 @@ public:
 
   // Receive the most recent response. The received object is valid until the next call to receive,
   // or until this RemoteServiceConnection is destroyed.
-  ConstRootMessage<RemoteServiceResponse>& receive();
+  ConstRootMessage<RemoteServiceResponse> &receive();
 
   // Check the connection status.
   ConnectionStatus status() { return status_.load(); }
@@ -115,9 +117,7 @@ private:
     kj::AsyncIoContext &ioContext,
     kj::Vector<kj::Promise<void>> &tasks);
 
-  void drainFdAndSendRpcs(
-    evutil_socket_t readFd,
-    std::function<void()> terminate);
+  void drainFdAndSendRpcs(evutil_socket_t readFd, std::function<void()> terminate);
 
   void disconnect();
 };

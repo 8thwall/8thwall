@@ -64,10 +64,10 @@ cc_library {
 }
 cc_end(0x1db05145);
 
-#include "reality/engine/geometry/homography-decomp.h"
-
 #include <Eigen/Core>
 #include <Eigen/SVD>
+
+#include "reality/engine/geometry/homography-decomp.h"
 
 namespace c8 {
 
@@ -118,11 +118,12 @@ HMatrix findRmatFrom_tstar_n(
   const HMatrix &H, const HVector3 &t, const HVector3 &n, const float v) {
   float s = -2.0f / v;
   return H
-    * HMatrix{{s * t.x() * n.x() + 1.0f, s * t.x() * n.y(), s * t.x() * n.z(), 0.0f},
-              {s * t.y() * n.x(), s * t.y() * n.y() + 1.0f, s * t.y() * n.z(), 0.0f},
-              {s * t.z() * n.x(), s * t.z() * n.y(), s * t.z() * n.z() + 1.0f, 0.0f},
-              {0.00000000000000000f, 0.0000000000000000f, 0.0000000000000000f, 1.0f},
-              true};
+    * HMatrix{
+      {s * t.x() * n.x() + 1.0f, s * t.x() * n.y(), s * t.x() * n.z(), 0.0f},
+      {s * t.y() * n.x(), s * t.y() * n.y() + 1.0f, s * t.y() * n.z(), 0.0f},
+      {s * t.z() * n.x(), s * t.z() * n.y(), s * t.z() * n.z() + 1.0f, 0.0f},
+      {0.00000000000000000f, 0.0000000000000000f, 0.0000000000000000f, 1.0f},
+      true};
 }
 
 Vector<CameraMotion> decompose(const HMatrix &_H) {
@@ -130,11 +131,12 @@ Vector<CameraMotion> decompose(const HMatrix &_H) {
 
   // S = H'H - I
   auto HH = H.t() * H;
-  HMatrix S{{HH(0, 0) - 1.0f, HH(0, 1), HH(0, 2), 0.0f},
-            {HH(1, 0), HH(1, 1) - 1.0f, HH(1, 2), 0.0f},
-            {HH(2, 0), HH(2, 1), HH(2, 2) - 1.0f, 0.0f},
-            {0.00000000f, 0.0000000f, 0.0000000f, 1.0f},
-            true};
+  HMatrix S{
+    {HH(0, 0) - 1.0f, HH(0, 1), HH(0, 2), 0.0f},
+    {HH(1, 0), HH(1, 1) - 1.0f, HH(1, 2), 0.0f},
+    {HH(2, 0), HH(2, 1), HH(2, 2) - 1.0f, 0.0f},
+    {0.00000000f, 0.0000000f, 0.0000000f, 1.0f},
+    true};
 
   // check if H is rotation matrix
   if (isZero3x3(S)) {

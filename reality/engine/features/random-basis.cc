@@ -18,14 +18,13 @@ cc_library {
 }
 cc_end(0xf97d99a3);
 
-#include "reality/engine/features/random-basis.h"
+#include <Eigen/Dense>
+#include <numeric>
 
 #include "c8/c8-log.h"
 #include "c8/exceptions.h"
 #include "reality/engine/features/image-descriptor.h"
-
-#include <Eigen/Dense>
-#include <numeric>
+#include "reality/engine/features/random-basis.h"
 
 namespace c8 {
 

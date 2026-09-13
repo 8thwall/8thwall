@@ -191,13 +191,9 @@ struct EarSampledVerticesFullView {
     return sampledAngleMap[idx.zBin][idx.yBin];
   }
 
-  size_t numZBin() const {
-    return sampledAngleMap.size();
-  }
+  size_t numZBin() const { return sampledAngleMap.size(); }
 
-  size_t numYBin() const {
-    return sampledAngleMap.size() > 0 ? sampledAngleMap[0].size() : 0;
-  }
+  size_t numYBin() const { return sampledAngleMap.size() > 0 ? sampledAngleMap[0].size() : 0; }
 
   int faceId = -1;
 

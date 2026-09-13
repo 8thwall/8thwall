@@ -25,9 +25,9 @@ cc_end(0xbd7fbda3);
 #include "c8/geometry/homography.h"
 #include "c8/geometry/worlds.h"
 #include "c8/parameter-data.h"
+#include "c8/stats/scope-timer.h"
 #include "reality/engine/geometry/homography-decomp.h"
 #include "reality/engine/geometry/pose-pnp.h"
-#include "c8/stats/scope-timer.h"
 
 using testing::Eq;
 using testing::FloatNear;
@@ -193,8 +193,7 @@ TEST_F(PosePnpTest, TestTargetVsWorldSpace) {
   HMatrix reconstructionCamImageSpace = HMatrixGen::i();
   HMatrix reconstructionCamWorldSpace = HMatrixGen::i();
 
-  robustPnP(
-    p3, p2, HMatrixGen::i(), params, &reconstructionCamWorldSpace, &inliers, &r, &scratch);
+  robustPnP(p3, p2, HMatrixGen::i(), params, &reconstructionCamWorldSpace, &inliers, &r, &scratch);
   robustPnP(p3InCam, p2, cam, params, &reconstructionCamImageSpace, &inliers, &r, &scratch);
   EXPECT_THAT(reconstructionCamWorldSpace.data(), equalsMatrix(cam));
   EXPECT_THAT((cam * reconstructionCamImageSpace).data(), equalsMatrix(cam));
@@ -292,8 +291,7 @@ TEST_F(PosePnpTest, TestImageTargetSolveHomography) {
   p.minPointsForRobustPose = 5;
   p.minPoseInliers = 5;
 
-  EXPECT_TRUE(
-    solveImageTargetHomography(imTargetPts, camPts, {}, p, &estCam, &inliers, &scratch));
+  EXPECT_TRUE(solveImageTargetHomography(imTargetPts, camPts, {}, p, &estCam, &inliers, &scratch));
 
   EXPECT_THAT(estCam.data(), equalsMatrix(newCam, 2e-7));
 }

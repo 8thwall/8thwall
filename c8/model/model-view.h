@@ -209,7 +209,7 @@ public:
   ModelViewGestureHandler &operator=(const ModelViewGestureHandler &) = delete;
 
   // Updates orbit params. Removes/does not consider role component.
-  void updateOrbitParams(const HMatrix& cameraPose);
+  void updateOrbitParams(const HMatrix &cameraPose);
 
 private:
   ModelViewGestureHandler(GestureDetector &gestureDetector, Camera &camera, Renderable &model);

@@ -220,7 +220,7 @@ void GestureDetector::observe(const TouchEvent &t) {
       // only take the positions of the first two touches.
       s.startRotationRadian = std::atan2(t.pos[1].y - t.pos[0].y, t.pos[1].x - t.pos[0].x);
     }
-    
+
     emit(format("%sfingerstart", fingerString(s.touchCount).c_str()), s);
     prev_ = s;
   }

@@ -65,9 +65,7 @@ float RollingMean::push(float timeInSecs, float measurement) {
   return currentSum_ / measurements_.size();
 }
 
-float RollingMean::currentMean() const {
-  return currentSum_ / measurements_.size();
-}
+float RollingMean::currentMean() const { return currentSum_ / measurements_.size(); }
 
 // Note there are fancier ways to do this, i.e.
 // https://dev.theomader.com/gaussian-kernel-calculator/

@@ -270,8 +270,8 @@ HMatrix rgbToYCbCrAnalogRaw(float kr, float kg, float kb) {
     {0.0f, 0.0f, 0.0f, 1.0f}};
 }
 
- inline uint8_t clampToByte(float value) {
-    return static_cast<uint8_t>(std::max(0.0f, std::min(255.0f, value)));
+inline uint8_t clampToByte(float value) {
+  return static_cast<uint8_t>(std::max(0.0f, std::min(255.0f, value)));
 }
 
 }  // namespace
@@ -279,8 +279,7 @@ HMatrix rgbToYCbCrAnalogRaw(float kr, float kg, float kb) {
 namespace ColorMat {
 
 HMatrix rgbToYCbCrAnalog(float kr, float kg, float kb) {
-  return HMatrixGen::translation(0.0f, 128.0f, 128.0f)
-    * rgbToYCbCrAnalogRaw(kr, kg, kb);
+  return HMatrixGen::translation(0.0f, 128.0f, 128.0f) * rgbToYCbCrAnalogRaw(kr, kg, kb);
 }
 
 HMatrix rgbToYCbCrDigital(float kr, float kg, float kb) {
@@ -2120,12 +2119,12 @@ void yuvToRgb(
   }
 }
 
-// This implementation is using using floating-point operations to convert YUV to RGBA for high precision
-// This function leverages the BT.709 inverse color transformation matrix to convert YUV data to
-// RGB, ensuring accurate color representation. The method processes individual YUV components
-// and calculates RGB values using floating-point arithmetic, which avoids the limitations of
-// lookup tables and provides a more precise color conversion. Each output pixel includes an
-// alpha channel set to 255 (fully opaque).
+// This implementation is using using floating-point operations to convert YUV to RGBA for high
+// precision This function leverages the BT.709 inverse color transformation matrix to convert YUV
+// data to RGB, ensuring accurate color representation. The method processes individual YUV
+// components and calculates RGB values using floating-point arithmetic, which avoids the
+// limitations of lookup tables and provides a more precise color conversion. Each output pixel
+// includes an alpha channel set to 255 (fully opaque).
 void bt709ToRgbHighPrecision(
   const ConstYPlanePixels &srcY,
   const ConstUPlanePixels &srcU,
@@ -2134,9 +2133,9 @@ void bt709ToRgbHighPrecision(
   ScopeTimer t("yuv-to-rgb");
 
   constexpr float bt709InverseMatrix[3][3] = {
-    {1.0f,  0.0f,       1.5748f},   // R = Y + 1.5748 * (V - 128)
-    {1.0f, -0.187324f, -0.468124f}, // G = Y - 0.187324 * (U - 128) - 0.468124 * (V - 128)
-    {1.0f,  1.8556f,    0.0f}       // B = Y + 1.8556 * (U - 128)
+    {1.0f, 0.0f, 1.5748f},           // R = Y + 1.5748 * (V - 128)
+    {1.0f, -0.187324f, -0.468124f},  // G = Y - 0.187324 * (U - 128) - 0.468124 * (V - 128)
+    {1.0f, 1.8556f, 0.0f}            // B = Y + 1.8556 * (U - 128)
   };
 
   // Copy reference values onto the stack so the compiler can infer constness across loops.
@@ -2167,33 +2166,39 @@ void bt709ToRgbHighPrecision(
     const uint8_t *vStart = srcVPixels + srcVRowStart;
 
     for (int i = 0; i < srcWidth; i += 2) {
-        // Extract the source YUV values
-        const float Y0 = static_cast<float>(srcYPix[i]);
-        const float Y1 = static_cast<float>(srcYPix[i + 1]);
-        const float U = static_cast<float>(uStart[i / 2]) - 128.0f; // Subtract 128 for chroma
-        const float V = static_cast<float>(vStart[i / 2]) - 128.0f; // Subtract 128 for chroma
+      // Extract the source YUV values
+      const float Y0 = static_cast<float>(srcYPix[i]);
+      const float Y1 = static_cast<float>(srcYPix[i + 1]);
+      const float U = static_cast<float>(uStart[i / 2]) - 128.0f;  // Subtract 128 for chroma
+      const float V = static_cast<float>(vStart[i / 2]) - 128.0f;  // Subtract 128 for chroma
 
-        // Convert YUV to RGB using the BT.709 matrix
-        float R0 = bt709InverseMatrix[0][0] * Y0 + bt709InverseMatrix[0][1] * U + bt709InverseMatrix[0][2] * V;
-        float G0 = bt709InverseMatrix[1][0] * Y0 + bt709InverseMatrix[1][1] * U + bt709InverseMatrix[1][2] * V;
-        float B0 = bt709InverseMatrix[2][0] * Y0 + bt709InverseMatrix[2][1] * U + bt709InverseMatrix[2][2] * V;
+      // Convert YUV to RGB using the BT.709 matrix
+      float R0 =
+        bt709InverseMatrix[0][0] * Y0 + bt709InverseMatrix[0][1] * U + bt709InverseMatrix[0][2] * V;
+      float G0 =
+        bt709InverseMatrix[1][0] * Y0 + bt709InverseMatrix[1][1] * U + bt709InverseMatrix[1][2] * V;
+      float B0 =
+        bt709InverseMatrix[2][0] * Y0 + bt709InverseMatrix[2][1] * U + bt709InverseMatrix[2][2] * V;
 
-        float R1 = bt709InverseMatrix[0][0] * Y1 + bt709InverseMatrix[0][1] * U + bt709InverseMatrix[0][2] * V;
-        float G1 = bt709InverseMatrix[1][0] * Y1 + bt709InverseMatrix[1][1] * U + bt709InverseMatrix[1][2] * V;
-        float B1 = bt709InverseMatrix[2][0] * Y1 + bt709InverseMatrix[2][1] * U + bt709InverseMatrix[2][2] * V;
+      float R1 =
+        bt709InverseMatrix[0][0] * Y1 + bt709InverseMatrix[0][1] * U + bt709InverseMatrix[0][2] * V;
+      float G1 =
+        bt709InverseMatrix[1][0] * Y1 + bt709InverseMatrix[1][1] * U + bt709InverseMatrix[1][2] * V;
+      float B1 =
+        bt709InverseMatrix[2][0] * Y1 + bt709InverseMatrix[2][1] * U + bt709InverseMatrix[2][2] * V;
 
-        // Store RGBA values for two pixels
-        destPix[0] = clampToByte(R0);  // Pixel 1 Red
-        destPix[1] = clampToByte(G0);  // Pixel 1 Green
-        destPix[2] = clampToByte(B0);  // Pixel 1 Blue
-        destPix[3] = 255;              // Pixel 1 Alpha
+      // Store RGBA values for two pixels
+      destPix[0] = clampToByte(R0);  // Pixel 1 Red
+      destPix[1] = clampToByte(G0);  // Pixel 1 Green
+      destPix[2] = clampToByte(B0);  // Pixel 1 Blue
+      destPix[3] = 255;              // Pixel 1 Alpha
 
-        destPix[4] = clampToByte(R1);  // Pixel 2 Red
-        destPix[5] = clampToByte(G1);  // Pixel 2 Green
-        destPix[6] = clampToByte(B1);  // Pixel 2 Blue
-        destPix[7] = 255;              // Pixel 2 Alpha
+      destPix[4] = clampToByte(R1);  // Pixel 2 Red
+      destPix[5] = clampToByte(G1);  // Pixel 2 Green
+      destPix[6] = clampToByte(B1);  // Pixel 2 Blue
+      destPix[7] = 255;              // Pixel 2 Alpha
 
-        destPix += 8; // Move to the next pair of destination pixels
+      destPix += 8;  // Move to the next pair of destination pixels
     }
 
     // Advance row pointers
@@ -2202,8 +2207,8 @@ void bt709ToRgbHighPrecision(
 
     // Subsampled U and V planes advance every two rows
     if (sourceRow % 2 == 1) {
-        srcURowStart += srcUStride;
-        srcVRowStart += srcVStride;
+      srcURowStart += srcUStride;
+      srcVRowStart += srcVStride;
     }
   }
 }

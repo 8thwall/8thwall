@@ -17,15 +17,14 @@ cc_test {
 cc_end(0x3bda69ff);
 
 #include "c8/c8-log.h"
+#include "gmock/gmock.h"
+#include "gtest/gtest.h"
 #include "reality/engine/features/gr8gl-slow.h"
 #include "reality/engine/features/gr8gl.h"
 #include "reality/engine/features/keypoint-queue.h"
 #include "reality/quality/datasets/benchmark-dataset.h"
 #include "third_party/cvlite/features2d/fast.h"
 #include "third_party/cvlite/features2d/keypoint.h"
-
-#include "gmock/gmock.h"
-#include "gtest/gtest.h"
 
 using ::testing::ContainerEq;
 

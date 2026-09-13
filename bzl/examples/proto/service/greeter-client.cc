@@ -3,19 +3,21 @@
 
 /**
  * To test this on an Android phone, do
- *   bazel build --platforms=//bzl:android_arm64 --features=adbrun //bzl/examples/proto/service:greeter-client
- *   bazel-bin/bzl/examples/proto/service/greeter-client --target <your_laptop_ip>:50051
+ *   bazel build --platforms=//bzl:android_arm64 --features=adbrun
+ * //bzl/examples/proto/service:greeter-client bazel-bin/bzl/examples/proto/service/greeter-client
+ * --target <your_laptop_ip>:50051
  *
  * while running the server on your laptop
  */
+
+#include <grpcpp/grpcpp.h>
 
 #include <iostream>
 #include <memory>
 #include <string>
 
-#include <grpcpp/grpcpp.h>
-#include "bzl/examples/proto/service/greeter.pb.h"
 #include "bzl/examples/proto/service/greeter.grpc.pb.h"
+#include "bzl/examples/proto/service/greeter.pb.h"
 
 using grpc::Channel;
 using grpc::ClientContext;
@@ -25,13 +27,12 @@ using helloworld::HelloReply;
 using helloworld::HelloRequest;
 
 class GreeterClient {
- public:
-  GreeterClient(std::shared_ptr<Channel> channel)
-      : stub_(Greeter::NewStub(channel)) {}
+public:
+  GreeterClient(std::shared_ptr<Channel> channel) : stub_(Greeter::NewStub(channel)) {}
 
   // Assembles the client's payload, sends it and presents the response back
   // from the server.
-  std::string SayHello(const std::string& user) {
+  std::string SayHello(const std::string &user) {
     // Data we are sending to the server.
     HelloRequest request;
     request.set_name(user);
@@ -50,17 +51,16 @@ class GreeterClient {
     if (status.ok()) {
       return reply.message();
     } else {
-      std::cout << status.error_code() << ": " << status.error_message()
-                << std::endl;
+      std::cout << status.error_code() << ": " << status.error_message() << std::endl;
       return "RPC failed";
     }
   }
 
- private:
+private:
   std::unique_ptr<Greeter::Stub> stub_;
 };
 
-int main(int argc, char** argv) {
+int main(int argc, char **argv) {
   // Instantiate the client. It requires a channel, out of which the actual RPCs
   // are created. This channel models a connection to an endpoint specified by
   // the argument "--target=" which is the only expected argument.
@@ -76,8 +76,7 @@ int main(int argc, char** argv) {
       if (arg_val[start_pos] == '=') {
         target_str = arg_val.substr(start_pos + 1);
       } else {
-        std::cout << "The only correct argument syntax is --target="
-                  << std::endl;
+        std::cout << "The only correct argument syntax is --target=" << std::endl;
         return 0;
       }
     } else {
@@ -87,8 +86,7 @@ int main(int argc, char** argv) {
   } else {
     target_str = "localhost:50051";
   }
-  GreeterClient greeter(
-      grpc::CreateChannel(target_str, grpc::InsecureChannelCredentials()));
+  GreeterClient greeter(grpc::CreateChannel(target_str, grpc::InsecureChannelCredentials()));
   std::string user("world");
   std::string reply = greeter.SayHello(user);
   std::cout << "Greeter received: " << reply << std::endl;

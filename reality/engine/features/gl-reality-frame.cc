@@ -627,8 +627,7 @@ void GlRealityFrame::addNextDrawRoi(const ImageRoi &roi) {
   nextRois_.push_back({roi, roiLayouts_[idx]});
 }
 
-void GlRealityFrame::draw(
-  GLuint cameraTexture, GlRealityFrame::Options options) {
+void GlRealityFrame::draw(GLuint cameraTexture, GlRealityFrame::Options options) {
   GLint restoreActiveTexture = 0;
   GLint restoreTexture = 0;
   GLint restoreProgram = 0;

@@ -3,8 +3,8 @@
 
 // Looks like algorithm is needed for std::min?
 #include <algorithm>
-#include <sstream>
 #include <cstring>
+#include <sstream>
 
 #include "c8/c8-log.h"
 #include "c8/map.h"

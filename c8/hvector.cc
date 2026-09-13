@@ -19,6 +19,4 @@ cc_end(0x0b095068);
 
 #include "c8/hvector.h"
 
-namespace c8 {
-
-}  // namespace c8
+namespace c8 {}  // namespace c8

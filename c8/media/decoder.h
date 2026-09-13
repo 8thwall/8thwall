@@ -5,11 +5,10 @@
 
 #pragma once
 
-#include "c8/media/media-status.h"
-
 #include <nlohmann/json_fwd.hpp>
 
 #include "c8/media/codec/codec-api.h"
+#include "c8/media/media-status.h"
 
 namespace c8 {
 
@@ -37,7 +36,7 @@ public:
   MediaStatus decode(
     const nlohmann::json &sampleConfig,
     const uint8_t **data,
-    size_t * byteSize,
+    size_t *byteSize,
     nlohmann::json *sampleMetadata);
 
   // Finish decoding and flush any remaining output to the demuxer.

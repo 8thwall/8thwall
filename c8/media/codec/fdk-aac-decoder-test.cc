@@ -18,13 +18,12 @@ cc_test {
 }
 cc_end(0x73b7276a);
 
-#include "c8/media/codec/fdk-aac-decoder.h"
+#include <nlohmann/json.hpp>
 
-#include "gtest/gtest.h"
+#include "c8/media/codec/fdk-aac-decoder.h"
 #include "c8/media/codec/mp4v2-demuxer.h"
 #include "c8/media/demuxer.h"
-
-#include <nlohmann/json.hpp>
+#include "gtest/gtest.h"
 
 namespace c8 {
 

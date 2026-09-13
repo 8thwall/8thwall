@@ -70,5 +70,4 @@ TEST_F(AssetsTest, TestBadGlbData) {
   EXPECT_EQ(nullptr, glbDataToMesh(glbData.data(), glbData.size()));
 }
 
-
 }  // namespace c8

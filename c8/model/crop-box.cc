@@ -175,7 +175,9 @@ void CropBox::updateCropBox() {
   auto ry = 0.5f * std::abs(cornerClip2[2].y() - cornerClip2[0].y());
   auto showEllipse = elliptical_ && side_ == Side::TOP;
   auto &cutout = boxScene.find<Renderable>("cutout");
-  cutout.material().set("bounds", std::array<float, 4>{cx, cy, rx, ry}).set("elliptical", showEllipse ? 1.0f : 0.0f);
+  cutout.material()
+    .set("bounds", std::array<float, 4>{cx, cy, rx, ry})
+    .set("elliptical", showEllipse ? 1.0f : 0.0f);
 
   // Update the crop circle if needed.
   if (showEllipse) {

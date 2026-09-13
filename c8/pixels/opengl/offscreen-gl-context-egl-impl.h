@@ -32,14 +32,20 @@ private:
   // Create the offscreen context.
   // NOTE: In Emscripten the context dimensions are ignored and set to 300x150px.
   OffscreenGlContextEglImpl(
-    int rSize, int gSize, int bSize, int aSize, int depthSize, void *sharedContext = EGL_NO_CONTEXT);
+    int rSize,
+    int gSize,
+    int bSize,
+    int aSize,
+    int depthSize,
+    void *sharedContext = EGL_NO_CONTEXT);
 
   friend class OffscreenGlContext;
 
   EGLContext context_;
   EGLDisplay display_;
   EGLContext sharedContext_;
-  EGLSurface surfaceUnused_;  // Needed for old versions of android that don't support surface-less contexts.
+  EGLSurface
+    surfaceUnused_;  // Needed for old versions of android that don't support surface-less contexts.
 };
 
 }  // namespace c8

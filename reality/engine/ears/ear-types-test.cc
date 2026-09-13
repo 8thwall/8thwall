@@ -54,11 +54,17 @@ TEST_F(EarTypesTest, TestMirrorInvisibleEarVertices) {
   mirrorInvisibleEarVertices(leftRefPt, rightRefPt, &ear3d);
   for (size_t i = 0; i < ear3d.leftVertices.size(); ++i) {
     EXPECT_NEAR(
-      ear3d.leftVertices[i].x() - leftRefPt.x(), rightRefPt.x() - ear3d.rightVertices[i].x(), delta);
+      ear3d.leftVertices[i].x() - leftRefPt.x(),
+      rightRefPt.x() - ear3d.rightVertices[i].x(),
+      delta);
     EXPECT_NEAR(
-      ear3d.leftVertices[i].y() - leftRefPt.y(), ear3d.rightVertices[i].y() - rightRefPt.y(), delta);
+      ear3d.leftVertices[i].y() - leftRefPt.y(),
+      ear3d.rightVertices[i].y() - rightRefPt.y(),
+      delta);
     EXPECT_NEAR(
-      ear3d.leftVertices[i].z() - leftRefPt.z(), ear3d.rightVertices[i].z() - rightRefPt.z(), delta);
+      ear3d.leftVertices[i].z() - leftRefPt.z(),
+      ear3d.rightVertices[i].z() - rightRefPt.z(),
+      delta);
   }
 }
 

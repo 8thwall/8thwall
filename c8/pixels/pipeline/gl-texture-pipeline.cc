@@ -28,6 +28,7 @@ cc_end(0x4eb10d0f);
 #if JAVASCRIPT || __APPLE__ && TARGET_OS_MAC
 
 #include <mutex>
+
 #include "c8/c8-log.h"
 #include "c8/exceptions.h"
 #include "c8/pixels/pipeline/gl-texture-pipeline.h"
@@ -42,7 +43,7 @@ void GlTexturePipeline::initialize(int width, int height, int delay, int numText
   //  - numTextures must be at least delay + 3 for ready/processing, processed, and frozen.
   if (numTextures < 0) {
     C8Log("[gl-texture-pipeline] %s", "numTextures can not be negative.");
-    //C8_THROW_INVALID_ARGUMENT("Delay can not be negative.");
+    // C8_THROW_INVALID_ARGUMENT("Delay can not be negative.");
   }
 
   /*
@@ -104,7 +105,7 @@ GLuint GlTexturePipeline::getReady(int width, int height) {
   C8Log("[gl-texture-pipeline] %s", "No textures ready");
   return 0;
   */
-  //C8_THROW("No textures ready");
+  // C8_THROW("No textures ready");
 }
 
 void GlTexturePipeline::markTextureFilled() {

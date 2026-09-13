@@ -17,6 +17,7 @@ cc_end(0x15d572ed);
 #include <chrono>
 #include <iostream>
 #include <thread>
+
 #include "c8/c8-log.h"
 #include "c8/pixels/pixels.h"
 #include "c8/protolog/remote-service-connection.h"

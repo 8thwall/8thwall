@@ -20,7 +20,6 @@ namespace c8 {
 
 class CircularMemcpyTest : public ::testing::Test {};
 
-
 TEST_F(CircularMemcpyTest, TestCircularMemcpyStore) {
   char buffer[9];
   char *bufferStart = buffer;

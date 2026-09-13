@@ -1,6 +1,6 @@
 #pragma once
 
 extern "C" {
-    void RunServer();
-    void StopServer();
+void RunServer();
+void StopServer();
 }

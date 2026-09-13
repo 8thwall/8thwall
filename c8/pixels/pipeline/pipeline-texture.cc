@@ -20,9 +20,7 @@ cc_end(0xd445132d);
 
 namespace c8 {
 
-void PipelineTexture::initialize() {
-  glTexture.initialize();
-}
+void PipelineTexture::initialize() { glTexture.initialize(); }
 
 void PipelineTexture::resize(int width, int height) {
   GLint restoreTexture = 0;

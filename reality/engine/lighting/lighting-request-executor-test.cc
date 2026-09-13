@@ -15,13 +15,13 @@ cc_test {
 }
 cc_end(0x52a80eae);
 
-#include "reality/engine/lighting/lighting-request-executor.h"
-
 #include <gtest/gtest.h>
+
 #include "c8/io/capnp-messages.h"
 #include "c8/pixels/pixels.h"
 #include "c8/protolog/xr-requests.h"
 #include "c8/stats/scope-timer.h"
+#include "reality/engine/lighting/lighting-request-executor.h"
 
 using MutableRequestSensor = c8::MutableRootMessage<c8::RequestSensor>;
 using MutableResponseLighting = c8::MutableRootMessage<c8::ResponseLighting>;
@@ -77,9 +77,9 @@ TEST_F(LightingRequestExecutorTest, TestLightingPyramid) {
   // (255, 0
   //  34, 56)
   uint8_t pixelData[] = {
-    0, 0, 0, 1,   2, 3, 4, 5,  6, 7, 8, 9,  // Row 0
-    0, 0, 0, 1, 255, 3, 4, 5,  0, 7, 8, 9,  // Row 4
-    0, 0, 0, 1,  34, 3, 4, 5, 56, 7, 8, 9,  // Row 8
+    0, 0, 0, 1, 2,   3, 4, 5, 6,  7, 8, 9,  // Row 0
+    0, 0, 0, 1, 255, 3, 4, 5, 0,  7, 8, 9,  // Row 4
+    0, 0, 0, 1, 34,  3, 4, 5, 56, 7, 8, 9,  // Row 8
   };
 
   size_t pixelDataAddr = reinterpret_cast<size_t>(pixelData);
@@ -88,7 +88,7 @@ TEST_F(LightingRequestExecutorTest, TestLightingPyramid) {
   auto pyramidImage = currentFramePyramid.getImage();
   pyramidImage.setRows(3);
   pyramidImage.setCols(3);
-  pyramidImage.setBytesPerRow(3 * 4); // Pyramid always contains 4-channel images
+  pyramidImage.setBytesPerRow(3 * 4);  // Pyramid always contains 4-channel images
   pyramidImage.setUInt8PixelDataPointer(pixelDataAddr);
   auto pyramidLevels = currentFramePyramid.initLevels(4);
   // we only compute data on the last level

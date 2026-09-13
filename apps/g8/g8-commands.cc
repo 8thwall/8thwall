@@ -137,7 +137,8 @@ CLI::App_p syncMasterCmd(MainContext &ctx) {
   return cmd;
 }
 
-// New command for ls, that works just like shell 'ls' in every way but also shows files that are sparse no-checkout files not in the working directory but in the git index
+// New command for ls, that works just like shell 'ls' in every way but also shows files that are
+// sparse no-checkout files not in the working directory but in the git index
 CLI::App_p lsCmd(MainContext &ctx) {
   CLI::App_p cmd = std::make_unique<CLI::App>("List files", "ls");
 
@@ -148,7 +149,8 @@ CLI::App_p lsCmd(MainContext &ctx) {
   cmd->set_help_flag("--help", "Print this help message and exit");
   cmd->add_flag("-l", opts.longFormat, "List files in a long listing format");
   cmd->add_flag("-a", opts.all, "Include directory entries whose names begin with a dot (‘.’)");
-  cmd->add_flag("-h", opts.humanReadable, "With -l, print sizes in human readable format (e.g., 1K 234M 2G)");
+  cmd->add_flag(
+    "-h", opts.humanReadable, "With -l, print sizes in human readable format (e.g., 1K 234M 2G)");
   cmd->add_flag("-1", opts.onePerLine, "Force output to be one entry per line");
   cmd->add_flag("-r", opts.reverse, "Reverse order while sorting");
   auto sortTime = cmd->add_flag("-t", opts.sortByTime, "Sort by modification time, newest first");
@@ -169,4 +171,3 @@ CLI::App_p lsCmd(MainContext &ctx) {
 
   return cmd;
 }
-

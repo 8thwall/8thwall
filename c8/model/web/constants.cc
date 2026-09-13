@@ -7,8 +7,7 @@ cc_library {
   hdrs = {
     "constants.h",
   };
-  deps = {
-  };
+  deps = {};
 }
 cc_end(0xec808e9b);
 
