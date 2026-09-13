@@ -455,6 +455,12 @@ npm_package(
 # Node modules for 8th Wall's js engine.
 npm_package(
     name = "npm-jsxr",
+    # NOTE(christoph): The ua-parser-js git dependency's `prepare` script installs its fuzzing
+    # devDependencies (@jazzer.js), whose native build fails under Node 22. The pinned fork
+    # commits its dist/, so skipping lifecycle scripts is safe here.
+    env = {
+        "NPM_CONFIG_IGNORE_SCRIPTS": "true",
+    },
     package = "//reality/app/xr/js:package.json",
     package_lock = "//reality/app/xr/js:package-lock.json",
 )
