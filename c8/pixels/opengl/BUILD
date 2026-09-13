@@ -6,7 +6,7 @@ load("//bzl/js:js.bzl", "js_binary")
 # When building a native node-addon to polyfill opengl in node, use this platform.
 label_flag(
     name = "node-opengl-polyfill-platform",
-    build_setting_default = "@local_execution_config_platform//:platform",
+    build_setting_default = "@local_config_platform_custom//:host",
 )
 
 js_binary(
