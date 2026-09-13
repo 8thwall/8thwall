@@ -48,6 +48,7 @@ const SceneStateContext: React.FC<ISceneStateContext> = ({
   const [currentPanelSection, setCurrentPanelSection] = React
     .useState<PanelSection>(selectedIds.length ? PanelSelection.INSPECTOR : PanelSelection.SETTINGS)
   const [sceneDiffOpen, setSceneDiffOpen] = React.useState(false)
+  const [renamingId, setRenamingId] = useStringUrlState('renamingId', null)
 
   const [currentBrowserSection, setCurrentBrowserSection] = React.useState<FileBrowserSection>(
     'files'
@@ -87,7 +88,12 @@ const SceneStateContext: React.FC<ISceneStateContext> = ({
     restartKey,
     fileBrowserScroller,
     sceneDiffOpen,
+    renamingId,
   }
+
+  React.useEffect(() => {
+    console.log(renamingId)
+  }, [renamingId])
 
   // NOTE(christoph+chloe): This stores the most recent update made to the state. It handles the
   // case where the state is updated multiple times in the same render, which makes the studioState
@@ -141,6 +147,7 @@ const SceneStateContext: React.FC<ISceneStateContext> = ({
     setCurrentBrowserSection(newState.currentBrowserSection)
     setRestartKey(newState.restartKey)
     setSceneDiffOpen(newState.sceneDiffOpen)
+    setRenamingId(newState.renamingId)
   })
 
   const setSelectedIdsUnique = (setter: (prev: DeepReadonly<string[]>) => string[]) => {

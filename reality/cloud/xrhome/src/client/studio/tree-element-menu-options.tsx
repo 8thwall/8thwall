@@ -25,11 +25,11 @@ import {useActiveRoot} from '../hooks/use-active-root'
 interface ITreeElementMenuOptions {
   id: string
   collapse: () => void
-  onRename?: () => void
+  excludeRename?: boolean
 }
 
 const TreeElementMenuOptions: React.FC<ITreeElementMenuOptions> = ({
-  id, collapse, onRename,
+  id, collapse, excludeRename = false,
 }) => {
   const {t} = useTranslation(['cloud-studio-pages', 'common'])
 
@@ -89,9 +89,9 @@ const TreeElementMenuOptions: React.FC<ITreeElementMenuOptions> = ({
       content: t('tree_element_context_menu.button.new_object'),
       options: newObjectOptions,
     },
-    onRename && {
+    !excludeRename && {
       content: t('tree_element_context_menu.button.rename'),
-      onClick: onRename,
+      onClick: () => stateCtx.update({renamingId: id}),
     },
     canDuplicate && {
       content: t('tree_element_context_menu.button.duplicate'),
