@@ -233,10 +233,12 @@ cc_library(
         "-DHAVE_UNISTD_H=1",
         "-DHAVE_FCNTL_H=1",
         "-DHAVE_STDINT_H=1",
-        "-Iexternal/org_freetype_freetype2/builds/unix",
-        "-Iexternal/org_freetype_freetype2/include/freetype/config",
     ],
-    includes = ["include"],
+    includes = [
+        "builds/unix",
+        "include",
+        "include/freetype/config",
+    ],
     visibility = ["//visibility:public"],
     deps = [
         "@png",

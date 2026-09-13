@@ -21,9 +21,8 @@ cc_library {
     "//c8/string:strcat",
     "@libgit2//:libgit2",
   };
-  copts = {"-Iexternal/libgit2/src"};
 }
-cc_end(0xc44e3519);
+cc_end(0x29d22669);
 
 #include <capnp/pretty-print.h>
 #include <git2.h>

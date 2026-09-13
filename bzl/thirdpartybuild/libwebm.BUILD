@@ -36,7 +36,6 @@ cc_library(
         "mkvparser/mkvreader.h",
     ],
     copts = [
-        "-Iexternal/libwebm",
         "-std=c++17",
     ],
     includes = [
@@ -56,10 +55,9 @@ cc_library(
     hdrs = glob([
         "webm_parser/include/webm/*.h",
     ]),
-    copts = [
-        "-Iexternal/libwebm/webm_parser",
-    ],
+    copts = ["-std=c++17"],
     includes = [
+        "webm_parser",
         "webm_parser/include",
     ],
     visibility = ["//visibility:public"],

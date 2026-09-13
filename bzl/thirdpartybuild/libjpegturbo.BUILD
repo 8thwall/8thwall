@@ -156,7 +156,6 @@ cc_library(
         "turbojpeg.h",
     ],
     copts = libjpegturbo_copts + [
-        "-Iexternal/libjpegturbo",
         "-DBMP_SUPPORTED",
         "-DPPM_SUPPORTED",
     ],

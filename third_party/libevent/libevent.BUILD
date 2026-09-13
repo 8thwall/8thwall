@@ -145,9 +145,6 @@ cc_library(
         ":public-headers",
     ],
     copts = [
-        "-Iexternal/libevent",
-        "-Iexternal/libevent/compat",
-        "-Iexternal/libevent/include",
         "-fno-strict-aliasing",
         "-Wno-unneeded-internal-declaration",
         "-Wno-implicit-function-declaration",
@@ -160,7 +157,11 @@ cc_library(
         "-Wno-empty-translation-unit",
         "-Wno-everything",  # Needed to silence comparison between pointer and integer.
     ],
-    includes = ["include"],
+    includes = [
+        ".",
+        "compat",
+        "include",
+    ],
     linkopts = select({
         "@the8thwall//bzl/conditions:windows": [
             "-lws2_32",

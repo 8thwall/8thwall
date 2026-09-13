@@ -17,9 +17,8 @@ cc_library {
     "//c8/string:strcat",
     "@libgit2//:libgit2",
   };
-  copts = {"-Iexternal/libgit2/src"};
 }
-cc_end(0x0bc86e0b);
+cc_end(0x473967d7);
 
 #include <git2.h>
 

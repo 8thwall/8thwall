@@ -57,9 +57,6 @@ cc_library(
         "Jolt/Physics/SoftBody/*.h",
         "Jolt/Physics/Vehicle/*.h",
     ]),
-    copts = [
-        "-Iexternal/joltphysics",
-    ],
     includes = [
         ".",
     ],

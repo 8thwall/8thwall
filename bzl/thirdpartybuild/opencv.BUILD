@@ -351,10 +351,10 @@ nia_objc_library(
         "modules/videoio/include/**/*.hpp",
     ]),
     copts = [
-        "-Iexternal/opencv/modules/videoio/include",
         "-D__OPENCV_BUILD",
         "-fno-objc-arc",
     ],
+    includes = ["modules/videoio/include"],
     deps = [
         ":core",
         ":imgcodecs",
@@ -372,10 +372,10 @@ nia_objc_library(
         "modules/highgui/include/**/*.hpp",
     ]),
     copts = [
-        "-Iexternal/opencv/modules/highgui/include",
         "-D__OPENCV_BUILD",
         "-fno-objc-arc",
     ],
+    includes = ["modules/highgui/include"],
     deps = [
         ":core",
         ":imgcodecs",

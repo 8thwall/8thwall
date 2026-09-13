@@ -5,7 +5,7 @@
 #include <memory>
 
 #include "c8/pixels/pixel-buffer.h"
-#include "external/png/png.h"
+#include "png.h"
 
 namespace c8 {
 class PngBufferReader {

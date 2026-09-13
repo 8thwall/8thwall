@@ -255,16 +255,16 @@ cc_library(
         "include/opus_types.h",
     ],
     copts = [
-        "-Iexternal/opus",
-        "-Iexternal/opus/silk",
-        "-Iexternal/opus/silk/float",
-        "-Iexternal/opus/celt",
         "-DUSE_ALLOCA",
         "-DOPUS_BUILD",
         "-Wno-#warnings",
     ],
     includes = [
+        ".",
+        "celt",
         "include",
+        "silk",
+        "silk/float",
     ],
     visibility = ["//visibility:public"],
     deps = [

@@ -12,9 +12,8 @@ cc_library {
     "//c8:vector",
     "@libgit2//:libgit2",
   };
-  copts = {"-Iexternal/libgit2/src"};
 }
-cc_end(0x6aa9b8bf);
+cc_end(0x193e445a);
 
 #include <git2.h>
 #include <git2/oid.h>

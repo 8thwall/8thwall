@@ -49,10 +49,10 @@ cc_end(0xfe753c31);
 #include "c8/string.h"
 #include "c8/string/contains.h"
 #include "c8/string/strcat.h"
-#include "external/libjpegturbo/turbojpeg.h"
-#include "external/png/png.h"
 #include "image-io.h"
+#include "png.h"
 #include "third_party/easy-gif-reader/easy-gif-reader.h"
+#include "turbojpeg.h"
 
 namespace c8 {
 
