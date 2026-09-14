@@ -3,7 +3,7 @@
 module.exports = {
   diff: true,
   extension: ['js', 'ts'],
-  require: ['esm', 'ts-mocha', 'test/mocha.env', 'tsconfig-paths/register'],
+  "node-option": ["import=tsx"],
   slow: 75,
   timeout: 2000,
   colors: true,

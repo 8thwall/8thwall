@@ -3,7 +3,7 @@ import uuidv4 from 'uuid/v4'
 
 let analysisWorker_: Worker = null
 
-const requests: Record<string, (d: unknown) => void> = {}
+const requests: Record<string, (d: ParsedComponents) => void> = {}
 
 // Worker is initialized on first use.
 const getWorker = () => {
