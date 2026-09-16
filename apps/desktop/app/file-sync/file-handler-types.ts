@@ -12,14 +12,14 @@ const FilePushParams = z.object({
   path: z.string().nonempty(),
 })
 
-type IFilePushParams= z.infer<typeof FilePushParams>
+type IFilePushParams = z.infer<typeof FilePushParams>
 
 const FileDeleteParams = z.object({
   appKey: z.string().nonempty(),
   path: z.string().nonempty(),
 })
 
-type IFileDeleteParams= z.infer<typeof FileDeleteParams>
+type IFileDeleteParams = z.infer<typeof FileDeleteParams>
 
 const FileStateParams = z.object({
   appKey: z.string().nonempty(),
