@@ -2,17 +2,17 @@
   "name": "@8thwall/desktop",
   "version": "1.0.1",
   "description": "",
-  "main": "app/dist/_start.js",
+  "main": "dist/_start.js",
   "engines": {
     "node": "22.x"
   },
   "scripts": {
-    "app:build": "./app-build.sh",
-    "app:start": "DEPLOY_STAGE=dev BUILDER_COMMAND=start ./app-package.sh",
-    "make:prod:mac": "PLATFORM=mac DEPLOY_STAGE=prod BUILDER_COMMAND=build ./app-package.sh",
-    "make:prod:win": "PLATFORM=win DEPLOY_STAGE=prod BUILDER_COMMAND=build ./app-package.sh",
-    "publish:prod:mac": "PLATFORM=mac DEPLOY_STAGE=prod BUILDER_COMMAND=publish ./app-package.sh",
-    "publish:prod:win": "PLATFORM=win DEPLOY_STAGE=prod BUILDER_COMMAND=publish ./app-package.sh",
+    "app:build": "./tools/app-build.sh",
+    "app:start": "./tools/app-package.sh start dev",
+    "make:prod:mac": "./tools/app-package.sh build prod mac",
+    "make:prod:win": "./tools/app-package.sh build prod win",
+    "publish:prod:mac": "./tools/app-package.sh publish prod mac",
+    "publish:prod:win": "./tools/app-package.sh publish prod win",
     "postinstall": "patch-package",
     "inliner": "./tools/inliner.sh"
   },

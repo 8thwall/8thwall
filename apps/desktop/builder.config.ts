@@ -34,7 +34,7 @@ export default {
     onlyLoadAppFromAsar: true,
   },
   files: [
-    'app/dist/**/*',
+    'dist/**/*',
     'node_modules/**/*',
     '!node_modules/npm/**/*',
     '!node_modules/**/test/**/*',
@@ -96,7 +96,7 @@ export default {
     target: 'nsis',
     icon: 'assets/icon.ico',
     signtoolOptions: {
-      sign: './windows-sign.js',
+      sign: './tools/windows-sign.js',
     },
   },
   nsis: {
