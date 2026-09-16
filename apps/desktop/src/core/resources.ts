@@ -3,7 +3,7 @@ import path from 'path'
 
 const RESOURCES_PATH = app.isPackaged
   ? process.resourcesPath
-  : path.resolve(__dirname, '../..', 'build_package')
+  : path.resolve(process.cwd(), 'build_package')
 
 const NODE_MODULES_PATH = app.isPackaged
   ? path.resolve(process.resourcesPath, 'app.asar.unpacked', 'node_modules')
@@ -17,7 +17,7 @@ const CLIENT_DIST_PATH = app.isPackaged
   // In packaged app, desktop-dist should be in Resources directory (outside asar)
   ? path.resolve(process.resourcesPath, 'desktop-dist')
   // In development, use the original path
-  : path.resolve(__dirname, '../../../../reality/cloud/xrhome/desktop-dist')
+  : path.resolve(process.cwd(), '../../reality/cloud/xrhome/desktop-dist')
 
 export {
   RESOURCES_PATH,
