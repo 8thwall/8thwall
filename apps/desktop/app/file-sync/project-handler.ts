@@ -148,7 +148,7 @@ const checkProjectMigrated = async (projectPath: string): Promise<boolean> => {
     if (inlineRuntimeFolder.isDirectory()) {
       return true
     }
-  } catch (err) {
+  } catch {
     // No inline folder
   }
 
@@ -159,7 +159,7 @@ const checkProjectMigrated = async (projectPath: string): Promise<boolean> => {
     if (packages['@8thwall/ecs']) {
       return true
     }
-  } catch (err) {
+  } catch {
     // No package/invalid package
   }
 
@@ -207,7 +207,7 @@ const openDiskLocation = withErrorHandlingResponse(async (req) => {
     })
   }
 
-  let isValid = false
+  let isValid: boolean
   try {
     isValid = (await fs.stat(path.join(projectPath, 'src/.expanse.json'))).isFile()
   } catch (error: any) {
@@ -535,7 +535,7 @@ const isValidNewLocation = async (newLocation: string) => {
     if (visibleContents.length > 0) {
       const itemsList = visibleContents.join(', ')
       const message = `The provided path already exists and is not empty: ${newLocation} ` +
-          `(contains: ${itemsList})`
+        `(contains: ${itemsList})`
       throw makeCodedError(message, 409)
     }
   } catch (error: any) {
@@ -638,7 +638,7 @@ const handleProjectMigratePost = withErrorHandlingResponse(async (req: Request) 
   }
 
   let shouldUpdateIndexHtml = false
-  let foldersToDelete: string[] = []
+  let foldersToDelete: string[]
 
   switch (project.initialization) {
     case 'done':
@@ -807,7 +807,7 @@ const getProjectConfig = withErrorHandlingResponse(async (req: Request) => {
     needsCopyPluginFix = configContent.includes(BAD_COPY_PLUGIN_CONFIG)
     needsDevSocketFix = configContent.includes(BAD_DEV_SOCKET_CONFIG)
     missingDev8 = !configContent.includes('dev8')
-  } catch (error) {
+  } catch {
     // Ignore
   }
 

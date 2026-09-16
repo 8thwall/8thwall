@@ -51,7 +51,7 @@ const createLocalServer = async (
         }),
       })
       return res.status === 200
-    } catch (error) {
+    } catch {
       return false
     }
   }
@@ -84,7 +84,7 @@ const createLocalServer = async (
     try {
       const isRunning = await localServerCheck()
       return isRunning ? `${LOCAL_BUILD_URL_BASE}${primaryPort}` : ''
-    } catch (error) {
+    } catch {
       return ''
     }
   }

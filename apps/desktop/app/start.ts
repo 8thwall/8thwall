@@ -156,26 +156,28 @@ if (app.setAsDefaultProtocolClient(protocolName)) {
   log.error('Failed to register as default protocol client')
 }
 
-app.whenReady()
-  .then(async () => {
-    registerDesktopAppHandler(distRoot)
-    registerFileSyncHandler()
-    registerPreferencesHandler()
-    registerImageTargetsHandler()
-    maybeUpdateOnBeforeRequest()
+const handleReady = () => {
+  registerDesktopAppHandler(distRoot)
+  registerFileSyncHandler()
+  registerPreferencesHandler()
+  registerImageTargetsHandler()
+  maybeUpdateOnBeforeRequest()
 
-    const win = createWindow()
+  const win = createWindow()
 
-    setupMenu()
+  setupMenu()
 
-    win.webContents.on('did-finish-load', () => {
-      setUpMainFileWatchPort(win)
-      setUpSystemLogPort(win)
-      setupDev8SocketPort(win)
-      navigateToDeepLink(win, process.argv.pop() || '')
-    })
-
-    if (app.isPackaged) {
-      setupAutoUpdater(win)
-    }
+  win.webContents.on('did-finish-load', () => {
+    setUpMainFileWatchPort(win)
+    setUpSystemLogPort(win)
+    setupDev8SocketPort(win)
+    navigateToDeepLink(win, process.argv.pop() || '')
   })
+
+  if (app.isPackaged) {
+    setupAutoUpdater(win)
+  }
+}
+
+await app.whenReady()
+handleReady()

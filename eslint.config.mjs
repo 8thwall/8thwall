@@ -230,6 +230,13 @@ export default [
     },
   },
   {
+    files: ['apps/desktop/new-project/**'],
+    rules: {
+      '@typescript-eslint/no-unused-vars': 'off',
+      'no-console': 'off',
+    },
+  },
+  {
     files: ['reality/cloud/xrhome/test/**'],
     languageOptions: {
       globals: {

@@ -38,7 +38,7 @@ const runScript = (options: ScriptRunOptions): Process => {
     }
   } catch (error) {
     log.error('Failed to read package.json:', error)
-    throw new Error('Failed to read package.json')
+    throw new Error('Failed to read package.json', {cause: error})
   }
 
   if (!scriptCommand) {

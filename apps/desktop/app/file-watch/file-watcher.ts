@@ -1,4 +1,4 @@
-import chokidar from 'chokidar'
+import * as chokidar from 'chokidar'
 import log from 'electron-log'
 import fs from 'fs'
 import path from 'path'
