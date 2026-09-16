@@ -33,13 +33,13 @@ const initDb = (location: string) => {
     // Add 'initialization' column exists for migration
     db.exec('ALTER TABLE projects ADD COLUMN initialization TEXT')
     db.exec('UPDATE projects SET initialization = \'done\' WHERE initialization IS NULL')
-  } catch (error: any) {
+  } catch {
     // ignore, initialization column already exists
   }
 
   try {
     db.exec('ALTER TABLE projects ADD COLUMN accessedAt INTEGER')
-  } catch (error: any) {
+  } catch {
     // ignore, accessedAt column already exists
   }
 
