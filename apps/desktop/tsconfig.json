@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "es2020",
     "lib": [
-      "esnext"
+      "esnext", "dom",
     ],
     "allowJs": true,
     "skipLibCheck": true,
@@ -23,12 +23,10 @@
   },
   "include": [
     ".",
-    "../../reality/shared",
-    "../../reality/cloud/xrhome/src/shared",
   ],
   "exclude": [
     "out",
-    "node_modules",
-    "dist"
+    "**/node_modules",
+    "**/dist",
   ],
 }
