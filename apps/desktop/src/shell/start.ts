@@ -4,7 +4,6 @@
 // @attr(target = "node")
 // @attr(externals = "electron, sharp")
 
-import path from 'path'
 import {app, BrowserWindow, protocol, dialog, ipcMain} from 'electron'
 import {autoUpdater} from 'electron-updater'
 import log from 'electron-log'
@@ -26,6 +25,7 @@ import {setupMenu} from './menu'
 import {IMAGE_TARGETS_SCHEME, registerImageTargetsHandler} from '../image-targets/protocol'
 import {setUpSystemLogPort} from '../system-log/ports'
 import {setupDev8SocketPort} from '../dev8-socket/ports'
+import {PRELOAD_PATH} from '../core/resources'
 
 const UPDATE_CHECK_INTERVAL = 60 * 60 * 1000
 
@@ -63,16 +63,6 @@ if (!gotTheLock) {
   process.exit(0)
 }
 
-const distRoot = (() => {
-  if (app.isPackaged) {
-    // In packaged app, desktop-dist should be in Resources directory (outside asar)
-    return path.resolve(process.resourcesPath, 'desktop-dist')
-  } else {
-    // In development, use the original path
-    return path.resolve(__dirname, '../../../../reality/cloud/xrhome/desktop-dist')
-  }
-})()
-
 try {
   // Write to ~/Library/Application Support/desktop (or 8th Wall on prod) on mac
   const userDataPath = app.getPath('userData')
@@ -92,7 +82,7 @@ const createWindow = () => {
     minWidth: 900,
     minHeight: 700,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
+      preload: PRELOAD_PATH,
       devTools: !process.env.RELEASE,
     },
     frame: false,
@@ -157,7 +147,7 @@ if (app.setAsDefaultProtocolClient(protocolName)) {
 }
 
 const handleReady = () => {
-  registerDesktopAppHandler(distRoot)
+  registerDesktopAppHandler()
   registerFileSyncHandler()
   registerPreferencesHandler()
   registerImageTargetsHandler()

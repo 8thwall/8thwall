@@ -5,6 +5,7 @@ import path from 'path'
 import {ELECTRON_PROTOCOL} from '@repo/reality/shared/desktop/create-electron-url'
 
 import {withErrorHandlingResponse} from '../transport/errors'
+import {CLIENT_DIST_PATH} from '../core/resources'
 
 // NOTE(cindyhu): /v1/repos is called in g8 worker to clone repo. libgit2 does not support
 // custom protocol, so we need to modify headers to support fake https server redirect
@@ -21,11 +22,11 @@ const DESKTOP_SCHEME: CustomScheme = {
   },
 }
 
-const registerDesktopAppHandler = (distRoot: string) => {
+const registerDesktopAppHandler = () => {
   protocol.handle('desktop', withErrorHandlingResponse(async (request) => {
     const {host, pathname} = new URL(request.url)
     if (host === 'dist') {
-      const filePath = path.join(distRoot, pathname)
+      const filePath = path.join(CLIENT_DIST_PATH, pathname)
       const data = fs.createReadStream(filePath)
       const mimeType = mime.lookup(filePath) || 'application/octet-stream'
       return new Response(data, {

@@ -9,6 +9,9 @@ js_library(
     srcs = [
         "application-state.ts",
     ],
+    deps = [
+        "//apps/desktop/src/core:resources",
+    ],
 )
 
 js_library(

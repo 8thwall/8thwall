@@ -16,6 +16,7 @@ js_binary(
     deps = [
         "//apps/desktop/src/core:application-state",
         "//apps/desktop/src/core:desktop-protocol",
+        "//apps/desktop/src/core:resources",
         "//apps/desktop/src/dev8-socket:ports",
         "//apps/desktop/src/file-sync:protocol",
         "//apps/desktop/src/file-watch:ports",
@@ -79,6 +80,7 @@ js_library(
         "protocol.ts",
     ],
     deps = [
+        "//apps/desktop/src/core:resources",
         "//apps/desktop/src/transport:errors",
         "//reality/shared/desktop:create-electron-url",
     ],

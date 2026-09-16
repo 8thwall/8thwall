@@ -1,9 +1,9 @@
 import Database, {Database as SqliteDatabase} from 'better-sqlite3'
 import path from 'path'
 import {mkdirSync} from 'fs'
-import {app} from 'electron'
+import {NODE_MODULES_PATH} from './resources'
 
-const BETTER_SQLITE3_NODE_PATH = 'node_modules/better-sqlite3/build/Release/better_sqlite3.node'
+const BETTER_SQLITE3_NODE_PATH = 'better-sqlite3/build/Release/better_sqlite3.node'
 
 let db: SqliteDatabase
 
@@ -12,13 +12,9 @@ const initDb = (location: string) => {
 
   mkdirSync(location, {recursive: true})
 
-  const nativeBinding = app.isPackaged
-    ? path.resolve(process.resourcesPath, 'app.asar.unpacked', BETTER_SQLITE3_NODE_PATH)
-    : path.resolve(process.cwd(), BETTER_SQLITE3_NODE_PATH)
-
   db = new Database(dbPath, {
     readonly: false,
-    nativeBinding,
+    nativeBinding: path.resolve(NODE_MODULES_PATH, BETTER_SQLITE3_NODE_PATH),
   })
 
   db.exec(`
