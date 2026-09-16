@@ -17,7 +17,7 @@ const CLIENT_DIST_PATH = app.isPackaged
   // In packaged app, desktop-dist should be in Resources directory (outside asar)
   ? path.resolve(process.resourcesPath, 'desktop-dist')
   // In development, use the original path
-  : path.resolve(__dirname, '../../../reality/cloud/xrhome/desktop-dist')
+  : path.resolve(__dirname, '../../../../reality/cloud/xrhome/desktop-dist')
 
 export {
   RESOURCES_PATH,
