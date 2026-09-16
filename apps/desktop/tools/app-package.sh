@@ -14,9 +14,6 @@ else
   fi
 fi
 
-echo "BUILDER_COMMAND: $BUILDER_COMMAND, DEPLOY_STAGE=$DEPLOY_STAGE, PLATFORM=$PLATFORM"
-# exit 0
-
 if [ -z "$DEPLOY_STAGE" ]; then
   echo "Error: DEPLOY_STAGE environment variable is required"
   exit 1
