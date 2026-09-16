@@ -2,7 +2,8 @@
   "compilerOptions": {
     "target": "es2020",
     "lib": [
-      "esnext"
+      "esnext",
+      "dom",
     ],
     "allowJs": true,
     "skipLibCheck": true,
@@ -14,10 +15,19 @@
     "moduleResolution": "Bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
+    "noEmit": true,
     "paths": {
       "@repo/*": [
         "../../*"
       ],
     },
-  }
+  },
+  "include": [
+    ".",
+  ],
+  "exclude": [
+    "out",
+    "**/node_modules",
+    "**/dist",
+  ],
 }

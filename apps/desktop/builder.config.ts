@@ -6,7 +6,7 @@
 // @attr(esnext = 1)
 // @attr(commonjs = 1)
 
-import {STUDIO_HUB_PROTOCOL} from './app/desktop-protocol'
+import {STUDIO_HUB_PROTOCOL} from './src/core/desktop-protocol'
 
 const {RELEASE} = process.env
 

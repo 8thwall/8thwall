@@ -3,8 +3,8 @@ set -e
 
 mkdir -p app/dist
 
-bazel build //apps/desktop/app:start
-cp ../../bazel-bin/apps/desktop/app/start.js app/dist/start.js
+bazel build //apps/desktop/src/shell:start
+cp ../../bazel-bin/apps/desktop/src/shell/start.js app/dist/start.js
 
 bazel build //apps/desktop/new-project
 mkdir -p build_package
@@ -20,7 +20,7 @@ Object.assign(process.env, {
 require('./start.js')
 EOF
 
-bazel build //apps/desktop/app:preload
-cp ../../bazel-bin/apps/desktop/app/preload.js app/dist/preload.js
+bazel build //apps/desktop/src/shell:preload
+cp ../../bazel-bin/apps/desktop/src/shell/preload.js app/dist/preload.js
 
 bazel build //apps/desktop:builder
