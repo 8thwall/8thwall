@@ -6,16 +6,16 @@ import type {Project} from '@repo/reality/shared/desktop/local-sync-types'
 import {applyCrop} from '@repo/apps/image-target-cli/src/apply'
 import sharp, {Sharp} from 'sharp'
 
-import {makeCodedError, withErrorHandlingResponse} from '../../errors'
-import {branches, methods, RequestHandler} from '../../requests'
-import {getLocalProject} from '../../local-project-db'
-import {makeJsonResponse} from '../../json-response'
+import {makeCodedError, withErrorHandlingResponse} from '../plumbing/errors'
+import {branches, methods, RequestHandler} from '../plumbing/requests'
+import {getLocalProject} from '../storage/local-project-db'
+import {makeJsonResponse} from '../plumbing/json-response'
 import {
   GetTextureParams, ListTargetsParams, UploadTargetParams, CropResult, DeleteTargetParams,
   UpdateTargetRequest, ImageTargetDataSchema,
 } from './image-target-types'
-import {makeStreamFileResponse} from '../../stream-file-response'
-import {getQueryParams} from '../../query-params'
+import {makeStreamFileResponse} from '../plumbing/stream-file-response'
+import {getQueryParams} from '../plumbing/query-params'
 
 const loadProject = async (appKey: string) => {
   const project = getLocalProject(appKey)

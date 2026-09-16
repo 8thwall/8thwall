@@ -4,7 +4,7 @@ import JsZip from 'jszip'
 
 import {makeRunQueue} from '@repo/reality/shared/run-queue'
 
-import {NEW_PROJECT_ZIP_PATH} from '../resources'
+import {NEW_PROJECT_ZIP_PATH} from '../native/resources'
 
 type FileFilter = (filePath: string) => boolean
 

@@ -1,4 +1,4 @@
-import {getDb} from './application-state'
+import {getDb} from '../storage/application-state'
 
 const getPreference = (key: string): string | undefined => {
   const row = getDb().prepare<[string], {value: string}>(

@@ -1,6 +1,6 @@
 import type {BrowserWindow} from 'electron'
 
-import {STUDIO_HUB_PROTOCOL} from '../desktop-protocol'
+import {STUDIO_HUB_PROTOCOL} from './desktop-protocol'
 import {ensureWindowOnTop} from './window-visibility'
 
 const navigateToDeepLink = (win: BrowserWindow, url: string) => {

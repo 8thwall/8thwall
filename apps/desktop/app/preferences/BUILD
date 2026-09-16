@@ -10,11 +10,11 @@ js_library(
         "preferences-handler.ts",
     ],
     deps = [
-        "//apps/desktop:errors",
-        "//apps/desktop:json-response",
-        "//apps/desktop:local-preferences",
-        "//apps/desktop:requests",
+        "//apps/desktop/app/plumbing:errors",
+        "//apps/desktop/app/plumbing:json-response",
+        "//apps/desktop/app/plumbing:requests",
         "//apps/desktop/app/preferences:code-editor",
+        "//apps/desktop/app/preferences:local-preferences",
         "//reality/shared/desktop:preferences-types",
     ],
 )
@@ -35,8 +35,18 @@ js_library(
         "code-editor.ts",
     ],
     deps = [
-        "//apps/desktop:local-preferences",
+        "//apps/desktop/app/preferences:local-preferences",
         "//reality/shared:run-queue",
         "//reality/shared/desktop:preferences-types",
+    ],
+)
+
+js_library(
+    name = "local-preferences",
+    srcs = [
+        "local-preferences.ts",
+    ],
+    deps = [
+        "//apps/desktop/app/storage:application-state",
     ],
 )

@@ -5,8 +5,8 @@ import path from 'path'
 import type {LocalSyncMessage, UnixPath} from '@repo/reality/shared/desktop/local-sync-types'
 import {toUnixPath} from '@repo/reality/shared/desktop/unix-path'
 
-import {getLocalProject} from '../../local-project-db'
-import {getProjectSrcPath, isIgnoredFile, isAssetPath} from '../../project-helpers'
+import {getLocalProject} from '../storage/local-project-db'
+import {getProjectSrcPath, isIgnoredFile, isAssetPath} from '../file-sync/project-helpers'
 
 type FileWatcher = {
   start: () => void

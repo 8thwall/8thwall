@@ -12,16 +12,16 @@ js_library(
     ],
     deps = [
         "//apps/desktop:constants",
-        "//apps/desktop:errors",
-        "//apps/desktop:json-response",
-        "//apps/desktop:local-project-db",
-        "//apps/desktop:project-helpers",
-        "//apps/desktop:query-params",
-        "//apps/desktop:requests",
-        "//apps/desktop:stream-file-response",
         "//apps/desktop/app/file-sync:file-handler-types",
         "//apps/desktop/app/file-sync:paths",
+        "//apps/desktop/app/file-sync:project-helpers",
+        "//apps/desktop/app/plumbing:errors",
+        "//apps/desktop/app/plumbing:json-response",
+        "//apps/desktop/app/plumbing:query-params",
+        "//apps/desktop/app/plumbing:requests",
+        "//apps/desktop/app/plumbing:stream-file-response",
         "//apps/desktop/app/preferences:code-editor",
+        "//apps/desktop/app/storage:local-project-db",
         "//reality/shared/desktop:local-sync-types",
         "//reality/shared/desktop:unix-path",
     ],
@@ -33,17 +33,17 @@ js_library(
         "project-handler.ts",
     ],
     deps = [
-        "//apps/desktop:errors",
-        "//apps/desktop:json-response",
-        "//apps/desktop:local-project-db",
-        "//apps/desktop:local-server",
-        "//apps/desktop:query-params",
-        "//apps/desktop:requests",
         "//apps/desktop/app/file-sync:create-project-files",
+        "//apps/desktop/app/file-sync:local-server",
         "//apps/desktop/app/file-sync:paths",
         "//apps/desktop/app/file-sync:project-handler-types",
         "//apps/desktop/app/file-sync:run-commands",
+        "//apps/desktop/app/plumbing:errors",
+        "//apps/desktop/app/plumbing:json-response",
+        "//apps/desktop/app/plumbing:query-params",
+        "//apps/desktop/app/plumbing:requests",
         "//apps/desktop/app/preferences:code-editor",
+        "//apps/desktop/app/storage:local-project-db",
         "//c8/ecs/src/shared:runtime-version",
         "//reality/shared:run-queue",
         "//reality/shared/desktop:local-sync-types",
@@ -89,7 +89,7 @@ js_library(
         "create-project-files.ts",
     ],
     deps = [
-        "//apps/desktop/app:resources",
+        "//apps/desktop/app/native:resources",
         "//reality/shared:run-queue",
     ],
 )
@@ -107,8 +107,8 @@ js_library(
         "run-commands.ts",
     ],
     deps = [
-        "//apps/desktop:process",
-        "//apps/desktop/app:resources",
+        "//apps/desktop/app/file-sync:process",
+        "//apps/desktop/app/native:resources",
         "//apps/desktop/app/system-log:listeners",
         "//reality/cloud/xrhome/src/shared:time-utils",
     ],
@@ -118,5 +118,37 @@ js_library(
     name = "local-proxy",
     srcs = [
         "local-proxy.ts",
+    ],
+)
+
+js_library(
+    name = "local-server",
+    srcs = [
+        "local-server.ts",
+    ],
+    deps = [
+        "//apps/desktop:constants",
+        "//apps/desktop/app/dev8-socket:dev8-socket-server",
+        "//apps/desktop/app/file-sync:local-proxy",
+        "//apps/desktop/app/file-sync:run-commands",
+        "//apps/desktop/app/system-log:listeners",
+        "//c8/cli:ip",
+    ],
+)
+
+js_library(
+    name = "process",
+    srcs = [
+        "process.ts",
+    ],
+)
+
+js_library(
+    name = "project-helpers",
+    srcs = [
+        "project-helpers.ts",
+    ],
+    deps = [
+        "//reality/shared/desktop:unix-path",
     ],
 )

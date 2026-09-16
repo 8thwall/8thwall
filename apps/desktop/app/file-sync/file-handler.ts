@@ -15,19 +15,19 @@ import {
 import {
   MAX_TEXT_FILE_UPLOAD_IN_BYTES,
 } from '../../constants'
-import {getProjectSrcPath, isIgnoredFile, isAssetPath} from '../../project-helpers'
-import {getLocalProject} from '../../local-project-db'
-import {makeCodedError, withErrorHandlingResponse} from '../../errors'
+import {getProjectSrcPath, isIgnoredFile, isAssetPath} from './project-helpers'
+import {getLocalProject} from '../storage/local-project-db'
+import {makeCodedError, withErrorHandlingResponse} from '../plumbing/errors'
 import {
   FILE_PATH, FILE_STATE_SNAPSHOT_PATH, FILE_METADATA_PATH, FILE_HASH_SHA256_PATH,
   FILE_SHOW_PATH, FILE_OPEN_PATH, FILE_DIRECTORY_PATH,
   FILE_RENAME_PATH,
 } from './paths'
-import {makeJsonResponse} from '../../json-response'
-import {getQueryParams} from '../../query-params'
+import {makeJsonResponse} from '../plumbing/json-response'
+import {getQueryParams} from '../plumbing/query-params'
 import {openInCodeEditor} from '../preferences/code-editor'
-import {createReadStreamPromise, makeStreamFileResponse} from '../../stream-file-response'
-import {branches, methods, RequestHandler} from '../../requests'
+import {createReadStreamPromise, makeStreamFileResponse} from '../plumbing/stream-file-response'
+import {branches, methods, RequestHandler} from '../plumbing/requests'
 
 const getLocalFile: RequestHandler = async (req) => {
   const requestUrl = new URL(req.url)

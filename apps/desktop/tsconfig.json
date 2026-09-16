@@ -14,10 +14,16 @@
     "moduleResolution": "Bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
+    "noEmit": true,
     "paths": {
       "@repo/*": [
         "../../*"
       ],
     },
-  }
+  },
+  "include": [
+    "app/start.ts",
+    "app/preload.ts",
+    "builder.config.ts"
+  ],
 }

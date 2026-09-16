@@ -4,9 +4,9 @@ import log from 'electron-log'
 
 import {MILLISECONDS_PER_MINUTE} from '@repo/reality/cloud/xrhome/src/shared/time-utils'
 
-import {NODE_MODULES_PATH} from '../resources'
+import {NODE_MODULES_PATH} from '../native/resources'
 import {forwardProcessOutput} from '../system-log/listeners'
-import {parseCommandString, Process, startProcess} from '../../process'
+import {parseCommandString, Process, startProcess} from './process'
 
 const NPM_CLI_PATH = path.join(NODE_MODULES_PATH, 'npm/bin/npm-cli.js')
 const EXEC_PATH: string = process.platform === 'darwin'

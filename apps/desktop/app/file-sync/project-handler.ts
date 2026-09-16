@@ -23,8 +23,8 @@ import {
   getLocalProjects, deleteLocalProject as deleteLocalProjectEntry,
   bumpProjectAccessedAt,
   getLocalProjectByLocation,
-} from '../../local-project-db'
-import {makeCodedError, withErrorHandlingResponse} from '../../errors'
+} from '../storage/local-project-db'
+import {makeCodedError, withErrorHandlingResponse} from '../plumbing/errors'
 import {
   PROJECT_INIT_PATH, PROJECT_LIST_PATH, PROJECT_DELETE_PATH, PROJECT_REVEAL_IN_FINDER_PATH,
   PROJECT_STATUS_PATH, PROJECT_WATCH_PATH, PROJECT_INSTALL_PATH,
@@ -38,13 +38,13 @@ import {
   PROJECT_RUNTIME_METADATA_PATH,
   PROJECT_CONFIG_PATH,
 } from './paths'
-import {makeJsonResponse} from '../../json-response'
-import {getQueryParams} from '../../query-params'
+import {makeJsonResponse} from '../plumbing/json-response'
+import {getQueryParams} from '../plumbing/query-params'
 import {projectSetup, unzipIntoFolder} from './create-project-files'
-import {createLocalServer, LocalServer} from '../../local-server'
+import {createLocalServer, LocalServer} from './local-server'
 import {openInCodeEditor} from '../preferences/code-editor'
 import {runBuildCommand, runInstallCommand} from './run-commands'
-import {branches, methods, RequestHandler} from '../../requests'
+import {branches, methods, RequestHandler} from '../plumbing/requests'
 
 const locationPrompt = async (): Promise<string | undefined> => {
   const res = await dialog.showOpenDialog({

@@ -31,8 +31,8 @@ js_library(
         "file-watcher.ts",
     ],
     deps = [
-        "//apps/desktop:local-project-db",
-        "//apps/desktop:project-helpers",
+        "//apps/desktop/app/file-sync:project-helpers",
+        "//apps/desktop/app/storage:local-project-db",
         "//reality/shared/desktop:local-sync-types",
         "//reality/shared/desktop:unix-path",
     ],

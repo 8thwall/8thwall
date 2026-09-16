@@ -4,7 +4,7 @@ import mime from 'mime-types'
 import path from 'path'
 import {ELECTRON_PROTOCOL} from '@repo/reality/shared/desktop/create-electron-url'
 
-import {withErrorHandlingResponse} from '../../errors'
+import {withErrorHandlingResponse} from '../plumbing/errors'
 
 // NOTE(cindyhu): /v1/repos is called in g8 worker to clone repo. libgit2 does not support
 // custom protocol, so we need to modify headers to support fake https server redirect

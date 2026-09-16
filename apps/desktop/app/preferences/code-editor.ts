@@ -7,7 +7,7 @@ import {spawn} from 'child_process'
 
 import {makeRunQueue} from '@repo/reality/shared/run-queue'
 
-import {getPreference} from '../../local-preferences'
+import {getPreference} from './local-preferences'
 
 type PathsByArch = Partial<Record<typeof process.platform, string | string[]>>
 

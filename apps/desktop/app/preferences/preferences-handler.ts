@@ -3,11 +3,11 @@ import type {
 } from '@repo/reality/shared/desktop/preferences-types'
 import {dialog} from 'electron'
 
-import {makeJsonResponse} from '../../json-response'
-import {getPreference, setPreference} from '../../local-preferences'
-import {withErrorHandlingResponse} from '../../errors'
+import {makeJsonResponse} from '../plumbing/json-response'
+import {getPreference, setPreference} from './local-preferences'
+import {withErrorHandlingResponse} from '../plumbing/errors'
 import {getAvailableEditors} from './code-editor'
-import {branches, methods, RequestHandler} from '../../requests'
+import {branches, methods, RequestHandler} from '../plumbing/requests'
 
 const loadPreferences = (): HubPreferences => {
   const codeEditorPath = getPreference('codeEditorProgram') || ''

@@ -5,11 +5,11 @@ import {guessIp} from '@repo/c8/cli/ip'
 
 import {
   DEV_SERVER_POLLING_INTERVAL, DEV_SERVER_POLLING_TIMEOUT,
-} from './constants'
-import {runServeCommand, runInstallCommand} from './app/file-sync/run-commands'
-import {dispatchSystemLog, forwardProcessOutput} from './app/system-log/listeners'
-import {startLocalProxy} from './app/file-sync/local-proxy'
-import {createDev8WebSocketServer} from './app/dev8-socket/dev8-socket-server'
+} from '../../constants'
+import {runServeCommand, runInstallCommand} from './run-commands'
+import {dispatchSystemLog, forwardProcessOutput} from '../system-log/listeners'
+import {startLocalProxy} from './local-proxy'
+import {createDev8WebSocketServer} from '../dev8-socket/dev8-socket-server'
 
 interface LocalServer {
   stop: () => Promise<void>
@@ -51,7 +51,7 @@ const createLocalServer = async (
         }),
       })
       return res.status === 200
-    } catch {
+    } catch (error) {
       return false
     }
   }
@@ -84,7 +84,7 @@ const createLocalServer = async (
     try {
       const isRunning = await localServerCheck()
       return isRunning ? `${LOCAL_BUILD_URL_BASE}${primaryPort}` : ''
-    } catch {
+    } catch (error) {
       return ''
     }
   }

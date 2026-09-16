@@ -6,7 +6,7 @@ import {contextBridge, ipcRenderer} from 'electron'
 import {ELECTRON_API_KEY, type ElectronApi} from '@repo/reality/shared/desktop/electron-api'
 
 import {createFileWatchApi} from './file-watch/api'
-import {STUDIO_HUB_PROTOCOL} from './desktop-protocol'
+import {STUDIO_HUB_PROTOCOL} from './native/desktop-protocol'
 import {createSystemLogApi} from './system-log/api'
 import {createDev8SocketApi} from './dev8-socket/api'
 
