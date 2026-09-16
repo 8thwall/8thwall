@@ -17,10 +17,10 @@ js_library(
         "local-server.ts",
     ],
     deps = [
-        "//apps/desktop/dev8-socket:dev8-socket-server",
-        "//apps/desktop/project:local-proxy",
-        "//apps/desktop/project:run-commands",
-        "//apps/desktop/system-log:listeners",
+        "//apps/desktop/src/dev8-socket:dev8-socket-server",
+        "//apps/desktop/src/project:local-proxy",
+        "//apps/desktop/src/project:run-commands",
+        "//apps/desktop/src/system-log:listeners",
         "//c8/cli:ip",
         "//reality/cloud/xrhome/src/shared:time-utils",
     ],
@@ -39,9 +39,9 @@ js_library(
         "run-commands.ts",
     ],
     deps = [
-        "//apps/desktop/core:resources",
-        "//apps/desktop/project:process",
-        "//apps/desktop/system-log:listeners",
+        "//apps/desktop/src/core:resources",
+        "//apps/desktop/src/project:process",
+        "//apps/desktop/src/system-log:listeners",
         "//reality/cloud/xrhome/src/shared:time-utils",
     ],
 )
@@ -52,7 +52,7 @@ js_library(
         "local-project-db.ts",
     ],
     deps = [
-        "//apps/desktop/core:application-state",
+        "//apps/desktop/src/core:application-state",
         "//reality/shared/desktop:local-sync-types",
     ],
 )

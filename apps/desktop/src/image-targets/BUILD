@@ -10,7 +10,7 @@ js_library(
         "protocol.ts",
     ],
     deps = [
-        "//apps/desktop/image-targets:image-target-handler",
+        "//apps/desktop/src/image-targets:image-target-handler",
     ],
 )
 
@@ -20,13 +20,13 @@ js_library(
         "image-target-handler.ts",
     ],
     deps = [
-        "//apps/desktop/image-targets:image-target-types",
-        "//apps/desktop/project:local-project-db",
-        "//apps/desktop/transport:errors",
-        "//apps/desktop/transport:json-response",
-        "//apps/desktop/transport:query-params",
-        "//apps/desktop/transport:requests",
-        "//apps/desktop/transport:stream-file-response",
+        "//apps/desktop/src/image-targets:image-target-types",
+        "//apps/desktop/src/project:local-project-db",
+        "//apps/desktop/src/transport:errors",
+        "//apps/desktop/src/transport:json-response",
+        "//apps/desktop/src/transport:query-params",
+        "//apps/desktop/src/transport:requests",
+        "//apps/desktop/src/transport:stream-file-response",
         "//apps/image-target-cli/src:apply",
         "//reality/shared:run-queue",
         "//reality/shared/desktop:image-target-api",

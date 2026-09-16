@@ -31,7 +31,7 @@ js_library(
         "ports.ts",
     ],
     deps = [
-        "//apps/desktop/system-log:listeners",
+        "//apps/desktop/src/system-log:listeners",
         "//reality/shared/desktop:system-log-types",
     ],
 )

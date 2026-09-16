@@ -24,7 +24,7 @@ js_library(
         "requests.ts",
     ],
     deps = [
-        "//apps/desktop/transport:errors",
+        "//apps/desktop/src/transport:errors",
     ],
 )
 
@@ -34,7 +34,7 @@ js_library(
         "stream-file-response.ts",
     ],
     deps = [
-        "//apps/desktop/transport:errors",
+        "//apps/desktop/src/transport:errors",
     ],
 )
 
@@ -44,6 +44,6 @@ js_library(
         "errors.ts",
     ],
     deps = [
-        "//apps/desktop/transport:json-response",
+        "//apps/desktop/src/transport:json-response",
     ],
 )

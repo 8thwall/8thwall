@@ -20,7 +20,7 @@ js_library(
         "ports.ts",
     ],
     deps = [
-        "//apps/desktop/file-watch:file-watcher",
+        "//apps/desktop/src/file-watch:file-watcher",
         "//reality/shared/desktop:local-sync-types",
     ],
 )
@@ -31,8 +31,8 @@ js_library(
         "file-watcher.ts",
     ],
     deps = [
-        "//apps/desktop/project:local-project-db",
-        "//apps/desktop/project:project-helpers",
+        "//apps/desktop/src/project:local-project-db",
+        "//apps/desktop/src/project:project-helpers",
         "//reality/shared/desktop:local-sync-types",
         "//reality/shared/desktop:unix-path",
     ],

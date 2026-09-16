@@ -10,7 +10,7 @@ js_library(
         "dev8-socket-server.ts",
     ],
     deps = [
-        "//apps/desktop/dev8-socket:listeners",
+        "//apps/desktop/src/dev8-socket:listeners",
         "//c8/ecs/src/shared:debug-messaging",
     ],
 )
@@ -44,7 +44,7 @@ js_library(
         "ports.ts",
     ],
     deps = [
-        "//apps/desktop/dev8-socket:listeners",
+        "//apps/desktop/src/dev8-socket:listeners",
         "//c8/ecs/src/shared:debug-messaging",
     ],
 )

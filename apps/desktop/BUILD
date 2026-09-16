@@ -22,6 +22,6 @@ js_binary(
     npm_rule = "@npm-desktop//:npm-desktop",
     target = "node",
     deps = [
-        "//apps/desktop/core:desktop-protocol",
+        "//apps/desktop/src/core:desktop-protocol",
     ],
 )

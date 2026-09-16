@@ -10,11 +10,11 @@ js_library(
         "preferences-handler.ts",
     ],
     deps = [
-        "//apps/desktop/preferences:code-editor",
-        "//apps/desktop/preferences:local-preferences",
-        "//apps/desktop/transport:errors",
-        "//apps/desktop/transport:json-response",
-        "//apps/desktop/transport:requests",
+        "//apps/desktop/src/preferences:code-editor",
+        "//apps/desktop/src/preferences:local-preferences",
+        "//apps/desktop/src/transport:errors",
+        "//apps/desktop/src/transport:json-response",
+        "//apps/desktop/src/transport:requests",
         "//reality/shared/desktop:preferences-types",
     ],
 )
@@ -25,7 +25,7 @@ js_library(
         "protocol.ts",
     ],
     deps = [
-        "//apps/desktop/preferences:preferences-handler",
+        "//apps/desktop/src/preferences:preferences-handler",
     ],
 )
 
@@ -35,7 +35,7 @@ js_library(
         "code-editor.ts",
     ],
     deps = [
-        "//apps/desktop/preferences:local-preferences",
+        "//apps/desktop/src/preferences:local-preferences",
         "//reality/shared:run-queue",
         "//reality/shared/desktop:preferences-types",
     ],
@@ -47,6 +47,6 @@ js_library(
         "local-preferences.ts",
     ],
     deps = [
-        "//apps/desktop/core:application-state",
+        "//apps/desktop/src/core:application-state",
     ],
 )

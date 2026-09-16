@@ -1,7 +1,7 @@
 load("//bzl/js:js.bzl", "js_binary", "js_library")
 
 package(default_visibility = [
-    "//apps/desktop/shell:__subpackages__",
+    "//apps/desktop/src/shell:__subpackages__",
 ])
 
 js_binary(
@@ -14,20 +14,20 @@ js_binary(
     npm_rule = "@npm-desktop//:npm-desktop",
     target = "node",
     deps = [
-        "//apps/desktop/core:application-state",
-        "//apps/desktop/core:desktop-protocol",
-        "//apps/desktop/dev8-socket:ports",
-        "//apps/desktop/file-sync:protocol",
-        "//apps/desktop/file-watch:ports",
-        "//apps/desktop/image-targets:protocol",
-        "//apps/desktop/preferences:protocol",
-        "//apps/desktop/shell:deep-link",
-        "//apps/desktop/shell:menu",
-        "//apps/desktop/shell:permissions",
-        "//apps/desktop/shell:protocol",
-        "//apps/desktop/shell:register-on-open-url-handler",
-        "//apps/desktop/shell:register-second-instance-handler",
-        "//apps/desktop/system-log:ports",
+        "//apps/desktop/src/core:application-state",
+        "//apps/desktop/src/core:desktop-protocol",
+        "//apps/desktop/src/dev8-socket:ports",
+        "//apps/desktop/src/file-sync:protocol",
+        "//apps/desktop/src/file-watch:ports",
+        "//apps/desktop/src/image-targets:protocol",
+        "//apps/desktop/src/preferences:protocol",
+        "//apps/desktop/src/shell:deep-link",
+        "//apps/desktop/src/shell:menu",
+        "//apps/desktop/src/shell:permissions",
+        "//apps/desktop/src/shell:protocol",
+        "//apps/desktop/src/shell:register-on-open-url-handler",
+        "//apps/desktop/src/shell:register-second-instance-handler",
+        "//apps/desktop/src/system-log:ports",
     ],
 )
 
@@ -40,10 +40,10 @@ js_binary(
     ],
     npm_rule = "@npm-desktop//:npm-desktop",
     deps = [
-        "//apps/desktop/core:desktop-protocol",
-        "//apps/desktop/dev8-socket:api",
-        "//apps/desktop/file-watch:api",
-        "//apps/desktop/system-log:api",
+        "//apps/desktop/src/core:desktop-protocol",
+        "//apps/desktop/src/dev8-socket:api",
+        "//apps/desktop/src/file-watch:api",
+        "//apps/desktop/src/system-log:api",
         "//reality/shared/desktop:electron-api",
     ],
 )
@@ -61,8 +61,8 @@ js_library(
         "deep-link.ts",
     ],
     deps = [
-        "//apps/desktop/core:desktop-protocol",
-        "//apps/desktop/shell:window-visibility",
+        "//apps/desktop/src/core:desktop-protocol",
+        "//apps/desktop/src/shell:window-visibility",
     ],
 )
 
@@ -79,7 +79,7 @@ js_library(
         "protocol.ts",
     ],
     deps = [
-        "//apps/desktop/transport:errors",
+        "//apps/desktop/src/transport:errors",
         "//reality/shared/desktop:create-electron-url",
     ],
 )
@@ -90,7 +90,7 @@ js_library(
         "register-on-open-url-handler.ts",
     ],
     deps = [
-        "//apps/desktop/shell:deep-link",
+        "//apps/desktop/src/shell:deep-link",
     ],
 )
 
@@ -100,7 +100,7 @@ js_library(
         "register-second-instance-handler.ts",
     ],
     deps = [
-        "//apps/desktop/shell:deep-link",
+        "//apps/desktop/src/shell:deep-link",
     ],
 )
 
