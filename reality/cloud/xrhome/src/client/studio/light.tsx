@@ -215,6 +215,10 @@ const SpotLightComponent: React.FC<ILightComponent> = (
   return (
     <spotLight
       ref={lightRef}
+      // SpotLight's constructor places it at Object3D.DEFAULT_UP, one unit above
+      // the entity; pin it to the origin like the directional and point lights
+      // here and the runtime (c8/ecs/src/runtime/lights.ts) do.
+      position={[0, 0, 0]}
       color={lightConfig.color}
       castShadow={lightConfig.castShadow}
       intensity={intensity}
