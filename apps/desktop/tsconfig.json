@@ -14,10 +14,21 @@
     "moduleResolution": "Bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
+    "noEmit": true,
     "paths": {
       "@repo/*": [
         "../../*"
       ],
     },
-  }
+  },
+  "include": [
+    ".",
+    "../../reality/shared",
+    "../../reality/cloud/xrhome/src/shared",
+  ],
+  "exclude": [
+    "out",
+    "node_modules",
+    "dist"
+  ],
 }
