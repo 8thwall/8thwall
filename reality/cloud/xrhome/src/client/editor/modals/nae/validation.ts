@@ -1,4 +1,4 @@
-import type {TFunction} from 'react-i18next'
+import type {CustomTFunction as TFunction} from 'react-i18next'
 
 import type {
   HtmlShell,

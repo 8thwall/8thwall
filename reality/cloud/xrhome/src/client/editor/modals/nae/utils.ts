@@ -13,7 +13,7 @@ import type {JointToggleOption} from '../../../ui/components/joint-toggle-button
 
 const getDateAndHourText = (
   timestampMs: number | string
-): { dateText: string; hoursText: string } => {
+): {dateText: string, hoursText: string} => {
   const buildEndDate = new Date(Number(timestampMs))
   const dateOptions = {year: 'numeric', month: 'long', day: 'numeric'} as const
   const dateText = buildEndDate.toLocaleDateString(undefined, dateOptions)
@@ -137,7 +137,7 @@ const getExportDisabled = (sceneCtx: SceneContext, platform: HtmlShell) => {
 }
 
 const validateScreenOrientation =
-(orientation: string) => SCREEN_ORIENTATION_OPTIONS.some(option => option.value === orientation)
+  (orientation: string) => SCREEN_ORIENTATION_OPTIONS.some(option => option.value === orientation)
 
 const IOS_SIGNING_TYPE_OPTIONS: readonly {
   translationValueKey: string
@@ -174,6 +174,10 @@ const getAppleSigningTypeName = (
   .find(option => option.value === appleSigningType)?.content || ''
 
 type EmbedType = 'iframe' | 'full-html'
+const EMBED_TYPE_TRANSLATION_KEYS = {
+  'iframe': 'editor_page.export_modal.iframe.iframe',
+  'full-html': 'editor_page.export_modal.iframe.full-html',
+} as const
 
 const getEmbedTypeOptions = (
   t: TFunction
@@ -183,7 +187,7 @@ const getEmbedTypeOptions = (
   ...JointToggleOption<EmbedType>[]
 ] => ['iframe', 'full-html'].map(value => ({
   value,
-  content: t(`editor_page.export_modal.iframe.${value}`),
+  content: t(EMBED_TYPE_TRANSLATION_KEYS[value]),
 })) as [
   JointToggleOption<EmbedType>,
   JointToggleOption<EmbedType>,
