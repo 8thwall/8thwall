@@ -4,7 +4,7 @@ import * as path from 'path'
 import {promisify} from 'util'
 
 import type * as Webpack from 'webpack'
-import type * as DtsBundleGenerator from 'dts-bundle-generator'
+import type * as ApiExtractor from '@microsoft/api-extractor'
 
 const cwd = process.cwd()
 
@@ -32,7 +32,12 @@ const {ConcatSource} = requireLib('webpack-sources')
 const TerserPlugin = requireLib('terser-webpack-plugin')
 const {BundleAnalyzerPlugin} = requireLib('webpack-bundle-analyzer')
 const escapeStringRegexp = requireLib<(s: string) => string>('escape-string-regexp')
-const {generateDtsBundle} = requireLib('dts-bundle-generator') as typeof DtsBundleGenerator
+const {Extractor, ExtractorConfig, CompilerState} =
+  requireLib<typeof ApiExtractor>('@microsoft/api-extractor')
+const legacyCompilerPath = require.resolve('typescript', {
+  paths: [path.dirname(resolveLib('@microsoft/api-extractor'))],
+})
+const ts = require(legacyCompilerPath)
 
 const EXTENSIONS = ['.ts', '.js', '.tsx', '.jsx']
 
@@ -153,8 +158,111 @@ const createRootResolverPlugin = (roots: string[]) => {
 
 type PostBuildAction = () => Promise<void>
 
-const createWrapperPlugin = ({headerPath, footerPath}) => {
-  const apply = (compiler) => {
+// API Extractor only follows exports. Temporarily export global augmentations as namespaces
+// so their referenced types and imports participate in bundling and symbol renaming too.
+// Keep the original augmentations in the analysis program for globalThis references.
+const bundleDeclarations = (config: ApiExtractor.ExtractorConfig, outPath: string) => {
+  const compilerState = CompilerState.create(config)
+  const program = compilerState.program as any
+  const sources = new Map<string, string>()
+  const globalNames = new Set<string>()
+  const extraExports: string[] = []
+  const projectSources = program.getSourceFiles().filter(source => (
+    !program.isSourceFileDefaultLibrary(source) && !program.isSourceFileFromExternalLibrary(source)
+  ))
+  for (const source of projectSources) {
+    let contents = source.text
+    const globals = source.statements.filter(statement => (
+      ts.isModuleDeclaration(statement) &&
+      // eslint-disable-next-line no-bitwise
+      (statement.flags & ts.NodeFlags.GlobalAugmentation)
+    ))
+    for (const statement of globals) {
+      const name = `__dts_global_${globalNames.size}`
+      if (program.getTypeChecker().getSymbolsInScope(source, ts.SymbolFlags.Module)
+        .some(symbol => symbol.name === name)) {
+        throw new Error(`Reserved declaration name already in use: ${name}`)
+      }
+      globalNames.add(name)
+      contents += `\nexport declare namespace ${name} ${statement.body.getText(source)}\n`
+      let importPath = path.relative(path.dirname(config.mainEntryPointFilePath), source.fileName)
+        .replace(/\\/g, '/').replace(/\.d\.ts$/, '')
+      if (!importPath.startsWith('.')) {
+        importPath = `./${importPath}`
+      }
+      if (source.fileName !== config.mainEntryPointFilePath) {
+        extraExports.push(`export {${name}} from ${JSON.stringify(importPath)};`)
+      }
+    }
+    sources.set(source.fileName, contents)
+  }
+  if (globalNames.size) {
+    const entry = config.mainEntryPointFilePath
+    sources.set(entry, `${sources.get(entry)}\n${extraExports.join('\n')}`)
+    const options = program.getCompilerOptions()
+    const host = ts.createCompilerHost(options)
+    const readFile = host.readFile.bind(host)
+    host.readFile = file => sources.get(file) ?? readFile(file)
+    const fileExists = host.fileExists.bind(host)
+    // Match API Extractor's declaration-first resolution for colocated .ts/.d.ts files.
+    host.fileExists = file => (
+      !/\.d\.ts$/.test(file) && /\.[jt]sx?$/.test(file) &&
+      fileExists(file.replace(/\.[jt]sx?$/, '.d.ts'))
+        ? false
+        : fileExists(file)
+    )
+    const augmentedProgram = ts.createProgram(program.getRootFileNames(), options, host)
+    const result = Extractor.invoke(config, {
+      localBuild: true,
+      compilerState: {...compilerState, program: augmentedProgram},
+    })
+    if (!result.succeeded) {
+      throw new Error(`API Extractor failed with ${result.errorCount} errors`)
+    }
+    const output = fs.readFileSync(outPath, 'utf8')
+    const bundled = ts.createSourceFile(outPath, output, ts.ScriptTarget.Latest, true)
+    const edits: {start: number, end: number, text: string}[] = []
+    const restoredGlobals = new Set<string>()
+    for (const statement of bundled.statements) {
+      if (ts.isModuleDeclaration(statement) && globalNames.has(statement.name.text)) {
+        restoredGlobals.add(statement.name.text)
+        edits.push({
+          start: statement.getStart(bundled),
+          end: statement.body.getStart(bundled),
+          text: 'declare global ',
+        })
+      } else if (ts.isExportDeclaration(statement) && statement.exportClause &&
+        ts.isNamedExports(statement.exportClause)) {
+        const kept = statement.exportClause.elements.filter(e => !globalNames.has(e.name.text))
+        if (kept.length !== statement.exportClause.elements.length) {
+          edits.push({
+            start: statement.getStart(bundled),
+            end: statement.end,
+            text: kept.length ? `export {${kept.map(e => e.getText(bundled)).join(', ')}};` : '',
+          })
+        }
+      }
+    }
+    if (restoredGlobals.size !== globalNames.size) {
+      throw new Error('API Extractor did not preserve all global declarations')
+    }
+    let restored = output
+    for (const edit of edits.sort((a, b) => b.start - a.start)) {
+      restored = restored.slice(0, edit.start) + edit.text + restored.slice(edit.end)
+    }
+    fs.writeFileSync(outPath, restored)
+  } else {
+    const result = Extractor.invoke(config, {localBuild: true, compilerState})
+    if (!result.succeeded) {
+      throw new Error(`API Extractor failed with ${result.errorCount} errors`)
+    }
+  }
+}
+
+type WrapperPluginOptions = {headerPath: string, footerPath: string}
+
+const createWrapperPlugin = ({headerPath, footerPath}: WrapperPluginOptions) => {
+  const apply = (compiler: Webpack.Compiler) => {
     compiler.hooks.compilation.tap('WrapperPlugin', (compilation) => {
       compilation.hooks.afterOptimizeChunkAssets.tap('WrapperPlugin', (chunks) => {
         const headerContents = headerPath ? fs.readFileSync(headerPath, 'utf-8') : ''
@@ -185,7 +293,7 @@ const NATIVE_NODE_MODULES = [
   'tls', 'tty', 'url', 'util', 'vm', 'worker_threads', 'zlib',
 ]
 
-const getFallback = (target, polyfill) => {
+const getFallback = (target: string, polyfill: string): any => {
   if (target === 'node') {
     return undefined
   }
@@ -203,7 +311,7 @@ const getFallback = (target, polyfill) => {
     return {path: resolveLib('path-browserify'), fs: false}
   }
 
-  const fallback = {}
+  const fallback: Record<string, boolean | string> = {}
 
   // NOTE(christoph): By setting false on all native modules, we're ignoring any imports of those
   // modules, assuming that they are enclosed in something like:
@@ -229,7 +337,7 @@ const getFallback = (target, polyfill) => {
   return fallback
 }
 
-const resolveBuildPaths = async (npmRule, includes) => {
+const resolveBuildPaths = async (npmRule: string, includes: string[]) => {
   // NOTE(cbartschat): To resolve transitive imports correctly, we first need to attempt to resolve
   // from any node_modules folder relative to the requester.
   // See bzl/examples/js/resolve/transitive.js to see this in practice.
@@ -341,7 +449,7 @@ const genConfig = async ({
   esnext,
   tsDeclaration,
   fullDts,
-}) => {
+}: any) => {
   // Get the directory location and filename of the output file.
   const outFileDir = path.dirname(outFile)
   const outFileName = path.basename(outFile)
@@ -387,11 +495,11 @@ const genConfig = async ({
       jsx: 'react',
       module: esnext ? 'esnext' : undefined,
       moduleResolution: 'node',
-      isolatedModules: false,
+      isolatedModules: true,
       experimentalDecorators: true,
       emitDecoratorMetadata: true,
       declaration: true,
-      noImplicitUseStrict: false,
+      strict: true,
       // NOTE(christoph): We need to preserve comments like /* webpackIgnore: true */.
       removeComments: false,
       noLib: false,
@@ -473,6 +581,9 @@ const genConfig = async ({
         {
           loader: resolveLib('ts-loader'),
           options: {
+            // ts-loader requires the JavaScript compiler API, which TypeScript 7 removed.
+            // Use API Extractor's bundled compiler for webpack's emit and analysis stages.
+            compiler: legacyCompilerPath,
             configFile: tsconfigPath,
             context: cwdPath,
           },
@@ -520,29 +631,36 @@ const genConfig = async ({
 
   if (tsDeclaration) {
     const mainFile = mainFiles[0]
-    const sourcePath = path.join(cwd, mainFile.replace(/\.ts$/, '.d.ts'))
+    const sourcePath = path.join(cwd, mainFile.replace(/\.tsx?$/, '.d.ts'))
     const outPath = path.join(cwd, outFileDir, `${outFileBase}.d.ts`)
 
     if (fullDts) {
       postBuildActions.push(async () => {
         try {
-          const declarationFile = generateDtsBundle(
-            [{
-              filePath: mainFile,
-              output: {
-                noBanner: true,
-                exportReferencedTypes: false,
-                inlineDeclareGlobals: true,
+          // ts-loader has already emitted declarations alongside the source files.
+          const extractorConfig = ExtractorConfig.prepare({
+            configObject: {
+              projectFolder: cwd,
+              mainEntryPointFilePath: sourcePath,
+              compiler: {
+                overrideTsconfig: {...tsconfig, files: [sourcePath], include: []},
               },
-            }],
-            {preferredConfigPath: tsconfigPath, followSymlinks: false}
-          )[0]
-
-          await fs.promises.writeFile(outPath, declarationFile)
+              apiReport: {enabled: false},
+              docModel: {enabled: false},
+              tsdocMetadata: {enabled: false},
+              dtsRollup: {enabled: true, untrimmedFilePath: outPath},
+              newlineKind: 'lf',
+            },
+            configObjectFullPath: path.join(cwd, 'api-extractor.json'),
+            // Bazel actions need not contain a package.json for the target.
+            packageJson: {name: outFileBase, version: '0.0.0'},
+            packageJsonFullPath: path.join(cwd, 'package.json'),
+          })
+          bundleDeclarations(extractorConfig, outPath)
         } catch (e) {
           // eslint-disable-next-line no-console
           console.error(e)
-          throw new Error('Error generating .d.ts with full_dts=1')
+          throw new Error('Error generating .d.ts with full_dts=1', {cause: e})
         }
       })
     } else {
