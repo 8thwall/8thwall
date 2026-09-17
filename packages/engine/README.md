@@ -1,64 +1,109 @@
-# Engine
-This engine packages contains an open source version of the 8th Wall engine with SLAM, VPS, and Hand Tracking removed. The SLAM, VPS, and Hand Tracking algorithms remain proprietary to Niantic Spatial, but other AR features, such as Face Tracking, Image Target tracking, Sky Segmentation are included. Because this core framework is open source, if browser APIs evolve or change, this open source engine code can adjust as needed.
-
-## Usage
-Today, the easiest way to add the engine is to use the [Distributed Engine Binary](https://github.com/8thwall/engine), which also supports SLAM. We will also be working on official releases of the open source engine through npm.
-
-## Running
-First, serve the engine:
-
-```bash
-bazel run --config=wasm //reality/app/xr/js:serve-xr
-```
-
-Then use the served `xr.js` file in your project, e.g. `https://192.168.68.65:8888/reality/app/xr/js/xr.js`.
-
-## Building
-To build the engine for distribution, run:
-```bash
-bazel build --config=wasmreleasesimd //reality/app/xr/js:bundle
-```
-
-Or, if building for a non-SIMD environment, run:
-```bash
-bazel build --config=wasmrelease //reality/app/xr/js:bundle
-```
-
-## Using the open source engine alongside the distributed engine binary
+# 8th Wall Engine
 
 > [!WARNING]
-> This approach is a work in progress, the real end state will be a version which doesn't require you to serve the open source engine alongside your app.
+> This engine is released as a pre-release build. The API may change before the official 1.0.0 release.
 
-This open source version of the engine doesn't include SLAM. But the [distributed engine binary](https://github.com/8thwall/engine) does. To use the open source engine for the camera pipeline and the distributed engine binary for SLAM, you can do the following:
+## Usage
 
-1. Host the open source engine with:
+See https://8thwall.org/docs/engine/overview for a more detailed guide.
+
+### Option 1: Script tag
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/@8thwall/engine@0.1.0/dist/xr.js" async crossorigin="anonymous" data-preload-chunks="slam"></script>
+```
+
+> [!NOTE]
+> The `XrController` module in this package does not contain SLAM (World Tracking), only Image Targets. However, for backwards compatibility, the chunk name is still `slam`. See "SLAM Integration" below for more details.
+
+### Option 2: npm
+
+```
+npm install @8thwall/engine
+```
+
+You will need to copy the included artifacts into your dist folder, for example in webpack:
+
+```js
+new CopyWebpackPlugin({
+  patterns: [
+    {
+      from: 'node_modules/@8thwall/engine/dist',
+      to: 'external/xr',
+    }
+  ]
+})
+```
+
+You can then load the SDK by adding the following to index.html:
+
+```html
+<script src="./external/xr/xr.js" data-preload-chunks="slam" async></script>
+```
+
+When importing the package, you will get a simple helper for accessing XR8 once it is loaded. This promise will only resolve if the script tag is included in the HTML.
+
+```js
+import {XR8Promise} from '@8thwall/engine'
+
+XR8Promise.then((XR8) => XR8.XrController.configure({}))
+```
+
+## Overview
+
+The 8th Wall open-source engine includes:
+
+- Core engine architecture
+- Image Targets
+- Face Effects
+- Sky Effects
+
+It does not include:
+
+- Niantic Spatial products such as VPS, Lightship Maps, or the Geospatial Browser
+- Hand Tracking
+
+### SLAM Integration
+
+The open-source engine does not contain a SLAM module. However, there is an option to load the SLAM module provided by the Distributed Engine Binary into the open-source engine.
+
+> [!NOTE]
+> The Distributed Engine Binary is available through a limited-use license which places restrictions on how it can be used. The full license text is [here](https://github.com/8thwall/engine/blob/main/LICENSE). Please see the [Permitted Use FAQ](https://8thwall.org/docs/migration/faq#distributed-engine-binary-license-and-permitted-use) and [Attribution Guidelines](https://8thwall.org/docs/open-source) for more information.
+
+In the below code, the `data-preload-chunks="slam: <url>"` instructs the open-source engine to fetch the `slam` chunk from that given URL. The same XrController API will be available. `XR8.loadChunks({name: 'slam', url: '<url>'})` is also supported.
+
+```html
+<script async crossorigin="anonymous"
+  src="https://cdn.jsdelivr.net/npm/@8thwall/engine@0.1.0/dist/xr.js"
+  data-preload-chunks="slam: https://cdn.jsdelivr.net/npm/@8thwall/engine-binary@1/dist/xr-slam.js"
+></script>
+```
+
+If using npm, run:
+
 ```bash
-cd ~/repo/8thwall
-bazel run --config=wasmreleasesimd //reality/app/xr/js:serve-xr
-```
-2. Take note of the IP address in the logs
-3. In your app, serve the distributed engine binary alongside the app. If you downloaded your app from 8thWall.com, it will already do this. An example file structure for your app is:
-```
-my-app/
-  ├── external/
-  │   └── xr/
-  │       ├── xr.js       # Distributed engine binary entry point - with this approach, we don't use xr.js.
-  │       └── xr-slam.js  # The SLAM chunk - this is what we instruct the open source engine to load.
-  ├── src/
-  │   ├── app.js
-  │   ├── index.html
-  │   └── ...
-  ├── config/
-  │   └── webpack.config.js
-  └── package.json
+npm install @8thwall/engine-binary
 ```
 
-4. In your app, switch to the open source engine by updating `my-app/src/index.html` from:
-```html
-<script crossorigin="anonymous" src="./external/xr/xr.js" data-preload-chunks="slam">
+Add the following, or equivalent to your build configuration:
+
+```js
+new CopyWebpackPlugin({
+  patterns: [
+    {
+      from: 'node_modules/@8thwall/engine-binary/dist',
+      to: 'external/xr-binary', // NOTE: Copied to a different path than @8thwall/engine
+    }
+  ]
+})
 ```
-to:
+
+Then specify the relative URL:
+
 ```html
-<script crossorigin="anonymous" src="https://192.168.68.55:8888/reality/app/xr/js/xr.js" async data-preload-chunks="slam: ./external/xr/xr-slam.js"></script>
+<script async
+  src="./external/xr/xr.js"
+  data-preload-chunks="slam: ./external/xr-binary/xr-slam.js"
+></script>
 ```
-Use the IP address from step 2., or if you have the engine uploaded elsewhere, you can use that domain.
+

@@ -1,0 +1,37 @@
+{
+  "name": "@8thwall/engine",
+  "version": "0.1.0",
+  "description": "Open Source framework for cross platform, browser based AR",
+  "author": "8th Wall Team",
+  "license": "MIT",
+  "homepage": "https://8thwall.org",
+  "bugs": {
+    "url": "https://github.com/8thwall/8thwall/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/8thwall/8thwall.git",
+    "directory": "packages/engine"
+  },
+  "keywords": [
+    "8thwall",
+    "ar",
+    "xr",
+    "augmented reality",
+    "world tracking",
+    "image tracking",
+    "face tracking",
+    "slam",
+    "webxr"
+  ],
+  "main": "index.js",
+  "files": [
+    "dist",
+    "index.js",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "prepack": "./tools/prepack.sh"
+  }
+}
