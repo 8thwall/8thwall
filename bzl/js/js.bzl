@@ -166,7 +166,7 @@ def _webpack_js(ctx):
     externals = ctx.attr.externals
 
     if ctx.attr.externalize_npm:
-        if not ctx.attr._test:
+        if not (ctx.attr._test or ctx.attr._cli):
             fail("externalize_npm can only be used with js_test rules")
         if externals != "":
             fail("Cannot use externals and externalize_npm on the same rule")
@@ -225,6 +225,7 @@ export NODE_PATH=$(dirname $(realpath "$RUNFILES_DIR/{workspace}/external/{npm_f
         ctx.actions.write(output = out_wrapper, content = """#!/bin/bash --norc
 set -eu
 export RUNFILES_DIR=${{RUNFILES_DIR:-$(realpath $0.runfiles)}}
+{node_path_override}
 ${{RUNFILES_DIR}}/{workspace}/{node} {inspect_opt} {node_opts} ${{RUNFILES_DIR}}/{workspace}/{jsfile} "$@"
 """.format(
             workspace = ctx.workspace_name,
@@ -232,6 +233,7 @@ ${{RUNFILES_DIR}}/{workspace}/{node} {inspect_opt} {node_opts} ${{RUNFILES_DIR}}
             inspect_opt = inspect_opt_str,
             node_opts = node_opt_string,
             jsfile = outs[0].short_path,
+            node_path_override = node_path_override,
         ), is_executable = True)
         return ([out_wrapper], outs)
     elif ctx.attr._test:
@@ -284,7 +286,10 @@ def _resolve_npm_provider(ctx):
 def _js_binary_impl(ctx):
     outs, runfiles = _webpack_js(ctx)
 
-    runfiles = ctx.runfiles(files = outs + ctx.files.data + runfiles)
+    runfiles = ctx.runfiles(
+        files = outs + ctx.files.data + runfiles +
+                (ctx.files.npm_rule if ctx.attr.externalize_npm else []),
+    )
     runfiles = runfiles.merge_all([dep[js_files_provider].runfiles for dep in ctx.attr.deps])
 
     out_structs = []
