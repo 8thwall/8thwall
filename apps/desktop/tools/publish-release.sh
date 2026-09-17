@@ -23,6 +23,14 @@ check_variable PKCS11_CONFIG
 check_variable SM_CLIENT_CERT_FILE
 check_variable SM_HOST
 
+cd "$ROOT"
+
+git fetch origin main
+git diff origin/main
+
+echo "Is the above diff from main intended? Press enter to continue..."
+read
+
 cd $ROOT/reality/cloud/xrhome
 npm ci --legacy-peer-deps
 BUILDIF_FLAG_LEVEL=launch npm run dist:desktop
