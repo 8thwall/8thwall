@@ -227,6 +227,7 @@ const SpotLightComponent: React.FC<ILightComponent> = (
       angle={lightConfig.angle}
       penumbra={lightConfig.penumbra}
       target={target}
+      position={[0, 0, 0]}
     >
       <perspectiveCamera
         ref={shadowCameraRef}
