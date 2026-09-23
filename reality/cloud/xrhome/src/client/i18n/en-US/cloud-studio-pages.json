@@ -647,6 +647,7 @@
   "mesh_configurator.geometry_type.option.model_url": "Model URL",
   "mesh_configurator.geometry_type.option.splat_url": "Splat URL",
   "mesh_configurator.geometry_type.option.face": "Face",
+  "mesh_configurator.face_geometry_disabled_warning": "Face Mesh geometry is disabled on the Camera. Enable at least one Face geometry option on the Camera to display this mesh.",
   "mesh_configurator.material_type.label": "Material Type",
   "mesh_configurator.material_type.option.normal": "Normal",
   "mesh_configurator.material_type.option.hider": "Hider",
