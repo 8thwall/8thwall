@@ -1,15 +1,12 @@
+/* eslint-disable local-rules/hardcoded-copy -- Legacy validation messages. */
 import * as React from 'react'
-import {Button} from 'semantic-ui-react'
 import '../static/styles/upload-drop.scss'
 
 export interface IUploadDropProps {
-  uploadMessage?: string
   dropMessage?: string  // shown on file hover
   onDrop(file: File): void  // what to do when the user upload
-  fileAccept?: string  // e.g. '*/*'
+  fileAccept: string  // e.g. '*/*'
   className?: string
-  elementClickInsteadOfButton: boolean  // when true, the entire element is clickable instead of the button
-  noButton: boolean  // when true, no button is shown
   children?: React.ReactNode
 }
 
@@ -19,28 +16,27 @@ export class UploadDrop extends React.Component<IUploadDropProps> {
     dropErrorMessage: null,
   }
 
-  inputFileRef: any
-
-  constructor(props) {
-    super(props)
-    this.inputFileRef = React.createRef()
-  }
-
   onDrop = (e) => {
     e.preventDefault()
-    if (e.dataTransfer && e.dataTransfer.files.length === 0 && (!e.target.files || e.target.files.length === 0)) {
+    const noDroppedFile = e.dataTransfer && e.dataTransfer.files.length === 0
+    const noSelectedFile = !e.target.files || e.target.files.length === 0
+    if (noDroppedFile && noSelectedFile) {
       this.setState({
-        dropErrorMessage: 'There was no file attached in this drop. You can drop a file from a file browser or ' +
-        'click this element to open the file picker',
+        dropErrorMessage: 'There was no file attached in this drop. ' +
+          'You can drop a file from a file browser or click this element to open the file picker',
       })
       return
     }
 
     const file = (e.dataTransfer && e.dataTransfer.files[0]) || e.target.files[0]
-    if (this.props.fileAccept != '*/*') {
-      const acceptableExtension = !!(this.props.fileAccept.split(',').find(ext => file.name.toLowerCase().endsWith(ext.trim())))
+    if (this.props.fileAccept !== '*/*') {
+      const acceptableExtension = !!this.props.fileAccept.split(',').find(
+        ext => file.name.toLowerCase().endsWith(ext.trim())
+      )
       if (!acceptableExtension) {
-        this.setState({dropErrorMessage: `Please drop only files with extensions ${this.props.fileAccept}`})
+        this.setState({
+          dropErrorMessage: `Please drop only files with extensions ${this.props.fileAccept}`,
+        })
         return
       }
     }
@@ -49,35 +45,37 @@ export class UploadDrop extends React.Component<IUploadDropProps> {
     this.setState({dropErrorMessage: null})
   }
 
-  buttonClicked = () => this.inputFileRef.current && this.inputFileRef.current.click()
-
   render() {
     return (
       <div
-        className={`upload-drop ${this.state.hovering && 'hovering'} ${this.props.className} ${this.props.elementClickInsteadOfButton && 'clickable'}`}
-        onDragEnter={(e) => { e.preventDefault(); this.setState({hovering: true}) }}
-        onDragLeave={e => this.setState({hovering: false})}
+        className={
+          `upload-drop clickable ${this.state.hovering && 'hovering'} ${this.props.className}`
+        }
+        onDragEnter={(e) => {
+          e.preventDefault(); this.setState({hovering: true})
+        }}
+        onDragLeave={() => this.setState({hovering: false})}
         onDragOver={e => e.preventDefault()}
-        onDrop={(e) => { this.onDrop(e); this.setState({hovering: false}) }}
-        onClick={() => { if (this.props.elementClickInsteadOfButton) this.buttonClicked() }}
+        onDrop={(e) => {
+          this.onDrop(e); this.setState({hovering: false})
+        }}
       >
         <div className='drop-target'>
-          {!this.props.elementClickInsteadOfButton && !this.props.noButton &&
-            <>
-              <Button
-                primary
-                style={{position: 'relative'}}
-                onClick={this.buttonClicked}
-                content='Upload'
-              />
-              {this.props.uploadMessage && `or ${this.props.uploadMessage}`}
-            </>
-          }
-          <input style={{display: 'none'}} type='file' accept={this.props.fileAccept} ref={this.inputFileRef} onChange={this.onDrop} value='' />
+          <input
+            style={{display: 'none'}}
+            type='file'
+            accept={this.props.fileAccept}
+            onChange={this.onDrop}
+            value=''
+          />
           <div className='drop-instructions'>{this.props.children}</div>
         </div>
-        {this.props.dropMessage && <div className='drop-message'>{this.props.dropMessage}</div>}
-        {this.state.dropErrorMessage && <div className='drop-error-message'>{this.state.dropErrorMessage}</div>}
+        {this.props.dropMessage && (
+          <div className='drop-message'>{this.props.dropMessage}</div>
+        )}
+        {this.state.dropErrorMessage && (
+          <div className='drop-error-message'>{this.state.dropErrorMessage}</div>
+        )}
       </div>
     )
   }

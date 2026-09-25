@@ -23,8 +23,6 @@ const IGNORED_UNUSED_PACKAGES = new Set([
   'sinon',
   'ts-mocha',
 
-  'real-semantic-ui-react',  // alias of semantic-ui-react
-
   // Used by shared ecs code
   '@automerge/automerge',
   '@tweenjs/tween.js',

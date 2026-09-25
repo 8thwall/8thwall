@@ -27,6 +27,8 @@ type StatePatch = (prev: DeepReadonly<UploadState>) => Partial<UploadState> | nu
 
 type ProgressHandle = (progress: number) => void
 
+const LOCAL_UPLOAD_COMPLETION_DELAY_MS = 2000
+
 const useFileUploadState = (
   primaryRepoId: string, assetLimitOverrides: string, convertFont?: boolean
 ) => {
@@ -35,7 +37,7 @@ const useFileUploadState = (
   const uploadActions = useActions(gitUploadActions)
   const {convertAssets} = useAssetConverter()
   const fontStateRef = React.useRef<{
-    [fileName: string]: {isLoading: boolean; ttfFile: File, repoId: string}
+    [fileName: string]: {isLoading: boolean, ttfFile: File, repoId: string}
   }>({})
 
   const waitForGeneratingMtsdf = (filename: string) => new Promise<void>((resolve) => {
@@ -127,6 +129,9 @@ const useFileUploadState = (
           await waitForGeneratingMtsdf(file.name)
         } else {
           await uploadFile(file, folderPath, onProgress)
+        }
+        if (BuildIf.LOCAL_DEV) {
+          await new Promise(resolve => setTimeout(resolve, LOCAL_UPLOAD_COMPLETION_DELAY_MS))
         }
         patchUploadState(s => ({
           uploadNumFilesUploaded: s.uploadNumFilesUploaded + 1,

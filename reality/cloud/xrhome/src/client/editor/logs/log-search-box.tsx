@@ -1,32 +1,28 @@
 import React from 'react'
-import {createUseStyles} from 'react-jss'
-import {Input} from 'semantic-ui-react'
+import {useTranslation} from 'react-i18next'
 
-import {combine} from '../../common/styles'
-import {brandBlack, gray4, gray2, brandWhite} from '../../static/styles/settings'
-import {useTheme} from '../../user/use-theme'
+import {Icon} from '../../ui/components/icon'
+import {StandardTextInput} from '../../ui/components/standard-text-input'
+import {createThemedStyles} from '../../ui/theme'
 
-const useStyles = createUseStyles({
-  'logSearchBox': {
-    '&.dark': {
-      '& .icon': {
-        'color': gray2,
-      },
-      '& input': {
-        'border': 'none',
-        'color': brandWhite,
-        'background-color': brandBlack,
-        '&:focus': {
-          'background-color': brandBlack,
-          'color': brandWhite,
-        },
-        '&::placeholder': {
-          'color': gray4,
-        },
-      },
+const useStyles = createThemedStyles(theme => ({
+  search: {
+    'position': 'relative',
+    'width': '180px',
+    '& input': {
+      paddingLeft: '2.67142857em',
     },
   },
-})
+  icon: {
+    position: 'absolute',
+    top: '50%',
+    left: '0.75em',
+    zIndex: 1,
+    color: theme.fgMuted,
+    pointerEvents: 'none',
+    transform: 'translateY(-50%)',
+  },
+}))
 
 interface ILogSearchBox {
   value: string
@@ -35,17 +31,23 @@ interface ILogSearchBox {
 
 const LogSearchBox: React.FunctionComponent<ILogSearchBox> = ({value, onChange}) => {
   const classes = useStyles()
-  const themeName = useTheme()
+  const {t} = useTranslation(['asset-lab'])
+  const filterLabel = t('asset_lab.library.filter')
+
   return (
-    <Input
-      className={combine(classes.logSearchBox, themeName)}
-      icon='search'
-      iconPosition='left'
-      placeholder='Filter...'
-      aria-label='Filter'
-      value={value}
-      onChange={e => onChange(e.target.value)}
-    />
+    <div className={classes.search}>
+      <span className={classes.icon}>
+        <Icon stroke='search' size={0.75} />
+      </span>
+      <StandardTextInput
+        id='log-search-box'
+        height='tiny'
+        placeholder={`${filterLabel}...`}
+        aria-label={filterLabel}
+        value={value}
+        onChange={e => onChange(e.target.value)}
+      />
+    </div>
   )
 }
 

@@ -25,8 +25,7 @@
       "@ecs/*": ["./src/shared/ecs/*"],
       "@repo/reality/shared/*": ["./src/shared/*"],
       "@repo/c8/ecs/src/*": ["./src/shared/ecs/*"],
-      "@studiomcp/*": ["./src/shared/studiomcp/*"],
-      "semantic-ui-react": ["./src/client/ui/semantic-ui-react.ts"]
+      "@studiomcp/*": ["./src/shared/studiomcp/*"]
     },
     "target": "es2020"
   },
