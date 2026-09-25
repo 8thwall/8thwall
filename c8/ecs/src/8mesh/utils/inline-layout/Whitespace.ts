@@ -267,7 +267,7 @@ function collapseWhitespaceOnInlines(line: Inline[], whiteSpace: WhiteSpace): nu
     case NOWRAP:
     case NORMAL:
       /* eslint-disable no-case-declarations */
-      let inlinesToCollapse = []
+      let inlinesToCollapse: Inline[] = []
       let collapsingTarget
       // collect starting whitespaces to collapse
       for (let i = 0; i < line.length; i++) {
