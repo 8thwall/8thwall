@@ -166,7 +166,7 @@ const CameraConfigurator: React.FC<ICameraConfigurator> = (
     <ComponentConfiguratorTray
       title={t('camera_configurator.title')}
       onResetToPrefab={resetToPrefab ? () => resetToPrefab([CAMERA_COMPONENT]) : undefined}
-      sectionId='camera-configurator'
+      sectionId={CAMERA_COMPONENT}
       componentData={[CAMERA_COMPONENT]}
     >
       {configState === 'not-ready' &&
