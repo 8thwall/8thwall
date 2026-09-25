@@ -38,6 +38,7 @@ import {
 } from './three-material-util'
 import {CompactImagePicker} from '../ui/compact-image-picker'
 import {
+  CAMERA_COMPONENT,
   GEOMETRY_COMPONENT, GLTF_MODEL_COMPONENT, MATERIAL_COMPONENT, MESH_COMPONENTS,
   SHADOW_COMPONENT, SPLAT_COMPONENT,
 } from './direct-property-components'
@@ -46,6 +47,9 @@ import {
   renderValueColor,
   makeRenderValueVisualResource,
 } from './diff-chip-default-renderers'
+import {BoldButton} from '../../ui/components/bold-button'
+import {SpaceBetween} from '../../ui/layout/space-between'
+import {setSectionCollapsed} from '../hooks/collapsed-section'
 
 interface IGltfMeshMaterialConfigurator {
   url: string
@@ -433,15 +437,30 @@ const MeshConfigurator: React.FC<IMeshConfigurator> = (
         GLTF_MODEL_COMPONENT, SHADOW_COMPONENT,
       ]}
     >
-      <MeshConfiguratorMenu
+      {!isFaceGeometry && <MeshConfiguratorMenu
         value={geometryValue()}
         onChange={handleGeometrySelect}
         disabled={isFaceGeometry}
-      />
+      />}
       {isFaceGeometry && isFaceCamera && !hasFaceGeometry &&
         <RowContent>
           <StaticBanner type='warning'>
-            {t('mesh_configurator.face_geometry_disabled_warning')}
+            <SpaceBetween direction='vertical'>
+              {t('mesh_configurator.face_geometry_disabled_warning')}
+              <br />
+              <SpaceBetween>
+                <BoldButton
+                  color='main'
+                  onClick={() => {
+                    stateCtx.setSelection(cameraObj.id)
+                    setSectionCollapsed(stateCtx, cameraObj.id, CAMERA_COMPONENT, false)
+                  }
+                  }
+                >
+                  {t('button.edit', {ns: 'common'})}
+                </BoldButton>
+              </SpaceBetween>
+            </SpaceBetween>
           </StaticBanner>
         </RowContent>
       }

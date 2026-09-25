@@ -3,7 +3,7 @@ import React from 'react'
 import {combine} from '../../common/styles'
 import {createThemedStyles} from '../theme'
 
-type BoldButtonColor = 'blue' | 'primary'
+type BoldButtonColor = 'blue' | 'primary' | 'main'
 
 const useStyles = createThemedStyles(theme => ({
   boldButton: {
@@ -28,6 +28,9 @@ const useStyles = createThemedStyles(theme => ({
   },
   primary: {
     color: theme.fgPrimary,
+  },
+  main: {
+    color: theme.fgMain,
   },
 }))
 
