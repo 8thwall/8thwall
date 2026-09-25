@@ -447,15 +447,12 @@ const MeshConfigurator: React.FC<IMeshConfigurator> = (
           <StaticBanner type='warning'>
             <SpaceBetween direction='vertical'>
               {t('mesh_configurator.face_geometry_disabled_warning')}
-              <br />
               <SpaceBetween>
                 <BoldButton
-                  color='main'
                   onClick={() => {
-                    stateCtx.setSelection(cameraObj.id)
                     setSectionCollapsed(stateCtx, cameraObj.id, CAMERA_COMPONENT, false)
-                  }
-                  }
+                    stateCtx.setSelection(cameraObj.id)
+                  }}
                 >
                   {t('button.edit', {ns: 'common'})}
                 </BoldButton>
