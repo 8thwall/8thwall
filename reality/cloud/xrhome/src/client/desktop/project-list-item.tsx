@@ -115,7 +115,7 @@ const HUE_ROTATE_VALUES = [
 
 const ProjectListItem: React.FC<IProjectListItem> = ({project}) => {
   const classes = useStyles()
-  const {t} = useTranslation(['studio-desktop-pages'])
+  const {t} = useTranslation(['studio-desktop-pages', 'common'])
   const queryClient = useQueryClient()
   const [isMovingAppModalOpen, setIsMovingAppModalOpen] = React.useState(false)
   const [targetLocation, setTargetLocation] = React.useState<string>('')

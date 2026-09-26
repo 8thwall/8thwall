@@ -5,7 +5,7 @@ import {
   LIGHT_DEFAULTS, DEFAULT_COLOR,
   SHADOW_LOW_QUALITY_SIZE, SHADOW_MEDIUM_QUALITY_SIZE, SHADOW_HIGH_QUALITY_SIZE,
 } from '@ecs/shared/light-constants'
-import {type TFunction, useTranslation} from 'react-i18next'
+import {type CustomTFunction as TFunction, useTranslation} from 'react-i18next'
 import {createUseStyles} from 'react-jss'
 import {degreesToRadians, radiansToDegrees} from '@ecs/shared/angle-conversion'
 
@@ -163,7 +163,8 @@ const LightConfigurator: React.FC<ILightConfigurator> = ({light, onChange, reset
                     target: [
                       currentLight.target?.[0] ?? LIGHT_DEFAULTS.targetX,
                       currentLight.target?.[1] ?? LIGHT_DEFAULTS.targetY,
-                      newValue],
+                      newValue,
+                    ],
                   }))
                 }}
               />

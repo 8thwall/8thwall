@@ -80,6 +80,13 @@ const getDefaultExportType = (platform: HtmlShell): ExportType => {
   }
 }
 
+const EXPORT_TYPE_DESCRIPTION_KEYS = {
+  apk: 'editor_page.export_modal.build_type.apk_description',
+  aab: 'editor_page.export_modal.build_type.aab_description',
+  ipa: 'editor_page.export_modal.build_type.ipa_description',
+  zip: 'editor_page.export_modal.build_type.zip_description',
+} as const
+
 interface IExportFlow {
   onClose: () => void
   platform: HtmlShell
@@ -667,7 +674,7 @@ const ExportFlow: React.FC<IExportFlow> = ({onClose, platform}) => {
           <span className={classes.displayText}>
             {t('editor_page.native_publish_modal.building_text')}
           </span>
-          }
+        }
         onBack={!isBuilding && (() => setCurrentStep('start'))}
         actionButton={(
           <BuildButton
@@ -799,11 +806,7 @@ const ExportFlow: React.FC<IExportFlow> = ({onClose, platform}) => {
                         <div className={classes.exportTypeContent}>
                           {option.content}
                           <span className={classes.exportTypeDropdownDescription}>
-                            {t(
-                              `editor_page.export_modal.build_type.${
-                                option.value
-                              }_description`
-                            )}
+                            {t(EXPORT_TYPE_DESCRIPTION_KEYS[option.value])}
                           </span>
                         </div>
                         {isSelected &&

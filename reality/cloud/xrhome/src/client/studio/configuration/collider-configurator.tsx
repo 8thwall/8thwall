@@ -1,6 +1,6 @@
 import React from 'react'
 import type {DeepReadonly} from 'ts-essentials'
-import {useTranslation, Trans, type TFunction} from 'react-i18next'
+import {useTranslation, Trans, type CustomTFunction as TFunction} from 'react-i18next'
 import type {
   BoxGeometry, CapsuleGeometry, ColliderGeometryType, ConeGeometry, CylinderGeometry, GeometryType,
   PlaneGeometry, Collider as SceneCollider, SphereGeometry, ColliderType,
@@ -82,7 +82,7 @@ const ColliderSlider: React.FC<IColliderSlider> = ({
 const renderBoxSliders = (
   geometry: DeepReadonly<BoxGeometry>,
   onChange: (update: BoxGeometry) => void,
-  t: TFunction<'cloud-editor-pages'[]>
+  t: TFunction<'cloud-studio-pages'[]>
 ) => (
   <div>
     <ColliderSlider
@@ -112,7 +112,7 @@ const renderBoxSliders = (
 const renderSphereSliders = (
   geometry: DeepReadonly<SphereGeometry>,
   onChange: (update: SphereGeometry) => void,
-  t: TFunction<'cloud-editor-pages'[]>
+  t: TFunction<'cloud-studio-pages'[]>
 ) => (
   <div>
     <ColliderSlider
@@ -128,7 +128,7 @@ const renderSphereSliders = (
 const renderPlaneSliders = (
   geometry: DeepReadonly<PlaneGeometry>,
   onChange: (update: PlaneGeometry) => void,
-  t: TFunction<'cloud-editor-pages'[]>
+  t: TFunction<'cloud-studio-pages'[]>
 ) => (
   <div>
     <ColliderSlider
@@ -151,7 +151,7 @@ const renderPlaneSliders = (
 const renderCapsuleSliders = (
   geometry: DeepReadonly<CapsuleGeometry>,
   onChange: (update: CapsuleGeometry) => void,
-  t: TFunction<'cloud-editor-pages'[]>
+  t: TFunction<'cloud-studio-pages'[]>
 ) => (
   <div>
     <ColliderSlider
@@ -174,7 +174,7 @@ const renderCapsuleSliders = (
 const renderConeSliders = (
   geometry: DeepReadonly<ConeGeometry>,
   onChange: (update: ConeGeometry) => void,
-  t: TFunction<'cloud-editor-pages'[]>
+  t: TFunction<'cloud-studio-pages'[]>
 ) => (
   <div>
     <ColliderSlider
@@ -197,7 +197,7 @@ const renderConeSliders = (
 const renderCylinderSliders = (
   geometry: DeepReadonly<CylinderGeometry>,
   onChange: (update: CylinderGeometry) => void,
-  t: TFunction<'cloud-editor-pages'[]>
+  t: TFunction<'cloud-studio-pages'[]>
 ) => (
   <div>
     <ColliderSlider
@@ -220,7 +220,7 @@ const renderCylinderSliders = (
 const renderSliders = (
   geometry: DeepReadonly<SceneCollider['geometry']>,
   onChange: (update: SceneCollider['geometry']) => void,
-  t: TFunction<'cloud-editor-pages'[]>
+  t: TFunction<'cloud-studio-pages'[]>
 ) => {
   switch (geometry.type) {
     case 'box':
@@ -274,7 +274,7 @@ const ColliderConfigurator: React.FC<IColliderConfigurator> = ({
         >
           <Icon stroke='danger' color='danger' block />
         </Tooltip>
-        }
+      }
       {modelCollider &&
         <Tooltip
           content={(
@@ -287,7 +287,7 @@ const ColliderConfigurator: React.FC<IColliderConfigurator> = ({
         >
           <Icon stroke='info' color='info' block />
         </Tooltip>
-        }
+      }
     </SpaceBetween>
   )
 
@@ -634,7 +634,7 @@ const ColliderConfigurator: React.FC<IColliderConfigurator> = ({
             />
 
           </div>
-}
+        }
 
         {!!collider.geometry &&
           <RowBooleanField
@@ -652,7 +652,7 @@ const ColliderConfigurator: React.FC<IColliderConfigurator> = ({
               eventOnly: event.target.checked ? true : undefined,
             }))}
           />
-      }
+        }
 
         {!collider.eventOnly &&
           <>
@@ -735,7 +735,7 @@ const ColliderConfigurator: React.FC<IColliderConfigurator> = ({
               label={t('collider_configurator.bounciness.label')}
             />
           </>
-      }
+        }
         {/* TODO(Dale): Add expanseField for offset */}
         <RowGroupFields label={t('collider_configurator.offset.label')}>
           <SliderInputAxisField

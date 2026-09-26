@@ -233,7 +233,7 @@ const BeforeAfterBox: React.FC<IBeforeAfterBox> = ({before, after}) => {
     return ''
   }
 
-  const {t} = useTranslation('asset-lab')
+  const {t} = useTranslation(['asset-lab', 'cloud-studio-pages'])
   const diff: GlbDiff = {}
   if (before && after) {
     if (before.vertices !== after.vertices) {
@@ -315,7 +315,7 @@ const parseAsTextureSizeOr = (
 }
 
 const Studio3dModelOptimizer: React.FC<IStudio3dModelOptimizer> = () => {
-  const {t} = useTranslation('asset-lab')
+  const {t} = useTranslation(['asset-lab', 'cloud-studio-pages'])
   const classes = useStyles()
   const assetLabCtx = useAssetLabStateContext()
   const {prevMode, assetGenerationUuid} = assetLabCtx.state
@@ -483,7 +483,8 @@ const Studio3dModelOptimizer: React.FC<IStudio3dModelOptimizer> = () => {
     isDracoCompression,
     isOptimizations,
     isSmoothShading,
-    isTextureResize, textureSize,
+    isTextureResize,
+    textureSize,
     isTextureBrightness,
     textureBrightnessValue,
     isSimplifyGeometry,
@@ -491,10 +492,17 @@ const Studio3dModelOptimizer: React.FC<IStudio3dModelOptimizer> = () => {
     isPbrMaterial,
     pbrMetal,
     pbrRoughness,
-    posX, posY, posZ,
-    rotX, rotY, rotZ,
-    scaleX, scaleY, scaleZ,
-    rawMeshUrl, glbPostProcessing.readyToApply,
+    posX,
+    posY,
+    posZ,
+    rotX,
+    rotY,
+    rotZ,
+    scaleX,
+    scaleY,
+    scaleZ,
+    rawMeshUrl,
+    glbPostProcessing.readyToApply,
   ])
 
   const {getMeshUploadSignedUrl, updateAssetGenerationMetadata} = useActions(assetLabActions)
@@ -821,7 +829,7 @@ const Studio3dModelOptimizer: React.FC<IStudio3dModelOptimizer> = () => {
                 <div className={classes.transformButtonRow}>
                   {t('asset_lab.model_optimizer.scale')}
                   <IconButton
-                    text={t('transform_configurator.button.lock_scale')}
+                    text={t('transform_configurator.button.lock_scale', {ns: 'cloud-studio-pages'})}
                     onClick={() => {
                       setScaleLocked(!scaledLocked)
                       if (!scaledLocked) {
