@@ -1,18 +1,5 @@
 @use 'defaults';
 
-.errorIcon {
-  display: grid;
-  place-items: center;
-  width: 64px;
-  height: 64px;
-  margin: 0 auto 24px;
-  border-radius: 50%;
-  color: var(--xrextras-error-color, defaults.$error);
-  background: var(--xrextras-error-soft-color, defaults.$error-soft);
-  font-size: 36px;
-  font-weight: 700;
-}
-
 .errorDetail {
   display: block;
   overflow: auto;

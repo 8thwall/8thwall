@@ -19,7 +19,7 @@
   grid-template-columns: minmax(0, 1fr);
 }
 
-.requesting > :not(.spinner) {
+.requestingPanel {
   grid-row: 3;
   align-self: start;
   justify-self: center;

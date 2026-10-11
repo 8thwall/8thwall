@@ -1,8 +1,9 @@
-import {h} from 'preact'
-import type {FunctionComponent} from 'preact'
+import {h, FunctionComponent} from 'preact'
 
+import {combine} from '../classnames'
 import {AlertIcon} from './icons'
 import {Panel} from './panel'
+import {PrimaryButton} from './primary-button'
 import styles from './permissions-error-screen.module.scss'
 import sharedStyles from './shared.module.scss'
 import type {
@@ -19,13 +20,14 @@ interface PermissionsErrorScreenProps {
 }
 
 const permissionLabel = (permission: Permission, strings: StartFlowStrings) => {
-  if (permission === 'camera') {
-    return strings.cameraLabel
+  switch (permission) {
+    case 'camera':
+      return strings.cameraLabel
+    case 'microphone':
+      return strings.microphoneLabel
+    default:
+      return strings.motionLabel
   }
-  if (permission === 'microphone') {
-    return strings.microphoneLabel
-  }
-  return strings.motionLabel
 }
 
 interface PermissionInstruction {
@@ -39,40 +41,50 @@ const instructionsFor = (
   if (!screen.failed.length) {
     return []
   }
-  if (screen.environment === 'ios-safari') {
-    const instructions: PermissionInstruction[] = []
-    const websitePermissions = screen.failed.filter(permission => permission !== 'motion')
-    if (websitePermissions.length) {
-      instructions.push({
-        message: strings.permissionsErrorIosInstructions,
-        permissions: websitePermissions,
-      })
+  switch (screen.environment) {
+    case 'ios-safari': {
+      const instructions: PermissionInstruction[] = []
+      const websitePermissions = screen.failed.filter(permission => permission !== 'motion')
+      if (websitePermissions.length) {
+        instructions.push({
+          message: strings.permissionsErrorIosInstructions,
+          permissions: websitePermissions,
+        })
+      }
+      if (screen.failed.includes('motion')) {
+        instructions.push({
+          message: strings.permissionsErrorIosMotionInstructions,
+          permissions: ['motion'],
+        })
+      }
+      return instructions
     }
-    if (screen.failed.includes('motion')) {
-      instructions.push({
-        message: strings.permissionsErrorIosMotionInstructions,
-        permissions: ['motion'],
-      })
-    }
-    return instructions
+    case 'ios-chrome':
+      return [{
+        message: strings.permissionsErrorIosChromeInstructions,
+        permissions: screen.failed,
+      }]
+    case 'android-chrome':
+      return [{
+        message: strings.permissionsErrorAndroidChromeInstructions,
+        permissions: screen.failed,
+      }]
+    case 'desktop-safari':
+      return [{
+        message: strings.permissionsErrorSafariInstructions,
+        permissions: screen.failed,
+      }]
+    case 'desktop-chrome':
+      return [{
+        message: strings.permissionsErrorChromeInstructions,
+        permissions: screen.failed,
+      }]
+    default:
+      return [{
+        message: strings.permissionsErrorOtherInstructions,
+        permissions: screen.failed,
+      }]
   }
-  if (screen.environment === 'ios-chrome') {
-    return [{
-      message: strings.permissionsErrorIosChromeInstructions,
-      permissions: screen.failed,
-    }]
-  }
-  let message: string
-  if (screen.environment === 'android-chrome') {
-    message = strings.permissionsErrorAndroidChromeInstructions
-  } else if (screen.environment === 'desktop-safari') {
-    message = strings.permissionsErrorSafariInstructions
-  } else if (screen.environment === 'desktop-chrome') {
-    message = strings.permissionsErrorChromeInstructions
-  } else {
-    message = strings.permissionsErrorOtherInstructions
-  }
-  return [{message, permissions: screen.failed}]
 }
 
 const PermissionsErrorScreen: FunctionComponent<PermissionsErrorScreenProps> = ({
@@ -84,11 +96,11 @@ const PermissionsErrorScreen: FunctionComponent<PermissionsErrorScreenProps> = (
 
   return (
     <main
-      className={`${sharedStyles.screen} ${sharedStyles.centered}`}
+      className={combine(sharedStyles.screen, sharedStyles.centered)}
       role='alert'
     >
       <Panel className={sharedStyles.statusContent}>
-        <div className={`${sharedStyles.iconBadge} ${sharedStyles.errorIconBadge}`}>
+        <div className={combine(sharedStyles.iconBadge, sharedStyles.errorIconBadge)}>
           <AlertIcon />
         </div>
         <h1 className={sharedStyles.title}>{strings.permissionsTitle}</h1>
@@ -105,7 +117,7 @@ const PermissionsErrorScreen: FunctionComponent<PermissionsErrorScreenProps> = (
           ))}
         </ul>
         {instructions.length > 0 && (
-          <div className={`${sharedStyles.instruction} ${styles.instructions}`}>
+          <div className={combine(sharedStyles.instruction, styles.instructions)}>
             {instructions.map(({message, permissions}) => (
               <div className={styles.instructionGroup} key={message}>
                 <p className={styles.instructionText}>{message}</p>
@@ -118,9 +130,9 @@ const PermissionsErrorScreen: FunctionComponent<PermissionsErrorScreenProps> = (
             ))}
           </div>
         )}
-        <button className={sharedStyles.primaryButton} type='button' onClick={refresh}>
+        <PrimaryButton onClick={refresh}>
           {strings.tryAgainCta}
-        </button>
+        </PrimaryButton>
       </Panel>
     </main>
   )

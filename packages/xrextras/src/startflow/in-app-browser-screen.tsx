@@ -1,6 +1,6 @@
-import {h} from 'preact'
-import type {FunctionComponent} from 'preact'
+import {h, FunctionComponent} from 'preact'
 
+import {combine} from '../classnames'
 import {OpenBrowserIcon} from './icons'
 import {Panel} from './panel'
 import sharedStyles from './shared.module.scss'
@@ -11,7 +11,7 @@ interface InAppBrowserScreenProps {
 }
 
 const InAppBrowserScreen: FunctionComponent<InAppBrowserScreenProps> = ({strings}) => (
-  <main className={`${sharedStyles.screen} ${sharedStyles.centered}`}>
+  <main className={combine(sharedStyles.screen, sharedStyles.centered)}>
     <Panel className={sharedStyles.statusContent}>
       <div className={sharedStyles.iconBadge}><OpenBrowserIcon /></div>
       <h1 className={sharedStyles.title}>{strings.inAppBrowserTitle}</h1>

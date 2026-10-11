@@ -1,7 +1,6 @@
 @use 'defaults';
 
 .screen {
-  position: var(--xrextras-position, defaults.$position);
   z-index: var(--xrextras-z-index, defaults.$z-index);
   inset: 0;
   overflow: auto;
@@ -136,25 +135,6 @@
   background: var(--xrextras-neutral-soft-color, defaults.$neutral-soft);
   font-size: 14px;
   line-height: 1.45;
-}
-
-.primaryButton {
-  appearance: none;
-  width: 100%;
-  min-height: 48px;
-  margin-top: 22px;
-  border: 0;
-  border-radius: var(--xrextras-button-border-radius, defaults.$button-border-radius);
-  padding: 12px 22px;
-  color: var(--xrextras-accent-text-color, defaults.$accent-text);
-  background: var(--xrextras-accent-color, defaults.$accent);
-  font: 700 16px/1.2 var(--xrextras-body-font, defaults.$body-font);
-  cursor: pointer;
-}
-
-.primaryButton:focus-visible {
-  outline: 3px solid var(--xrextras-focus-ring-color, defaults.$focus-ring);
-  outline-offset: 3px;
 }
 
 .visuallyHidden {

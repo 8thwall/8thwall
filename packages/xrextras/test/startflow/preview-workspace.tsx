@@ -1,8 +1,8 @@
-import {h} from 'preact'
-import type {ComponentChildren, FunctionComponent} from 'preact'
+import {h, ComponentChildren, FunctionComponent} from 'preact'
 
 import type {StartFlowScreen} from '../../src/startflow/types'
 import styles from './debug.module.css'
+import {combine} from '../../src/classnames'
 
 type ViewMode = 'mobile' | 'full' | 'full-no-sidebar'
 
@@ -60,7 +60,7 @@ const PreviewWorkspace: FunctionComponent<PreviewWorkspaceProps> = ({
   if (collection) {
     const layoutClass = viewMode === 'mobile' ? styles.mobileGrid : styles.fullStack
     previews = (
-      <div className={`${styles.allScreens} ${layoutClass}`}>
+      <div className={combine(styles.allScreens, layoutClass)}>
         {items.map(({label, screen}) => (
           <section className={styles.screenPreview} key={label}>
             <h2>{label}</h2>
@@ -81,7 +81,7 @@ const PreviewWorkspace: FunctionComponent<PreviewWorkspaceProps> = ({
   }
 
   return (
-    <main className={`${styles.workspace} ${collection ? styles.allWorkspace : ''}`}>
+    <main className={combine(styles.workspace, collection && styles.allWorkspace)}>
       <div className={styles.viewToggle} role='group' aria-label='Preview size'>
         {VIEW_MODES.map(({value, label}) => (
           <button

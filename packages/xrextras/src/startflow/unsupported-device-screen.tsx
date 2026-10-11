@@ -1,5 +1,6 @@
 import {h, FunctionComponent} from 'preact'
 
+import {combine} from '../classnames'
 import {Panel} from './panel'
 import sharedStyles from './shared.module.scss'
 import type {StartFlowStrings} from './types'
@@ -11,10 +12,10 @@ interface UnsupportedDeviceScreenProps {
 
 const UnsupportedDeviceScreen: FunctionComponent<UnsupportedDeviceScreenProps> = ({strings}) => (
   <main
-    className={`${sharedStyles.screen} ${sharedStyles.centered}`}
+    className={combine(sharedStyles.screen, sharedStyles.centered)}
   >
     <Panel className={sharedStyles.statusContent}>
-      <div className={`${sharedStyles.iconBadge} ${sharedStyles.errorIconBadge}`}>
+      <div className={combine(sharedStyles.iconBadge, sharedStyles.errorIconBadge)}>
         <AlertIcon />
       </div>
       <h1 className={sharedStyles.title}>{strings.unsupportedDeviceTitle}</h1>

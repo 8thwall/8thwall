@@ -1,8 +1,8 @@
-import {h} from 'preact'
-import type {FunctionComponent} from 'preact'
+import {h, FunctionComponent} from 'preact'
 import {useEffect, useState} from 'preact/hooks'
 
 import styles from './debug.module.css'
+import {combine} from '../../src/classnames'
 
 const STYLE_FIELDS = [
   {token: '--xrextras-accent-color', defaultValue: '#ffffff', color: true},
@@ -183,7 +183,7 @@ interface StyleOverridesControlProps {
 const StyleOverridesControl: FunctionComponent<StyleOverridesControlProps> = ({
   onChange, onPreset, onReset, overrides,
 }) => (
-  <details className={`${styles.fieldset} ${styles.styleOverrides}`}>
+  <details className={combine(styles.fieldset, styles.styleOverrides)}>
     <summary>Style overrides</summary>
     <div className={styles.presetGroup}>
       <span className={styles.presetLabel}>Theme presets</span>

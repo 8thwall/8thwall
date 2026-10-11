@@ -31,27 +31,27 @@ import {StringOverridesControl} from './string-controls'
 import {StyleOverridesControl} from './style-controls'
 import type {StyleToken} from './style-controls'
 import {readSettings, writeSettings} from './url-settings'
+import {combine} from '../../src/classnames'
 
 const screenFromSettings = (
   type: StartFlowScreenType, settings: DebugSettings
 ): StartFlowScreen => {
-  if (type === 'loading') {
-    return {type, ...settings.state.loading}
+  switch (type) {
+    case 'loading':
+      return {type, ...settings.state.loading}
+    case 'permissions-error':
+      return {type, ...settings.state.permissionsError}
+    case 'unexpected-error':
+      return {type, ...settings.state.unexpectedError}
+    default:
+      return type
   }
-  if (type === 'permissions-error') {
-    return {type, ...settings.state.permissionsError}
-  }
-  if (type === 'unexpected-error') {
-    return {type, ...settings.state.unexpectedError}
-  }
-  return type
 }
 
 const DebugApp = () => {
   const [settings, setSettings] = useState<DebugSettings>(readSettings)
   const strings = {...defaultStrings, ...settings.stringOverrides}
   const previewStyle = [
-    '--xrextras-position: absolute',
     '--xrextras-z-index: 1',
     ...Object.entries(settings.styleOverrides).map(([token, value]) => `${token}: ${value}`),
   ].join('; ')
@@ -117,30 +117,33 @@ const DebugApp = () => {
         : () => showLoading(true),
     }
 
-    if (typeof screen === 'string') {
-      if (screen === 'unsupported-device') {
+    switch (screen) {
+      case 'unsupported-device':
         return <UnsupportedDeviceScreen strings={strings} />
-      }
-      if (screen === 'unsupported-browser') {
-        return <UnsupportedBrowserScreen strings={strings} />
-      }
-      if (screen === 'in-app-browser') {
-        return <InAppBrowserScreen strings={strings} />
-      }
-      return <StartScreen options={options} strings={strings} />
-    }
 
-    switch (screen.type) {
-      case 'loading':
-        return (
-          <LoadingScreen requestingPermissions={screen.requestingPermissions} strings={strings} />
-        )
-      case 'permissions-error':
-        return <PermissionsErrorScreen options={options} screen={screen} strings={strings} />
-      case 'unexpected-error':
-        return <UnexpectedErrorScreen options={options} screen={screen} strings={strings} />
+      case 'unsupported-browser':
+        return <UnsupportedBrowserScreen strings={strings} />
+
+      case 'in-app-browser':
+        return <InAppBrowserScreen strings={strings} />
+      case 'start':
+        return <StartScreen options={options} strings={strings} />
       default:
-        return null
+        switch (screen.type) {
+          case 'loading':
+            return (
+              <LoadingScreen
+                requestingPermissions={screen.requestingPermissions}
+                strings={strings}
+              />
+            )
+          case 'permissions-error':
+            return <PermissionsErrorScreen options={options} screen={screen} strings={strings} />
+          case 'unexpected-error':
+            return <UnexpectedErrorScreen options={options} screen={screen} strings={strings} />
+          default:
+            return null
+        }
     }
   }
   let previewItems: PreviewItem[]
@@ -159,9 +162,10 @@ const DebugApp = () => {
   }
 
   return (
-    <div className={`${styles.app} ${
-      settings.viewMode === 'full-no-sidebar' ? styles.noSidebar : ''
-    }`}
+    <div className={combine(
+      styles.app,
+      settings.viewMode === 'full-no-sidebar' && styles.noSidebar
+    )}
     >
       <aside className={styles.panel}>
         <fieldset className={styles.fieldset}>
@@ -203,7 +207,7 @@ const DebugApp = () => {
         )}
 
         {isSelected('loading') && (
-          <fieldset className={`${styles.fieldset} ${styles.screenState}`}>
+          <fieldset className={combine(styles.fieldset, styles.screenState)}>
             <legend>{settings.screen === 'all' ? 'Loading state' : 'Screen state'}</legend>
             <label className={styles.checkboxField}>
               <input
@@ -223,10 +227,9 @@ const DebugApp = () => {
         )}
 
         {isSelected('permissions-error') && (
-          <fieldset className={`${styles.fieldset} ${styles.screenState}`}>
-            <legend>{settings.screen === 'all'
-              ? 'Permissions error state'
-              : 'Screen state'}
+          <fieldset className={combine(styles.fieldset, styles.screenState)}>
+            <legend>
+              {settings.screen === 'all' ? 'Permissions error state' : 'Screen state'}
             </legend>
             {settings.screen === 'permissions-error' && (
               <label className={styles.checkboxField}>
@@ -313,7 +316,7 @@ const DebugApp = () => {
         )}
 
         {isSelected('unexpected-error') && (
-          <fieldset className={`${styles.fieldset} ${styles.screenState}`}>
+          <fieldset className={combine(styles.fieldset, styles.screenState)}>
             <legend>{settings.screen === 'all' ? 'Unexpected error state' : 'Screen state'}</legend>
             <label className={styles.field}>
               <span>Error detail</span>

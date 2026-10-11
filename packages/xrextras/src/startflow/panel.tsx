@@ -1,5 +1,6 @@
 import {h, ComponentChildren, FunctionComponent} from 'preact'
 
+import {combine} from '../classnames'
 import sharedStyles from './shared.module.scss'
 
 interface PanelProps {
@@ -14,9 +15,7 @@ const Panel: FunctionComponent<PanelProps> = ({
   animate = true, ariaLabel, children, className, style,
 }) => (
   <section
-    className={`${sharedStyles.panel}${animate ? ` ${sharedStyles.panelEnter}` : ''}${
-      className ? ` ${className}` : ''
-    }`}
+    className={combine(sharedStyles.panel, animate && sharedStyles.panelEnter, className)}
     aria-label={ariaLabel}
     style={style}
   >

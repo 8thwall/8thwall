@@ -1,6 +1,8 @@
 import {h, FunctionComponent} from 'preact'
 
+import {combine} from '../classnames'
 import {Panel} from './panel'
+import {PrimaryButton} from './primary-button'
 import sharedStyles from './shared.module.scss'
 import styles from './start-screen.module.scss'
 import type {StartFlowScreenOptions, StartFlowStrings} from './types'
@@ -12,10 +14,10 @@ interface StartScreenProps {
 
 const StartScreen: FunctionComponent<StartScreenProps> = ({options, strings}) => (
   <main
-    className={`${sharedStyles.screen} ${sharedStyles.centered}`}
+    className={combine(sharedStyles.screen, sharedStyles.centered)}
   >
     <Panel
-      className={`${styles.card} ${sharedStyles.autoHeightPanel}`}
+      className={combine(styles.card, sharedStyles.autoHeightPanel)}
       ariaLabel={strings.startTitle}
     >
       {options.previewSrc && (
@@ -32,13 +34,9 @@ const StartScreen: FunctionComponent<StartScreenProps> = ({options, strings}) =>
         {strings.startDescription && (
           <p className={sharedStyles.description}>{strings.startDescription}</p>
         )}
-        <button
-          className={styles.button}
-          type='button'
-          onClick={options.onStart}
-        >
+        <PrimaryButton onClick={options.onStart}>
           {strings.startCta}
-        </button>
+        </PrimaryButton>
       </div>
     </Panel>
   </main>
