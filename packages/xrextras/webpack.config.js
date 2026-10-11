@@ -1,6 +1,8 @@
 const path = require('path')
 const CopyPlugin = require('copy-webpack-plugin')
 
+const TESTING = process.env.WEBPACK_SERVE === 'true'
+
 module.exports = {
   entry: {
     xrextras: './src/index.js',
@@ -22,20 +24,6 @@ module.exports = {
         },
       },
       {
-        test: /\.module\.css$/,
-        use: [
-          'style-loader',
-          {
-            loader: 'css-loader',
-            options: {
-              modules: {
-                localIdentName: 'xrextras_[hash:base64:8]',
-              },
-            },
-          },
-        ],
-      },
-      {
         test: /\.module\.scss$/,
         use: [
           'style-loader',
@@ -43,7 +31,9 @@ module.exports = {
             loader: 'css-loader',
             options: {
               modules: {
-                localIdentName: 'xrextras_[hash:base64:8]',
+                localIdentName: TESTING
+                  ? 'xrextras_[local]_[hash:base64:8]'
+                  : 'xrextras_[hash:base64:8]',
               },
             },
           },
@@ -52,7 +42,6 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        exclude: /\.module\.css$/,
         use: [
           'style-loader',
           'css-loader',

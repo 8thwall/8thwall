@@ -1,7 +1,7 @@
 import {h, FunctionComponent} from 'preact'
 
 import type {StartFlowStrings} from '../../src/startflow/types'
-import styles from './debug.module.css'
+import styles from './debug.module.scss'
 import {combine} from '../../src/classnames'
 
 interface StringOverridesControlProps {

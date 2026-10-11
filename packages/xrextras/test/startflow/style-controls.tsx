@@ -1,7 +1,7 @@
 import {h, FunctionComponent} from 'preact'
 import {useEffect, useState} from 'preact/hooks'
 
-import styles from './debug.module.css'
+import styles from './debug.module.scss'
 import {combine} from '../../src/classnames'
 
 const STYLE_FIELDS = [

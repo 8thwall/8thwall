@@ -17,13 +17,12 @@
   display: grid;
   grid-template-rows: minmax(0, 1fr) 54px minmax(0, 1fr);
   grid-template-columns: minmax(0, 1fr);
+  gap: 24px;
 }
 
 .requestingPanel {
-  grid-row: 3;
-  align-self: start;
+  align-self: end;
   justify-self: center;
-  margin-top: 24px;
 }
 
 @keyframes spin {

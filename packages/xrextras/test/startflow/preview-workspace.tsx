@@ -1,7 +1,7 @@
 import {h, ComponentChildren, FunctionComponent} from 'preact'
 
 import type {StartFlowScreen} from '../../src/startflow/types'
-import styles from './debug.module.css'
+import styles from './debug.module.scss'
 import {combine} from '../../src/classnames'
 
 type ViewMode = 'mobile' | 'full' | 'full-no-sidebar'

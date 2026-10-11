@@ -1,6 +1,7 @@
 @use 'defaults';
 
 .screen {
+  position: fixed;
   z-index: var(--xrextras-z-index, defaults.$z-index);
   inset: 0;
   overflow: auto;
@@ -77,7 +78,6 @@
 .panel {
   flex: 0 0 auto;
   width: min(100%, 420px);
-  min-height: 460px;
   border-radius: var(--xrextras-panel-border-radius, defaults.$panel-border-radius);
   padding: 30px 28px;
   background: var(--xrextras-panel-background-color, defaults.$panel-background);
@@ -87,10 +87,6 @@
 
 .panelEnter {
   animation: panelEnter 300ms ease both;
-}
-
-.autoHeightPanel {
-  min-height: 0;
 }
 
 @keyframes panelEnter {

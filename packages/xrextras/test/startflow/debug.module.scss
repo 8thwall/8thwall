@@ -58,7 +58,7 @@
   padding: 0;
 }
 
-.panel > .fieldset:first-child {
+.panel>.fieldset:first-child {
   margin-top: 0;
 }
 
@@ -149,12 +149,12 @@
   margin-top: 0;
 }
 
-.field + .field {
+.field+.field {
   margin-top: 8px;
 }
 
 .field span,
-.field > label {
+.field>label {
   display: block;
   margin-bottom: 4px;
   color: #555560;
@@ -172,6 +172,7 @@
   background: white;
   font: 13px/1.3 inherit;
 }
+
 
 .field select {
   min-height: 34px;
@@ -241,6 +242,10 @@
   padding: 20px;
   background-image: radial-gradient(#393941 1px, transparent 1px);
   background-size: 18px 18px;
+
+  [class^="xrextras_screen_"] {
+    position: absolute !important;
+  }
 }
 
 .allWorkspace {

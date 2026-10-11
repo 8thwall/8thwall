@@ -23,7 +23,7 @@ import {
   SCREENS,
   STRING_KEYS,
 } from './debug-config'
-import styles from './debug.module.css'
+import styles from './debug.module.scss'
 import type {DebugSettings, ScreenSelection} from './debug-types'
 import {PreviewWorkspace} from './preview-workspace'
 import type {PreviewItem, ViewMode} from './preview-workspace'
