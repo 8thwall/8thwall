@@ -117,6 +117,30 @@ export default [
     },
   },
   {
+    files: [
+      ...globs('packages/xrextras/src'),
+      ...globs('packages/xrextras/test'),
+    ],
+    settings: {
+      'react': {
+        pragma: 'h',
+        fragment: 'Fragment',
+        version: 'detect',
+      },
+    },
+    rules: {
+      'local-rules/type-only-imports': 'off',
+      'react/no-unknown-property': 'off',
+      'react/prop-types': 'off',
+    },
+  },
+  {
+    files: globs('packages/xrextras/src/startflow'),
+    rules: {
+      'local-rules/hardcoded-copy': 'warn',
+    },
+  },
+  {
     files: globs('reality/app/xr/js'),
     rules: {
       'no-restricted-properties': [

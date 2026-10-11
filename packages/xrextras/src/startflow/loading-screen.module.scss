@@ -1,0 +1,39 @@
+@use 'defaults';
+
+.spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 54px;
+  height: 54px;
+  margin: -27px 0 0 -27px;
+  border: 5px solid var(--xrextras-spinner-track-color, defaults.$spinner-track);
+  border-top-color: var(--xrextras-accent-color, defaults.$accent);
+  border-radius: 50%;
+  animation: spin 800ms linear infinite;
+}
+
+.requesting {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) 54px minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.requesting > :not(.spinner) {
+  grid-row: 3;
+  align-self: start;
+  justify-self: center;
+  margin-top: 24px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation-duration: 1600ms;
+  }
+}

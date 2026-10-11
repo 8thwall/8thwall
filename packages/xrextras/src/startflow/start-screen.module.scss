@@ -1,0 +1,70 @@
+@use 'defaults';
+
+.card {
+  overflow: hidden;
+  padding: 0;
+}
+
+.previewWrap {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: var(--xrextras-preview-aspect-ratio, defaults.$preview-aspect-ratio);
+  max-height: min(54vh, 500px);
+  background: defaults.$preview-background;
+}
+
+.preview {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.content {
+  padding: 26px 28px 30px;
+}
+
+.button {
+  appearance: none;
+  width: 100%;
+  min-height: 52px;
+  margin-top: 24px;
+  border: 0;
+  border-radius: var(--xrextras-button-border-radius, defaults.$button-border-radius);
+  padding: 13px 24px;
+  color: var(--xrextras-accent-text-color, defaults.$accent-text);
+  background: var(--xrextras-accent-color, defaults.$accent);
+  font: 700 17px/1.2 var(--xrextras-body-font, defaults.$body-font);
+  cursor: pointer;
+  transition: filter 150ms ease, transform 150ms ease;
+}
+
+.button:hover {
+  filter: brightness(1.08);
+}
+
+.button:active {
+  transform: scale(0.985);
+}
+
+.button:focus-visible {
+  outline: 3px solid var(--xrextras-focus-ring-color, defaults.$focus-ring);
+  outline-offset: 3px;
+}
+
+@media (max-height: 700px) {
+  .previewWrap {
+    max-height: 42vh;
+  }
+
+  .content {
+    padding-top: 20px;
+    padding-bottom: 22px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button {
+    transition: none;
+  }
+}

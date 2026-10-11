@@ -1,0 +1,178 @@
+@use 'defaults';
+
+.screen {
+  position: var(--xrextras-position, defaults.$position);
+  z-index: var(--xrextras-z-index, defaults.$z-index);
+  inset: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  display: flex;
+  align-items: center;
+  align-items: safe center;
+  justify-content: center;
+  justify-content: safe center;
+  min-width: 280px;
+  min-height: 100%;
+  padding: max(20px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right))
+    max(20px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left));
+  isolation: isolate;
+  color: var(--xrextras-text-color, defaults.$text);
+  background: var(--xrextras-background-color, defaults.$background);
+  font-family: var(--xrextras-body-font, defaults.$body-font);
+  text-align: center;
+  text-shadow: var(--xrextras-text-shadow, defaults.$text-shadow);
+}
+
+.screen::before {
+  position: absolute;
+  z-index: -1;
+  inset: calc(-1 * var(--xrextras-background-blur, defaults.$background-blur));
+  background-image: var(--xrextras-background-image, defaults.$background-image);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  content: '';
+  filter: blur(var(--xrextras-background-blur, defaults.$background-blur));
+}
+
+.screen,
+.screen::before,
+.screen::after,
+.screen *,
+.screen *::before,
+.screen *::after {
+  box-sizing: border-box;
+}
+
+.centered {
+  flex-direction: column;
+}
+
+.fadeOut {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 300ms linear 300ms;
+}
+
+.title {
+  margin: 0;
+  color: var(--xrextras-text-color, defaults.$text);
+  font-size: var(--xrextras-title-font-size, defaults.$title-font-size);
+  font-family: var(--xrextras-title-font, defaults.$title-font);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.description {
+  margin: 12px auto 0;
+  color: var(--xrextras-muted-text-color, defaults.$muted-text);
+  font-size: var(--xrextras-body-font-size, defaults.$body-font-size);
+  line-height: 1.45;
+}
+
+.statusContent {
+  width: min(100%, 420px);
+}
+
+.panel {
+  flex: 0 0 auto;
+  width: min(100%, 420px);
+  min-height: 460px;
+  border-radius: var(--xrextras-panel-border-radius, defaults.$panel-border-radius);
+  padding: 30px 28px;
+  background: var(--xrextras-panel-background-color, defaults.$panel-background);
+  box-shadow: var(--xrextras-panel-shadow, defaults.$panel-shadow);
+  backdrop-filter: var(--xrextras-panel-backdrop-filter, defaults.$panel-backdrop-filter);
+}
+
+.panelEnter {
+  animation: panelEnter 300ms ease both;
+}
+
+.autoHeightPanel {
+  min-height: 0;
+}
+
+@keyframes panelEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.expandedPanel {
+  width: min(100%, 1000px);
+}
+
+.iconBadge {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 24px;
+  border-radius: 50%;
+  color: var(--xrextras-accent-color, defaults.$accent);
+  background: var(--xrextras-accent-soft-color, defaults.$accent-soft);
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.errorIconBadge {
+  color: var(--xrextras-error-color, defaults.$error);
+  background: var(--xrextras-error-soft-color, defaults.$error-soft);
+}
+
+.instruction {
+  margin: 22px auto 0;
+  border-radius: var(--xrextras-border-radius, defaults.$border-radius);
+  padding: 14px 16px;
+  color: var(--xrextras-text-color, defaults.$text);
+  background: var(--xrextras-neutral-soft-color, defaults.$neutral-soft);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.primaryButton {
+  appearance: none;
+  width: 100%;
+  min-height: 48px;
+  margin-top: 22px;
+  border: 0;
+  border-radius: var(--xrextras-button-border-radius, defaults.$button-border-radius);
+  padding: 12px 22px;
+  color: var(--xrextras-accent-text-color, defaults.$accent-text);
+  background: var(--xrextras-accent-color, defaults.$accent);
+  font: 700 16px/1.2 var(--xrextras-body-font, defaults.$body-font);
+  cursor: pointer;
+}
+
+.primaryButton:focus-visible {
+  outline: 3px solid var(--xrextras-focus-ring-color, defaults.$focus-ring);
+  outline-offset: 3px;
+}
+
+.visuallyHidden {
+  position: absolute;
+  overflow: hidden;
+  width: 1px;
+  height: 1px;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panelEnter {
+    animation: none;
+  }
+
+  .fadeOut {
+    transition-duration: 1ms;
+  }
+}
