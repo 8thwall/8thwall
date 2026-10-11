@@ -1,0 +1,56 @@
+@use 'defaults';
+
+.permissionList {
+  display: grid;
+  gap: 8px;
+  margin: 22px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.permissionRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: var(--xrextras-border-radius, defaults.$border-radius);
+  padding: 11px 13px;
+  color: var(--xrextras-text-color, defaults.$text);
+  background: var(--xrextras-neutral-soft-color, defaults.$neutral-soft);
+  font-size: 14px;
+  font-weight: 700;
+  text-align: left;
+}
+
+.allowed,
+.failed {
+  font-size: 12px;
+}
+
+.allowed {
+  color: defaults.$success;
+}
+
+.failed {
+  color: var(--xrextras-error-color, defaults.$error);
+}
+
+.instructions {
+  display: grid;
+  gap: 12px;
+  text-align: left;
+}
+
+.instructionGroup {
+  display: grid;
+  gap: 6px;
+}
+
+.instructionText {
+  margin: 0;
+}
+
+.instructionPermissionList {
+  margin: 0;
+  padding-left: 20px;
+  font-weight: 700;
+}

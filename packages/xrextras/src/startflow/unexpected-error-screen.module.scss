@@ -1,0 +1,16 @@
+@use 'defaults';
+
+.errorDetail {
+  display: block;
+  overflow: auto;
+  max-height: 120px;
+  margin-top: 18px;
+  border-radius: var(--xrextras-border-radius, defaults.$border-radius);
+  padding: 12px 14px;
+  color: var(--xrextras-text-color, defaults.$text);
+  background: var(--xrextras-neutral-soft-color, defaults.$neutral-soft);
+  font: 13px/1.45 monospace;
+  text-align: left;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}

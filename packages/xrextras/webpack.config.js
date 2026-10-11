@@ -1,9 +1,12 @@
 const path = require('path')
 const CopyPlugin = require('copy-webpack-plugin')
 
+const TESTING = process.env.WEBPACK_SERVE === 'true'
+
 module.exports = {
   entry: {
     xrextras: './src/index.js',
+    'startflow-debug': './test/startflow/index.tsx',
   },
   output: {
     filename: '[name].js',
@@ -21,6 +24,23 @@ module.exports = {
         },
       },
       {
+        test: /\.module\.scss$/,
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              modules: {
+                localIdentName: TESTING
+                  ? 'xrextras_[local]_[hash:base64:8]'
+                  : 'xrextras_[hash:base64:8]',
+              },
+            },
+          },
+          'sass-loader',
+        ],
+      },
+      {
         test: /\.css$/,
         use: [
           'style-loader',
@@ -33,7 +53,7 @@ module.exports = {
         },
       },
       {
-        test: /\.ts$/,
+        test: /\.tsx?$/,
         use: 'ts-loader',
         exclude: /node_modules/,
       },
@@ -51,12 +71,13 @@ module.exports = {
         {from: 'test/index.html', to: 'test/index.html'},
         {from: 'test/index-aframe.html', to: 'test/index-aframe.html'},
         {from: 'test/index.js', to: 'test/index.js'},
+        {from: 'test/startflow/index.html', to: 'test/startflow/index.html'},
       ],
     }),
   ],
   mode: 'production',
   resolve: {
-    extensions: ['.ts', '.js'],
+    extensions: ['.ts', '.tsx', '.js'],
   },
   devServer: {
     static: path.join(__dirname, 'dist'),

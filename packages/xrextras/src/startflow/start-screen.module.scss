@@ -1,0 +1,36 @@
+@use 'defaults';
+
+.card {
+  overflow: hidden;
+  padding: 0;
+}
+
+.previewWrap {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: var(--xrextras-preview-aspect-ratio, defaults.$preview-aspect-ratio);
+  max-height: min(54vh, 500px);
+  background: defaults.$preview-background;
+}
+
+.preview {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.content {
+  padding: 26px 28px 30px;
+}
+
+@media (max-height: 700px) {
+  .previewWrap {
+    max-height: 42vh;
+  }
+
+  .content {
+    padding-top: 20px;
+    padding-bottom: 22px;
+  }
+}

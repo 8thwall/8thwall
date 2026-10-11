@@ -1,0 +1,361 @@
+:global(html),
+:global(body),
+:global([data-startflow-debug-root]) {
+  width: 100%;
+  min-width: 720px;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+:global(body) {
+  background: #1d1d23;
+}
+
+.app {
+  display: grid;
+  grid-template-columns: 320px minmax(400px, 1fr);
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  color: #202027;
+  background: #1d1d23;
+  font-family: Inter, system-ui, -apple-system, sans-serif;
+}
+
+.noSidebar {
+  grid-template-columns: 1fr;
+}
+
+.noSidebar .panel {
+  display: none;
+}
+
+.app,
+.app::before,
+.app::after,
+.app *,
+.app *::before,
+.app *::after {
+  box-sizing: border-box;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  z-index: 2;
+  overflow-y: auto;
+  min-height: 0;
+  height: 100%;
+  padding: 16px;
+  background: #f8f8fa;
+  box-shadow: 4px 0 14px rgba(0, 0, 0, 0.1);
+}
+
+.fieldset {
+  margin: 16px 0 0;
+  border: 0;
+  padding: 0;
+}
+
+.panel>.fieldset:first-child {
+  margin-top: 0;
+}
+
+.fieldset legend {
+  margin-bottom: 7px;
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.screenState {
+  order: 2;
+}
+
+.stringOverrides {
+  order: 4;
+}
+
+.styleOverrides {
+  order: 3;
+}
+
+.stringOverrides summary,
+.styleOverrides summary {
+  color: #202027;
+  font-size: 12px;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.stringOverrides[open] summary,
+.styleOverrides[open] summary {
+  margin-bottom: 7px;
+}
+
+.resetButton {
+  width: 100%;
+  margin-top: 10px;
+  border: 1px solid #d8d8df;
+  border-radius: 7px;
+  padding: 7px 9px;
+  color: #555560;
+  background: #ffffff;
+  font: 650 12px/1.2 inherit;
+  cursor: pointer;
+}
+
+.presetGroup {
+  margin-bottom: 10px;
+}
+
+.presetLabel {
+  display: block;
+  margin-bottom: 5px;
+  color: #555560;
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.presetButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.presetButtons button {
+  min-height: 28px;
+  border: 1px solid #d8d8df;
+  border-radius: 7px;
+  padding: 5px 8px;
+  color: #35353d;
+  background: #ffffff;
+  font: 650 11px/1.2 inherit;
+  cursor: pointer;
+}
+
+.presetButtons button:hover {
+  border-color: #aaa7f4;
+  background: #f2f1ff;
+}
+
+.presetButtons button:focus-visible {
+  outline: 2px solid #726de9;
+  outline-offset: 1px;
+}
+
+.field {
+  display: block;
+  margin-top: 0;
+}
+
+.field+.field {
+  margin-top: 8px;
+}
+
+.field span,
+.field>label {
+  display: block;
+  margin-bottom: 4px;
+  color: #555560;
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.field input,
+.field select {
+  width: 100%;
+  border: 1px solid #d8d8df;
+  border-radius: 8px;
+  padding: 7px 8px;
+  color: #202027;
+  background: white;
+  font: 13px/1.3 inherit;
+}
+
+
+.field select {
+  min-height: 34px;
+}
+
+.field input:focus,
+.field select:focus {
+  border-color: #726de9;
+  outline: 3px solid rgba(91, 85, 231, 0.13);
+}
+
+.styleInput {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 6px;
+}
+
+.field input.colorPicker {
+  width: 34px;
+  height: 34px;
+  border-radius: 7px;
+  padding: 2px;
+  cursor: pointer;
+}
+
+.checkboxField {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 7px;
+  color: #555560;
+  font-size: 12px;
+}
+
+.checkboxField input {
+  width: 14px;
+  height: 14px;
+  margin: 0;
+}
+
+.permissionControls {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 10px;
+  align-items: center;
+  margin-top: 9px;
+  border-top: 1px solid #e3e3e8;
+  padding-top: 9px;
+  color: #555560;
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.permissionControls .checkboxField {
+  margin-top: 0;
+  font-weight: 500;
+}
+
+.workspace {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+  padding: 20px;
+  background-image: radial-gradient(#393941 1px, transparent 1px);
+  background-size: 18px 18px;
+
+  [class^="xrextras_screen_"] {
+    position: absolute !important;
+  }
+}
+
+.allWorkspace {
+  display: block;
+  overflow: auto;
+  padding: 8px 20px 20px;
+}
+
+.allWorkspace .viewToggle {
+  position: sticky;
+  top: 0;
+  right: auto;
+  width: max-content;
+  margin: 0 0 12px auto;
+}
+
+.allScreens {
+  width: 100%;
+}
+
+.mobileGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 390px));
+  justify-content: center;
+  gap: 24px;
+}
+
+.fullStack {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.screenPreview {
+  min-width: 0;
+}
+
+.screenPreview h2 {
+  margin: 0 0 8px;
+  color: rgba(255, 255, 255, 0.86);
+  font: 700 13px/1.2 inherit;
+}
+
+.gridDevice {
+  width: 100%;
+}
+
+.stackedPreview {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: max(480px, calc(100vh - 82px));
+  background: white;
+}
+
+.viewToggle {
+  position: absolute;
+  z-index: 3;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  gap: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 10px;
+  padding: 2px;
+  background: rgba(18, 18, 23, 0.82);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(10px);
+}
+
+.viewToggle button {
+  min-height: 28px;
+  border: 0;
+  border-radius: 7px;
+  padding: 5px 8px;
+  color: rgba(255, 255, 255, 0.72);
+  background: transparent;
+  font: 650 12px/1 inherit;
+  cursor: pointer;
+}
+
+.viewToggle button.viewToggleActive {
+  color: #202027;
+  background: #ffffff;
+}
+
+.viewToggle button:focus-visible {
+  outline: 2px solid #8d89f2;
+  outline-offset: 1px;
+}
+
+.device {
+  position: relative;
+  overflow: hidden;
+  width: min(390px, calc(100vw - 360px), calc((100vh - 40px) * 390 / 740));
+  aspect-ratio: 390 / 740;
+  border: 10px solid #08080a;
+  border-radius: 38px;
+  background: white;
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.45);
+}
+
+.fullPreview {
+  position: absolute;
+  overflow: hidden;
+  inset: 0;
+  background: white;
+}
+
+.preview {
+  position: absolute;
+  inset: 0;
+}
