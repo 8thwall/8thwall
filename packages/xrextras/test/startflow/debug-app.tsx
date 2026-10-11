@@ -1,20 +1,15 @@
 import {h} from 'preact'
 import {useEffect, useState} from 'preact/hooks'
 
-import {InAppBrowserScreen} from '../../src/startflow/in-app-browser-screen'
+import {combine} from '../../src/classnames'
 import {defaultStrings} from '../../src/startflow/strings'
-import {LoadingScreen} from '../../src/startflow/loading-screen'
-import {PermissionsErrorScreen} from '../../src/startflow/permissions-error-screen'
-import {StartScreen} from '../../src/startflow/start-screen'
 import type {
   PermissionsErrorEnvironment,
   StartFlowScreen,
   StartFlowScreenType,
   StartFlowStrings,
 } from '../../src/startflow/types'
-import {UnexpectedErrorScreen} from '../../src/startflow/unexpected-error-screen'
-import {UnsupportedBrowserScreen} from '../../src/startflow/unsupported-browser-screen'
-import {UnsupportedDeviceScreen} from '../../src/startflow/unsupported-device-screen'
+import {StartFlowView} from '../../src/startflow/view'
 import {
   INDIVIDUAL_SCREENS,
   PERMISSION_LABELS,
@@ -31,7 +26,6 @@ import {StringOverridesControl} from './string-controls'
 import {StyleOverridesControl} from './style-controls'
 import type {StyleToken} from './style-controls'
 import {readSettings, writeSettings} from './url-settings'
-import {combine} from '../../src/classnames'
 
 const screenFromSettings = (
   type: StartFlowScreenType, settings: DebugSettings
@@ -109,42 +103,17 @@ const DebugApp = () => {
       screen: 'loading',
       state: {...current.state, loading: {requestingPermissions}},
     }))
-    const options = {
-      previewSrc: settings.options.start.previewSrc,
-      onStart: settings.screen === 'all' ? () => undefined : () => showLoading(false),
-      onRefresh: isCollectionMode
-        ? () => undefined
-        : () => showLoading(true),
-    }
-
-    switch (screen) {
-      case 'unsupported-device':
-        return <UnsupportedDeviceScreen strings={strings} />
-
-      case 'unsupported-browser':
-        return <UnsupportedBrowserScreen strings={strings} />
-
-      case 'in-app-browser':
-        return <InAppBrowserScreen strings={strings} />
-      case 'start':
-        return <StartScreen options={options} strings={strings} />
-      default:
-        switch (screen.type) {
-          case 'loading':
-            return (
-              <LoadingScreen
-                requestingPermissions={screen.requestingPermissions}
-                strings={strings}
-              />
-            )
-          case 'permissions-error':
-            return <PermissionsErrorScreen options={options} screen={screen} strings={strings} />
-          case 'unexpected-error':
-            return <UnexpectedErrorScreen options={options} screen={screen} strings={strings} />
-          default:
-            return null
-        }
-    }
+    return (
+      <StartFlowView
+        screen={screen}
+        options={{
+          previewSrc: settings.options.start.previewSrc,
+          onStart: settings.screen === 'all' ? () => undefined : () => showLoading(false),
+          onRefresh: isCollectionMode ? () => undefined : () => showLoading(true),
+        }}
+        stringOverrides={settings.stringOverrides}
+      />
+    )
   }
   let previewItems: PreviewItem[]
   if (settings.screen === 'all') {
