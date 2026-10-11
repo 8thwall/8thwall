@@ -1,7 +1,6 @@
 const fs = require('fs')
 const path = require('path')
 const postcss = require('postcss')
-const sass = require('sass')
 const selectorParser = require('postcss-selector-parser')
 
 const srcDir = path.join(__dirname, '../src')
@@ -26,7 +25,7 @@ const collectCssFiles = (dir) => {
 
     if (entry.isDirectory()) {
       collectCssFiles(fullPath)
-    } else if (entry.isFile() && /\.s?css$/.test(entry.name)) {
+    } else if (entry.isFile() && entry.name.endsWith('.css')) {
       cssFiles.push(fullPath)
     }
   }
@@ -36,30 +35,24 @@ collectCssFiles(srcDir)
 
 for (const cssPath of cssFiles) {
   const relativePath = path.relative(srcDir, cssPath).split(path.sep).join('/')
+
   if (skippedCssFiles.has(relativePath)) {
     continue
   }
 
-  const isCssModule = /\.module\.s?css$/.test(relativePath)
-  const css = cssPath.endsWith('.scss')
-    ? sass.compile(cssPath).css
-    : fs.readFileSync(cssPath, 'utf8')
+  const css = fs.readFileSync(cssPath, 'utf8')
   const root = postcss.parse(css, {from: cssPath})
 
   root.walkRules((rule) => {
     selectorParser((selectors) => {
       selectors.walkIds((node) => {
-        if (isCssModule && !/^[a-z][A-Za-z0-9]*$/.test(node.value)) {
-          failures.push(`${relativePath}: non-camelCase module id "#${node.value}"`)
-        } else if (!isCssModule && !node.value.startsWith('xrextras')) {
+        if (!node.value.startsWith('xrextras-')) {
           failures.push(`${relativePath}: unnamespaced id "#${node.value}"`)
         }
       })
 
       selectors.walkClasses((node) => {
-        if (isCssModule && !/^[a-z][A-Za-z0-9]*$/.test(node.value)) {
-          failures.push(`${relativePath}: non-camelCase module class ".${node.value}"`)
-        } else if (!isCssModule && !node.value.startsWith('xrextras')) {
+        if (!node.value.startsWith('xrextras-')) {
           failures.push(`${relativePath}: unnamespaced class ".${node.value}"`)
         }
       })
@@ -69,9 +62,7 @@ for (const cssPath of cssFiles) {
   root.walkAtRules('keyframes', (rule) => {
     const name = rule.params.trim()
 
-    if (isCssModule && !/^[a-z][A-Za-z0-9]*$/.test(name)) {
-      failures.push(`${relativePath}: non-camelCase module keyframes "${name}"`)
-    } else if (!isCssModule && !name.startsWith('xrextras')) {
+    if (!name.startsWith('xrextras-')) {
       failures.push(`${relativePath}: unnamespaced keyframes "${name}"`)
     }
   })
@@ -79,9 +70,7 @@ for (const cssPath of cssFiles) {
   root.walkAtRules('-webkit-keyframes', (rule) => {
     const name = rule.params.trim()
 
-    if (isCssModule && !/^[a-z][A-Za-z0-9]*$/.test(name)) {
-      failures.push(`${relativePath}: non-camelCase module keyframes "${name}"`)
-    } else if (!isCssModule && !name.startsWith('xrextras')) {
+    if (!name.startsWith('xrextras-')) {
       failures.push(`${relativePath}: unnamespaced keyframes "${name}"`)
     }
   })
@@ -89,7 +78,7 @@ for (const cssPath of cssFiles) {
 
 if (failures.length) {
   process.stderr.write('XRExtras CSS namespace check failed:\n')
-  failures.forEach(failure => process.stderr.write(`- ${failure}\n`))
+  failures.forEach((failure) => process.stderr.write(`- ${failure}\n`))
   process.exit(1)
 }
 
