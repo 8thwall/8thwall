@@ -13,6 +13,7 @@ import {StatsFactory} from './statsmodule/stats'
 import {ThreeExtrasFactory} from './three/three-extras'
 import {MediaRecorder} from './mediarecorder/mediarecorder'
 import {SessionReconfigureFactory} from './sessionreconfiguremodule/session-reconfigure-module'
+import {StartFlowFactory} from './startflow'
 
 import './common.css'
 
@@ -32,6 +33,7 @@ const XRExtras = {
   ThreeExtras: ThreeExtrasFactory(),
   MediaRecorder,
   SessionReconfigure: SessionReconfigureFactory(),
+  StartFlow: StartFlowFactory(),
 }
 
 const setDeprecatedProperty = (object, property, value, message) => {
