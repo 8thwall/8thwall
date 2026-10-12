@@ -6,7 +6,7 @@ import type {
   StartFlowScreenOptions,
   StartFlowStringOverrides,
 } from './types'
-import {resolveDefaultOptions, resolveDefaultStringOverrides} from './options'
+import {resolveDefaultOptions, resolveDefaultStrings} from './options'
 import sharedStyles from './shared.module.scss'
 import {StartFlowView} from './view'
 
@@ -29,7 +29,7 @@ const createStartFlowRenderer = (): StartFlowRenderer => {
   let root: HTMLDivElement | null = null
   let options = resolveDefaultOptions()
   let screen: StartFlowScreen = 'start'
-  let stringOverrides = resolveDefaultStringOverrides()
+  let strings = resolveDefaultStrings()
   let pendingStartListener: (() => void) | undefined
 
   const hide = () => {
@@ -63,10 +63,6 @@ const createStartFlowRenderer = (): StartFlowRenderer => {
     if (!root || hideTimeout !== undefined) {
       return
     }
-    if (typeof screen !== 'object' || screen.type !== 'loading' ||
-      screen.requestingPermissions || !root.firstElementChild) {
-      return
-    }
     root.firstElementChild.classList.add(sharedStyles.fadeOut)
     hideTimeout = window.setTimeout(() => {
       hideTimeout = undefined
@@ -88,7 +84,7 @@ const createStartFlowRenderer = (): StartFlowRenderer => {
       <StartFlowView
         options={viewOptions()}
         screen={screen}
-        stringOverrides={stringOverrides}
+        strings={strings}
       />,
       root
     )
@@ -119,7 +115,7 @@ const createStartFlowRenderer = (): StartFlowRenderer => {
       draw()
     },
     setStringOverrides: (nextOverrides) => {
-      stringOverrides = {...stringOverrides, ...nextOverrides}
+      strings = {...strings, ...nextOverrides}
       draw()
     },
     isVisible: () => Boolean(root),

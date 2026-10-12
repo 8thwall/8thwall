@@ -34,7 +34,7 @@ type StartFlowStringOverrides = Partial<StartFlowStrings>
 interface StartFlowOptions {
   previewSrc: string | null
   showStartScreen: boolean
-  waitForRealityTexture: boolean
+  waitForCameraTexture: boolean
 }
 
 interface StartFlowScreenOptions {
@@ -65,7 +65,7 @@ interface StartFlowController {
 interface StartFlowViewProps {
   screen: StartFlowScreen
   options: StartFlowScreenOptions
-  stringOverrides: StartFlowStringOverrides
+  strings: StartFlowStrings
 }
 
 export type {

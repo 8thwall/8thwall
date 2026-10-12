@@ -64,6 +64,7 @@ const createStartFlowPipelineModule = (renderer: StartFlowRenderer): StartFlowPi
   let runConfig: unknown
   let cameraReady = false
   let resourcesReady = false
+  let finishedLoading = false
 
   const showCompatibilityScreen = () => {
     const compatibility = compatibilityScreen(runConfig)
@@ -134,12 +135,19 @@ const createStartFlowPipelineModule = (renderer: StartFlowRenderer): StartFlowPi
       resourcesReady = true
     },
     onUpdate: ({processCpuResult}) => {
-      if (renderer.getOptions().waitForRealityTexture &&
-        !hasRealityTexture(processCpuResult)) {
+      if (finishedLoading) {
+        return
+      }
+      const waitingForTexture = (
+        renderer.getOptions().waitForCameraTexture &&
+        !hasRealityTexture(processCpuResult)
+      )
+      if (waitingForTexture) {
         return
       }
       if (cameraReady && resourcesReady) {
         renderer.fadeOut()
+        finishedLoading = true
       }
     },
     onException: (error: unknown) => {

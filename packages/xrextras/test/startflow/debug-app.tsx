@@ -111,7 +111,7 @@ const DebugApp = () => {
           onStart: settings.screen === 'all' ? () => undefined : () => showLoading(false),
           onRefresh: isCollectionMode ? () => undefined : () => showLoading(true),
         }}
-        stringOverrides={settings.stringOverrides}
+        strings={strings}
       />
     )
   }

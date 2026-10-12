@@ -4,17 +4,14 @@ import {InAppBrowserScreen} from './in-app-browser-screen'
 import {LoadingScreen} from './loading-screen'
 import {PermissionsErrorScreen} from './permissions-error-screen'
 import {StartScreen} from './start-screen'
-import {defaultStrings} from './strings'
 import type {StartFlowViewProps} from './types'
 import {UnexpectedErrorScreen} from './unexpected-error-screen'
 import {UnsupportedBrowserScreen} from './unsupported-browser-screen'
 import {UnsupportedDeviceScreen} from './unsupported-device-screen'
 
 const StartFlowView: FunctionComponent<StartFlowViewProps> = ({
-  options, screen, stringOverrides,
+  options, screen, strings,
 }) => {
-  const strings = {...defaultStrings, ...stringOverrides}
-
   switch (screen) {
     case 'unsupported-device':
       return <UnsupportedDeviceScreen strings={strings} />
