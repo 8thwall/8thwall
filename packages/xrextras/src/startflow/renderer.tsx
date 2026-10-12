@@ -12,12 +12,13 @@ import {StartFlowView} from './view'
 
 interface StartFlowRenderer {
   configure: (options: Partial<StartFlowOptions>) => void
+  fadeOut: () => void
   getOptions: () => StartFlowOptions
   hide: () => void
   isVisible: () => boolean
   setStringOverrides: (overrides: StartFlowStringOverrides) => void
   show: (screen: StartFlowScreen) => void
-  showStart: (onStart?: () => void) => void
+  showStart: (listener: () => void) => void
 }
 
 const FADE_OUT_DELAY_MS = 300
@@ -26,33 +27,31 @@ const FADE_OUT_DURATION_MS = 300
 const createStartFlowRenderer = (): StartFlowRenderer => {
   let hideTimeout: number | undefined
   let root: HTMLDivElement | null = null
-  let options: StartFlowOptions | undefined
-  let optionOverrides: Partial<StartFlowOptions> = {}
+  let options = resolveDefaultOptions()
   let screen: StartFlowScreen = 'start'
-  let stringOverrides: StartFlowStringOverrides | undefined
-  let pendingStringOverrides: StartFlowStringOverrides = {}
-  let startHandler: () => void
+  let stringOverrides = resolveDefaultStringOverrides()
+  let pendingStartListener: (() => void) | undefined
 
-  const getOptions = () => {
-    options ??= {...resolveDefaultOptions(), ...optionOverrides}
-    return options
-  }
-
-  const getStringOverrides = () => {
-    stringOverrides ??= {...resolveDefaultStringOverrides(), ...pendingStringOverrides}
-    return stringOverrides
-  }
-
-  const remove = () => {
+  const hide = () => {
     if (!root) {
       return
+    }
+    if (hideTimeout !== undefined) {
+      window.clearTimeout(hideTimeout)
+      hideTimeout = undefined
     }
     render(null, root)
     root.remove()
     root = null
   }
 
-  const cancelHide = () => {
+  const handleStart = () => {
+    const listener = pendingStartListener
+    pendingStartListener = undefined
+    listener?.()
+  }
+
+  const cancelFadeOut = () => {
     if (hideTimeout !== undefined) {
       window.clearTimeout(hideTimeout)
       hideTimeout = undefined
@@ -60,25 +59,24 @@ const createStartFlowRenderer = (): StartFlowRenderer => {
     root?.firstElementChild?.classList.remove(sharedStyles.fadeOut)
   }
 
-  const hide = () => {
+  const fadeOut = () => {
     if (!root || hideTimeout !== undefined) {
       return
     }
     if (typeof screen !== 'object' || screen.type !== 'loading' ||
       screen.requestingPermissions || !root.firstElementChild) {
-      remove()
       return
     }
     root.firstElementChild.classList.add(sharedStyles.fadeOut)
     hideTimeout = window.setTimeout(() => {
       hideTimeout = undefined
-      remove()
+      hide()
     }, FADE_OUT_DELAY_MS + FADE_OUT_DURATION_MS)
   }
 
   const viewOptions = (): StartFlowScreenOptions => ({
-    previewSrc: getOptions().previewSrc,
-    onStart: startHandler || hide,
+    previewSrc: options.previewSrc,
+    onStart: handleStart,
     onRefresh: () => window.location.reload(),
   })
 
@@ -90,14 +88,14 @@ const createStartFlowRenderer = (): StartFlowRenderer => {
       <StartFlowView
         options={viewOptions()}
         screen={screen}
-        stringOverrides={getStringOverrides()}
+        stringOverrides={stringOverrides}
       />,
       root
     )
   }
 
   const show = (nextScreen: StartFlowScreen) => {
-    cancelHide()
+    cancelFadeOut()
     screen = nextScreen
     if (!root) {
       root = document.createElement('div') as unknown as HTMLDivElement
@@ -109,26 +107,19 @@ const createStartFlowRenderer = (): StartFlowRenderer => {
 
   return {
     show,
-    showStart: (onStart = hide) => {
-      startHandler = onStart
+    showStart: (listener) => {
+      pendingStartListener = listener
       show('start')
     },
+    fadeOut,
     hide,
-    getOptions,
+    getOptions: () => options,
     configure: (nextOptions) => {
-      if (options) {
-        options = {...options, ...nextOptions}
-      } else {
-        optionOverrides = {...optionOverrides, ...nextOptions}
-      }
+      options = {...options, ...nextOptions}
       draw()
     },
     setStringOverrides: (nextOverrides) => {
-      if (stringOverrides) {
-        stringOverrides = {...stringOverrides, ...nextOverrides}
-      } else {
-        pendingStringOverrides = {...pendingStringOverrides, ...nextOverrides}
-      }
+      stringOverrides = {...stringOverrides, ...nextOverrides}
       draw()
     },
     isVisible: () => Boolean(root),

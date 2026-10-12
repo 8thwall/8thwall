@@ -1,19 +1,24 @@
 import {createStartFlowPipelineModule} from './pipeline-module'
 import {createStartFlowRenderer} from './renderer'
-import type {StartFlowController, StartFlowOptions, StartFlowStringOverrides} from './types'
+import type {StartFlowController} from './types'
 
 const create = (): StartFlowController => {
-  const renderer = createStartFlowRenderer()
+  let renderer: ReturnType<typeof createStartFlowRenderer> | undefined
+
+  // NOTE(christoph): We late-initialize so that we don't initialize default options based on
+  // meta tags too early - the xrextras script may be above he meta tags in <head>.
+  const getRenderer = () => {
+    renderer ??= createStartFlowRenderer()
+    return renderer
+  }
 
   return {
-    pipelineModule: createStartFlowPipelineModule(renderer),
-    configure: (options: Partial<StartFlowOptions>) => renderer.configure(options),
-    setStringOverrides: (overrides: StartFlowStringOverrides) => {
-      renderer.setStringOverrides(overrides)
-    },
-    show: () => renderer.show({type: 'loading', requestingPermissions: false}),
-    hide: renderer.hide,
-    isVisible: renderer.isVisible,
+    pipelineModule: () => createStartFlowPipelineModule(getRenderer()),
+    configure: options => getRenderer().configure(options),
+    setStringOverrides: overrides => getRenderer().setStringOverrides(overrides),
+    show: () => getRenderer().show({type: 'loading', requestingPermissions: false}),
+    hide: () => renderer?.hide(),
+    isVisible: () => renderer?.isVisible() ?? false,
   }
 }
 
@@ -27,10 +32,3 @@ const StartFlowFactory = (): StartFlowController => {
 }
 
 export {StartFlowFactory}
-export type {
-  StartFlowOptions,
-  StartFlowController,
-  StartFlowPipelineModule,
-  StartFlowStringOverrides,
-  StartFlowStrings,
-} from './types'

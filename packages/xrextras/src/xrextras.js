@@ -17,7 +17,6 @@ import {StartFlowFactory} from './startflow'
 
 import './common.css'
 
-// eslint-disable-next-line local-rules/acronym-capitalization
 const XRExtras = {
   AFrame: AFrameFactory(),
   AlmostThere: AlmostThereFactory(),

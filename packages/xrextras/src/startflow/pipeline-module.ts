@@ -25,6 +25,13 @@ interface EngineErrorDetails {
   type?: string
 }
 
+interface ProcessCpuResult {
+  facecontroller?: {cameraFeedTexture?: unknown}
+  handcontroller?: {cameraFeedTexture?: unknown}
+  layerscontroller?: {cameraFeedTexture?: unknown}
+  reality?: {realityTexture?: unknown}
+}
+
 const stopCameraLoop = () => {
   XR8.pause()
   XR8.stop()
@@ -40,7 +47,20 @@ const errorMessage = (error: unknown, details?: EngineErrorDetails) => {
   return details?.message ?? String(error)
 }
 
-const createStartFlowPipelineModule = (renderer: StartFlowRenderer) => {
+const hasRealityTexture = (value: unknown) => {
+  if (!value || typeof value !== 'object') {
+    return false
+  }
+  const {reality, facecontroller, handcontroller, layerscontroller} = value as ProcessCpuResult
+  return Boolean(
+    reality?.realityTexture ||
+    facecontroller?.cameraFeedTexture ||
+    handcontroller?.cameraFeedTexture ||
+    layerscontroller?.cameraFeedTexture
+  )
+}
+
+const createStartFlowPipelineModule = (renderer: StartFlowRenderer): StartFlowPipelineModule => {
   let runConfig: unknown
   let cameraReady = false
   let resourcesReady = false
@@ -55,17 +75,15 @@ const createStartFlowPipelineModule = (renderer: StartFlowRenderer) => {
   }
 
   const showPermissionsError = (failed: Permission[]) => {
-    const requested = requestedPermissions()
-    const uniqueFailed = [...new Set(failed)]
     renderer.show({
       type: 'permissions-error',
       environment: currentPermissionsErrorEnvironment(),
-      failed: uniqueFailed,
-      requested: [...new Set([...requested, ...uniqueFailed])],
+      failed,
+      requested: requestedPermissions(),
     })
   }
 
-  const pipelineModule = (): StartFlowPipelineModule => ({
+  return {
     name: 'startflow',
     onBeforeRun: ({config}: BeforeRunArgs) => {
       runConfig = config
@@ -115,9 +133,13 @@ const createStartFlowPipelineModule = (renderer: StartFlowRenderer) => {
     onAppResourcesLoaded: () => {
       resourcesReady = true
     },
-    onUpdate: () => {
+    onUpdate: ({processCpuResult}) => {
+      if (renderer.getOptions().waitForRealityTexture &&
+        !hasRealityTexture(processCpuResult)) {
+        return
+      }
       if (cameraReady && resourcesReady) {
-        renderer.hide()
+        renderer.fadeOut()
       }
     },
     onException: (error: unknown) => {
@@ -130,8 +152,10 @@ const createStartFlowPipelineModule = (renderer: StartFlowRenderer) => {
         : undefined
       if (details?.type === 'permission') {
         const permission = permissionFromEngine(details.permission)
-        showPermissionsError(permission ? [permission] : requestedPermissions())
-        return
+        if (permission) {
+          showPermissionsError([permission])
+          return
+        }
       }
 
       renderer.show({type: 'unexpected-error', error: errorMessage(error, details)})
@@ -143,9 +167,7 @@ const createStartFlowPipelineModule = (renderer: StartFlowRenderer) => {
       resourcesReady = false
       runConfig = undefined
     },
-  })
-
-  return pipelineModule
+  }
 }
 
 export {createStartFlowPipelineModule}

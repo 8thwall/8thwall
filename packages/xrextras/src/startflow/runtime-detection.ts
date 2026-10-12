@@ -46,18 +46,13 @@ const permissionFromEngine = (permission?: string): Permission | undefined => {
     return undefined
   }
   const permissions = XR8.XrPermissions.permissions()
-  if (permission === permissions.CAMERA || permission === 'camera') {
+  if (permission === permissions.CAMERA) {
     return 'camera'
   }
-  if (permission === permissions.MICROPHONE || permission === 'microphone') {
+  if (permission === permissions.MICROPHONE) {
     return 'microphone'
   }
-  if (
-    permission === permissions.DEVICE_MOTION ||
-    permission === permissions.DEVICE_ORIENTATION ||
-    permission === 'devicemotion' ||
-    permission === 'deviceorientation'
-  ) {
+  if (permission === permissions.DEVICE_MOTION || permission === permissions.DEVICE_ORIENTATION) {
     return 'motion'
   }
   return undefined

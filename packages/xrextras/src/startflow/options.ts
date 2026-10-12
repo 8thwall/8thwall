@@ -29,6 +29,7 @@ const resolveDefaultOptions = (): StartFlowOptions => {
   return {
     previewSrc: ogImage ?? null,
     showStartScreen: false,
+    waitForRealityTexture: true,
   }
 }
 

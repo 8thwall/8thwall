@@ -34,6 +34,7 @@ type StartFlowStringOverrides = Partial<StartFlowStrings>
 interface StartFlowOptions {
   previewSrc: string | null
   showStartScreen: boolean
+  waitForRealityTexture: boolean
 }
 
 interface StartFlowScreenOptions {
@@ -47,7 +48,7 @@ interface StartFlowPipelineModule {
   onBeforeRun: (args: {config: unknown}) => void | Promise<void>
   onCameraStatusChange: (args: {reason?: string, status: string}) => void
   onAppResourcesLoaded: () => void
-  onUpdate: () => void
+  onUpdate: (args: {processCpuResult?: unknown}) => void
   onException: (error: unknown) => void
   onRemove: () => void
 }
