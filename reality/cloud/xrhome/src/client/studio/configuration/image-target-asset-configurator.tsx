@@ -42,6 +42,7 @@ import {Tooltip} from '../../ui/components/tooltip'
 import {useImageTarget} from '../hooks/use-image-target'
 import {useImageTargetActions} from '../../image-targets/use-image-targets'
 import {MissingTargetRegisterWarning} from '../missing-target-register-warning'
+import {useChangeEffect} from '../../hooks/use-change-effect'
 
 type VisualizerFocus = 'main' | 'trackingRegion' | 'arcCurves'
 interface VisualizerState {
@@ -381,15 +382,15 @@ const LoadedImageTargetAssetConfigurator: React.FC<ILoadedImageTargetAssetConfig
     setName(imageTarget.name)
   }, [imageTarget.name])
 
-  // TODO (jeffha): improve error handling? need to visually show to users that there's an error
-  //                https://<REMOVED_BEFORE_OPEN_SOURCING>.atlassian.net/browse/J8W-4698
-  if (hasMetadataError) {
-    stateCtx.update(p => ({
-      ...p,
-      errorMsg:
+  useChangeEffect(([prevHasMetadataError]) => {
+    if (hasMetadataError && !prevHasMetadataError) {
+      stateCtx.update(p => ({
+        ...p,
+        errorMsg:
         t('asset_configurator.image_target_configurator.error.invalid_target_circumference'),
-    }))
-  }
+      }))
+    }
+  }, [hasMetadataError])
 
   const renameModalTrigger = (
     <button
