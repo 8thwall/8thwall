@@ -41,7 +41,7 @@ type SubMenuItem = {
   value: string
   content: string
   icon?: IconStroke
-  ns?: string
+  ns?: 'cloud-studio-pages' | 'common'
 }
 
 type SubmenuContentOptions = {
@@ -84,7 +84,7 @@ const SubMenuOptionsListing: React.FC<ISubMenuOptionsListing> = ({
   options, onChange, onCollapse, firstActive,
 }) => {
   const classes = useStyles()
-  const {t} = useTranslation(['cloud-studio-pages'])
+  const {t} = useTranslation(['cloud-studio-pages', 'common'])
 
   return (
     <>

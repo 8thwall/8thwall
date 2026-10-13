@@ -87,8 +87,11 @@ const ImageTargetSections: React.FC<IImageTargetSections> = ({
     <button
       type='button'
       onClick={hasChanges ? undefined : () => setSection('test')}
-      className={combine('style-reset', classes.sectionTitle,
-        section === 'test' && classes.sectionActive)}
+      className={combine(
+        'style-reset',
+        classes.sectionTitle,
+        section === 'test' && classes.sectionActive
+      )}
       disabled={section === 'test'}
     >
       {t('asset_configurator.image_target_configurator.section.test')}
@@ -107,8 +110,11 @@ const ImageTargetSections: React.FC<IImageTargetSections> = ({
       <button
         type='button'
         onClick={() => setSection('configure')}
-        className={combine('style-reset', classes.sectionTitle,
-          section === 'configure' && classes.sectionActive)}
+        className={combine(
+          'style-reset',
+          classes.sectionTitle,
+          section === 'configure' && classes.sectionActive
+        )}
         disabled={section === 'configure'}
       >
         {t('asset_configurator.image_target_configurator.section.configure')}
@@ -169,6 +175,7 @@ const ImageTargetTestSection: React.FC<IImageTargetTestSection> = ({
             <div>
               <Trans
                 t={t}
+                ns='cloud-studio-pages'
                 i18nKey='asset_configurator.image_target_configurator.test.scan'
                 components={[
                   <a href={imageTargetPreview} key='link' className={classes.link}> open link</a>,

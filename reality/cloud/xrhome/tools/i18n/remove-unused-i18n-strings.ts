@@ -30,13 +30,26 @@ const loadJsonKeys = (jsonFilePath: string): {jsonData: JsonData, keys: string[]
 // Function to search for JSON keys in the codebase
 const searchKeysInCodebase = (keys: string[], codebaseDir: string): Set<string> => {
   const matchedKeys = new Set<string>()
+  const dynamicPrefixes = new Set<string>()
+
+  const pluralBase = (key: string): string | undefined => {
+    const match = key.match(/^(.*)_(one|other)$/)
+    return match?.[1]
+  }
 
   const searchFileForKeys = (filePath: string): void => {
     const fileContent = fs.readFileSync(filePath, 'utf-8')
     for (const key of keys) {
-      if (fileContent.includes(key)) {
+      const base = pluralBase(key)
+      if (fileContent.includes(key) || (base && fileContent.includes(base))) {
         matchedKeys.add(key)
       }
+    }
+
+    // Keep all keys in a family when code constructs a key with a template
+    // literal, for example `asset_lab.model_optimizer.${point}`.
+    for (const match of fileContent.matchAll(/([A-Za-z0-9_.-]+)\$\{/g)) {
+      dynamicPrefixes.add(match[1])
     }
   }
 
@@ -57,6 +70,15 @@ const searchKeysInCodebase = (keys: string[], codebaseDir: string): Set<string> 
   }
 
   walkDirectory(codebaseDir)
+
+  for (const prefix of dynamicPrefixes) {
+    for (const key of keys) {
+      if (key.startsWith(prefix)) {
+        matchedKeys.add(key)
+      }
+    }
+  }
+
   return matchedKeys
 }
 

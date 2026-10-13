@@ -40,7 +40,7 @@ const SubMenuSelectWithSearch: React.FC<ISubMenuSelectWithSearch> = ({
   onChange, categories, trigger, onCategoryChange, disabled, matchTriggerWidth, a8,
 }) => {
   const classes = useStyles()
-  const {t} = useTranslation(['cloud-studio-pages'])
+  const {t} = useTranslation(['cloud-studio-pages', 'common'])
   const studioClasses = useStudioMenuStyles()
   const [rawSearchText, setSearchText] = React.useState('')
   const searchText = rawSearchText.toLowerCase()
