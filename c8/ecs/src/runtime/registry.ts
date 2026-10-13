@@ -124,10 +124,13 @@ const createComponentStateMachine = <S extends Schema, D extends Schema>(
   return createStateMachine(world, eid, {...definition, prepareCallback})
 }
 
-const registerComponent = <ES extends ExtendedSchema<Schema>, ED extends ExtendedSchema<Schema>>({
-  name, schema, schemaDefaults, stateMachine: machineDef,
-  data, tick, add, remove,
-}: ComponentRegistration<ES, ED>) => {
+const registerComponent = <ES extends ExtendedSchema<Schema>, ED extends ExtendedSchema<Schema>>(
+  registration: ComponentRegistration<ES, ED>
+) => {
+  const {
+    name, schema, schemaDefaults, stateMachine: machineDef,
+    data, tick, add, remove,
+  } = registration
   if (attributes[name]) {
     // eslint-disable-next-line no-console
     console.warn(`Already registered component with name: ${name}`)

@@ -214,7 +214,7 @@ const constructFaceCameraPipeline = async (
       xrModuleName_ = xrModule.name
 
       // Fill out mesh geometry array (temporary)
-      const meshGeometry = []
+      const meshGeometry: (typeof FaceMeshGeometry)[keyof typeof FaceMeshGeometry][] = []
       if (config_.meshGeometryFace) {
         meshGeometry.push(FaceMeshGeometry.FACE)
       }

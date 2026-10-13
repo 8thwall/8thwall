@@ -7,7 +7,7 @@ const run = async () => {
 
   const defFile = definitionRaw
     .replace(/.* UserData.*{[^}]*};?/g, '')  // hide entire UserData type
-    .replace(/.* Location\$.*{[^}]*}>?;?/g, '')  // hide entire Location type
+    .replace(/.* Location[$_]\w*.*{[^}]*}>?;?/g, '')  // hide renamed Location type
     .split('\n')
     .filter(e => !e.includes('_id'))  // hide world._id
     .filter(e => !e.includes(': UserData'))  // hide any props that are UserData
