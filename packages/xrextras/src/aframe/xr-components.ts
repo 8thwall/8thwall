@@ -54,6 +54,8 @@ import {
   loadingComponent,
 } from './components/lifecycle-components'
 
+import {startFlowComponent} from './components/start-flow-component'
+
 import {
   captureButtonComponent,
   capturePreviewComponent,
@@ -73,6 +75,7 @@ import {
 const xrComponents = () => {
   return {
     'xrextras-almost-there': almostThereComponent,
+    'xrextras-start-flow': startFlowComponent,
     'xrextras-loading': loadingComponent,
     'xrextras-runtime-error': runtimeErrorComponent,
     'xrextras-stats': statsComponent,

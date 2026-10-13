@@ -29,7 +29,8 @@ const createStartFlowRenderer = (): StartFlowRenderer => {
   let root: HTMLDivElement | null = null
   let options = resolveDefaultOptions()
   let screen: StartFlowScreen = 'start'
-  let strings = resolveDefaultStrings()
+  const resolvedDefaultStrings = resolveDefaultStrings()
+  let strings = resolvedDefaultStrings
   let pendingStartListener: (() => void) | undefined
 
   const hide = () => {
@@ -115,7 +116,7 @@ const createStartFlowRenderer = (): StartFlowRenderer => {
       draw()
     },
     setStringOverrides: (nextOverrides) => {
-      strings = {...strings, ...nextOverrides}
+      strings = {...resolvedDefaultStrings, ...nextOverrides}
       draw()
     },
     isVisible: () => Boolean(root),

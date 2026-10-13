@@ -3,6 +3,7 @@
 import {xrComponents} from './xr-components'
 import {xrPrimitives} from './xr-primitives'
 import {ensureXrAndExtras} from './ensure'
+import {defaultStrings} from '../startflow/strings'
 
 let xrextrasAframe = null
 
@@ -21,6 +22,8 @@ const eagerload = () => {
 
   let foundAlmostThere = false
   let foundLoading = false
+  let foundStartFlow = false
+  let startFlowStringOverrides = null
   let redirectUrl = null
   let runConfig = null
 
@@ -38,6 +41,16 @@ const eagerload = () => {
 
     if (attr === 'xrextras-loading') {
       foundLoading = true
+    }
+
+    if (attr === 'xrextras-start-flow') {
+      foundStartFlow = true
+      const config = AFRAME.utils.styleParser.parse(attrs.item(a).value)
+      startFlowStringOverrides = Object.fromEntries(
+        Object.keys(defaultStrings)
+          .filter(key => config[key] !== undefined)
+          .map(key => [key, config[key]])
+      )
     }
 
     // We use xrconfig if it is present, else xrweb or xrface or xrlayers.
@@ -67,6 +80,13 @@ const eagerload = () => {
     const waitForRealityTexture =
       !!(scene.attributes.xrweb || scene.attributes.xrface || scene.attributes.xrlayers)
     window.XRExtras.Loading.showLoading({onxrloaded, waitForRealityTexture})
+  }
+
+  if (foundStartFlow) {
+    if (Object.keys(startFlowStringOverrides).length) {
+      window.XRExtras.StartFlow.setStringOverrides(startFlowStringOverrides)
+    }
+    window.XRExtras.StartFlow.show()
   }
 }
 

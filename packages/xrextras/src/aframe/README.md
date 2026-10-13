@@ -5,6 +5,7 @@ The XRExtras library contains various A-Frame components and primitives to quick
 ## A-Frame Components
 
 - `xrextras-almost-there`
+- `xrextras-start-flow`
 - `xrextras-loading`
 - `xrextras-runtime-error`
 - `xrextras-stats`
@@ -68,6 +69,31 @@ Displays almost there flows and a loading screen until scene assets are loaded.
 | cameraBackgroundColor | string | ""      | Background hex color of the loading screen's top section.           |
 | loadImage             | string | ""      | The HTML Element ID of an image. The image needs to be an `<a-asset>`. Ex: `#load` |
 | loadAnimation         | string | "spin"  | Animation style of `loadImage`. Choose from `spin`, `pulse`, `scale`, or `none`. |
+
+### `xrextras-start-flow`
+
+Displays the unified compatibility, permissions, loading, and error flow.
+
+**Properties (all optional)**
+
+| Property        | Type    | Default | Description                                      |
+|-----------------|---------|---------|--------------------------------------------------|
+| previewSrc      | string  | ""      | Image displayed on the optional start screen.    |
+| showStartScreen | boolean | false   | Wait for a user gesture before starting the app. |
+
+Every key in the StartFlow strings object can also be supplied as a string property:
+
+```html
+<a-scene
+  xrextras-start-flow="
+    showStartScreen: true;
+    startTitle: Welcome to the experience;
+    startDescription: Look around to begin;
+    startCta: Enter AR;
+    loadingLabel: Preparing experience
+  "
+>
+```
 
 ### `xrextras-runtime-error`
 
