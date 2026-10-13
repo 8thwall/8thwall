@@ -1,8 +1,0 @@
-// TODO (tri) delete this when moving away from Semantic
-@import 'settings';
-
-.ui.dimmer {
-  @media screen and (max-width: $mobile-width-breakpoint) {
-    width: 100vw !important;
-  }
-}

@@ -1,7 +1,8 @@
 import React from 'react'
 import {createUseStyles} from 'react-jss'
 
-import {brandBlack, mint} from '../../static/styles/settings'
+import {combine} from '../../common/styles'
+import {brandBlack, mint, popGradient} from '../../static/styles/settings'
 
 const useStyles = createUseStyles({
   progressBar: {
@@ -17,13 +18,21 @@ const useStyles = createUseStyles({
     borderRadius: '0.5em',
     transition: 'width .5s',
   },
+  gradient: {
+    background: popGradient,
+  },
 })
 
 interface IProgressBar {
+  ariaLabel: string
   progress: number  // Value from [0, 1]
+  color?: 'default' | 'gradient'
+  transitionDuration?: string
 }
 
-const ProgressBar: React.FC<IProgressBar> = ({progress = 0}) => {
+const ProgressBar: React.FC<IProgressBar> = ({
+  ariaLabel, progress = 0, color = 'default', transitionDuration,
+}) => {
   const styles = useStyles()
 
   const percentFilled = Math.max(0, Math.min(1, progress)) * 100
@@ -32,11 +41,15 @@ const ProgressBar: React.FC<IProgressBar> = ({progress = 0}) => {
     <div
       className={styles.progressBar}
       role='progressbar'
+      aria-label={ariaLabel}
       aria-valuenow={percentFilled}
     >
       <div
-        className={styles.filled}
-        style={{width: `${percentFilled}%`}}
+        className={combine(styles.filled, color === 'gradient' && styles.gradient)}
+        style={{
+          transitionDuration,
+          width: `${percentFilled}%`,
+        }}
       />
     </div>
   )

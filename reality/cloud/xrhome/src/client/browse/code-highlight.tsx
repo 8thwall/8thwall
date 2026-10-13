@@ -4,13 +4,13 @@ import {useLocation} from 'react-router-dom'
 import Highlight, {defaultProps, Language} from 'prism-react-renderer'
 import lightTheme from 'prism-react-renderer/themes/github'
 import darkTheme from 'prism-react-renderer/themes/vsDark'
-import {Message} from 'semantic-ui-react'
 import {createUseStyles} from 'react-jss'
 import {useTranslation} from 'react-i18next'
 
 import {fileExt} from '../editor/editor-common'
 import * as settings from '../static/styles/settings'
 import withTranslationLoaded from '../i18n/with-translations-loaded'
+import {StaticBanner} from '../ui/components/banner'
 
 const useStyles = createUseStyles({
   prismCode: {
@@ -74,7 +74,7 @@ const CodeHighlight: React.FC<ICodeHighlight> = (
   }
 
   if (content === '') {
-    return <Message info>{t('code_highlight.file_empty')}</Message>
+    return <StaticBanner type='info'>{t('code_highlight.file_empty')}</StaticBanner>
   }
 
   const theme = themeMode === 'light' ? lightTheme : darkTheme

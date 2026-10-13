@@ -1,8 +1,8 @@
 import * as React from 'react'
-import {Progress} from 'semantic-ui-react'
+import {useTranslation} from 'react-i18next'
 
 import {combine} from '../common/styles'
-import {popGradient, brandWhite} from '../static/styles/settings'
+import {ProgressBar} from '../ui/components/progress-bar'
 import {createThemedStyles} from '../ui/theme'
 
 const useStyles = createThemedStyles(theme => ({
@@ -28,15 +28,8 @@ const useStyles = createThemedStyles(theme => ({
   },
 
   uploadProgressBar: {
-    'margin': '0.5em 1em !important',
-
-    '& .bar': {
-      background: `${popGradient} !important`,
-    },
-
-    '& .bar .progress': {
-      color: brandWhite,
-    },
+    margin: '0.5em 1em',
+    width: 'calc(100% - 2em)',
   },
 
   collapsed: {
@@ -56,25 +49,30 @@ const FileUploadProgressBar: React.FunctionComponent<IFileUploadProgressBar> = (
   numFileUploading, totalNumFiles, bytesUploaded, totalBytes,
 }) => {
   const classes = useStyles()
+  const {t} = useTranslation(['cloud-studio-pages', 'common'])
+  const status = totalNumFiles !== 0
+    ? t('asset_configurator.image_target_configurator.uploading', {ns: 'cloud-studio-pages'})
+    : t('status.complete', {ns: 'common'})
 
   return (
     <div
       className={totalNumFiles !== 0
         ? classes.uploadProgress
         : combine(classes.uploadProgress, classes.collapsed)
-    }
+      }
     >
       <div className={classes.uploadMessage}>
-        <span>{totalNumFiles !== 0 ? 'Uploading...' : 'Completed'}</span>
+        <span>{status}</span>
         <span>{totalNumFiles !== 0 ? `${numFileUploading} of ${totalNumFiles}` : ''}</span>
       </div>
-      <Progress
-        className={classes.uploadProgressBar}
-        percent={totalBytes !== 0 ? Math.round(bytesUploaded / totalBytes * 100) : 100}
-        size='small'
-        progress
-        color='purple'
-      />
+      <div className={classes.uploadProgressBar}>
+        <ProgressBar
+          ariaLabel={status}
+          progress={totalBytes !== 0 ? bytesUploaded / totalBytes : 1}
+          color='gradient'
+          transitionDuration={BuildIf.LOCAL_DEV ? '2s' : undefined}
+        />
+      </div>
     </div>
   )
 }

@@ -1,8 +1,8 @@
 import React from 'react'
 import {useTranslation} from 'react-i18next'
-import {Menu} from 'semantic-ui-react'
 
 import {useMaybeLocalSyncContext} from '../../studio/local-sync-context'
+import {ConsoleMenuButton} from './console-menu'
 
 interface ISystemLogsMenu {
 
@@ -15,9 +15,9 @@ const SystemLogsMenu: React.FC<ISystemLogsMenu> = () => {
     return null
   }
   return (
-    <Menu.Item onClick={() => localSync.restartServer()}>
+    <ConsoleMenuButton onClick={() => localSync.restartServer()}>
       {t('system_logs_menu.button.restart_server')}
-    </Menu.Item>
+    </ConsoleMenuButton>
   )
 }
 

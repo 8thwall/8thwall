@@ -42,12 +42,9 @@ const RowUploadDrop: React.FC<IRowUploadDrop> = ({
         <StandardFieldContainer>
           <div className={classes.uploadContainer}>
             <UploadDrop
-              uploadMessage=''
-              elementClickInsteadOfButton
               dropMessage={dropMessage}
               onDrop={handleDrop}
               fileAccept={fileAccept}
-              noButton
               className={dropClassName}
             >
               {dropContent}
