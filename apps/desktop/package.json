@@ -1,6 +1,6 @@
 {
   "name": "@8thwall/desktop",
-  "version": "1.0.1",
+  "version": "1.0.202609241937",
   "description": "",
   "main": "dist/_start.js",
   "engines": {
