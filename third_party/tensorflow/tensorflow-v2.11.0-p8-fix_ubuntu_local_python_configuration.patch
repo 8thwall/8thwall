@@ -51,7 +51,7 @@ diff -ruN third_party/py/python_configure.bzl third_party/py/python_configure.bz
              outs.append('        "' + dest_dir + dest_files[i] + '",')
      genrule = _genrule(
 -        src_dir,
-+        src_dirs[0],
++        None if src_dirs == None else src_dirs[0],
          genrule_name,
          " && ".join(command),
          "\n".join(outs),

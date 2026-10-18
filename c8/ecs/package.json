@@ -19,7 +19,7 @@
   "scripts": {
     "postinstall": "patch-package",
     "ecs:prepare": "bazel build //c8/ecs:ecs-asm --config=wasm && cp -f ../../bazel-bin/c8/ecs/ecs-asm.js src/runtime",
-    "test": "bazel test --test_output=errors //c8/ecs/... && bazel test --test_output=errors //c8/ecs/... --config=node",
+    "test": "bazel test --test_output=errors //c8/ecs/... -k && bazel test --test_output=errors //c8/ecs/... --config=node -k",
     "runtime:serve": "webpack-dev-server -c webpack.runtime.js",
     "runtime:build": "npm run ecs:prepare && webpack -c webpack.runtime.js",
     "runtime:build:sourcemaps": "npm run ecs:prepare && webpack -c webpack.runtime.js --env=dev",

@@ -222,7 +222,7 @@ const throwIfNotInSparseCheckout = (pathInCode8: string) => {
 // TODO(J8W-2057) Remove this after switching to remote debugging.
 const prepareEcs = async () => {
   throwIfNotInSparseCheckout('/c8/ecs/')
-  await wrapBazel(() => runChildProcess('npm run ecs:prepare', {cwd: path.join(CODE8, '/c8/ecs')}))
+  await wrapBazel(() => runChildProcess('npm run ecs:prepare', {cwd: path.join(CODE8, 'c8', 'ecs')}))
 }
 
 const copySemantic = () => (

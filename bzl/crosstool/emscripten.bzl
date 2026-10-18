@@ -104,6 +104,7 @@ def _emscripten_toolchain_impl(repository_ctx):
     ])
 
     if result.return_code != 0:
+        print(result)
         fail("Failed to compute sha1 hash")
 
     repository_ctx.file("{}.sha1".format(repository_ctx.name), content = result.stdout, executable = False)

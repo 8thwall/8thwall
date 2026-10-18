@@ -1,4 +1,6 @@
 #include <cmath>
+#define _USE_MATH_DEFINES
+#include <math.h>
 #include <cstring>
 
 #include "bzl/inliner/rules2.h"
