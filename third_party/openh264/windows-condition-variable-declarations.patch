@@ -1,0 +1,19 @@
+diff --git a/codec/common/inc/WelsThreadLib.h b/codec/common/inc/WelsThreadLib.h
+index 54e345f..a1493ec 100644
+--- a/codec/common/inc/WelsThreadLib.h
++++ b/codec/common/inc/WelsThreadLib.h
+@@ -130,12 +130,14 @@ typedef  struct _WelsLogicalProcessorInfo {
+ #define    WELS_THREAD_ERROR_WAIT_TIMEOUT               ((uint32_t)0x00000102L)
+ #define    WELS_THREAD_ERROR_WAIT_FAILED                WELS_THREAD_ERROR_GENERAL
+ 
++#if !defined(_WIN32) && !defined(__CYGWIN__)
+ WELS_THREAD_ERROR_CODE    WelsCondInit(WELS_COND* cond);
+ WELS_THREAD_ERROR_CODE    WelsCondBroadcast(WELS_COND* cond);
+ WELS_THREAD_ERROR_CODE    WelsCondWait(WELS_COND* cond, WELS_MUTEX* mutex);
+ WELS_THREAD_ERROR_CODE    WelsCondTimedwait(WELS_COND* cond, WELS_MUTEX* mutex, const struct timespec* ts);
+ WELS_THREAD_ERROR_CODE    WelsCondSignal(WELS_COND* cond);
+ WELS_THREAD_ERROR_CODE    WelsCondDestroy(WELS_COND* cond);
++#endif
+ 
+ WELS_THREAD_ERROR_CODE    WelsMutexInit (WELS_MUTEX*    mutex);
+ WELS_THREAD_ERROR_CODE    WelsMutexLock (WELS_MUTEX*    mutex);

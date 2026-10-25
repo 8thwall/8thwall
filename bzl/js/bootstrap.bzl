@@ -14,6 +14,9 @@ def _ts_bootstrap_impl(ctx):
 set -eu
 
 absolute_node_modules=$(dirname $(realpath external/npm-webpack-build/fingerprint.sha1))/node_modules
+if command -v cygpath >/dev/null 2>&1; then
+  absolute_node_modules=$(cygpath -m "$absolute_node_modules")
+fi
 
 echo '
 {{
@@ -36,22 +39,49 @@ echo '
 }}
 ' | sed "s|<absolute_node_modules>|$absolute_node_modules|g" > tsconfig.json
 
-{node_path} $absolute_node_modules/typescript/lib/tsc.js --project tsconfig.json
+compile_dir="$(dirname "{output}")/{output_basename}.bootstrap"
+mkdir -p "$compile_dir"
+trap 'rm -rf "$compile_dir"' EXIT
 
-cp "{input_as_js}" "{output}"
+{node_path} $absolute_node_modules/typescript/lib/tsc.js --project tsconfig.json --outDir "$compile_dir"
+
+cp "$compile_dir/{input_basename_as_js}" "{output}"
 """.format(
             node_path = ctx.file._node_bin.path,
             output = output_file.path,
+            output_basename = output_file.basename,
             input = ctx.file.src.path,
-            input_as_js = ctx.file.src.path.replace(".ts", ".js"),
+            input_basename_as_js = ctx.file.src.basename.replace(".ts", ".js"),
         ),
         is_executable = True,
     )
 
+    action_executable = shell_script
+    action_inputs = [ctx.file.src, ctx.file._node_bin, shell_script] + ctx.files._node_deps
+    if ctx.configuration.host_path_separator == ";":
+        batch_script = ctx.actions.declare_file("shell.cmd")
+        ctx.actions.write(
+            output = batch_script,
+            content = """@echo off
+set "BASH_EXE=%BAZEL_SH%"
+if not defined BASH_EXE if exist "C:\\Program Files\\Git\\bin\\bash.exe" set "BASH_EXE=C:\\Program Files\\Git\\bin\\bash.exe"
+if not defined BASH_EXE if exist "%ProgramFiles%\\Git\\bin\\bash.exe" set "BASH_EXE=%ProgramFiles%\\Git\\bin\\bash.exe"
+if not defined BASH_EXE if exist "%LocalAppData%\\Programs\\Git\\bin\\bash.exe" set "BASH_EXE=%LocalAppData%\\Programs\\Git\\bin\\bash.exe"
+if not defined BASH_EXE (
+  echo Git Bash was not found. Set BAZEL_SH to its bash.exe path. 1>&2
+  exit /b 1
+)
+"%BASH_EXE%" "%~dp0shell.sh"
+""",
+            is_executable = True,
+        )
+        action_executable = batch_script
+        action_inputs.append(batch_script)
+
     ctx.actions.run(
-        inputs = [ctx.file.src, ctx.file._node_bin] + ctx.files._node_deps,
+        inputs = action_inputs,
         outputs = [output_file],
-        executable = shell_script,
+        executable = action_executable,
     )
 
     return [DefaultInfo(files = depset([output_file]))]

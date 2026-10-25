@@ -103,11 +103,15 @@ cc_library(
             "KJ_USE_FUTEX=0",
             "KJ_USE_EPOLL=0",
         ],
-        # NOTE(dat): Might need to also link Ws2_32
-        "@the8thwall//bzl/conditions:windows": ["-lAdvAPI32"],
+        "@the8thwall//bzl/conditions:windows": [],
         "//conditions:default": ["KJ_USE_FUTEX=0"],
     }),
     includes = ["c++/src"],
+    # NOTE(dat): Might need to also link Ws2_32.
+    linkopts = select({
+        "@the8thwall//bzl/conditions:windows": ["-lAdvAPI32"],
+        "//conditions:default": [],
+    }),
 )
 
 cc_library(

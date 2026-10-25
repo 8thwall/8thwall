@@ -17,7 +17,7 @@
     "yoga-layout": "^3.1.0"
   },
   "scripts": {
-    "postinstall": "patch-package",
+    "postinstall": "node ./node_modules/patch-package/index.js",
     "ecs:prepare": "bazel build //c8/ecs:ecs-asm --config=wasm && cp -f ../../bazel-bin/c8/ecs/ecs-asm.js src/runtime",
     "test": "bazel test --test_output=errors //c8/ecs/... && bazel test --test_output=errors //c8/ecs/... --config=node",
     "runtime:serve": "webpack-dev-server -c webpack.runtime.js",

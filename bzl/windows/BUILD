@@ -1,3 +1,5 @@
+exports_files(["test-dispatcher.cmd"])
+
 cc_library(
     name = "hello-world-x64",
     srcs = [

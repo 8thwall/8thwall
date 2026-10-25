@@ -1,0 +1,25 @@
+diff --git a/BUILD.bazel b/BUILD.bazel
+index 7f825b5..098d37a 100644
+--- a/BUILD.bazel
++++ b/BUILD.bazel
+@@ -229,13 +229,13 @@ cc_library(
+     hdrs = glob(["include/curl/*.h"]),
+     copts = select({
+         "@platforms//os:windows": [
+-            "/DWIN32",
+-            "/DBUILDING_LIBCURL",
+-            "/DUSE_WIN32_IDN",
+-            "/DWANT_IDN_PROTOTYPES",
+-            "/DUSE_IPV6",
+-            "/DUSE_WINDOWS_SSPI",
+-            "/DUSE_SCHANNEL",
++            "-DWIN32",
++            "-DBUILDING_LIBCURL",
++            "-DUSE_WIN32_IDN",
++            "-DWANT_IDN_PROTOTYPES",
++            "-DUSE_IPV6",
++            "-DUSE_WINDOWS_SSPI",
++            "-DUSE_SCHANNEL",
+         ],
+         "@platforms//os:macos": _BASE_CURL_COPTS,
+         "//conditions:default": _BASE_CURL_COPTS + [

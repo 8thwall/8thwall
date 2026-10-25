@@ -8,6 +8,7 @@ cc_library(
         "tiny_gltf.cc",
     ],
     hdrs = [
+        "json.hpp",
         "stb_image.h",
         "stb_image_write.h",
         "tiny_gltf.h",

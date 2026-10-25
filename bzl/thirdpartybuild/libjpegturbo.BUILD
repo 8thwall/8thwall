@@ -166,7 +166,10 @@ cc_library(
     deps = select({
         "@the8thwall//bzl/conditions:arm": [":simd_armv7a"],
         "@the8thwall//bzl/conditions:arm64": [":simd_armv8a"],
-        "@the8thwall//bzl/conditions:windows": [":simd_win_x86_64"],
+        # The Windows build intentionally uses the portable implementation.
+        # The SIMD target requires an undeclared host NASM repository and is
+        # only a performance optimization.
+        "@the8thwall//bzl/conditions:windows": [":simd_none"],
         "//conditions:default": [":simd_none"],
     }),
 )

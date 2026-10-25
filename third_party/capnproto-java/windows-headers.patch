@@ -1,0 +1,13 @@
+diff --git a/compiler/src/main/cpp/capnpc-java.c++ b/compiler/src/main/cpp/capnpc-java.c++
+index ba75083..220281d 100644
+--- a/compiler/src/main/cpp/capnpc-java.c++
++++ b/compiler/src/main/cpp/capnpc-java.c++
+@@ -31,7 +31,9 @@
+ #include <capnp/schema-loader.h>
+ #include <capnp/dynamic.h>
++#ifndef _WIN32
+ #include <unistd.h>
++#endif
+ #include <unordered_map>
+ #include <unordered_set>
+ #include <set>

@@ -52,6 +52,13 @@ bazel_dep(name = "zlib", repo_name = "zlib", version = "1.3")
 bazel_dep(name = "curl", version = "8.8.0")
 bazel_dep(name = "rules_android", repo_name = "build_bazel_rules_android", version = "0.1.1")
 
+single_version_override(
+    module_name = "curl",
+    patch_strip = 1,
+    patches = ["//third_party/curl:windows-clang-flags.patch"],
+    version = "8.8.0",
+)
+
 git_override(
     commit = "04f42ceca40f73e2978b50e93806c2a18c1281fc",
     module_name = "zlib",
@@ -437,6 +444,7 @@ new_git_repository(
     name = "capnproto_java",
     build_file = "//bzl/thirdpartybuild:capnproto_java.BUILD",
     commit = "be364f41c66b8c41484e0cb5bc25f726613cc04a",
+    patches = ["//third_party/capnproto-java:windows-headers.patch"],
     remote = "https://github.com/dwrensha/capnproto-java",
     shallow_since = "1488309561 -0500",
 )
@@ -586,6 +594,7 @@ new_git_repository(
     name = "openh264",
     build_file = "//bzl/thirdpartybuild:openh264.BUILD",
     commit = "22a46624f3b5c88e017ae5fb78f7a66e06bfccb9",
+    patches = ["//third_party/openh264:windows-condition-variable-declarations.patch"],
     remote = "https://github.com/8thwall/openh264",
     shallow_since = "1612314198 -0800",
 )

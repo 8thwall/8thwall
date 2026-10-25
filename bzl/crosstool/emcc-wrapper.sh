@@ -139,7 +139,34 @@ if [ $METADATA_FILE_INDEX -ge 0 ]
 then
   # Rewrite the dependency file so that sources use relative paths to execroot.
   METADATA_FILE=${ARGS[${METADATA_FILE_INDEX}]}
-  sed -i.bak "s|$TOOLCHAIN_EXTERNAL|/\{\{toolchain\}\}/external|" "${METADATA_FILE}"
-  sed -i.bak "s|$EXECROOT_ABS|/\{\{toolchain\}\}|" "${METADATA_FILE}"
+  if [ "${C8_WINDOWS_EXEC:-}" = "1" ]; then
+    # Native Windows Emscripten writes backslash paths. Bazel validates these against a
+    # synthetic root because drive-qualified builtin include paths are not portable.
+    sed -i.bak -e 's|\\|/|g' -e 's|/$|\\|' "${METADATA_FILE}"
+    # WORKSPACE_ENV contains MSYS paths (/c/...), while native Emscripten records
+    # drive-qualified paths (C:/...). Normalize the prefixes before replacing them.
+    TOOLCHAIN_EXTERNAL=$(cygpath -m "${TOOLCHAIN_EXTERNAL}")
+    EXECROOT_ABS=$(cygpath -m "${EXECROOT_ABS}")
+    DEPENDENCY_ROOT="/\{\{deceive_bazel_header_deps\}\}"
+  else
+    DEPENDENCY_ROOT="/\{\{toolchain\}\}"
+  fi
+  sed -i.bak "s|$TOOLCHAIN_EXTERNAL|${DEPENDENCY_ROOT}/external|" "${METADATA_FILE}"
+  sed -i.bak "s|$EXECROOT_ABS|${DEPENDENCY_ROOT}|" "${METADATA_FILE}"
   rm -f "${METADATA_FILE}.bak"
+  if [ "${C8_WINDOWS_EXEC:-}" = "1" ]; then
+    # Clang can report a generated external-repository header as external/<repo>/...
+    # even though Bazel declares it under bazel-out/<config>/bin/external/<repo>/....
+    BAZEL_BIN_ROOT="${METADATA_FILE%%/bin/*}/bin"
+    while read -r DEPENDENCY; do
+      if [ -e "${BAZEL_BIN_ROOT}/${DEPENDENCY}" ]; then
+        sed -i.bak "s|${DEPENDENCY}|${BAZEL_BIN_ROOT}/${DEPENDENCY}|g" "${METADATA_FILE}"
+        rm -f "${METADATA_FILE}.bak"
+      fi
+    done < <(
+      grep -oE '(^|[[:space:]])external/[^[:space:]\\]*' "${METADATA_FILE}" \
+        | sed 's/^[[:space:]]*//' \
+        | sort -u
+    )
+  fi
 fi

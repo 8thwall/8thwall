@@ -182,6 +182,18 @@ filegroup(
     ],
 )
 
+filegroup(
+    name = "tool-wrappers-wasm-windows",
+    srcs = [
+        "emar-wrapper.cmd",
+        "emar-wrapper.sh",
+        "emcc-wrapper.cmd",
+        "emcc-wrapper.sh",
+        "@emscripten//:stub",
+        "@workspace-env//:workspace-env",
+    ],
+)
+
 cc_toolchain_suite(
     name = "xcode-cc-toolchain",
     toolchains = {
@@ -608,12 +620,45 @@ wasm_cc_toolchain(
     toolchain = "@emscripten//:stub",
 )
 
+wasm_cc_toolchain(
+    name = "cc-compiler-wasm32-windows",
+    all_files = ":tool-wrappers-wasm-windows",
+    ar_files = ":tool-wrappers-wasm-windows",
+    compiler_files = ":tool-wrappers-wasm-windows",
+    dwp_files = ":empty",
+    dynamic_runtime_lib = ":empty",
+    linker_files = ":tool-wrappers-wasm-windows",
+    objcopy_files = ":empty",
+    static_runtime_lib = ":empty",
+    strip_files = ":empty",
+    supports_param_files = REQUIRES_RESPONSE_FILES,
+    toolchain = "@emscripten//:stub",
+    windows = True,
+)
+
 toolchain(
-    name = "cc-toolchain-wasm32",
+    name = "cc-toolchain-wasm32-exec-osx",
+    exec_compatible_with = ["@platforms//os:osx"],
     target_compatible_with = [
         "@platforms//cpu:wasm32",
     ],
     toolchain = ":cc-compiler-wasm32",
+    toolchain_type = "@bazel_tools//tools/cpp:toolchain_type",
+)
+
+toolchain(
+    name = "cc-toolchain-wasm32-exec-linux",
+    exec_compatible_with = ["@platforms//os:linux"],
+    target_compatible_with = ["@platforms//cpu:wasm32"],
+    toolchain = ":cc-compiler-wasm32",
+    toolchain_type = "@bazel_tools//tools/cpp:toolchain_type",
+)
+
+toolchain(
+    name = "cc-toolchain-wasm32-exec-windows",
+    exec_compatible_with = ["@platforms//os:windows"],
+    target_compatible_with = ["@platforms//cpu:wasm32"],
+    toolchain = ":cc-compiler-wasm32-windows",
     toolchain_type = "@bazel_tools//tools/cpp:toolchain_type",
 )
 

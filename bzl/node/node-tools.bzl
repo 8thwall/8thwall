@@ -1,9 +1,23 @@
 load("@bazel_skylib//rules:common_settings.bzl", "BuildSettingInfo")
 
 def _node_wrapper_impl(ctx):
-    output = ctx.actions.declare_file(ctx.label.name)
+    is_windows = ctx.configuration.host_path_separator == ";"
+    output = ctx.actions.declare_file(ctx.label.name + (".cmd" if is_windows else ""))
     runfiles = ctx.runfiles(files = ctx.files.node + [output])
     node_path = "{workspace}/{path}".format(workspace = ctx.workspace_name, path = ctx.file.node.short_path)
+
+    if is_windows:
+        ctx.actions.write(
+            output,
+            content = """@echo off
+if not defined RUNFILES_DIR set "RUNFILES_DIR=%~f0.runfiles"
+set "NODE=%RUNFILES_DIR%/{node}"
+for %%D in ("%NODE%") do set "PATH=%%~dpD;%PATH%"
+"%NODE%" %*
+""".format(node = node_path),
+            is_executable = True,
+        )
+        return [DefaultInfo(executable = output, runfiles = runfiles)]
 
     # See https://github.com/bazelbuild/bazel/issues/14444 for discussion on detecting tool configuration.
     is_exec = "-exec" in ctx.bin_dir.path or "host" in ctx.bin_dir.path
@@ -81,7 +95,8 @@ node_wrapper = rule(
 )
 
 def _node_tool_wrapper_impl(ctx):
-    output = ctx.actions.declare_file(ctx.label.name)
+    is_windows = ctx.configuration.host_path_separator == ";"
+    output = ctx.actions.declare_file(ctx.label.name + (".cmd" if is_windows else ""))
     runfiles = ctx.runfiles(files = ctx.files.node + ctx.files.node_tool + ctx.files.data + [output])
 
     # Also merge in node's runfiles.
@@ -89,6 +104,22 @@ def _node_tool_wrapper_impl(ctx):
 
     node_path = "{workspace}/{path}".format(workspace = ctx.workspace_name, path = ctx.file.node.short_path)
     node_tool_path = "{workspace}/{path}".format(workspace = ctx.workspace_name, path = ctx.file.node_tool.short_path)
+
+    if is_windows:
+        ctx.actions.write(
+            output,
+            is_executable = True,
+            content = """@echo off
+set "RUNFILES_DIR=%~f0.runfiles"
+{env}
+call "%RUNFILES_DIR%/{node}" "%RUNFILES_DIR%/{node_tool}" %*
+""".format(
+                env = "\n".join(["set \"{}={}\"".format(key, value) for key, value in ctx.attr.env.items()]),
+                node = node_path,
+                node_tool = node_tool_path,
+            ),
+        )
+        return [DefaultInfo(executable = output, runfiles = runfiles)]
 
     ctx.actions.write(
         output,

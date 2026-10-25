@@ -8,9 +8,9 @@ def _configure_rosetta_impl(repository_ctx):
     if os.startswith("mac os"):
         is_osx = True
 
-    cpu_triple = repository_ctx.execute(["bash", "-c", "echo $MACHTYPE"]).stdout
-    if cpu_triple.startswith("aarch64") or cpu_triple.startswith("arm64"):
-        is_arm64 = True
+        cpu_triple = repository_ctx.execute(["bash", "-c", "echo $MACHTYPE"]).stdout
+        if cpu_triple.startswith("aarch64") or cpu_triple.startswith("arm64"):
+            is_arm64 = True
 
     if is_osx and is_arm64:
         has_rosetta2 = (

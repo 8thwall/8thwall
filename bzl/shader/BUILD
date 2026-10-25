@@ -2,9 +2,10 @@ load("@bazel_skylib//lib:selects.bzl", "selects")
 
 filegroup(
     name = "shadercc",
-    srcs = [
-        "shadercc.sh",
-    ],
+    srcs = select({
+        "//bzl/conditions:windows": ["shadercc.cmd"],
+        "//conditions:default": ["shadercc.sh"],
+    }),
     visibility = ["//visibility:public"],
 )
 

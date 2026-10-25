@@ -66,6 +66,12 @@ _default_target_transition = transition(
 )
 
 def _webpack_js(ctx):
+    # This rule transitions its target configuration, so the target's path
+    # separator does not reliably identify the machine executing its actions.
+    # The webpack tool is exec-configured and its generated launcher has the
+    # native Windows extension when the execution host is Windows.
+    is_windows = ctx.executable._webpack_build.basename.endswith(".cmd")
+
     if (ctx.attr._buildonly):
         index_files = [f.path for f in ctx.files.srcs if not f.path.endswith(".d.ts")]
     elif (len(ctx.files.main) == 0):
@@ -125,6 +131,11 @@ def _webpack_js(ctx):
         outs.append(ctx.actions.declare_file("%s.d.ts" % ctx.label.name))
 
     srcs = _get_transitive_srcs(ctx.files.srcs + ctx.files.main, ctx.attr.deps)
+    source_manifest = ctx.actions.declare_file("%s%s.webpack-inputs" % (ctx.label.name, buildsuffix))
+    ctx.actions.write(
+        output = source_manifest,
+        content = "\n".join([f.path for f in srcs.to_list()]),
+    )
 
     src_includes = []
     for src in ctx.files.srcs + ctx.files.main:
@@ -136,7 +147,7 @@ def _webpack_js(ctx):
         transitive = [dep[js_files_provider].includes for dep in ctx.attr.deps],
     )
 
-    inputs = srcs.to_list() + ctx.files.npm_rule
+    inputs = srcs.to_list() + ctx.files.npm_rule + [source_manifest]
 
     if target_setting == "node":
         inputs.extend(ctx.files._generated_node)
@@ -163,6 +174,7 @@ def _webpack_js(ctx):
             inputs.append(file)
 
     node_path_override = ""
+    node_path_override_windows = ""
     externals = ctx.attr.externals
 
     if ctx.attr.externalize_npm:
@@ -174,6 +186,13 @@ def _webpack_js(ctx):
 
         node_path_override = """
 export NODE_PATH=$(dirname $(realpath "$RUNFILES_DIR/{workspace}/external/{npm_folder}/fingerprint.sha1"))/node_modules
+""".format(
+            workspace = ctx.workspace_name,
+            npm_folder = ctx.attr.npm_rule.label.workspace_name,
+        )
+        node_path_override_windows = """
+for /f "tokens=1,*" %%A in ('findstr /B /C:"{workspace}/external/{npm_folder}/fingerprint.sha1 " "%RUNFILES_DIR%\\MANIFEST"') do set "NPM_FINGERPRINT=%%B"
+for %%F in ("%NPM_FINGERPRINT%") do set "NODE_PATH=%%~dpFnode_modules"
 """.format(
             workspace = ctx.workspace_name,
             npm_folder = ctx.attr.npm_rule.label.workspace_name,
@@ -193,6 +212,7 @@ export NODE_PATH=$(dirname $(realpath "$RUNFILES_DIR/{workspace}/external/{npm_f
             "--includewebtypes=%s" % ("1" if target_setting == "web" or ctx.attr.include_web_types else "0"),
             "--outpattern=%s" % (outpattern),
             "--entries=%s" % (",".join(index_files)),
+            "--sourceManifest=%s" % source_manifest.path,
             "--mode=%s" % ctx.attr.webpack_mode,
             "--npmrule=%s" % (ctx.attr.npm_rule.label if ctx.attr.npm_rule else ""),
             "--commonjs=%s" % ("1" if ctx.attr.commonjs else "0"),
@@ -221,7 +241,25 @@ export NODE_PATH=$(dirname $(realpath "$RUNFILES_DIR/{workspace}/external/{npm_f
 
     if ctx.attr._cli:
         # Wrap flags in single quotes if they contain whitespace.
-        out_wrapper = ctx.actions.declare_file(ctx.label.name)
+        out_wrapper = ctx.actions.declare_file(ctx.label.name + (".cmd" if is_windows else ""))
+        if is_windows:
+            node_opt_windows = " ".join(["\"{}\"".format(flag) if " " in flag else flag for flag in node_opts.to_list()])
+            ctx.actions.write(
+                output = out_wrapper,
+                content = """@echo off
+if not defined RUNFILES_DIR set "RUNFILES_DIR=%~f0.runfiles"
+call "%RUNFILES_DIR%/{workspace}/{node}" {inspect_opt} {node_opts} "%RUNFILES_DIR%/{workspace}/{jsfile}" %*
+""".format(
+                    workspace = ctx.workspace_name,
+                    node = ctx.file.target_node.short_path,
+                    inspect_opt = inspect_opt_str,
+                    node_opts = node_opt_windows,
+                    jsfile = outs[0].short_path,
+                ),
+                is_executable = True,
+            )
+            return ([out_wrapper], outs)
+
         ctx.actions.write(output = out_wrapper, content = """#!/bin/bash --norc
 set -eu
 export RUNFILES_DIR=${{RUNFILES_DIR:-$(realpath $0.runfiles)}}
@@ -235,7 +273,36 @@ ${{RUNFILES_DIR}}/{workspace}/{node} {inspect_opt} {node_opts} ${{RUNFILES_DIR}}
         ), is_executable = True)
         return ([out_wrapper], outs)
     elif ctx.attr._test:
-        out_wrapper = ctx.actions.declare_file(ctx.label.name)
+        out_wrapper = ctx.actions.declare_file(ctx.label.name + (".cmd" if is_windows else ""))
+        if is_windows:
+            node_opt_windows = " ".join(["\"{}\"".format(flag) if " " in flag else flag for flag in node_opts.to_list()])
+            ctx.actions.write(
+                output = out_wrapper,
+                content = """@echo off
+if not defined RUNFILES_DIR set "RUNFILES_DIR=%~f0.runfiles"
+if not defined TEST_SRCDIR set "TEST_SRCDIR=%RUNFILES_DIR%"
+set "REPORTER_OPTS="
+if defined XML_OUTPUT_FILE (
+  set "REPORTER_OPTS=--reporter mocha-multi-reporters --reporter-options configFile=%RUNFILES_DIR%/{workspace}/{reporters}"
+  set "MOCHA_FILE=%XML_OUTPUT_FILE%"
+)
+{node_path_override_windows}
+call "%RUNFILES_DIR%/_main/{node_workspace}/{node}" {inspect_opt} {node_opts} "%RUNFILES_DIR%/{workspace}/{mocha}" %REPORTER_OPTS% "%RUNFILES_DIR%/{workspace}/{jsfile}" %*
+""".format(
+                    node = ctx.file.target_node.short_path,
+                    inspect_opt = inspect_opt_str,
+                    node_opts = node_opt_windows,
+                    mocha = ctx.file._mocha_bin.short_path,
+                    reporters = ctx.file._mocha_reporters.short_path,
+                    workspace = ctx.workspace_name,
+                    node_workspace = ctx.file.target_node.owner.workspace_root,
+                    jsfile = outs[0].short_path,
+                    node_path_override_windows = node_path_override_windows,
+                ),
+                is_executable = True,
+            )
+            return ([out_wrapper], outs)
+
         ctx.actions.write(
             output = out_wrapper,
             content = """#!/bin/bash --norc
@@ -434,7 +501,7 @@ def _js_build_attrs(cli, buildonly, test):
         "bundle_header": attr.label(default = None, allow_single_file = True),
         "bundle_footer": attr.label(default = None, allow_single_file = True),
         "mangle": attr.bool(default = True),
-        "polyfill": attr.string(default = "<default>"),
+        "polyfill": attr.string(default = "default"),
         "externals": attr.string(default = ""),
         "externalsType": attr.string(default = "commonjs"),
         "esnext": attr.bool(default = False),

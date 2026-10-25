@@ -64,7 +64,9 @@ build:linux --disk_cache=/tmp/bazel_local_cache_archive8
 build:macos --disk_cache=/tmp/bazel_local_cache_archive8
 # For windows specifically we have to use the shortest possible paths to avoid hitting the 260 character limit.
 # and we have to enable_runfiles to make sure runfiles sandboxes are created for tests.
-build:windows --disk_cache=C:\\bzlc8 --enable_runfiles
+build:windows --disk_cache=C:\\bzlc8 --enable_runfiles --action_env=BAZEL_SH --action_env=PATH
+build:windows --//c8/pixels/opengl:angle
+test:windows --run_under=//bzl/windows:test-dispatcher.cmd
 
 build --incompatible_remote_results_ignore_disk --experimental_guard_against_concurrent_changes
 
@@ -109,7 +111,7 @@ build:ext --config=release --copt=-DD2D_PROD
 build:ext_no_lto --config=release_no_lto --copt=-DD2D_PROD
 
 # Build for wasm releases
-build:versionedrelease -c opt --action_env='C8VERSION=true' --workspace_status_command='$PWD/bzl/stamp/stamp-build.sh'
+build:versionedrelease -c opt --action_env='C8VERSION=true' --workspace_status_command=bzl/stamp/stamp-build
 build:wasmrelease --config=versionedrelease --platforms=//bzl:wasm32 --action_env='NODE_ENV=production' --copt=-DC8_RELEASE_CONFIG_ENABLE_CONSOLE_LOGGING=true --features=nosourcemap
 build:wasmreleasesimd --config=wasmrelease --features=simd
 

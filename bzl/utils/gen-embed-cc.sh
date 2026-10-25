@@ -42,7 +42,12 @@ else
   echo "#endif"
 
   echo "extern const uint8_t $symbolData[] = {"
-  hexdump -v -e '/1 "0x%02x, "' "${path}" | fmt -w 100
+  # `hexdump` is not included with Git for Windows. `od` is available on the
+  # supported Unix hosts and in Git Bash, and produces the same byte literals.
+  od -An -v -t x1 "${path}" \
+    | tr -s '[:space:]' '\n' \
+    | sed -e '/^$/d' -e 's/^/0x/' -e 's/$/,/' \
+    | fmt -w 100
   echo "0x00"
   echo "};"
 fi

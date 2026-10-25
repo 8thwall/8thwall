@@ -8,8 +8,10 @@ load(
     "flag_group",
     "flag_set",
     "tool_path",
+    "variable_with_value",
     "with_feature_set",
 )
+load("@local-env//:vars.bzl", "BAZEL_SH")
 load("//bzl/crosstool:toolchain-compiler-flags.bzl", "DBG_COMPILER_FLAGS", "FASTBUILD_COMPILER_FLAGS", "OPT_WITHOUT_SYMBOLS_COMPILER_FLAGS")
 
 LLVM_USR = "external/emscripten/upstream"
@@ -67,21 +69,30 @@ all_archiver_actions = [
 ]
 
 def _impl(ctx):
+    wrapper_extension = ".cmd" if ctx.attr.windows else ".sh"
+    builtin_root = "/{{deceive_bazel_header_deps}}" if ctx.attr.windows else "/{{toolchain}}"
     cxx_builtin_include_directories = [
-        "/{{toolchain}}/external/emscripten-cache/cache/sysroot/include",
-        "/{{toolchain}}/external/emscripten-cache/cache/sysroot/include/libcxx",
-        "/{{toolchain}}/external/emscripten-cache/cache/sysroot/include/libc",
-        "/{{toolchain}}/external/emscripten-cache/cache/sysroot/lib/libcxxabi/include",
-        "/{{toolchain}}/external/emscripten-cache/cache/sysroot/lib/libc/musl/arch/emscripten",
-        "/{{toolchain}}/external/emscripten/upstream/lib/clang/16.0.0/include",
-        "/{{toolchain}}/external/emscripten/upstream/lib/clang/16.0.0/share",
+        builtin_root + "/external/emscripten-cache/cache/sysroot/include",
+        builtin_root + "/external/emscripten-cache/cache/sysroot/include/libcxx",
+        builtin_root + "/external/emscripten-cache/cache/sysroot/include/libc",
+        builtin_root + "/external/emscripten-cache/cache/sysroot/lib/libcxxabi/include",
+        builtin_root + "/external/emscripten-cache/cache/sysroot/lib/libc/musl/arch/emscripten",
+        builtin_root + "/external/emscripten/upstream/lib/clang/16.0.0/include",
+        builtin_root + "/external/emscripten/upstream/lib/clang/16.0.0/share",
     ]
+    if ctx.attr.windows:
+        # Bazel's Windows dependency parser may expand a leading slash relative to
+        # its Bash interpreter. Accept both forms, as the native Windows toolchain does.
+        cxx_builtin_include_directories += [
+            BAZEL_SH + path
+            for path in cxx_builtin_include_directories
+        ]
 
     tool_paths = [
-        tool_path(name = "ar", path = "emar-wrapper.sh"),
+        tool_path(name = "ar", path = "emar-wrapper{}".format(wrapper_extension)),
         tool_path(name = "cpp", path = "emscripten/clang/current/clang-cpp"),
         tool_path(name = "dwp", path = "emscripten/clang/current/llvm-dwp"),
-        tool_path(name = "gcc", path = "emcc-wrapper.sh"),
+        tool_path(name = "gcc", path = "emcc-wrapper{}".format(wrapper_extension)),
         tool_path(name = "gcov", path = "emscripten/clang/current/llvm-cov"),
         tool_path(name = "ld", path = "emscripten/clang/current/lld"),
         tool_path(name = "nm", path = "emscripten/clang/current/llvm-nm"),
@@ -221,6 +232,68 @@ def _impl(ctx):
         ],
     )
 
+    # Bazel's legacy supports_param_files attribute is not sufficient for a
+    # Starlark toolchain action. Explicitly route Windows link and archive
+    # arguments through the parameter file exposed by the C++ rules.
+    linker_param_file_feature = feature(
+        name = "linker_param_file",
+        enabled = ctx.attr.windows,
+        flag_sets = [
+            flag_set(
+                actions = all_link_actions + all_archiver_actions,
+                flag_groups = [flag_group(
+                    flags = ["@%{linker_param_file}"],
+                    expand_if_available = "linker_param_file",
+                )],
+            ),
+        ],
+    )
+
+    # Bazel only creates a linker_param_file variable for static-library
+    # actions when this feature is enabled. supports_param_files alone covers
+    # executable and dynamic-library links, but not archives.
+    archive_param_file_feature = feature(
+        name = "archive_param_file",
+        enabled = ctx.attr.windows,
+    )
+
+    archiver_flags_feature = feature(
+        name = "archiver_flags",
+        flag_sets = [
+            flag_set(
+                actions = all_archiver_actions,
+                flag_groups = [
+                    flag_group(flags = ["rcsD"]),
+                    flag_group(
+                        flags = ["%{output_execpath}"],
+                        expand_if_available = "output_execpath",
+                    ),
+                    flag_group(
+                        iterate_over = "libraries_to_link",
+                        flag_groups = [
+                            flag_group(
+                                flags = ["%{libraries_to_link.name}"],
+                                expand_if_equal = variable_with_value(
+                                    name = "libraries_to_link.type",
+                                    value = "object_file",
+                                ),
+                            ),
+                            flag_group(
+                                flags = ["%{libraries_to_link.object_files}"],
+                                iterate_over = "libraries_to_link.object_files",
+                                expand_if_equal = variable_with_value(
+                                    name = "libraries_to_link.type",
+                                    value = "object_file_group",
+                                ),
+                            ),
+                        ],
+                        expand_if_available = "libraries_to_link",
+                    ),
+                ],
+            ),
+        ],
+    )
+
     opt_feature = feature(name = "opt")
     fastbuild_feature = feature(name = "fastbuild")
     dbg_feature = feature(name = "dbg")
@@ -311,7 +384,11 @@ def _impl(ctx):
                     "-Wself-assign",  # Enable additional warnings not part of -Wall.
                     "-fno-omit-frame-pointer",  # Keep stack frames for debugging, even in opt mode.
                     "-fcolor-diagnostics",  # Enable coloring.
-                ])],
+                ] + ([
+                    # Emscripten's NODERAWFS cannot expose a Windows working directory
+                    # through getcwd(). GoogleTest only uses this during test startup.
+                    "-DGTEST_HAS_FILE_SYSTEM=0",
+                ] if ctx.attr.windows else []))],
             ),
         ],
     )
@@ -362,6 +439,9 @@ def _impl(ctx):
         tool_paths = tool_paths,
         features = [
             default_env_feature,
+            archive_param_file_feature,
+            archiver_flags_feature,
+            linker_param_file_feature,
             opt_feature,
             fastbuild_feature,
             full_lto_feature,
@@ -382,6 +462,7 @@ def _impl(ctx):
 _wasm_cc_toolchain_config = rule(
     attrs = {
         "toolchain": attr.label(mandatory = True, allow_files = True),
+        "windows": attr.bool(default = False),
         "_workspace_env": attr.label(default = "@workspace-env//:workspace-env", allow_single_file = True),
         "_flags": attr.label(default = "//bzl/wasm:flag", providers = [BuildSettingInfo]),
         "_browser": attr.label(default = "//bzl/wasm:browser", providers = [BuildSettingInfo]),
@@ -390,12 +471,13 @@ _wasm_cc_toolchain_config = rule(
     implementation = _impl,
 )
 
-def wasm_cc_toolchain(name, toolchain, **kwargs):
+def wasm_cc_toolchain(name, toolchain, windows = False, **kwargs):
     """Macro to create a bazel cc_toolchain that uses targets WebAssembly."""
     config_name = "{}-config".format(name)
     _wasm_cc_toolchain_config(
         name = config_name,
         toolchain = toolchain,
+        windows = windows,
     )
     native.cc_toolchain(
         name = name,

@@ -38,6 +38,6 @@ genrule(
     outs = [
         "pose-estimation.cc",
     ],
-    cmd = "python3 $(location :generate-pose-estimation) $(@D)/pose-estimation.cc",
+    cmd = "$(location :generate-pose-estimation) $(@D)/pose-estimation.cc",
     tools = [":generate-pose-estimation"],
 )

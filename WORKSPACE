@@ -353,6 +353,24 @@ nodejs_register_toolchains(
     node_version = "20.14.0",
 )
 
+# Unlike the Unix Node distributions, the official Windows zip does not ship
+# C/C++ addon headers. Keep those headers in a platform-neutral repository so
+# native addon builds have the same declared inputs on every host.
+http_archive(
+    name = "nodejs_headers",
+    build_file_content = """
+package(default_visibility = ["//visibility:public"])
+exports_files(["include/node/node_api.h"])
+filegroup(
+    name = "headers",
+    srcs = glob(["include/node/**"]),
+)
+""",
+    sha256 = "289ecd13b5d8edfff527b258fd752f049e1c85351e6833de00daf088b17ef3b2",
+    strip_prefix = "node-v20.14.0",
+    urls = ["https://nodejs.org/dist/v20.14.0/node-v20.14.0-headers.tar.gz"],
+)
+
 load("//bzl/crosstool:node-toolchain.bzl", "node_toolchain")
 
 node_toolchain(name = "node-toolchain")
@@ -455,6 +473,11 @@ npm_package(
 # Node modules for 8th Wall's js engine.
 npm_package(
     name = "npm-jsxr",
+    # ua-parser-js is pinned to a git commit with its distributable files checked in.
+    # Preparing the git dependency installs its fuzzing-only native dev dependencies.
+    env = {
+        "NPM_CONFIG_IGNORE_SCRIPTS": "1",
+    },
     package = "//reality/app/xr/js:package.json",
     package_lock = "//reality/app/xr/js:package-lock.json",
 )
@@ -553,7 +576,9 @@ register_toolchains(
     "//bzl/crosstool:cc-toolchain-android_x86_32-exec-linux",
     "//bzl/crosstool:cc-toolchain-android_x86_64-exec-linux",
     # Toolchain for compiling for WebAssembly.
-    "//bzl/crosstool:cc-toolchain-wasm32",
+    "//bzl/crosstool:cc-toolchain-wasm32-exec-osx",
+    "//bzl/crosstool:cc-toolchain-wasm32-exec-linux",
+    "//bzl/crosstool:cc-toolchain-wasm32-exec-windows",
     # Toolchain for compiling for Amazon Linux from OSX, Linux x86 and Linux arm64.
     "//bzl/crosstool:cc-toolchain-amazonlinux",
     # Toolchain for compiling for Niantic Linuxes from OSX, Linux x86 and Linux arm64.
@@ -991,6 +1016,7 @@ http_archive(
         "//bzl/thirdpartybuild/bazel-contrib-rules_cuda:change_generated_external_repo_name.patch",
         "//bzl/thirdpartybuild/bazel-contrib-rules_cuda:hermetic_host_compiler.patch",
         "//bzl/thirdpartybuild/bazel-contrib-rules_cuda:dummy_local_cuda_BUILD.patch",
+        "//bzl/thirdpartybuild/bazel-contrib-rules_cuda:windows_bazelignore.patch",
     ],
     sha256 = "dc1f4f704ca56e3d5edd973f98a45f0487d0f28c689d0a57ba236112148b1833",
     strip_prefix = "rules_cuda-v0.1.2",
