@@ -56,6 +56,7 @@ interface StartFlowPipelineModule {
 interface StartFlowController {
   pipelineModule: () => StartFlowPipelineModule
   configure: (options: Partial<StartFlowOptions>) => void
+  reset: () => void
   setStringOverrides: (overrides: StartFlowStringOverrides) => void
   show: () => void
   hide: () => void

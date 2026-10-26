@@ -54,6 +54,8 @@ import {
   loadingComponent,
 } from './components/lifecycle-components'
 
+import {startFlowComponent} from './components/start-flow-component'
+
 import {
   captureButtonComponent,
   capturePreviewComponent,
@@ -113,6 +115,7 @@ const xrComponents = () => ({
   'xrextras-hand-occluder': handOccluderComponent,
   'xrextras-wrist-mesh': wristMeshComponent,
   'xrextras-session-reconfigure': sessionReconfigureComponent,
+  'xrextras-start-flow': startFlowComponent,
 })
 
 export {

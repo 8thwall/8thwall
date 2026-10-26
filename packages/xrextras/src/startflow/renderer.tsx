@@ -16,6 +16,7 @@ interface StartFlowRenderer {
   getOptions: () => StartFlowOptions
   hide: () => void
   isVisible: () => boolean
+  reset: () => void
   setStringOverrides: (overrides: StartFlowStringOverrides) => void
   show: (screen: StartFlowScreen) => void
   showStart: (listener: () => void) => void
@@ -112,6 +113,11 @@ const createStartFlowRenderer = (): StartFlowRenderer => {
     getOptions: () => options,
     configure: (nextOptions) => {
       options = {...options, ...nextOptions}
+      draw()
+    },
+    reset: () => {
+      options = resolveDefaultOptions()
+      strings = resolveDefaultStrings()
       draw()
     },
     setStringOverrides: (nextOverrides) => {

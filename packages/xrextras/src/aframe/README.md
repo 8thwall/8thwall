@@ -5,6 +5,7 @@ The XRExtras library contains various A-Frame components and primitives to quick
 ## A-Frame Components
 
 - `xrextras-almost-there`
+- `xrextras-start-flow`
 - `xrextras-loading`
 - `xrextras-runtime-error`
 - `xrextras-stats`
@@ -68,6 +69,36 @@ Displays almost there flows and a loading screen until scene assets are loaded.
 | cameraBackgroundColor | string | ""      | Background hex color of the loading screen's top section.           |
 | loadImage             | string | ""      | The HTML Element ID of an image. The image needs to be an `<a-asset>`. Ex: `#load` |
 | loadAnimation         | string | "spin"  | Animation style of `loadImage`. Choose from `spin`, `pulse`, `scale`, or `none`. |
+
+### `xrextras-start-flow`
+
+Displays the unified compatibility, permissions, loading, and error flow.
+
+**Properties (all optional)**
+
+| Property             | Type    | Default   | Description                                      |
+|----------------------|---------|-----------|--------------------------------------------------|
+| previewSrc           | asset   | og:image  | Image displayed on the optional start screen.    |
+| showStartScreen      | boolean | false     | Wait for a user gesture before starting the app. |
+| waitForCameraTexture | boolean | true      | Wait for one of the AR pipeline modules to provide camera frames before hiding. |
+
+String overrides can be used to customize the text displayed in the UI. See [strings.ts](../startflow/strings.ts) for the full list.
+
+```html
+<a-scene
+  xrextras-start-flow="
+    previewSrc: #preview;
+    showStartScreen: true;
+    startTitle: Welcome to the experience;
+    startCta: Enter AR;
+    loadingLabel: Preparing experience
+  "
+>
+  <a-assets>
+    <img id="preview" src="./preview.jpg">
+  </a-assets>
+</a-scene>
+```
 
 ### `xrextras-runtime-error`
 

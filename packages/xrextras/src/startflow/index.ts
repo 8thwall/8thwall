@@ -15,6 +15,7 @@ const create = (): StartFlowController => {
   return {
     pipelineModule: () => createStartFlowPipelineModule(getRenderer()),
     configure: options => getRenderer().configure(options),
+    reset: () => getRenderer().reset(),
     setStringOverrides: overrides => getRenderer().setStringOverrides(overrides),
     show: () => getRenderer().show({type: 'loading', requestingPermissions: false}),
     hide: () => renderer?.hide(),

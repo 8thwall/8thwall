@@ -3,6 +3,7 @@
 import {xrComponents} from './xr-components'
 import {xrPrimitives} from './xr-primitives'
 import {ensureXrAndExtras} from './ensure'
+import {getStartFlowStringOverrides} from './components/start-flow-component'
 
 let xrextrasAframe = null
 
@@ -38,6 +39,13 @@ const eagerload = () => {
 
     if (attr === 'xrextras-loading') {
       foundLoading = true
+    }
+
+    if (attr === 'xrextras-start-flow') {
+      const config = AFRAME.utils.styleParser.parse(attrs.item(a).value)
+      const stringOverrides = getStartFlowStringOverrides(config)
+      window.XRExtras.StartFlow.setStringOverrides(stringOverrides)
+      window.XRExtras.StartFlow.show()
     }
 
     // We use xrconfig if it is present, else xrweb or xrface or xrlayers.
