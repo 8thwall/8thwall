@@ -82,7 +82,7 @@ Displays the unified compatibility, permissions, loading, and error flow.
 | showStartScreen      | boolean | false     | Wait for a user gesture before starting the app. |
 | waitForCameraTexture | boolean | true      | Wait for one of the AR pipeline modules to provide camera frames before hiding. |
 
-String overrides can be used to the text displayed in the UI. See [strings.ts](../startflow/strings.ts) for the full list.
+String overrides can be used to customize the text displayed in the UI. See [strings.ts](../startflow/strings.ts) for the full list.
 
 ```html
 <a-scene

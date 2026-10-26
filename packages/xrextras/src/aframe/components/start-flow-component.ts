@@ -64,14 +64,15 @@ const startFlowComponent: ComponentDefinition = {
     this.configure()
   },
   remove() {
+    if (window.XRExtras) {
+      XRExtras.StartFlow.hide()
+      XRExtras.StartFlow.reset()
+    }
     this.removed = true
     window.removeEventListener('xrandextrasloaded', this.load)
-    if (!this.loaded) {
-      return
+    if (this.loaded) {
+      XR8.removeCameraPipelineModule('startflow')
     }
-    XRExtras.StartFlow.hide()
-    XRExtras.StartFlow.reset()
-    XR8.removeCameraPipelineModule('startflow')
   },
 }
 
