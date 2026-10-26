@@ -1,7 +1,6 @@
 // Copyright (c) 2018 8th Wall, Inc.
 
-// A pipeline module that throws an error after 300 frames -- illustrates the error handling in
-// RuntimeError.pipelineModule().
+// A pipeline module that throws an error after 300 frames -- illustrates StartFlow error handling.
 const throwerrorPipelineModule = () => {
   let frame = 0
   return {
@@ -15,10 +14,8 @@ const onxrloaded = () => {
   XR8.addCameraPipelineModules([  // Add camera pipeline modules.
     // Existing pipeline modules.
     XR8.GlTextureRenderer.pipelineModule(),      // Draws the camera feed.
-    XRExtras.AlmostThere.pipelineModule(),       // Detects unsupported browsers and gives hints.
     XRExtras.FullWindowCanvas.pipelineModule(),  // Modifies the canvas to fill the window.
-    XRExtras.Loading.pipelineModule(),           // Manages the loading screen on startup.
-    XRExtras.RuntimeError.pipelineModule(),      // Shows an error image on runtime error.
+    XRExtras.StartFlow.pipelineModule(),         // Manages compatibility, loading, and errors.
     // Custom pipeline modules.
     throwerrorPipelineModule(),  // Throw an error after 300 frames.
   ])
@@ -30,5 +27,8 @@ const onxrloaded = () => {
   })
 }
 
-// Show loading screen before the full XR library has been loaded.
-window.XRExtras.Loading.showLoading({onxrloaded})
+if (window.XR8) {
+  onxrloaded()
+} else {
+  window.addEventListener('xrloaded', onxrloaded)
+}

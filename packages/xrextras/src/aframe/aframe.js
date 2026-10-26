@@ -7,11 +7,7 @@ import {getStartFlowStringOverrides} from './components/start-flow-component'
 
 let xrextrasAframe = null
 
-const onxrloaded = () => { XR8.addCameraPipelineModule(XRExtras.Loading.pipelineModule()) }
-
-// We want to start showing the loading screen eagerly (before AFRAME has loaded and parsed the
-// scene and set up everything). We also need to work around a bug in the AFRAME loading in iOS
-// Webviews for almost there.
+// We want to start showing the start flow eagerly before AFRAME has loaded and parsed the scene.
 const eagerload = () => {
   // Manually traverse the dom for an aframe scene and check its attributes.
   const scene = document.getElementsByTagName('a-scene')[0]
@@ -20,62 +16,16 @@ const eagerload = () => {
   }
   const attrs = scene.attributes
 
-  let foundAlmostThere = false
-  let foundLoading = false
-  let redirectUrl = null
-  let runConfig = null
-
-  // Eagerly inspect the dom, and trigger loading or almost there modules early if appropriate.
-  const xrconfigPresent = Array.from(attrs).map(attr => attr.name).includes('xrconfig')
+  // Eagerly inspect the DOM and trigger the start flow if appropriate.
   Object.keys(attrs).forEach((a) => {
     const attr = attrs.item(a).name
-    if (attr === 'xrextras-almost-there') {
-      foundAlmostThere = true
-      const redirectMatch = new RegExp('url:([^;]*)').exec(attrs.item(a).value)
-      if (redirectMatch) {
-        redirectUrl = redirectMatch[1]
-      }
-    }
-
-    if (attr === 'xrextras-loading') {
-      foundLoading = true
-    }
-
     if (attr === 'xrextras-start-flow') {
       const config = AFRAME.utils.styleParser.parse(attrs.item(a).value)
       const stringOverrides = getStartFlowStringOverrides(config)
       window.XRExtras.StartFlow.setStringOverrides(stringOverrides)
       window.XRExtras.StartFlow.show()
     }
-
-    // We use xrconfig if it is present, else xrweb or xrface or xrlayers.
-    if (attr === 'xrconfig' ||
-      (!xrconfigPresent && (attr === 'xrweb' || attr === 'xrface' || attr === 'xrlayers'))) {
-      const allowedDevicesMatch = new RegExp('allowedDevices:([^;]*)').exec(attrs.item(a).value)
-      if (allowedDevicesMatch) {
-        runConfig = {allowedDevices: allowedDevicesMatch[1].trim()}
-      }
-    }
   })
-
-  if (foundAlmostThere) {
-    if (redirectUrl) {
-      window.XRExtras.AlmostThere.configure({url: redirectUrl})
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    window.XR8
-      ? window.XRExtras.AlmostThere.checkCompatibility(runConfig)
-      : window.addEventListener(
-        'xrloaded', () => window.XRExtras.AlmostThere.checkCompatibility(runConfig)
-      )
-  }
-
-  if (foundLoading) {
-    const waitForRealityTexture =
-      !!(scene.attributes.xrweb || scene.attributes.xrface || scene.attributes.xrlayers)
-    window.XRExtras.Loading.showLoading({onxrloaded, waitForRealityTexture})
-  }
 }
 
 function create() {

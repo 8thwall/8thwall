@@ -220,94 +220,6 @@ const hideCameraFeedComponent: ComponentDefinition = {
   },
 }
 
-// Display 'almost there' flows.
-const almostThereComponent: ComponentDefinition = {
-  schema: {
-    url: {default: ''},
-  },
-  init() {
-    const load = () => {
-      this.data.url && XRExtras.AlmostThere.configure({url: this.data.url})
-      XR8.addCameraPipelineModule(XRExtras.AlmostThere.pipelineModule())
-    }
-    window.XRExtras && window.XR8
-      ? load()
-      : window.addEventListener('xrandextrasloaded', load, {once: true})
-  },
-  remove() {
-    XRExtras.AlmostThere.hideAlmostThere()
-    XR8.removeCameraPipelineModule('almostthere')
-  },
-}
-
-// Display loading screen.
-const onxrloaded = () => { XR8.addCameraPipelineModule(XRExtras.Loading.pipelineModule()) }
-const loadingComponent: ComponentDefinition = {
-  schema: {
-    loadBackgroundColor: {default: ''},
-    cameraBackgroundColor: {default: ''},
-    loadImage: {default: ''},
-    loadAnimation: {default: ''},
-  },
-  init() {
-    let aframeLoaded = false
-    this.el.addEventListener('loaded', () => { aframeLoaded = true })
-    const aframeDidLoad = () => aframeLoaded
-    const load = () => {
-      XRExtras.Loading.setAppLoadedProvider(aframeDidLoad)
-      const waitForRealityTexture =
-        !!(this.el.sceneEl.attributes.xrweb ||
-          this.el.sceneEl.attributes.xrface ||
-          this.el.sceneEl.attributes.xrlayers)
-      XRExtras.Loading.showLoading({onxrloaded, waitForRealityTexture})
-    }
-    window.XRExtras ? load() : window.addEventListener('xrextrasloaded', load, {once: true})
-
-    const loadImg = document.querySelector('#xrextras-load-image') as any
-
-    if (loadImg) {
-      if (this.data.loadImage !== '') {
-        const imgElement = document.querySelector(this.data.loadImage) as any
-        if (imgElement) {  // Added null check
-          loadImg.src = imgElement.src
-        }
-      }
-
-      if (this.data.loadAnimation !== '') {
-        loadImg.classList.remove('xrextras-loading-spin')
-
-        const animations: Record<string, string> = {
-          spin: 'xrextras-loading-spin',
-          pulse: 'xrextras-loading-pulse',
-          scale: 'xrextras-loading-scale',
-        }
-
-        if (this.data.loadAnimation !== 'none') {
-          const animation = animations[this.data.loadAnimation]
-          if (animation) {
-            loadImg.classList.add(animation)
-          }
-        }
-      }
-    }
-
-    const loadBackground = document.querySelector('#xrextras-load-background')
-
-    if (loadBackground) {
-      loadBackground.style.backgroundColor = this.data.loadBackgroundColor
-    }
-
-    const requestingCameraPermissions = document.querySelector('#requestingCameraPermissions')
-
-    if (requestingCameraPermissions) {
-      requestingCameraPermissions.style.backgroundColor = this.data.cameraBackgroundColor
-    }
-  },
-  remove() {
-    XR8.removeCameraPipelineModule('loading')
-  },
-}
-
 export {
   opaqueBackgroundComponent,
   attachComponent,
@@ -315,6 +227,4 @@ export {
   pauseOnBlurComponent,
   pauseOnHiddenComponent,
   hideCameraFeedComponent,
-  almostThereComponent,
-  loadingComponent,
 }

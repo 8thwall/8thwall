@@ -4,10 +4,7 @@ The XRExtras library contains various A-Frame components and primitives to quick
 
 ## A-Frame Components
 
-- `xrextras-almost-there`
 - `xrextras-start-flow`
-- `xrextras-loading`
-- `xrextras-runtime-error`
 - `xrextras-stats`
 - `xrextras-tap-recenter`
 - `xrextras-generate-image-targets`
@@ -47,29 +44,6 @@ The XRExtras library contains various A-Frame components and primitives to quick
 
 ## Components
 
-### `xrextras-almost-there`
-
-Detects incompatible browsers and guides the user to either refresh the page to accept permissions or to open the experience in a compatible browser. This component is succeeded by `xrextras-loading`.
-
-**Properties**
-
-| Property | Type   | Default | Description                    |
-|----------|--------|---------|--------------------------------|
-| url      | string | ""      | Used for the QR code and link out button. |
-
-### `xrextras-loading`
-
-Displays almost there flows and a loading screen until scene assets are loaded.
-
-**Properties (all optional)**
-
-| Property              | Type   | Default | Description                                                        |
-|-----------------------|--------|---------|--------------------------------------------------------------------|
-| loadBackgroundColor   | string | ""      | Background hex color of the loading screen's lower section.         |
-| cameraBackgroundColor | string | ""      | Background hex color of the loading screen's top section.           |
-| loadImage             | string | ""      | The HTML Element ID of an image. The image needs to be an `<a-asset>`. Ex: `#load` |
-| loadAnimation         | string | "spin"  | Animation style of `loadImage`. Choose from `spin`, `pulse`, `scale`, or `none`. |
-
 ### `xrextras-start-flow`
 
 Displays the unified compatibility, permissions, loading, and error flow.
@@ -99,14 +73,6 @@ String overrides can be used to customize the text displayed in the UI. See [str
   </a-assets>
 </a-scene>
 ```
-
-### `xrextras-runtime-error`
-
-Catches runtime errors and displays a "something went wrong" screen.
-
-**Properties**
-
-None.
 
 ### `xrextras-stats`
 

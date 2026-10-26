@@ -11,7 +11,6 @@ import {
 } from './components/session-reconfigure-components'
 
 import {
-  runtimeErrorComponent,
   statsComponent,
   logToScreenComponent,
 } from './components/debug-components'
@@ -50,8 +49,6 @@ import {
   pauseOnBlurComponent,
   pauseOnHiddenComponent,
   hideCameraFeedComponent,
-  almostThereComponent,
-  loadingComponent,
 } from './components/lifecycle-components'
 
 import {startFlowComponent} from './components/start-flow-component'
@@ -73,9 +70,6 @@ import {
 } from './components/target-components'
 
 const xrComponents = () => ({
-  'xrextras-almost-there': almostThereComponent,
-  'xrextras-loading': loadingComponent,
-  'xrextras-runtime-error': runtimeErrorComponent,
   'xrextras-stats': statsComponent,
   'xrextras-opaque-background': opaqueBackgroundComponent,
   'xrextras-tap-recenter': tapRecenterComponent,
