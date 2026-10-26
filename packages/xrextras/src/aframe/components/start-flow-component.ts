@@ -12,10 +12,10 @@ const stringSchema = Object.fromEntries(
 )
 
 const getStartFlowStringOverrides = (
-  values: Record<string, string>, specified: Record<string, unknown> = values
+  values: Record<string, string>
 ): StartFlowStringOverrides => Object.fromEntries(
   stringKeys
-    .filter(key => specified[key] !== undefined)
+    .filter(key => values[key] !== undefined)
     .map(key => [key, values[key]])
 ) as StartFlowStringOverrides
 
@@ -30,7 +30,7 @@ const startFlowComponent: ComponentDefinition = {
     this.configure = () => {
       const {previewSrc, showStartScreen, waitForCameraTexture} = this.data
       XRExtras.StartFlow.reset()
-      if (typeof previewSrc !== 'undefined') {
+      if (typeof this.attrValue.previewSrc !== 'undefined') {
         XRExtras.StartFlow.configure({
           previewSrc: typeof previewSrc === 'string' ? previewSrc : previewSrc.src,
         })
@@ -40,7 +40,7 @@ const startFlowComponent: ComponentDefinition = {
         waitForCameraTexture,
       })
       XRExtras.StartFlow.setStringOverrides(
-        getStartFlowStringOverrides(this.data, this.attrValue)
+        getStartFlowStringOverrides(this.attrValue)
       )
     }
     this.load = () => {
@@ -70,6 +70,7 @@ const startFlowComponent: ComponentDefinition = {
       return
     }
     XRExtras.StartFlow.hide()
+    XRExtras.StartFlow.reset()
     XR8.removeCameraPipelineModule('startflow')
   },
 }
