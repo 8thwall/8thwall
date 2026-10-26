@@ -14,7 +14,7 @@ type FingerMoveEvent = {
   positionChange: {
     x: number
     y: number
-  },
+  }
   touchCount: number
   startTime: number
   startSpread: number
