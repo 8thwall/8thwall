@@ -78,7 +78,7 @@ for (const cssPath of cssFiles) {
 
 if (failures.length) {
   process.stderr.write('XRExtras CSS namespace check failed:\n')
-  failures.forEach((failure) => process.stderr.write(`- ${failure}\n`))
+  failures.forEach(failure => process.stderr.write(`- ${failure}\n`))
   process.exit(1)
 }
 
