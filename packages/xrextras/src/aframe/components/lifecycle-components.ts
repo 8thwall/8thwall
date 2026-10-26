@@ -273,20 +273,20 @@ const loadingComponent: ComponentDefinition = {
         }
       }
 
-    if (this.data.loadAnimation !== '') {
-      loadImg.classList.remove('xrextras-loading-spin')
+      if (this.data.loadAnimation !== '') {
+        loadImg.classList.remove('xrextras-loading-spin')
 
-      const animations: Record<string, string> = {
-        spin: 'xrextras-loading-spin',
-        pulse: 'xrextras-loading-pulse',
-        scale: 'xrextras-loading-scale',
-      }
-
-      if (this.data.loadAnimation !== 'none') {
-        const animation = animations[this.data.loadAnimation]
-        if (animation) {
-          loadImg.classList.add(animation)
+        const animations: Record<string, string> = {
+          spin: 'xrextras-loading-spin',
+          pulse: 'xrextras-loading-pulse',
+          scale: 'xrextras-loading-scale',
         }
+
+        if (this.data.loadAnimation !== 'none') {
+          const animation = animations[this.data.loadAnimation]
+          if (animation) {
+            loadImg.classList.add(animation)
+          }
         }
       }
     }

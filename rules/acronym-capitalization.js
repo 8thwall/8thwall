@@ -1,3 +1,7 @@
+const ALLOWED_NAMES = new Set([
+  'XRExtras',
+])
+
 module.exports = {
   name: 'acronym-capitalization',
   meta: {
@@ -10,6 +14,9 @@ module.exports = {
     const identifierRegex = /[A-Z]{3,}([a-z])|[a-z].*[A-Z]{2}$/
 
     const checkName = (node, name) => {
+      if (ALLOWED_NAMES.has(name)) {
+        return
+      }
       const matches = name.match(identifierRegex)
       if (matches) {
         context.report({

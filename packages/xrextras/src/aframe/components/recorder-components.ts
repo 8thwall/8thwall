@@ -56,7 +56,10 @@ const capturePreviewComponent: ComponentDefinition = {
 }
 
 interface CaptureComponentDefinition extends ComponentDefinition {
-  includeSceneAudio: ({microphoneInput, audioProcessor}: { microphoneInput: any, audioProcessor: any }) => any
+  includeSceneAudio: ({microphoneInput, audioProcessor}: {
+    microphoneInput: any
+    audioProcessor: any
+  }) => any
 }
 
 const captureConfigComponent: CaptureComponentDefinition = {
