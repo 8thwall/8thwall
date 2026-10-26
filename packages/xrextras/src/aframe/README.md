@@ -78,10 +78,11 @@ Displays the unified compatibility, permissions, loading, and error flow.
 
 | Property             | Type    | Default   | Description                                      |
 |----------------------|---------|-----------|--------------------------------------------------|
-| previewSrc           | asset   | ""        | Image displayed on the optional start screen.    |
+| previewSrc           | asset   | og:image  | Image displayed on the optional start screen.    |
 | showStartScreen      | boolean | false     | Wait for a user gesture before starting the app. |
-| waitForCameraTexture | boolean | true      | Wait for a camera texture before hiding the UI.  |
-| <Text overrides>     | string  | <various> | Override the text displayed in the UI. See [strings.ts](../startflow/strings.ts)          |
+| waitForCameraTexture | boolean | true      | Wait for one of the AR pipeline modules to provide camera frames before hiding. |
+
+String overrides can be used to the text displayed in the UI. See [strings.ts](../startflow/strings.ts) for the full list.
 
 ```html
 <a-scene
