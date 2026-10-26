@@ -21,7 +21,7 @@ const getStartFlowStringOverrides = (
 
 const startFlowComponent: ComponentDefinition = {
   schema: {
-    previewSrc: {type: 'string'},
+    previewSrc: {type: 'asset'},
     showStartScreen: {default: false},
     waitForCameraTexture: {default: true},
     ...stringSchema,
@@ -32,7 +32,7 @@ const startFlowComponent: ComponentDefinition = {
       XRExtras.StartFlow.reset()
       if (typeof previewSrc !== 'undefined') {
         XRExtras.StartFlow.configure({
-          previewSrc,
+          previewSrc: typeof previewSrc === 'string' ? previewSrc : previewSrc.src,
         })
       }
       XRExtras.StartFlow.configure({

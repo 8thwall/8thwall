@@ -78,7 +78,7 @@ Displays the unified compatibility, permissions, loading, and error flow.
 
 | Property             | Type    | Default   | Description                                      |
 |----------------------|---------|-----------|--------------------------------------------------|
-| previewSrc           | string  | ""        | Image displayed on the optional start screen.    |
+| previewSrc           | asset   | ""        | Image displayed on the optional start screen.    |
 | showStartScreen      | boolean | false     | Wait for a user gesture before starting the app. |
 | waitForCameraTexture | boolean | true      | Wait for a camera texture before hiding the UI.  |
 | <Text overrides>     | string  | <various> | Override the text displayed in the UI. See [strings.ts](../startflow/strings.ts)          |
@@ -86,12 +86,17 @@ Displays the unified compatibility, permissions, loading, and error flow.
 ```html
 <a-scene
   xrextras-start-flow="
+    previewSrc: #preview;
     showStartScreen: true;
     startTitle: Welcome to the experience;
     startCta: Enter AR;
     loadingLabel: Preparing experience
   "
 >
+  <a-assets>
+    <img id="preview" src="./preview.jpg">
+  </a-assets>
+</a-scene>
 ```
 
 ### `xrextras-runtime-error`
