@@ -7,14 +7,14 @@ import {StartScreen} from './start-screen'
 import type {StartFlowViewProps} from './types'
 import {UnexpectedErrorScreen} from './unexpected-error-screen'
 import {UnsupportedBrowserScreen} from './unsupported-browser-screen'
-import {UnsupportedDeviceScreen} from './unsupported-device-screen'
+import {LandingScreen} from './landing/screen'
 
 const StartFlowView: FunctionComponent<StartFlowViewProps> = ({
   options, screen, strings,
 }) => {
   switch (screen) {
-    case 'unsupported-device':
-      return <UnsupportedDeviceScreen strings={strings} />
+    case 'landing':
+      return <LandingScreen options={options} strings={strings} />
     case 'unsupported-browser':
       return <UnsupportedBrowserScreen strings={strings} />
     case 'in-app-browser':

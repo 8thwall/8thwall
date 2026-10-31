@@ -72,7 +72,7 @@ const createStartFlowRenderer = (): StartFlowRenderer => {
   }
 
   const viewOptions = (): StartFlowScreenOptions => ({
-    previewSrc: options.previewSrc,
+    ...options,
     onStart: handleStart,
     onRefresh: () => window.location.reload(),
   })

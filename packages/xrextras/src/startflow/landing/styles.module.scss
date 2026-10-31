@@ -1,0 +1,338 @@
+.screen {
+  container-type: inline-size;
+}
+
+.centered {
+  display: grid;
+  align-items: safe center;
+  justify-items: center;
+  width: 100%;
+  min-height: 100%;
+  margin: auto;
+}
+
+.mediaView {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto auto auto;
+  grid-template-areas: 'media' 'logo' 'qr';
+  gap: 24px;
+  padding: 16px;
+  transition: opacity 300ms, transform 300ms;
+}
+
+.loading {
+  opacity: 0;
+  transform: scale(0.97);
+}
+
+.media,
+.mediaEmbed {
+  display: block;
+  overflow: hidden;
+  width: 100%;
+  min-width: 0;
+  max-width: calc(
+    (var(--xrextras-landing-media-width, 1) / var(--xrextras-landing-media-height, 1)) * 600px
+  );
+  margin: 0 auto;
+  border-radius: var(--xrextras-border-radius, 12px);
+}
+
+.media,
+.mediaEmbed,
+.videoContainer {
+  grid-area: media;
+}
+
+.videoContainer {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  max-width: 100%;
+}
+
+.mediaEmbed {
+  position: relative;
+  max-width: 100%;
+  padding-top: 56.25%;
+}
+
+.mediaEmbed iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.promptSection {
+  display: flex;
+  grid-area: qr;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-width: 0;
+}
+
+.qr {
+  width: min(220px, 100%);
+  height: auto;
+  aspect-ratio: 1;
+  margin-bottom: 12px;
+  border-radius: var(--xrextras-border-radius, 12px);
+  background: white;
+}
+
+.promptText {
+  z-index: 1;
+  min-width: 0;
+  font-size: 24px;
+  line-height: 1.25;
+  text-align: center;
+  text-shadow: var(--xrextras-text-shadow, none);
+}
+
+.promptLink {
+  position: relative;
+  display: block;
+  width: 100%;
+  color: inherit;
+  line-height: 0;
+  text-decoration: none;
+}
+
+.linkPlaceholder {
+  display: inline-block;
+  overflow: hidden;
+  width: 100%;
+  line-height: normal;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.linkOverflow {
+  position: absolute;
+  top: -2px;
+  left: -8px;
+  display: none;
+  width: 150%;
+  max-width: calc(100% + 16px);
+}
+
+.promptLink:hover .linkOverflow {
+  display: block;
+}
+
+.linkOverflowText {
+  display: inline-block;
+  overflow: hidden;
+  max-width: 100%;
+  border-radius: var(--xrextras-border-radius, 12px);
+  padding: 2px 8px;
+  color: #2d2e43;
+  background: white;
+  line-height: normal;
+  overflow-wrap: anywhere;
+}
+
+.copyIcon {
+  position: relative;
+  top: 3px;
+  display: inline-block;
+  margin-left: 4px;
+}
+
+.messengerButton {
+  display: block;
+  margin-bottom: 8px;
+  border-radius: var(--xrextras-button-border-radius, 999px);
+  padding: 8px 16px;
+  color: white;
+  background: rgb(0, 130, 250);
+  font: 300 24px/1.2 sans-serif;
+  text-decoration: none;
+}
+
+.messengerButton svg {
+  position: relative;
+  top: 3px;
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+}
+
+.logoSection {
+  display: flex;
+  grid-area: logo;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: min(300px, 100%);
+  min-width: 0;
+  margin: 0 auto;
+}
+
+.logo {
+  display: block;
+  max-width: 100%;
+  max-height: 168px;
+  height: auto;
+  margin-bottom: 24px;
+}
+
+.attributionLogo {
+  width: 220px;
+  max-width: 100%;
+  margin-top: auto;
+  filter: var(--xrextras-attribution-filter, none);
+}
+
+.blankView {
+  display: grid;
+  grid-template-areas: 'logo' 'qr';
+  align-content: center;
+  gap: 32px;
+}
+
+.modelCanvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.modelInfo {
+  position: absolute;
+  z-index: 1;
+  inset: auto 0 0;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  gap: 20px;
+  padding: max(20px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right))
+    max(20px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left));
+  pointer-events: none;
+}
+
+.modelInfo .attributionLogo,
+.modelInfo .logo,
+.modelInfo .qr,
+.modelInfo .promptText {
+  pointer-events: auto;
+}
+
+.mediaControl {
+  position: absolute;
+  z-index: 5;
+  margin: 0;
+  border: 0;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.mediaControl svg {
+  display: block;
+  width: 32px;
+  height: 32px;
+  filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.8));
+}
+
+.playButton {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.playButton svg {
+  width: 56px;
+  height: 56px;
+}
+
+.pauseButton {
+  z-index: 4;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.muteButton {
+  right: 24px;
+  bottom: 24px;
+}
+
+@container (min-width: 768px) {
+  .promptText {
+    text-align: left;
+  }
+
+  .promptSection {
+    flex-direction: row;
+    align-items: flex-end;
+  }
+
+  .qr {
+    flex: 0 0 220px;
+    margin-right: 24px;
+    margin-bottom: 0;
+  }
+
+  .logoSection {
+    align-items: flex-end;
+    margin-right: 0;
+  }
+
+  .portrait {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: 1fr auto;
+    grid-template-areas: 'logo media' 'qr media';
+    padding: 24px;
+  }
+
+  .portrait .media {
+    max-height: calc(100vh - 88px);
+  }
+
+  .portrait .logoSection {
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-left: 0;
+  }
+
+  .landscape {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 300px);
+    grid-template-rows: auto auto;
+    grid-template-areas: 'media media' 'qr logo';
+    padding: 24px;
+  }
+
+  .blankView {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 300px);
+    grid-template-areas: 'qr logo';
+    align-items: center;
+    padding: 32px;
+  }
+
+  .modelInfo {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding: max(32px, env(safe-area-inset-top)) max(32px, env(safe-area-inset-right))
+      max(32px, env(safe-area-inset-bottom)) max(32px, env(safe-area-inset-left));
+  }
+
+  .modelInfo .promptSection {
+    align-items: flex-end;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mediaView {
+    transition: none;
+  }
+}

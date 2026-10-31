@@ -1,7 +1,7 @@
 import type {ComponentDefinition} from 'aframe'
 
 import {defaultStrings} from '../../startflow/strings'
-import type {StartFlowStringOverrides} from '../../startflow/types'
+import type {StartFlowOptions, StartFlowStringOverrides} from '../../startflow/types'
 
 declare const XRExtras: any
 declare const XR8: any
@@ -19,26 +19,69 @@ const getStartFlowStringOverrides = (
     .map(key => [key, values[key]])
 ) as StartFlowStringOverrides
 
+const assetSrc = (value: string | {src?: string} | null): string | null => (
+  typeof value === 'string' ? value : value?.src ?? null
+)
+
 const startFlowComponent: ComponentDefinition = {
   schema: {
     previewSrc: {type: 'asset'},
     showStartScreen: {default: false},
     waitForCameraTexture: {default: true},
+    url: {type: 'string'},
+    mediaSrc: {type: 'asset'},
+    logoSrc: {type: 'asset'},
+    mediaAutoplay: {default: true},
+    mediaAnimation: {type: 'string'},
+    mediaControls: {default: 'minimal'},
+    sceneEnvMap: {default: 'field'},
+    sceneOrbitIdle: {default: 'spin'},
+    sceneOrbitInteraction: {default: 'drag'},
+    sceneLightingIntensity: {default: 1},
     ...stringSchema,
   },
   init() {
     this.configure = () => {
-      const {previewSrc, showStartScreen, waitForCameraTexture} = this.data
-      XRExtras.StartFlow.reset()
-      if (typeof this.attrValue.previewSrc !== 'undefined') {
-        XRExtras.StartFlow.configure({
-          previewSrc: typeof previewSrc === 'string' ? previewSrc : previewSrc.src,
-        })
-      }
-      XRExtras.StartFlow.configure({
+      const {
+        previewSrc,
         showStartScreen,
         waitForCameraTexture,
-      })
+        url,
+        mediaSrc,
+        logoSrc,
+        mediaAutoplay,
+        mediaAnimation,
+        mediaControls,
+        sceneEnvMap,
+        sceneOrbitIdle,
+        sceneOrbitInteraction,
+        sceneLightingIntensity,
+      } = this.data
+      XRExtras.StartFlow.reset()
+      const options: Partial<StartFlowOptions> = {
+        showStartScreen,
+        waitForCameraTexture,
+        mediaAutoplay,
+        mediaAnimation,
+        mediaControls,
+        sceneEnvMap,
+        sceneOrbitIdle,
+        sceneOrbitInteraction,
+        sceneLightingIntensity,
+      }
+      if (typeof this.attrValue.previewSrc !== 'undefined') {
+        options.previewSrc = assetSrc(previewSrc)
+      }
+      if (typeof this.attrValue.url !== 'undefined') {
+        options.url = url
+      }
+      if (typeof this.attrValue.mediaSrc !== 'undefined') {
+        options.mediaSrc = assetSrc(mediaSrc)
+      }
+      if (typeof this.attrValue.logoSrc !== 'undefined') {
+        options.logoSrc = assetSrc(logoSrc)
+      }
+      XRExtras.StartFlow.configure(options)
       XRExtras.StartFlow.setStringOverrides(
         getStartFlowStringOverrides(this.attrValue)
       )
