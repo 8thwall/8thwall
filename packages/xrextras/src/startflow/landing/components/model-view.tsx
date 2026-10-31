@@ -3,9 +3,6 @@ import {h} from 'preact'
 import type {FunctionComponent as FC} from 'preact'
 import {useState, useEffect} from 'preact/hooks'
 
-import {combine} from '../../../classnames'
-import {Panel} from '../../panel'
-import sharedStyles from '../../shared.module.scss'
 import type {LandingParameters} from '../parameters'
 import {ViewContainer} from './view-container'
 import {LogoSection} from './logo-section'
@@ -46,7 +43,7 @@ const ModelView: FC<IModelView> = (props) => {
 
   return (
     <ViewContainer centered={false}>
-      <Panel className={combine(sharedStyles.expandedPanel, styles.modelViewerInfo)}>
+      <div className={styles.modelViewerInfo}>
         <UrlPromptSection
           url={props.url}
           promptPrefix={props.promptPrefix}
@@ -56,7 +53,7 @@ const ModelView: FC<IModelView> = (props) => {
           messengerLabel={props.messengerLabel}
         />
         <LogoSection {...props} />
-      </Panel>
+      </div>
       {isReady && <ModelScene {...props} />}
     </ViewContainer>
   )

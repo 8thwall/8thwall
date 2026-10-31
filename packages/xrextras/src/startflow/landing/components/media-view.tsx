@@ -2,9 +2,6 @@ import {h} from 'preact'
 import type {FunctionComponent as FC} from 'preact'
 import {useState, useRef, useEffect} from 'preact/hooks'
 
-import {combine} from '../../../classnames'
-import {Panel} from '../../panel'
-import sharedStyles from '../../shared.module.scss'
 import type {LandingParameters} from '../parameters'
 import styles from '../styles.module.scss'
 
@@ -59,11 +56,7 @@ const MediaView: FC<IMediaView> = (props) => {
 
   return (
     <ViewContainer>
-      <Panel
-        animate={false}
-        className={combine(sharedStyles.expandedPanel, classes)}
-        style={style}
-      >
+      <div className={classes} style={style}>
         <MediaElement
           src={props.mediaSrc}
           alt={props.mediaAlt}
@@ -86,7 +79,7 @@ const MediaView: FC<IMediaView> = (props) => {
           messengerLabel={props.messengerLabel}
         />
         <LogoSection {...props} />
-      </Panel>
+      </div>
     </ViewContainer>
   )
 }

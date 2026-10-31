@@ -1,3 +1,5 @@
+@use '../defaults';
+
 .viewLoading {
   opacity: 0;
   transform: scale(0.97);
@@ -5,6 +7,11 @@
 
 .viewTransition {
   transition: 0.3s opacity, 0.3s transform;
+}
+
+.blankView, .mediaView, .modelViewerInfo {
+  color: var(--xrextras-landing-text-color, defaults.$landing-text);
+  text-shadow: var(--xrextras-landing-text-shadow, defaults.$landing-text-shadow);
 }
 
 .logo {
@@ -64,6 +71,10 @@
 }
 
 .promptLink:hover {
+  .promptLinkPlaceholder {
+    visibility: hidden;
+  }
+
   .promptLinkOverflowContainer {
     display: block;
   }
@@ -71,13 +82,17 @@
 
 .promptLink:active {
   .promptLinkOverflowText {
-    background-color: black;
     color: white;
+  }
+
+  .promptLinkOverflowText::before {
+    background-color: black;
   }
 }
 
 .promptLinkPlaceholder {
   display: inline-block;
+  vertical-align: top;
   overflow: hidden;
   width: 100%;
   white-space: nowrap;
@@ -91,30 +106,44 @@ $overflow-padding-y: 2px;
 .promptLinkOverflowContainer {
   display: none;
   position: absolute;
-  top: -1 * $overflow-padding-y;
-  left: -1 * $overflow-padding-x;
-  width: 150%;
-  max-width: calc(100% + #{2 * $overflow-padding-x});
+  top: 0;
+  left: 0;
+  width: max-content;
+  max-width: 150%;
+  text-align: left;
+  line-height: normal;
 }
 
 .promptLinkOverflowText {
   display: inline-block;
+  position: relative;
+  z-index: 0;
+  padding-right: 28px;
   color: black;
-  background-color: white;
-  padding: $overflow-padding-y $overflow-padding-x;
-  border-radius: 8px;
   max-width: 100%;
-  overflow: hidden;
   white-space: normal;
   word-break: break-all;
-  line-height: normal;
+  line-height: inherit;
+  text-shadow: none;
+}
+
+.promptLinkOverflowText::before {
+  position: absolute;
+  z-index: -1;
+  top: -1 * $overflow-padding-y;
+  right: -1 * $overflow-padding-x;
+  bottom: -1 * $overflow-padding-y;
+  left: -1 * $overflow-padding-x;
+  border-radius: 8px;
+  background-color: white;
+  content: '';
 }
 
 .promptLinkIcon {
-  display: inline-block;
-  position: relative;
-  top: 3px;
-  margin-left: 4px;
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
 }
 
 .shadow {
@@ -222,6 +251,8 @@ $overflow-padding-y: 2px;
 }
 
 .blankView {
+  width: min(100%, 1000px);
+  padding: 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -275,6 +306,7 @@ $overflow-padding-y: 2px;
   width: auto;
   max-width: 1000px;
   margin: 0 auto;
+  padding: 28px;
   display: flex;
   flex-wrap: wrap;
   align-items: flex-end;

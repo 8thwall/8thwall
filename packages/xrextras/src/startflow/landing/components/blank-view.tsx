@@ -1,9 +1,6 @@
 import {h} from 'preact'
 import type {FunctionComponent as FC} from 'preact'
 
-import {combine} from '../../../classnames'
-import {Panel} from '../../panel'
-import sharedStyles from '../../shared.module.scss'
 import type {LandingParameters} from '../parameters'
 import styles from '../styles.module.scss'
 
@@ -14,7 +11,7 @@ import {ViewContainer} from './view-container'
 
 const BlankView: FC<LandingParameters> = props => (
   <ViewContainer>
-    <Panel className={combine(sharedStyles.expandedPanel, styles.blankView)}>
+    <div className={styles.blankView}>
       <UrlPromptSection
         url={props.url}
         promptPrefix={props.promptPrefix}
@@ -24,7 +21,7 @@ const BlankView: FC<LandingParameters> = props => (
         messengerLabel={props.messengerLabel}
       />
       <LogoSection {...props} />
-    </Panel>
+    </div>
   </ViewContainer>
 )
 
