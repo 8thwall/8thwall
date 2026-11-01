@@ -1,0 +1,32 @@
+diff --git a/node_modules/react-i18next/ts4.1/index.d.ts b/node_modules/react-i18next/ts4.1/index.d.ts
+index 429e2fe..c2eef59 100644
+--- a/node_modules/react-i18next/ts4.1/index.d.ts
++++ b/node_modules/react-i18next/ts4.1/index.d.ts
+@@ -239,25 +239,8 @@ export type TFuncReturn<
+     : NormalizeReturn<T[N], KeysWithSeparator<TKPrefix, TKeys>>
+   : Fallback<TDefaultResult>;
+ 
+-export interface TFunction<N extends Namespace = DefaultNamespace, TKPrefix = undefined> {
+-  <
+-    TKeys extends TFuncKey<N, TKPrefix> | TemplateStringsArray extends infer A ? A : never,
+-    TDefaultResult extends TFunctionResult | React.ReactNode = string,
+-    TInterpolationMap extends object = StringMap
+-  >(
+-    key: TKeys | TKeys[],
+-    options?: TOptions<TInterpolationMap> | string,
+-  ): TFuncReturn<N, TKeys, TDefaultResult, TKPrefix>;
+-  <
+-    TKeys extends TFuncKey<N, TKPrefix> | TemplateStringsArray extends infer A ? A : never,
+-    TDefaultResult extends TFunctionResult | React.ReactNode = string,
+-    TInterpolationMap extends object = StringMap
+-  >(
+-    key: TKeys | TKeys[],
+-    defaultValue?: string,
+-    options?: TOptions<TInterpolationMap> | string,
+-  ): TFuncReturn<N, TKeys, TDefaultResult, TKPrefix>;
+-}
++// Intentionally empty so consumers can fully define TFunction through module augmentation.
++export interface TFunction<N extends Namespace = Namespace, TKPrefix = undefined> {}
+ 
+ type TransChild = React.ReactNode | Record<string, unknown>;
+ export type TransProps<

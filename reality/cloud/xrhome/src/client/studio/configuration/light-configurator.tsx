@@ -39,7 +39,9 @@ const SHADOW_QUALITIES = [
 
 type LightConfig = DeepReadonly<Light> | undefined
 
-const makeDefaultLight = (type: Light['type'], t: TFunction<'cloud-studio-pages'[]>): Light => {
+const makeDefaultLight = (
+  type: Light['type'], t: TFunction<'cloud-studio-pages'[]>
+): Light => {
   if (!LIGHT_TYPES.map(({value}) => value).includes(type)) {
     throw new Error(t('light_configurator.error.invalid_light_type'))
   }
@@ -163,7 +165,8 @@ const LightConfigurator: React.FC<ILightConfigurator> = ({light, onChange, reset
                     target: [
                       currentLight.target?.[0] ?? LIGHT_DEFAULTS.targetX,
                       currentLight.target?.[1] ?? LIGHT_DEFAULTS.targetY,
-                      newValue],
+                      newValue,
+                    ],
                   }))
                 }}
               />

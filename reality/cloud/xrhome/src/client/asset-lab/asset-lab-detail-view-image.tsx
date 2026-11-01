@@ -79,7 +79,7 @@ const useStyles = createThemedStyles(theme => ({
 }))
 
 const AssetLabDetailViewImage = () => {
-  const {t} = useTranslation('asset-lab')
+  const {t} = useTranslation(['asset-lab', 'common'])
   const classes = useStyles()
   const assetLabCtx = useAssetLabStateContext()
   const {assetGenerationUuid} = assetLabCtx.state

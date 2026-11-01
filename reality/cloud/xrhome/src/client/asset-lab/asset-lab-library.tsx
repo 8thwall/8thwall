@@ -76,7 +76,7 @@ const AssetLabLibrary = () => {
   const [contextMenuActive, setContextMenuActive] = React.useState(false)
   const {librarySearchResults} = useAssetLabStateContext()
 
-  const {t} = useTranslation('asset-lab')
+  const {t} = useTranslation(['asset-lab', 'cloud-studio-pages'])
   const [filterBy, setFilterBy] = React.useState<string>(t('asset_lab.search_bar.filter_by_all'))
   const classes = useStyles()
   const {assetGenerationIds} = useCurrentAccountAssetGenerations()
