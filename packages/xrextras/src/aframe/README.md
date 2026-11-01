@@ -76,11 +76,21 @@ Displays the unified compatibility, permissions, loading, and error flow.
 
 **Properties (all optional)**
 
-| Property             | Type    | Default   | Description                                      |
-|----------------------|---------|-----------|--------------------------------------------------|
-| previewSrc           | asset   | og:image  | Image displayed on the optional start screen.    |
-| showStartScreen      | boolean | false     | Wait for a user gesture before starting the app. |
-| waitForCameraTexture | boolean | true      | Wait for one of the AR pipeline modules to provide camera frames before hiding. |
+| Property                  | Type    | Default          | Description                                      |
+|---------------------------|---------|------------------|--------------------------------------------------|
+| previewSrc                | asset   | og:image         | Image displayed on the optional start screen.    |
+| showStartScreen           | boolean | false            | Wait for a user gesture before starting the app. |
+| waitForCameraTexture      | boolean | true             | Wait for one of the AR pipeline modules to provide camera frames before hiding. |
+| url                       | string  | canonical URL    | Experience URL shown in the landing prompt and QR code. |
+| mediaSrc                  | asset   | og:image         | Image, MP4, YouTube URL, or GLB/GLTF displayed on the landing screen. |
+| logoSrc                   | asset   | none             | Custom logo displayed on the landing screen.     |
+| mediaAutoplay             | boolean | true             | Autoplay landing videos.                         |
+| mediaAnimation            | string  | none             | Animation clip to play for a 3D model.            |
+| mediaControls             | string  | minimal          | Video controls: `minimal`, `browser`, or `none`.  |
+| sceneEnvMap               | string  | field            | 3D environment preset or environment-map URL.    |
+| sceneOrbitIdle            | string  | spin             | Idle model motion: `spin`, `bounce`, or `none`.   |
+| sceneOrbitInteraction     | string  | drag             | Model interaction: `drag` or `none`.              |
+| sceneLightingIntensity    | number  | 1                | Lighting multiplier for 3D models.                |
 
 String overrides can be used to customize the text displayed in the UI. See [strings.ts](../startflow/strings.ts) for the full list.
 
@@ -89,6 +99,8 @@ String overrides can be used to customize the text displayed in the UI. See [str
   xrextras-start-flow="
     previewSrc: #preview;
     showStartScreen: true;
+    mediaSrc: #landing-preview;
+    logoSrc: #brand-logo;
     startTitle: Welcome to the experience;
     startCta: Enter AR;
     loadingLabel: Preparing experience
@@ -96,6 +108,8 @@ String overrides can be used to customize the text displayed in the UI. See [str
 >
   <a-assets>
     <img id="preview" src="./preview.jpg">
+    <img id="landing-preview" src="./landing-preview.jpg">
+    <img id="brand-logo" src="./logo.png">
   </a-assets>
 </a-scene>
 ```

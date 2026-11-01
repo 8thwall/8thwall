@@ -10,7 +10,7 @@ type StartFlowScreen =
   | 'start'
   | 'in-app-browser'
   | 'unsupported-browser'
-  | 'unsupported-device'
+  | 'landing'
   | {type: 'loading', requestingPermissions: boolean}
   | {type: 'unexpected-error', error: string}
   | {
@@ -31,14 +31,27 @@ type StartFlowStrings = typeof import('./strings').defaultStrings
 
 type StartFlowStringOverrides = Partial<StartFlowStrings>
 
+type LandingMediaControlMode = 'none' | 'browser' | 'minimal'
+type LandingOrbitIdle = 'none' | 'spin' | 'bounce'
+type LandingOrbitInteraction = 'none' | 'drag'
+
 interface StartFlowOptions {
   previewSrc: string | null
   showStartScreen: boolean
   waitForCameraTexture: boolean
+  url: string | null
+  mediaSrc: string | null
+  logoSrc: string | null
+  mediaAutoplay: boolean
+  mediaAnimation: string
+  mediaControls: LandingMediaControlMode
+  sceneEnvMap: string
+  sceneOrbitIdle: LandingOrbitIdle
+  sceneOrbitInteraction: LandingOrbitInteraction
+  sceneLightingIntensity: number
 }
 
-interface StartFlowScreenOptions {
-  previewSrc: string | null
+interface StartFlowScreenOptions extends StartFlowOptions {
   onStart: () => void
   onRefresh: () => void
 }
@@ -63,16 +76,23 @@ interface StartFlowController {
   isVisible: () => boolean
 }
 
-interface StartFlowViewProps {
-  screen: StartFlowScreen
+interface StartFlowContentProps {
   options: StartFlowScreenOptions
   strings: StartFlowStrings
 }
 
+interface StartFlowViewProps extends StartFlowContentProps {
+  screen: StartFlowScreen
+}
+
 export type {
+  LandingMediaControlMode,
+  LandingOrbitIdle,
+  LandingOrbitInteraction,
   Permission,
   PermissionsErrorEnvironment,
   StartFlowController,
+  StartFlowContentProps,
   StartFlowOptions,
   StartFlowPipelineModule,
   StartFlowScreen,

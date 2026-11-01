@@ -3,6 +3,7 @@ import {useEffect, useState} from 'preact/hooks'
 
 import {combine} from '../../src/classnames'
 import {defaultStrings} from '../../src/startflow/strings'
+import {resolveDefaultOptions} from '../../src/startflow/options'
 import type {
   PermissionsErrorEnvironment,
   StartFlowScreen,
@@ -11,6 +12,7 @@ import type {
 } from '../../src/startflow/types'
 import {StartFlowView} from '../../src/startflow/view'
 import {
+  DEFAULT_LANDING_OPTIONS,
   INDIVIDUAL_SCREENS,
   PERMISSION_LABELS,
   PERMISSIONS,
@@ -19,12 +21,13 @@ import {
   STRING_KEYS,
 } from './debug-config'
 import styles from './debug.module.scss'
-import type {DebugSettings, ScreenSelection} from './debug-types'
+import type {DebugLandingOptions, DebugSettings, ScreenSelection} from './debug-types'
 import {PreviewWorkspace} from './preview-workspace'
 import type {PreviewItem, ViewMode} from './preview-workspace'
 import {StringOverridesControl} from './string-controls'
 import {StyleOverridesControl} from './style-controls'
 import type {StyleToken} from './style-controls'
+import {LandingOptionsControl} from './landing-options-control'
 import {readSettings, writeSettings} from './url-settings'
 
 const screenFromSettings = (
@@ -82,6 +85,28 @@ const DebugApp = () => {
       return {...current, styleOverrides}
     })
   }
+  const setLandingOption = <K extends keyof DebugLandingOptions>(
+    key: K, value: DebugLandingOptions[K]
+  ) => setSettings(current => ({
+    ...current,
+    options: {
+      ...current.options,
+      landing: {...current.options.landing, [key]: value},
+    },
+  }))
+  const applyLandingPreset = (values: Partial<DebugLandingOptions>) => {
+    setSettings(current => ({
+      ...current,
+      options: {
+        ...current.options,
+        landing: {
+          ...DEFAULT_LANDING_OPTIONS,
+          url: current.options.landing.url,
+          ...values,
+        },
+      },
+    }))
+  }
   const isSelected = (screen: StartFlowScreenType) => (
     settings.screen === 'all' || settings.screen === screen
   )
@@ -107,6 +132,8 @@ const DebugApp = () => {
       <StartFlowView
         screen={screen}
         options={{
+          ...resolveDefaultOptions(),
+          ...settings.options.landing,
           previewSrc: settings.options.start.previewSrc,
           onStart: settings.screen === 'all' ? () => undefined : () => showLoading(false),
           onRefresh: isCollectionMode ? () => undefined : () => showLoading(true),
@@ -173,6 +200,15 @@ const DebugApp = () => {
               />
             </label>
           </fieldset>
+        )}
+
+        {isSelected('landing') && (
+          <LandingOptionsControl
+            legend={settings.screen === 'all' ? 'Landing options' : 'Options'}
+            options={settings.options.landing}
+            onChange={setLandingOption}
+            onPreset={applyLandingPreset}
+          />
         )}
 
         {isSelected('loading') && (

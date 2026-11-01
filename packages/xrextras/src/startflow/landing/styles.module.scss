@@ -1,0 +1,451 @@
+@use '../defaults';
+
+.viewLoading {
+  opacity: 0;
+  transform: scale(0.97);
+}
+
+.viewTransition {
+  transition: 0.3s opacity, 0.3s transform;
+}
+
+.blankView, .mediaView, .modelViewerInfo {
+  color: var(--xrextras-landing-text-color, defaults.$landing-text);
+  text-shadow: var(--xrextras-landing-text-shadow, defaults.$landing-text-shadow);
+}
+
+.logo {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  max-height: 168px;
+  margin-bottom: 24px;
+}
+
+.attributionLogo {
+  margin-top: auto;
+  width: 220px;
+  max-width: 100%;
+}
+
+.mediaEmbed, .mediaImage, .mediaVideo {
+  width: 100%;
+  min-width: 0;
+  border-radius: var(--xrextras-border-radius, 12px);
+  overflow: hidden;
+  margin: 0 auto;
+  display: block;
+}
+
+.mediaEmbed, .mediaImage, .mediaVideoContainer {
+  grid-area: media;
+}
+
+.promptText {
+  text-align: center;
+  font-size: 24px;
+  min-width: 0;
+  z-index: 1;
+}
+
+.promptLink {
+  display: block;
+  position: relative;
+  width: 100%;
+  line-height: 0;
+}
+
+.qr {
+  background: white;
+  border-radius: 16px;
+  width: 220px;
+  height: 220px;
+  grid-area: qr;
+  margin-bottom: 12px;
+}
+
+.promptLink:link, .promptLink:visited,
+.promptLink:hover, .promptLink:active {
+  color: inherit;
+  text-decoration: none;
+}
+
+.promptLink:hover {
+  .promptLinkPlaceholder {
+    visibility: hidden;
+  }
+
+  .promptLinkOverflowContainer {
+    display: block;
+  }
+}
+
+.promptLink:active {
+  .promptLinkOverflowText {
+    color: white;
+  }
+
+  .promptLinkOverflowText::before {
+    background-color: black;
+  }
+}
+
+.promptLinkPlaceholder {
+  display: inline-block;
+  vertical-align: top;
+  overflow: hidden;
+  width: 100%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  line-height: normal;
+}
+
+$overflow-padding-x: 8px;
+$overflow-padding-y: 2px;
+
+.promptLinkOverflowContainer {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: max-content;
+  max-width: 150%;
+  text-align: left;
+  line-height: normal;
+}
+
+.promptLinkOverflowText {
+  display: inline-block;
+  position: relative;
+  z-index: 0;
+  padding-right: 28px;
+  color: black;
+  max-width: 100%;
+  white-space: normal;
+  word-break: break-all;
+  line-height: inherit;
+  text-shadow: none;
+}
+
+.promptLinkOverflowText::before {
+  position: absolute;
+  z-index: -1;
+  top: -1 * $overflow-padding-y;
+  right: -1 * $overflow-padding-x;
+  bottom: -1 * $overflow-padding-y;
+  left: -1 * $overflow-padding-x;
+  border-radius: 8px;
+  background-color: white;
+  content: '';
+}
+
+.promptLinkIcon {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+}
+
+.shadow {
+  filter: drop-shadow(0px 0px 5px rgba(0,0,0,0.8))
+}
+
+.mediaImage, .mediaVideo {
+  max-width: calc((var(--landing8-media-width) / var(--landing8-media-height)) * var(--landing8-media-max-height));
+  --landing8-media-max-height: 600px;
+}
+
+.mediaView {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto auto;
+  grid-gap: 24px;
+  grid-template-areas:
+    "media"
+    "logo"
+    "qr";
+}
+
+.promptSection  {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  grid-area: qr;
+}
+
+.logoSection {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  grid-area: logo;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+@media screen and (min-width: 768px) {
+  .mediaView, .modelViewerInfo {
+    .promptLinkOverflowContainer {
+      max-width: 150%;
+    }
+    .promptText {
+      text-align: left;
+    }
+
+    .qr {
+      margin-right: 24px;
+      margin-bottom: 0;
+    }
+
+    .promptSection  {
+      flex-direction: row;
+      align-items: flex-end;
+    }
+  }
+
+  .logoSection {
+    align-items: flex-end;
+    margin-right: 0;
+  }
+
+  .portraitLayout {
+    grid-template-columns: 500px minmax(0, 500px);
+    grid-template-rows: 1fr auto;
+    grid-template-areas:
+      "logo media"
+      "qr media";
+
+    .mediaImage, .mediaVideo {
+      --landing8-media-max-height: 80vh;
+    }
+
+    .logoSection {
+      align-items: flex-start;
+      margin-left: 0;
+      justify-content: space-between;
+    }
+
+  }
+
+  .landscapeLayout {
+    min-width: 736px;
+    width: 65vw;
+    max-width: 1000px;
+
+    grid-template-columns: minmax(500px, 1fr) minmax(0, 300px);
+    grid-template-rows: auto auto;
+    grid-template-areas:
+      "media media"
+      "qr logo";
+
+    .mediaImage, .mediaVideoElement {
+      max-height: 650px;
+    }
+
+    .logoSection {
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+  }
+}
+
+.blankView {
+  width: min(100%, 1000px);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 48px;
+
+  .promptSection {
+    width: 100%;
+  }
+
+  .logoSection {
+    width: 100%;
+    margin: 0 auto;
+    align-items: center;
+  }
+
+  .attributionLogo {
+    margin-right: auto;
+    margin-left: auto;
+  }
+}
+
+.mediaEmbed {
+  width: 100%;
+  max-width: 100%;
+  padding-top: 56.25%;
+  position: relative;
+
+  iframe {
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.modelCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.modelViewerInfo {
+  z-index: 1;
+  position: absolute;
+  bottom: max(20px, env(safe-area-inset-bottom));
+  left: max(20px, env(safe-area-inset-left));
+  right: max(20px, env(safe-area-inset-right));
+  width: auto;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 28px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px 32px;
+  overflow: hidden;
+  pointer-events: none;
+
+  .attributionLogo, .logo, .qr, .promptText {
+    pointer-events: auto;
+  }
+
+  .promptSection {
+    flex: 1 1 500px;
+    flex-wrap: wrap;
+    min-width: 0;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .qr {
+    flex: 0 0 auto;
+    margin-right: 0;
+    margin-bottom: 0;
+  }
+
+  .promptText {
+    flex: 1 1 220px;
+  }
+
+  .logoSection {
+    flex: 0 1 220px;
+    margin-left: 0;
+  }
+
+  .promptLinkOverflowContainer {
+    max-width: 150%;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .modelViewerInfo {
+    flex-direction: column;
+    align-items: center;
+
+    .promptSection,
+    .logoSection {
+      width: 100%;
+      margin: 0;
+    }
+
+    .promptSection {
+      align-items: flex-start;
+    }
+
+    .promptText {
+      text-align: left;
+    }
+  }
+}
+
+.facebookMessengerButton {
+  display: block;
+  background: rgb(0, 130, 250);
+  font-family: sans-serif;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 24px;
+  margin-bottom: 8px;
+  font-weight: 300;
+
+  &:link, &:visited, &:hover, &:active {
+    color: white;
+    text-decoration: none;
+  }
+}
+
+.facebookMessengerIcon {
+  margin-right: 8px;
+  display: inline-block;
+  position: relative;
+  top: 3px;
+}
+
+.mediaVideoContainer {
+  position: relative;
+  max-width: 100%;
+  z-index: 3;
+}
+
+.mediaControlButton {
+  background: none;
+  border: none;
+  box-shadow: none;
+  position: absolute;
+  z-index: 5;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+}
+
+
+.mediaControlIcon {
+  display: block;
+  width: 32px;
+  height: 32px;
+}
+
+.mediaPlayButton {
+  top: var(--landing8-video-center-y, 50%);
+  left: var(--landing8-video-center-x, 50%);
+  transform: translate(-50%, -50%);
+
+  .mediaControlIcon {
+    width: 56px;
+    height: 56px;
+  }
+}
+
+$mute-button-inset: 32px;
+
+.mediaMuteButton {
+  right: calc(var(--landing8-video-right, 0) + #{$mute-button-inset});
+  bottom: $mute-button-inset;
+  transition: 0.5s opacity;
+}
+
+.mediaVideoContainer:not(:hover) {
+  .mediaMuteButton.playingWithSound:not(:focus) {
+    opacity: 0;
+    transition-delay: 1s;
+  }
+}
+
+.mediaPauseButton {
+  top: 0;
+  left: 0;
+  width: var(--landing8-video-width, 100%) ;
+  height: var(--landing8-video-height, 100%);
+  color: transparent;
+  z-index: 4;
+}

@@ -5,9 +5,21 @@ import type {
   StartFlowScreenType,
   StartFlowStrings,
 } from '../../src/startflow/types'
-import type {ScreenSelection} from './debug-types'
+import type {DebugLandingOptions, ScreenSelection} from './debug-types'
 
 const DEFAULT_PREVIEW_PATH = 'https://8thwall.org/social-cover.png'
+const DEFAULT_LANDING_OPTIONS: DebugLandingOptions = {
+  url: 'https://8th.io/example',
+  mediaSrc: '',
+  logoSrc: '',
+  mediaAutoplay: true,
+  mediaAnimation: '',
+  mediaControls: 'minimal',
+  sceneEnvMap: 'field',
+  sceneOrbitIdle: 'spin',
+  sceneOrbitInteraction: 'drag',
+  sceneLightingIntensity: 1,
+}
 
 const SCREENS: {value: ScreenSelection, label: string}[] = [
   {value: 'all', label: 'All screens'},
@@ -16,7 +28,7 @@ const SCREENS: {value: ScreenSelection, label: string}[] = [
   {value: 'permissions-error', label: 'Permissions error'},
   {value: 'unsupported-browser', label: 'Browser update required'},
   {value: 'in-app-browser', label: 'In-app browser'},
-  {value: 'unsupported-device', label: 'Unsupported device'},
+  {value: 'landing', label: 'Landing'},
   {value: 'unexpected-error', label: 'Unexpected error'},
 ]
 
@@ -52,6 +64,7 @@ const STRING_KEYS = Object.keys(defaultStrings) as (keyof StartFlowStrings)[]
 
 export {
   DEFAULT_PREVIEW_PATH,
+  DEFAULT_LANDING_OPTIONS,
   INDIVIDUAL_SCREENS,
   PERMISSION_LABELS,
   PERMISSIONS,

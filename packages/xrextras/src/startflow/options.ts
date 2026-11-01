@@ -14,6 +14,14 @@ const getOpenGraphContent = (property: string) => (
   queryContent(`meta[name="${property}"]`)
 )
 
+const getShortUrl = () => {
+  const shortLink = queryContent('meta[name="8thwall:shortlink"]')
+  if (!shortLink || /^https?:\/\//.test(shortLink)) {
+    return shortLink
+  }
+  return `https://8th.io/${shortLink}`
+}
+
 const resolveDefaultStrings = (): StartFlowStrings => ({
   ...defaultStrings,
   startTitle: (
@@ -34,6 +42,19 @@ const resolveDefaultOptions = (): StartFlowOptions => {
     previewSrc: ogImage ?? null,
     showStartScreen: false,
     waitForCameraTexture: true,
+    url: getShortUrl() ||
+      queryAttribute('link[rel="canonical"]', 'href') ||
+      getOpenGraphContent('og:url') ||
+      window.location.href,
+    mediaSrc: ogImage ?? null,
+    logoSrc: null,
+    mediaAutoplay: true,
+    mediaAnimation: '',
+    mediaControls: 'minimal',
+    sceneEnvMap: 'field',
+    sceneOrbitIdle: 'spin',
+    sceneOrbitInteraction: 'drag',
+    sceneLightingIntensity: 1,
   }
 }
 

@@ -84,7 +84,7 @@ const currentPermissionsErrorEnvironment = (): PermissionsErrorEnvironment => {
   return 'other'
 }
 
-type CompatibilityScreen = 'in-app-browser' | 'unsupported-browser' | 'unsupported-device'
+type CompatibilityScreen = 'in-app-browser' | 'unsupported-browser' | 'landing'
 
 const compatibilityScreen = (runConfig?: unknown): CompatibilityScreen | undefined => {
   if (XR8.XrDevice.isDeviceBrowserCompatible(runConfig)) {
@@ -94,7 +94,7 @@ const compatibilityScreen = (runConfig?: unknown): CompatibilityScreen | undefin
   const reasons = XR8.XrDevice.incompatibleReasons(runConfig)
   const incompatibilityReasons = XR8.XrDevice.IncompatibilityReasons
   if (reasons.includes(incompatibilityReasons.UNSUPPORTED_OS)) {
-    return 'unsupported-device'
+    return 'landing'
   }
 
   const device = XR8.XrDevice.deviceEstimate()

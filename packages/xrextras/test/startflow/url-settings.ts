@@ -4,6 +4,7 @@ import type {
 } from '../../src/startflow/types'
 import {
   DEFAULT_PREVIEW_PATH,
+  DEFAULT_LANDING_OPTIONS,
   PERMISSIONS_ERROR_ENVIRONMENTS,
   SCREENS,
   STRING_KEYS,
@@ -25,6 +26,12 @@ const readSettings = (): DebugSettings => {
   }
   const stringOverrides: StartFlowStringOverrides = {}
   const styleOverrides: StyleOverrides = {}
+  const requestedMediaControls = params.get('mediaControls')
+  const requestedOrbitIdle = params.get('sceneOrbitIdle')
+  const requestedLightingIntensity = Number(
+    params.get('sceneLightingIntensity') ??
+    DEFAULT_LANDING_OPTIONS.sceneLightingIntensity
+  )
   STRING_KEYS.forEach((key) => {
     const value = params.get(key)
     if (value !== null) {
@@ -45,6 +52,25 @@ const readSettings = (): DebugSettings => {
       params.get('showAllPermissionsErrorCombinations') === 'true',
     options: {
       start: {previewSrc: params.get('previewSrc') || DEFAULT_PREVIEW_PATH},
+      landing: {
+        ...DEFAULT_LANDING_OPTIONS,
+        url: params.get('url') || DEFAULT_LANDING_OPTIONS.url,
+        mediaSrc: params.get('mediaSrc') || '',
+        logoSrc: params.get('logoSrc') || '',
+        mediaAutoplay: params.get('mediaAutoplay') !== 'false',
+        mediaAnimation: params.get('mediaAnimation') || '',
+        mediaControls: requestedMediaControls === 'browser' || requestedMediaControls === 'none'
+          ? requestedMediaControls
+          : 'minimal',
+        sceneEnvMap: params.get('sceneEnvMap') || DEFAULT_LANDING_OPTIONS.sceneEnvMap,
+        sceneOrbitIdle: requestedOrbitIdle === 'none' || requestedOrbitIdle === 'bounce'
+          ? requestedOrbitIdle
+          : 'spin',
+        sceneOrbitInteraction: params.get('sceneOrbitInteraction') === 'none' ? 'none' : 'drag',
+        sceneLightingIntensity: Number.isFinite(requestedLightingIntensity)
+          ? requestedLightingIntensity
+          : DEFAULT_LANDING_OPTIONS.sceneLightingIntensity,
+      },
     },
     state: {
       loading: {requestingPermissions: params.get('requestingPermissions') === 'true'},
@@ -78,6 +104,11 @@ const writeSettings = (settings: DebugSettings) => {
   if (settings.options.start.previewSrc !== DEFAULT_PREVIEW_PATH) {
     params.set('previewSrc', settings.options.start.previewSrc)
   }
+  Object.entries(settings.options.landing).forEach(([key, value]) => {
+    if (value !== '') {
+      params.set(key, String(value))
+    }
+  })
   if (settings.state.unexpectedError.error) {
     params.set('error', settings.state.unexpectedError.error)
   }
