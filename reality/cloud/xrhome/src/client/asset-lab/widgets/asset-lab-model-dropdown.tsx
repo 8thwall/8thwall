@@ -4,6 +4,7 @@ import {useTranslation} from 'react-i18next'
 import type {DropdownOption} from '../../ui/components/standard-dropdown-field'
 import {
   ImageModelOptions, MeshModelOptions, AnimModelOptions, ModelDropdownOption,
+  SelectableToMeshModelIds,
 } from '../constants'
 import {createThemedStyles} from '../../ui/theme'
 import {StandardChip} from '../../ui/components/standard-chip'
@@ -64,7 +65,7 @@ const ModelOption: React.FC<IModelOption> = ({nameKey, descriptionKey, costRange
 
 const getDropdownOptions = (
   modelOptions: ModelDropdownOption[]
-): DropdownOption[] => modelOptions.map((option) => {
+): DropdownOption<ModelDropdownOption['modelId']>[] => modelOptions.map((option) => {
   const nameKey = `${option.translationKey}.name`
   const descriptionKey = `${option.translationKey}.description`
   return {
@@ -89,7 +90,7 @@ const formatVisibleContent = (option: DropdownOption): React.ReactNode => {
 
 interface IAssetLabModelDropdown {
   model: string
-  setModel: (model: string) => void
+  setModel: (model: SelectableToMeshModelIds) => void
   label: string
   id?: string
   disabled?: boolean
