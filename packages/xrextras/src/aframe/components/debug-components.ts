@@ -3,20 +3,6 @@ import type {ComponentDefinition} from 'aframe'
 declare const XRExtras: any
 declare const XR8: any
 
-// Show an error-handling scene on error.
-const runtimeErrorComponent: ComponentDefinition = {
-  init() {
-    const load = () => { XR8.addCameraPipelineModule(XRExtras.RuntimeError.pipelineModule()) }
-    window.XRExtras && window.XR8
-      ? load()
-      : window.addEventListener('xrandextrasloaded', load, {once: true})
-  },
-  remove() {
-    XRExtras.RuntimeError.hideRuntimeError()
-    XR8.removeCameraPipelineModule('error')
-  },
-}
-
 // Display stats.
 const statsComponent: ComponentDefinition = {
   schema: {
@@ -71,7 +57,6 @@ const logToScreenComponent: ComponentDefinition = {
 }
 
 export {
-  runtimeErrorComponent,
   statsComponent,
   logToScreenComponent,
 }

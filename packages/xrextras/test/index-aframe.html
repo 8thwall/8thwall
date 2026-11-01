@@ -13,7 +13,7 @@
   <script>
     const load = () => {
       const xrScene = `
-<a-scene xrweb xrextras-tap-recenter xrextras-almost-there xrextras-loading xrextras-runtime-error
+<a-scene xrweb xrextras-tap-recenter xrextras-start-flow
     xrextras-gesture-detector throw-error>
   <a-camera position="0 3 3"></a-camera>
   <a-box position="0 0.5 -1" material="color: #7611B6;" shadow xrextras-one-finger-rotate></a-box>
@@ -23,8 +23,8 @@
 
       AFRAME.registerComponent('throw-error', {
         init: function () {
-          // A pipeline module that throws an error after 300 frames -- illustrates the error
-          // handinling in xrweb-runtime-error.
+          // A pipeline module that throws an error after 300 frames -- illustrates StartFlow
+          // error handling.
           const throwerrorPipelineModule = () => {
             let frame = 0
             return {

@@ -14,7 +14,6 @@ const skippedCssFiles = new Set([
   'mediarecorder/media-preview.css',
   'mediarecorder/record-button.css',
   'pwainstallermodule/pwa-installer-module.css',
-  'runtimeerrormodule/runtime-error-module.css',
 ])
 
 const cssFiles = []
