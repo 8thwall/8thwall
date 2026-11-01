@@ -1,13 +1,12 @@
 import React from 'react'
 import {useTranslation} from 'react-i18next'
 
-import {Menu} from 'semantic-ui-react'
-
 import {Icon} from '../ui/components/icon'
 import useCurrentApp from '../common/use-current-app'
 import {DevQRCodePopup} from '../editor/token/dev-qr-code-popup'
 import {createThemedStyles} from '../ui/theme'
 import {combine} from '../common/styles'
+import {ConsoleMenuItem} from '../editor/logs/console-menu'
 
 const useStyles = createThemedStyles({
   button: {
@@ -22,7 +21,7 @@ const DebugSessionsMenu: React.FC = () => {
   const app = useCurrentApp()
 
   return (
-    <Menu.Item>
+    <ConsoleMenuItem>
       <DevQRCodePopup
         app={app}
         placement='top'
@@ -38,7 +37,7 @@ const DebugSessionsMenu: React.FC = () => {
           </button>
         )}
       />
-    </Menu.Item>
+    </ConsoleMenuItem>
   )
 }
 

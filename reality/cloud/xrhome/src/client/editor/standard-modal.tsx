@@ -1,19 +1,18 @@
 import React from 'react'
-import {Modal} from 'semantic-ui-react'
 
-import '../static/styles/standard-modal.scss'
 import {bodySanSerif, tinyViewOverride} from '../static/styles/settings'
+import {StandardModal as BaseStandardModal} from '../ui/components/standard-modal'
 import {createThemedStyles} from '../ui/theme'
 
 const useStyles = createThemedStyles(theme => ({
   standardModal: {
-    // TODO (tri) remove this important hack when removing semantic
-    color: `${theme.modalFg} !important`,
-    backgroundColor: `${theme.modalBg} !important`,
+    color: theme.modalFg,
+    backgroundColor: theme.modalBg,
     fontFamily: bodySanSerif,
     borderRadius: '8px',
+    width: '700px',
     [tinyViewOverride]: {
-      width: 'calc(100vw - 2em) !important',
+      width: 'calc(100vw - 2em)',
       margin: '1em auto',
     },
   },
@@ -22,22 +21,29 @@ const useStyles = createThemedStyles(theme => ({
 interface IStandardModal {
   onClose?: () => void
   closeOnDimmerClick?: boolean
-  size?: 'mini' | 'tiny' | 'small' | 'large' | 'fullscreen'
   children?: React.ReactNode
 }
 
 const StandardModal: React.FC<IStandardModal> = ({
-  children, onClose, size, closeOnDimmerClick = true,
-}) => (
-  <Modal
-    open
-    onClose={onClose}
-    className={useStyles().standardModal}
-    closeOnDimmerClick={closeOnDimmerClick}
-    size={size}
-  >
-    {children}
-  </Modal>
-)
+  children, onClose, closeOnDimmerClick = true,
+}) => {
+  const classes = useStyles()
+  return (
+    <BaseStandardModal
+      trigger='render'
+      onOpenChange={(open) => {
+        if (!open) {
+          onClose?.()
+        }
+      }}
+      closable={closeOnDimmerClick}
+      width='unset'
+    >
+      <div className={classes.standardModal}>
+        {children}
+      </div>
+    </BaseStandardModal>
+  )
+}
 
 export {StandardModal}

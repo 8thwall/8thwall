@@ -1,5 +1,4 @@
 import * as React from 'react'
-import {Image} from 'semantic-ui-react'
 import '../../static/styles/pwa-settings.scss'
 
 const ICON_DISPLAY_SHAPES = ['circle', 'drop', 'square', 'squircle'] as const
@@ -41,7 +40,7 @@ const IconPreview: React.FunctionComponent<IIconPreview> =
       <div className='icon-preview-container'>
         <div className='icon-preview'>
           <div className='icon-shadow'>
-            <Image src={src} className={classes} />
+            <img src={src} className={classes} alt='' />
           </div>
           {text && <p>{text}</p>}
         </div>

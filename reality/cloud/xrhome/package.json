@@ -48,7 +48,6 @@
     "react-redux": "^7.1.0",
     "react-router-dom": "^5.0.1",
     "react-split-pane": "^0.1.87",
-    "real-semantic-ui-react": "npm:semantic-ui-react@^0.88.2",
     "redux": "^4.2.1",
     "redux-first-history": "^5.1.1",
     "redux-logger": "^3.0.6",

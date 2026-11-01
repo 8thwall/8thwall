@@ -1,5 +1,4 @@
 import '../static/styles/index.scss'
-import '../static/semantic/dist/semantic.min.css'
 import '../static/styles/account-deep-link.scss'
 
 import './styles.scss'
