@@ -7,6 +7,7 @@ interface TypeImportedFromDep {
 declare global {
   interface MySharedInterface {
     sharedProperty2: string
+    sharedPayload: TypeImportedFromDep
   }
 }
 

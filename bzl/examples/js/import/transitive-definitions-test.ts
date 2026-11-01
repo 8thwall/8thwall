@@ -28,5 +28,7 @@ describe('transitive definitions with full_dts', () => {
     assert.include(buildContents, 'interface MySharedInterface')
     assert.include(buildContents, 'sharedProperty1: string')
     assert.include(buildContents, 'sharedProperty2: string')
+    assert.include(buildContents, 'sharedPayload: TypeImportedFromDep')
+    assert.notInclude(buildContents, '__dts_global_')
   })
 })

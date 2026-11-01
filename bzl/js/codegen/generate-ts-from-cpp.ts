@@ -86,16 +86,23 @@ const parameterToTs = (rawParameter: string) => {
     isOptional = true
     parameter = parameter.split('=')[0].trim()
   }
-  const [, type, name] = parameter.match(/^(.*)\b(\w+)$/)
+  const match = parameter.match(/^(.*)\b(\w+)$/)
+  if (!match) {
+    throw new Error(`Invalid C++ parameter: ${rawParameter}`)
+  }
+  const [, type, name] = match
   return `${name}${isOptional ? '?' : ''}: ${cppTypeToTs(type)}`
 }
 
 export {
   messages,
-  WindowObjects,
-  Declaration,
   cppTypeToTs,
   findDeclarations,
   findWindowObjects,
   parameterToTs,
+}
+
+export type {
+  WindowObjects,
+  Declaration,
 }
