@@ -5,7 +5,7 @@ import {useEffect, useRef, useState} from 'preact/hooks'
 
 import {useElementSize} from '../hooks/element-size'
 
-import type {MediaControlMode} from '../parameters'
+import type {LandingMediaControlMode as MediaControlMode} from '../../types'
 import styles from '../styles.module.scss'
 
 import PLAY_SRC from '../resources/play.svg'

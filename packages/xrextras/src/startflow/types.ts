@@ -76,10 +76,13 @@ interface StartFlowController {
   isVisible: () => boolean
 }
 
-interface StartFlowViewProps {
-  screen: StartFlowScreen
+interface StartFlowContentProps {
   options: StartFlowScreenOptions
   strings: StartFlowStrings
+}
+
+interface StartFlowViewProps extends StartFlowContentProps {
+  screen: StartFlowScreen
 }
 
 export type {
@@ -89,6 +92,7 @@ export type {
   Permission,
   PermissionsErrorEnvironment,
   StartFlowController,
+  StartFlowContentProps,
   StartFlowOptions,
   StartFlowPipelineModule,
   StartFlowScreen,

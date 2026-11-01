@@ -3,28 +3,21 @@ import {h} from 'preact'
 import type {FunctionComponent as FC} from 'preact'
 import {useRef, useEffect} from 'preact/hooks'
 
-import type {LandingParameters} from '../parameters'
+import type {StartFlowScreenOptions} from '../../types'
 import {createScene} from '../3d/scene'
 import {defaultMaps} from '../3d/env-maps'
 import styles from '../styles.module.scss'
 
-type SceneParameters = Pick<LandingParameters,
-  'mediaSrc' |
-  'mediaAnimation' |
-  'sceneEnvMap' |
-  'sceneOrbitIdle' |
-  'sceneOrbitInteraction' |
-  'sceneLightingIntensity'
->
-
-interface IModelScene extends SceneParameters {
+interface IModelScene {
+  options: StartFlowScreenOptions
   onError: () => void
 }
 
-const ModelScene: FC<IModelScene> = ({
-  mediaSrc, mediaAnimation, sceneLightingIntensity, sceneOrbitIdle, sceneOrbitInteraction,
-  sceneEnvMap, onError,
-}) => {
+const ModelScene: FC<IModelScene> = ({options, onError}) => {
+  const {
+    mediaAnimation, sceneLightingIntensity, sceneOrbitIdle, sceneOrbitInteraction, sceneEnvMap,
+  } = options
+  const {mediaSrc} = options
   const sceneRef = useRef<ReturnType<typeof createScene>>()
   const canvasRef = useRef<HTMLCanvasElement>()
 

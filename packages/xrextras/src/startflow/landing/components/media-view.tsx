@@ -2,7 +2,7 @@ import {h} from 'preact'
 import type {FunctionComponent as FC} from 'preact'
 import {useState, useRef, useEffect} from 'preact/hooks'
 
-import type {LandingParameters} from '../parameters'
+import type {StartFlowContentProps} from '../../types'
 import styles from '../styles.module.scss'
 
 import {LogoSection} from './logo-section'
@@ -11,11 +11,11 @@ import {MediaElement} from './media-element'
 import {UrlPromptSection} from './url-prompt-section'
 import {ViewContainer} from './view-container'
 
-interface IMediaView extends LandingParameters {
+interface IMediaView extends StartFlowContentProps {
   onError: () => void
 }
 
-const MediaView: FC<IMediaView> = (props) => {
+const MediaView: FC<IMediaView> = ({options, strings, onError}) => {
   const [needsTransition, setNeedsTransition] = useState(false)
   const [mediaDimensions, setMediaDimensions] = useState<{width: number, height: number}>(null)
   const timeoutRef = useRef(null)
@@ -28,7 +28,7 @@ const MediaView: FC<IMediaView> = (props) => {
     return () => {
       setMediaDimensions(null)
     }
-  }, [props.mediaSrc])
+  }, [options.mediaSrc])
 
   const handleSizeChange = (size: {width: number, height: number}) => {
     setNeedsTransition(Date.now() - loadStartRef.current > 1000)
@@ -41,6 +41,7 @@ const MediaView: FC<IMediaView> = (props) => {
 
   const isLoaded = !!mediaDimensions
   const isPortrait = !!(mediaDimensions && mediaDimensions.width < mediaDimensions.height)
+  const {mediaSrc} = options
 
   const classes = [
     styles.mediaView,
@@ -58,27 +59,20 @@ const MediaView: FC<IMediaView> = (props) => {
     <ViewContainer>
       <div className={classes} style={style}>
         <MediaElement
-          src={props.mediaSrc}
-          alt={props.mediaAlt}
-          autoplay={props.mediaAutoplay}
+          src={mediaSrc}
+          alt={strings.landingMediaAlt}
+          autoplay={options.mediaAutoplay}
           onSizeChange={handleSizeChange}
-          onError={props.onError}
-          mediaControls={props.mediaControls}
-          videoTitle={props.videoTitle}
-          playLabel={props.playLabel}
-          pauseLabel={props.pauseLabel}
-          muteLabel={props.muteLabel}
-          unmuteLabel={props.unmuteLabel}
+          onError={onError}
+          mediaControls={options.mediaControls}
+          videoTitle={strings.landingVideoTitle}
+          playLabel={strings.landingPlayLabel}
+          pauseLabel={strings.landingPauseLabel}
+          muteLabel={strings.landingMuteLabel}
+          unmuteLabel={strings.landingUnmuteLabel}
         />
-        <UrlPromptSection
-          url={props.url}
-          promptPrefix={props.promptPrefix}
-          promptSuffix={props.promptSuffix}
-          vrPromptPrefix={props.vrPromptPrefix}
-          qrAlt={props.qrAlt}
-          messengerLabel={props.messengerLabel}
-        />
-        <LogoSection {...props} />
+        <UrlPromptSection options={options} strings={strings} />
+        <LogoSection options={options} strings={strings} />
       </div>
     </ViewContainer>
   )

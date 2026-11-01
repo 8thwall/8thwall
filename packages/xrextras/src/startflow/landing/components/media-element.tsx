@@ -1,7 +1,7 @@
 import {h} from 'preact'
 import type {FunctionComponent as FC} from 'preact'
 
-import type {MediaControlMode} from '../parameters'
+import type {LandingMediaControlMode as MediaControlMode} from '../../types'
 
 import {MediaImage} from './media-image'
 import {MediaVideo} from './media-video'

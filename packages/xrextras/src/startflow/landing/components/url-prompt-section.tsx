@@ -3,15 +3,11 @@ import {useState, useEffect} from 'preact/hooks'
 import type {FunctionComponent as FC} from 'preact'
 import * as QRCode from 'qrcode'
 
-import type {LandingParameters} from '../parameters'
+import type {StartFlowContentProps} from '../../types'
 import styles from '../styles.module.scss'
 
 import {UrlPromptLink} from './url-prompt-link'
 import {FacebookMessengerButton} from './facebook-messenger-button'
-
-type IUrlPromptSection = Pick<LandingParameters,
-  'url' | 'promptPrefix' | 'promptSuffix' | 'vrPromptPrefix' | 'qrAlt' | 'messengerLabel'
->
 
 const isOnOculus = () => {
   try {
@@ -42,10 +38,9 @@ const makeQrCode = async (url: string) => {
   }
 }
 
-const UrlPromptSection: FC<IUrlPromptSection> = ({
-  url, promptPrefix, promptSuffix, vrPromptPrefix, qrAlt, messengerLabel,
-}) => {
+const UrlPromptSection: FC<StartFlowContentProps> = ({options, strings}) => {
   const isVr = isOnOculus()
+  const url = options.url ?? ''
   const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string>('')
 
   useEffect(() => {
@@ -62,14 +57,14 @@ const UrlPromptSection: FC<IUrlPromptSection> = ({
         <img
           className={styles.qr}
           src={qrCodeDataUrl}
-          alt={qrAlt}
+          alt={strings.landingQrAlt}
         />
       }
       <div className={styles.promptText}>
-        {isVr && <FacebookMessengerButton label={messengerLabel} url={url} />}
-        {isVr ? vrPromptPrefix : promptPrefix }{' '}
+        {isVr && <FacebookMessengerButton label={strings.landingMessengerLabel} url={url} />}
+        {isVr ? strings.landingVrPromptPrefix : strings.landingPromptPrefix }{' '}
         <UrlPromptLink url={url} />
-        {' '}{promptSuffix}
+        {' '}{strings.landingPromptSuffix}
       </div>
     </div>
   )

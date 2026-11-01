@@ -1,20 +1,17 @@
 import {h} from 'preact'
 import type {FunctionComponent as FC} from 'preact'
 
+import type {StartFlowContentProps} from '../../types'
 import styles from '../styles.module.scss'
 
 import {AttributionLogo} from './attribution-logo'
 
-interface ILogoSection {
-  logoSrc?: string
-  logoAlt?: string
-  poweredByLabel: string
-}
-
-const LogoSection: FC<ILogoSection> = ({logoSrc, logoAlt, poweredByLabel}) => (
+const LogoSection: FC<StartFlowContentProps> = ({options, strings}) => (
   <div className={styles.logoSection}>
-    {logoSrc && <img className={styles.logo} src={logoSrc} alt={logoAlt} />}
-    <AttributionLogo ariaLabel={poweredByLabel} />
+    {options.logoSrc &&
+      <img className={styles.logo} src={options.logoSrc} alt={strings.landingLogoAlt} />
+    }
+    <AttributionLogo ariaLabel={strings.poweredByLabel} />
   </div>
 )
 

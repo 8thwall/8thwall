@@ -2,17 +2,17 @@ import {h} from 'preact'
 import type {FunctionComponent as FC} from 'preact'
 import {useState, useEffect} from 'preact/hooks'
 
-import type {LandingParameters} from '../parameters'
+import type {StartFlowContentProps} from '../../types'
 import {MediaView} from './media-view'
 import {BlankView} from './blank-view'
 import {ModelView} from './model-view'
 
-const View: FC<LandingParameters> = (props) => {
+const View: FC<StartFlowContentProps> = ({options, strings}) => {
   const [didError, setDidError] = useState(false)
 
   useEffect(() => {
     setDidError(false)
-  }, [props.mediaSrc])
+  }, [options.mediaSrc])
 
   const handleLoadError = () => {
     // eslint-disable-next-line no-console
@@ -20,12 +20,12 @@ const View: FC<LandingParameters> = (props) => {
     setDidError(true)
   }
 
-  if (!props.mediaSrc || didError) {
-    return <BlankView {...props} />
-  } else if (/\.(glb|gltf)(?:[?#]|$)/i.test(props.mediaSrc)) {
-    return <ModelView {...props} onError={handleLoadError} />
+  if (!options.mediaSrc || didError) {
+    return <BlankView options={options} strings={strings} />
+  } else if (/\.(glb|gltf)(?:[?#]|$)/i.test(options.mediaSrc)) {
+    return <ModelView options={options} strings={strings} onError={handleLoadError} />
   } else {
-    return <MediaView {...props} onError={handleLoadError} />
+    return <MediaView options={options} strings={strings} onError={handleLoadError} />
   }
 }
 
