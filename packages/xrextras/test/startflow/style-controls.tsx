@@ -31,6 +31,11 @@ const STYLE_FIELDS = [
     pickerDefault: '#704752',
   },
   {token: '--xrextras-focus-ring-color', defaultValue: '#ffffff', color: true},
+  {token: '--xrextras-landing-text-color', defaultValue: '#ffffff', color: true},
+  {
+    token: '--xrextras-landing-text-shadow',
+    defaultValue: '0 1px 4px rgba(0, 0, 0, 0.75)',
+  },
   {token: '--xrextras-muted-text-color', defaultValue: '#d1d1d8', color: true},
   {
     token: '--xrextras-neutral-soft-color',
