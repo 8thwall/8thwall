@@ -33,6 +33,7 @@ const TerserPlugin = requireLib('terser-webpack-plugin')
 const {BundleAnalyzerPlugin} = requireLib('webpack-bundle-analyzer')
 const escapeStringRegexp = requireLib<(s: string) => string>('escape-string-regexp')
 const {generateDtsBundle} = requireLib('dts-bundle-generator') as typeof DtsBundleGenerator
+const typescript = requireLib<any>('typescript')
 
 const EXTENSIONS = ['.ts', '.js', '.tsx', '.jsx']
 
@@ -151,6 +152,50 @@ const createRootResolverPlugin = (roots: string[]) => {
   }
 }
 
+// A TypeScript Cap'n Proto import intentionally omits the generated .ts suffix, for example
+// `reality/engine/api/semantics.capnp`. In a sandbox, only the declared generated
+// `semantics.capnp.ts` file is visible. A local Windows action can also see the raw schema in the
+// source checkout, and webpack otherwise resolves that file first and attempts to parse it as JS.
+const createDeclaredCapnpResolverPlugin = (sourceFiles: string[]) => {
+  const generatedCapnpFiles = sourceFiles
+    .filter(file => file.endsWith('.capnp.ts'))
+    .map(file => ({
+      file,
+      normalized: file.split(path.sep).join('/'),
+    }))
+
+  const handleBeforeResolve = (resource: BeforeResolveData) => {
+    if (!resource.request?.endsWith('.capnp')) {
+      return
+    }
+
+    const suffix = `/${resource.request.replace(/\\/g, '/')}.ts`
+    const declared = generatedCapnpFiles.find(({normalized}) => normalized.endsWith(suffix))
+    if (!declared) {
+      return
+    }
+
+    const resolvedPath = path.resolve(cwd, declared.file)
+    resource.dependencies.forEach((dep) => {
+      if (dep.request === resource.request) {
+        dep.request = resolvedPath
+      }
+    })
+    resource.request = resolvedPath
+  }
+
+  return {
+    apply(compiler: Webpack.Compiler) {
+      compiler.hooks.normalModuleFactory.tap(
+        'DeclaredCapnpResolverPlugin',
+        factory => factory.hooks.beforeResolve.tap(
+          'DeclaredCapnpResolverPlugin', handleBeforeResolve
+        )
+      )
+    },
+  }
+}
+
 type PostBuildAction = () => Promise<void>
 
 const createWrapperPlugin = ({headerPath, footerPath}) => {
@@ -197,7 +242,7 @@ const getFallback = (target, polyfill) => {
     path: resolveLib('path-browserify'),
   }
 
-  if (polyfill === '<default>') {
+  if (polyfill === 'default') {
     // NOTE(christoph): By default we'll set a sane default that will still fail the build if
     // an unexpected node dependency is specified, like child_process.
     return {path: resolveLib('path-browserify'), fs: false}
@@ -299,7 +344,7 @@ const makeExternals = (target: string, externals: string): ExternalsConfig => {
       }
       const resolver = getResolve()
       const resolved = await resolver(context, request)
-      if (resolved.includes('/node_modules/')) {
+      if (/[\\/]node_modules[\\/]/.test(resolved)) {
         return request
       }
       return false
@@ -321,6 +366,7 @@ const makeExternals = (target: string, externals: string): ExternalsConfig => {
 const genConfig = async ({
   outFile,
   mainFiles,
+  sourceFiles,
   cwdPath,
   target,
   includeWebTypes,
@@ -353,7 +399,7 @@ const genConfig = async ({
     throw new Error('Target must be "web" or "node"')
   }
 
-  if (target === 'node' && polyfill !== '<default>') {
+  if (target === 'node' && polyfill !== 'default') {
     throw new Error('Unexpected polyfill specified when target is "node"')
   }
 
@@ -377,6 +423,12 @@ const genConfig = async ({
   // environment. Particularly, we need to alias the different node_modules directories so that
   // typescript knows where to find them.
   const tsconfig = {
+    // Windows local actions can see the entire checkout. An explicit root list prevents the
+    // implicit **/* project from pulling in unrelated ambient declarations and their imports.
+    ...(process.platform === 'win32'
+      ? {files: [...mainFiles, ...sourceFiles.filter(file => file.endsWith('.d.ts'))]
+        .map(file => path.resolve(cwd, file))}
+      : {}),
     compilerOptions: {
       esModuleInterop: true,
       noImplicitAny: false,
@@ -390,7 +442,9 @@ const genConfig = async ({
       isolatedModules: false,
       experimentalDecorators: true,
       emitDecoratorMetadata: true,
-      declaration: true,
+      // Declaration outputs are captured explicitly below. Letting ts-loader emit them writes
+      // undeclared files beside sources when Bazel executes locally on Windows.
+      declaration: false,
       noImplicitUseStrict: false,
       // NOTE(christoph): We need to preserve comments like /* webpackIgnore: true */.
       removeComments: false,
@@ -406,16 +460,28 @@ const genConfig = async ({
       importHelpers: true,
       preserveConstEnums: true,
       preserveSymlinks: true,
-      baseUrl: '.',
+      baseUrl: cwd,
       typeRoots,
       paths: {
         'bzl/js/generated/*': [[generatedPath, '*'].join(path.sep)],
-        ...buildPaths.typescriptIncludes,
+        ...Object.fromEntries(Object.entries(buildPaths.typescriptIncludes).map(
+          ([key, values]: [string, string[]]) => [
+            key,
+            values.map(value => path.resolve(cwd, value)),
+          ]
+        )),
       },
     },
   }
 
-  const tsconfigPath = [cwd, 'tsconfig.json'].join(path.sep)
+  // Unix actions get private sandboxes, but native Windows actions share the execroot. Give every
+  // webpack action its own config path so concurrent bundles cannot replace each other's project.
+  // Resolving through the native filesystem also gives TypeScript and ts-loader the same path
+  // spelling when Node was launched by Git Bash.
+  const tsconfigPath = path.join(
+    fs.realpathSync.native(cwd), `${outFile}.tsconfig.json`
+  )
+  fs.mkdirSync(path.dirname(tsconfigPath), {recursive: true})
   fs.writeFileSync(tsconfigPath, JSON.stringify(tsconfig, null, 2))
 
   const babelPlugins = [
@@ -475,6 +541,9 @@ const genConfig = async ({
           options: {
             configFile: tsconfigPath,
             context: cwdPath,
+            // Windows actions run locally rather than in Bazel's input-only sandbox. Without
+            // this, TypeScript's implicit **/* include scans the entire checkout.
+            onlyCompileBundledFiles: process.platform === 'win32',
           },
         },
       ],
@@ -487,6 +556,7 @@ const genConfig = async ({
     // Allow only one chunk, as bazel is expecting a single output.
     new LimitChunkCountPlugin({maxChunks: 1}),
     createRootResolverPlugin([cwd, ...includes.map((e: string) => path.join(cwd, e))]),
+    createDeclaredCapnpResolverPlugin(sourceFiles),
   ]
 
   if (headerPath || footerPath) {
@@ -520,7 +590,6 @@ const genConfig = async ({
 
   if (tsDeclaration) {
     const mainFile = mainFiles[0]
-    const sourcePath = path.join(cwd, mainFile.replace(/\.ts$/, '.d.ts'))
     const outPath = path.join(cwd, outFileDir, `${outFileBase}.d.ts`)
 
     if (fullDts) {
@@ -547,10 +616,42 @@ const genConfig = async ({
       })
     } else {
       postBuildActions.push(async () => {
-        if (!fs.existsSync(sourcePath)) {
-          throw new Error(`Expected ${sourcePath} to exist`)
+        const configFile = typescript.readConfigFile(tsconfigPath, typescript.sys.readFile)
+        if (configFile.error) {
+          throw new Error(typescript.formatDiagnostics([configFile.error], {
+            getCanonicalFileName: fileName => fileName,
+            getCurrentDirectory: () => cwd,
+            getNewLine: () => '\n',
+          }))
         }
-        await fs.promises.copyFile(sourcePath, outPath)
+        const parsedConfig = typescript.parseJsonConfigFileContent(
+          configFile.config, typescript.sys, cwd
+        )
+        const program = typescript.createProgram(parsedConfig.fileNames, {
+          ...parsedConfig.options,
+          declaration: true,
+          emitDeclarationOnly: true,
+          noEmit: false,
+          // Match ts-loader's historical behavior: declaration diagnostics in transitive files
+          // must not prevent capturing the requested entry declaration.
+          noEmitOnError: false,
+        })
+        const expectedName = path.basename(mainFile).replace(/\.ts$/, '.d.ts')
+        let declarationFile: string | undefined
+        const result = program.emit(undefined, (fileName, contents) => {
+          if (path.basename(fileName) === expectedName) {
+            declarationFile = contents
+          }
+        }, undefined, true)
+        if (declarationFile === undefined) {
+          const diagnostics = typescript.getPreEmitDiagnostics(program).concat(result.diagnostics)
+          throw new Error(typescript.formatDiagnostics(diagnostics, {
+            getCanonicalFileName: fileName => fileName,
+            getCurrentDirectory: () => cwd,
+            getNewLine: () => '\n',
+          }))
+        }
+        await fs.promises.writeFile(outPath, declarationFile)
       })
     }
   }
@@ -668,10 +769,12 @@ const runWebpack = async (webpackConfigPromise: ReturnType<typeof genConfig>) =>
 
 // Get the command line arguments and run webpack.
 const args = getArgs()
+const sourceFiles = fs.readFileSync(args.sourceManifest, 'utf8').split(/\r?\n/).filter(Boolean)
 
 runWebpack(genConfig({
   outFile: args.outpattern,
   mainFiles: args.entries.split(','),
+  sourceFiles,
   cwdPath: cwd,
   target: args.target,
   includeWebTypes: args.includewebtypes,

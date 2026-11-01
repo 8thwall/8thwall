@@ -33,8 +33,13 @@
 #define HAVE_VSX 0
 #define HAVE_MMI 0
 #define HAVE_VPX_PORTS 1
+#ifdef _WIN32
+#define HAVE_PTHREAD_H 0
+#define HAVE_UNISTD_H 0
+#else
 #define HAVE_PTHREAD_H 1
 #define HAVE_UNISTD_H 1
+#endif
 #define CONFIG_DEPENDENCY_TRACKING 1
 #define CONFIG_EXTERNAL_BUILD 0
 #define CONFIG_INSTALL_DOCS 0

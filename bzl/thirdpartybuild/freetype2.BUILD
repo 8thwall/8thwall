@@ -2,8 +2,10 @@ licenses(["permissive"])  # BSD-style
 
 cc_library(
     name = "freetype2",
-    srcs = [
-        "builds/unix/ftsystem.c",
+    srcs = select({
+        "@the8thwall//bzl/conditions:windows": ["src/base/ftsystem.c"],
+        "//conditions:default": ["builds/unix/ftsystem.c"],
+    }) + [
         "src/autofit/autofit.c",
         "src/base/ftbase.c",
         "src/base/ftbbox.c",
@@ -230,10 +232,12 @@ cc_library(
         "-DFT_CONFIG_OPTION_USE_PNG",
         "-DFT2_BUILD_LIBRARY",
         "-DFT_CONFIG_MODULES_H=<ftmodule.h>",
-        "-DHAVE_UNISTD_H=1",
         "-DHAVE_FCNTL_H=1",
         "-DHAVE_STDINT_H=1",
-    ],
+    ] + select({
+        "@the8thwall//bzl/conditions:windows": ["-UZ_HAVE_UNISTD_H"],
+        "//conditions:default": ["-DHAVE_UNISTD_H=1"],
+    }),
     includes = [
         "builds/unix",
         "include",
