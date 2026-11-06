@@ -314,6 +314,13 @@ const buildZip = async (appKey: string) => {
   return response.blob()
 }
 
+const runPublishScript = (appKey: string) => {
+  const params = new URLSearchParams({
+    appKey,
+  })
+  return fetchJson<{}>(`${API}/project/publish-script?${params}`, {method: 'POST'})
+}
+
 const migrateProject = (appKey: string) => {
   const params = new URLSearchParams({
     appKey,
@@ -407,6 +414,7 @@ export {
   openDiskLocation,
   notifyProjectAccess,
   buildZip,
+  runPublishScript,
   migrateProject,
   getRuntimeMetadata,
   renameFile,
