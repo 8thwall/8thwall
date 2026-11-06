@@ -46,7 +46,7 @@ const usePublishingStateContext = (): PublishingStateContext => {
 
 const PublishingStateContextProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
   const [activePublishModalOption, setActivePublishModalOption] =
-  React.useState<PublishModalOption | null>(null)
+    React.useState<PublishModalOption | null>(null)
 
   const [htmlShellToNaeBuildData, setHtmlShellToNaeBuildData] = React.useState<NaeBuildDataMap>({
     android: DEFAULT_NAE_BUILD_DATA,
