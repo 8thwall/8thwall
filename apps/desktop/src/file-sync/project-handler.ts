@@ -34,6 +34,7 @@ import {
   PROJECT_OPEN_DISK_PATH,
   PROJECT_RECENT_PATH,
   PROJECT_BUILD_PATH,
+  PROJECT_PUBLISH_SCRIPT_PATH,
   PROJECT_MIGRATE_PATH,
   PROJECT_RUNTIME_METADATA_PATH,
   PROJECT_CONFIG_PATH,
@@ -43,7 +44,7 @@ import {getQueryParams} from '../transport/query-params'
 import {projectSetup, unzipIntoFolder} from './create-project-files'
 import {createLocalServer, LocalServer} from '../project/local-server'
 import {openInCodeEditor} from '../preferences/code-editor'
-import {runBuildCommand, runInstallCommand} from '../project/run-commands'
+import {runBuildCommand, runInstallCommand, runPublishScript} from '../project/run-commands'
 import {branches, methods, RequestHandler} from '../transport/requests'
 
 const locationPrompt = async (): Promise<string | undefined> => {
@@ -379,6 +380,27 @@ const buildZip = withErrorHandlingResponse(async (req: Request) => {
   archive.finalize()
 
   return response
+})
+
+const runProjectPublishScript = withErrorHandlingResponse(async (req: Request) => {
+  const requestUrl = new URL(req.url)
+  const params = ProjectRequestParams.safeParse(getQueryParams(requestUrl))
+  if (!params.success) {
+    throw makeCodedError('Invalid query params', 400)
+  }
+
+  const project = getLocalProject(params.data.appKey)
+  if (!project) {
+    throw makeCodedError('Project for appKey not found', 404)
+  }
+
+  try {
+    await runPublishScript(project.appKey, project.location)
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Failed to run npm run publish'
+    throw makeCodedError(message, 400)
+  }
+  return makeJsonResponse({})
 })
 
 const isDirectory = async (location: string) => {
@@ -891,6 +913,7 @@ const handleProjectRequest = withErrorHandlingResponse(branches({
     DELETE: stopWatch,
   }),
   [PROJECT_BUILD_PATH]: methods({POST: buildZip}),
+  [PROJECT_PUBLISH_SCRIPT_PATH]: methods({POST: runProjectPublishScript}),
   [PROJECT_STATUS_PATH]: methods({GET: getProjectStatus}),
   [PROJECT_LIST_PATH]: methods({GET: getAllProjects}),
   [PROJECT_REVEAL_IN_FINDER_PATH]: methods({POST: postRevealProject}),

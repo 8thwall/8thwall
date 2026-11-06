@@ -23,7 +23,7 @@ const DEFAULT_NAE_BUILD_DATA: NaeBuildData = {
 
 type NaeBuildDataMap = Record<HtmlShell, NaeBuildData>
 
-type PublishModalOption = HtmlShell | 'all-builds' | 'iframe'
+type PublishModalOption = HtmlShell | 'all-builds' | 'iframe' | 'publish-script'
 
 type PublishingStateContext = {
   activePublishModalOption: PublishModalOption | null

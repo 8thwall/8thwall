@@ -15,6 +15,7 @@ import {IconButton} from '../../ui/components/icon-button'
 import {NoTriggerWrapModal} from '../../ui/components/no-trigger-wrap-modal'
 import {ExportFlowHtml} from './nae/export-flow-html'
 import {ExportFlowIframe} from './nae/export-flow-iframe'
+import {ExportFlowPublishScript} from './nae/export-flow-publish-script'
 import {AllBuilds} from './nae/all-builds'
 
 interface IPublishModal {
@@ -228,6 +229,14 @@ const UniversalPublishModal: React.FC<IPublishModal> = ({
                   onSelect={() => setActivePublishModalOption('iframe')}
                   label={t('editor_page.native_publish_modal.iframe')}
                 />
+                {BuildIf.PUBLISH_SCRIPT_20261101 &&
+                  Build8.PLATFORM_TARGET === 'desktop' && (
+                  <PublishModalOption
+                    selected={activePublishModalOption === 'publish-script'}
+                    onSelect={() => setActivePublishModalOption('publish-script')}
+                    label={t('editor_page.native_publish_modal.publish_script.label')}
+                  />
+                )}
               </div>
 
               {BuildIf.NAE_MODALS_VISIBLE_20260202 && isStudio &&
@@ -275,6 +284,11 @@ const UniversalPublishModal: React.FC<IPublishModal> = ({
               )}
               {activePublishModalOption === 'iframe' && (
                 <ExportFlowIframe />
+              )}
+              {BuildIf.PUBLISH_SCRIPT_20261101 &&
+                Build8.PLATFORM_TARGET === 'desktop' &&
+                activePublishModalOption === 'publish-script' && (
+                <ExportFlowPublishScript />
               )}
               {activePublishModalOption === 'all-builds' && (
                 <AllBuilds />

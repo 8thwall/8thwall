@@ -21,7 +21,7 @@ const COMMON_ENV = {
 
 type ScriptRunOptions = {
   cwd: string
-  name: 'build' | 'serve'
+  name: 'build' | 'publish' | 'serve'
   env?: Record<string, string>
   arguments?: ('--port' | `${number}`)[]
 }
@@ -66,7 +66,13 @@ const runScript = (options: ScriptRunOptions): Process => {
   // Otherwise invoke the command through npm. Any dependencies will need to be installed
   // on the system.
   return startProcess({
-    command: [EXEC_PATH, NPM_CLI_PATH, 'run', name, '--', ...additionalArgs],
+    command: [
+      EXEC_PATH,
+      NPM_CLI_PATH,
+      'run',
+      name,
+      ...(additionalArgs.length ? ['--', ...additionalArgs] : []),
+    ],
     cwd,
     env: {...env, ELECTRON_RUN_AS_NODE: '1'},
   })
@@ -127,6 +133,21 @@ const runBuildCommand = async (
   await child.exitSuccess()
 }
 
+const runPublishScript = async (
+  appKey: string,
+  savePath: string
+): Promise<void> => {
+  const child = runScript({
+    cwd: savePath,
+    name: 'publish',
+    env: COMMON_ENV,
+  })
+
+  forwardProcessOutput(appKey, child.nodeChildProcess)
+
+  await child.exitSuccess()
+}
+
 const runServeCommand = (savePath: string, port: number): Process => runScript({
   cwd: savePath,
   name: 'serve',
@@ -138,4 +159,5 @@ export {
   runServeCommand,
   runInstallCommand,
   runBuildCommand,
+  runPublishScript,
 }
