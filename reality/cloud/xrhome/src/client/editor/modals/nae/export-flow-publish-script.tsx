@@ -27,14 +27,15 @@ const ExportFlowPublishScript: React.FC = () => {
   const [publishState, setPublishState] = React.useState<PublishState>({status: 'idle'})
   const isPublishing = publishState.status === 'publishing'
 
-  const systemLogs = useLogStreams(appKey)
-    .find(stream => publishState.status === 'failed' && stream.name === SYSTEM_STREAM_NAME)
+  const logs = useLogStreams(appKey)
 
-  const publishLogs = systemLogs && publishState.status === 'failed'
-    ? systemLogs.logs
-      .filter(({timestamp}) => timestamp > publishState.startTime &&
-        timestamp < publishState.completeTime)
-      .map(log => log.text).join('\n')
+  const publishLogs = publishState.status === 'failed'
+    ? logs
+      .find(stream => stream.name === SYSTEM_STREAM_NAME)?.logs
+      .filter(log => log.timestamp > publishState.startTime &&
+        log.timestamp < publishState.completeTime)
+      .map(log => log.text)
+      .join('\n') || ''
     : ''
 
   const handlePublish = async () => {
