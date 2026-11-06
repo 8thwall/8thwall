@@ -268,23 +268,17 @@ const UniversalPublishModal: React.FC<IPublishModal> = ({
             </div>
 
             <div className={classes.mainContent}>
-              {
-                  activePublishModalOption === 'html' && (
-                    <ExportFlowHtml
-                      onClose={collapse}
-                    />
-                  )
-              }
-              {
-                  activePublishModalOption === 'iframe' && (
-                    <ExportFlowIframe />
-                  )
-              }
-              {
-                  activePublishModalOption === 'all-builds' && (
-                    <AllBuilds />
-                  )
-                }
+              {activePublishModalOption === 'html' && (
+                <ExportFlowHtml
+                  onClose={collapse}
+                />
+              )}
+              {activePublishModalOption === 'iframe' && (
+                <ExportFlowIframe />
+              )}
+              {activePublishModalOption === 'all-builds' && (
+                <AllBuilds />
+              )}
             </div>
           </div>
         </div>

@@ -4,8 +4,8 @@ type Project = {
   appKey: string
   location: string
   initialization: 'needs-initialization'  // The app never finished initializing from the cloud
-  | 'done'  // The app finished initializing from the cloud
-  | 'v2'  // The app is initialized to the "exported" project structure
+    | 'done'  // The app finished initializing from the cloud
+    | 'v2'  // The app is initialized to the "exported" project structure
   accessedAt?: number | null
 }
 
