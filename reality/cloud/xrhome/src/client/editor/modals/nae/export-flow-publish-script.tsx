@@ -13,42 +13,39 @@ import {PublishPageWrapper} from '../../publishing/publish-page-wrapper'
 import {PublishTipBanner} from '../../publishing/publish-tip-banner'
 import {useNaeStyles} from './nae-styles'
 
+type PublishState =
+  | {status: 'idle'}
+  | {status: 'publishing', startTime: number}
+  | {status: 'success'}
+  | {status: 'failed', startTime: number, completeTime: number}
+
 const ExportFlowPublishScript: React.FC = () => {
   const {t} = useTranslation(['cloud-editor-pages', 'common'])
   const classes = useNaeStyles()
   const {appKey} = useCurrentApp()
   const dispatch = useDispatch()
-  const [isPublishing, setIsPublishing] = React.useState(false)
-  const [publishStartTime, setPublishStartTime] = React.useState(0)
-  const [publishCompleteTime, setPublishCompleteTime] = React.useState(0)
-  const [publishFailed, setPublishFailed] = React.useState(false)
-  const [didPublish, setDidPublish] = React.useState(false)
+  const [publishState, setPublishState] = React.useState<PublishState>({status: 'idle'})
+  const isPublishing = publishState.status === 'publishing'
 
   const systemLogs = useLogStreams(appKey)
-    .find(stream => publishFailed && stream.name === SYSTEM_STREAM_NAME)
+    .find(stream => publishState.status === 'failed' && stream.name === SYSTEM_STREAM_NAME)
 
-  const publishLogs = systemLogs
+  const publishLogs = systemLogs && publishState.status === 'failed'
     ? systemLogs.logs
-      .filter(({timestamp}) => timestamp > publishStartTime &&
-        (!publishCompleteTime || timestamp < publishCompleteTime))
+      .filter(({timestamp}) => timestamp > publishState.startTime &&
+        timestamp < publishState.completeTime)
       .map(log => log.text).join('\n')
     : ''
 
   const handlePublish = async () => {
     dispatch({type: 'ERROR', msg: null})
-    setIsPublishing(true)
-    setDidPublish(false)
+    const startTime = Date.now()
+    setPublishState({status: 'publishing', startTime})
     try {
-      setPublishStartTime(Date.now())
-      setPublishCompleteTime(0)
-      setPublishFailed(false)
       await runPublishScript(appKey)
-      setDidPublish(true)
+      setPublishState({status: 'success'})
     } catch {
-      setPublishFailed(true)
-    } finally {
-      setPublishCompleteTime(Date.now())
-      setIsPublishing(false)
+      setPublishState({status: 'failed', startTime, completeTime: Date.now()})
     }
   }
 
@@ -78,7 +75,7 @@ const ExportFlowPublishScript: React.FC = () => {
           iconStroke='pointLight'
           content={t('editor_page.native_publish_modal.publish_script.description')}
         />
-        {publishFailed && (
+        {publishState.status === 'failed' && (
           <>
             <StaticBanner type='danger'>
               {t('editor_page.native_publish_modal.publish_script.publish_error')}
@@ -86,7 +83,7 @@ const ExportFlowPublishScript: React.FC = () => {
             {publishLogs && <CopyableBlock text={publishLogs} description='' />}
           </>
         )}
-        {didPublish && (
+        {publishState.status === 'success' && (
           <StaticBanner type='success'>
             {t('editor_page.native_publish_modal.publish_script.success')}
           </StaticBanner>
