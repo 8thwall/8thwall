@@ -1,68 +1,86 @@
 import * as React from 'react'
 import {CopyToClipboard} from 'react-copy-to-clipboard'
 import {useTranslation} from 'react-i18next'
+import type {Language} from 'prism-react-renderer'
 
-import {brandWhite, csBlack, mobileViewOverride} from '../static/styles/settings'
-import type {UiTheme} from '../ui/theme'
-import {createCustomUseStyles} from '../common/create-custom-use-styles'
+import {createThemedStyles, UiTheme} from '../ui/theme'
 import {PublishingPrimaryButton} from '../editor/publishing/publish-primary-button'
 import {Icon} from '../ui/components/icon'
 import {Tooltip} from '../ui/components/tooltip'
 import CodeHighlight from '../browse/code-highlight'
+import {useTheme} from '../user/use-theme'
 
-const useStyles = createCustomUseStyles<{}>()((theme: UiTheme) => ({
+const useStyles = createThemedStyles((theme: UiTheme) => ({
   wrapper: {
     overflow: 'hidden',
     width: '100%',
-    color: brandWhite,
     borderRadius: '0.5rem',
+    backgroundColor: theme.publishModalTextBg,
+    position: 'relative',
   },
   label: {
     flex: '1 0 0',
-    padding: '0.75rem 1rem',
+    padding: '1rem 1rem 0',
     color: theme.fgMuted,
     minWidth: 0,
-    backgroundColor: theme.publishModalTextBg,
   },
   codeWrapper: {
-    padding: '0.75rem 1rem',
     minWidth: 0,
-    backgroundColor: theme.publishModalTextBg,
   },
   codeWrapperInner: {
     display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingLeft: '1rem',
-    paddingRight: '1rem',
-    width: '100%',
-    borderRadius: '0.5rem',
-    backgroundColor: csBlack,
-    [mobileViewOverride]: {
-      flexDirection: 'column',
-      paddingBottom: '1rem',
-    },
+    flexDirection: 'column',
+    gap: '1rem',
+    margin: '1rem',
   },
   code: {
     whiteSpace: 'break-spaces',
-    width: '100%',
+    margin: 0,
   },
-  buttonContainer: {
-    paddingTop: '0.75rem',
+  actionContainer: {
+    position: 'absolute',
+    top: '1rem',
+    right: '1rem',
     display: 'flex',
-    flexDirection: 'column',
-    gap: '0.25rem',
-    [mobileViewOverride]: {
-      paddingTop: '0rem',
-      flexDirection: 'row',
-    },
-  },
-  hidden: {
-    // Keep the item in the DOM so that the buttons are the same width even when the download button
-    // is hidden.
-    visibility: 'hidden',
+    flexDirection: 'row',
+    gap: '0.5rem',
   },
 }))
+
+interface ICodeBlock {
+  label?: string
+  code: string
+  language: Language
+  actions?: React.ReactNode
+}
+
+const CodeBlock: React.FC<ICodeBlock> = ({label, code, language, actions}) => {
+  const classes = useStyles()
+  const theme = useTheme()
+
+  return (
+    <div className={classes.wrapper}>
+      {label && <div className={classes.label}>{label}</div>}
+      <div className={classes.codeWrapper}>
+        <div className={classes.codeWrapperInner}>
+          {actions &&
+            <div className={classes.actionContainer}>
+              {actions}
+            </div>}
+          <pre className={classes.code}>
+            <CodeHighlight
+              content={code}
+              language={language}
+              themeMode={theme}
+              simpleMode
+            />
+          </pre>
+
+        </div>
+      </div>
+    </div>
+  )
+}
 
 interface ICopyableBlock {
   label?: string
@@ -71,13 +89,13 @@ interface ICopyableBlock {
   tooltip?: string
   // If passed, we'll show a download button which downloads the code with this name.
   downloadFileName?: string
+  language: Language
 }
 
 const CopyableCodeBlock: React.FunctionComponent<ICopyableBlock> = ({
-  label, code, disabled, tooltip, downloadFileName,
+  label, code, disabled, tooltip, downloadFileName, language,
 }) => {
   const [isCopied, setIsCopied] = React.useState(false)
-  const classes = useStyles({})
   const {t} = useTranslation(['common'])
   const timeoutRef = React.useRef<ReturnType<typeof setTimeout>>()
 
@@ -97,60 +115,53 @@ const CopyableCodeBlock: React.FunctionComponent<ICopyableBlock> = ({
     setIsCopied(false)
   }, [code])
 
-  const downloadCode = () => {
-    const blob = new Blob([code], {type: 'text/plain'})
-    const url = window.URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = downloadFileName
-    a.click()
-    window.URL.revokeObjectURL(url)
-  }
-
   return (
-    <div className={classes.wrapper}>
-      {label && <div className={classes.label}>{label}</div>}
-      <div className={classes.codeWrapper}>
-        <div className={classes.codeWrapperInner}>
-          <pre className={classes.code}>
-            <CodeHighlight
-              content={code}
-              language='markup'
-              themeMode='dark'
-              simpleMode
-            />
-          </pre>
-          <div className={classes.buttonContainer}>
-            <CopyToClipboard text={code} onCopy={onCopy}>
-              <PublishingPrimaryButton
-                height='tiny'
-                disabled={disabled}
-              >
-                <Tooltip
-                  content={tooltip}
-                  zIndex={501}
-                  openDelay={300}
-                  closeDelay={300}
-                >
-                  <Icon stroke='copy' />
-                  {isCopied ? t('button.copied') : t('button.copy')}
-                </Tooltip>
-              </PublishingPrimaryButton>
-            </CopyToClipboard>
+    <CodeBlock
+      language={language}
+      label={label}
+      code={code}
+      actions={
+        <>
+          <CopyToClipboard text={code} onCopy={onCopy}>
             <PublishingPrimaryButton
               height='tiny'
               disabled={disabled}
-              onClick={downloadCode}
-              className={!downloadFileName ? classes.hidden : undefined}
+            >
+              <Tooltip
+                content={tooltip}
+                zIndex={501}
+                openDelay={300}
+                closeDelay={300}
+              >
+                <Icon stroke='copy' />
+                {isCopied ? t('button.copied') : t('button.copy')}
+              </Tooltip>
+            </PublishingPrimaryButton>
+          </CopyToClipboard>
+          {!!downloadFileName &&
+            <PublishingPrimaryButton
+              height='tiny'
+              disabled={disabled}
+              onClick={() => {
+                const blob = new Blob([code], {type: 'text/plain'})
+                const url = window.URL.createObjectURL(blob)
+                const a = document.createElement('a')
+                a.href = url
+                a.download = downloadFileName
+                a.click()
+                window.URL.revokeObjectURL(url)
+              }}
             >
               <Icon stroke='downloadFile' />
               {t('button.download')}
-            </PublishingPrimaryButton>
-          </div>
-        </div>
-      </div>
-    </div>
+            </PublishingPrimaryButton>}
+        </>
+      }
+    />
   )
 }
 
-export default CopyableCodeBlock
+export {
+  CopyableCodeBlock,
+  CodeBlock,
+}

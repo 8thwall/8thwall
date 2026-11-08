@@ -7,6 +7,10 @@ const FilePullParams = z.object({
 
 type IFilePullParams = z.infer<typeof FilePullParams>
 
+const FileOpenParams = FilePullParams.extend({
+  scope: z.enum(['src', 'root']).optional(),
+})
+
 const FilePushParams = z.object({
   appKey: z.string().nonempty(),
   path: z.string().nonempty(),
@@ -44,6 +48,7 @@ type IFileRenameParams = z.infer<typeof FileRenameParams>
 
 export {
   FilePullParams,
+  FileOpenParams,
   FilePushParams,
   FileDeleteParams,
   FileStateParams,
