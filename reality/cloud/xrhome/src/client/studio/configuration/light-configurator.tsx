@@ -163,7 +163,8 @@ const LightConfigurator: React.FC<ILightConfigurator> = ({light, onChange, reset
                     target: [
                       currentLight.target?.[0] ?? LIGHT_DEFAULTS.targetX,
                       currentLight.target?.[1] ?? LIGHT_DEFAULTS.targetY,
-                      newValue],
+                      newValue,
+                    ],
                   }))
                 }}
               />

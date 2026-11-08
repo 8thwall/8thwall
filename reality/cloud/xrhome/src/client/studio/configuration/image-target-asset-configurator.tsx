@@ -278,7 +278,7 @@ const LoadedImageTargetAssetConfigurator: React.FC<ILoadedImageTargetAssetConfig
 
   const saveChanges = async (): Promise<boolean> => {
     setIsSaving(true)
-    let success = true
+    let success: boolean
     try {
       let newStaticOrientation
       if (BuildIf.STATIC_IMAGE_TARGETS_20250721 && imageTarget.type === 'PLANAR') {

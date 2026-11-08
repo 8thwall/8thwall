@@ -13,7 +13,7 @@ import type {JointToggleOption} from '../../../ui/components/joint-toggle-button
 
 const getDateAndHourText = (
   timestampMs: number | string
-): { dateText: string; hoursText: string } => {
+): {dateText: string, hoursText: string} => {
   const buildEndDate = new Date(Number(timestampMs))
   const dateOptions = {year: 'numeric', month: 'long', day: 'numeric'} as const
   const dateText = buildEndDate.toLocaleDateString(undefined, dateOptions)
@@ -137,7 +137,7 @@ const getExportDisabled = (sceneCtx: SceneContext, platform: HtmlShell) => {
 }
 
 const validateScreenOrientation =
-(orientation: string) => SCREEN_ORIENTATION_OPTIONS.some(option => option.value === orientation)
+  (orientation: string) => SCREEN_ORIENTATION_OPTIONS.some(option => option.value === orientation)
 
 const IOS_SIGNING_TYPE_OPTIONS: readonly {
   translationValueKey: string

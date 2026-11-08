@@ -274,7 +274,7 @@ const ColliderConfigurator: React.FC<IColliderConfigurator> = ({
         >
           <Icon stroke='danger' color='danger' block />
         </Tooltip>
-        }
+      }
       {modelCollider &&
         <Tooltip
           content={(
@@ -287,7 +287,7 @@ const ColliderConfigurator: React.FC<IColliderConfigurator> = ({
         >
           <Icon stroke='info' color='info' block />
         </Tooltip>
-        }
+      }
     </SpaceBetween>
   )
 
@@ -634,7 +634,7 @@ const ColliderConfigurator: React.FC<IColliderConfigurator> = ({
             />
 
           </div>
-}
+        }
 
         {!!collider.geometry &&
           <RowBooleanField
@@ -652,7 +652,7 @@ const ColliderConfigurator: React.FC<IColliderConfigurator> = ({
               eventOnly: event.target.checked ? true : undefined,
             }))}
           />
-      }
+        }
 
         {!collider.eventOnly &&
           <>
@@ -735,7 +735,7 @@ const ColliderConfigurator: React.FC<IColliderConfigurator> = ({
               label={t('collider_configurator.bounciness.label')}
             />
           </>
-      }
+        }
         {/* TODO(Dale): Add expanseField for offset */}
         <RowGroupFields label={t('collider_configurator.offset.label')}>
           <SliderInputAxisField
