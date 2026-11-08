@@ -219,6 +219,7 @@ const TreeHierarchy: React.FC = () => {
           filterOptions={collapse => (
             <OptionalFilters
               options={TREE_HIERARCHY_FILTERS}
+              renderLabel={label => t(label)}
               noneOption={t('tree_hierarchy_search_results.option.all_objects')}
               filters={filters}
               setFilters={setFilters}

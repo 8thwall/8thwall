@@ -146,20 +146,18 @@ const SearchBar: React.FC<ISearchBar> = ({
   )
 }
 
-interface IOptionalFilters {
-  options: {type: string, label: string}[]
+interface IOptionalFilters<TLabel extends string> {
+  options: ReadonlyArray<{type: string, label: TLabel}>
+  renderLabel: (label: TLabel) => React.ReactNode
   noneOption: string
   filters: string[]
   setFilters: (filters: string[]) => void
   collapse: () => void
-  translationNamespace?: string
 }
 
-const OptionalFilters: React.FC<IOptionalFilters> = ({
-  options, noneOption, filters, setFilters, collapse,
-  translationNamespace = 'cloud-studio-pages',
-}) => {
-  const {t} = useTranslation(translationNamespace)
+const OptionalFilters = <TLabel extends string,>({
+  options, renderLabel, noneOption, filters, setFilters, collapse,
+}: IOptionalFilters<TLabel>) => {
   const classes = useStyles()
   return (
     <>
@@ -191,7 +189,7 @@ const OptionalFilters: React.FC<IOptionalFilters> = ({
           }}
         >
           <div className={classes.filterButton}>
-            <div>{t(label)}</div>
+            <div>{renderLabel(label)}</div>
             {filters.includes(type) &&
               <div className={classes.checkmark}>
                 <Icon stroke='checkmark' color='highlight' block />

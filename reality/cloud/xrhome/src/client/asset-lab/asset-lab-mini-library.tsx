@@ -62,7 +62,7 @@ const useStyles = createUseStyles({
 })
 
 const AssetLabMiniLibrary = () => {
-  const {t} = useTranslation('asset-lab')
+  const {t} = useTranslation(['asset-lab', 'cloud-studio-pages'])
   const classes = useStyles()
   const [searchValue, setSearchValue] = React.useState('')
   const [filters, setFilters] = React.useState<string[]>([])
@@ -87,11 +87,11 @@ const AssetLabMiniLibrary = () => {
             filterOptions={collapse => (
               <OptionalFilters
                 options={ASSET_LAB_FILTERS}
+                renderLabel={label => t(label)}
                 noneOption={t('file_browser.search_bar.option.all', {ns: 'cloud-studio-pages'})}
                 filters={filters}
                 setFilters={setFilters}
                 collapse={collapse}
-                translationNamespace='asset-lab'
               />
             )}
             a8='click;studio-bottom-left-pane;asset-lab-click'
