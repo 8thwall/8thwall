@@ -272,8 +272,8 @@ const translateAppleSigningError = (
       )
     case 'unexpected-null-provisioning-profile-expiration':
       return t(
-        'editor_page.export_modal.apple_signing_error.' +
-        'unexpected_null_provisioning_profile_expiration'
+        // eslint-disable-next-line @stylistic/max-len
+        'editor_page.export_modal.apple_signing_error.unexpected_null_provisioning_profile_expiration'
       )
     case 'invalid-request-signing-type':
       return t('editor_page.export_modal.apple_signing_error.invalid_request_signing_type')
