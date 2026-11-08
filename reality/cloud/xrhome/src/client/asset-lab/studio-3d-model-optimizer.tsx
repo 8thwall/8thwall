@@ -315,7 +315,7 @@ const parseAsTextureSizeOr = (
 }
 
 const Studio3dModelOptimizer: React.FC<IStudio3dModelOptimizer> = () => {
-  const {t} = useTranslation('asset-lab')
+  const {t} = useTranslation(['asset-lab', 'cloud-studio-pages'])
   const classes = useStyles()
   const assetLabCtx = useAssetLabStateContext()
   const {prevMode, assetGenerationUuid} = assetLabCtx.state
@@ -821,7 +821,7 @@ const Studio3dModelOptimizer: React.FC<IStudio3dModelOptimizer> = () => {
                 <div className={classes.transformButtonRow}>
                   {t('asset_lab.model_optimizer.scale')}
                   <IconButton
-                    text={t('transform_configurator.button.lock_scale')}
+                    text={t('transform_configurator.button.lock_scale', {ns: 'cloud-studio-pages'})}
                     onClick={() => {
                       setScaleLocked(!scaledLocked)
                       if (!scaledLocked) {

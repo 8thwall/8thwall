@@ -75,9 +75,9 @@ const BindingConfiguratorMenu: React.FC<IBindingConfiguratorMenu> = (
             {binding &&
               <span className={classes.selectedBinding}>
                 <Icon stroke={binding?.icon} />
-                {binding?.ns ? t(binding.content.toString()) : binding?.content.toString()}
+                {'ns' in binding ? t(binding.content, {ns: binding.ns}) : binding.content}
               </span>
-                }
+            }
             {!binding && <div className={classes.placeholder}>{placeholder}</div>}
             <div className={studioClasses.chevronIcon}>
               <Icon block color='gray4' stroke='chevronDown' />
