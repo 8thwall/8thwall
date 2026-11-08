@@ -772,7 +772,7 @@ const SigningContent: React.FC<ISigningContent> = ({
                     >
                       {t('editor_page.native_publish_modal.cancel')}
                     </PrimaryButton>
-                   }
+                  }
                 </div>
                 {csrBase64 && (
                   <div className={classes.textGray}>
@@ -935,55 +935,55 @@ const SigningContent: React.FC<ISigningContent> = ({
                         {existingSigningInfo.provisioningProfileName}
                         {(existingSigningInfo.deviceUdids ||
                           existingSigningInfo.entitlements) && (
-                            <TooltipIcon
-                              // eslint-disable-next-line local-rules/hardcoded-copy
-                              position='right center'
-                              content={(
-                                <div className={classes.tooltipContent}>
-                                  {existingSigningInfo.deviceUdids?.length > 0 && (
-                                    <div className={classes.tooltipSection}>
-                                      <div className={classes.tooltipLabel}>
-                                        {t('editor_page.export_modal.provisioning_profile' +
-                                          '.provisioned_devices')}{' '}
-                                        ({existingSigningInfo.deviceUdids.length}):
-                                      </div>
-                                      <div className={classes.tooltipScrollContainer}>
-                                        {existingSigningInfo.deviceUdids.map(device => (
-                                          <div key={device} className={classes.tooltipScrollItem}>
-                                            {device}
-                                          </div>
-                                        ))}
-                                      </div>
+                          <TooltipIcon
+                            // eslint-disable-next-line local-rules/hardcoded-copy
+                            position='right center'
+                            content={(
+                              <div className={classes.tooltipContent}>
+                                {existingSigningInfo.deviceUdids?.length > 0 && (
+                                  <div className={classes.tooltipSection}>
+                                    <div className={classes.tooltipLabel}>
+                                      {t('editor_page.export_modal.provisioning_profile' +
+                                        '.provisioned_devices')}{' '}
+                                      ({existingSigningInfo.deviceUdids.length}):
                                     </div>
-                                  )}
+                                    <div className={classes.tooltipScrollContainer}>
+                                      {existingSigningInfo.deviceUdids.map(device => (
+                                        <div key={device} className={classes.tooltipScrollItem}>
+                                          {device}
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
 
-                                  {existingSigningInfo.entitlements &&
-                                    Object.keys(existingSigningInfo.entitlements).length > 0 && (
-                                      <div className={classes.tooltipSection}>
-                                        <div className={classes.tooltipLabel}>
-                                          {t('editor_page.export_modal.provisioning_profile' +
-                                            '.entitlements')}{' '}
-                                          ({Object.keys(existingSigningInfo.entitlements).length}):
-                                        </div>
-                                        <div className={classes.tooltipScrollContainer}>
-                                          {Object.entries(existingSigningInfo.entitlements).map(
-                                            ([key, value]) => (
-                                              <div key={key} className={classes.tooltipScrollItem}>
-                                                <strong>{key}:</strong>{' '}
-                                                {Array.isArray(value)
-                                                  ? value.join(', ')
-                                                  : String(value)}
-                                              </div>
-                                            )
-                                          )}
-                                        </div>
-                                      </div>
-                                  )}
-                                </div>
-                              )}
-                              wide
-                              hoverable
-                            />
+                                {existingSigningInfo.entitlements &&
+                                  Object.keys(existingSigningInfo.entitlements).length > 0 && (
+                                  <div className={classes.tooltipSection}>
+                                    <div className={classes.tooltipLabel}>
+                                      {t('editor_page.export_modal.provisioning_profile' +
+                                        '.entitlements')}{' '}
+                                      ({Object.keys(existingSigningInfo.entitlements).length}):
+                                    </div>
+                                    <div className={classes.tooltipScrollContainer}>
+                                      {Object.entries(existingSigningInfo.entitlements).map(
+                                        ([key, value]) => (
+                                          <div key={key} className={classes.tooltipScrollItem}>
+                                            <strong>{key}:</strong>{' '}
+                                            {Array.isArray(value)
+                                              ? value.join(', ')
+                                              : String(value)}
+                                          </div>
+                                        )
+                                      )}
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            )}
+                            wide
+                            hoverable
+                          />
                         )}
                       </div>
                       <div className={combine(classes.fileExpiration, classes.textGray)}>
@@ -1303,7 +1303,7 @@ const IosSigningPage: React.FC<IIosSigningPage> = ({
       try {
         await handleUploadAuthKey()
         authKeySucceeded = true
-      } catch (error) {
+      } catch {
         // TODO(akashmahesh): Handle errors when Auth Key Upload is enabled.
       }
     }

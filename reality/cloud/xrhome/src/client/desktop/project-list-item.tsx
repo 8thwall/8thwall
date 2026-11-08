@@ -15,7 +15,6 @@ import {
   deleteProject, migrateProject, moveProject, pickNewProjectLocation,
 } from '../studio/local-sync-api'
 import {ProjectListModal} from './project-list-modal'
-import {basename} from '../editor/editor-common'
 import {createThemedStyles} from '../ui/theme'
 import {StandardLink} from '../ui/components/standard-link'
 import {Icon} from '../ui/components/icon'
