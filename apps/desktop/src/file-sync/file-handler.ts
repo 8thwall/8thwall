@@ -9,7 +9,7 @@ import type {FileSnapshotResponse} from '@repo/reality/shared/desktop/local-sync
 import {toUnixPath} from '@repo/reality/shared/desktop/unix-path'
 
 import {
-  FilePushParams, FilePullParams, FileDeleteParams, FileStateParams,
+  FilePushParams, FilePullParams, FileOpenParams, FileDeleteParams, FileStateParams,
   FileRenameParams,
 } from './file-handler-types'
 import {getProjectSrcPath, isIgnoredFile, isAssetPath} from '../project/project-helpers'
@@ -309,12 +309,12 @@ const postShowFile: RequestHandler = async (req) => {
 
 const postOpenFile: RequestHandler = async (req) => {
   const requestUrl = new URL(req.url)
-  const params = FilePullParams.safeParse(getQueryParams(requestUrl))
+  const params = FileOpenParams.safeParse(getQueryParams(requestUrl))
   if (!params.success) {
     throw makeCodedError('Invalid query params', 400)
   }
 
-  const {appKey, path: filePath} = params.data
+  const {appKey, path: filePath, scope = 'src'} = params.data
   if (isIgnoredFile(filePath)) {
     throw makeCodedError('Invalid file', 400)
   }
@@ -324,7 +324,7 @@ const postOpenFile: RequestHandler = async (req) => {
     throw makeCodedError('Project not found', 404)
   }
 
-  const projectPath = getProjectSrcPath(project.location)
+  const projectPath = scope === 'root' ? project.location : getProjectSrcPath(project.location)
   const fullPath = path.join(projectPath, filePath)
 
   try {

@@ -207,12 +207,14 @@ const showFile = (appKey: string, path: string) => {
   return fetchJson<{}>(`${API}/file/show?${params}`, {method: 'POST'})
 }
 
-const openFile = (appKey: string, path: string) => {
+const openFile = (appKey: string, path: string, scope?: 'src' | 'root') => {
   const params = new URLSearchParams({
     appKey,
     path,
-
   })
+  if (scope) {
+    params.set('scope', scope)
+  }
   return fetchJson<{}>(`${API}/file/open?${params}`, {method: 'POST'})
 }
 

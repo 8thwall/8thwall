@@ -1,11 +1,17 @@
 import React from 'react'
 import {useTranslation} from 'react-i18next'
 import {useDispatch} from 'react-redux'
+import {useQueryClient} from '@tanstack/react-query'
 
 import useCurrentApp from '../../../common/use-current-app'
-import {runPublishScript} from '../../../studio/local-sync-api'
+import {
+  getProjectConfigStatusQuery, useProjectConfigStatus,
+} from '../../../hooks/use-project-config'
+import {openFile, runPublishScript} from '../../../studio/local-sync-api'
 import {StaticBanner} from '../../../ui/components/banner'
+import {FloatingPanelButton} from '../../../ui/components/floating-panel-button'
 import {PrimaryButton} from '../../../ui/components/primary-button'
+import {CodeBlock} from '../../../widgets/copyable-code-block'
 import CopyableBlock from '../../../widgets/copyable-block'
 import {SYSTEM_STREAM_NAME} from '../../logs/log-constants'
 import {useLogStreams} from '../../logs/use-log-streams'
@@ -26,6 +32,16 @@ const ExportFlowPublishScript: React.FC = () => {
   const dispatch = useDispatch()
   const [publishState, setPublishState] = React.useState<PublishState>({status: 'idle'})
   const isPublishing = publishState.status === 'publishing'
+  const {publishScript} = useProjectConfigStatus()
+  const queryClient = useQueryClient()
+  const publishScriptConfig = `{
+  ...
+  "scripts": {
+    ...
+    "publish": ${JSON.stringify(publishScript ||
+      t('editor_page.native_publish_modal.publish_script.example_command'))}
+  }
+}`
 
   const logs = useLogStreams(appKey)
 
@@ -50,6 +66,18 @@ const ExportFlowPublishScript: React.FC = () => {
     }
   }
 
+  React.useEffect(() => {
+    const focusHandler = () => {
+      queryClient.invalidateQueries(getProjectConfigStatusQuery(appKey))
+    }
+
+    window.addEventListener('focus', focusHandler)
+
+    return () => {
+      window.removeEventListener('focus', focusHandler)
+    }
+  }, [])
+
   return (
     <PublishPageWrapper
       headline={t('editor_page.native_publish_modal.publish_script.headline')}
@@ -65,7 +93,7 @@ const ExportFlowPublishScript: React.FC = () => {
       actionButton={(
         <PrimaryButton
           onClick={handlePublish}
-          disabled={isPublishing}
+          disabled={isPublishing || !publishScript}
         >
           {t('button.publish', {ns: 'common'})}
         </PrimaryButton>
@@ -75,6 +103,19 @@ const ExportFlowPublishScript: React.FC = () => {
         <PublishTipBanner
           iconStroke='pointLight'
           content={t('editor_page.native_publish_modal.publish_script.description')}
+        />
+
+        <CodeBlock
+          language='json'
+          label={t(publishScript
+            ? 'editor_page.native_publish_modal.publish_script.configured_label'
+            : 'editor_page.native_publish_modal.publish_script.example_label')}
+          code={publishScriptConfig}
+          actions={(
+            <FloatingPanelButton onClick={() => openFile(appKey, 'package.json', 'root')}>
+              {t('editor_page.native_publish_modal.publish_script.open_package_json')}
+            </FloatingPanelButton>
+          )}
         />
         {publishState.status === 'failed' && (
           <>

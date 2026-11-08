@@ -95,6 +95,7 @@ type ProjectConfigResponse = {
   needsCopyPluginFix: boolean
   needsDevSocketFix: boolean
   missingDev8: boolean
+  publishScript: string | null
 }
 
 export type {

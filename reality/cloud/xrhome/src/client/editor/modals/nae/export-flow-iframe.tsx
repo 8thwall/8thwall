@@ -3,7 +3,7 @@ import {useTranslation} from 'react-i18next'
 
 import {PublishPageWrapper} from '../../publishing/publish-page-wrapper'
 import {useNaeStyles} from './nae-styles'
-import CopyableCodeBlock from '../../../widgets/copyable-code-block'
+import {CopyableCodeBlock} from '../../../widgets/copyable-code-block'
 import {RowJointToggleButton} from '../../../studio/configuration/row-joint-toggle-button'
 import {useStyles as useNaeModalsStyles} from './nae-modals-styles'
 import {EmbedType, getEmbedTypeOptions} from './utils'
@@ -78,9 +78,9 @@ const ExportFlowIframe: React.FC = () => {
             ? getIframeCode(productionUrl, IFRAME_AVAILABLE_PERMISSIONS)
             // eslint-disable-next-line local-rules/hardcoded-copy
             : getFullHtmlCode('My App',
-              productionUrl, IFRAME_AVAILABLE_PERMISSIONS)
-            }
+              productionUrl, IFRAME_AVAILABLE_PERMISSIONS)}
           downloadFileName={embedType === 'full-html' ? 'index.html' : undefined}
+          language='markup'
         />
 
         <SupportedPlatforms

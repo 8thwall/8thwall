@@ -822,6 +822,7 @@ const getProjectConfig = withErrorHandlingResponse(async (req: Request) => {
   let needsCopyPluginFix = false
   let needsDevSocketFix = false
   let missingDev8 = false
+  let publishScript: string | null = null
   try {
     const configPath = path.join(project.location, WEBPACK_CONFIG_PATH)
     const configContent = await fs.readFile(configPath, 'utf-8')
@@ -833,11 +834,24 @@ const getProjectConfig = withErrorHandlingResponse(async (req: Request) => {
     // Ignore
   }
 
+  try {
+    const packageJson = JSON.parse(
+      await fs.readFile(path.join(project.location, 'package.json'), 'utf-8')
+    )
+    const configuredPublishScript = packageJson.scripts?.publish
+    if (typeof configuredPublishScript === 'string' && configuredPublishScript.trim()) {
+      publishScript = configuredPublishScript
+    }
+  } catch {
+    // Ignore
+  }
+
   const response: ProjectConfigResponse = {
     needsInjectFix,
     needsCopyPluginFix,
     missingDev8,
     needsDevSocketFix,
+    publishScript,
   }
 
   return makeJsonResponse(response)

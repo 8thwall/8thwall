@@ -13,6 +13,7 @@ import {createThemedStyles} from '../../ui/theme'
 import {usePublishingStateContext} from '../publishing/publish-context'
 import {IconButton} from '../../ui/components/icon-button'
 import {NoTriggerWrapModal} from '../../ui/components/no-trigger-wrap-modal'
+import {Loader} from '../../ui/components/loader'
 import {ExportFlowHtml} from './nae/export-flow-html'
 import {ExportFlowIframe} from './nae/export-flow-iframe'
 import {ExportFlowPublishScript} from './nae/export-flow-publish-script'
@@ -288,7 +289,9 @@ const UniversalPublishModal: React.FC<IPublishModal> = ({
               {BuildIf.PUBLISH_SCRIPT_20261101 &&
                 Build8.PLATFORM_TARGET === 'desktop' &&
                 activePublishModalOption === 'publish-script' && (
-                <ExportFlowPublishScript />
+                <React.Suspense fallback={<Loader centered />}>
+                  <ExportFlowPublishScript />
+                </React.Suspense>
               )}
               {activePublishModalOption === 'all-builds' && (
                 <AllBuilds />
