@@ -169,6 +169,7 @@ const ImageTargetTestSection: React.FC<IImageTargetTestSection> = ({
             <div>
               <Trans
                 t={t}
+                ns='cloud-studio-pages'
                 i18nKey='asset_configurator.image_target_configurator.test.scan'
                 components={[
                   <a href={imageTargetPreview} key='link' className={classes.link}> open link</a>,
