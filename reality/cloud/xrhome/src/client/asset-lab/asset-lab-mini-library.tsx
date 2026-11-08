@@ -141,7 +141,7 @@ const AssetLabMiniLibrary = () => {
                 ))}
               </GridOfSquares>
             )
-      }
+        }
         {/* {view === 'list' &&
           <div>
             {searchResults?.map(id => <SquareAssetWithIcon key={id} generationId={id} size={82} />)}

@@ -667,7 +667,7 @@ const ExportFlow: React.FC<IExportFlow> = ({onClose, platform}) => {
           <span className={classes.displayText}>
             {t('editor_page.native_publish_modal.building_text')}
           </span>
-          }
+        }
         onBack={!isBuilding && (() => setCurrentStep('start'))}
         actionButton={(
           <BuildButton
