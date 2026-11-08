@@ -82,7 +82,7 @@ const createPrimitiveOption = (label: string, onClick: () => void, stroke?: Icon
 
 const createNewPrimitiveOptions = (
   newObjectParentId: string, ctx: SceneContext, stateCtx: StudioStateContext,
-  derivedScene: DerivedScene, t: TFunction, makePrefab?: boolean
+  derivedScene: DerivedScene, t: TFunction<'cloud-studio-pages'>, makePrefab?: boolean
 ) => {
   const handleNewPrimitive = (type: string, label?: string) => {
     let newEntity: GraphObject

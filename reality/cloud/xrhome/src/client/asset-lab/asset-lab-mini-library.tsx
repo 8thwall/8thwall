@@ -62,7 +62,7 @@ const useStyles = createUseStyles({
 })
 
 const AssetLabMiniLibrary = () => {
-  const {t} = useTranslation('asset-lab')
+  const {t} = useTranslation(['asset-lab', 'cloud-studio-pages'])
   const classes = useStyles()
   const [searchValue, setSearchValue] = React.useState('')
   const [filters, setFilters] = React.useState<string[]>([])

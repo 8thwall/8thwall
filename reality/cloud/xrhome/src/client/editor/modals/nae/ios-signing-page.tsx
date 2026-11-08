@@ -425,7 +425,7 @@ const DeleteSigningButton: React.FC<IDeleteSigningButton> = ({
   onDeleteClick,
 }) => {
   const classes = useStyles()
-  const {t} = useTranslation(['cloud-editor-pages'])
+  const {t} = useTranslation(['cloud-editor-pages', 'common'])
 
   if (!hasExistingConfig) {
     return null
@@ -448,7 +448,7 @@ const DeleteSigningButton: React.FC<IDeleteSigningButton> = ({
 
   return (
     <IconButton
-      text={t('button.delete')}
+      text={t('button.delete', {ns: 'common'})}
       stroke='delete12'
       size={0.875}
       onClick={(e) => {
@@ -1377,7 +1377,7 @@ const IosSigningPage: React.FC<IIosSigningPage> = ({
           onClick={handleSave}
           loading={isSaving}
         >
-          {t('button.save', {ns: 'common'})}
+          {t('button.add', {ns: 'common'})}
         </PrimaryButton>
       )}
     >

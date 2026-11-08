@@ -15,6 +15,20 @@ import {RowLayout} from './row-layout'
 import type {ExpanseField} from './expanse-field-types'
 import type {ConfigDiffInfo} from './diff-chip-types'
 
+const GEOMETRY_TYPE_TRANSLATION_KEYS = {
+  box: 'mesh_configurator.geometry_type.option.box',
+  capsule: 'mesh_configurator.geometry_type.option.capsule',
+  circle: 'mesh_configurator.geometry_type.option.circle',
+  cone: 'mesh_configurator.geometry_type.option.cone',
+  cylinder: 'mesh_configurator.geometry_type.option.cylinder',
+  plane: 'mesh_configurator.geometry_type.option.plane',
+  polyhedron: 'mesh_configurator.geometry_type.option.polyhedron',
+  ring: 'mesh_configurator.geometry_type.option.ring',
+  sphere: 'mesh_configurator.geometry_type.option.sphere',
+  tetrahedron: 'mesh_configurator.geometry_type.option.tetrahedron',
+  torus: 'mesh_configurator.geometry_type.option.torus',
+} as const
+
 const useStyles = createThemedStyles(theme => ({
   floatingMenu: {
     padding: 0,
@@ -164,7 +178,7 @@ const MeshConfiguratorMenu: React.FC<IMeshConfiguratorMenu> = (
           return t('mesh_configurator.geometry_type.option.splat_url')
         }
         if (geometryType) {
-          return t(`mesh_configurator.geometry_type.option.${geometryType}`)
+          return t(GEOMETRY_TYPE_TRANSLATION_KEYS[geometryType])
         }
         return t('mesh_configurator.geometry_type.option.none')
       },
@@ -190,8 +204,12 @@ const MeshConfiguratorMenu: React.FC<IMeshConfiguratorMenu> = (
           a8='click;studio-right-panel;mesh-geometry-type-click'
           trigger={(
             <button
-              className={combine('style-reset', rowFieldStyles.select,
-                rowFieldStyles.preventOverflow, disabled && rowFieldStyles.disabledSelect)}
+              className={combine(
+                'style-reset',
+                rowFieldStyles.select,
+                rowFieldStyles.preventOverflow,
+                disabled && rowFieldStyles.disabledSelect
+              )}
               type='button'
             >
               <div className={rowFieldStyles.selectText}>

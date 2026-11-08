@@ -174,6 +174,10 @@ const getAppleSigningTypeName = (
   .find(option => option.value === appleSigningType)?.content || ''
 
 type EmbedType = 'iframe' | 'full-html'
+const EMBED_TYPE_TRANSLATION_KEYS = {
+  'iframe': 'editor_page.export_modal.iframe.iframe',
+  'full-html': 'editor_page.export_modal.iframe.full-html',
+} as const
 
 const getEmbedTypeOptions = (
   t: TFunction
@@ -183,7 +187,7 @@ const getEmbedTypeOptions = (
   ...JointToggleOption<EmbedType>[]
 ] => ['iframe', 'full-html'].map(value => ({
   value,
-  content: t(`editor_page.export_modal.iframe.${value}`),
+  content: t(EMBED_TYPE_TRANSLATION_KEYS[value]),
 })) as [
   JointToggleOption<EmbedType>,
   JointToggleOption<EmbedType>,
