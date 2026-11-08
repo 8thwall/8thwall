@@ -65,8 +65,7 @@ const ModelOption: React.FC<IModelOption> = ({nameKey, descriptionKey, costRange
 const getDropdownOptions = (
   modelOptions: ModelDropdownOption[]
 ): DropdownOption[] => modelOptions.map((option) => {
-  const nameKey = `${option.translationKey}.name`
-  const descriptionKey = `${option.translationKey}.description`
+  const {nameKey, descriptionKey} = option
   return {
     value: option.modelId,
     content: (

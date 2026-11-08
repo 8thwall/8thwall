@@ -80,9 +80,28 @@ const getDefaultExportType = (platform: HtmlShell): ExportType => {
   }
 }
 
+const EXPORT_TYPE_DESCRIPTION_KEYS = {
+  apk: 'editor_page.export_modal.build_type.apk_description',
+  aab: 'editor_page.export_modal.build_type.aab_description',
+  ipa: 'editor_page.export_modal.build_type.ipa_description',
+  zip: 'editor_page.export_modal.build_type.zip_description',
+} as const
+
+const PUBLISH_HEADLINE_FIRST_KEYS = {
+  android: 'editor_page.native_publish_modal.publish_headline_first.android',
+  ios: 'editor_page.native_publish_modal.publish_headline_first.ios',
+} as const
+
+const PUBLISH_HEADLINE_CONFIGURE_KEYS = {
+  android: 'editor_page.native_publish_modal.publish_headline_configure.android',
+  ios: 'editor_page.native_publish_modal.publish_headline_configure.ios',
+} as const
+
+type NativePlatform = keyof typeof PUBLISH_HEADLINE_FIRST_KEYS
+
 interface IExportFlow {
   onClose: () => void
-  platform: HtmlShell
+  platform: NativePlatform
 }
 
 const ExportFlow: React.FC<IExportFlow> = ({onClose, platform}) => {
@@ -385,8 +404,7 @@ const ExportFlow: React.FC<IExportFlow> = ({onClose, platform}) => {
 
   const isBuilding = naeBuildData.naeBuildStatus === 'building'
 
-  const publishHeadlineFirstKey =
-    `editor_page.native_publish_modal.publish_headline_first.${platform}`
+  const publishHeadlineFirstKey = PUBLISH_HEADLINE_FIRST_KEYS[platform]
 
   if (currentStep === 'start' && !isBuilding) {
     return (
@@ -656,8 +674,7 @@ const ExportFlow: React.FC<IExportFlow> = ({onClose, platform}) => {
       />
     )
   } else if (currentStep === 'configure' || isBuilding) {
-    const configureHeadlineKey =
-      `editor_page.native_publish_modal.publish_headline_configure.${platform}`
+    const configureHeadlineKey = PUBLISH_HEADLINE_CONFIGURE_KEYS[platform]
     return (
       <PublishPageWrapper
         headline={t(configureHeadlineKey)}
@@ -799,11 +816,7 @@ const ExportFlow: React.FC<IExportFlow> = ({onClose, platform}) => {
                         <div className={classes.exportTypeContent}>
                           {option.content}
                           <span className={classes.exportTypeDropdownDescription}>
-                            {t(
-                              `editor_page.export_modal.build_type.${
-                                option.value
-                              }_description`
-                            )}
+                            {t(EXPORT_TYPE_DESCRIPTION_KEYS[option.value])}
                           </span>
                         </div>
                         {isSelected &&

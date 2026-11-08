@@ -722,8 +722,10 @@ const SigningContent: React.FC<ISigningContent> = ({
                 </div>
                 <div className={classes.textGray}>
                   {!existingSigningInfo
-                    ? t('editor_page.export_modal' +
-                      '.create_certificate_signing_request_description_with_p12')
+                    ? t(
+                      // eslint-disable-next-line @stylistic/max-len
+                      'editor_page.export_modal.create_certificate_signing_request_description_with_p12'
+                    )
                     : t('editor_page.export_modal.create_certificate_signing_request_description')}
                 </div>
                 <div className={classes.gap075}>
@@ -943,8 +945,10 @@ const SigningContent: React.FC<ISigningContent> = ({
                                 {existingSigningInfo.deviceUdids?.length > 0 && (
                                   <div className={classes.tooltipSection}>
                                     <div className={classes.tooltipLabel}>
-                                      {t('editor_page.export_modal.provisioning_profile' +
-                                        '.provisioned_devices')}{' '}
+                                      {t(
+                                        // eslint-disable-next-line @stylistic/max-len
+                                        'editor_page.export_modal.provisioning_profile.provisioned_devices'
+                                      )}{' '}
                                       ({existingSigningInfo.deviceUdids.length}):
                                     </div>
                                     <div className={classes.tooltipScrollContainer}>
@@ -961,8 +965,10 @@ const SigningContent: React.FC<ISigningContent> = ({
                                   Object.keys(existingSigningInfo.entitlements).length > 0 && (
                                   <div className={classes.tooltipSection}>
                                     <div className={classes.tooltipLabel}>
-                                      {t('editor_page.export_modal.provisioning_profile' +
-                                        '.entitlements')}{' '}
+                                      {t(
+                                        // eslint-disable-next-line @stylistic/max-len
+                                        'editor_page.export_modal.provisioning_profile.entitlements'
+                                      )}{' '}
                                       ({Object.keys(existingSigningInfo.entitlements).length}):
                                     </div>
                                     <div className={classes.tooltipScrollContainer}>
