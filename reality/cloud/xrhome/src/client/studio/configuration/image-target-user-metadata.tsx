@@ -6,7 +6,11 @@ import {StandardTextAreaField} from '../../ui/components/standard-text-area-fiel
 import {USER_METADATA_LIMIT} from '../../../shared/xrengine-config'
 import {StaticBanner} from '../../ui/components/banner'
 
-const validateMetadata = (input: string, isJson: boolean, t: TFunction) => {
+const validateMetadata = (
+  input: string,
+  isJson: boolean,
+  t: TFunction<['cloud-studio-pages', 'app-pages']>
+) => {
   if (!input) {
     return null
   } else if (input.length > USER_METADATA_LIMIT) {

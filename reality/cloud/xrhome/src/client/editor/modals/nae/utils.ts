@@ -37,7 +37,7 @@ const BUILD_MODE_OPTIONS = [
 ] as const
 
 const getBuildModeOptions = (
-  t: TFunction
+  t: TFunction<'cloud-editor-pages'>
 ): [
   JointToggleOption<NaeBuildMode>,
   JointToggleOption<NaeBuildMode>,
@@ -52,10 +52,10 @@ const getBuildModeOptions = (
 ]
 
 const getBuildModeName = (
-  t: TFunction, mode: NaeBuildMode
+  t: TFunction<'cloud-editor-pages'>, mode: NaeBuildMode
 ): React.ReactNode => getBuildModeOptions(t).find(option => option.value === mode)?.content || ''
 
-const getEnvName = (t: TFunction, refhead: RefHead) => {
+const getEnvName = (t: TFunction<'cloud-editor-pages'>, refhead: RefHead) => {
   switch (refhead) {
     case 'master':
       return t('editor_page.export_modal.build_env.master')
@@ -92,7 +92,7 @@ const SCREEN_ORIENTATION_OPTIONS = [
 ] as const
 
 const getScreenOrientationOptions = (
-  t: TFunction
+  t: TFunction<'cloud-editor-pages'>
 ): [
   JointToggleOption<ScreenOrientation>,
   JointToggleOption<ScreenOrientation>,
@@ -107,7 +107,7 @@ const getScreenOrientationOptions = (
 ]
 
 const getScreenOrientationName = (
-  t: TFunction, screenOrientation: ScreenOrientation
+  t: TFunction<'cloud-editor-pages'>, screenOrientation: ScreenOrientation
 ): React.ReactNode => getScreenOrientationOptions(t)
   .find(option => option.value === screenOrientation)?.content || ''
 
@@ -154,7 +154,7 @@ const IOS_SIGNING_TYPE_OPTIONS: readonly {
 ] as const
 
 const getAppleSigningTypeOptions = (
-  t: TFunction
+  t: TFunction<'cloud-editor-pages'>
 ): [
   JointToggleOption<AppleSigningType>,
   JointToggleOption<AppleSigningType>,
@@ -169,14 +169,14 @@ const getAppleSigningTypeOptions = (
 ]
 
 const getAppleSigningTypeName = (
-  t: TFunction, appleSigningType: AppleSigningType
+  t: TFunction<'cloud-editor-pages'>, appleSigningType: AppleSigningType
 ): React.ReactNode => getAppleSigningTypeOptions(t)
   .find(option => option.value === appleSigningType)?.content || ''
 
 type EmbedType = 'iframe' | 'full-html'
 
 const getEmbedTypeOptions = (
-  t: TFunction
+  t: TFunction<'cloud-editor-pages'>
 ): [
   JointToggleOption<EmbedType>,
   JointToggleOption<EmbedType>,

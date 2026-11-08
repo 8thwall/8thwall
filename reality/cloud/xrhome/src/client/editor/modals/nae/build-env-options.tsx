@@ -6,7 +6,7 @@ import type {TFunction} from 'react-i18next'
 import type {RepoState} from '../../../git/git-redux-types'
 
 const getBuildEnvOptions = (
-  t: TFunction,
+  t: TFunction<'cloud-editor-pages'>,
   git: RepoState,
   activeRef: RefHead,
   classes: any

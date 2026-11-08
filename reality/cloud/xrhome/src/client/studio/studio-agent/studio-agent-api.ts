@@ -2,6 +2,13 @@
 import type {DeepReadonly} from 'ts-essentials'
 import {v4 as uuid} from 'uuid'
 import type {TFunction} from 'react-i18next'
+
+import type {StudioComponentData} from '@ecs/shared/studio-component'
+import type {BaseGraphObject, SceneGraph, Space, InputMap, Action} from '@ecs/shared/scene-graph'
+import {isPrefab, isPrefabInstance} from '@ecs/shared/object-hierarchy'
+import {parseComponentAst} from '@ecs/shared/parse-component-ast'
+import {DEFAULT_ACTION_MAP} from '@ecs/shared/default-action-maps'
+
 import type {
   GetObjectsPropertyRequest, GetObjectsPropertyResponse,
   SetObjectsPropertyRequest, SetObjectsPropertyResponse,
@@ -10,14 +17,9 @@ import type {
   UpdateComponentsRequest, RemoveComponentsRequest, UpdateComponentsResponse,
   RemoveComponentsResponse,
 } from '@studiomcp/schema/scene-tools'
-import type {StudioComponentData} from '@ecs/shared/studio-component'
-import type {BaseGraphObject, SceneGraph, Space, InputMap, Action} from '@ecs/shared/scene-graph'
-import {isPrefab, isPrefabInstance} from '@ecs/shared/object-hierarchy'
-import {parseComponentAst} from '@ecs/shared/parse-component-ast'
-import {DEFAULT_ACTION_MAP} from '@ecs/shared/default-action-maps'
 
-import {makeObjectName} from '../common/studio-files'
-import {deleteObjects} from '../configuration/delete-object'
+import {makeObjectName, makeDuplicatedSpaceName} from '../common/studio-files'
+import {deleteObjects, deleteSpace} from '../configuration/delete-object'
 import {canDuplicateObjects, duplicateObjects} from '../configuration/duplicate-object'
 import {makeEmptyObject, makePrimitive} from '../make-object'
 import {handleObjectReorder} from '../reparent-object'
@@ -40,8 +42,6 @@ import type {RepoState} from '../../git/git-redux-types'
 import type {IImageTarget} from '../../common/types/models'
 import {duplicateSpace} from '../configuration/duplicate-space'
 import {addSpace, switchSpace} from '../spaces'
-import {makeDuplicatedSpaceName} from '../common/studio-files'
-import {deleteSpace} from '../configuration/delete-object'
 import {getInputMap} from '../configuration/input-action-map-dropdown'
 import {validateInput} from '../configuration/input-strings'
 
@@ -76,7 +76,7 @@ const makeBaseApi = (
   appUuid: string,
   git: RepoState,
   imageTargetsFetch: () => Promise<IImageTarget[]>,
-  t: TFunction
+  t: TFunction<'cloud-studio-pages'>
 ) => ({
   // TODO(kyle): Only return objects, filtering out lights, cameras, attachments, etc.
   getCurrentScene: () => sceneCtx.scene,
@@ -201,7 +201,7 @@ const makeBaseApi = (
     })
     return {parentObject}
   },
-  deleteObjects: ({objectIds}: { objectIds: string[] }) => {
+  deleteObjects: ({objectIds}: {objectIds: string[]}) => {
     sceneCtx.updateScene(scene => deleteObjects(scene, objectIds))
     // Do we want to store the undo step to where these objects used to be?
     return {objectIds}
@@ -214,7 +214,7 @@ const makeBaseApi = (
     }
     return {color}
   },
-  duplicateObjects: ({objectIds}: { objectIds: string[] }) => {
+  duplicateObjects: ({objectIds}: {objectIds: string[]}) => {
     if (!canDuplicateObjects(derivedScene, objectIds)) {
       throw new Error('Cannot duplicate objects with POI locations')
     }
@@ -334,7 +334,7 @@ const makeBaseApi = (
   },
   getRealtimeToken: () => authFetch<{token: string}>(`/v1/realtime/access/${accountUuid}`),
   getAiApiToken: () => authFetch<{token: string}>(`/v1/ai-api/access/${accountUuid}/${appUuid}`),
-  makePrefabs: ({objectIds}: { objectIds: string[] }, requestId: string) => {
+  makePrefabs: ({objectIds}: {objectIds: string[]}, requestId: string) => {
     const ids = validateIds(sceneCtx, objectIds)
     let currentScene = sceneCtx.scene
     const newPrefabs: Array<{instanceId: string, prefabSourceId: string}> = []
@@ -669,7 +669,7 @@ const makeStudioAgentApi = (
   appUuid: string,
   git: RepoState,
   imageTargetsFetch: () => Promise<IImageTarget[]>,
-  t: TFunction
+  t: TFunction<'cloud-studio-pages'>
 ) => makeMetaApi(makeBaseApi(
   sceneCtx, derivedScene, studioStateCtx, studioAgentCtx, studioComponentCtx, authFetch,
   accountUuid, appUuid, git, imageTargetsFetch, t

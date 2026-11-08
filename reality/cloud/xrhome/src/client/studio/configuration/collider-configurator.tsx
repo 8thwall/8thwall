@@ -82,7 +82,7 @@ const ColliderSlider: React.FC<IColliderSlider> = ({
 const renderBoxSliders = (
   geometry: DeepReadonly<BoxGeometry>,
   onChange: (update: BoxGeometry) => void,
-  t: TFunction<'cloud-editor-pages'[]>
+  t: TFunction<'cloud-studio-pages'[]>
 ) => (
   <div>
     <ColliderSlider
@@ -112,7 +112,7 @@ const renderBoxSliders = (
 const renderSphereSliders = (
   geometry: DeepReadonly<SphereGeometry>,
   onChange: (update: SphereGeometry) => void,
-  t: TFunction<'cloud-editor-pages'[]>
+  t: TFunction<'cloud-studio-pages'[]>
 ) => (
   <div>
     <ColliderSlider
@@ -128,7 +128,7 @@ const renderSphereSliders = (
 const renderPlaneSliders = (
   geometry: DeepReadonly<PlaneGeometry>,
   onChange: (update: PlaneGeometry) => void,
-  t: TFunction<'cloud-editor-pages'[]>
+  t: TFunction<'cloud-studio-pages'[]>
 ) => (
   <div>
     <ColliderSlider
@@ -151,7 +151,7 @@ const renderPlaneSliders = (
 const renderCapsuleSliders = (
   geometry: DeepReadonly<CapsuleGeometry>,
   onChange: (update: CapsuleGeometry) => void,
-  t: TFunction<'cloud-editor-pages'[]>
+  t: TFunction<'cloud-studio-pages'[]>
 ) => (
   <div>
     <ColliderSlider
@@ -174,7 +174,7 @@ const renderCapsuleSliders = (
 const renderConeSliders = (
   geometry: DeepReadonly<ConeGeometry>,
   onChange: (update: ConeGeometry) => void,
-  t: TFunction<'cloud-editor-pages'[]>
+  t: TFunction<'cloud-studio-pages'[]>
 ) => (
   <div>
     <ColliderSlider
@@ -197,7 +197,7 @@ const renderConeSliders = (
 const renderCylinderSliders = (
   geometry: DeepReadonly<CylinderGeometry>,
   onChange: (update: CylinderGeometry) => void,
-  t: TFunction<'cloud-editor-pages'[]>
+  t: TFunction<'cloud-studio-pages'[]>
 ) => (
   <div>
     <ColliderSlider
@@ -220,7 +220,7 @@ const renderCylinderSliders = (
 const renderSliders = (
   geometry: DeepReadonly<SceneCollider['geometry']>,
   onChange: (update: SceneCollider['geometry']) => void,
-  t: TFunction<'cloud-editor-pages'[]>
+  t: TFunction<'cloud-studio-pages'[]>
 ) => {
   switch (geometry.type) {
     case 'box':
