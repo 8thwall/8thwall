@@ -34,38 +34,48 @@ interface ModelDropdownOption {
   modelId: ToImageModelIds | ToMeshModelIds | ToAnimModelIds
   // A string so we can display a range, e.g. 4.5+
   costRange: string
-  // Prefix for translation of name and description
-  translationKey: string
+  nameKey: string
+  descriptionKey: string
 }
 
 const ImageModelOptions: ModelDropdownOption[] = [
   {
     modelId: 'stability.stable-image-core-v1:1',
     costRange: '2',
-    translationKey: 'asset_lab.model.stable_image_core',
+    nameKey: 'asset_lab.model.stable_image_core.name',
+    descriptionKey: 'asset_lab.model.stable_image_core.description',
   },
-  {modelId: 'flux-pro-1.1', costRange: '2', translationKey: 'asset_lab.model.flux_pro_1_1'},
+  {
+    modelId: 'flux-pro-1.1',
+    costRange: '2',
+    nameKey: 'asset_lab.model.flux_pro_1_1.name',
+    descriptionKey: 'asset_lab.model.flux_pro_1_1.description',
+  },
   {
     modelId: 'fal-ai/flux-pro/kontext',
     costRange: '2',
-    translationKey: 'asset_lab.model.flux_pro_kontext',
+    nameKey: 'asset_lab.model.flux_pro_kontext.name',
+    descriptionKey: 'asset_lab.model.flux_pro_kontext.description',
   },
   {
     modelId: 'fal-ai/flux-1/schnell',
     costRange: '0.25',
-    translationKey: 'asset_lab.model.flux_1_schnell',
+    nameKey: 'asset_lab.model.flux_1_schnell.name',
+    descriptionKey: 'asset_lab.model.flux_1_schnell.description',
   },
   {
     modelId: 'gpt-image-1',
     costRange: '2.5',
-    translationKey: 'asset_lab.model.gpt_image_1',
+    nameKey: 'asset_lab.model.gpt_image_1.name',
+    descriptionKey: 'asset_lab.model.gpt_image_1.description',
   },
 ]
 
 const ImageModelOptionsForAnimation: ModelDropdownOption[] = [{
   modelId: 'gpt-image-1',
   costRange: '2.5',
-  translationKey: 'asset_lab.model.gpt_image_1',
+  nameKey: 'asset_lab.model.gpt_image_1.name',
+  descriptionKey: 'asset_lab.model.gpt_image_1.description',
 }]
 
 type AllToImageKeys = keyof TextToImageStabilityImageCore
@@ -237,21 +247,29 @@ const MeshModelToDescriptionExtended = {
 /* eslint-enable local-rules/hardcoded-copy */
 
 const MeshModelOptions: ModelDropdownOption[] = [
-  {modelId: 'fal-ai/trellis', costRange: '2', translationKey: 'asset_lab.model.trellis'},
+  {
+    modelId: 'fal-ai/trellis',
+    costRange: '2',
+    nameKey: 'asset_lab.model.trellis.name',
+    descriptionKey: 'asset_lab.model.trellis.description',
+  },
   {
     modelId: 'fal-ai/hunyuan3d/v2',
     costRange: '4.5+',
-    translationKey: 'asset_lab.model.hunyuan_3d_v2',
+    nameKey: 'asset_lab.model.hunyuan_3d_v2.name',
+    descriptionKey: 'asset_lab.model.hunyuan_3d_v2.description',
   },
   {
     modelId: 'fal-ai/hunyuan3d/v2/mini',
     costRange: '24+',
-    translationKey: 'asset_lab.model.hunyuan_3d_v2_mini',
+    nameKey: 'asset_lab.model.hunyuan_3d_v2_mini.name',
+    descriptionKey: 'asset_lab.model.hunyuan_3d_v2_mini.description',
   },
   {
     modelId: 'fal-ai/hunyuan3d-v21',
     costRange: '90',
-    translationKey: 'asset_lab.model.hunyuan_3d_v2_1',
+    nameKey: 'asset_lab.model.hunyuan_3d_v2_1.name',
+    descriptionKey: 'asset_lab.model.hunyuan_3d_v2_1.description',
   },
 ]
 
@@ -267,7 +285,8 @@ const AnimModelOptions: ModelDropdownOption[] = [
   {
     modelId: 'meshy-ai',
     costRange: '24',
-    translationKey: 'asset_lab.model.meshy_ai',
+    nameKey: 'asset_lab.model.meshy_ai.name',
+    descriptionKey: 'asset_lab.model.meshy_ai.description',
   },
 ]
 
