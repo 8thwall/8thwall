@@ -228,6 +228,8 @@
   "editor_page.export_modal.build_mode.static": "Static Bundle",
   "editor_page.export_modal.build_type.apk_description": "For testing on a device or distributing your app outside of Google Play.",
   "editor_page.export_modal.build_type.aab_description": "For publishing on Google Play.",
+  "editor_page.export_modal.build_type.ipa_description": "For publishing on the Apple App Store.",
+  "editor_page.export_modal.build_type.zip_description": "For hosting on a web server.",
   "editor_page.export_modal.bundle_id.too_few_parts": "Bundle ID must contain at least 2 parts separated by periods",
   "editor_page.export_modal.bundle_id.empty_part": "Bundle ID cannot have an empty part",
   "editor_page.export_modal.bundle_id.invalid_first_char": "The first character of each part must be a letter",
