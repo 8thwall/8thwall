@@ -65,6 +65,7 @@ const ExportFlowPublishScript: React.FC = () => {
       setPublishState({status: 'failed', startTime, completeTime: Date.now()})
     }
   }
+
   React.useEffect(() => {
     const focusHandler = () => {
       queryClient.invalidateQueries(getProjectConfigStatusQuery(appKey))

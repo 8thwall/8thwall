@@ -26,8 +26,6 @@ const useStyles = createThemedStyles((theme: UiTheme) => ({
   },
   codeWrapper: {
     minWidth: 0,
-  },
-  codeWrapperInner: {
     display: 'flex',
     flexDirection: 'column',
     gap: '1rem',
@@ -62,21 +60,18 @@ const CodeBlock: React.FC<ICodeBlock> = ({label, code, language, actions}) => {
     <div className={classes.wrapper}>
       {label && <div className={classes.label}>{label}</div>}
       <div className={classes.codeWrapper}>
-        <div className={classes.codeWrapperInner}>
-          {actions &&
-            <div className={classes.actionContainer}>
-              {actions}
-            </div>}
-          <pre className={classes.code}>
-            <CodeHighlight
-              content={code}
-              language={language}
-              themeMode={theme}
-              simpleMode
-            />
-          </pre>
-
-        </div>
+        {actions &&
+          <div className={classes.actionContainer}>
+            {actions}
+          </div>}
+        <pre className={classes.code}>
+          <CodeHighlight
+            content={code}
+            language={language}
+            themeMode={theme}
+            simpleMode
+          />
+        </pre>
       </div>
     </div>
   )
