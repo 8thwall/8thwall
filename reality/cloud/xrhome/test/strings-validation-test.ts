@@ -71,7 +71,7 @@ const areBracketsBalanced = (str: string) => {
 }
 
 const areTagsComplete = (str: string) => {
-  const tags = str.match(/<\/?[a-zA-Z0-9]+\s*[^>]*>/g) || []
+  const tags = str.match(/<\/?[a-zA-Z0-9]+\s*\/?>/g) || []
   const stack: string[] = []
 
   for (const tag of tags) {
@@ -94,6 +94,16 @@ const areTagsComplete = (str: string) => {
 
   return stack.length === 0
 }
+
+describe('Translation tag validation', () => {
+  it('allows literal angle-bracket text', () => {
+    assert.isTrue(areTagsComplete('<place your publish command here>'))
+  })
+
+  it('rejects unbalanced rich-text tags', () => {
+    assert.isFalse(areTagsComplete('<linkTo>missing closing tag'))
+  })
+})
 
 describe('Strings Validation Test - Verify all i18n strings are valid', () => {
   describe('Client side translations', () => {
