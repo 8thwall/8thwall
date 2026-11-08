@@ -1,7 +1,6 @@
 import type {GraphComponent, GraphObject, Space} from '@ecs/shared/scene-graph'
-import type {TFunction} from 'i18next'
 import React from 'react'
-import {useTranslation} from 'react-i18next'
+import {TFunction, useTranslation} from 'react-i18next'
 import type {DeepReadonly} from 'ts-essentials'
 
 import {hexColorWithAlpha} from '../../shared/colors'
@@ -157,7 +156,7 @@ const isSearchableObject = (
 
 const getAllComponentNames = (
   object: DeepReadonly<GraphObject>,
-  t: TFunction
+  t: TFunction<'cloud-studio-pages'>
 ) => {
   const customs = Object.values(object.components).map(component => component.name)
   const includedDirects = DIRECT_PROPERTY_COMPONENTS.filter(
@@ -185,7 +184,7 @@ const getAllComponentNames = (
 const useComponentSearchResults = (
   searchText: string,
   filters: string[],
-  t: TFunction,
+  t: TFunction<'cloud-studio-pages'>,
   prefabList: boolean
   // Components may be used in different spaces but parent objects are partitioned between them.
 ): Record<Space['id'], Record<GraphComponent['name'], GraphObject['id'][]>> => {

@@ -43,7 +43,8 @@ const convertFromSpaceless = (
 }
 
 const createDefaultSpace = (
-  scene: DeepReadonly<SceneGraph>, spaceName: string, id: string, t: TFunction
+  scene: DeepReadonly<SceneGraph>, spaceName: string, id: string,
+  t: TFunction<'cloud-studio-pages'>
 ) => {
   const newScene = {...scene, spaces: {...scene.spaces}}
   newScene.spaces[id] = {id, name: spaceName}
@@ -69,7 +70,8 @@ const createDefaultSpace = (
 }
 
 const addSpace = (
-  oldScene: DeepReadonly<SceneGraph>, newSpaceName: string, t: TFunction, newSpaceId?: string
+  oldScene: DeepReadonly<SceneGraph>, newSpaceName: string,
+  t: TFunction<'cloud-studio-pages'>, newSpaceId?: string
 ) => {
   const id = newSpaceId ?? uuid()
   if (!oldScene.spaces) {

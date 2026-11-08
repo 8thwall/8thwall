@@ -1,4 +1,4 @@
-import type {TFunction} from 'i18next'
+import type {TFunction} from 'react-i18next'
 
 import type {
   FalAiFluxKontext, ImageToImage, ImageToImageGpt,
@@ -138,9 +138,9 @@ type ModelAttribute = {
   label?: string
 }
 const ModelAttributeDefaults: Partial<
-Record<keyof ImageToMeshHunyuanBase |
+  Record<keyof ImageToMeshHunyuanBase |
   keyof ImageToMeshTrellisBase, ModelAttribute
->> = {
+  >> = {
   'numInferenceSteps': {
     defaultValue: 50, render: false,
   },
@@ -283,7 +283,9 @@ const WorkflowDropdownOptions: Options = [
   {value: 'gen-animated-char', content: 'asset_lab.workflow.animation'},
 ]
 
-const translateContent = (options: Options, t: TFunction): Options => options.map((option) => {
+const translateContent = (
+  options: Options, t: TFunction<'asset-lab'>
+): Options => options.map((option) => {
   option.content = t(option.content)
   return option
 })
