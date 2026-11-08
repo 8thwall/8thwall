@@ -152,6 +152,7 @@ const StudioImageTargetBrowser: React.FC = () => {
           filterOptions={collapse => (
             <OptionalFilters
               options={IMAGE_TARGET_FILTERS}
+              renderLabel={label => t(label)}
               noneOption={t('file_browser.image_targets.all_targets', {ns: 'cloud-studio-pages'})}
               filters={filters}
               setFilters={setFilters}

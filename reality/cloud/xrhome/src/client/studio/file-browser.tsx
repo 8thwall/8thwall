@@ -305,6 +305,7 @@ const FileBrowser: React.FC<IFileBrowser> = ({
             filterOptions={collapse => (
               <OptionalFilters
                 options={FILE_BROWSER_FILTERS}
+                renderLabel={label => t(label, {ns: 'cloud-studio-pages'})}
                 noneOption={t('file_browser.search_bar.option.all', {ns: 'cloud-studio-pages'})}
                 filters={filters}
                 setFilters={setFilters}
