@@ -527,7 +527,7 @@ const ALL_INPUTS = [
   ...KEYBOARD_NONE_INPUTS,
   ...MOUSE_INPUTS,
   ...TOUCHSCREEN_INPUTS,
-] as SubMenuItem[]
+] as const satisfies readonly SubMenuItem[]
 
 enum InputCategoryType {
   KEYBOARD = 'input_strings.category.keyboard',
@@ -617,7 +617,7 @@ const ALL_INPUT_CATEGORIES = [
     parent: InputCategoryType.KEYBOARD,
     options: KEYBOARD_FUNCTION_INPUTS,
   },
-] as SubMenuCategory[]
+] satisfies SubMenuCategory[]
 
 const validateInput = (input: string) => ALL_INPUTS.find(option => option.value === input)
 

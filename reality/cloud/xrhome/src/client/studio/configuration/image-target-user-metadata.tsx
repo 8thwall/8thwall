@@ -1,5 +1,5 @@
 import React from 'react'
-import {TFunction, useTranslation} from 'react-i18next'
+import {type TFunction, useTranslation} from 'react-i18next'
 
 import {RowBooleanField, RowSelectField} from './row-fields'
 import {StandardTextAreaField} from '../../ui/components/standard-text-area-field'

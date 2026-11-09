@@ -76,7 +76,7 @@ const diffTypeLoc = {
   added: 'diff_chip.added',
   removed: 'diff_chip.removed',
   unchanged: 'diff_chip.unchanged',
-}
+} as const
 
 const bannerFromRenderValue = <T, >(
   renderValue: (val: DeepReadonly<T>) => React.ReactNode,

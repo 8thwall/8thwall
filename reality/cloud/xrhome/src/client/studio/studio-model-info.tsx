@@ -3,7 +3,7 @@ import {useTranslation} from 'react-i18next'
 
 import {AnimationMixer, AnimationClip, Clock, Object3D} from 'three'
 
-import {BASIC, ENV_MAP_PRESETS} from '@ecs/shared/environment-maps'
+import {BASIC, ENV_MAP_PRESETS} from './environment-map-presets'
 
 import StudioModelPreviewWithLoader from './studio-model-preview-with-loader'
 import {RowBooleanField, RowSelectField} from './configuration/row-fields'
