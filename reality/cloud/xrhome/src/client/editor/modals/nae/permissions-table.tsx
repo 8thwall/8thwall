@@ -197,7 +197,7 @@ const PermissionsTable: React.FC<IPermissionsTable> = ({setCurrentStep, platform
   const [isSaving, setIsSaving] = React.useState(false)
   const [permissions, setPermissions] = React.useState<Permissions>(DEFAULT_PERMISSIONS)
   const [originalPermissions, setOriginalPermissions] =
-  React.useState<Permissions>(DEFAULT_PERMISSIONS)
+    React.useState<Permissions>(DEFAULT_PERMISSIONS)
   const app = useCurrentApp()
   const {updateNaeInfo} = useActions(naeActions)
   const naeInfo = React.useMemo(
@@ -344,8 +344,8 @@ const PermissionsTable: React.FC<IPermissionsTable> = ({setCurrentStep, platform
                         onChange={e => handleDescriptionChange(permission, e.target.value)}
                         disabled={permissionStatus !== 'REQUESTED'}
                         placeholder={
-                        PERMISSION_PLACEHOLDERS[permission]
-                      }
+                          PERMISSION_PLACEHOLDERS[permission]
+                        }
                         height='small'
                         maxLength={NAE_PERMISSION_USAGE_DESCRIPTION_MAX_CHARACTERS}
                       />

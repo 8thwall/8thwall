@@ -196,7 +196,7 @@ interface IMaterialConfigurator {
   onChange: (updater: (current: DeepReadonly<Material>) => DeepReadonly<Material>) => void
 }
 
-type MaterialTypeOption = { value: Material['type']; content: string; a8: string; }
+type MaterialTypeOption = {value: Material['type'], content: string, a8: string}
 
 const MAT_TYPES: {[type: string]: MaterialTypeOption} = {
   basic: {
@@ -585,7 +585,7 @@ const MaterialConfigurator: React.FC<IMaterialConfigurator> = ({
               step={0.1}
             />
           </>
-          }
+        }
         {hasSide &&
           <RowSelectField
             expanseField={{
@@ -669,7 +669,7 @@ const MaterialConfigurator: React.FC<IMaterialConfigurator> = ({
               onChange={e => onChange(old => old && ({...old, mipmaps: e.target.checked}))}
             />
           </>
-      }
+        }
         {hasTextureSettings &&
           <>
             <RowSelectField

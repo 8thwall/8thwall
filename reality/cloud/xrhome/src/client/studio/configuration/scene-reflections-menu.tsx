@@ -13,7 +13,7 @@ import {createUseStyles} from 'react-jss'
 import {useActiveSpace} from '../hooks/active-space'
 import {MutateCallback, useSceneContext} from '../scene-context'
 import {combine} from '../../common/styles'
-import {RowTextField, useStyles as useRowStyles} from './row-fields'
+import {RowTextField, useStyles as useRowStyles, useStyles as useRowFieldStyles} from './row-fields'
 import {basename} from '../../editor/editor-common'
 import {useCurrentRepoId} from '../../git/repo-id-context'
 import {useScopedGit} from '../../git/hooks/use-current-git'
@@ -21,7 +21,6 @@ import {getFilesByKind} from '../common/studio-files'
 import {SubMenuSelectWithSearch} from '../ui/submenu-select-with-search'
 import type {SubMenuCategory} from '../ui/submenu'
 import {StandardFieldLabel} from '../../ui/components/standard-field-label'
-import {useStyles as useRowFieldStyles} from './row-fields'
 
 const useStyles = createUseStyles(
   {
@@ -106,8 +105,7 @@ const SceneReflectionsMenu: React.FC = () => {
         value: 'url',
         content: t('reflection.menu.label.url'),
         icon: isUrl ? 'checkmark' : undefined,
-      },
-      ],
+      }],
   }
 
   const envMapCategories = [assetCategory, presetCategory, rootOptions]

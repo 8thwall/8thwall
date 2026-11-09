@@ -76,6 +76,12 @@ interface IPlayableMediaPreview {
   setAudioState?: (value: {audioCheckDone: boolean, hasAudio: boolean}) => void
 }
 
+interface AudioDetectableVideoElement extends HTMLVideoElement {
+  mozHasAudio?: boolean
+  webkitAudioDecodedByteCount?: number
+  audioTracks?: {length: number}
+}
+
 const PlayableMediaPreview: React.FunctionComponent<IPlayableMediaPreview> = ({
   src,
   onMoreData,
@@ -111,15 +117,14 @@ const PlayableMediaPreview: React.FunctionComponent<IPlayableMediaPreview> = ({
     }
   }
 
-  const handleFullScreen = () => {
-    if (mediaRef.current) {
+  const handleFullScreen = async () => {
+    const media = mediaRef.current
+    if (media) {
       if (!document.fullscreenElement) {
-        mediaRef.current.requestFullscreen()
-          .then(() => {
-            mediaRef.current.addEventListener('fullscreenchange', handleFullscreenChange)
-          })
+        await media.requestFullscreen()
+        media.addEventListener('fullscreenchange', handleFullscreenChange)
       } else {
-        document.exitFullscreen()
+        await document.exitFullscreen()
       }
     }
   }
@@ -159,7 +164,7 @@ const PlayableMediaPreview: React.FunctionComponent<IPlayableMediaPreview> = ({
     }
   }
 
-  const handleProgressChange = (e) => {
+  const handleProgressChange = (e: {clientX: number}) => {
     if (progressBarRef.current && mediaRef.current) {
       const rect = progressBarRef.current.getBoundingClientRect()
       const offsetX = e.clientX - rect.left
@@ -169,7 +174,7 @@ const PlayableMediaPreview: React.FunctionComponent<IPlayableMediaPreview> = ({
     }
   }
 
-  const handleMouseMove = (e) => {
+  const handleMouseMove = (e: MouseEvent) => {
     if (isDragging.current) {
       handleProgressChange(e)
     }
@@ -183,7 +188,7 @@ const PlayableMediaPreview: React.FunctionComponent<IPlayableMediaPreview> = ({
     document.removeEventListener('mouseup', handleMouseUp)
   }
 
-  const handleMouseDown = (e) => {
+  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     isDragging.current = true
     shouldResumeAfterScrub.current = isPlaying
     shouldMuteAfterScrub.current = isMuted
@@ -207,20 +212,20 @@ const PlayableMediaPreview: React.FunctionComponent<IPlayableMediaPreview> = ({
   let mediaElement
 
   if (VIDEO_FILES.includes(ext)) {
-    const onLoadedMetadata = (e) => {
+    const onLoadedMetadata = (e: React.SyntheticEvent<HTMLVideoElement>) => {
+      const video: AudioDetectableVideoElement = e.currentTarget
       onMoreData({
         dimension: {
-          width: e.target.videoWidth,
-          height: e.target.videoHeight,
+          width: video.videoWidth,
+          height: video.videoHeight,
         },
-        duration: e.target.duration,
+        duration: video.duration,
       })
       setDuration(formatTime(mediaRef.current.duration))
 
       // put hasAudio check in a timeout to ensure webkitAudioDecodedByteCount is decoded
       setTimeout(() => {
-        const video = e.target
-        const hasAudio = video.mozHasAudio || video.webkitAudioDecodedByteCount > 0 ||
+        const hasAudio = video.mozHasAudio || (video.webkitAudioDecodedByteCount ?? 0) > 0 ||
           video.audioTracks?.length > 0
         setAudioState({audioCheckDone: true, hasAudio})
       }, 50)
@@ -242,9 +247,9 @@ const PlayableMediaPreview: React.FunctionComponent<IPlayableMediaPreview> = ({
       </div>
     )
   } else if (AUDIO_FILES.includes(ext)) {
-    const onLoadedMetadata = (e) => {
+    const onLoadedMetadata = (e: React.SyntheticEvent<HTMLAudioElement>) => {
       onMoreData({
-        duration: e.target.duration,
+        duration: e.currentTarget.duration,
       })
       setDuration(formatTime(mediaRef.current.duration))
     }
@@ -286,6 +291,7 @@ const PlayableMediaPreview: React.FunctionComponent<IPlayableMediaPreview> = ({
           onMouseDown={handleMouseDown}
           role='slider'
           tabIndex={0}
+          aria-label={`${currentTime} / ${duration}`}
           aria-valuenow={progress}
         >
           <div className={classes.progress} style={{width: `${progress}%`}} />
@@ -331,11 +337,11 @@ const ImagePreview: React.FunctionComponent<IImagePreview> = ({
   src, alt, onMoreData, onAssetLoad,
 }) => {
   const classes = useStyles()
-  const onLoad = (e) => {
+  const onLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
     onMoreData({
       dimension: {
-        width: e.target.naturalWidth,
-        height: e.target.naturalHeight,
+        width: e.currentTarget.naturalWidth,
+        height: e.currentTarget.naturalHeight,
       },
     })
     onAssetLoad()
@@ -350,7 +356,7 @@ const ImagePreview: React.FunctionComponent<IImagePreview> = ({
 
 interface IVideoPreview {
   src: string
-  onMoreData: (data: Pick<AdditionalAssetData, 'dimension' |'duration'>) => void
+  onMoreData: (data: Pick<AdditionalAssetData, 'dimension' | 'duration'>) => void
   onAssetLoad: () => void
   audioState: {audioCheckDone: boolean, hasAudio: boolean}
   setAudioState: (value: {audioCheckDone: boolean, hasAudio: boolean}) => void
