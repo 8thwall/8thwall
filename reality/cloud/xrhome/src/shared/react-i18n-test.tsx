@@ -36,7 +36,7 @@ const ReactI18nTypeTest: React.FC = () => {
   const _exampleKey: TFuncKey<'cloud-studio-pages'> = 'something'
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const _exampleCommonKey: TFuncKey<'common'> = 'button.activate'
+  const _exampleCommonKey: TFuncKey<'common'> = 'button.delete'
 
   return (
     <>
