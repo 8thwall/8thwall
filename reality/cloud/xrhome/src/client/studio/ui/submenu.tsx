@@ -1,6 +1,6 @@
 import React from 'react'
 import type {DeepReadonly} from 'ts-essentials'
-import {type TranslationKey, useTranslation} from 'react-i18next'
+import {TranslationKey, useTranslation} from 'react-i18next'
 
 import {FloatingMenuButton} from '../../ui/components/floating-menu-button'
 import {Icon, IconStroke} from '../../ui/components/icon'

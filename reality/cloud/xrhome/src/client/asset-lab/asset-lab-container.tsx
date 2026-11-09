@@ -1,7 +1,7 @@
 /* eslint-disable local-rules/hardcoded-copy */
 // TODO(dat): Remove this once we are ready to ship this.
 import React from 'react'
-import {type TranslationKey, useTranslation} from 'react-i18next'
+import {TranslationKey, useTranslation} from 'react-i18next'
 
 import {AssetLabMode, AssetLabWorkflow, useAssetLabStateContext} from './asset-lab-context'
 import {ModeButton, MODE_BUTTON_HEIGHT_REM} from './widgets/mode-button'

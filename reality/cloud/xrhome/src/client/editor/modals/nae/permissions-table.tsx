@@ -1,5 +1,5 @@
 import React from 'react'
-import {type TranslationKey, useTranslation} from 'react-i18next'
+import {TranslationKey, useTranslation} from 'react-i18next'
 
 import {
   validatePermissionUsageDescriptionUtil,

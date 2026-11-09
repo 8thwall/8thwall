@@ -1,6 +1,6 @@
 import React from 'react'
 import type {DeepReadonly} from 'ts-essentials'
-import {type TranslationKey, useTranslation} from 'react-i18next'
+import {TranslationKey, useTranslation} from 'react-i18next'
 
 import type {
   BasicMaterial, Material, MaterialBlending, Resource, TextureFiltering, Side, TextureWrap,

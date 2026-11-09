@@ -1,6 +1,6 @@
 import React from 'react'
 import {createUseStyles} from 'react-jss'
-import {type TranslationKey, useTranslation} from 'react-i18next'
+import {TranslationKey, useTranslation} from 'react-i18next'
 
 import type {CropResult} from '@repo/reality/shared/desktop/image-target-api'
 

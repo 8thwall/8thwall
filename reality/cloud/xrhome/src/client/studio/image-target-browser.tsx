@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react'
 import {createUseStyles} from 'react-jss'
-import {type TranslationKey, useTranslation} from 'react-i18next'
+import {TranslationKey, useTranslation} from 'react-i18next'
 
 import {useEnclosedApp} from '../apps/enclosed-app-context'
 import {useSelector} from '../hooks'

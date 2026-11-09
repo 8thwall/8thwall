@@ -1,5 +1,5 @@
 import React from 'react'
-import {type TranslationKey, useTranslation} from 'react-i18next'
+import {TranslationKey, useTranslation} from 'react-i18next'
 
 import type {Vec3Tuple} from '@ecs/shared/scene-graph'
 import {BASIC} from '@ecs/shared/environment-maps'
