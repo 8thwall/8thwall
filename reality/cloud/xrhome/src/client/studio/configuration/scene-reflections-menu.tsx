@@ -7,8 +7,9 @@ import {getReflectionsFromSceneGraph} from '@ecs/shared/get-environment-from-sce
 
 import {extractResourceUrl} from '@ecs/shared/resource'
 
-import {ENV_MAP_PRESETS} from '@ecs/shared/environment-maps'
 import {createUseStyles} from 'react-jss'
+
+import {ENV_MAP_PRESETS} from '../environment-map-presets'
 
 import {useActiveSpace} from '../hooks/active-space'
 import {MutateCallback, useSceneContext} from '../scene-context'
@@ -72,7 +73,7 @@ const SceneReflectionsMenu: React.FC = () => {
 
   const presetCategory: SubMenuCategory = {
     parent: null,
-    value: t('reflection.menu.label.presets'),
+    value: 'reflection.menu.label.presets',
     options: Object.entries(ENV_MAP_PRESETS).map(([envUrl, displayKey]) => ({
       value: envUrl,
       content: t(displayKey),
@@ -82,7 +83,7 @@ const SceneReflectionsMenu: React.FC = () => {
 
   const assetCategory: SubMenuCategory = {
     parent: null,
-    value: t('reflection.menu.label.assets'),
+    value: 'reflection.menu.label.assets',
     options: getFilesByKind(filesByPath, 'special_image')
       .concat(getFilesByKind(filesByPath, 'image'))
       .map(asset => ({

@@ -38,7 +38,7 @@ const PrimaryGeometryTypes = [
   {type: 'box', label: 'mesh_configurator.geometry_type.option.box', stroke: 'box'},
   {type: 'sphere', label: 'mesh_configurator.geometry_type.option.sphere', stroke: 'sphere'},
   {type: 'cylinder', label: 'mesh_configurator.geometry_type.option.cylinder', stroke: 'cylinder'},
-]
+] as const
 
 const SecondaryGeometryTypes = [
   {type: 'capsule', label: 'mesh_configurator.geometry_type.option.capsule', stroke: 'capsule'},
@@ -51,7 +51,7 @@ const SecondaryGeometryTypes = [
   },
   {type: 'ring', label: 'mesh_configurator.geometry_type.option.ring', stroke: 'ring'},
   {type: 'torus', label: 'mesh_configurator.geometry_type.option.torus', stroke: 'torus'},
-]
+] as const
 
 const LightTypes = [
   {
@@ -63,7 +63,7 @@ const LightTypes = [
   {type: 'point', label: 'new_primitive_button.option.light.point', stroke: 'pointLight'},
   {type: 'spot', label: 'new_primitive_button.option.light.spot', stroke: 'spotLight'},
   {type: 'area', label: 'new_primitive_button.option.light.area', stroke: 'areaLight'},
-]
+] as const
 
 const DEFAULT_BOX_GEOMETRY: DeepReadonly<BoxGeometry> = {
   type: 'box',

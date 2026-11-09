@@ -20,7 +20,7 @@ const ENV_MAP_PRESETS = {
   [ESPLANADE]: 'reflection.preset.option.esplanade',
   [CATHEDRAL]: 'reflection.preset.option.cathedral',
   [WINTER_LAKE]: 'reflection.preset.option.winter_lake',
-}
+} as const
 
 export {
   ENV_MAP_PRESETS,

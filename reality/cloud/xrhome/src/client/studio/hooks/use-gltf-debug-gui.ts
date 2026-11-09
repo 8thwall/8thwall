@@ -3,7 +3,8 @@ import {useTranslation} from 'react-i18next'
 import {useThree} from '@react-three/fiber'
 import {Controller, GUI} from 'lil-gui'
 import {AnimationMixer, Clock, Object3D} from 'three'
-import {ENV_MAP_PRESETS} from '@ecs/shared/environment-maps'
+
+import {ENV_MAP_PRESETS} from '../environment-map-presets'
 
 interface DebugLightConfig {
   ambientIntensity: number

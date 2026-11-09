@@ -81,7 +81,7 @@ const FILE_BROWSER_FILTERS = [
     label: 'file_browser.search_bar.option.model',
     fileTypes: ['obj', 'fbx', 'gltf', 'glb'],
   },
-]
+] as const
 
 const getFileExtension = (filePath: string) => {
   const parts = filePath.split('.')
@@ -114,8 +114,9 @@ const FileBrowserSearchResults: React.FC<IFileBrowserSearchResults> = ({
         return true
       }
       if (typeFilters.length > 0) {
+        const extension = getFileExtension(file.filePath)
         return typeFilters
-          .some(({fileTypes}) => fileTypes.includes(getFileExtension(file.filePath)))
+          .some(({fileTypes}) => fileTypes.some(fileType => fileType === extension))
       }
       return false
     })

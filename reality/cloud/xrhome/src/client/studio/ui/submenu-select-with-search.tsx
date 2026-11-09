@@ -53,7 +53,7 @@ const SubMenuSelectWithSearch: React.FC<ISubMenuSelectWithSearch> = ({
           const optionContent = !option.ns ? option.content : t(option.content, {ns: option.ns})
           return optionContent.toLowerCase()
             .includes(searchText.toLowerCase())
-        }).map(option => ({...option, category: category.value})))).flat()
+        }).map(option => ({...option, category: category.value || undefined})))).flat()
     : null
 
   return (

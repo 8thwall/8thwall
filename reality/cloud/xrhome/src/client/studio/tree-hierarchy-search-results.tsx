@@ -1,6 +1,6 @@
 import type {GraphComponent, GraphObject, Space} from '@ecs/shared/scene-graph'
 import React from 'react'
-import {TFunction, useTranslation} from 'react-i18next'
+import {type TFunction, useTranslation} from 'react-i18next'
 import type {DeepReadonly} from 'ts-essentials'
 
 import {hexColorWithAlpha} from '../../shared/colors'
@@ -110,7 +110,7 @@ const TREE_HIERARCHY_FILTERS = [
     isType: (object: DeepReadonly<GraphObject>) => !(object?.geometry || object?.gltfModel) &&
       !object?.audio && !object?.light,
   },
-]
+] as const
 
 // Checks if an object is valid to appear in search given current state
 // E.g. if user is filtering out all mesh objects, mesh objects are not

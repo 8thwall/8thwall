@@ -1,6 +1,6 @@
 import React from 'react'
 
-import {useTranslation} from 'react-i18next'
+import {TFuncKey, useTranslation} from 'react-i18next'
 
 import type {AdditionalAssetData} from '../../editor/asset-preview-types'
 
@@ -421,7 +421,9 @@ interface ICustomImagePreview {
 
 const CustomImagePreview: React.FC<ICustomImagePreview> = ({src, onMoreData, onAssetLoad}) => {
   const [imageData, setImageData] = React.useState<ImagePreviewData>(NO_DATA)
-  const [errorKey, setErrorKey] = React.useState('')
+  const [errorKey, setErrorKey] = React.useState<
+    TFuncKey<'cloud-studio-pages'> | ''
+  >('')
   const {t} = useTranslation(['cloud-studio-pages'])
 
   const classes = useStyles()

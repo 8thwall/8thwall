@@ -1,5 +1,5 @@
 import React from 'react'
-import {useTranslation} from 'react-i18next'
+import {TFuncKey, useTranslation} from 'react-i18next'
 
 import type {DropdownOption} from '../../ui/components/standard-dropdown-field'
 import {
@@ -42,8 +42,8 @@ const useStyles = createThemedStyles(theme => ({
 }))
 
 interface IModelOption {
-  nameKey: string
-  descriptionKey: string
+  nameKey: TFuncKey<'asset-lab'>
+  descriptionKey: TFuncKey<'asset-lab'>
   costRange: string
   selected?: boolean
 }

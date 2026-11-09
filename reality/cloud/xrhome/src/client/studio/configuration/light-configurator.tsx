@@ -35,7 +35,7 @@ const SHADOW_QUALITIES = [
   {value: 'low', content: 'light_configurator.shadow_quality.option.low'},
   {value: 'medium', content: 'light_configurator.shadow_quality.option.medium'},
   {value: 'high', content: 'light_configurator.shadow_quality.option.high'},
-]
+] as const
 
 type LightConfig = DeepReadonly<Light> | undefined
 
