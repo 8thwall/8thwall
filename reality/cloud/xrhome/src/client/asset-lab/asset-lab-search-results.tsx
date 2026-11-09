@@ -33,10 +33,10 @@ const useUpdateAssetLabSearchResults = (
     // Note(Dale): Potentially we could use a deep comparison here, but for now
     // we just check if the length of the ids has changed.
     if (prevIds && ids && prevIds.length === ids.length &&
-        prevSearchText === searchText &&
-        Array.isArray(prevFilters) &&
-        prevFilters.length === filters.length &&
-        prevFilters.every((filter, index) => filter === filters[index])
+      prevSearchText === searchText &&
+      Array.isArray(prevFilters) &&
+      prevFilters.length === filters.length &&
+      prevFilters.every((filter, index) => filter === filters[index])
     ) {
       return
     }
@@ -71,7 +71,7 @@ const useUpdateAssetLabSearchResults = (
   return {
     loading,
     filterBy: (ASSET_LAB_FILTERS.find(f => f.type === filters[0])?.label) ||
-     'asset_lab.search_bar.filter_by_all',
+      'asset_lab.search_bar.filter_by_all',
   }
 }
 

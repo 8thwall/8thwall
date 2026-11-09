@@ -237,7 +237,7 @@ const AssetLabContainer: React.FC<IAssetLabContainer> = ({isModal}) => {
           <div className={classes.noWorkflow}>
             {t('asset_lab.generate.no_workflow')}
           </div>
-      }
+        }
         {mode === 'model' && <AssetLabModelGen />}
         {mode === 'animation' && <AssetLabAnimationGen />}
         {mode === 'detailView' && <AssetLabDetailView />}
