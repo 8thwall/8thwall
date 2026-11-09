@@ -123,7 +123,7 @@ const ImageTargetUploadInput: React.FC<IImageTargetUploadInput> = ({
       )
 
       const cylinderSideLength = widerTargetCircumference *
-          (unconifiedHeight / unconifiedWidth)
+        (unconifiedHeight / unconifiedWidth)
 
       const coniness = getConinessForRadii(topRadius, bottomRadius)
 

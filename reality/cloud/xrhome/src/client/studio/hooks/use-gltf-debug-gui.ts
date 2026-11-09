@@ -1,7 +1,7 @@
 import React from 'react'
 import {useTranslation} from 'react-i18next'
 import {useThree} from '@react-three/fiber'
-import GUI, {Controller} from 'lil-gui'
+import {Controller, GUI} from 'lil-gui'
 import {AnimationMixer, Clock, Object3D} from 'three'
 import {ENV_MAP_PRESETS} from '@ecs/shared/environment-maps'
 
