@@ -1,5 +1,5 @@
 import React from 'react'
-import {TFuncKey, useTranslation} from 'react-i18next'
+import {useTranslation} from 'react-i18next'
 import {useDispatch} from 'react-redux'
 
 import {createNaeProjectUrl} from '../../../../shared/hosting-urls'
@@ -87,19 +87,17 @@ const EXPORT_TYPE_DESCRIPTION_KEYS = {
   zip: 'editor_page.export_modal.build_type.zip_description',
 } as const
 
-type NativePlatform = Extract<HtmlShell, 'android' | 'ios'>
-const PUBLISH_HEADLINE_FIRST_KEYS: Record<
-  NativePlatform, TFuncKey<'cloud-editor-pages'>
-> = {
+const PUBLISH_HEADLINE_FIRST_KEYS = {
   android: 'editor_page.native_publish_modal.publish_headline_first.android',
   ios: 'editor_page.native_publish_modal.publish_headline_first.ios',
-}
-const PUBLISH_HEADLINE_CONFIGURE_KEYS: Record<
-  NativePlatform, TFuncKey<'cloud-editor-pages'>
-> = {
+} as const
+
+const PUBLISH_HEADLINE_CONFIGURE_KEYS = {
   android: 'editor_page.native_publish_modal.publish_headline_configure.android',
   ios: 'editor_page.native_publish_modal.publish_headline_configure.ios',
-}
+} as const
+
+type NativePlatform = keyof typeof PUBLISH_HEADLINE_FIRST_KEYS
 
 interface IExportFlow {
   onClose: () => void
