@@ -144,7 +144,6 @@ const IGNORED_PATHS = [
   '/src/shared/globals.d.ts',
   '/src/shared/module/',
   '/src/shared/nae/',
-  '/src/shared/react-i18n.d.ts',
   '/src/shared/react.d.ts',
   '/src/shared/static.d.ts',
   '/src/shared/studio/',
