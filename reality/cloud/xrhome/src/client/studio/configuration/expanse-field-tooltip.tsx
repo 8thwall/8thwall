@@ -1,5 +1,5 @@
 import React from 'react'
-import {TranslationKey, useTranslation} from 'react-i18next'
+import {TFuncKey, useTranslation} from 'react-i18next'
 
 import type {EditorTooltipData, PropertyEntry} from '@ecs/shared/tooltip-types'
 
@@ -13,13 +13,13 @@ import {Tooltip} from '../../ui/components/tooltip'
 const TOOLTIP_DATA = RAW_TOOLTIP_DATA satisfies EditorTooltipData
 
 type TooltipProperty = PropertyEntry & {
-  textKey: TranslationKey<'studio-tooltips'>
+  textKey: TFuncKey<'studio-tooltips'>
 }
 
 type TooltipData = {
   accessor: string
   link: string
-  textKey: TranslationKey<'studio-tooltips'>
+  textKey: TFuncKey<'studio-tooltips'>
   properties: TooltipProperty[]
 }
 

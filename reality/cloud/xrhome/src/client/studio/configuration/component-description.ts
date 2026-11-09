@@ -1,6 +1,6 @@
-import type {TranslationKey} from 'react-i18next'
+import type {TFuncKey} from 'react-i18next'
 
-const COMPONENT_DESCRIPTION: Record<string, TranslationKey<'cloud-studio-pages'>> = {
+const COMPONENT_DESCRIPTION: Record<string, TFuncKey<'cloud-studio-pages'>> = {
   'position-animation': 'component_description.position_animation',
   'scale-animation': 'component_description.scale_animation',
   'custom-vec3-animation': 'component_description.custom_vec3_animation',

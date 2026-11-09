@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react'
 import {createUseStyles} from 'react-jss'
-import {TranslationKey, useTranslation} from 'react-i18next'
+import {TFuncKey, useTranslation} from 'react-i18next'
 
 import {useEnclosedApp} from '../apps/enclosed-app-context'
 import {useSelector} from '../hooks'
@@ -65,7 +65,7 @@ const useStyles = createUseStyles({
 
 type GeometryFilter = {
   type: ImageTargetType
-  label: TranslationKey<'cloud-studio-pages'>
+  label: TFuncKey<'cloud-studio-pages'>
 }
 const GEOMETRY_FILTERS: GeometryFilter[] = [{
   type: 'PLANAR',
@@ -80,7 +80,7 @@ const GEOMETRY_FILTERS: GeometryFilter[] = [{
 
 type FlagFilter = {
   type: ImageTargetFilterFlag
-  label: TranslationKey<'cloud-studio-pages'>
+  label: TFuncKey<'cloud-studio-pages'>
 }
 const FLAG_FILTERS: FlagFilter[] = [{
   type: 'hasMetadata',

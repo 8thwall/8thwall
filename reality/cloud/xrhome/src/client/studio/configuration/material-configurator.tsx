@@ -1,6 +1,6 @@
 import React from 'react'
 import type {DeepReadonly} from 'ts-essentials'
-import {TranslationKey, useTranslation} from 'react-i18next'
+import {TFuncKey, useTranslation} from 'react-i18next'
 
 import type {
   BasicMaterial, Material, MaterialBlending, Resource, TextureFiltering, Side, TextureWrap,
@@ -198,7 +198,7 @@ interface IMaterialConfigurator {
 
 type MaterialTypeOption = {
   value: Material['type']
-  content: TranslationKey<'cloud-studio-pages'>
+  content: TFuncKey<'cloud-studio-pages'>
   a8: string
 }
 

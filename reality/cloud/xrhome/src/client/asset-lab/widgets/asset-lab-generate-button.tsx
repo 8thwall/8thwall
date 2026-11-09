@@ -1,5 +1,5 @@
 import React from 'react'
-import {TranslationKey, useTranslation} from 'react-i18next'
+import {TFuncKey, useTranslation} from 'react-i18next'
 import {createUseStyles} from 'react-jss'
 
 import {SelectMenu} from '../../studio/ui/select-menu'
@@ -27,7 +27,7 @@ const AssetLabGenerateButton = () => {
   const assetLabCtx = useAssetLabStateContext()
   const classes = useStyles()
 
-  const makeOptionContent = (icon: IconStroke, label: TranslationKey<'asset-lab'>) => (
+  const makeOptionContent = (icon: IconStroke, label: TFuncKey<'asset-lab'>) => (
     <span className={classes.optionWithIcon}><Icon stroke={icon} inline />{t(label)}...</span>
   )
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import type {DeepReadonly} from 'ts-essentials'
-import {TranslationKey, useTranslation} from 'react-i18next'
+import {TFuncKey, useTranslation} from 'react-i18next'
 
 import {FloatingMenuButton} from '../../ui/components/floating-menu-button'
 import {Icon, IconStroke} from '../../ui/components/icon'
@@ -44,8 +44,8 @@ type SubMenuItemBase = {
 
 type SubMenuItem = SubMenuItemBase & (
   | {content: string, ns?: never}
-  | {content: TranslationKey<'cloud-studio-pages'>, ns: 'cloud-studio-pages'}
-  | {content: TranslationKey<'common'>, ns: 'common'}
+  | {content: TFuncKey<'cloud-studio-pages'>, ns: 'cloud-studio-pages'}
+  | {content: TFuncKey<'common'>, ns: 'common'}
 )
 
 type SubmenuContentOptions = {
@@ -54,8 +54,8 @@ type SubmenuContentOptions = {
 }
 
 type SubMenuCategory = {
-  parent: TranslationKey<'cloud-studio-pages'> | null
-  value: TranslationKey<'cloud-studio-pages'> | null
+  parent: TFuncKey<'cloud-studio-pages'> | null
+  value: TFuncKey<'cloud-studio-pages'> | null
   options?: DeepReadonly<SubMenuItem[]>
   renderAdditionalContent?: (options: SubmenuContentOptions) => React.ReactNode
 }

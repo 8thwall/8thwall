@@ -1,4 +1,4 @@
-import type {TFunction, TranslationKey} from 'react-i18next'
+import type {TFunction, TFuncKey} from 'react-i18next'
 
 import type {
   FalAiFluxKontext, ImageToImage, ImageToImageGpt,
@@ -34,8 +34,8 @@ interface ModelDropdownOption {
   modelId: ToImageModelIds | ToMeshModelIds | ToAnimModelIds
   // A string so we can display a range, e.g. 4.5+
   costRange: string
-  nameKey: TranslationKey<'asset-lab'>
-  descriptionKey: TranslationKey<'asset-lab'>
+  nameKey: TFuncKey<'asset-lab'>
+  descriptionKey: TFuncKey<'asset-lab'>
 }
 
 const ImageModelOptions: ModelDropdownOption[] = [
@@ -145,7 +145,7 @@ type ModelAttribute = {
   min?: number
   max?: number
   step?: number
-  label?: TranslationKey<'asset-lab'>
+  label?: TFuncKey<'asset-lab'>
 }
 const ModelAttributeDefaults: Partial<
   Record<keyof ImageToMeshHunyuanBase |
@@ -296,7 +296,7 @@ const AllModelToDescription = {
   ...AnimModelToDescription,
 }
 type Options = {value: string, content: string}[]
-type UntranslatedOptions = {value: string, content: TranslationKey<'asset-lab'>}[]
+type UntranslatedOptions = {value: string, content: TFuncKey<'asset-lab'>}[]
 const WorkflowDropdownOptions: UntranslatedOptions = [
   {value: 'gen-image', content: 'asset_lab.workflow.image'},
   {value: 'gen-3d-model', content: 'asset_lab.workflow.model'},

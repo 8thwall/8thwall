@@ -1,5 +1,5 @@
 import React from 'react'
-import {TranslationKey, useTranslation} from 'react-i18next'
+import {TFuncKey, useTranslation} from 'react-i18next'
 
 import {
   validatePermissionUsageDescriptionUtil,
@@ -173,7 +173,7 @@ const PERMISSION_ICONS: Record<IosAvailablePermissions, IconStroke> = {
 } as const
 
 const PERMISSION_NAMES: Record<
-  IosAvailablePermissions, TranslationKey<'cloud-editor-pages'>
+  IosAvailablePermissions, TFuncKey<'cloud-editor-pages'>
 > = {
   camera: 'editor_page.export_modal.permissions.camera',
   location: 'editor_page.export_modal.permissions.location',

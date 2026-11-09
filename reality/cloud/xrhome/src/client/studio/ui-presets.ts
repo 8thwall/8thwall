@@ -3,7 +3,7 @@ import type {
 } from '@ecs/shared/scene-graph'
 
 import type {DeepReadonly} from 'ts-essentials'
-import type {TranslationKey} from 'react-i18next'
+import type {TFuncKey} from 'react-i18next'
 
 import {EIGHTH_WALL_ICON_URL, WHITE_GRAY_TILES_URL} from '../../shared/studio/cdn-assets'
 
@@ -17,14 +17,14 @@ import {getNextChildOrder} from './reparent-object'
 type UiPresetType = 'frame' | 'button' | 'text' | 'image'
 
 type UiPresetChild = {
-  nameKey: TranslationKey<'cloud-studio-pages'>
+  nameKey: TFuncKey<'cloud-studio-pages'>
   ui: UiGraphSettings
   position?: [number, number, number]
 }
 
 type UiPreset = {
   type: UiPresetType
-  nameKey: TranslationKey<'cloud-studio-pages'>
+  nameKey: TFuncKey<'cloud-studio-pages'>
   ui: UiGraphSettings
   children?: Array<UiPresetChild>
 }

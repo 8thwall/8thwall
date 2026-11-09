@@ -1,5 +1,5 @@
 import React from 'react'
-import {TranslationKey, useTranslation} from 'react-i18next'
+import {TFuncKey, useTranslation} from 'react-i18next'
 
 import type {Vec3Tuple} from '@ecs/shared/scene-graph'
 import {BASIC} from '@ecs/shared/environment-maps'
@@ -277,7 +277,7 @@ const BeforeAfterBox: React.FC<IBeforeAfterBox> = ({before, after}) => {
     }
   }
   const renderBeforeAfterRow = (
-    tLabel: TranslationKey<'asset-lab'>, beforeAfter: BeforeAfterPair
+    tLabel: TFuncKey<'asset-lab'>, beforeAfter: BeforeAfterPair
   ) => beforeAfter && (
     <div>
       {t(tLabel)}:&nbsp;

@@ -1,5 +1,5 @@
 import React from 'react'
-import {TranslationKey, useTranslation} from 'react-i18next'
+import {TFuncKey, useTranslation} from 'react-i18next'
 
 import {FloatingTrayModal} from '../../ui/components/floating-tray-modal'
 import {createThemedStyles} from '../../ui/theme'
@@ -82,7 +82,7 @@ const useStyles = createThemedStyles(theme => ({
 }))
 
 interface IActionRow {
-  label: TranslationKey<'app-pages'>
+  label: TFuncKey<'app-pages'>
   action: string
 }
 

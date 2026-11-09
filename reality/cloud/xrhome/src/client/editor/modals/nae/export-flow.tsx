@@ -1,5 +1,5 @@
 import React from 'react'
-import {TranslationKey, useTranslation} from 'react-i18next'
+import {TFuncKey, useTranslation} from 'react-i18next'
 import {useDispatch} from 'react-redux'
 
 import {createNaeProjectUrl} from '../../../../shared/hosting-urls'
@@ -89,13 +89,13 @@ const EXPORT_TYPE_DESCRIPTION_KEYS = {
 
 type NativePlatform = Extract<HtmlShell, 'android' | 'ios'>
 const PUBLISH_HEADLINE_FIRST_KEYS: Record<
-  NativePlatform, TranslationKey<'cloud-editor-pages'>
+  NativePlatform, TFuncKey<'cloud-editor-pages'>
 > = {
   android: 'editor_page.native_publish_modal.publish_headline_first.android',
   ios: 'editor_page.native_publish_modal.publish_headline_first.ios',
 }
 const PUBLISH_HEADLINE_CONFIGURE_KEYS: Record<
-  NativePlatform, TranslationKey<'cloud-editor-pages'>
+  NativePlatform, TFuncKey<'cloud-editor-pages'>
 > = {
   android: 'editor_page.native_publish_modal.publish_headline_configure.android',
   ios: 'editor_page.native_publish_modal.publish_headline_configure.ios',

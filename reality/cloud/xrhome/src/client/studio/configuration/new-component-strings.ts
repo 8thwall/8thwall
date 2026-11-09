@@ -1,10 +1,10 @@
 import type {DeepReadonly} from 'ts-essentials'
-import type {TranslationKey} from 'react-i18next'
+import type {TFuncKey} from 'react-i18next'
 
 import type {NewComponentValue} from '../hooks/available-components'
 
 type NewComponentOption = {
-  content: TranslationKey<'cloud-studio-pages'>
+  content: TFuncKey<'cloud-studio-pages'>
   value: NewComponentValue
   ns: 'cloud-studio-pages'
 }
