@@ -1,6 +1,5 @@
 import React from 'react'
-import type {TFunction} from 'react-i18next'
-import {Trans, useTranslation} from 'react-i18next'
+import {TFunction, TFuncKey, Trans, useTranslation} from 'react-i18next'
 
 // NOTE(christoph): This file contains demo code that validates that our react-i18next types
 // enforce the desired rules.
@@ -31,6 +30,13 @@ const ReactI18nTypeTest: React.FC = () => {
   // Can assign out optional namespaces
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const _justCommonT: TFunction<'cloud-studio-pages'> = studioCommonT
+
+  // @ts-expect-error cannot assign incompatible TFuncKey
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const _exampleKey: TFuncKey<'cloud-studio-pages'> = 'something'
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const _exampleCommonKey: TFuncKey<'common'> = 'button.activate'
 
   return (
     <>

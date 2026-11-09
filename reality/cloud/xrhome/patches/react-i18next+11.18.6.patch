@@ -1,8 +1,8 @@
 diff --git a/node_modules/react-i18next/ts4.1/index.d.ts b/node_modules/react-i18next/ts4.1/index.d.ts
-index 429e2fe..c659108 100644
+index 429e2fe..924b0a9 100644
 --- a/node_modules/react-i18next/ts4.1/index.d.ts
 +++ b/node_modules/react-i18next/ts4.1/index.d.ts
-@@ -239,25 +239,9 @@ export type TFuncReturn<
+@@ -239,25 +239,8 @@ export type TFuncReturn<
      : NormalizeReturn<T[N], KeysWithSeparator<TKPrefix, TKeys>>
    : Fallback<TDefaultResult>;
  
@@ -30,7 +30,7 @@ index 429e2fe..c659108 100644
  
  type TransChild = React.ReactNode | Record<string, unknown>;
  export type TransProps<
-@@ -308,13 +292,7 @@ export type UseTranslationResponse<N extends Namespace, TKPrefix = undefined> =
+@@ -308,13 +291,7 @@ export type UseTranslationResponse<N extends Namespace, TKPrefix = undefined> =
    ready: boolean;
  };
  
