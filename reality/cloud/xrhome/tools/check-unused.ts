@@ -126,6 +126,8 @@ const ENTRY_POINTS = [
   'src/client/studio/worker/gltf-transform-worker.ts',
   'gulpfile.ts',
   'tools/check-unused.ts',
+  'src/shared/react-i18n.d.ts',
+  'src/shared/react-i18n-test.tsx',
   'src/client/ui/form.tsx',
   'src/shared/run-queue.ts',
   'src/shared/registry.ts',
