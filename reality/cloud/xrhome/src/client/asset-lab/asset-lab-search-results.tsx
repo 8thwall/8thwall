@@ -1,4 +1,5 @@
 import React from 'react'
+import type {TranslationKey} from 'react-i18next'
 
 import {useSelector} from '../hooks'
 import {useChangeEffect} from '../hooks/use-change-effect'
@@ -17,13 +18,13 @@ const ASSET_LAB_FILTERS = [
     type: 'ANIMATION',
     label: 'asset_lab.search_bar.option.animation',
   },
-]
+] as const
 
 const useUpdateAssetLabSearchResults = (
   searchText: string,
   filters: string[],
   ids: readonly string[]
-): {loading: boolean, filterBy: string} => {
+): {loading: boolean, filterBy: TranslationKey<'asset-lab'>} => {
   const assetGenerations = useSelector(s => s.assetLab.assetGenerations)
   const assetRequests = useSelector(s => s.assetLab.assetRequests)
   const [loading, setLoading] = React.useState(false)

@@ -1,5 +1,5 @@
 import type React from 'react'
-import type {TFunction} from 'react-i18next'
+import type {TFunction, TranslationKey} from 'react-i18next'
 
 import type {
   AppleSigningType,
@@ -140,7 +140,7 @@ const validateScreenOrientation =
   (orientation: string) => SCREEN_ORIENTATION_OPTIONS.some(option => option.value === orientation)
 
 const IOS_SIGNING_TYPE_OPTIONS: readonly {
-  translationValueKey: string
+  translationValueKey: TranslationKey<'cloud-editor-pages'>
   value: AppleSigningType
 }[] = [
   {

@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react'
 import {createUseStyles} from 'react-jss'
-import {useTranslation} from 'react-i18next'
+import {type TranslationKey, useTranslation} from 'react-i18next'
 
 import {useEnclosedApp} from '../apps/enclosed-app-context'
 import {useSelector} from '../hooks'
@@ -63,7 +63,10 @@ const useStyles = createUseStyles({
   },
 })
 
-type GeometryFilter = {type: ImageTargetType, label: string}
+type GeometryFilter = {
+  type: ImageTargetType
+  label: TranslationKey<'cloud-studio-pages'>
+}
 const GEOMETRY_FILTERS: GeometryFilter[] = [{
   type: 'PLANAR',
   label: 'file_browser.image_targets.flat',
@@ -77,7 +80,7 @@ const GEOMETRY_FILTERS: GeometryFilter[] = [{
 
 type FlagFilter = {
   type: ImageTargetFilterFlag
-  label: string
+  label: TranslationKey<'cloud-studio-pages'>
 }
 const FLAG_FILTERS: FlagFilter[] = [{
   type: 'hasMetadata',

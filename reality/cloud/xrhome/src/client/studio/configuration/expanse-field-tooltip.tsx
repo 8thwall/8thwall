@@ -1,5 +1,5 @@
 import React from 'react'
-import {useTranslation} from 'react-i18next'
+import {type TranslationKey, useTranslation} from 'react-i18next'
 
 import type {EditorTooltipData, PropertyEntry} from '@ecs/shared/tooltip-types'
 
@@ -10,13 +10,17 @@ import {StandardLink} from '../../ui/components/standard-link'
 import {useScenePathContext} from '../scene-path-context'
 import {Tooltip} from '../../ui/components/tooltip'
 
-const TOOLTIP_DATA: EditorTooltipData = RAW_TOOLTIP_DATA
+const TOOLTIP_DATA = RAW_TOOLTIP_DATA satisfies EditorTooltipData
+
+type TooltipProperty = PropertyEntry & {
+  textKey: TranslationKey<'studio-tooltips'>
+}
 
 type TooltipData = {
   accessor: string
   link: string
-  textKey: string
-  properties: Array<PropertyEntry>
+  textKey: TranslationKey<'studio-tooltips'>
+  properties: TooltipProperty[]
 }
 
 const makeExampleValue = (property: PropertyEntry) => {

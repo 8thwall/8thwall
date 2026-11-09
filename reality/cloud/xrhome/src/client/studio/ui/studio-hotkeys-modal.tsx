@@ -1,5 +1,5 @@
 import React from 'react'
-import {useTranslation} from 'react-i18next'
+import {type TranslationKey, useTranslation} from 'react-i18next'
 
 import {FloatingTrayModal} from '../../ui/components/floating-tray-modal'
 import {createThemedStyles} from '../../ui/theme'
@@ -82,9 +82,13 @@ const useStyles = createThemedStyles(theme => ({
 }))
 
 interface IActionRow {
-  label: string
+  label: TranslationKey<'app-pages'>
   action: string
 }
+
+const objectKeys = <T extends object>(object: T): Array<keyof T> => (
+  Object.keys(object) as Array<keyof T>
+)
 
 const ActionRow: React.FC<IActionRow> = ({label, action}) => {
   const classes = useStyles()
@@ -148,13 +152,17 @@ const StudioHotkeysModal: React.FC<IStudioHotkeysModal> = ({
             {isMacOs ? 'macOS/iPadOS' : 'Windows/Linux'}
           </div>
           <div className={classes.groupContainer}>
-            {Object.entries(categories).map(([categoryName, category]) => (
+            {objectKeys(categories).map(categoryName => (
               <div className={classes.group} key={categoryName}>
                 <div className={classes.groupHeading}>{t(categoryName)}</div>
-                {Object.entries(category).map(
-                  ([action, shortcut]) => (
-                    shortcut[os]
-                      ? <ActionRow key={action} label={action} action={shortcut[os]} />
+                {objectKeys(categories[categoryName]).map(
+                  action => (
+                    categories[categoryName][action][os]
+                      ? <ActionRow
+                          key={action}
+                          label={action}
+                          action={categories[categoryName][action][os]}
+                      />
                       : null
                   )
                 )}

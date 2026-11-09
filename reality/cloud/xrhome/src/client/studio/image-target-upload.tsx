@@ -1,6 +1,6 @@
 import React from 'react'
 import {createUseStyles} from 'react-jss'
-import {useTranslation} from 'react-i18next'
+import {type TranslationKey, useTranslation} from 'react-i18next'
 
 import type {CropResult} from '@repo/reality/shared/desktop/image-target-api'
 
@@ -265,7 +265,7 @@ const useImageTargetUpload = (): {
     inputRefs[type]?.current?.click()
   }
 
-  const createAddOption = (label: string, stroke: IconStroke) => (
+  const createAddOption = (label: TranslationKey<'cloud-studio-pages'>, stroke: IconStroke) => (
     <div className={classes.addOption}>
       {t(label)}
       <Icon stroke={stroke} />

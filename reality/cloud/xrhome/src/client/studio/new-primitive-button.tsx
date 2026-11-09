@@ -1,6 +1,6 @@
 import React from 'react'
 import type {GeometryType, GraphObject, LightType} from '@ecs/shared/scene-graph'
-import {TFunction, useTranslation} from 'react-i18next'
+import {TFunction, type TranslationKey, useTranslation} from 'react-i18next'
 import {createUseStyles} from 'react-jss'
 
 import type {StudioStateContext} from './studio-state-context'
@@ -84,7 +84,9 @@ const createNewPrimitiveOptions = (
   newObjectParentId: string, ctx: SceneContext, stateCtx: StudioStateContext,
   derivedScene: DerivedScene, t: TFunction<'cloud-studio-pages'>, makePrefab?: boolean
 ) => {
-  const handleNewPrimitive = (type: string, label?: string) => {
+  const handleNewPrimitive = (
+    type: string, label?: TranslationKey<'cloud-studio-pages'>
+  ) => {
     let newEntity: GraphObject
     if (type === 'empty') {
       newEntity = makeEmptyObject(newObjectParentId)

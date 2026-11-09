@@ -1,6 +1,6 @@
 import React from 'react'
 import type {DeepReadonly} from 'ts-essentials'
-import {useTranslation} from 'react-i18next'
+import {type TranslationKey, useTranslation} from 'react-i18next'
 
 import {FloatingMenuButton} from '../../ui/components/floating-menu-button'
 import {Icon, IconStroke} from '../../ui/components/icon'
@@ -37,12 +37,16 @@ const useStyles = createThemedStyles(theme => ({
   },
 }))
 
-type SubMenuItem = {
+type SubMenuItemBase = {
   value: string
-  content: string
   icon?: IconStroke
-  ns?: string
 }
+
+type SubMenuItem = SubMenuItemBase & (
+  | {content: string, ns?: never}
+  | {content: TranslationKey<'cloud-studio-pages'>, ns: 'cloud-studio-pages'}
+  | {content: TranslationKey<'common'>, ns: 'common'}
+)
 
 type SubmenuContentOptions = {
   onCollapse: () => void
@@ -50,8 +54,8 @@ type SubmenuContentOptions = {
 }
 
 type SubMenuCategory = {
-  parent: string | null
-  value: string
+  parent: TranslationKey<'cloud-studio-pages'> | null
+  value: TranslationKey<'cloud-studio-pages'> | null
   options?: DeepReadonly<SubMenuItem[]>
   renderAdditionalContent?: (options: SubmenuContentOptions) => React.ReactNode
 }
@@ -102,7 +106,7 @@ const SubMenuOptionsListing: React.FC<ISubMenuOptionsListing> = ({
             }}
           >
             <div className={classes.subMenuOption}>
-              {option.ns ? t(option.content.toString(), {ns: option.ns}) : option.content}
+              {option.ns ? t(option.content, {ns: option.ns}) : option.content}
               {option.icon && <Icon stroke={option.icon} />}
             </div>
           </FloatingMenuButton>
@@ -124,7 +128,9 @@ const SubMenuView: React.FC<ISubMenuView> = (
 ) => {
   const classes = useStyles()
   const {t} = useTranslation(['cloud-studio-pages'])
-  const [currentCategoryValue, setCurrentCategoryValue] = React.useState<string | null>(null)
+  const [currentCategoryValue, setCurrentCategoryValue] = React.useState<
+    SubMenuCategory['value']
+  >(null)
   const currentCategory = optionCategories.find(category => category.value === currentCategoryValue)
   const categories = optionCategories
     .filter(category => category.parent === (currentCategoryValue || null) &&

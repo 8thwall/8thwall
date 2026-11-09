@@ -1,5 +1,5 @@
 import React from 'react'
-import {useTranslation} from 'react-i18next'
+import {type TranslationKey, useTranslation} from 'react-i18next'
 
 import {
   validatePermissionUsageDescriptionUtil,
@@ -172,7 +172,9 @@ const PERMISSION_ICONS: Record<IosAvailablePermissions, IconStroke> = {
   microphone: 'microphone',
 } as const
 
-const PERMISSION_NAMES: Record<IosAvailablePermissions, string> = {
+const PERMISSION_NAMES: Record<
+  IosAvailablePermissions, TranslationKey<'cloud-editor-pages'>
+> = {
   camera: 'editor_page.export_modal.permissions.camera',
   location: 'editor_page.export_modal.permissions.location',
   microphone: 'editor_page.export_modal.permissions.microphone',

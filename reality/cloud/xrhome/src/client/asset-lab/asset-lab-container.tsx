@@ -1,7 +1,7 @@
 /* eslint-disable local-rules/hardcoded-copy */
 // TODO(dat): Remove this once we are ready to ship this.
 import React from 'react'
-import {useTranslation} from 'react-i18next'
+import {type TranslationKey, useTranslation} from 'react-i18next'
 
 import {AssetLabMode, AssetLabWorkflow, useAssetLabStateContext} from './asset-lab-context'
 import {ModeButton, MODE_BUTTON_HEIGHT_REM} from './widgets/mode-button'
@@ -148,7 +148,8 @@ const AssetLabContainer: React.FC<IAssetLabContainer> = ({isModal}) => {
   // TODO(dat): Replace these structure with components that reflects the design.
 
   const renderModeButton = (
-    targetMode: AssetLabMode, label: string, icon: IconStroke, className?: string
+    targetMode: AssetLabMode, label: TranslationKey<'asset-lab'>,
+    icon: IconStroke, className?: string
   ) => {
     const onClick = () => {
       if (mode === targetMode) {
