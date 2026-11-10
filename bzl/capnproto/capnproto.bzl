@@ -68,7 +68,7 @@ _capnp_src_gen = rule(
             executable = True,
             cfg = "exec",
             allow_single_file = True,
-            default = Label("//bzl/node:node"),
+            default = Label("@nodejs_host//:node_bin"),
         ),
         "capnpc_exe": attr.label(
             executable = True,
@@ -80,7 +80,6 @@ _capnp_src_gen = rule(
         "capnpc_plugin": attr.label(
             executable = True,
             cfg = "exec",
-            allow_single_file = True,
             mandatory = True,
             default = None,
         ),

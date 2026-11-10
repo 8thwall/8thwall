@@ -178,3 +178,12 @@ diff --git a/tensorflow/core/kernels/mlir_generated/build_defs.bzl b/tensorflow/
 +    "//tensorflow/lite:bzlmod_config.bzl",
      "if_gpu_is_configured",
  )
+diff --git a/tensorflow/lite/kernels/internal/BUILD b/tensorflow/lite/kernels/internal/BUILD
+--- a/tensorflow/lite/kernels/internal/BUILD
++++ b/tensorflow/lite/kernels/internal/BUILD
+@@ -233,7 +233,6 @@ selects.config_setting_group(
+         ":darwin_x86_64",
+         ":freebsd",
+-        ":windows",
+     ],
+ )

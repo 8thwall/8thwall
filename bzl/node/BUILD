@@ -59,8 +59,7 @@ node_tool_wrapper(
 genrule(
     name = "node-addons-hdrs",
     srcs = [
-        "@nodejs_host//:npm_files",
-        "@nodejs_host//:node_bin",
+        "@nodejs_headers//:headers",
     ],
     outs = [
         "node_api.h",
@@ -68,7 +67,7 @@ genrule(
         "js_native_api.h",
         "js_native_api_types.h",
     ],
-    cmd = "cp $$(dirname $$(dirname $(location @nodejs_host//:node_bin)))/include/node/*api*.h $(@D)/",
+    cmd = "cp $$(dirname $(location @nodejs_headers//:include/node/node_api.h))/*api*.h $(@D)/",
 )
 
 cc_library(
@@ -92,8 +91,7 @@ alias(
 genrule(
     name = "node-addons-extra-hdrs",
     srcs = [
-        "@nodejs_host//:npm_files",
-        "@nodejs_host//:node_bin",
+        "@nodejs_headers//:headers",
     ],
     outs = [
         "node.h",
@@ -164,7 +162,7 @@ genrule(
         "uv/version.h",
         "uv/win.h",
     ],
-    cmd = "rsync -Lr $$(dirname $$(dirname $(location @nodejs_host//:node_bin)))/include/node/* $(@D)/",
+    cmd = "rsync -Lr $$(dirname $(location @nodejs_headers//:include/node/node_api.h))/* $(@D)/",
 )
 
 cc_library(

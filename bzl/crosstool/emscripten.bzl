@@ -97,8 +97,11 @@ def _emscripten_toolchain_impl(repository_ctx):
     # toolchain from bazel to prevent slow-downs from importing the toolchain
     # into the sandbox for every action. This hash ensures that any files
     # changed in the toolchain will cause a cache-miss and recompilation.
+    bash = "bash"
+    if repository_ctx.os.name.lower().startswith("windows"):
+        bash = repository_ctx.os.environ.get("BAZEL_SH", "C:/Program Files/Git/bin/bash.exe")
     result = repository_ctx.execute([
-        "bash",
+        bash,
         "-c",
         "find -L . -type f -print0 | sort -z | xargs -0 sha1sum | sha1sum | cut -d \" \" -f 1",
     ])
@@ -110,6 +113,7 @@ def _emscripten_toolchain_impl(repository_ctx):
 
 emscripten_toolchain = repository_rule(
     implementation = _emscripten_toolchain_impl,
+    environ = ["BAZEL_SH"],
     attrs = {
         "version": attr.string(mandatory = True),
         "wasm_release_commit": attr.string(mandatory = True),

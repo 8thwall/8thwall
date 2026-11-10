@@ -67,6 +67,7 @@ def _shader_binary_impl(ctx):
         inputs = srcs.to_list(),
         executable = ctx.file._shadercc,
         tools = [
+            ctx.file._shadercc_script,
             ctx.file._validator,
             ctx.file._optimizer,
         ],
@@ -173,6 +174,10 @@ _shader_binary = rule(
             allow_single_file = True,
             executable = True,
             cfg = "exec",
+        ),
+        "_shadercc_script": attr.label(
+            default = Label("//bzl/shader:shadercc.sh"),
+            allow_single_file = True,
         ),
         "_crosstool": attr.label(
             default = Label("//third_party/spirvcross:spirv-cross"),

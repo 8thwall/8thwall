@@ -55,7 +55,11 @@ TEST_F(LevEventListenerTest, TestSimpleHelloWorldEvent) {
     EventFlag::READ | EventFlag::PERSIST,
     [dataString, listenSocketId, &invokeCount, &listener]() {
       std::unique_ptr<char[]> readBuffer(new char[sizeof(dataString)]);
+#ifdef _WIN32
+      recv(listenSocketId, readBuffer.get(), sizeof(dataString), 0);
+#else
       read(listenSocketId, readBuffer.get(), sizeof(dataString));
+#endif
       EXPECT_STREQ(dataString, readBuffer.get());
 
       ++invokeCount;
@@ -63,14 +67,23 @@ TEST_F(LevEventListenerTest, TestSimpleHelloWorldEvent) {
     });
 
   // Write data to the other socket
+#ifdef _WIN32
+  send(writeSocketId, dataString, sizeof(dataString), 0);
+#else
   write(writeSocketId, dataString, sizeof(dataString));
+#endif
 
   listener.wait();
 
   EXPECT_EQ(1, invokeCount);
   listener.removeFdEvent(listenSocketId);
+#ifdef _WIN32
+  closesocket(listenSocketId);
+  closesocket(writeSocketId);
+#else
   close(listenSocketId);
   close(writeSocketId);
+#endif
 }
 
 }  // namespace c8

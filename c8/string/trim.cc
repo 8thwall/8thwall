@@ -26,7 +26,7 @@ const std::regex TRAILING_LEADING_SPACE_REGEX(R"(^\s+|\s+$)");
 }  // namespace
 
 String strTrim(StringView str) {
-  return std::regex_replace(str.begin(), TRAILING_LEADING_SPACE_REGEX, "");
+  return std::regex_replace(String(str), TRAILING_LEADING_SPACE_REGEX, "");
 }
 
 }  // namespace c8

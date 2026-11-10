@@ -15,10 +15,21 @@ cc_library(
             "libplatform/**/*.cpp",
         ],
         exclude = [
+            "libplatform/*_posix.cpp",
+            "libplatform/**/*_posix.cpp",
             "libplatform/*_win32.cpp",
             "libplatform/**/*_win32.cpp",
         ],
-    ),
+    ) + select({
+        "@the8thwall//bzl/conditions:windows": glob([
+            "libplatform/*_win32.cpp",
+            "libplatform/**/*_win32.cpp",
+        ]),
+        "//conditions:default": glob([
+            "libplatform/*_posix.cpp",
+            "libplatform/**/*_posix.cpp",
+        ]),
+    }),
     hdrs = glob([
         "include/*.h",
         "include/**/*.h",

@@ -10,7 +10,13 @@ cc_library(
         "include/benchmark/benchmark.h",
         "include/benchmark/export.h",
     ],
-    copts = ["-DHAVE_POSIX_REGEX"],  # HAVE_STD_REGEX didn't work.
+    defines = select({
+        "@the8thwall//bzl/conditions:windows": [
+            "BENCHMARK_STATIC_DEFINE",
+            "HAVE_STD_REGEX",
+        ],
+        "//conditions:default": ["HAVE_POSIX_REGEX"],
+    }),
     includes = ["include"],
     strip_include_prefix = "include",
     visibility = ["//visibility:public"],
