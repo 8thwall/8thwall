@@ -113,13 +113,7 @@ const removeUnusedI18nStrings = async (
   }
 }
 
-if (process.argv[1] === __filename) {
-  const isDryRun = process.argv.includes('--dry-run')
-  process.argv.slice(2).filter(e => !e.startsWith('--')).map(
-    e => removeUnusedI18nStrings(e, XRHOME_SRC_PATH, isDryRun)
-  )
-}
-
-export {
-  searchKeysInCodebase,
-}
+const isDryRun = process.argv.includes('--dry-run')
+process.argv.slice(2).filter(e => !e.startsWith('--')).map(
+  e => removeUnusedI18nStrings(e, XRHOME_SRC_PATH, isDryRun)
+)
