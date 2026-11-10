@@ -75,7 +75,7 @@ const removeUnusedI18nStrings = async (
   jsonFilePath: string, codebaseDir: string, isDryRun: boolean
 ) => {
   if (EXCLUDED_TRANSLATION_FILES.has(path.basename(jsonFilePath))) {
-    console.log(`Skipping generated translation file ${jsonFilePath}.`)
+    console.log(`Skipping excluded translation file ${jsonFilePath}.`)
     return
   }
 
