@@ -9,8 +9,7 @@ import {AssetGenImageDrop} from './widgets/asset-gen-image-drop'
 import {useAssetLabStyles} from './asset-lab-styles'
 import {AssetLabImageModelDropdown} from './widgets/asset-lab-model-dropdown'
 import type {GenerateRequest} from '../../shared/genai/types/generate'
-import {RerollOrientation, ToImage} from '../../shared/genai/types/base'
-import {ImageStyle} from '../../shared/genai/types/base'
+import {RerollOrientation, ToImage, ImageStyle} from '../../shared/genai/types/base'
 import {SquareAsset, SquareAssetFwdRef} from './widgets/square-asset'
 import {AssetGenProgressIndicator} from './widgets/asset-gen-progress-indicator'
 import {useAssetLabStateContext} from './asset-lab-context'
@@ -102,7 +101,7 @@ const AssetLabImageGen = () => {
   const [assetReqToReroll, setAssetReqToReroll] = React.useState<AssetReqToReroll>({})
 
   const has4Results = assetGenerationsFromRequest?.length >= 4 ||
-   (assetGenerationsFromRequest?.length === 3 && !!frontViewGen)
+    (assetGenerationsFromRequest?.length === 3 && !!frontViewGen)
 
   const requestNum = Number.parseInt(numRequests, 10)
   const isRequests4 = requestNum >= 4
@@ -341,7 +340,7 @@ const AssetLabImageGen = () => {
   const requiresImage = modelsThatRequireImages.has(model)
 
   const cannotGenerate = creditStatus !== 'success' || prompt.trim().length < MIN_PROMPT_LEN ||
-   (requiresImage && !uuidOrFileInput) || isGenerating || isSubmitting
+    (requiresImage && !uuidOrFileInput) || isGenerating || isSubmitting
 
   const rerollProps = workflowParameters.has('has3d') && {
     generateReroll,
@@ -418,7 +417,7 @@ const AssetLabImageGen = () => {
                   }}
                   onDrop={(file) => { setUuidOrFileInput(file) }}
               />
-              }
+            }
           </div>
         }
         {modelParameters.has('aspectRatio') && workflowParameters.has('aspectRatio') &&
@@ -597,12 +596,12 @@ const AssetLabImageGen = () => {
                               ref={resultSquareRefs[frontViewGen ? idx + 1 : idx]}
                               onHoverContent={() => (
                                 genId &&
-                                  <AssetGenActionButtons
-                                    id={genId}
-                                    bottomRight={rerollProps &&
-                                      <AssetLabRerollButton {...rerollProps} inputIndex={idx} />
-                                    }
-                                  />
+                                <AssetGenActionButtons
+                                  id={genId}
+                                  bottomRight={rerollProps &&
+                                    <AssetLabRerollButton {...rerollProps} inputIndex={idx} />
+                                  }
+                                />
                               )}
                             >
                               <AssetGenProgressIndicator id={reqId} />
@@ -634,9 +633,9 @@ const AssetLabImageGen = () => {
               loading={isDownloading}
             >
               <Icon inline stroke='download' />&nbsp;
-              {t(`asset_lab.detail_view.download_asset${
-                assetGenerationsFromRequest?.length !== 1 ? 's' : ''
-              }`)}
+              {t(assetGenerationsFromRequest?.length !== 1
+                ? `asset_lab.detail_view.download_assets`
+                : `asset_lab.detail_view.download_asset`)}
             </AssetLabButton>
             {workflow === 'gen-image' && hasApp && (
               <AssetLabButton
@@ -662,7 +661,7 @@ const AssetLabImageGen = () => {
                       }
                       label={t('asset_lab.image_gen.generate_multi_view')}
                       type='TO_IMAGE'
-                    // Multi-view always uses gpt-image-1.
+                      // Multi-view always uses gpt-image-1.
                       modelId='gpt-image-1'
                       multiplier={MULTIVEW_COUNT_WITHOUT_FRONT}
                     />
@@ -736,7 +735,7 @@ const AssetLabImageGen = () => {
                             size={GRID_OF_SQUARES_ASSET_SIZE}
                             onHoverContent={() => <AssetGenActionButtons id={extraAssetGenUuid} />}
                           />
-                      }
+                        }
                         {assetGenIds.map(agId => (
                           <SquareAsset
                             key={agId}

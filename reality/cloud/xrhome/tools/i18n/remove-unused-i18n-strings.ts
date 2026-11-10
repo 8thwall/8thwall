@@ -8,23 +8,17 @@ const VALID_FILE_EXTENSIONS = ['.ts', '.js', '.jsx', '.tsx']
 
 // Path to the codebase directory
 const XRHOME_SRC_PATH = './src'
+const EXCLUDED_TRANSLATION_FILES = new Set([
+  'studio-tooltips.json',
+  'common.json',
+])
 
 type JsonData = Record<string, string>
 
 // Function to load JSON and extract all keys
 const loadJsonKeys = (jsonFilePath: string): {jsonData: JsonData, keys: string[]} => {
   const jsonData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'))
-
-  const extractKeys = (data: JsonData): string[] => {
-    const keys: string[] = []
-    for (const key of Object.keys(data)) {
-      keys.push(key)
-    }
-    return keys
-  }
-
-  const keys = extractKeys(jsonData)
-  return {jsonData, keys}
+  return {jsonData, keys: Object.keys(jsonData)}
 }
 
 // Function to search for JSON keys in the codebase
@@ -34,7 +28,10 @@ const searchKeysInCodebase = (keys: string[], codebaseDir: string): Set<string> 
   const searchFileForKeys = (filePath: string): void => {
     const fileContent = fs.readFileSync(filePath, 'utf-8')
     for (const key of keys) {
-      if (fileContent.includes(key)) {
+      const base = key.replace(/_(one|other)$/, '')
+      const lastDot = key.lastIndexOf('.')
+      const templatePrefix = lastDot === -1 ? undefined : `${key.slice(0, lastDot + 1)}\${`
+      if (fileContent.includes(base) || (templatePrefix && fileContent.includes(templatePrefix))) {
         matchedKeys.add(key)
       }
     }
@@ -75,9 +72,13 @@ const removeUnmatchedKeys = (
 
 // Main function to find unmatched keys and remove them from the JSON file
 const removeUnusedI18nStrings = async (
-  jsonFilePath: string, codebaseDir: string, dryRun: string
+  jsonFilePath: string, codebaseDir: string, isDryRun: boolean
 ) => {
-  const isDryRun = dryRun ? dryRun === 'true' : true
+  if (EXCLUDED_TRANSLATION_FILES.has(path.basename(jsonFilePath))) {
+    console.log(`Skipping excluded translation file ${jsonFilePath}.`)
+    return
+  }
+
   if (isDryRun) {
     console.log('\n***********************')
     console.log('** THIS IS A DRY RUN **')
@@ -105,11 +106,14 @@ const removeUnusedI18nStrings = async (
     const updatedJsonData = removeUnmatchedKeys(jsonData, unmatchedKeys)
 
     // Write the updated JSON back to the file
-    fs.writeFileSync(jsonFilePath, JSON.stringify(updatedJsonData, null, 2), 'utf-8')
+    fs.writeFileSync(jsonFilePath, `${JSON.stringify(updatedJsonData, null, 2)}\n`, 'utf-8')
     console.log(`Unmatched keys have been removed from ${jsonFilePath}.`)
   } else {
     console.log('All JSON keys are referenced in the codebase.')
   }
 }
 
-removeUnusedI18nStrings(process.argv[2], XRHOME_SRC_PATH, process.argv[3])
+const isDryRun = process.argv.includes('--dry-run')
+process.argv.slice(2).filter(e => !e.startsWith('--')).map(
+  e => removeUnusedI18nStrings(e, XRHOME_SRC_PATH, isDryRun)
+)

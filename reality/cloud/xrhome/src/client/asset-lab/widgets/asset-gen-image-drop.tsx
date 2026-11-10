@@ -149,7 +149,9 @@ const AssetGenImageDrop: React.FC<IAssetGenImageDrop> = ({
             <>
               <Icon stroke={isImageInputMode ? 'image' : 'meshCube'} size={2} />
               <span className={classes.imageDropLabel}>
-                {t(`asset_lab.drag_and_drop_${isImageInputMode ? 'image' : 'model'}_prompt`)}&nbsp;
+                {t(isImageInputMode
+                  ? 'asset_lab.drag_and_drop_image_prompt'
+                  : 'asset_lab.drag_and_drop_model_prompt')}&nbsp;
                 <label
                   className={classes.imageDropButton}
                   htmlFor={`${id}-input`}
