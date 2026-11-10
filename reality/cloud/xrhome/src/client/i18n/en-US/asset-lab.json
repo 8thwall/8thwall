@@ -131,8 +131,6 @@
   "asset_lab.model_optimizer.transforms": "Transforms",
   "asset_lab.model_optimizer.back": "Back",
   "asset_lab.model_optimizer.save_optimized_3d_model": "Save Optimized 3D Model",
-  "asset_lab.model_optimizer.download_optimized": "Download Optimized",
-  "asset_lab.model_optimizer.import_optimized_into_project": "Import Optimized into Project",
   "asset_lab.model_optimizer.draco_compression": "Draco Compression",
   "asset_lab.model_optimizer.optimizations": "Optimizations",
   "asset_lab.model_optimizer.smooth_shading": "Smooth Shading",
