@@ -5,8 +5,13 @@ import * as path from 'path'
 // Usage: ./remove-unused-i18n-strings.ts <json-file-path> <dry-run>
 
 const VALID_FILE_EXTENSIONS = ['.ts', '.js', '.jsx', '.tsx']
+
+// Path to the codebase directory
 const XRHOME_SRC_PATH = './src'
-const EXCLUDED_TRANSLATION_FILES = new Set(['studio-tooltips.json'])
+const EXCLUDED_TRANSLATION_FILES = new Set([
+  'studio-tooltips.json',
+  'common.json',
+])
 
 type JsonData = Record<string, string>
 
@@ -40,7 +45,7 @@ const searchKeysInCodebase = (keys: string[], codebaseDir: string): Set<string> 
 
       if (stat.isDirectory()) {
         // eslint-disable-next-line no-await-in-loop
-        walkDirectory(fullPath)
+        walkDirectory(fullPath)  // Recursively go through directories
       } else if (VALID_FILE_EXTENSIONS.includes(path.extname(file))) {
         // eslint-disable-next-line no-await-in-loop
         searchFileForKeys(fullPath)
@@ -65,15 +70,11 @@ const removeUnmatchedKeys = (
     }, {} as Record<string, string>)
 )
 
-const isTranslationFileExcluded = (jsonFilePath: string): boolean => (
-  EXCLUDED_TRANSLATION_FILES.has(path.basename(jsonFilePath))
-)
-
 // Main function to find unmatched keys and remove them from the JSON file
 const removeUnusedI18nStrings = async (
   jsonFilePath: string, codebaseDir: string, isDryRun: boolean
 ) => {
-  if (isTranslationFileExcluded(jsonFilePath)) {
+  if (EXCLUDED_TRANSLATION_FILES.has(path.basename(jsonFilePath))) {
     console.log(`Skipping generated translation file ${jsonFilePath}.`)
     return
   }
