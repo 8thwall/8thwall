@@ -1,3 +1,5 @@
+import {captureConfigMappings} from './components/recorder-components'
+
 const xrPrimitives = () => {
   const faceAnchorPrimitive = {
     defaultComponents: {
@@ -105,23 +107,7 @@ const xrPrimitives = () => {
     defaultComponents: {
       'xrextras-capture-config': {},
     },
-    mappings: {
-      'enable-end-card': 'xrextras-capture-config.enableEndCard',
-      'short-link': 'xrextras-capture-config.shortLink',
-      'cover-image-url': 'xrextras-capture-config.coverImageUrl',
-      'footer-image-url': 'xrextras-capture-config.footerImageUrl',
-      'max-duration-ms': 'xrextras-capture-config.maxDurationMs',
-      'end-card-call-to-action': 'xrextras-capture-config.endCardCallToAction',
-      'max-dimension': 'xrextras-capture-config.maxDimension',
-      'watermark-image-url': 'xrextras-capture-config.watermarkImageUrl',
-      'watermark-max-width': 'xrextras-capture-config.watermarkMaxWidth',
-      'watermark-max-height': 'xrextras-capture-config.watermarkMaxHeight',
-      'watermark-location': 'xrextras-capture-config.watermarkLocation',
-      'file-name-prefix': 'xrextras-capture-config.fileNamePrefix',
-      'request-mic': 'xrextras-capture-config.requestMic',
-      'include-scene-audio': 'xrextras-capture-config.includeSceneAudio',
-      'exclude-scene-audio': 'xrextras-capture-config.excludeSceneAudio',  // deprecated
-    },
+    mappings: captureConfigMappings,
   }
 
   const namedImageTargetPrimitive = {
