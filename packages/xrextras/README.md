@@ -73,12 +73,9 @@ index.html:
     <title>XR Extras: Camera Pipeline</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
-    <!-- XR Extras - provides utilities like load screen, error handling, and gesture control helpers.
+    <!-- XR Extras - provides startup, error handling, and gesture control helpers.
          See https://github.com/8thwall/web/tree/master/xrextras/ -->
     <script src="./external/xrextras/xrextras.js"></script>
-
-    <!-- Landing Pages - see https://8thwall.org/docs/engine/guides/landing-pages -->
-    <script src='./external/landing-page/landing-page.js'></script>
 
     <!-- 8th Wall Engine -->
     <script async src="./external/xr/xr.js"></script>
@@ -98,10 +95,8 @@ const onxrloaded = () => {
   XR8.addCameraPipelineModules([  // Add camera pipeline modules.
     // Existing pipeline modules.
     XR8.GlTextureRenderer.pipelineModule(),       // Draws the camera feed.
-    window.LandingPage.pipelineModule(),          // Detects unsupported browsers and gives hints.
+    XRExtras.StartFlow.pipelineModule(),          // Handles startup, compatibility, and errors.
     XRExtras.FullWindowCanvas.pipelineModule(),   // Modifies the canvas to fill the window.
-    XRExtras.Loading.pipelineModule(),            // Manages the loading screen on startup.
-    XRExtras.RuntimeError.pipelineModule(),       // Shows an error image on runtime error.
   ])
 
   XR8.run({canvas: document.getElementById('camerafeed')})   // Request permissions and run camera.
@@ -122,12 +117,9 @@ index.html:
     <!-- We've included a slightly modified version of A-Frame, which fixes some polish concerns -->
     <script src="./external/scripts/8frame-1.5.0.min.js"></script>
 
-    <!-- XR Extras - provides utilities like load screen, error handling, and gesture control helpers.
+    <!-- XR Extras - provides startup, error handling, and gesture control helpers.
          See https://github.com/8thwall/web/tree/master/xrextras/ -->
     <script src="./external/xrextras/xrextras.js"></script>
-
-    <!-- Landing Pages - see https://8thwall.org/docs/engine/guides/landing-pages -->
-    <script src='./external/landing-page/landing-page.js'></script>
 
     <!-- 8th Wall Engine -->
       <script async src="./external/xr/xr.js"></script>
@@ -137,9 +129,7 @@ index.html:
     <!-- Add the 'xrweb' attribute to your scene to make it an 8th Wall Web A-FRAME scene. -->
     <a-scene
       xrweb
-      landing-pages
-      xrextras-loading
-      xrextras-runtime-error
+      xrextras-start-flow
       xrextras-tap-recenter>
 
       <a-camera position="0 8 8"></a-camera>
@@ -189,23 +179,18 @@ Quick Reference:
   XR8.addCameraPipelineModules([  // Add camera pipeline modules.
     // Existing pipeline modules.
     XR8.GlTextureRenderer.pipelineModule(),       // Draws the camera feed.
-    window.LandingPage.pipelineModule(),          // Detects unsupported browsers and gives hints.
+    XRExtras.StartFlow.pipelineModule(),          // Handles startup, compatibility, and errors.
     XRExtras.FullWindowCanvas.pipelineModule(),   // Modifies the canvas to fill the window.
-    XRExtras.Loading.pipelineModule(),            // Manages the loading screen on startup.
-    XRExtras.RuntimeError.pipelineModule(),       // Shows an error image on runtime error.
     XRExtras.PwaInstaller.pipelineModule(),       // Displays a prompt to add to home screen.
   ])
 ```
 
 Pipeline Modules:
 
-* LandingPage.pipelineModule(): Detects if the user is not on a supported device or browser, and
-provides helpful information for how to view the XR experience.
+* StartFlow.pipelineModule(): Handles startup, browser compatibility, permissions, loading, and
+runtime errors.
 * FullWindowCanvas.pipelineModule(): Makes sure that the camera display canvas fills the full
 browser window across device orientation changes, etc.
-* Loading.pipelineModule(): Displays a loading overlay and camera permissions prompt while
-libraries are loading, and while the camera is starting up.
-* RuntimeError.pipelineModule(): Shows an error image when an error occurs at runtime.
 * PwaInstaller.pipelineModule(): Displays a prompt to add to home screen.
 
 ### AFrame Components
@@ -215,9 +200,7 @@ Quick Reference:
 ```html
     <a-scene
       xrweb
-      landing-pages
-      xrextras-loading
-      xrextras-runtime-error
+      xrextras-start-flow
       xrextras-tap-recenter>
 ```
 
@@ -230,11 +213,8 @@ you can call this method.
 
 AFrame Components:
 
-* landing-pages: Detects if the user is not on a supported device or browser, and provides
-helpful information for how to view the XR experience.
-* xrextras-loading: Displays a loading overlay and camera permissions prompt while the scene and
-libraries are loading, and while the camera is starting up.
-* xrextras-runtime-error: Hides the scene and shows an error image when an error occurs at runtime.
+* xrextras-start-flow: Handles startup, browser compatibility, permissions, loading, and runtime
+errors.
 * xrextras-tap-recenter: Calls 'XR.recenter()' when the AFrame scene is tapped.
 
 ### Other
@@ -256,4 +236,3 @@ Quick Reference:
       window.XRExtras ? screenlog() : window.addEventListener('xrextrasloaded', screenlog)
     </script>
 ```
-
