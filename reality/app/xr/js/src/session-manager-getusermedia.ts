@@ -200,6 +200,10 @@ const SessionManagerGetUserMedia = (xrccPromise: Promise<XrccModule>) => {
             closeStream(stream)
             // Request devices so that we can determine which to re-open with.
             navigator.mediaDevices.enumerateDevices().then((devices) => {
+              if (loadId !== cameraLoadId_) {
+                return
+              }
+
               // Filter out audio devices.
               const videoDevices = devices.filter(d => d.kind !== 'audioinput')
 
@@ -211,10 +215,17 @@ const SessionManagerGetUserMedia = (xrccPromise: Promise<XrccModule>) => {
               constraints.video.deviceId = backCameraId
               // Re-open with the correct deviceId.
               navigator.mediaDevices.getUserMedia(constraints).then((iosStream) => {
+                if (loadId !== cameraLoadId_) {
+                  closeStream(iosStream)
+                  return
+                }
                 verboseLog(`[XR] Opened iOS >= 16.4 camera stream at ${
                   getDimensionString(constraints)}`)
                 resolve(iosStream)
               }).catch((err) => {
+                if (loadId !== cameraLoadId_) {
+                  return
+                }
                 verboseLog(`[XR] Couldn't open iOS >= 16.4 camera stream at ${
                   getDimensionString(constraints)}`)
                 reject(err)
