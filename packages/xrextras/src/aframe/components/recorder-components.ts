@@ -1,23 +1,70 @@
 import type {ComponentDefinition} from 'aframe'
 
+import type {
+  ConfigureAudioOutput, MediaRecorderConfigOptions,
+} from '../../mediarecorder/capture-config'
+import {defaultStrings} from '../../mediarecorder/strings'
+import type {MediaRecorderStringOverrides} from '../../mediarecorder/strings'
 import {ensureXrAndExtras} from '../ensure'
 
 declare const THREE: any
 declare const XRExtras: any
 
+const stringKeys = Object.keys(defaultStrings) as Array<keyof typeof defaultStrings>
+const stringSchema = Object.fromEntries(
+  stringKeys.map(key => [key, {type: 'string'}])
+)
+const mediaRecorderConfigSchema = {
+  enableEndCard: {type: 'boolean'},
+  shortLink: {type: 'string'},
+  coverImageUrl: {type: 'string'},
+  footerImageUrl: {type: 'string'},
+  maxDurationMs: {type: 'int'},
+  endCardCallToAction: {type: 'string'},
+  maxDimension: {type: 'int'},
+  watermarkImageUrl: {type: 'string'},
+  watermarkMaxWidth: {type: 'number'},
+  watermarkMaxHeight: {type: 'number'},
+  watermarkLocation: {type: 'string'},
+  fileNamePrefix: {type: 'string'},
+  requestMic: {type: 'string'},
+} satisfies Record<
+  Exclude<keyof MediaRecorderConfigOptions,
+  'audioContext' | 'configureAudioOutput' | 'onProcessFrame'>,
+  {type: string}
+>
+const captureConfigSchema = {
+  ...mediaRecorderConfigSchema,
+  includeSceneAudio: {type: 'boolean', default: true},
+  ...stringSchema,
+}
+const captureConfigMappings = Object.fromEntries(
+  Object.keys(captureConfigSchema).map(key => [
+    key.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`),
+    `xrextras-capture-config.${key}`,
+  ])
+)
+
+const getMediaRecorderStringOverrides = (
+  values: Record<string, string>
+): MediaRecorderStringOverrides => Object.fromEntries(
+  stringKeys
+    .filter(key => values[key] !== undefined)
+    .map(key => [key, values[key]])
+) as MediaRecorderStringOverrides
+
 const captureButtonComponent: ComponentDefinition = {
   schema: {
     captureMode: {default: 'standard'},
   },
-  init() {
-    ensureXrAndExtras().then(() => {
-      if (this.removed) {
-        return
-      }
-      this.added = true
-      XRExtras.MediaRecorder.initRecordButton()
-      XRExtras.MediaRecorder.setCaptureMode(this.data.captureMode)
-    })
+  async init() {
+    await ensureXrAndExtras()
+    if (this.removed) {
+      return
+    }
+    this.added = true
+    XRExtras.MediaRecorder.initRecordButton()
+    XRExtras.MediaRecorder.setCaptureMode(this.data.captureMode)
   },
   update() {
     if (this.added) {
@@ -39,13 +86,12 @@ const capturePreviewComponent: ComponentDefinition = {
     actionButtonViewText: {default: ''},
     finalizeText: {default: ''},
   },
-  init() {
-    ensureXrAndExtras().then(() => {
-      if (!this.removed) {
-        this.added = true
-        XRExtras.MediaRecorder.initMediaPreview(this.data)
-      }
-    })
+  async init() {
+    await ensureXrAndExtras()
+    if (!this.removed) {
+      this.added = true
+      XRExtras.MediaRecorder.initMediaPreview(this.data)
+    }
   },
   remove() {
     this.removed = true
@@ -56,55 +102,36 @@ const capturePreviewComponent: ComponentDefinition = {
 }
 
 interface CaptureComponentDefinition extends ComponentDefinition {
-  includeSceneAudio: ({microphoneInput, audioProcessor}: {
-    microphoneInput: any
-    audioProcessor: any
-  }) => any
+  includeSceneAudio: ConfigureAudioOutput
 }
 
 const captureConfigComponent: CaptureComponentDefinition = {
-  // This schema must be duplicated to mappings xr-primitives.js
-  schema: {
-    enableEndCard: {type: 'boolean'},
-    shortLink: {type: 'string'},
-    coverImageUrl: {type: 'string'},
-    footerImageUrl: {type: 'string'},
-    maxDurationMs: {type: 'int'},
-    endCardCallToAction: {type: 'string'},
-    maxDimension: {type: 'int'},
-    watermarkImageUrl: {type: 'string'},
-    watermarkMaxWidth: {type: 'number'},
-    watermarkMaxHeight: {type: 'number'},
-    watermarkLocation: {type: 'string'},
-    fileNamePrefix: {type: 'string'},
-    requestMic: {type: 'string'},
-    includeSceneAudio: {type: 'boolean', default: true},
-    excludeSceneAudio: {type: 'boolean', default: false},  // deprecated
-  },
+  schema: captureConfigSchema,
   init() {
     this.includeSceneAudio = this.includeSceneAudio.bind(this)
   },
   update() {
-    const config: any = {
+    const configValues = Object.fromEntries(
+      (Object.keys(mediaRecorderConfigSchema) as Array<keyof MediaRecorderConfigOptions>)
+        .filter(key => this.attrValue[key] !== undefined)
+        .map(key => [key, this.data[key]])
+    ) as Partial<MediaRecorderConfigOptions>
+    const config: MediaRecorderConfigOptions = {
+      ...configValues,
       audioContext: THREE.AudioContext.getContext(),
+      configureAudioOutput: this.data.includeSceneAudio ? this.includeSceneAudio : null,
     }
 
-    if (this.attrValue.excludeSceneAudio !== undefined) {
-      console.warn('"exclude-scene-audio" has been deprecated in favor of "include-scene-audio"')
-      config.configureAudioOutput = this.data.excludeSceneAudio ? null : this.includeSceneAudio
-    } else {
-      config.configureAudioOutput = this.data.includeSceneAudio ? this.includeSceneAudio : null
-    }
-
-    Object.keys(this.data).forEach((key) => {
-      // Ignore value if not specified
-      if (this.attrValue[key] !== undefined &&
-        !['includeSceneAudio', 'excludeSceneAudio'].includes(key)) {
-        config[key] = this.data[key]
-      }
-    })
-
+    XRExtras.MediaRecorder.reset()
     XRExtras.MediaRecorder.configure(config)
+    XRExtras.MediaRecorder.setStringOverrides(
+      getMediaRecorderStringOverrides(this.attrValue)
+    )
+  },
+  remove() {
+    if (window.XRExtras) {
+      XRExtras.MediaRecorder.reset()
+    }
   },
   includeSceneAudio({microphoneInput, audioProcessor}) {
     const audioContext = audioProcessor.context
@@ -131,6 +158,7 @@ const captureConfigComponent: CaptureComponentDefinition = {
 
 export {
   captureButtonComponent,
+  captureConfigMappings,
   capturePreviewComponent,
   captureConfigComponent,
   CaptureComponentDefinition,
