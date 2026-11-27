@@ -322,6 +322,12 @@ XR Extras adds this node automatically as a child of an `<a-scene>` with an `xrw
 `xrlayers` or `xrconfig` attribute, so you usually don't need to add it yourself. Requires
 A-Frame 1.8.0 or later.
 
+XR Extras also disables A-Frame's `loading-screen` on these scenes, and `xr-mode-ui` and
+`device-orientation-permission-ui` by default. They are not compatible with the 8th Wall Engine,
+which provides its own loading screen (with `xrextras-loading`), enter AR/VR button and permission
+requests. Load XR Extras after A-Frame and before the scene is added to the page, for example in the
+`<head>`. The scene can be in the HTML or added later, for example after `xrloaded`.
+
 ```html
 <a-scene xrweb>
   <xrextras-wait-for-xr8></xrextras-wait-for-xr8>

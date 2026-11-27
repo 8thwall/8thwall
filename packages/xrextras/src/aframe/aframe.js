@@ -4,6 +4,7 @@ import {xrComponents} from './xr-components'
 import {xrPrimitives} from './xr-primitives'
 import {ensureXrAndExtras} from './ensure'
 import {registerWaitForXr8} from './wait-for-xr8'
+import {applySceneDefaults} from './scene-defaults'
 import {getStartFlowStringOverrides} from './components/start-flow-component'
 
 let xrextrasAframe = null
@@ -157,6 +158,8 @@ function create() {
         }
       },
     })
+    // Disable A-Frame's loading screen, enter VR/AR buttons and motion permission dialog.
+    applySceneDefaults()
     // Delay the scene start until XR8 has loaded and registered its components.
     registerWaitForXr8()
     registerComponents(xrComponents())

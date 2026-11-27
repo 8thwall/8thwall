@@ -135,14 +135,10 @@ index.html:
 
   <body>
     <!-- Add the 'xrweb' attribute to your scene to make it an 8th Wall Web A-FRAME scene.
-         XR Extras delays the scene start until the 8th Wall Engine has loaded.
-         A-Frame's own loading screen, enter VR/AR button and motion permission dialog are
-         disabled, XR Extras and the 8th Wall Engine provide them. -->
+         XR Extras delays the scene start until the 8th Wall Engine has loaded, and disables
+         A-Frame's loading screen, enter VR/AR buttons and motion permission dialog. -->
     <a-scene
       xrweb
-      loading-screen="enabled: false"
-      xr-mode-ui="enabled: false"
-      device-orientation-permission-ui="enabled: false"
       landing-pages
       xrextras-loading
       xrextras-runtime-error
