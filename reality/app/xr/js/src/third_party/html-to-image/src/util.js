@@ -142,12 +142,17 @@ function createOutputImage(url) {
     outputImage = new Image()
     outputImage.crossOrigin = 'anonymous'
     outputImage.decoding = 'async'
-    outputImage.width = 1024
-    outputImage.height = 1024
   }
   return new Promise((resolve, reject) => {
     outputImage.onerror = reject
-    outputImage.onload = () => resolve(outputImage)
+    outputImage.onload = () => {
+      // Match the element size to the loaded image. three.js r163+ allocates textures with
+      // image.width/height and then uploads the image at its natural size, a fixed size here made
+      // every upload fail with GL_INVALID_VALUE (blank DOM tablet).
+      outputImage.width = outputImage.naturalWidth
+      outputImage.height = outputImage.naturalHeight
+      resolve(outputImage)
+    }
     outputImage.src = url
   })
 }

@@ -119,8 +119,8 @@ index.html:
   <head>
     <title>XRExtras: A-FRAME</title>
 
-    <!-- We've included a slightly modified version of A-Frame, which fixes some polish concerns -->
-    <script src="./external/scripts/8frame-1.5.0.min.js"></script>
+    <!-- A-Frame -->
+    <script src="https://aframe.io/releases/1.8.0/aframe.min.js"></script>
 
     <!-- XR Extras - provides utilities like load screen, error handling, and gesture control helpers.
          See https://github.com/8thwall/web/tree/master/xrextras/ -->
@@ -134,7 +134,9 @@ index.html:
   </head>
 
   <body>
-    <!-- Add the 'xrweb' attribute to your scene to make it an 8th Wall Web A-FRAME scene. -->
+    <!-- Add the 'xrweb' attribute to your scene to make it an 8th Wall Web A-FRAME scene.
+         XR Extras delays the scene start until the 8th Wall Engine has loaded, and disables
+         A-Frame's loading screen, enter VR/AR buttons and motion permission dialog. -->
     <a-scene
       xrweb
       landing-pages

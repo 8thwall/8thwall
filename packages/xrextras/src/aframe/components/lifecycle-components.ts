@@ -297,7 +297,8 @@ const loadingComponent: ComponentDefinition = {
       loadBackground.style.backgroundColor = this.data.loadBackgroundColor
     }
 
-    const requestingCameraPermissions = document.querySelector('#requestingCameraPermissions')
+    const requestingCameraPermissions =
+      document.querySelector('#xrextras-requesting-camera-permissions')
 
     if (requestingCameraPermissions) {
       requestingCameraPermissions.style.backgroundColor = this.data.cameraBackgroundColor

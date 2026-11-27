@@ -28,6 +28,7 @@ The XRExtras library contains various A-Frame components and primitives to quick
 
 ## A-Frame Primitives
 
+- `<xrextras-wait-for-xr8>`
 - `<xrextras-faceanchor>`
 - `<xrextras-resource>`
 - `<xrextras-pbr-material>`
@@ -308,6 +309,35 @@ Rotates an object around its y-axis.
 
 
 ## Primitives
+
+### `<xrextras-wait-for-xr8>`
+
+Delays the start of the scene until the 8th Wall Engine (`window.XR8`) has loaded. The engine
+script is usually loaded with `async` and registers its A-Frame components (`xrweb`, `xrface`,
+`xrlayers`, `xrconfig`...) when it loads. A-Frame only initializes the components of the scene
+once all its children have loaded, so this node keeps the scene from initializing before the
+engine components are registered.
+
+XR Extras adds this node automatically as a child of an `<a-scene>` with an `xrweb`, `xrface`,
+`xrlayers` or `xrconfig` attribute, so you usually don't need to add it yourself. Requires
+A-Frame 1.8.0 or later.
+
+XR Extras also disables A-Frame's `loading-screen` on these scenes, and `xr-mode-ui` and
+`device-orientation-permission-ui` by default. They are not compatible with the 8th Wall Engine,
+which provides its own loading screen (with `xrextras-loading`), enter AR/VR button and permission
+requests. Load XR Extras after A-Frame and before the scene is added to the page, for example in the
+`<head>`. The scene can be in the HTML or added later, for example after `xrloaded`.
+
+XR Extras also changes two defaults of A-Frame's `shadow` shader to match 8-Frame: `opacity` is
+`0.4` (A-Frame: `0.5`) and `alphaToCoverage` is `false` (A-Frame: `true`, which gives a dithered
+shadow when antialiasing is on). Values set on the material are kept.
+
+```html
+<a-scene xrweb>
+  <xrextras-wait-for-xr8></xrextras-wait-for-xr8>
+  ...
+</a-scene>
+```
 
 ### `<xrextras-opaque-background>`
 
