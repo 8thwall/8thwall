@@ -259,7 +259,7 @@ const selectProcessorOptions = async (rl) => {
   const folder = normalizePath(await rl.prompt('Enter the output folder: '))
 
   const name = await rl.prompt('Enter a name for the image target: ')
-  const {dataPath} = await applyCrop(
+  const {dataPath, imagePath: imageUrl} = await applyCrop(
     image,
     geometry,
     folder,
@@ -268,6 +268,10 @@ const selectProcessorOptions = async (rl) => {
   )
 
   console.log('Image target data saved to:', dataPath)
+  console.log(
+    `The engine loads the image target from the URL "${imageUrl}", relative to your page. ` +
+    `Make sure your project serves the "${path.basename(folder)}" folder at that path.`
+  )
 }
 
 export {

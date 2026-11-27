@@ -46,3 +46,9 @@ window.XR8 ? onxrloaded() : window.addEventListener('xrloaded', onxrloaded)
 
 The `imagePath` field of the json data will tell the engine where to load the tracked image, which
 will have its features extracted and compared to the camera feed.
+
+`imagePath` is a URL relative to your page, made of the output folder name and the luminance image
+name, for example `image-targets/target1_luminance.jpg` for the output folder `image-targets`. Your
+project needs to serve the output folder under the same name. The example projects copy the
+`image-targets` folder at the project root to their build, so use `image-targets` as the output
+folder there, or add your folder to the `CopyWebpackPlugin` patterns in `config/webpack.config.js`.
