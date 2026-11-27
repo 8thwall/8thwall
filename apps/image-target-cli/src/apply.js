@@ -93,7 +93,9 @@ const applyCrop = async (rawImage, crop, folder, name, overwriteFiles, extraData
   const data = {
     ...crop,
     // NOTE(christoph): This is a URL, not a relative path
-    imagePath: `image-targets/${resources.luminanceImage}`,
+    // The output folder is expected to be served under its own name, like the image-targets
+    // folder of the example projects.
+    imagePath: `${path.basename(folder)}/${resources.luminanceImage}`,
     metadata: null,
     name,
     resources,
@@ -149,6 +151,7 @@ const applyCrop = async (rawImage, crop, folder, name, overwriteFiles, extraData
 
   return {
     dataPath,
+    imagePath: data.imagePath,
   }
 }
 
