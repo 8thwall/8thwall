@@ -200,7 +200,7 @@ const hideImmersivePrompt = () => {
 
 // Immersive Session Request
 const showImmersivePrompt = (sessionType) => {
-  const el = document.getElementById('loadImage')
+  const el = document.getElementById('xrextras-load-image')
   if (el && el.parentNode) {
     el.parentNode.removeChild(el)
   }
