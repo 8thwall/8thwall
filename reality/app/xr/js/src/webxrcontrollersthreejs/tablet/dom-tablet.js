@@ -92,6 +92,9 @@ const createDomTablet = ({element, interactionProvider}) => {
   let mutationObserver_
   let pendingRefresh_
   let isDrawingCanvas_ = false
+  // Size of the image last set on the tablet texture.
+  let textureWidth_ = 0
+  let textureHeight_ = 0
   let domWidth = element.offsetWidth
   let domHeight = element.offsetHeight
   let didRefresh_ = false
@@ -152,6 +155,13 @@ const createDomTablet = ({element, interactionProvider}) => {
       imagePlaceholder: `image/svg+xml,${btoa('<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"></svg>')}`,
     }).then((img) => {
       didRefresh_ = true
+      // three.js r163+ allocates immutable texture storage on the first upload, so the texture
+      // needs to be reallocated when the size of the DOM image changes.
+      if (img.naturalWidth !== textureWidth_ || img.naturalHeight !== textureHeight_) {
+        tabletQuad.material.map.dispose()
+        textureWidth_ = img.naturalWidth
+        textureHeight_ = img.naturalHeight
+      }
       tabletQuad.material.map.image = img
       tabletQuad.material.map.needsUpdate = true
 
