@@ -3,6 +3,7 @@
 import {xrComponents} from './xr-components'
 import {xrPrimitives} from './xr-primitives'
 import {ensureXrAndExtras} from './ensure'
+import {registerWaitForXr8} from './wait-for-xr8'
 import {getStartFlowStringOverrides} from './components/start-flow-component'
 
 let xrextrasAframe = null
@@ -156,6 +157,8 @@ function create() {
         }
       },
     })
+    // Delay the scene start until XR8 has loaded and registered its components.
+    registerWaitForXr8()
     registerComponents(xrComponents())
     registerPrimitives(xrPrimitives())
   }
