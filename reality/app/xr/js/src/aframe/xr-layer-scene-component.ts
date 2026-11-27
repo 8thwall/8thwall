@@ -28,14 +28,19 @@ const xrlayersceneComponent = () => {
 
   function init() {
     state.name = this.data.name
-    XR8.LayersController.configure({
-      layers: {
-        [state.name]: {
-          invertLayerMask: this.data.invertLayerMask,
-          edgeSmoothness: this.data.edgeSmoothness,
+    const {invertLayerMask, edgeSmoothness} = this.data
+    const configureLayer = () => {
+      XR8.LayersController.configure({
+        layers: {
+          [state.name]: {invertLayerMask, edgeSmoothness},
         },
-      },
-    })
+      })
+    }
+    // The A-Frame components are registered before window.XR8 is set (it is set once the
+    // preloaded chunks are loaded). This component is on a child entity of the scene, which is
+    // initialized before the scene, so XR8 may not be available yet.
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    window.XR8 ? configureLayer() : window.addEventListener('xrloaded', configureLayer, {once: true})
 
     state.el = this.el
     state.aScene = this.el.sceneEl
