@@ -12,6 +12,7 @@
 - [World Effects](https://github.com/8thwall/aframe-world-effects-example)
 - [Sky Effects](https://github.com/8thwall/aframe-sky-effects-example)
 - [Image Targets](https://github.com/8thwall/aframe-image-targets-example)
+- [Face Effects](https://github.com/8thwall/aframe-face-effects-example)
 
 ## three.js
 
