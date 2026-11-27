@@ -328,6 +328,10 @@ which provides its own loading screen (with `xrextras-loading`), enter AR/VR but
 requests. Load XR Extras after A-Frame and before the scene is added to the page, for example in the
 `<head>`. The scene can be in the HTML or added later, for example after `xrloaded`.
 
+XR Extras also changes two defaults of A-Frame's `shadow` shader to match 8-Frame: `opacity` is
+`0.4` (A-Frame: `0.5`) and `alphaToCoverage` is `false` (A-Frame: `true`, which gives a dithered
+shadow when antialiasing is on). Values set on the material are kept.
+
 ```html
 <a-scene xrweb>
   <xrextras-wait-for-xr8></xrextras-wait-for-xr8>
